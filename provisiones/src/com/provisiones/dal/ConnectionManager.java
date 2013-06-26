@@ -8,9 +8,8 @@ import java.sql.SQLException;
 public class ConnectionManager 
 {
 	static String sClassName = ConnectionManager.class.getName();
-
 	
-	private static String sConnector = "com.mysql.jdbc.Driver";
+	private static String sConnector = "org.mariadb.jdbc.Driver";
 	private static String sConnectorType = "jdbc:mysql:";
 	private static String sHostResource = "//localhost/glsl";
 	private static String sLogin = "?user=root&password=glsl1234";

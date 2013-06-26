@@ -13,6 +13,7 @@ public class Test
 
 		conn = com.provisiones.dal.ConnectionManager.OpenDBConnection();
 		com.provisiones.dal.ConnectionManager.CloseDBConnection(conn);
+		com.provisiones.dal.Utils.debugTrace(true, sClassName, "main", "Conexion Realizada");
 				
 	}
 
