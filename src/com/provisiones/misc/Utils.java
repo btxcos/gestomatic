@@ -1,4 +1,4 @@
-package com.provisiones.dal;
+package com.provisiones.misc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

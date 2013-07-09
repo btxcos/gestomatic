@@ -1,7 +1,7 @@
 package com.provisiones.types;
 
-public class sizes {
-	
+public class Longitudes 
+{
 	//Tamaño de los campos segun codigo PACBASE
 	
 	public static final int BIARRE_L = 1;
@@ -210,6 +210,4 @@ public class sizes {
 	public static final int CUOTAS_L = 400;
 	public static final int REFERENCIAS_L = 500;
 	public static final int IMPUESTOS_L = 400;
-	
-	
 }
