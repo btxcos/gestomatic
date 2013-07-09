@@ -194,18 +194,19 @@ public class Longitudes
 	public static final int YCOS10_L = 1;
 	public static final int YNOCUR_L = 30;
 	public static final int YNOLEC_L = 30;
-
+	
 	//Tamaño de los registros
 	
 	//Entrada
-	//public static final int ACTIVOS_L = 881;
+	public static final int ACTIVOS_L = 900;
 	public static final int RECHAZADOS_L = 400;
-	//public static final int AUTORIZADAS_L = 400;
+	public static final int AUTORIZADAS_L = 400;
 
 	//Salida
 	public static final int GASTOS_L = 400;
 	public static final int CIERRE_L = 48;
-
+	
+	//Entrada-Salida
 	public static final int COMUNIDADES_L = 700;
 	public static final int CUOTAS_L = 400;
 	public static final int REFERENCIAS_L = 500;

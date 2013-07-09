@@ -98,4 +98,52 @@ public class Posiciones
 	public static final int AC_BIOBNU_P = 874;
 	public static final int AC_POBRAR_P = 875;
 	
+	//Posiciones en archivo gastos
+	
+	public static final int GA_COACES_P = 0;
+	public static final int GA_COGRUG_P = 9;
+	public static final int GA_COTPGA_P = 11;
+	public static final int GA_COSBGA_P = 13;
+	public static final int GA_PTPAGO_P = 15;
+	public static final int GA_FEDEVE_P = 16;
+	public static final int GA_FFGTVP_P = 24;
+	public static final int GA_FEPAGA_P = 32;
+	public static final int GA_FELIPG_P = 40;
+	public static final int GA_COSIGA_P = 48;
+	public static final int GA_FEEESI_P = 50;
+	public static final int GA_FEECOI_P = 58;
+	public static final int GA_FEEAUI_P = 66;
+	public static final int GA_FEEPAI_P = 74;
+	public static final int GA_IMNGAS_P = 82;
+	public static final int GA_YCOS02_P = 97;
+	public static final int GA_IMRGAS_P = 98;
+	public static final int GA_YCOS04_P = 111;
+	public static final int GA_IMDGAS_P = 112;
+	public static final int GA_YCOS06_P = 125;
+	public static final int GA_IMCOST_P = 126;
+	public static final int GA_YCOS08_P = 139;
+	public static final int GA_IMOGAS_P = 140;
+	public static final int GA_YCOS10_P = 153;
+	public static final int GA_IMDTGA_P = 154;
+	public static final int GA_COUNMO_P = 167;
+	public static final int GA_IMIMGA_P = 170;
+	public static final int GA_COIMPT_P = 185;
+	public static final int GA_COTNEG_P = 187;
+	public static final int GA_COENCX_P = 189;
+	public static final int GA_COOFCX_P = 193;
+	public static final int GA_NUCONE_P = 197;
+	public static final int GA_NUPROF_P = 210;
+	public static final int GA_FEAGTO_P = 219;
+	public static final int GA_COMONA_P = 227;
+	public static final int GA_BIAUTO_P = 229;
+	public static final int GA_FEAUFA_P = 230;
+	public static final int GA_COTERR_P = 238;
+	public static final int GA_FMPAGN_P = 240;
+	public static final int GA_FEPGPR_P = 248;
+	public static final int GA_FEAPLI_P = 256;
+	public static final int GA_COAPII_P = 264;
+	public static final int GA_COSPII_P = 267;
+	public static final int GA_NUCLII_P = 269;
+ 
+	
 }

@@ -31,6 +31,10 @@ public class TableManager
 			stmt.executeUpdate("DROP TABLE cosopa_tbl;");
 			stmt.executeUpdate("DROP TABLE cospat_tbl;");
 			stmt.executeUpdate("DROP TABLE costli_tbl;");
+			stmt.executeUpdate("DROP TABLE cotdor_e1_tbl;");
+			stmt.executeUpdate("DROP TABLE cotdor_e2_tbl;");
+			stmt.executeUpdate("DROP TABLE cotdor_e3_tbl;");
+			stmt.executeUpdate("DROP TABLE cotdor_e4_tbl;");
 			stmt.executeUpdate("DROP TABLE cotpet_tbl;");
 			stmt.executeUpdate("DROP TABLE cotsin_tbl;");
 			stmt.executeUpdate("DROP TABLE coxpro_tbl;");
@@ -205,6 +209,34 @@ public class TableManager
 
 					"PRIMARY KEY(biobnu_id))");
 
+			stmt.executeUpdate("CREATE TABLE cotdor_e1_tbl ("
+					+ "cotdor_id INT, " +
+
+					"descripcion VARCHAR(90) NOT NULL, " +
+
+					"PRIMARY KEY(cotdor_id))");
+
+			stmt.executeUpdate("CREATE TABLE cotdor_e2_tbl ("
+					+ "cotdor_id INT, " +
+
+					"descripcion VARCHAR(90) NOT NULL, " +
+
+					"PRIMARY KEY(cotdor_id))");
+
+			stmt.executeUpdate("CREATE TABLE cotdor_e3_tbl ("
+					+ "cotdor_id INT, " +
+
+					"descripcion VARCHAR(90) NOT NULL, " +
+
+					"PRIMARY KEY(cotdor_id))");
+
+			stmt.executeUpdate("CREATE TABLE cotdor_e4_tbl ("
+					+ "cotdor_id INT, " +
+
+					"descripcion VARCHAR(90) NOT NULL, " +
+
+					"PRIMARY KEY(cotdor_id))");
+			
 		} catch (SQLException ex) {
 
 			System.out.println("SQLException: " + ex.getMessage());
