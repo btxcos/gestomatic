@@ -39,6 +39,10 @@ public class TableManager
 			stmt.executeUpdate("DROP TABLE cotsin_tbl;");
 			stmt.executeUpdate("DROP TABLE coxpro_tbl;");
 			stmt.executeUpdate("DROP TABLE coxsia_tbl;");
+			stmt.executeUpdate("DROP TABLE unaria_tbl;");
+			stmt.executeUpdate("DROP TABLE codtrn_tbl;");
+			stmt.executeUpdate("DROP TABLE coacci_e1_tbl;");
+			stmt.executeUpdate("DROP TABLE cocldo_tbl;");
 			
 		} 
 		catch (SQLException ex) 
@@ -236,6 +240,34 @@ public class TableManager
 					"descripcion VARCHAR(90) NOT NULL, " +
 
 					"PRIMARY KEY(cotdor_id))");
+
+			stmt.executeUpdate("CREATE TABLE unaria_tbl ("
+					+ "unaria_id CHAR, " +
+
+					"descripcion VARCHAR(30) NOT NULL, " +
+
+					"PRIMARY KEY(unaria_id))");
+
+			stmt.executeUpdate("CREATE TABLE codtrn_tbl ("
+					+ "codtrn_id VARCHAR(4), " +
+
+					"descripcion VARCHAR(30) NOT NULL, " +
+
+					"PRIMARY KEY(codtrn_id))");
+
+			stmt.executeUpdate("CREATE TABLE coacci_tbl ("
+					+ "coacci_id CHAR, " +
+
+					"descripcion VARCHAR(70) NOT NULL, " +
+
+					"PRIMARY KEY(coacci_id))");
+
+			stmt.executeUpdate("CREATE TABLE cocldo_tbl ("
+					+ "cocldo_id CHAR, " +
+
+					"descripcion VARCHAR(30) NOT NULL, " +
+
+					"PRIMARY KEY(cocldo_id))");
 			
 		} catch (SQLException ex) {
 
