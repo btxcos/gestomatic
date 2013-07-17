@@ -1,5 +1,10 @@
 package com.provisiones.misc;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -77,5 +82,36 @@ public class Utils
 		
 		return sResultPath;
 	}
+	public static void standardIO2File(String fileName){
+		 
+        if(fileName.equals("")){//Si viene vacío usamos este por defecto
+ 
+            fileName="C:\\javalog.txt";
+ 
+        }
+ 
+        try {
+ 
+            //Creamos un printstream sobre el archivo permitiendo añadir al
+ 
+            //final para no sobreescribir.
+ 
+            PrintStream ps = new PrintStream(new BufferedOutputStream(
+ 
+                    new FileOutputStream(new File(fileName),true)),true);
+ 
+            //Redirigimos entrada y salida estandar
+ 
+            System.setOut(ps);
+ 
+            System.setErr(ps);
+ 
+        } catch (FileNotFoundException ex) {
+ 
+            System.err.println("Se ha producido una excepción FileNotFoundException");
+ 
+        }
+ 
+    }
 	
 }
