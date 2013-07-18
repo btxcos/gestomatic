@@ -46,13 +46,13 @@ public class Test
 		
 		System.out.println("Inicio: " + new Timestamp(date.getTime()));
 
-		while((linea=br.readLine())!=null)
+		/*while((linea=br.readLine())!=null)
         {
 			contador++;
     		if (linea.equals(aChar))
-    			System.out.println("Hola!");
+    			System.out.println("Lectura finalizada!");
     		else if (linea.length()< 881 )
-    			System.out.println("error!");
+    			System.out.println("Error en linea "+contador);
     		else
     		{
     			//System.out.println(linea.length());
@@ -62,13 +62,14 @@ public class Test
 
     			//activo.pintaActivo();
     		}
-    		System.out.println(contador+" OK!");
+    		//System.out.println(contador+" OK!");
             
-        }
+        }*/
+		//QMDatosActivos.delActivo("1234");
 		
 		br.close();
 		
-		System.out.println("Fin: " + new Timestamp(date.getTime()));
+		//System.out.println("Fin: " + new Timestamp(date.getTime()));
 
 		
 

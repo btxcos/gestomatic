@@ -7,6 +7,7 @@ import java.io.IOException;
 
 
 import com.provisiones.types.Activo;
+import com.provisiones.types.Gasto;
 import com.provisiones.types.Longitudes;
 import com.provisiones.types.Posiciones;
 
@@ -224,6 +225,112 @@ public class Parser {
 				sBIOBNU, sPOBRAR);
 	}
 
+	public static Gasto LeerGasto (String linea)
+	{
+
+		String sCOACES = linea.substring(Posiciones.GA_COACES_P, Posiciones.GA_COACES_P+Longitudes.COACES_L);
+		sCOACES = Integer.toString(Integer.parseInt(sCOACES));
+		String sCOGRUG = linea.substring(Posiciones.GA_COGRUG_P, Posiciones.GA_COGRUG_P+Longitudes.COGRUG_L);
+		sCOGRUG = Integer.toString(Integer.parseInt(sCOGRUG));
+		String sCOTPGA = linea.substring(Posiciones.GA_COTPGA_P, Posiciones.GA_COTPGA_P+Longitudes.COTPGA_L);
+		sCOTPGA = Integer.toString(Integer.parseInt(sCOTPGA));
+		String sCOSBGA = linea.substring(Posiciones.GA_COSBGA_P, Posiciones.GA_COSBGA_P+Longitudes.COSBGA_L);
+		sCOSBGA = Integer.toString(Integer.parseInt(sCOSBGA));
+		
+		String sPTPAGO = linea.substring(Posiciones.GA_PTPAGO_P, Posiciones.GA_PTPAGO_P+Longitudes.PTPAGO_L);
+		if (sPTPAGO.trim().equals(""))
+			sPTPAGO = "0";
+
+		String sFEDEVE = linea.substring(Posiciones.GA_FEDEVE_P, Posiciones.GA_FEDEVE_P+Longitudes.FEDEVE_L);
+		String sFFGTVP = linea.substring(Posiciones.GA_FFGTVP_P, Posiciones.GA_FFGTVP_P+Longitudes.FFGTVP_L);
+		String sFEPAGA = linea.substring(Posiciones.GA_FEPAGA_P, Posiciones.GA_FEPAGA_P+Longitudes.FEPAGA_L);
+		String sFELIPG = linea.substring(Posiciones.GA_FELIPG_P, Posiciones.GA_FELIPG_P+Longitudes.FELIPG_L);
+
+		String sCOSIGA = linea.substring(Posiciones.GA_COSIGA_P, Posiciones.GA_COSIGA_P+Longitudes.COSIGA_L);
+		sCOSIGA = Integer.toString(Integer.parseInt(sCOSIGA));
+		
+		String sFEEESI = linea.substring(Posiciones.GA_FEEESI_P, Posiciones.GA_FEEESI_P+Longitudes.FEEESI_L);
+		String sFEECOI = linea.substring(Posiciones.GA_FEECOI_P, Posiciones.GA_FEECOI_P+Longitudes.FEECOI_L);
+		String sFEEAUI = linea.substring(Posiciones.GA_FEEAUI_P, Posiciones.GA_FEEAUI_P+Longitudes.FEEAUI_L);
+		String sFEEPAI = linea.substring(Posiciones.GA_FEEPAI_P, Posiciones.GA_FEEPAI_P+Longitudes.FEEPAI_L);
+	
+		String sIMNGAS = linea.substring(Posiciones.GA_IMNGAS_P, Posiciones.GA_IMNGAS_P+Longitudes.IMNGAS_L);
+		sIMNGAS = Integer.toString(Integer.parseInt(sIMNGAS));
+		
+		String sYCOS02 = linea.substring(Posiciones.GA_YCOS02_P, Posiciones.GA_YCOS02_P+Longitudes.YCOS02_L);
+		
+		String sIMRGAS = linea.substring(Posiciones.GA_IMRGAS_P, Posiciones.GA_IMRGAS_P+Longitudes.IMRGAS_L);
+		sIMRGAS = Integer.toString(Integer.parseInt(sIMRGAS));
+
+		String sYCOS04 = linea.substring(Posiciones.GA_YCOS04_P, Posiciones.GA_YCOS04_P+Longitudes.YCOS04_L);
+		
+		String sIMDGAS = linea.substring(Posiciones.GA_IMDGAS_P, Posiciones.GA_IMDGAS_P+Longitudes.IMDGAS_L);
+		sIMDGAS = Integer.toString(Integer.parseInt(sIMDGAS));
+		
+		String sYCOS06 = linea.substring(Posiciones.GA_YCOS06_P, Posiciones.GA_YCOS06_P+Longitudes.YCOS06_L);
+		
+		String sIMCOST = linea.substring(Posiciones.GA_IMCOST_P, Posiciones.GA_IMCOST_P+Longitudes.IMCOST_L);
+		sIMCOST = Integer.toString(Integer.parseInt(sIMCOST));
+		
+		String sYCOS08 = linea.substring(Posiciones.GA_YCOS08_P, Posiciones.GA_YCOS08_P+Longitudes.YCOS08_L);
+		
+		String sIMOGAS = linea.substring(Posiciones.GA_IMOGAS_P, Posiciones.GA_IMOGAS_P+Longitudes.IMOGAS_L);
+		sIMOGAS = Integer.toString(Integer.parseInt(sIMOGAS));
+		
+		String sYCOS10 = linea.substring(Posiciones.GA_YCOS10_P, Posiciones.GA_YCOS10_P+Longitudes.YCOS10_L);
+		
+		String sIMDTGA = linea.substring(Posiciones.GA_IMDTGA_P, Posiciones.GA_IMDTGA_P+Longitudes.IMDTGA_L);
+		sIMDTGA = Integer.toString(Integer.parseInt(sIMDTGA));
+		String sCOUNMO = linea.substring(Posiciones.GA_COUNMO_P, Posiciones.GA_COUNMO_P+Longitudes.COUNMO_L);
+		sCOUNMO = Integer.toString(Integer.parseInt(sCOUNMO));
+		String sIMIMGA = linea.substring(Posiciones.GA_IMIMGA_P, Posiciones.GA_IMIMGA_P+Longitudes.IMIMGA_L);
+		sIMIMGA = Integer.toString(Integer.parseInt(sIMIMGA));
+		String sCOIMPT = linea.substring(Posiciones.GA_COIMPT_P, Posiciones.GA_COIMPT_P+Longitudes.COIMPT_L);
+		sCOIMPT = Integer.toString(Integer.parseInt(sCOIMPT));
+		String sCOTNEG = linea.substring(Posiciones.GA_COTNEG_P, Posiciones.GA_COTNEG_P+Longitudes.COTNEG_L);
+		sCOTNEG = Integer.toString(Integer.parseInt(sCOTNEG));
+		String sCOENCX = linea.substring(Posiciones.GA_COENCX_P, Posiciones.GA_COENCX_P+Longitudes.COENCX_L);
+		sCOENCX = Integer.toString(Integer.parseInt(sCOENCX));
+		String sCOOFCX = linea.substring(Posiciones.GA_COOFCX_P, Posiciones.GA_COOFCX_P+Longitudes.COOFCX_L);
+		sCOOFCX = Integer.toString(Integer.parseInt(sCOOFCX));
+		String sNUCONE = linea.substring(Posiciones.GA_NUCONE_P, Posiciones.GA_NUCONE_P+Longitudes.NUCONE_L);
+		sNUCONE = Integer.toString(Integer.parseInt(sNUCONE));
+		String sNUPROF = linea.substring(Posiciones.GA_NUPROF_P, Posiciones.GA_NUPROF_P+Longitudes.NUPROF_L);
+		sNUPROF = Integer.toString(Integer.parseInt(sNUPROF));
+
+		String sFEAGTO = linea.substring(Posiciones.GA_FEAGTO_P, Posiciones.GA_FEAGTO_P+Longitudes.FEAGTO_L);
+
+		String sCOMONA = linea.substring(Posiciones.GA_COMONA_P, Posiciones.GA_COMONA_P+Longitudes.COMONA_L);
+		sCOMONA = Integer.toString(Integer.parseInt(sCOMONA));
+		
+		String sBIAUTO = linea.substring(Posiciones.GA_BIAUTO_P, Posiciones.GA_BIAUTO_P+Longitudes.BIAUTO_L);
+		
+		String sFEAUFA = linea.substring(Posiciones.GA_FEAUFA_P, Posiciones.GA_FEAUFA_P+Longitudes.FEAUFA_L);
+
+		String sCOTERR = linea.substring(Posiciones.GA_COTERR_P, Posiciones.GA_COTERR_P+Longitudes.COTERR_L);
+		sCOTERR = Integer.toString(Integer.parseInt(sCOTERR));
+
+		String sFMPAGN = linea.substring(Posiciones.GA_FMPAGN_P, Posiciones.GA_FMPAGN_P+Longitudes.FMPAGN_L);
+		String sFEPGPR = linea.substring(Posiciones.GA_FEPGPR_P, Posiciones.GA_FEPGPR_P+Longitudes.FEPGPR_L);
+		String sFEAPLI = linea.substring(Posiciones.GA_FEAPLI_P, Posiciones.GA_FEAPLI_P+Longitudes.FEAPLI_L);
+
+		String sCOAPII = linea.substring(Posiciones.GA_COAPII_P, Posiciones.GA_COAPII_P+Longitudes.COAPII_L);
+		String sCOSPII = linea.substring(Posiciones.GA_COSPII_P, Posiciones.GA_COSPII_P+Longitudes.COSPII_L);
+
+		String sNUCLII = linea.substring(Posiciones.GA_NUCLII_P, Posiciones.GA_NUCLII_P+Longitudes.NUCLII_L);                                              
+		
+		
+		
+		
+		return new Gasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
+				sFFGTVP, sFEPAGA, sFELIPG, sCOSIGA, sFEEESI, sFEECOI, sFEEAUI,
+				sFEEPAI, sIMNGAS, sYCOS02, sIMRGAS, sYCOS04, sIMDGAS, sYCOS06,
+				sIMCOST, sYCOS08, sIMOGAS, sYCOS10, sIMDTGA, sCOUNMO, sIMIMGA,
+				sCOIMPT, sCOTNEG, sCOENCX, sCOOFCX, sNUCONE, sNUPROF, sFEAGTO,
+				sCOMONA, sBIAUTO, sFEAUFA, sCOTERR, sFMPAGN, sFEPGPR, sFEAPLI,
+				sCOAPII, sCOSPII, sNUCLII);
+	}
+	
 	public static void main(String[] args) throws IOException {
 
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, "main",	"Conexion Realizada");

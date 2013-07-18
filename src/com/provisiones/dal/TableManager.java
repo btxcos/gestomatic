@@ -97,7 +97,10 @@ public class TableManager
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DROP TABLE ac_datos_tbl;");
-
+			stmt.executeUpdate("DROP TABLE e1_comunidades_tbl;");
+			stmt.executeUpdate("DROP TABLE e2_comunidades_tbl;");
+			stmt.executeUpdate("DROP TABLE e3_referencias_tbl;");
+			stmt.executeUpdate("DROP TABLE e4_impuestos_tbl;");
 		} 
 		catch (SQLException ex) 
 		{
@@ -613,7 +616,153 @@ public class TableManager
 					"FOREIGN KEY(cod_cospas) REFERENCES cospat_tbl(cospat_id), " +
 					"FOREIGN KEY(cod_biobnu) REFERENCES binaria_tbl(binaria_id))");
 
+			stmt.executeUpdate("CREATE TABLE e1_comunidades_tbl ("+
+					"e1_comunidades_id INT AUTO_INCREMENT,"+
+					"cod_codtrn VARCHAR(4) NOT NULL,"+
+					"cod_cotdor INT NOT NULL,"+
+					"idprov VARCHAR(9) NOT NULL,"+
+					"cod_coacci CHAR NOT NULL,"+
+					"coengp VARCHAR(5) NOT NULL,"+
+					"cod_cocldo CHAR NOT NULL,"+
+					"nudcom VARCHAR(10) NOT NULL,"+
+					"cod_bitc10 CHAR NOT NULL,"+
+					"cod_bitc01 CHAR NOT NULL,"+
+					"nomcoc VARCHAR(60) NOT NULL,"+
+					"cod_bitc02 CHAR NOT NULL,"+
+					"nodcco VARCHAR(60) NOT NULL,"+
+					"cod_bitc03 CHAR NOT NULL,"+
+					"nomprc VARCHAR(55) NOT NULL,"+
+					"cod_bitc04 CHAR NOT NULL,"+
+					"nutprc VARCHAR(14) NOT NULL,"+
+					"cod_bitc05 CHAR NOT NULL,"+
+					"nomadc VARCHAR(55) NOT NULL,"+
+					"cod_bitc06 CHAR NOT NULL,"+
+					"nutadc VARCHAR(14) NOT NULL,"+
+					"cod_bitc07 CHAR NOT NULL,"+
+					"nodcad VARCHAR(60) NOT NULL,"+
+					"cod_bitc08 CHAR NOT NULL,"+
+					"nuccen VARCHAR(4) NOT NULL,"+
+					"nuccof VARCHAR(4) NOT NULL,"+
+					"nuccdi VARCHAR(2) NOT NULL,"+
+					"nuccnt VARCHAR(10) NOT NULL,"+
+					"cod_bitc09 CHAR NOT NULL,"+
+					"obtexc VARCHAR(110) NOT NULL,"+
+					"obdeer VARCHAR(80) NOT NULL,"+
+					"PRIMARY KEY(e1_comunidades_id),"+
+					"FOREIGN KEY(cod_codtrn) REFERENCES codtrn_tbl(codtrn_id),"+
+					"FOREIGN KEY(cod_cotdor) REFERENCES cotdor_e1_tbl(cotdor_id),"+
+					"FOREIGN KEY(cod_coacci) REFERENCES coacci_e1_tbl(coacci_id),"+
+					"FOREIGN KEY(cod_cocldo) REFERENCES cocldo_tbl(cocldo_id),"+
+					"FOREIGN KEY(cod_bitc10) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc01) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc02) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc03) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc04) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc05) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc06) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc07) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc08) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc09) REFERENCES ternaria_tbl(ternaria_id))");
 
+			stmt.executeUpdate("CREATE TABLE e2_cuotas_tbl ("+
+					"e2_cuotas_id INT AUTO_INCREMENT,"+
+					"cod_codtrn VARCHAR(4) NOT NULL,"+
+					"cod_cotdor INT NOT NULL,"+
+					"idprov VARCHAR(9) NOT NULL,"+
+					"cod_coacci CHAR NOT NULL,"+
+					"cod_cocldo CHAR NOT NULL,"+
+					"nudcom VARCHAR(10) NOT NULL,"+
+					"coengp VARCHAR(5) NOT NULL,"+
+					"cogrug INT NOT NULL,"+
+					"cotaca INT NOT NULL,"+
+					"cosbac INT NOT NULL,"+
+					"cod_bitc11 CHAR NOT NULL,"+
+					"fipago VARCHAR(8) NOT NULL,"+
+					"cod_bitc12 CHAR NOT NULL,"+
+					"ffpago VARCHAR(8) NOT NULL,"+
+					"cod_bitc13 CHAR NOT NULL,"+
+					"imcuco VARCHAR(15) NOT NULL,"+
+					"cod_bitc14 CHAR NOT NULL,"+
+					"faacta VARCHAR(8) NOT NULL,"+
+					"cod_bitc15 CHAR NOT NULL,"+
+					"ptpago INT NOT NULL,"+
+					"cod_bitc09 CHAR NOT NULL,"+
+					"obtexc VARCHAR(110) NOT NULL,"+
+					"obdeer VARCHAR(80) NOT NULL,"+
+					"PRIMARY KEY(e2_cuotas_id),"+
+					"FOREIGN KEY(cod_codtrn) REFERENCES codtrn_tbl(codtrn_id),"+
+					"FOREIGN KEY(cod_cotdor) REFERENCES cotdor_e2_tbl(cotdor_id),"+
+					"FOREIGN KEY(cod_coacci) REFERENCES coacci_e2_tbl(coacci_id),"+
+					"FOREIGN KEY(cod_cocldo) REFERENCES cocldo_tbl(cocldo_id),"+
+					"FOREIGN KEY(cod_bitc11) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc12) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc13) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc14) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc15) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc09) REFERENCES ternaria_tbl(ternaria_id))");
+
+			stmt.executeUpdate("CREATE TABLE e3_referencias_tbl ("+
+					"e3_referencias_id INT AUTO_INCREMENT,"+
+					"cod_codtrn VARCHAR(4) NOT NULL,"+
+					"cod_cotdor INT NOT NULL,"+
+					"idprov VARCHAR(9) NOT NULL,"+
+					"cod_coacci CHAR NOT NULL,"+
+					"coengp VARCHAR(5) NOT NULL,"+
+					"nurcat VARCHAR(20) NOT NULL,"+
+					"cod_bitc16 CHAR NOT NULL,"+
+					"tircat VARCHAR(60) NOT NULL,"+
+					"cod_bitc17 CHAR NOT NULL,"+
+					"enemis VARCHAR(60) NOT NULL,"+
+					"cotexa VARCHAR(10) NOT NULL,"+
+					"cod_bitc09 CHAR NOT NULL,"+
+					"obtexc VARCHAR(110) NOT NULL,"+
+					"obdeer VARCHAR(80) NOT NULL,"+
+					"PRIMARY KEY(e3_referencias_id),"+
+					"FOREIGN KEY(cod_codtrn) REFERENCES codtrn_tbl(codtrn_id),"+
+					"FOREIGN KEY(cod_cotdor) REFERENCES cotdor_e3_tbl(cotdor_id),"+
+					"FOREIGN KEY(cod_coacci) REFERENCES coacci_e3_tbl(coacci_id),"+
+					"FOREIGN KEY(cod_bitc16) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc17) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc09) REFERENCES ternaria_tbl(ternaria_id))");
+
+			stmt.executeUpdate("CREATE TABLE e4_impuestos_tbl ("+
+					"e4_impuestos_id INT AUTO_INCREMENT,"+
+					"cod_codtrn VARCHAR(4) NOT NULL,"+
+					"cod_cotdor INT NOT NULL,"+
+					"idprov VARCHAR(9) NOT NULL,"+
+					"cod_coacci CHAR NOT NULL,"+
+					"coengp VARCHAR(5) NOT NULL,"+
+					"nurcat VARCHAR(20) NOT NULL,"+
+					"cod_cogruc INT NOT NULL,"+
+					"cod_cotaca INT NOT NULL,"+
+					"cod_cosbac INT NOT NULL,"+
+					"cod_bitc18 CHAR NOT NULL,"+
+					"feprre VARCHAR(8) NOT NULL,"+
+					"cod_bitc19 CHAR NOT NULL,"+
+					"ferere VARCHAR(8) NOT NULL,"+
+					"cod_bitc20 CHAR NOT NULL,"+
+					"fedein VARCHAR(8) NOT NULL,"+
+					"cod_bitc21 CHAR NOT NULL,"+
+					"cod_bisode CHAR NOT NULL,"+
+					"cod_bitc22 CHAR NOT NULL,"+
+					"cod_bireso CHAR NOT NULL,"+
+					"cotexa VARCHAR(10) NOT NULL,"+
+					"cod_bitc09 CHAR NOT NULL,"+
+					"obtexc VARCHAR(110) NOT NULL,"+
+					"obdeer VARCHAR(80) NOT NULL,"+
+					"PRIMARY KEY(e4_impuestos_id),"+
+					"FOREIGN KEY(cod_codtrn) REFERENCES codtrn_tbl(codtrn_id),"+
+					"FOREIGN KEY(cod_cotdor) REFERENCES cotdor_e3_tbl(cotdor_id),"+
+					"FOREIGN KEY(cod_coacci) REFERENCES coacci_e3_tbl(coacci_id),"+
+					"FOREIGN KEY(cod_bitc18) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc19) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc20) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc21) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bisode) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc22) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bireso) REFERENCES unaria_tbl(unaria_id),"+
+					"FOREIGN KEY(cod_bitc09) REFERENCES ternaria_tbl(ternaria_id))");
+			
 		} catch (SQLException ex) {
 
 			System.out.println("SQLException: " + ex.getMessage());
