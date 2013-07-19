@@ -1,6 +1,6 @@
 package com.provisiones.types;
 
-public class ImpuestosRecursos 
+public class ImpuestoRecurso 
 {
 
 	private String CODTRN = "";
@@ -29,7 +29,7 @@ public class ImpuestosRecursos
 	private String OBDEER = "";
 
 	//Constructor de clase
-	public ImpuestosRecursos(String cODTRN, String cOTDOR, String iDPROV,
+	public ImpuestoRecurso(String cODTRN, String cOTDOR, String iDPROV,
 			String cOACCI, String cOENGP, String cOACES, String nURCAT,
 			String cOGRUC, String cOTACA, String cOSBAC, String bITC18,
 			String fEPRRE, String bITC19, String fERERE, String bITC20,

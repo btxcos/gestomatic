@@ -33,7 +33,7 @@ public class Test
 		com.provisiones.dal.ConnectionManager.CloseDBConnection(conn);
 
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, "main", "Conexion Realizada");
-		File archivo = new File ("C:\\168AC.txt");
+		File archivo = new File ("C:\\168AC2.txt");
 		FileReader fr = new FileReader (archivo);
 		BufferedReader br = new BufferedReader(fr);
 		String linea = "";
