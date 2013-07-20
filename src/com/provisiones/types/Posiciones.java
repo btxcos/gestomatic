@@ -145,5 +145,112 @@ public class Posiciones
 	public static final int GA_COSPII_P = 267;
 	public static final int GA_NUCLII_P = 269;
  
+
+	//Posiciones en archivo comunidades
 	
+	public static final int E1_CODTRN_P  = 0;
+	public static final int E1_COTDOR_P  = 4;
+	public static final int E1_IDPROV_P  = 7;
+	public static final int E1_COACCI_P  = 16;
+	public static final int E1_COENGP_P  = 17;
+	public static final int E1_COCLDO_P  = 22;
+	public static final int E1_NUDCOM_P  = 23;
+	public static final int E1_BITC10_P  = 33;
+	public static final int E1_COACES_P  = 34;
+	public static final int E1_BITC01_P  = 43;
+	public static final int E1_NOMCOC_P  = 44;
+	public static final int E1_BITC02_P  = 104;
+	public static final int E1_NODCCO_P  = 105;
+	public static final int E1_BITC03_P  = 165;
+	public static final int E1_NOMPRC_P  = 166;
+	public static final int E1_BITC04_P  = 221;
+	public static final int E1_NUTPRC_P  = 222;
+	public static final int E1_BITC05_P  = 236;
+	public static final int E1_NOMADC_P  = 237;
+	public static final int E1_BITC06_P  = 292;
+	public static final int E1_NUTADC_P  = 293;
+	public static final int E1_BITC07_P  = 307;
+	public static final int E1_NODCAD_P  = 308;
+	public static final int E1_BITC08_P  = 368;
+	public static final int E1_NUCCEN_P  = 369;
+	public static final int E1_NUCCOF_P  = 373;
+	public static final int E1_NUCCDI_P  = 377;
+	public static final int E1_NUCCNT_P  = 379;
+	public static final int E1_BITC09_P  = 389;
+	public static final int E1_OBTEXC_P  = 390;
+	public static final int E1_OBDEER_P  = 500;
+
+
+	//Posiciones en archivo Cuotas
+	
+	public static final int E2_CODTRN_P  = 0;
+	public static final int E2_COTDOR_P  = 4;
+	public static final int E2_IDPROV_P  = 7;
+	public static final int E2_COACCI_P  = 16;
+	public static final int E2_COCLDO_P  = 17;
+	public static final int E2_NUDCOM_P  = 18;
+	public static final int E2_COENGP_P  = 28;
+	public static final int E2_COACES_P  = 33;
+	public static final int E2_COGRUG_P  = 42;
+	public static final int E2_COTACA_P  = 44;
+	public static final int E2_COSBAC_P  = 46;
+	public static final int E2_BITC11_P  = 48;
+	public static final int E2_FIPAGO_P  = 49;
+	public static final int E2_BITC12_P  = 57;
+	public static final int E2_FFPAGO_P  = 58;
+	public static final int E2_BITC13_P  = 66;
+	public static final int E2_IMCUCO_P  = 67;
+	public static final int E2_BITC14_P  = 82;
+	public static final int E2_FAACTA_P  = 83;
+	public static final int E2_BITC15_P  = 91;
+	public static final int E2_PTPAGO_P  = 92;
+	public static final int E2_BITC09_P  = 93;
+	public static final int E2_OBTEXC_P  = 94;
+	public static final int E2_OBDEER_P  = 204;
+
+	//Posiciones en archivo Referencias Catastrales
+	
+	public static final int E3_CODTRN_P  = 0;
+	public static final int E3_COTDOR_P  = 4;
+	public static final int E3_IDPROV_P  = 7;
+	public static final int E3_COACCI_P  = 16;
+	public static final int E3_COENGP_P  = 17;
+	public static final int E3_COACES_P  = 22;
+	public static final int E3_NURCAT_P  = 31;
+	public static final int E3_BITC16_P  = 51;
+	public static final int E3_TIRCAT_P  = 52;
+	public static final int E3_BITC17_P  = 112;
+	public static final int E3_ENEMIS_P  = 113;
+	public static final int E3_COTEXA_P  = 173;
+	public static final int E3_BITC09_P  = 183;
+	public static final int E3_OBTEXC_P  = 184;
+	public static final int E3_OBDEER_P  = 294;
+	
+	//Posiciones en archivo Impuestos y Recursos
+	
+	public static final int E4_CODTRN_P  = 0;
+	public static final int E4_COTDOR_P  = 4;
+	public static final int E4_IDPROV_P  = 7;
+	public static final int E4_COACCI_P  = 16;
+	public static final int E4_COENGP_P  = 17;
+	public static final int E4_COACES_P  = 22;
+	public static final int E4_NURCAT_P  = 31;
+	public static final int E4_COGRUC_P  = 51;
+	public static final int E4_COTACA_P  = 53;
+	public static final int E4_COSBAC_P  = 55;
+	public static final int E4_BITC18_P  = 57;
+	public static final int E4_FEPRRE_P  = 58;
+	public static final int E4_BITC19_P  = 66;
+	public static final int E4_FERERE_P  = 67;
+	public static final int E4_BITC20_P  = 75;
+	public static final int E4_FEDEIN_P  = 76;
+	public static final int E4_BITC21_P  = 84;
+	public static final int E4_BISODE_P  = 85;
+	public static final int E4_BITC22_P  = 86;
+	public static final int E4_BIRESO_P  = 87;
+	public static final int E4_COTEXA_P  = 88;
+	public static final int E4_BITC09_P  = 98;
+	public static final int E4_OBTEXC_P  = 99;
+	public static final int E4_OBDEER_P  = 209;
+
 }

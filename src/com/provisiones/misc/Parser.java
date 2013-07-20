@@ -7,16 +7,45 @@ import java.io.IOException;
 
 
 import com.provisiones.types.Activo;
+import com.provisiones.types.Comunidad;
+import com.provisiones.types.Cuota;
 import com.provisiones.types.Gasto;
+import com.provisiones.types.ImpuestoRecurso;
 import com.provisiones.types.Longitudes;
 import com.provisiones.types.Posiciones;
+import com.provisiones.types.ReferenciaCatastral;
 
 public class Parser {
 
 	static String sClassName = Parser.class.getName();
 	static boolean bEnable = true;
 	
-	public static Activo LeerActivo (String linea)
+	public static String formateaCampoNumerico (String sCampo, int iLongitud)
+	{
+
+        String sResultado = sCampo;
+        
+        while (sResultado.length() < iLongitud) 
+        {
+        	sResultado="0"+sResultado;
+        }	
+		return sResultado;
+	}
+
+	public static String formateaCampoAlfanumerico (String sCampo, int iLongitud)
+	{
+
+        String sResultado = sCampo;
+        
+        while (sResultado.length() < iLongitud) 
+        {
+        	sResultado=sResultado+" ";
+        }	
+		return sResultado;
+	}
+	
+	
+	public static Activo leerActivo (String linea)
 	{
 
 		String sCOACES = linea.substring(Posiciones.AC_COACES_P, Posiciones.AC_COACES_P+Longitudes.COACES_L);
@@ -225,7 +254,122 @@ public class Parser {
 				sBIOBNU, sPOBRAR);
 	}
 
-	public static Gasto LeerGasto (String linea)
+	public static String escribirActivo (Activo activo)
+	{
+	
+        String sCOACES = activo.getCOACES();
+        String sNUINMU = activo.getNUINMU();
+        String sCOSOPA = activo.getCOSOPA();
+        String sCOENAE = activo.getCOENAE();
+        String sCOESEN = activo.getCOESEN();
+        String sNOVIAS = activo.getNOVIAS();
+        String sNUPOAC = activo.getNUPOAC();
+        String sNUESAC = activo.getNUESAC();
+        String sNUPIAC = activo.getNUPIAC();
+        String sNUPUAC = activo.getNUPUAC();
+        String sNOMUIN = activo.getNOMUIN();
+        String sCOPRAE = activo.getCOPRAE();
+        String sNOPRAC = activo.getNOPRAC();
+        String sCOPOIN = activo.getCOPOIN();
+        String sFEREAP = activo.getFEREAP();
+        String sCOREAE = activo.getCOREAE();
+        String sFEINAU = activo.getFEINAU();
+        String sFESOPO = activo.getFESOPO();
+        String sFESEPO = activo.getFESEPO();
+        String sFEREPO = activo.getFEREPO();
+        String sFEADAC = activo.getFEADAC();
+        String sCODIJU = activo.getCODIJU();
+        String sCOSJUP = activo.getCOSJUP();
+        String sCOSTLI = activo.getCOSTLI();
+        String sCOSCAR = activo.getCOSCAR();
+        String sCOESVE = activo.getCOESVE();
+        String sCOTSIN = activo.getCOTSIN();
+        String sNUFIRE = activo.getNUFIRE();
+        String sNUREGP = activo.getNUREGP();
+        String sNOMUI0 = activo.getNOMUI0();
+        String sNULIBE = activo.getNULIBE();
+        String sNUTOME = activo.getNUTOME();
+        String sNUFOLE = activo.getNUFOLE();
+        String sNUINSR = activo.getNUINSR();
+        String sCOSOCU = activo.getCOSOCU();
+        String sCOXPRO = activo.getCOXPRO();
+        String sFESOLA = activo.getFESOLA();
+        String sFESELA = activo.getFESELA();
+        String sFERELA = activo.getFERELA();
+        String sFERLLA = activo.getFERLLA();
+        String sCASPRE = activo.getCASPRE();
+        String sCASUTR = activo.getCASUTR();
+        String sCASUTC = activo.getCASUTC();
+        String sCASUTG = activo.getCASUTG();
+        String sBIARRE = activo.getBIARRE(); 
+        String sCADORM = activo.getCADORM(); 
+        String sCABANO = activo.getCABANO(); 
+        String sBIGAPA = activo.getBIGAPA(); 
+        String sCAGAPA = activo.getCAGAPA(); 
+        String sCASUTE = activo.getCASUTE(); 
+        String sBILIPO = activo.getBILIPO(); 
+        String sBILIAC = activo.getBILIAC(); 
+        String sBILIUS = activo.getBILIUS(); 
+        String sBIBOIN = activo.getBIBOIN(); 
+        String sBICEFI = activo.getBICEFI(); 
+        String sCASUCB = activo.getCASUCB(); 
+        String sCASUCS = activo.getCASUCS(); 
+        String sFEACON = activo.getFEACON(); 
+        String sIDAUTO = activo.getIDAUTO(); 
+        String sFEDEMA = activo.getFEDEMA(); 
+        String sYNOCUR = activo.getYNOCUR(); 
+        String sOBRECO = activo.getOBRECO(); 
+        String sYNOLEC = activo.getYNOLEC(); 
+        String sNOLOJZ = activo.getNOLOJZ(); 
+        String sFEREDE = activo.getFEREDE(); 
+        String sPOPROP = activo.getPOPROP(); 
+        String sCOGRAP = activo.getCOGRAP(); 
+        String sFEPREG = activo.getFEPREG(); 
+        String sFEPHAC = activo.getFEPHAC(); 
+        String sFEFOAC = activo.getFEFOAC(); 
+        String sFEVACT = activo.getFEVACT(); 
+        String sIMVACT = activo.getIMVACT(); 
+        String sNUFIPR = activo.getNUFIPR(); 
+        String sCOTPET = activo.getCOTPET(); 
+        String sFEEMPT = activo.getFEEMPT(); 
+        String sFESORC = activo.getFESORC(); 
+        String sFESODE = activo.getFESODE(); 
+        String sFEREAC = activo.getFEREAC(); 
+        String sCOXSIA = activo.getCOXSIA(); 
+        String sNUJUZD = activo.getNUJUZD(); 
+        String sNURCAT = activo.getNURCAT(); 
+        String sNOMPRC = activo.getNOMPRC(); 
+        String sNUTPRC = activo.getNUTPRC(); 
+        String sNOMADC = activo.getNOMADC(); 
+        String sNUTADC = activo.getNUTADC(); 
+        String sIMPCOO = activo.getIMPCOO(); 
+        String sCOENOR = activo.getCOENOR(); 
+        String sCOSPAT = activo.getCOSPAT(); 
+        String sCOSPAS = activo.getCOSPAS(); 
+        String sIDCOL3 = activo.getIDCOL3(); 
+        String sBIOBNU = activo.getBIOBNU(); 
+        String sPOBRAR = activo.getPOBRAR();		
+		
+		return sCOACES + sNUINMU + sCOSOPA + sCOENAE + sCOESEN + sNOVIAS
+				+ sNUPOAC + sNUESAC + sNUPIAC + sNUPUAC + sNOMUIN + sCOPRAE
+				+ sNOPRAC + sCOPOIN + sFEREAP + sCOREAE + sFEINAU + sFESOPO
+				+ sFESEPO + sFEREPO + sFEADAC + sCODIJU + sCOSJUP + sCOSTLI
+				+ sCOSCAR + sCOESVE + sCOTSIN + sNUFIRE + sNUREGP + sNOMUI0
+				+ sNULIBE + sNUTOME + sNUFOLE + sNUINSR + sCOSOCU + sCOXPRO
+				+ sFESOLA + sFESELA + sFERELA + sFERLLA + sCASPRE + sCASUTR
+				+ sCASUTC + sCASUTG + sBIARRE + sCADORM + sCABANO + sBIGAPA
+				+ sCAGAPA + sCASUTE + sBILIPO + sBILIAC + sBILIUS + sBIBOIN
+				+ sBICEFI + sCASUCB + sCASUCS + sFEACON + sIDAUTO + sFEDEMA
+				+ sYNOCUR + sOBRECO + sYNOLEC + sNOLOJZ + sFEREDE + sPOPROP
+				+ sCOGRAP + sFEPREG + sFEPHAC + sFEFOAC + sFEVACT + sIMVACT
+				+ sNUFIPR + sCOTPET + sFEEMPT + sFESORC + sFESODE + sFEREAC
+				+ sCOXSIA + sNUJUZD + sNURCAT + sNOMPRC + sNUTPRC + sNOMADC
+				+ sNUTADC + sIMPCOO + sCOENOR + sCOSPAT + sCOSPAS + sIDCOL3
+				+ sBIOBNU + sPOBRAR;
+	}
+
+	
+	public static Gasto leerGasto (String linea)
 	{
 
 		String sCOACES = linea.substring(Posiciones.GA_COACES_P, Posiciones.GA_COACES_P+Longitudes.COACES_L);
@@ -331,6 +475,343 @@ public class Parser {
 				sCOAPII, sCOSPII, sNUCLII);
 	}
 	
+	public static String escribirGasto (Gasto gasto)
+	{
+
+		String sCOACES = gasto.getCOACES();
+		String sCOGRUG = gasto.getCOGRUG();
+		String sCOTPGA = gasto.getCOTPGA();
+		String sCOSBGA = gasto.getCOSBGA();
+		String sPTPAGO = gasto.getPTPAGO();
+		String sFEDEVE = gasto.getFEDEVE();
+		String sFFGTVP = gasto.getFFGTVP();
+		String sFEPAGA = gasto.getFEPAGA();
+		String sFELIPG = gasto.getFELIPG();
+		String sCOSIGA = gasto.getCOSIGA();
+		String sFEEESI = gasto.getFEEESI();
+		String sFEECOI = gasto.getFEECOI();
+		String sFEEAUI = gasto.getFEEAUI();
+		String sFEEPAI = gasto.getFEEPAI();
+		String sIMNGAS = gasto.getIMNGAS();
+		String sYCOS02 = gasto.getYCOS02();
+		String sIMRGAS = gasto.getIMRGAS();
+		String sYCOS04 = gasto.getYCOS04();
+		String sIMDGAS = gasto.getIMDGAS();
+		String sYCOS06 = gasto.getYCOS06();
+		String sIMCOST = gasto.getIMCOST();
+		String sYCOS08 = gasto.getYCOS08();
+		String sIMOGAS = gasto.getIMOGAS();
+		String sYCOS10 = gasto.getYCOS10();
+		String sIMDTGA = gasto.getIMDTGA();
+		String sCOUNMO = gasto.getCOUNMO();
+		String sIMIMGA = gasto.getIMIMGA();
+		String sCOIMPT = gasto.getCOIMPT();
+		String sCOTNEG = gasto.getCOTNEG();
+		String sCOENCX = gasto.getCOENCX();
+		String sCOOFCX = gasto.getCOOFCX();
+		String sNUCONE = gasto.getNUCONE();
+		String sNUPROF = gasto.getNUPROF();
+		String sFEAGTO = gasto.getFEAGTO();
+		String sCOMONA = gasto.getCOMONA();
+		String sBIAUTO = gasto.getBIAUTO();
+		String sFEAUFA = gasto.getFEAUFA();
+		String sCOTERR = gasto.getCOTERR();
+		String sFMPAGN = gasto.getFMPAGN();
+		String sFEPGPR = gasto.getFEPGPR();
+		String sFEAPLI = gasto.getFEAPLI();
+		String sCOAPII = gasto.getCOAPII();
+		String sCOSPII = gasto.getCOSPII();
+		String sNUCLII = gasto.getNUCLII();
+		
+		
+		
+		
+		return sCOACES + sCOGRUG + sCOTPGA + sCOSBGA + sPTPAGO + sFEDEVE
+				+ sFFGTVP + sFEPAGA + sFELIPG + sCOSIGA + sFEEESI + sFEECOI
+				+ sFEEAUI + sFEEPAI + sIMNGAS + sYCOS02 + sIMRGAS + sYCOS04
+				+ sIMDGAS + sYCOS06 + sIMCOST + sYCOS08 + sIMOGAS + sYCOS10
+				+ sIMDTGA + sCOUNMO + sIMIMGA + sCOIMPT + sCOTNEG + sCOENCX
+				+ sCOOFCX + sNUCONE + sNUPROF + sFEAGTO + sCOMONA + sBIAUTO
+				+ sFEAUFA + sCOTERR + sFMPAGN + sFEPGPR + sFEAPLI + sCOAPII
+				+ sCOSPII + sNUCLII;
+	}
+	
+	public static Comunidad leerComunidad (String linea)
+	{
+
+		String sCODTRN = linea.substring(Posiciones.E1_CODTRN_P, Posiciones.E1_CODTRN_P+Longitudes.CODTRN_L);
+		String sCOTDOR = linea.substring(Posiciones.E1_COTDOR_P, Posiciones.E1_COTDOR_P+Longitudes.COTDOR_L);
+		String sIDPROV = linea.substring(Posiciones.E1_IDPROV_P, Posiciones.E1_IDPROV_P+Longitudes.IDPROV_L);
+		String sCOACCI = linea.substring(Posiciones.E1_COACCI_P, Posiciones.E1_COACCI_P+Longitudes.COACCI_L);
+		String sCOENGP = linea.substring(Posiciones.E1_COENGP_P, Posiciones.E1_COENGP_P+Longitudes.COENGP_L);
+		String sCOCLDO = linea.substring(Posiciones.E1_COCLDO_P, Posiciones.E1_COCLDO_P+Longitudes.COCLDO_L);
+		String sNUDCOM = linea.substring(Posiciones.E1_NUDCOM_P, Posiciones.E1_NUDCOM_P+Longitudes.NUDCOM_L);
+		String sBITC10 = linea.substring(Posiciones.E1_BITC10_P, Posiciones.E1_BITC10_P+Longitudes.BITC10_L);
+		String sCOACES = linea.substring(Posiciones.E1_COACES_P, Posiciones.E1_COACES_P+Longitudes.COACES_L);
+		String sBITC01 = linea.substring(Posiciones.E1_BITC01_P, Posiciones.E1_BITC01_P+Longitudes.BITC01_L);
+		String sNOMCOC = linea.substring(Posiciones.E1_NOMCOC_P, Posiciones.E1_NOMCOC_P+Longitudes.NOMCOC_L);
+		String sBITC02 = linea.substring(Posiciones.E1_BITC02_P, Posiciones.E1_BITC02_P+Longitudes.BITC02_L);
+		String sNODCCO = linea.substring(Posiciones.E1_NODCCO_P, Posiciones.E1_NODCCO_P+Longitudes.NODCCO_L);
+		String sBITC03 = linea.substring(Posiciones.E1_BITC03_P, Posiciones.E1_BITC03_P+Longitudes.BITC03_L);
+		String sNOMPRC = linea.substring(Posiciones.E1_NOMPRC_P, Posiciones.E1_NOMPRC_P+Longitudes.NOMPRC_L);
+		String sBITC04 = linea.substring(Posiciones.E1_BITC04_P, Posiciones.E1_BITC04_P+Longitudes.BITC04_L);
+		String sNUTPRC = linea.substring(Posiciones.E1_NUTPRC_P, Posiciones.E1_NUTPRC_P+Longitudes.NUTPRC_L);
+		String sBITC05 = linea.substring(Posiciones.E1_BITC05_P, Posiciones.E1_BITC05_P+Longitudes.BITC05_L);
+		String sNOMADC = linea.substring(Posiciones.E1_NOMADC_P, Posiciones.E1_NOMADC_P+Longitudes.NOMADC_L);
+		String sBITC06 = linea.substring(Posiciones.E1_BITC06_P, Posiciones.E1_BITC06_P+Longitudes.BITC06_L);
+		String sNUTADC = linea.substring(Posiciones.E1_NUTADC_P, Posiciones.E1_NUTADC_P+Longitudes.NUTADC_L);
+		String sBITC07 = linea.substring(Posiciones.E1_BITC07_P, Posiciones.E1_BITC07_P+Longitudes.BITC07_L);
+		String sNODCAD = linea.substring(Posiciones.E1_NODCAD_P, Posiciones.E1_NODCAD_P+Longitudes.NODCAD_L);
+		String sBITC08 = linea.substring(Posiciones.E1_BITC08_P, Posiciones.E1_BITC08_P+Longitudes.BITC08_L);
+		String sNUCCEN = linea.substring(Posiciones.E1_NUCCEN_P, Posiciones.E1_NUCCEN_P+Longitudes.NUCCEN_L);
+		String sNUCCOF = linea.substring(Posiciones.E1_NUCCOF_P, Posiciones.E1_NUCCOF_P+Longitudes.NUCCOF_L);
+		String sNUCCDI = linea.substring(Posiciones.E1_NUCCDI_P, Posiciones.E1_NUCCDI_P+Longitudes.NUCCDI_L);
+		String sNUCCNT = linea.substring(Posiciones.E1_NUCCNT_P, Posiciones.E1_NUCCNT_P+Longitudes.NUCCNT_L);
+		String sBITC09 = linea.substring(Posiciones.E1_BITC09_P, Posiciones.E1_BITC09_P+Longitudes.BITC09_L);
+		String sOBTEXC = linea.substring(Posiciones.E1_OBTEXC_P, Posiciones.E1_OBTEXC_P+Longitudes.OBTEXC_L);
+		String sOBDEER = linea.substring(Posiciones.E1_OBDEER_P, Posiciones.E1_OBDEER_P+Longitudes.OBDEER_L);
+
+		
+		
+		return new Comunidad(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOENGP,
+				sCOCLDO, sNUDCOM, sBITC10, sCOACES, sBITC01, sNOMCOC, sBITC02,
+				sNODCCO, sBITC03, sNOMPRC, sBITC04, sNUTPRC, sBITC05, sNOMADC,
+				sBITC06, sNUTADC, sBITC07, sNODCAD, sBITC08, sNUCCEN, sNUCCOF,
+				sNUCCDI, sNUCCNT, sBITC09, sOBTEXC, sOBDEER);
+	}
+	
+	public static String escribirComunidad (Comunidad comunidad)
+	{
+
+        String sCODTRN = comunidad.getCODTRN();
+        String sCOTDOR = comunidad.getCOTDOR();
+        String sIDPROV = comunidad.getIDPROV();
+        String sCOACCI = comunidad.getCOACCI();
+        String sCOENGP = comunidad.getCOENGP();
+        String sCOCLDO = comunidad.getCOCLDO();
+        String sNUDCOM = comunidad.getNUDCOM();
+        String sBITC10 = comunidad.getBITC10();
+        String sCOACES = comunidad.getCOACES();
+        String sBITC01 = comunidad.getBITC01();
+        String sNOMCOC = comunidad.getNOMCOC();
+        String sBITC02 = comunidad.getBITC02();
+        String sNODCCO = comunidad.getNODCCO();
+        String sBITC03 = comunidad.getBITC03();
+        String sNOMPRC = comunidad.getNOMPRC();
+        String sBITC04 = comunidad.getBITC04();
+        String sNUTPRC = comunidad.getNUTPRC();
+        String sBITC05 = comunidad.getBITC05();
+        String sNOMADC = comunidad.getNOMADC();
+        String sBITC06 = comunidad.getBITC06();
+        String sNUTADC = comunidad.getNUTADC();
+        String sBITC07 = comunidad.getBITC07();
+        String sNODCAD = comunidad.getNODCAD();
+        String sBITC08 = comunidad.getBITC08();
+        String sNUCCEN = comunidad.getNUCCEN();
+        String sNUCCOF = comunidad.getNUCCOF();
+        String sNUCCDI = comunidad.getNUCCDI();
+        String sNUCCNT = comunidad.getNUCCNT();
+        String sBITC09 = comunidad.getBITC09();
+        String sOBTEXC = comunidad.getOBTEXC();
+        String sOBDEER = comunidad.getOBDEER();
+		
+		
+		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOENGP + sCOCLDO
+				+ sNUDCOM + sBITC10 + sCOACES + sBITC01 + sNOMCOC + sBITC02
+				+ sNODCCO + sBITC03 + sNOMPRC + sBITC04 + sNUTPRC + sBITC05
+				+ sNOMADC + sBITC06 + sNUTADC + sBITC07 + sNODCAD + sBITC08
+				+ sNUCCEN + sNUCCOF + sNUCCDI + sNUCCNT + sBITC09 + sOBTEXC
+				+ sOBDEER;
+	}
+
+	public static Cuota leerCuota (String linea)
+	{
+
+		String sCODTRN = linea.substring(Posiciones.E2_CODTRN_P, Posiciones.E2_CODTRN_P+Longitudes.CODTRN_L);
+		String sCOTDOR = linea.substring(Posiciones.E2_COTDOR_P, Posiciones.E2_COTDOR_P+Longitudes.COTDOR_L);
+		String sIDPROV = linea.substring(Posiciones.E2_IDPROV_P, Posiciones.E2_IDPROV_P+Longitudes.IDPROV_L);
+		String sCOACCI = linea.substring(Posiciones.E2_COACCI_P, Posiciones.E2_COACCI_P+Longitudes.COACCI_L);
+		String sCOCLDO = linea.substring(Posiciones.E2_COCLDO_P, Posiciones.E2_COCLDO_P+Longitudes.COCLDO_L);
+		String sNUDCOM = linea.substring(Posiciones.E2_NUDCOM_P, Posiciones.E2_NUDCOM_P+Longitudes.NUDCOM_L);
+		String sCOENGP = linea.substring(Posiciones.E2_COENGP_P, Posiciones.E2_COENGP_P+Longitudes.COENGP_L);
+		String sCOACES = linea.substring(Posiciones.E2_COACES_P, Posiciones.E2_COACES_P+Longitudes.COACES_L);
+		String sCOGRUG = linea.substring(Posiciones.E2_COGRUG_P, Posiciones.E2_COGRUG_P+Longitudes.COGRUG_L);
+		String sCOTACA = linea.substring(Posiciones.E2_COTACA_P, Posiciones.E2_COTACA_P+Longitudes.COTACA_L);
+		String sCOSBAC = linea.substring(Posiciones.E2_COSBAC_P, Posiciones.E2_COSBAC_P+Longitudes.COSBAC_L);
+		String sBITC11 = linea.substring(Posiciones.E2_BITC11_P, Posiciones.E2_BITC11_P+Longitudes.BITC11_L);
+		String sFIPAGO = linea.substring(Posiciones.E2_FIPAGO_P, Posiciones.E2_FIPAGO_P+Longitudes.FIPAGO_L);
+		String sBITC12 = linea.substring(Posiciones.E2_BITC12_P, Posiciones.E2_BITC12_P+Longitudes.BITC12_L);
+		String sFFPAGO = linea.substring(Posiciones.E2_FFPAGO_P, Posiciones.E2_FFPAGO_P+Longitudes.FFPAGO_L);
+		String sBITC13 = linea.substring(Posiciones.E2_BITC13_P, Posiciones.E2_BITC13_P+Longitudes.BITC13_L);
+		String sIMCUCO = linea.substring(Posiciones.E2_IMCUCO_P, Posiciones.E2_IMCUCO_P+Longitudes.IMCUCO_L);
+		String sBITC14 = linea.substring(Posiciones.E2_BITC14_P, Posiciones.E2_BITC14_P+Longitudes.BITC14_L);
+		String sFAACTA = linea.substring(Posiciones.E2_FAACTA_P, Posiciones.E2_FAACTA_P+Longitudes.FAACTA_L);
+		String sBITC15 = linea.substring(Posiciones.E2_BITC15_P, Posiciones.E2_BITC15_P+Longitudes.BITC15_L);
+		String sPTPAGO = linea.substring(Posiciones.E2_PTPAGO_P, Posiciones.E2_PTPAGO_P+Longitudes.PTPAGO_L);
+		String sBITC09 = linea.substring(Posiciones.E2_BITC09_P, Posiciones.E2_BITC09_P+Longitudes.BITC09_L);
+		String sOBTEXC = linea.substring(Posiciones.E2_OBTEXC_P, Posiciones.E2_OBTEXC_P+Longitudes.OBTEXC_L);
+		String sOBDEER = linea.substring(Posiciones.E2_OBDEER_P, Posiciones.E2_OBDEER_P+Longitudes.OBDEER_L);
+		
+		
+		return new Cuota(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOCLDO, sNUDCOM,
+				sCOENGP, sCOACES, sCOGRUG, sCOTACA, sCOSBAC, sBITC11, sFIPAGO,
+				sBITC12, sFFPAGO, sBITC13, sIMCUCO, sBITC14, sFAACTA, sBITC15,
+				sPTPAGO, sBITC09, sOBTEXC, sOBDEER);
+	}
+	
+	public static String escribirCuota (Cuota cuota)
+	{
+
+        String sCODTRN = cuota.getCODTRN();
+        String sCOTDOR = cuota.getCOTDOR();
+        String sIDPROV = cuota.getIDPROV();
+        String sCOACCI = cuota.getCOACCI();
+        String sCOCLDO = cuota.getCOCLDO();
+        String sNUDCOM = cuota.getNUDCOM();
+        String sCOENGP = cuota.getCOENGP();
+        String sCOACES = cuota.getCOACES();
+        String sCOGRUG = cuota.getCOGRUG();
+        String sCOTACA = cuota.getCOTACA();
+        String sCOSBAC = cuota.getCOSBAC();
+        String sBITC11 = cuota.getBITC11();
+        String sFIPAGO = cuota.getFIPAGO();
+        String sBITC12 = cuota.getBITC12();
+        String sFFPAGO = cuota.getFFPAGO();
+        String sBITC13 = cuota.getBITC13();
+        String sIMCUCO = cuota.getIMCUCO();
+        String sBITC14 = cuota.getBITC14();
+        String sFAACTA = cuota.getFAACTA();
+        String sBITC15 = cuota.getBITC15();
+        String sPTPAGO = cuota.getPTPAGO();
+        String sBITC09 = cuota.getBITC09();
+        String sOBTEXC = cuota.getOBTEXC();
+        String sOBDEER = cuota.getOBDEER();
+
+		
+		
+		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOCLDO + sNUDCOM
+				+ sCOENGP + sCOACES + sCOGRUG + sCOTACA + sCOSBAC + sBITC11
+				+ sFIPAGO + sBITC12 + sFFPAGO + sBITC13 + sIMCUCO + sBITC14
+				+ sFAACTA + sBITC15 + sPTPAGO + sBITC09 + sOBTEXC + sOBDEER;
+	}
+	
+	public static ReferenciaCatastral leerReferenciaCatastral (String linea)
+	{
+
+		String sCODTRN = linea.substring(Posiciones.E3_CODTRN_P, Posiciones.E3_CODTRN_P+Longitudes.CODTRN_L);
+		String sCOTDOR = linea.substring(Posiciones.E3_COTDOR_P, Posiciones.E3_COTDOR_P+Longitudes.COTDOR_L);
+		String sIDPROV = linea.substring(Posiciones.E3_IDPROV_P, Posiciones.E3_IDPROV_P+Longitudes.IDPROV_L);
+		String sCOACCI = linea.substring(Posiciones.E3_COACCI_P, Posiciones.E3_COACCI_P+Longitudes.COACCI_L);
+		String sCOENGP = linea.substring(Posiciones.E3_COENGP_P, Posiciones.E3_COENGP_P+Longitudes.COENGP_L);
+		String sCOACES = linea.substring(Posiciones.E3_COACES_P, Posiciones.E3_COACES_P+Longitudes.COACES_L);
+		String sNURCAT = linea.substring(Posiciones.E3_NURCAT_P, Posiciones.E3_NURCAT_P+Longitudes.NURCAT_L);
+		String sBITC16 = linea.substring(Posiciones.E3_BITC16_P, Posiciones.E3_BITC16_P+Longitudes.BITC16_L);
+		String sTIRCAT = linea.substring(Posiciones.E3_TIRCAT_P, Posiciones.E3_TIRCAT_P+Longitudes.TIRCAT_L);
+		String sBITC17 = linea.substring(Posiciones.E3_BITC17_P, Posiciones.E3_BITC17_P+Longitudes.BITC17_L);
+		String sENEMIS = linea.substring(Posiciones.E3_ENEMIS_P, Posiciones.E3_ENEMIS_P+Longitudes.ENEMIS_L);
+		String sCOTEXA = linea.substring(Posiciones.E3_COTEXA_P, Posiciones.E3_COTEXA_P+Longitudes.COTEXA_L);
+		String sBITC09 = linea.substring(Posiciones.E3_BITC09_P, Posiciones.E3_BITC09_P+Longitudes.BITC09_L);
+		String sOBTEXC = linea.substring(Posiciones.E3_OBTEXC_P, Posiciones.E3_OBTEXC_P+Longitudes.OBTEXC_L);
+		String sOBDEER = linea.substring(Posiciones.E3_OBDEER_P, Posiciones.E3_OBDEER_P+Longitudes.OBDEER_L);
+		
+		
+		return new ReferenciaCatastral(sCODTRN, sCOTDOR, sIDPROV, sCOACCI,
+				sCOENGP, sCOACES, sNURCAT, sBITC16, sTIRCAT, sBITC17, sENEMIS,
+				sCOTEXA, sBITC09, sOBTEXC, sOBDEER);
+	}
+	
+	public static String escribirReferenciaCatastral (ReferenciaCatastral referenciacatrastral)
+	{
+
+        String sCODTRN = referenciacatrastral.getCODTRN();
+        String sCOTDOR = referenciacatrastral.getCOTDOR();
+        String sIDPROV = referenciacatrastral.getIDPROV();
+        String sCOACCI = referenciacatrastral.getCOACCI();
+        String sCOENGP = referenciacatrastral.getCOENGP();
+        String sCOACES = referenciacatrastral.getCOACES();
+        String sNURCAT = referenciacatrastral.getNURCAT();
+        String sBITC16 = referenciacatrastral.getBITC16();
+        String sTIRCAT = referenciacatrastral.getTIRCAT();
+        String sBITC17 = referenciacatrastral.getBITC17();
+        String sENEMIS = referenciacatrastral.getENEMIS();
+        String sCOTEXA = referenciacatrastral.getCOTEXA();
+        String sBITC09 = referenciacatrastral.getBITC09();
+        String sOBTEXC = referenciacatrastral.getOBTEXC();
+        String sOBDEER = referenciacatrastral.getOBDEER();	
+		
+		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOENGP + sCOACES
+				+ sNURCAT + sBITC16 + sTIRCAT + sBITC17 + sENEMIS + sCOTEXA
+				+ sBITC09 + sOBTEXC + sOBDEER;
+	}
+
+	public static ImpuestoRecurso leerImpuestoRecurso (String linea)
+	{
+
+		String sCODTRN = linea.substring(Posiciones.E4_CODTRN_P, Posiciones.E4_CODTRN_P+Longitudes.CODTRN_L);
+		String sCOTDOR = linea.substring(Posiciones.E4_COTDOR_P, Posiciones.E4_COTDOR_P+Longitudes.COTDOR_L);
+		String sIDPROV = linea.substring(Posiciones.E4_IDPROV_P, Posiciones.E4_IDPROV_P+Longitudes.IDPROV_L);
+		String sCOACCI = linea.substring(Posiciones.E4_COACCI_P, Posiciones.E4_COACCI_P+Longitudes.COACCI_L);
+		String sCOENGP = linea.substring(Posiciones.E4_COENGP_P, Posiciones.E4_COENGP_P+Longitudes.COENGP_L);
+		String sCOACES = linea.substring(Posiciones.E4_COACES_P, Posiciones.E4_COACES_P+Longitudes.COACES_L);
+		String sNURCAT = linea.substring(Posiciones.E4_NURCAT_P, Posiciones.E4_NURCAT_P+Longitudes.NURCAT_L);
+		String sCOGRUC = linea.substring(Posiciones.E4_COGRUC_P, Posiciones.E4_COGRUC_P+Longitudes.COGRUC_L);
+		String sCOTACA = linea.substring(Posiciones.E4_COTACA_P, Posiciones.E4_COTACA_P+Longitudes.COTACA_L);
+		String sCOSBAC = linea.substring(Posiciones.E4_COSBAC_P, Posiciones.E4_COSBAC_P+Longitudes.COSBAC_L);
+		String sBITC18 = linea.substring(Posiciones.E4_BITC18_P, Posiciones.E4_BITC18_P+Longitudes.BITC18_L);
+		String sFEPRRE = linea.substring(Posiciones.E4_FEPRRE_P, Posiciones.E4_FEPRRE_P+Longitudes.FEPRRE_L);
+		String sBITC19 = linea.substring(Posiciones.E4_BITC19_P, Posiciones.E4_BITC19_P+Longitudes.BITC19_L);
+		String sFERERE = linea.substring(Posiciones.E4_FERERE_P, Posiciones.E4_FERERE_P+Longitudes.FERERE_L);
+		String sBITC20 = linea.substring(Posiciones.E4_BITC20_P, Posiciones.E4_BITC20_P+Longitudes.BITC20_L);
+		String sFEDEIN = linea.substring(Posiciones.E4_FEDEIN_P, Posiciones.E4_FEDEIN_P+Longitudes.FEDEIN_L);
+		String sBITC21 = linea.substring(Posiciones.E4_BITC21_P, Posiciones.E4_BITC21_P+Longitudes.BITC21_L);
+		String sBISODE = linea.substring(Posiciones.E4_BISODE_P, Posiciones.E4_BISODE_P+Longitudes.BISODE_L);
+		String sBITC22 = linea.substring(Posiciones.E4_BITC22_P, Posiciones.E4_BITC22_P+Longitudes.BITC22_L);
+		String sBIRESO = linea.substring(Posiciones.E4_BIRESO_P, Posiciones.E4_BIRESO_P+Longitudes.BIRESO_L);
+		String sCOTEXA = linea.substring(Posiciones.E4_COTEXA_P, Posiciones.E4_COTEXA_P+Longitudes.COTEXA_L);
+		String sBITC09 = linea.substring(Posiciones.E4_BITC09_P, Posiciones.E4_BITC09_P+Longitudes.BITC09_L);
+		String sOBTEXC = linea.substring(Posiciones.E4_OBTEXC_P, Posiciones.E4_OBTEXC_P+Longitudes.OBTEXC_L);
+		String sOBDEER = linea.substring(Posiciones.E4_OBDEER_P, Posiciones.E4_OBDEER_P+Longitudes.OBDEER_L);
+		
+		return new ImpuestoRecurso(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOENGP,
+				sCOACES, sNURCAT, sCOGRUC, sCOTACA, sCOSBAC, sBITC18, sFEPRRE,
+				sBITC19, sFERERE, sBITC20, sFEDEIN, sBITC21, sBISODE, sBITC22,
+				sBIRESO, sCOTEXA, sBITC09, sOBTEXC, sOBDEER);
+	}
+	
+	public static String escribirImpuestoRecurso (ImpuestoRecurso impuestorecurso)
+	{
+
+        String sCODTRN = impuestorecurso.getCODTRN();
+        String sCOTDOR = impuestorecurso.getCOTDOR();
+        String sIDPROV = impuestorecurso.getIDPROV();
+        String sCOACCI = impuestorecurso.getCOACCI();
+        String sCOENGP = impuestorecurso.getCOENGP();
+        String sCOACES = impuestorecurso.getCOACES();
+        String sNURCAT = impuestorecurso.getNURCAT();
+        String sCOGRUC = impuestorecurso.getCOGRUC();
+        String sCOTACA = impuestorecurso.getCOTACA();
+        String sCOSBAC = impuestorecurso.getCOSBAC();
+        String sBITC18 = impuestorecurso.getBITC18();
+        String sFEPRRE = impuestorecurso.getFEPRRE();
+        String sBITC19 = impuestorecurso.getBITC19();
+        String sFERERE = impuestorecurso.getFERERE();
+        String sBITC20 = impuestorecurso.getBITC20();
+        String sFEDEIN = impuestorecurso.getFEDEIN();
+        String sBITC21 = impuestorecurso.getBITC21();
+        String sBISODE = impuestorecurso.getBISODE();
+        String sBITC22 = impuestorecurso.getBITC22();
+        String sBIRESO = impuestorecurso.getBIRESO();
+        String sCOTEXA = impuestorecurso.getCOTEXA();
+        String sBITC09 = impuestorecurso.getBITC09();
+        String sOBTEXC = impuestorecurso.getOBTEXC();
+        String sOBDEER = impuestorecurso.getOBDEER();
+		
+		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOENGP + sCOACES
+				+ sNURCAT + sCOGRUC + sCOTACA + sCOSBAC + sBITC18 + sFEPRRE
+				+ sBITC19 + sFERERE + sBITC20 + sFEDEIN + sBITC21 + sBISODE
+				+ sBITC22 + sBIRESO + sCOTEXA + sBITC09 + sOBTEXC + sOBDEER;
+	}
+	
 	public static void main(String[] args) throws IOException {
 
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, "main",	"Conexion Realizada");
@@ -340,7 +821,7 @@ public class Parser {
 		String linea = br.readLine();
 		br.close();
 
-		Activo activo = LeerActivo(linea);
+		Activo activo = leerActivo(linea);
 
 		activo.pintaActivo();
 

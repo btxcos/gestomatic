@@ -56,7 +56,7 @@ public class Test
     		else
     		{
     			//System.out.println(linea.length());
-    			Activo activo = Parser.LeerActivo(linea);
+    			Activo activo = Parser.leerActivo(linea);
     			//activo.pintaActivo();
     			QMDatosActivos.addActivo(activo);
 
