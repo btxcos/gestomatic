@@ -19,6 +19,28 @@ public class Parser {
 
 	static String sClassName = Parser.class.getName();
 	static boolean bEnable = true;
+
+	public static String limpiaCampoNumerico (String sCampo)
+	{
+
+        String sResultado = sCampo;
+        
+        while ((sResultado.startsWith("0")) && (sResultado.length() > 1) ) 
+        {
+        	sResultado=sResultado.substring(1);
+        }	
+		return sResultado;
+	}
+
+	public static String limpiaCampoAlfanumerico (String sCampo, String sValorBlanco)
+	{
+		String sResultado = sCampo.trim();
+		
+		if (sResultado.length()==0)
+			sResultado = sValorBlanco;
+
+		return sResultado;
+	}
 	
 	public static String formateaCampoNumerico (String sCampo, int iLongitud)
 	{
@@ -257,98 +279,98 @@ public class Parser {
 	public static String escribirActivo (Activo activo)
 	{
 	
-        String sCOACES = activo.getCOACES();
-        String sNUINMU = activo.getNUINMU();
-        String sCOSOPA = activo.getCOSOPA();
-        String sCOENAE = activo.getCOENAE();
-        String sCOESEN = activo.getCOESEN();
-        String sNOVIAS = activo.getNOVIAS();
-        String sNUPOAC = activo.getNUPOAC();
-        String sNUESAC = activo.getNUESAC();
-        String sNUPIAC = activo.getNUPIAC();
-        String sNUPUAC = activo.getNUPUAC();
-        String sNOMUIN = activo.getNOMUIN();
-        String sCOPRAE = activo.getCOPRAE();
-        String sNOPRAC = activo.getNOPRAC();
-        String sCOPOIN = activo.getCOPOIN();
-        String sFEREAP = activo.getFEREAP();
-        String sCOREAE = activo.getCOREAE();
-        String sFEINAU = activo.getFEINAU();
-        String sFESOPO = activo.getFESOPO();
-        String sFESEPO = activo.getFESEPO();
-        String sFEREPO = activo.getFEREPO();
-        String sFEADAC = activo.getFEADAC();
-        String sCODIJU = activo.getCODIJU();
-        String sCOSJUP = activo.getCOSJUP();
-        String sCOSTLI = activo.getCOSTLI();
-        String sCOSCAR = activo.getCOSCAR();
-        String sCOESVE = activo.getCOESVE();
-        String sCOTSIN = activo.getCOTSIN();
-        String sNUFIRE = activo.getNUFIRE();
-        String sNUREGP = activo.getNUREGP();
-        String sNOMUI0 = activo.getNOMUI0();
-        String sNULIBE = activo.getNULIBE();
-        String sNUTOME = activo.getNUTOME();
-        String sNUFOLE = activo.getNUFOLE();
-        String sNUINSR = activo.getNUINSR();
-        String sCOSOCU = activo.getCOSOCU();
-        String sCOXPRO = activo.getCOXPRO();
-        String sFESOLA = activo.getFESOLA();
-        String sFESELA = activo.getFESELA();
-        String sFERELA = activo.getFERELA();
-        String sFERLLA = activo.getFERLLA();
-        String sCASPRE = activo.getCASPRE();
-        String sCASUTR = activo.getCASUTR();
-        String sCASUTC = activo.getCASUTC();
-        String sCASUTG = activo.getCASUTG();
-        String sBIARRE = activo.getBIARRE(); 
-        String sCADORM = activo.getCADORM(); 
-        String sCABANO = activo.getCABANO(); 
-        String sBIGAPA = activo.getBIGAPA(); 
-        String sCAGAPA = activo.getCAGAPA(); 
-        String sCASUTE = activo.getCASUTE(); 
-        String sBILIPO = activo.getBILIPO(); 
-        String sBILIAC = activo.getBILIAC(); 
-        String sBILIUS = activo.getBILIUS(); 
-        String sBIBOIN = activo.getBIBOIN(); 
-        String sBICEFI = activo.getBICEFI(); 
-        String sCASUCB = activo.getCASUCB(); 
-        String sCASUCS = activo.getCASUCS(); 
-        String sFEACON = activo.getFEACON(); 
-        String sIDAUTO = activo.getIDAUTO(); 
-        String sFEDEMA = activo.getFEDEMA(); 
-        String sYNOCUR = activo.getYNOCUR(); 
-        String sOBRECO = activo.getOBRECO(); 
-        String sYNOLEC = activo.getYNOLEC(); 
-        String sNOLOJZ = activo.getNOLOJZ(); 
-        String sFEREDE = activo.getFEREDE(); 
-        String sPOPROP = activo.getPOPROP(); 
-        String sCOGRAP = activo.getCOGRAP(); 
-        String sFEPREG = activo.getFEPREG(); 
-        String sFEPHAC = activo.getFEPHAC(); 
-        String sFEFOAC = activo.getFEFOAC(); 
-        String sFEVACT = activo.getFEVACT(); 
-        String sIMVACT = activo.getIMVACT(); 
-        String sNUFIPR = activo.getNUFIPR(); 
-        String sCOTPET = activo.getCOTPET(); 
-        String sFEEMPT = activo.getFEEMPT(); 
-        String sFESORC = activo.getFESORC(); 
-        String sFESODE = activo.getFESODE(); 
-        String sFEREAC = activo.getFEREAC(); 
-        String sCOXSIA = activo.getCOXSIA(); 
-        String sNUJUZD = activo.getNUJUZD(); 
-        String sNURCAT = activo.getNURCAT(); 
-        String sNOMPRC = activo.getNOMPRC(); 
-        String sNUTPRC = activo.getNUTPRC(); 
-        String sNOMADC = activo.getNOMADC(); 
-        String sNUTADC = activo.getNUTADC(); 
-        String sIMPCOO = activo.getIMPCOO(); 
-        String sCOENOR = activo.getCOENOR(); 
-        String sCOSPAT = activo.getCOSPAT(); 
-        String sCOSPAS = activo.getCOSPAS(); 
-        String sIDCOL3 = activo.getIDCOL3(); 
-        String sBIOBNU = activo.getBIOBNU(); 
-        String sPOBRAR = activo.getPOBRAR();		
+        String sCOACES = formateaCampoNumerico(activo.getCOACES(),Longitudes.COACES_L);
+        String sNUINMU = formateaCampoNumerico(activo.getNUINMU(),Longitudes.NUINMU_L);
+        String sCOSOPA = formateaCampoNumerico(activo.getCOSOPA(),Longitudes.COSOPA_L);
+        String sCOENAE = formateaCampoNumerico(activo.getCOENAE(),Longitudes.COENAE_L);
+        String sCOESEN = formateaCampoNumerico(activo.getCOESEN(),Longitudes.COESEN_L);
+        String sNOVIAS = formateaCampoAlfanumerico(activo.getNOVIAS(),Longitudes.NOVIAS_L);
+        String sNUPOAC = formateaCampoAlfanumerico(activo.getNUPOAC(),Longitudes.NUPOAC_L);
+        String sNUESAC = formateaCampoAlfanumerico(activo.getNUESAC(),Longitudes.NUESAC_L);
+        String sNUPIAC = formateaCampoAlfanumerico(activo.getNUPIAC(),Longitudes.NUPIAC_L);
+        String sNUPUAC = formateaCampoAlfanumerico(activo.getNUPUAC(),Longitudes.NUPUAC_L);
+        String sNOMUIN = formateaCampoAlfanumerico(activo.getNOMUIN(),Longitudes.NOMUIN_L);
+        String sCOPRAE = formateaCampoNumerico(activo.getCOPRAE(),Longitudes.COPRAE_L);
+        String sNOPRAC = formateaCampoAlfanumerico(activo.getNOPRAC(),Longitudes.NOPRAC_L);
+        String sCOPOIN = formateaCampoNumerico(activo.getCOPOIN(),Longitudes.COPOIN_L);
+        String sFEREAP = formateaCampoNumerico(activo.getFEREAP(),Longitudes.FEREAP_L);
+        String sCOREAE = formateaCampoNumerico(activo.getCOREAE(),Longitudes.COREAE_L);
+        String sFEINAU = formateaCampoNumerico(activo.getFEINAU(),Longitudes.FEINAU_L);
+        String sFESOPO = formateaCampoNumerico(activo.getFESOPO(),Longitudes.FESOPO_L);
+        String sFESEPO = formateaCampoNumerico(activo.getFESEPO(),Longitudes.FESEPO_L);
+        String sFEREPO = formateaCampoNumerico(activo.getFEREPO(),Longitudes.FEREPO_L);
+        String sFEADAC = formateaCampoNumerico(activo.getFEADAC(),Longitudes.FEADAC_L);
+        String sCODIJU = formateaCampoNumerico(activo.getCODIJU(),Longitudes.CODIJU_L);
+        String sCOSJUP = formateaCampoNumerico(activo.getCOSJUP(),Longitudes.COSJUP_L);
+        String sCOSTLI = formateaCampoNumerico(activo.getCOSTLI(),Longitudes.COSTLI_L);
+        String sCOSCAR = formateaCampoNumerico(activo.getCOSCAR(),Longitudes.COSCAR_L);
+        String sCOESVE = formateaCampoNumerico(activo.getCOESVE(),Longitudes.COESVE_L);
+        String sCOTSIN = formateaCampoAlfanumerico(activo.getCOTSIN(),Longitudes.COTSIN_L);
+        String sNUFIRE = formateaCampoAlfanumerico(activo.getNUFIRE(),Longitudes.NUFIRE_L);
+        String sNUREGP = formateaCampoNumerico(activo.getNUREGP(),Longitudes.NUREGP_L);
+        String sNOMUI0 = formateaCampoAlfanumerico(activo.getNOMUI0(),Longitudes.NOMUI0_L);
+        String sNULIBE = formateaCampoNumerico(activo.getNULIBE(),Longitudes.NULIBE_L);
+        String sNUTOME = formateaCampoNumerico(activo.getNUTOME(),Longitudes.NUTOME_L);
+        String sNUFOLE = formateaCampoNumerico(activo.getNUFOLE(),Longitudes.NUFOLE_L);
+        String sNUINSR = formateaCampoNumerico(activo.getNUINSR(),Longitudes.NUINSR_L);
+        String sCOSOCU = formateaCampoNumerico(activo.getCOSOCU(),Longitudes.COSOCU_L);
+        String sCOXPRO = formateaCampoNumerico(activo.getCOXPRO(),Longitudes.COXPRO_L);
+        String sFESOLA = formateaCampoNumerico(activo.getFESOLA(),Longitudes.FESOLA_L);
+        String sFESELA = formateaCampoNumerico(activo.getFESELA(),Longitudes.FESELA_L);
+        String sFERELA = formateaCampoNumerico(activo.getFERELA(),Longitudes.FERELA_L);
+        String sFERLLA = formateaCampoNumerico(activo.getFERLLA(),Longitudes.FERLLA_L);
+        String sCASPRE = formateaCampoNumerico(activo.getCASPRE(),Longitudes.CASPRE_L);
+        String sCASUTR = formateaCampoNumerico(activo.getCASUTR(),Longitudes.CASUTR_L);
+        String sCASUTC = formateaCampoNumerico(activo.getCASUTC(),Longitudes.CASUTC_L);
+        String sCASUTG = formateaCampoNumerico(activo.getCASUTG(),Longitudes.CASUTG_L);
+        String sBIARRE = formateaCampoAlfanumerico(activo.getBIARRE(),Longitudes.BIARRE_L); 
+        String sCADORM = formateaCampoNumerico(activo.getCADORM(),Longitudes.CADORM_L); 
+        String sCABANO = formateaCampoNumerico(activo.getCABANO(),Longitudes.CABANO_L); 
+        String sBIGAPA = formateaCampoAlfanumerico(activo.getBIGAPA(),Longitudes.BIGAPA_L); 
+        String sCAGAPA = formateaCampoNumerico(activo.getCAGAPA(),Longitudes.CAGAPA_L); 
+        String sCASUTE = formateaCampoNumerico(activo.getCASUTE(),Longitudes.CASUTE_L); 
+        String sBILIPO = formateaCampoAlfanumerico(activo.getBILIPO(),Longitudes.BILIPO_L); 
+        String sBILIAC = formateaCampoAlfanumerico(activo.getBILIAC(),Longitudes.BILIAC_L); 
+        String sBILIUS = formateaCampoAlfanumerico(activo.getBILIUS(),Longitudes.BILIUS_L); 
+        String sBIBOIN = formateaCampoAlfanumerico(activo.getBIBOIN(),Longitudes.BIBOIN_L); 
+        String sBICEFI = formateaCampoAlfanumerico(activo.getBICEFI(),Longitudes.BICEFI_L); 
+        String sCASUCB = formateaCampoNumerico(activo.getCASUCB(),Longitudes.CASUCB_L); 
+        String sCASUCS = formateaCampoNumerico(activo.getCASUCS(),Longitudes.CASUCS_L); 
+        String sFEACON = formateaCampoNumerico(activo.getFEACON(),Longitudes.FEACON_L); 
+        String sIDAUTO = formateaCampoAlfanumerico(activo.getIDAUTO(),Longitudes.IDAUTO_L); 
+        String sFEDEMA = formateaCampoNumerico(activo.getFEDEMA(),Longitudes.FEDEMA_L); 
+        String sYNOCUR = formateaCampoAlfanumerico(activo.getYNOCUR(),Longitudes.YNOCUR_L); 
+        String sOBRECO = formateaCampoAlfanumerico(activo.getOBRECO(),Longitudes.OBRECO_L); 
+        String sYNOLEC = formateaCampoAlfanumerico(activo.getYNOLEC(),Longitudes.YNOLEC_L); 
+        String sNOLOJZ = formateaCampoAlfanumerico(activo.getNOLOJZ(),Longitudes.NOLOJZ_L); 
+        String sFEREDE = formateaCampoNumerico(activo.getFEREDE(),Longitudes.FEREDE_L); 
+        String sPOPROP = formateaCampoNumerico(activo.getPOPROP(),Longitudes.POPROP_L); 
+        String sCOGRAP = formateaCampoNumerico(activo.getCOGRAP(),Longitudes.COGRAP_L); 
+        String sFEPREG = formateaCampoNumerico(activo.getFEPREG(),Longitudes.FEPREG_L); 
+        String sFEPHAC = formateaCampoNumerico(activo.getFEPHAC(),Longitudes.FEPHAC_L); 
+        String sFEFOAC = formateaCampoNumerico(activo.getFEFOAC(),Longitudes.FEFOAC_L); 
+        String sFEVACT = formateaCampoNumerico(activo.getFEVACT(),Longitudes.FEVACT_L); 
+        String sIMVACT = formateaCampoNumerico(activo.getIMVACT(),Longitudes.IMVACT_L); 
+        String sNUFIPR = formateaCampoNumerico(activo.getNUFIPR(),Longitudes.NUFIPR_L); 
+        String sCOTPET = formateaCampoNumerico(activo.getCOTPET(),Longitudes.COTPET_L); 
+        String sFEEMPT = formateaCampoNumerico(activo.getFEEMPT(),Longitudes.FEEMPT_L); 
+        String sFESORC = formateaCampoNumerico(activo.getFESORC(),Longitudes.FESORC_L); 
+        String sFESODE = formateaCampoNumerico(activo.getFESODE(),Longitudes.FESODE_L); 
+        String sFEREAC = formateaCampoNumerico(activo.getFEREAC(),Longitudes.FEREAC_L); 
+        String sCOXSIA = formateaCampoNumerico(activo.getCOXSIA(),Longitudes.COXSIA_L); 
+        String sNUJUZD = formateaCampoNumerico(activo.getNUJUZD(),Longitudes.NUJUZD_L); 
+        String sNURCAT = formateaCampoAlfanumerico(activo.getNURCAT(),Longitudes.NURCAT_L); 
+        String sNOMPRC = formateaCampoAlfanumerico(activo.getNOMPRC(),Longitudes.NOMPRC_L); 
+        String sNUTPRC = formateaCampoAlfanumerico(activo.getNUTPRC(),Longitudes.NUTPRC_L); 
+        String sNOMADC = formateaCampoAlfanumerico(activo.getNOMADC(),Longitudes.NOMADC_L); 
+        String sNUTADC = formateaCampoAlfanumerico(activo.getNUTADC(),Longitudes.NUTADC_L); 
+        String sIMPCOO = formateaCampoNumerico(activo.getIMPCOO(),Longitudes.IMPCOO_L); 
+        String sCOENOR = formateaCampoNumerico(activo.getCOENOR(),Longitudes.COENOR_L); 
+        String sCOSPAT = formateaCampoNumerico(activo.getCOSPAT(),Longitudes.COSPAT_L); 
+        String sCOSPAS = formateaCampoNumerico(activo.getCOSPAS(),Longitudes.COSPAS_L); 
+        String sIDCOL3 = formateaCampoAlfanumerico(activo.getIDCOL3(),Longitudes.IDCOL3_L); 
+        String sBIOBNU = formateaCampoAlfanumerico(activo.getBIOBNU(),Longitudes.BIOBNU_L); 
+        String sPOBRAR = formateaCampoNumerico(activo.getPOBRAR(),Longitudes.POBRAR_L);		
 		
 		return sCOACES + sNUINMU + sCOSOPA + sCOENAE + sCOESEN + sNOVIAS
 				+ sNUPOAC + sNUESAC + sNUPIAC + sNUPUAC + sNOMUIN + sCOPRAE
@@ -478,50 +500,50 @@ public class Parser {
 	public static String escribirGasto (Gasto gasto)
 	{
 
-		String sCOACES = gasto.getCOACES();
-		String sCOGRUG = gasto.getCOGRUG();
-		String sCOTPGA = gasto.getCOTPGA();
-		String sCOSBGA = gasto.getCOSBGA();
-		String sPTPAGO = gasto.getPTPAGO();
-		String sFEDEVE = gasto.getFEDEVE();
-		String sFFGTVP = gasto.getFFGTVP();
-		String sFEPAGA = gasto.getFEPAGA();
-		String sFELIPG = gasto.getFELIPG();
-		String sCOSIGA = gasto.getCOSIGA();
-		String sFEEESI = gasto.getFEEESI();
-		String sFEECOI = gasto.getFEECOI();
-		String sFEEAUI = gasto.getFEEAUI();
-		String sFEEPAI = gasto.getFEEPAI();
-		String sIMNGAS = gasto.getIMNGAS();
-		String sYCOS02 = gasto.getYCOS02();
-		String sIMRGAS = gasto.getIMRGAS();
-		String sYCOS04 = gasto.getYCOS04();
-		String sIMDGAS = gasto.getIMDGAS();
-		String sYCOS06 = gasto.getYCOS06();
-		String sIMCOST = gasto.getIMCOST();
-		String sYCOS08 = gasto.getYCOS08();
-		String sIMOGAS = gasto.getIMOGAS();
-		String sYCOS10 = gasto.getYCOS10();
-		String sIMDTGA = gasto.getIMDTGA();
-		String sCOUNMO = gasto.getCOUNMO();
-		String sIMIMGA = gasto.getIMIMGA();
-		String sCOIMPT = gasto.getCOIMPT();
-		String sCOTNEG = gasto.getCOTNEG();
-		String sCOENCX = gasto.getCOENCX();
-		String sCOOFCX = gasto.getCOOFCX();
-		String sNUCONE = gasto.getNUCONE();
-		String sNUPROF = gasto.getNUPROF();
-		String sFEAGTO = gasto.getFEAGTO();
-		String sCOMONA = gasto.getCOMONA();
-		String sBIAUTO = gasto.getBIAUTO();
-		String sFEAUFA = gasto.getFEAUFA();
-		String sCOTERR = gasto.getCOTERR();
-		String sFMPAGN = gasto.getFMPAGN();
-		String sFEPGPR = gasto.getFEPGPR();
-		String sFEAPLI = gasto.getFEAPLI();
-		String sCOAPII = gasto.getCOAPII();
-		String sCOSPII = gasto.getCOSPII();
-		String sNUCLII = gasto.getNUCLII();
+        String sCOACES = formateaCampoNumerico(gasto.getCOACES(),Longitudes.COACES_L);
+        String sCOGRUG = formateaCampoNumerico(gasto.getCOGRUG(),Longitudes.COGRUG_L);
+        String sCOTPGA = formateaCampoNumerico(gasto.getCOTPGA(),Longitudes.COTPGA_L);
+        String sCOSBGA = formateaCampoNumerico(gasto.getCOSBGA(),Longitudes.COSBGA_L);
+        String sPTPAGO = formateaCampoAlfanumerico(gasto.getPTPAGO(),Longitudes.PTPAGO_L);
+        String sFEDEVE = formateaCampoNumerico(gasto.getFEDEVE(),Longitudes.FEDEVE_L);
+        String sFFGTVP = formateaCampoNumerico(gasto.getFFGTVP(),Longitudes.FFGTVP_L);
+        String sFEPAGA = formateaCampoNumerico(gasto.getFEPAGA(),Longitudes.FEPAGA_L);
+        String sFELIPG = formateaCampoNumerico(gasto.getFELIPG(),Longitudes.FELIPG_L);
+        String sCOSIGA = formateaCampoNumerico(gasto.getCOSIGA(),Longitudes.COSIGA_L);
+        String sFEEESI = formateaCampoNumerico(gasto.getFEEESI(),Longitudes.FEEESI_L);
+        String sFEECOI = formateaCampoNumerico(gasto.getFEECOI(),Longitudes.FEECOI_L);
+        String sFEEAUI = formateaCampoNumerico(gasto.getFEEAUI(),Longitudes.FEEAUI_L);
+        String sFEEPAI = formateaCampoNumerico(gasto.getFEEPAI(),Longitudes.FEEPAI_L);
+        String sIMNGAS = formateaCampoNumerico(gasto.getIMNGAS(),Longitudes.IMNGAS_L);
+        String sYCOS02 = formateaCampoAlfanumerico(gasto.getYCOS02(),Longitudes.YCOS02_L);
+        String sIMRGAS = formateaCampoNumerico(gasto.getIMRGAS(),Longitudes.IMRGAS_L);
+        String sYCOS04 = formateaCampoAlfanumerico(gasto.getYCOS04(),Longitudes.YCOS04_L);
+        String sIMDGAS = formateaCampoNumerico(gasto.getIMDGAS(),Longitudes.IMDGAS_L);
+        String sYCOS06 = formateaCampoAlfanumerico(gasto.getYCOS06(),Longitudes.YCOS06_L);
+        String sIMCOST = formateaCampoNumerico(gasto.getIMCOST(),Longitudes.IMCOST_L);
+        String sYCOS08 = formateaCampoAlfanumerico(gasto.getYCOS08(),Longitudes.YCOS08_L);
+        String sIMOGAS = formateaCampoNumerico(gasto.getIMOGAS(),Longitudes.IMOGAS_L);
+        String sYCOS10 = formateaCampoAlfanumerico(gasto.getYCOS10(),Longitudes.YCOS10_L);
+        String sIMDTGA = formateaCampoNumerico(gasto.getIMDTGA(),Longitudes.IMDTGA_L);
+        String sCOUNMO = formateaCampoNumerico(gasto.getCOUNMO(),Longitudes.COUNMO_L);
+        String sIMIMGA = formateaCampoNumerico(gasto.getIMIMGA(),Longitudes.IMIMGA_L);
+        String sCOIMPT = formateaCampoNumerico(gasto.getCOIMPT(),Longitudes.COIMPT_L);
+        String sCOTNEG = formateaCampoNumerico(gasto.getCOTNEG(),Longitudes.COTNEG_L);
+        String sCOENCX = formateaCampoNumerico(gasto.getCOENCX(),Longitudes.COENCX_L);
+        String sCOOFCX = formateaCampoNumerico(gasto.getCOOFCX(),Longitudes.COOFCX_L);
+        String sNUCONE = formateaCampoNumerico(gasto.getNUCONE(),Longitudes.NUCONE_L);
+        String sNUPROF = formateaCampoNumerico(gasto.getNUPROF(),Longitudes.NUPROF_L);
+        String sFEAGTO = formateaCampoNumerico(gasto.getFEAGTO(),Longitudes.FEAGTO_L);
+        String sCOMONA = formateaCampoNumerico(gasto.getCOMONA(),Longitudes.COMONA_L);
+        String sBIAUTO = formateaCampoAlfanumerico(gasto.getBIAUTO(),Longitudes.BIAUTO_L);
+        String sFEAUFA = formateaCampoNumerico(gasto.getFEAUFA(),Longitudes.FEAUFA_L);
+        String sCOTERR = formateaCampoNumerico(gasto.getCOTERR(),Longitudes.COTERR_L);
+        String sFMPAGN = formateaCampoNumerico(gasto.getFMPAGN(),Longitudes.FMPAGN_L);
+        String sFEPGPR = formateaCampoNumerico(gasto.getFEPGPR(),Longitudes.FEPGPR_L);
+        String sFEAPLI = formateaCampoNumerico(gasto.getFEAPLI(),Longitudes.FEAPLI_L);
+        String sCOAPII = formateaCampoAlfanumerico(gasto.getCOAPII(),Longitudes.COAPII_L);
+        String sCOSPII = formateaCampoAlfanumerico(gasto.getCOSPII(),Longitudes.COSPII_L);
+        String sNUCLII = formateaCampoNumerico(gasto.getNUCLII(),Longitudes.NUCLII_L);
 		
 		
 		
@@ -533,7 +555,8 @@ public class Parser {
 				+ sIMDTGA + sCOUNMO + sIMIMGA + sCOIMPT + sCOTNEG + sCOENCX
 				+ sCOOFCX + sNUCONE + sNUPROF + sFEAGTO + sCOMONA + sBIAUTO
 				+ sFEAUFA + sCOTERR + sFMPAGN + sFEPGPR + sFEAPLI + sCOAPII
-				+ sCOSPII + sNUCLII;
+				+ sCOSPII + sNUCLII 
+				+ gasto.getFILLER();
 	}
 	
 	public static Comunidad leerComunidad (String linea)
@@ -583,37 +606,38 @@ public class Parser {
 	public static String escribirComunidad (Comunidad comunidad)
 	{
 
-        String sCODTRN = comunidad.getCODTRN();
-        String sCOTDOR = comunidad.getCOTDOR();
-        String sIDPROV = comunidad.getIDPROV();
-        String sCOACCI = comunidad.getCOACCI();
-        String sCOENGP = comunidad.getCOENGP();
-        String sCOCLDO = comunidad.getCOCLDO();
-        String sNUDCOM = comunidad.getNUDCOM();
-        String sBITC10 = comunidad.getBITC10();
-        String sCOACES = comunidad.getCOACES();
-        String sBITC01 = comunidad.getBITC01();
-        String sNOMCOC = comunidad.getNOMCOC();
-        String sBITC02 = comunidad.getBITC02();
-        String sNODCCO = comunidad.getNODCCO();
-        String sBITC03 = comunidad.getBITC03();
-        String sNOMPRC = comunidad.getNOMPRC();
-        String sBITC04 = comunidad.getBITC04();
-        String sNUTPRC = comunidad.getNUTPRC();
-        String sBITC05 = comunidad.getBITC05();
-        String sNOMADC = comunidad.getNOMADC();
-        String sBITC06 = comunidad.getBITC06();
-        String sNUTADC = comunidad.getNUTADC();
-        String sBITC07 = comunidad.getBITC07();
-        String sNODCAD = comunidad.getNODCAD();
-        String sBITC08 = comunidad.getBITC08();
-        String sNUCCEN = comunidad.getNUCCEN();
-        String sNUCCOF = comunidad.getNUCCOF();
-        String sNUCCDI = comunidad.getNUCCDI();
-        String sNUCCNT = comunidad.getNUCCNT();
-        String sBITC09 = comunidad.getBITC09();
-        String sOBTEXC = comunidad.getOBTEXC();
-        String sOBDEER = comunidad.getOBDEER();
+        String sCODTRN = formateaCampoAlfanumerico(comunidad.getCODTRN(),Longitudes.CODTRN_L);
+        String sCOTDOR = formateaCampoNumerico(comunidad.getCOTDOR(),Longitudes.COTDOR_L);
+        String sIDPROV = formateaCampoNumerico(comunidad.getIDPROV(),Longitudes.IDPROV_L);
+        String sCOACCI = formateaCampoAlfanumerico(comunidad.getCOACCI(),Longitudes.COACCI_L);
+        String sCOENGP = formateaCampoNumerico(comunidad.getCOENGP(),Longitudes.COENGP_L);
+        String sCOCLDO = formateaCampoAlfanumerico(comunidad.getCOCLDO(),Longitudes.COCLDO_L);
+        String sNUDCOM = formateaCampoAlfanumerico(comunidad.getNUDCOM(),Longitudes.NUDCOM_L);
+        String sBITC10 = formateaCampoAlfanumerico(comunidad.getBITC10(),Longitudes.BITC10_L);
+        String sCOACES = formateaCampoNumerico(comunidad.getCOACES(),Longitudes.COACES_L);
+        String sBITC01 = formateaCampoAlfanumerico(comunidad.getBITC01(),Longitudes.BITC01_L);
+        String sNOMCOC = formateaCampoAlfanumerico(comunidad.getNOMCOC(),Longitudes.NOMCOC_L);
+        String sBITC02 = formateaCampoAlfanumerico(comunidad.getBITC02(),Longitudes.BITC02_L);
+        String sNODCCO = formateaCampoAlfanumerico(comunidad.getNODCCO(),Longitudes.NODCCO_L);
+        String sBITC03 = formateaCampoAlfanumerico(comunidad.getBITC03(),Longitudes.BITC03_L);
+        String sNOMPRC = formateaCampoAlfanumerico(comunidad.getNOMPRC(),Longitudes.NOMPRC_L);
+        String sBITC04 = formateaCampoAlfanumerico(comunidad.getBITC04(),Longitudes.BITC04_L);
+        String sNUTPRC = formateaCampoAlfanumerico(comunidad.getNUTPRC(),Longitudes.NUTPRC_L);
+        String sBITC05 = formateaCampoAlfanumerico(comunidad.getBITC05(),Longitudes.BITC05_L);
+        String sNOMADC = formateaCampoAlfanumerico(comunidad.getNOMADC(),Longitudes.NOMADC_L);
+        String sBITC06 = formateaCampoAlfanumerico(comunidad.getBITC06(),Longitudes.BITC06_L);
+        String sNUTADC = formateaCampoAlfanumerico(comunidad.getNUTADC(),Longitudes.NUTADC_L);
+        String sBITC07 = formateaCampoAlfanumerico(comunidad.getBITC07(),Longitudes.BITC07_L);
+        String sNODCAD = formateaCampoAlfanumerico(comunidad.getNODCAD(),Longitudes.NODCAD_L);
+        String sBITC08 = formateaCampoAlfanumerico(comunidad.getBITC08(),Longitudes.BITC08_L);
+        String sNUCCEN = formateaCampoNumerico(comunidad.getNUCCEN(),Longitudes.NUCCEN_L);
+        String sNUCCOF = formateaCampoNumerico(comunidad.getNUCCOF(),Longitudes.NUCCOF_L);
+        String sNUCCDI = formateaCampoNumerico(comunidad.getNUCCDI(),Longitudes.NUCCDI_L);
+        String sNUCCNT = formateaCampoNumerico(comunidad.getNUCCNT(),Longitudes.NUCCNT_L);
+        String sBITC09 = formateaCampoAlfanumerico(comunidad.getBITC09(),Longitudes.BITC09_L);
+        String sOBTEXC = formateaCampoAlfanumerico(comunidad.getOBTEXC(),Longitudes.OBTEXC_L);
+        String sOBDEER = formateaCampoAlfanumerico(comunidad.getOBDEER(),Longitudes.OBDEER_L);
+
 		
 		
 		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOENGP + sCOCLDO
@@ -621,7 +645,8 @@ public class Parser {
 				+ sNODCCO + sBITC03 + sNOMPRC + sBITC04 + sNUTPRC + sBITC05
 				+ sNOMADC + sBITC06 + sNUTADC + sBITC07 + sNODCAD + sBITC08
 				+ sNUCCEN + sNUCCOF + sNUCCDI + sNUCCNT + sBITC09 + sOBTEXC
-				+ sOBDEER;
+				+ sOBDEER 
+				+ comunidad.getFILLER();
 	}
 
 	public static Cuota leerCuota (String linea)
@@ -662,37 +687,39 @@ public class Parser {
 	public static String escribirCuota (Cuota cuota)
 	{
 
-        String sCODTRN = cuota.getCODTRN();
-        String sCOTDOR = cuota.getCOTDOR();
-        String sIDPROV = cuota.getIDPROV();
-        String sCOACCI = cuota.getCOACCI();
-        String sCOCLDO = cuota.getCOCLDO();
-        String sNUDCOM = cuota.getNUDCOM();
-        String sCOENGP = cuota.getCOENGP();
-        String sCOACES = cuota.getCOACES();
-        String sCOGRUG = cuota.getCOGRUG();
-        String sCOTACA = cuota.getCOTACA();
-        String sCOSBAC = cuota.getCOSBAC();
-        String sBITC11 = cuota.getBITC11();
-        String sFIPAGO = cuota.getFIPAGO();
-        String sBITC12 = cuota.getBITC12();
-        String sFFPAGO = cuota.getFFPAGO();
-        String sBITC13 = cuota.getBITC13();
-        String sIMCUCO = cuota.getIMCUCO();
-        String sBITC14 = cuota.getBITC14();
-        String sFAACTA = cuota.getFAACTA();
-        String sBITC15 = cuota.getBITC15();
-        String sPTPAGO = cuota.getPTPAGO();
-        String sBITC09 = cuota.getBITC09();
-        String sOBTEXC = cuota.getOBTEXC();
-        String sOBDEER = cuota.getOBDEER();
+        String sCODTRN = formateaCampoAlfanumerico(cuota.getCODTRN(),Longitudes.CODTRN_L);
+        String sCOTDOR = formateaCampoNumerico(cuota.getCOTDOR(),Longitudes.COTDOR_L);
+        String sIDPROV = formateaCampoNumerico(cuota.getIDPROV(),Longitudes.IDPROV_L);
+        String sCOACCI = formateaCampoAlfanumerico(cuota.getCOACCI(),Longitudes.COACCI_L);
+        String sCOCLDO = formateaCampoAlfanumerico(cuota.getCOCLDO(),Longitudes.COCLDO_L);
+        String sNUDCOM = formateaCampoAlfanumerico(cuota.getNUDCOM(),Longitudes.NUDCOM_L);
+        String sCOENGP = formateaCampoNumerico(cuota.getCOENGP(),Longitudes.COENGP_L);
+        String sCOACES = formateaCampoNumerico(cuota.getCOACES(),Longitudes.COACES_L);
+        String sCOGRUG = formateaCampoNumerico(cuota.getCOGRUG(),Longitudes.COGRUG_L);
+        String sCOTACA = formateaCampoNumerico(cuota.getCOTACA(),Longitudes.COTACA_L);
+        String sCOSBAC = formateaCampoNumerico(cuota.getCOSBAC(),Longitudes.COSBAC_L);
+        String sBITC11 = formateaCampoAlfanumerico(cuota.getBITC11(),Longitudes.BITC11_L);
+        String sFIPAGO = formateaCampoNumerico(cuota.getFIPAGO(),Longitudes.FIPAGO_L);
+        String sBITC12 = formateaCampoAlfanumerico(cuota.getBITC12(),Longitudes.BITC12_L);
+        String sFFPAGO = formateaCampoNumerico(cuota.getFFPAGO(),Longitudes.FFPAGO_L);
+        String sBITC13 = formateaCampoAlfanumerico(cuota.getBITC13(),Longitudes.BITC13_L);
+        String sIMCUCO = formateaCampoNumerico(cuota.getIMCUCO(),Longitudes.IMCUCO_L);
+        String sBITC14 = formateaCampoAlfanumerico(cuota.getBITC14(),Longitudes.BITC14_L);
+        String sFAACTA = formateaCampoNumerico(cuota.getFAACTA(),Longitudes.FAACTA_L);
+        String sBITC15 = formateaCampoAlfanumerico(cuota.getBITC15(),Longitudes.BITC15_L);
+        String sPTPAGO = formateaCampoAlfanumerico(cuota.getPTPAGO(),Longitudes.PTPAGO_L);
+        String sBITC09 = formateaCampoAlfanumerico(cuota.getBITC09(),Longitudes.BITC09_L);
+        String sOBTEXC = formateaCampoAlfanumerico(cuota.getOBTEXC(),Longitudes.OBTEXC_L);
+        String sOBDEER = formateaCampoAlfanumerico(cuota.getOBDEER(),Longitudes.OBDEER_L);
+
 
 		
 		
 		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOCLDO + sNUDCOM
 				+ sCOENGP + sCOACES + sCOGRUG + sCOTACA + sCOSBAC + sBITC11
 				+ sFIPAGO + sBITC12 + sFFPAGO + sBITC13 + sIMCUCO + sBITC14
-				+ sFAACTA + sBITC15 + sPTPAGO + sBITC09 + sOBTEXC + sOBDEER;
+				+ sFAACTA + sBITC15 + sPTPAGO + sBITC09 + sOBTEXC + sOBDEER 
+				+ cuota.getFILLER();
 	}
 	
 	public static ReferenciaCatastral leerReferenciaCatastral (String linea)
@@ -723,25 +750,27 @@ public class Parser {
 	public static String escribirReferenciaCatastral (ReferenciaCatastral referenciacatrastral)
 	{
 
-        String sCODTRN = referenciacatrastral.getCODTRN();
-        String sCOTDOR = referenciacatrastral.getCOTDOR();
-        String sIDPROV = referenciacatrastral.getIDPROV();
-        String sCOACCI = referenciacatrastral.getCOACCI();
-        String sCOENGP = referenciacatrastral.getCOENGP();
-        String sCOACES = referenciacatrastral.getCOACES();
-        String sNURCAT = referenciacatrastral.getNURCAT();
-        String sBITC16 = referenciacatrastral.getBITC16();
-        String sTIRCAT = referenciacatrastral.getTIRCAT();
-        String sBITC17 = referenciacatrastral.getBITC17();
-        String sENEMIS = referenciacatrastral.getENEMIS();
-        String sCOTEXA = referenciacatrastral.getCOTEXA();
-        String sBITC09 = referenciacatrastral.getBITC09();
-        String sOBTEXC = referenciacatrastral.getOBTEXC();
-        String sOBDEER = referenciacatrastral.getOBDEER();	
+        String sCODTRN = formateaCampoAlfanumerico(referenciacatrastral.getCODTRN(),Longitudes.CODTRN_L);
+        String sCOTDOR = formateaCampoNumerico(referenciacatrastral.getCOTDOR(),Longitudes.COTDOR_L);
+        String sIDPROV = formateaCampoNumerico(referenciacatrastral.getIDPROV(),Longitudes.IDPROV_L);
+        String sCOACCI = formateaCampoAlfanumerico(referenciacatrastral.getCOACCI(),Longitudes.COACCI_L);
+        String sCOENGP = formateaCampoNumerico(referenciacatrastral.getCOENGP(),Longitudes.COENGP_L);
+        String sCOACES = formateaCampoNumerico(referenciacatrastral.getCOACES(),Longitudes.COACES_L);
+        String sNURCAT = formateaCampoAlfanumerico(referenciacatrastral.getNURCAT(),Longitudes.NURCAT_L);
+        String sBITC16 = formateaCampoAlfanumerico(referenciacatrastral.getBITC16(),Longitudes.BITC16_L);
+        String sTIRCAT = formateaCampoAlfanumerico(referenciacatrastral.getTIRCAT(),Longitudes.TIRCAT_L);
+        String sBITC17 = formateaCampoAlfanumerico(referenciacatrastral.getBITC17(),Longitudes.BITC17_L);
+        String sENEMIS = formateaCampoAlfanumerico(referenciacatrastral.getENEMIS(),Longitudes.ENEMIS_L);
+        String sCOTEXA = formateaCampoNumerico(referenciacatrastral.getCOTEXA(),Longitudes.COTEXA_L);
+        String sBITC09 = formateaCampoAlfanumerico(referenciacatrastral.getBITC09(),Longitudes.BITC09_L);
+        String sOBTEXC = formateaCampoAlfanumerico(referenciacatrastral.getOBTEXC(),Longitudes.OBTEXC_L);
+        String sOBDEER = formateaCampoAlfanumerico(referenciacatrastral.getOBDEER(),Longitudes.OBDEER_L);
+
 		
 		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOENGP + sCOACES
 				+ sNURCAT + sBITC16 + sTIRCAT + sBITC17 + sENEMIS + sCOTEXA
-				+ sBITC09 + sOBTEXC + sOBDEER;
+				+ sBITC09 + sOBTEXC + sOBDEER
+				+ referenciacatrastral.getFILLER();
 	}
 
 	public static ImpuestoRecurso leerImpuestoRecurso (String linea)
@@ -781,35 +810,37 @@ public class Parser {
 	public static String escribirImpuestoRecurso (ImpuestoRecurso impuestorecurso)
 	{
 
-        String sCODTRN = impuestorecurso.getCODTRN();
-        String sCOTDOR = impuestorecurso.getCOTDOR();
-        String sIDPROV = impuestorecurso.getIDPROV();
-        String sCOACCI = impuestorecurso.getCOACCI();
-        String sCOENGP = impuestorecurso.getCOENGP();
-        String sCOACES = impuestorecurso.getCOACES();
-        String sNURCAT = impuestorecurso.getNURCAT();
-        String sCOGRUC = impuestorecurso.getCOGRUC();
-        String sCOTACA = impuestorecurso.getCOTACA();
-        String sCOSBAC = impuestorecurso.getCOSBAC();
-        String sBITC18 = impuestorecurso.getBITC18();
-        String sFEPRRE = impuestorecurso.getFEPRRE();
-        String sBITC19 = impuestorecurso.getBITC19();
-        String sFERERE = impuestorecurso.getFERERE();
-        String sBITC20 = impuestorecurso.getBITC20();
-        String sFEDEIN = impuestorecurso.getFEDEIN();
-        String sBITC21 = impuestorecurso.getBITC21();
-        String sBISODE = impuestorecurso.getBISODE();
-        String sBITC22 = impuestorecurso.getBITC22();
-        String sBIRESO = impuestorecurso.getBIRESO();
-        String sCOTEXA = impuestorecurso.getCOTEXA();
-        String sBITC09 = impuestorecurso.getBITC09();
-        String sOBTEXC = impuestorecurso.getOBTEXC();
-        String sOBDEER = impuestorecurso.getOBDEER();
+        String sCODTRN = formateaCampoAlfanumerico(impuestorecurso.getCODTRN(),Longitudes.CODTRN_L);
+        String sCOTDOR = formateaCampoNumerico(impuestorecurso.getCOTDOR(),Longitudes.COTDOR_L);
+        String sIDPROV = formateaCampoNumerico(impuestorecurso.getIDPROV(),Longitudes.IDPROV_L);
+        String sCOACCI = formateaCampoAlfanumerico(impuestorecurso.getCOACCI(),Longitudes.COACCI_L);
+        String sCOENGP = formateaCampoNumerico(impuestorecurso.getCOENGP(),Longitudes.COENGP_L);
+        String sCOACES = formateaCampoNumerico(impuestorecurso.getCOACES(),Longitudes.COACES_L);
+        String sNURCAT = formateaCampoAlfanumerico(impuestorecurso.getNURCAT(),Longitudes.NURCAT_L);
+        String sCOGRUC = formateaCampoNumerico(impuestorecurso.getCOGRUC(),Longitudes.COGRUC_L);
+        String sCOTACA = formateaCampoNumerico(impuestorecurso.getCOTACA(),Longitudes.COTACA_L);
+        String sCOSBAC = formateaCampoNumerico(impuestorecurso.getCOSBAC(),Longitudes.COSBAC_L);
+        String sBITC18 = formateaCampoAlfanumerico(impuestorecurso.getBITC18(),Longitudes.BITC18_L);
+        String sFEPRRE = formateaCampoNumerico(impuestorecurso.getFEPRRE(),Longitudes.FEPRRE_L);
+        String sBITC19 = formateaCampoAlfanumerico(impuestorecurso.getBITC19(),Longitudes.BITC19_L);
+        String sFERERE = formateaCampoNumerico(impuestorecurso.getFERERE(),Longitudes.FERERE_L);
+        String sBITC20 = formateaCampoAlfanumerico(impuestorecurso.getBITC20(),Longitudes.BITC20_L);
+        String sFEDEIN = formateaCampoNumerico(impuestorecurso.getFEDEIN(),Longitudes.FEDEIN_L);
+        String sBITC21 = formateaCampoAlfanumerico(impuestorecurso.getBITC21(),Longitudes.BITC21_L);
+        String sBISODE = formateaCampoNumerico(impuestorecurso.getBISODE(),Longitudes.BISODE_L);
+        String sBITC22 = formateaCampoAlfanumerico(impuestorecurso.getBITC22(),Longitudes.BITC22_L);
+        String sBIRESO = formateaCampoAlfanumerico(impuestorecurso.getBIRESO(),Longitudes.BIRESO_L);
+        String sCOTEXA = formateaCampoNumerico(impuestorecurso.getCOTEXA(),Longitudes.COTEXA_L);
+        String sBITC09 = formateaCampoAlfanumerico(impuestorecurso.getBITC09(),Longitudes.BITC09_L);
+        String sOBTEXC = formateaCampoAlfanumerico(impuestorecurso.getOBTEXC(),Longitudes.OBTEXC_L);
+        String sOBDEER = formateaCampoAlfanumerico(impuestorecurso.getOBDEER(),Longitudes.OBDEER_L);
+
 		
 		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOENGP + sCOACES
 				+ sNURCAT + sCOGRUC + sCOTACA + sCOSBAC + sBITC18 + sFEPRRE
 				+ sBITC19 + sFERERE + sBITC20 + sFEDEIN + sBITC21 + sBISODE
-				+ sBITC22 + sBIRESO + sCOTEXA + sBITC09 + sOBTEXC + sOBDEER;
+				+ sBITC22 + sBIRESO + sCOTEXA + sBITC09 + sOBTEXC + sOBDEER
+				+ impuestorecurso.getFILLER();
 	}
 	
 	public static void main(String[] args) throws IOException {

@@ -18,7 +18,7 @@ public class ReferenciaCatastral
 	private String BITC09 = "";
 	private String OBTEXC = "";
 	private String OBDEER = "";
-
+	private String FILLER = "                                                                                                                            ";
 
 	//Constructor de clase
 	public ReferenciaCatastral(String cODTRN, String cOTDOR, String iDPROV,
@@ -45,6 +45,10 @@ public class ReferenciaCatastral
 
 
 	//Métodos de acceso
+	public String getFILLER() {
+		return FILLER;
+	}	
+	
 	public String getCODTRN() {
 		return CODTRN;
 	}

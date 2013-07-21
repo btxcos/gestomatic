@@ -27,6 +27,7 @@ public class ImpuestoRecurso
 	private String BITC09 = "";
 	private String OBTEXC = "";
 	private String OBDEER = "";
+	private String FILLER = "                                                                                                             ";
 
 	//Constructor de clase
 	public ImpuestoRecurso(String cODTRN, String cOTDOR, String iDPROV,
@@ -64,7 +65,11 @@ public class ImpuestoRecurso
 	}
 
 
-	//Métodos de acceso	
+	//Métodos de acceso
+	public String getFILLER() {
+		return FILLER;
+	}
+	
 	public String getCODTRN() {
 		return CODTRN;
 	}

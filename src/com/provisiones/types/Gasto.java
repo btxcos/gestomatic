@@ -47,7 +47,7 @@ public class Gasto
 	private String COAPII = "";
 	private String COSPII = "";
 	private String NUCLII = "";
-
+	private String FILLER = "                                                                                                                      ";
 	
 	//Constructor de clase
 	public Gasto(String cOACES, String cOGRUG, String cOTPGA, String cOSBGA,
@@ -109,6 +109,11 @@ public class Gasto
 	}
 
 	//Métodos de acceso
+
+	public String getFILLER() {
+		return FILLER;
+	}	
+	
 	public String getCOACES() {
 		return COACES;
 	}

@@ -33,7 +33,7 @@ public class Comunidad
 	private String BITC09 = "";
 	private String OBTEXC = "";
 	private String OBDEER = "";
-
+	private String FILLER = "                                                                                                                      ";
 
 	//Constructor de clase
 	public Comunidad(String cODTRN, String cOTDOR, String iDPROV,
@@ -80,6 +80,10 @@ public class Comunidad
 
 
 	//Métodos de acceso
+	public String getFILLER() {
+		return FILLER;
+	}
+
 	public String getCODTRN() {
 		return CODTRN;
 	}

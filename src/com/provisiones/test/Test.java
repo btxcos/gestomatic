@@ -12,6 +12,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.Activo;
+import com.provisiones.types.Gasto;
 import com.provisiones.types.Longitudes;
 import com.provisiones.types.Posiciones;
 import com.provisiones.dal.TableManager;
@@ -41,10 +42,20 @@ public class Test
 		String aChar = new Character((char)i).toString();
 		//linea=br.readLine();
 		int contador=0;
-		Utils.standardIO2File("");
+		//Utils.standardIO2File("");//Salida por fichero de texto
 		java.util.Date date= new java.util.Date();
 		
 		System.out.println("Inicio: " + new Timestamp(date.getTime()));
+		
+		String sLetras  = "qwerty     ";
+		String sNumeros = "0000012345";
+		System.out.println("|"+sLetras+"|");
+		System.out.println("|"+sNumeros+"|");
+		System.out.println("|"+Parser.limpiaCampoAlfanumerico(sLetras,"")+"|");
+		System.out.println("|"+Parser.limpiaCampoNumerico(sNumeros)+"|");
+		System.out.println("|"+Parser.formateaCampoAlfanumerico(sLetras,10)+"|");
+		System.out.println("|"+Parser.formateaCampoNumerico(sNumeros,10)+"|");
+		
 
 		/*while((linea=br.readLine())!=null)
         {

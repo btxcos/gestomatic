@@ -27,7 +27,9 @@ public class Cuota
 	private String BITC09 = "";
 	private String OBTEXC = "";
 	private String OBDEER = "";
-
+	private String FILLER = "                                                                                                                  ";
+	
+	
 	//Constructor de clase
 	public Cuota(String cODTRN, String cOTDOR, String iDPROV, String cOACCI,
 			String cOCLDO, String nUDCOM, String cOENGP, String cOACES,
@@ -65,6 +67,10 @@ public class Cuota
 
 
 	//Métodos de acceso
+	public String getFILLER() {
+		return FILLER;
+	}
+
 	public String getCODTRN() {
 		return CODTRN;
 	}
