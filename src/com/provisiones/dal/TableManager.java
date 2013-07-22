@@ -127,7 +127,7 @@ public class TableManager
 		return true;
 	}
 
-	public static boolean crearTablasCodigos(Connection conn)
+	/*public static boolean crearTablasCodigos(Connection conn)
 	{
 
 		Statement stmt = null;
@@ -483,10 +483,10 @@ public class TableManager
 			}
 		}
 		return bExit;
-	}	
+	}*/	
 
 
-	public static boolean crearTablasDatos(Connection conn)
+	/*public static boolean crearTablasDatos(Connection conn)
 	{
 
 		Statement stmt = null;
@@ -780,5 +780,5 @@ public class TableManager
 			}
 		}
 		return bExit;
-	}
+	}*/
 }

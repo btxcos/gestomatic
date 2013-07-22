@@ -11,7 +11,7 @@ import com.provisiones.dal.ConnectionManager;
 
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.Activo;
+import com.provisiones.types.DatosActivo;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Longitudes;
 import com.provisiones.types.Posiciones;
@@ -34,7 +34,7 @@ public class Test
 		com.provisiones.dal.ConnectionManager.CloseDBConnection(conn);
 
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, "main", "Conexion Realizada");
-		File archivo = new File ("C:\\168AC2.txt");
+		File archivo = new File ("C:\\168AC.txt");
 		FileReader fr = new FileReader (archivo);
 		BufferedReader br = new BufferedReader(fr);
 		String linea = "";
@@ -42,22 +42,23 @@ public class Test
 		String aChar = new Character((char)i).toString();
 		//linea=br.readLine();
 		int contador=0;
-		//Utils.standardIO2File("");//Salida por fichero de texto
+		Utils.standardIO2File("");//Salida por fichero de texto
 		java.util.Date date= new java.util.Date();
 		
 		System.out.println("Inicio: " + new Timestamp(date.getTime()));
 		
-		String sLetras  = "qwerty     ";
+		/*String sLetras  = "qwerty     ";
 		String sNumeros = "0000012345";
 		System.out.println("|"+sLetras+"|");
 		System.out.println("|"+sNumeros+"|");
 		System.out.println("|"+Parser.limpiaCampoAlfanumerico(sLetras,"")+"|");
 		System.out.println("|"+Parser.limpiaCampoNumerico(sNumeros)+"|");
 		System.out.println("|"+Parser.formateaCampoAlfanumerico(sLetras,10)+"|");
-		System.out.println("|"+Parser.formateaCampoNumerico(sNumeros,10)+"|");
+		System.out.println("|"+Parser.formateaCampoNumerico(sNumeros,10)+"|");*/
 		
+		String sCOACES = "1";
 
-		/*while((linea=br.readLine())!=null)
+		while((linea=br.readLine())!=null)
         {
 			contador++;
     		if (linea.equals(aChar))
@@ -67,20 +68,27 @@ public class Test
     		else
     		{
     			//System.out.println(linea.length());
-    			Activo activo = Parser.leerActivo(linea);
+    			DatosActivo activo = Parser.leerActivo(linea);
     			//activo.pintaActivo();
-    			QMDatosActivos.addActivo(activo);
+    			QMDatosActivos.addDatosActivo(activo);
+    			//sCOACES = activo.getCOACES();
 
     			//activo.pintaActivo();
     		}
     		//System.out.println(contador+" OK!");
             
-        }*/
+        }
+		
+		System.out.println("|"+QMDatosActivos.getDatosActivo(sCOACES).getNOVIAS()+"|");
+		
+		System.out.println("|"+Parser.escribirCierre("903845","20130721").length()+"|");
+		
 		//QMDatosActivos.delActivo("1234");
+		System.out.println("Fin: " + new Timestamp(date.getTime()));
 		
 		br.close();
 		
-		//System.out.println("Fin: " + new Timestamp(date.getTime()));
+		
 
 		
 

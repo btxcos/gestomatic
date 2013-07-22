@@ -16,38 +16,36 @@ public class QMComunidades
 
 	static String sTable = "e1_comunidades_tbl";
 
-	static String sField1 = "e1_comunidades_id";
-
-	static String sField2 = "cod_codtrn";
-	static String sField3 = "cotdor";
-	static String sField4 = "idprov";
-	static String sField5 = "cod_coacci";
-	static String sField6 = "coengp";
-	static String sField7 = "cod_cocldo";
-	static String sField8 = "nudcom";
-	static String sField9 = "cod_bitc10";
-	static String sField10 = "cod_bitc01";
-	static String sField11 = "nomcoc";
-	static String sField12 = "cod_bitc02";
-	static String sField13 = "nodcco";
-	static String sField14 = "cod_bitc03";
-	static String sField15 = "nomprc";
-	static String sField16 = "cod_bitc04";
-	static String sField17 = "nutprc";
-	static String sField18 = "cod_bitc05";
-	static String sField19 = "nomadc";
-	static String sField20 = "cod_bitc06";
-	static String sField21 = "nutadc";
-	static String sField22 = "cod_bitc07";
-	static String sField23 = "nodcad";
-	static String sField24 = "cod_bitc08";
-	static String sField25 = "nuccen";
-	static String sField26 = "nuccof";
-	static String sField27 = "nuccdi";
-	static String sField28 = "nuccnt";
-	static String sField29 = "cod_bitc09";
-	static String sField30 = "obtexc";
-	static String sField31 = "obdeer";
+	static String sField1  = "cod_codtrn";
+	static String sField2  = "cotdor";    
+	static String sField3  = "idprov";    
+	static String sField4  = "cod_coacci";
+	static String sField5  = "coengp";    
+	static String sField6  = "cod_cocldo";
+	static String sField7  = "nudcom_id";    
+	static String sField8  = "cod_bitc10";
+	static String sField9  = "cod_bitc01";
+	static String sField10 = "nomcoc";    
+	static String sField11 = "cod_bitc02";
+	static String sField12 = "nodcco";    
+	static String sField13 = "cod_bitc03";
+	static String sField14 = "nomprc";    
+	static String sField15 = "cod_bitc04";
+	static String sField16 = "nutprc";    
+	static String sField17 = "cod_bitc05";
+	static String sField18 = "nomadc";    
+	static String sField19 = "cod_bitc06";
+	static String sField20 = "nutadc";    
+	static String sField21 = "cod_bitc07";
+	static String sField22 = "nodcad";    
+	static String sField23 = "cod_bitc08";
+	static String sField24 = "nuccen";    
+	static String sField25 = "nuccof";    
+	static String sField26 = "nuccdi";    
+	static String sField27 = "nuccnt";    
+	static String sField28 = "cod_bitc09";
+	static String sField29 = "obtexc";    
+	static String sField30 = "obdeer";    
 
 	public static boolean addComunidad(Comunidad NuevaComunidad)
 
@@ -62,6 +60,7 @@ public class QMComunidades
 
 			stmt = conn.createStatement();
 			stmt.executeUpdate("INSERT INTO " + sTable + " ("
+					   + sField1  + "," 
 				       + sField2  + ","              
 				       + sField3  + ","              
 				       + sField4  + ","              
@@ -90,8 +89,7 @@ public class QMComunidades
 				       + sField27 + ","              
 				       + sField28 + ","              
 				       + sField29 + ","              
-				       + sField30 + ","              
-				       + sField31 +
+				       + sField30 +               
 				       ") VALUES ('" 
 				       + NuevaComunidad.getCODTRN() + "','" 
 				       + NuevaComunidad.getCOTDOR() + "','"
@@ -130,7 +128,7 @@ public class QMComunidades
 
 			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaComunidad.getCOGRAP());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevaComunidad.getCOACES());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevaComunidad.getNUDCOM());
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -158,36 +156,36 @@ public class QMComunidades
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField2  + " = '"+ NuevaComunidad.getCODTRN() + "','"
-					+ sField3  + " = '"+ NuevaComunidad.getCOTDOR() + "','"
-					+ sField4  + " = '"+ NuevaComunidad.getIDPROV() + "','"
-					+ sField5  + " = '"+ NuevaComunidad.getCOACCI() + "','"
-					+ sField6  + " = '"+ NuevaComunidad.getCOENGP() + "','"
-					+ sField7  + " = '"+ NuevaComunidad.getCOCLDO() + "','"
-					+ sField8  + " = '"+ NuevaComunidad.getNUDCOM() + "','"
-					+ sField9  + " = '"+ NuevaComunidad.getBITC10() + "','"
-					+ sField10 + " = '"+ NuevaComunidad.getBITC01() + "','"
-					+ sField11 + " = '"+ NuevaComunidad.getNOMCOC() + "','"
-					+ sField12 + " = '"+ NuevaComunidad.getBITC02() + "','"
-					+ sField13 + " = '"+ NuevaComunidad.getNODCCO() + "','"
-					+ sField14 + " = '"+ NuevaComunidad.getBITC03() + "','"
-					+ sField15 + " = '"+ NuevaComunidad.getNOMPRC() + "','"
-					+ sField16 + " = '"+ NuevaComunidad.getBITC04() + "','"
-					+ sField17 + " = '"+ NuevaComunidad.getNUTPRC() + "','"
-					+ sField18 + " = '"+ NuevaComunidad.getBITC05() + "','"
-					+ sField19 + " = '"+ NuevaComunidad.getNOMADC() + "','"
-					+ sField20 + " = '"+ NuevaComunidad.getBITC06() + "','"
-					+ sField21 + " = '"+ NuevaComunidad.getNUTADC() + "','"
-					+ sField22 + " = '"+ NuevaComunidad.getBITC07() + "','"
-					+ sField23 + " = '"+ NuevaComunidad.getNODCAD() + "','"
-					+ sField24 + " = '"+ NuevaComunidad.getBITC08() + "','"
-					+ sField25 + " = '"+ NuevaComunidad.getNUCCEN() + "','"
-					+ sField26 + " = '"+ NuevaComunidad.getNUCCOF() + "','"
-					+ sField27 + " = '"+ NuevaComunidad.getNUCCDI() + "','"
-					+ sField28 + " = '"+ NuevaComunidad.getNUCCNT() + "','"
-					+ sField29 + " = '"+ NuevaComunidad.getBITC09() + "','"
-					+ sField30 + " = '"+ NuevaComunidad.getOBTEXC() + "','"
-					+ sField31 + " = '"+ NuevaComunidad.getOBDEER() + 
+					+ sField1  + " = '"+ NuevaComunidad.getCODTRN() + "','"
+					+ sField2  + " = '"+ NuevaComunidad.getCOTDOR() + "','"
+					+ sField3  + " = '"+ NuevaComunidad.getIDPROV() + "','"
+					+ sField4  + " = '"+ NuevaComunidad.getCOACCI() + "','"
+					+ sField5  + " = '"+ NuevaComunidad.getCOENGP() + "','"
+					+ sField6  + " = '"+ NuevaComunidad.getCOCLDO() + "','"
+					//+ sField7  + " = '"+ NuevaComunidad.getNUDCOM() + "','"
+					+ sField8  + " = '"+ NuevaComunidad.getBITC10() + "','"
+					+ sField9  + " = '"+ NuevaComunidad.getBITC01() + "','"
+					+ sField10 + " = '"+ NuevaComunidad.getNOMCOC() + "','"
+					+ sField11 + " = '"+ NuevaComunidad.getBITC02() + "','"
+					+ sField12 + " = '"+ NuevaComunidad.getNODCCO() + "','"
+					+ sField13 + " = '"+ NuevaComunidad.getBITC03() + "','"
+					+ sField14 + " = '"+ NuevaComunidad.getNOMPRC() + "','"
+					+ sField15 + " = '"+ NuevaComunidad.getBITC04() + "','"
+					+ sField16 + " = '"+ NuevaComunidad.getNUTPRC() + "','"
+					+ sField17 + " = '"+ NuevaComunidad.getBITC05() + "','"
+					+ sField18 + " = '"+ NuevaComunidad.getNOMADC() + "','"
+					+ sField19 + " = '"+ NuevaComunidad.getBITC06() + "','"
+					+ sField20 + " = '"+ NuevaComunidad.getNUTADC() + "','"
+					+ sField21 + " = '"+ NuevaComunidad.getBITC07() + "','"
+					+ sField22 + " = '"+ NuevaComunidad.getNODCAD() + "','"
+					+ sField23 + " = '"+ NuevaComunidad.getBITC08() + "','"
+					+ sField24 + " = '"+ NuevaComunidad.getNUCCEN() + "','"
+					+ sField25 + " = '"+ NuevaComunidad.getNUCCOF() + "','"
+					+ sField26 + " = '"+ NuevaComunidad.getNUCCDI() + "','"
+					+ sField27 + " = '"+ NuevaComunidad.getNUCCNT() + "','"
+					+ sField28 + " = '"+ NuevaComunidad.getBITC09() + "','"
+					+ sField29 + " = '"+ NuevaComunidad.getOBTEXC() + "','"
+					+ sField30 + " = '"+ NuevaComunidad.getOBDEER() +
 					"' "+
 					" WHERE "
 					+ sField1 + " = '"+ sComunidadID +"'");
@@ -222,7 +220,7 @@ public class QMComunidades
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sComunidadID + "' )");
+					" WHERE (" + sField7 + " = '" + sComunidadID + "' )");
 		} 
 		catch (SQLException ex) 
 		{
@@ -292,7 +290,8 @@ public class QMComunidades
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  + ","              
+				       + sField1  + ","              
+				       + sField2  + ","
 				       + sField3  + ","              
 				       + sField4  + ","              
 				       + sField5  + ","              
@@ -320,16 +319,15 @@ public class QMComunidades
 				       + sField27 + ","              
 				       + sField28 + ","              
 				       + sField29 + ","              
-				       + sField30 + ","              
-				       + sField31 +               
+				       + sField30 +               
        
 			"  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sComunidadID	+ "')");
+					" WHERE (" + sField7 + " = '" + sComunidadID	+ "')");
 
 			rs = pstmt.executeQuery();
 
 			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sComunidadID);
+			System.out.println(sField7 + ": " + sComunidadID);
 
 			if (rs != null) 
 			{
@@ -339,36 +337,37 @@ public class QMComunidades
 					found = true;
 
 					sCOACES = "";
-					sCODTRN = rs.getString(sField2);
-					sCOTDOR = rs.getString(sField3);
-					sIDPROV = rs.getString(sField4);
-					sCOACCI = rs.getString(sField5);
-					sCOENGP = rs.getString(sField6);
-					sCOCLDO = rs.getString(sField7);
-					sNUDCOM = rs.getString(sField8);
-					sBITC10 = rs.getString(sField9);
-					sBITC01 = rs.getString(sField10);
-					sNOMCOC = rs.getString(sField11);
-					sBITC02 = rs.getString(sField12);
-					sNODCCO = rs.getString(sField13);
-					sBITC03 = rs.getString(sField14);
-					sNOMPRC = rs.getString(sField15);
-					sBITC04 = rs.getString(sField16);
-					sNUTPRC = rs.getString(sField17);
-					sBITC05 = rs.getString(sField18);
-					sNOMADC = rs.getString(sField19);
-					sBITC06 = rs.getString(sField20);
-					sNUTADC = rs.getString(sField21);
-					sBITC07 = rs.getString(sField22);
-					sNODCAD = rs.getString(sField23);
-					sBITC08 = rs.getString(sField24);
-					sNUCCEN = rs.getString(sField25);
-					sNUCCOF = rs.getString(sField26);
-					sNUCCDI = rs.getString(sField27);
-					sNUCCNT = rs.getString(sField28);
-					sBITC09 = rs.getString(sField29);
-					sOBTEXC = rs.getString(sField30);
-					sOBDEER = rs.getString(sField31);
+					sCODTRN = rs.getString(sField1); 
+					sCOTDOR = rs.getString(sField2); 
+					sIDPROV = rs.getString(sField3); 
+					sCOACCI = rs.getString(sField4); 
+					sCOENGP = rs.getString(sField5); 
+					sCOCLDO = rs.getString(sField6); 
+					sNUDCOM = rs.getString(sField7); 
+					sBITC10 = rs.getString(sField8); 
+					sBITC01 = rs.getString(sField9); 
+					sNOMCOC = rs.getString(sField10);
+					sBITC02 = rs.getString(sField11);
+					sNODCCO = rs.getString(sField12);
+					sBITC03 = rs.getString(sField13);
+					sNOMPRC = rs.getString(sField14);
+					sBITC04 = rs.getString(sField15);
+					sNUTPRC = rs.getString(sField16);
+					sBITC05 = rs.getString(sField17);
+					sNOMADC = rs.getString(sField18);
+					sBITC06 = rs.getString(sField19);
+					sNUTADC = rs.getString(sField20);
+					sBITC07 = rs.getString(sField21);
+					sNODCAD = rs.getString(sField22);
+					sBITC08 = rs.getString(sField23);
+					sNUCCEN = rs.getString(sField24);
+					sNUCCOF = rs.getString(sField25);
+					sNUCCDI = rs.getString(sField26);
+					sNUCCNT = rs.getString(sField27);
+					sBITC09 = rs.getString(sField28);
+					sOBTEXC = rs.getString(sField29);
+					sOBDEER = rs.getString(sField30);
+
 
 
 

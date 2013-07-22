@@ -2,7 +2,7 @@ package com.provisiones.dal.qm;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.Activo;
+import com.provisiones.types.DatosActivo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -109,7 +109,7 @@ public class QMDatosActivos
 	static String sField91 = "cod_biobnu";
 	static String sField92 = "pobrar";
 
-	public static boolean addActivo (Activo NuevoActivo) 
+	public static boolean addDatosActivo (DatosActivo NuevoActivo) 
 	 
 	{
 		String sMethod = "addActivo";
@@ -328,7 +328,7 @@ public class QMDatosActivos
 		ConnectionManager.CloseDBConnection(conn);
 		return true;
 	}
-	public static boolean modActivo(Activo NuevoActivo, String sActivoID)
+	public static boolean modDatosActivo(DatosActivo NuevoActivo, String sActivoID)
 	{
 		String sMethod = "modActivo";
 		Statement stmt = null;
@@ -454,7 +454,7 @@ public class QMDatosActivos
 		return bExit;
 	}
 
-	public static boolean delActivo(String sActivoID)
+	public static boolean delDatosActivo(String sActivoID)
 	{
 		String sMethod = "delActivo";
 		Statement stmt = null;
@@ -484,7 +484,7 @@ public class QMDatosActivos
 		return true;
 	}
 
-	public static Activo getActivo(String sActivoID)
+	public static DatosActivo getDatosActivo(String sActivoID)
 	{//pendiente de coaces, de la tabla activos
 		
 		String sMethod = "getActivo";
@@ -823,7 +823,7 @@ public class QMDatosActivos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return new Activo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
+		return new DatosActivo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
 				sNUPOAC, sNUESAC, sNUPIAC, sNUPUAC, sNOMUIN, sCOPRAE, sNOPRAC,
 				sCOPOIN, sFEREAP, sCOREAE, sFEINAU, sFESOPO, sFESEPO, sFEREPO,
 				sFEADAC, sCODIJU, sCOSJUP, sCOSTLI, sCOSCAR, sCOESVE, sCOTSIN,

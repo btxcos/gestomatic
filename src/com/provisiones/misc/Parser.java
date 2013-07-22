@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 
-import com.provisiones.types.Activo;
+import com.provisiones.types.DatosActivo;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuota;
 import com.provisiones.types.Gasto;
@@ -32,7 +32,13 @@ public class Parser {
 		return sResultado;
 	}
 
-	public static String limpiaCampoAlfanumerico (String sCampo, String sValorBlanco)
+	public static String limpiaCampoAlfanumerico(String sCampo)
+	{
+
+		return sCampo.trim();
+	}
+	
+	public static String limpiaCampoAlfanumericoCodigo (String sCampo, String sValorBlanco)
 	{
 		String sResultado = sCampo.trim();
 		
@@ -67,200 +73,109 @@ public class Parser {
 	}
 	
 	
-	public static Activo leerActivo (String linea)
+	public static DatosActivo leerActivo (String linea)
 	{
 
 		String sCOACES = linea.substring(Posiciones.AC_COACES_P, Posiciones.AC_COACES_P+Longitudes.COACES_L);
-		sCOACES = Integer.toString(Integer.parseInt(sCOACES));
 		String sNUINMU = linea.substring(Posiciones.AC_NUINMU_P, Posiciones.AC_NUINMU_P+Longitudes.NUINMU_L);
-		sNUINMU = Integer.toString(Integer.parseInt(sNUINMU));
 		String sCOSOPA = linea.substring(Posiciones.AC_COSOPA_P, Posiciones.AC_COSOPA_P+Longitudes.COSOPA_L);
-		sCOSOPA = Integer.toString(Integer.parseInt(sCOSOPA));
 		String sCOENAE = linea.substring(Posiciones.AC_COENAE_P, Posiciones.AC_COENAE_P+Longitudes.COENAE_L);
-		sCOENAE = Integer.toString(Integer.parseInt(sCOENAE));
 		String sCOESEN = linea.substring(Posiciones.AC_COESEN_P, Posiciones.AC_COESEN_P+Longitudes.COESEN_L);
-		sCOESEN = Integer.toString(Integer.parseInt(sCOESEN));
-		
-		String sNOVIAS = linea.substring(Posiciones.AC_NOVIAS_P, Posiciones.AC_NOVIAS_P+Longitudes.NOVIAS_L).trim();
-		String sNUPOAC = linea.substring(Posiciones.AC_NUPOAC_P, Posiciones.AC_NUPOAC_P+Longitudes.NUPOAC_L).trim();
-		String sNUESAC = linea.substring(Posiciones.AC_NUESAC_P, Posiciones.AC_NUESAC_P+Longitudes.NUESAC_L).trim();
-		String sNUPIAC = linea.substring(Posiciones.AC_NUPIAC_P, Posiciones.AC_NUPIAC_P+Longitudes.NUPIAC_L).trim();
-		String sNUPUAC = linea.substring(Posiciones.AC_NUPUAC_P, Posiciones.AC_NUPUAC_P+Longitudes.NUPUAC_L).trim();
-		String sNOMUIN = linea.substring(Posiciones.AC_NOMUIN_P, Posiciones.AC_NOMUIN_P+Longitudes.NOMUIN_L).trim();
-		
+		String sNOVIAS = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NOVIAS_P, Posiciones.AC_NOVIAS_P+Longitudes.NOVIAS_L));
+		String sNUPOAC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NUPOAC_P, Posiciones.AC_NUPOAC_P+Longitudes.NUPOAC_L));
+		String sNUESAC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NUESAC_P, Posiciones.AC_NUESAC_P+Longitudes.NUESAC_L));
+		String sNUPIAC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NUPIAC_P, Posiciones.AC_NUPIAC_P+Longitudes.NUPIAC_L));
+		String sNUPUAC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NUPUAC_P, Posiciones.AC_NUPUAC_P+Longitudes.NUPUAC_L));
+		String sNOMUIN = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NOMUIN_P, Posiciones.AC_NOMUIN_P+Longitudes.NOMUIN_L));
 		String sCOPRAE = linea.substring(Posiciones.AC_COPRAE_P, Posiciones.AC_COPRAE_P+Longitudes.COPRAE_L);
-		sCOPRAE = Integer.toString(Integer.parseInt(sCOPRAE));
-		
-		String sNOPRAC = linea.substring(Posiciones.AC_NOPRAC_P, Posiciones.AC_NOPRAC_P+Longitudes.NOPRAC_L).trim();
-		
+		String sNOPRAC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NOPRAC_P, Posiciones.AC_NOPRAC_P+Longitudes.NOPRAC_L));
 		String sCOPOIN = linea.substring(Posiciones.AC_COPOIN_P, Posiciones.AC_COPOIN_P+Longitudes.COPOIN_L);
-		
 		String sFEREAP = linea.substring(Posiciones.AC_FEREAP_P, Posiciones.AC_FEREAP_P+Longitudes.FEREAP_L);
-		
 		String sCOREAE = linea.substring(Posiciones.AC_COREAE_P, Posiciones.AC_COREAE_P+Longitudes.COREAE_L);
-		sCOREAE = Integer.toString(Integer.parseInt(sCOREAE));
-		
 		String sFEINAU = linea.substring(Posiciones.AC_FEINAU_P, Posiciones.AC_FEINAU_P+Longitudes.FEINAU_L);
 		String sFESOPO = linea.substring(Posiciones.AC_FESOPO_P, Posiciones.AC_FESOPO_P+Longitudes.FESOPO_L);
 		String sFESEPO = linea.substring(Posiciones.AC_FESEPO_P, Posiciones.AC_FESEPO_P+Longitudes.FESEPO_L);
 		String sFEREPO = linea.substring(Posiciones.AC_FEREPO_P, Posiciones.AC_FEREPO_P+Longitudes.FEREPO_L);
 		String sFEADAC = linea.substring(Posiciones.AC_FEADAC_P, Posiciones.AC_FEADAC_P+Longitudes.FEADAC_L);
-		
 		String sCODIJU = linea.substring(Posiciones.AC_CODIJU_P, Posiciones.AC_CODIJU_P+Longitudes.CODIJU_L);
-		sCODIJU = Integer.toString(Integer.parseInt(sCODIJU));
 		String sCOSJUP = linea.substring(Posiciones.AC_COSJUP_P, Posiciones.AC_COSJUP_P+Longitudes.COSJUP_L);
-		sCOSJUP = Integer.toString(Integer.parseInt(sCOSJUP));
 		String sCOSTLI = linea.substring(Posiciones.AC_COSTLI_P, Posiciones.AC_COSTLI_P+Longitudes.COSTLI_L);
-		sCOSTLI = Integer.toString(Integer.parseInt(sCOSTLI));
 		String sCOSCAR = linea.substring(Posiciones.AC_COSCAR_P, Posiciones.AC_COSCAR_P+Longitudes.COSCAR_L);
-		sCOSCAR = Integer.toString(Integer.parseInt(sCOSCAR));
 		String sCOESVE = linea.substring(Posiciones.AC_COESVE_P, Posiciones.AC_COESVE_P+Longitudes.COESVE_L);
-		sCOESVE = Integer.toString(Integer.parseInt(sCOESVE));
-
-		String sCOTSIN = linea.substring(Posiciones.AC_COTSIN_P, Posiciones.AC_COTSIN_P+Longitudes.COTSIN_L);
-		String sNUFIRE = linea.substring(Posiciones.AC_NUFIRE_P, Posiciones.AC_NUFIRE_P+Longitudes.NUFIRE_L).trim();
-
+		String sCOTSIN = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_COTSIN_P, Posiciones.AC_COTSIN_P+Longitudes.COTSIN_L));
+		String sNUFIRE = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NUFIRE_P, Posiciones.AC_NUFIRE_P+Longitudes.NUFIRE_L));
 		String sNUREGP = linea.substring(Posiciones.AC_NUREGP_P, Posiciones.AC_NUREGP_P+Longitudes.NUREGP_L);
-		sNUREGP = Integer.toString(Integer.parseInt(sNUREGP));
-		
-		String sNOMUI0 = linea.substring(Posiciones.AC_NOMUI0_P, Posiciones.AC_NOMUI0_P+Longitudes.NOMUI0_L).trim();
-
+		String sNOMUI0 = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NOMUI0_P, Posiciones.AC_NOMUI0_P+Longitudes.NOMUI0_L));
 		String sNULIBE = linea.substring(Posiciones.AC_NULIBE_P, Posiciones.AC_NULIBE_P+Longitudes.NULIBE_L);
-		sNULIBE = Integer.toString(Integer.parseInt(sNULIBE));
 		String sNUTOME = linea.substring(Posiciones.AC_NUTOME_P, Posiciones.AC_NUTOME_P+Longitudes.NUTOME_L);
-		sNUTOME = Integer.toString(Integer.parseInt(sNUTOME));
 		String sNUFOLE = linea.substring(Posiciones.AC_NUFOLE_P, Posiciones.AC_NUFOLE_P+Longitudes.NUFOLE_L);
-		sNUFOLE = Integer.toString(Integer.parseInt(sNUFOLE));
 		String sNUINSR = linea.substring(Posiciones.AC_NUINSR_P, Posiciones.AC_NUINSR_P+Longitudes.NUINSR_L);
-		sNUINSR = Integer.toString(Integer.parseInt(sNUINSR));
 		String sCOSOCU = linea.substring(Posiciones.AC_COSOCU_P, Posiciones.AC_COSOCU_P+Longitudes.COSOCU_L);
-		sCOSOCU = Integer.toString(Integer.parseInt(sCOSOCU));
 		String sCOXPRO = linea.substring(Posiciones.AC_COXPRO_P, Posiciones.AC_COXPRO_P+Longitudes.COXPRO_L);
-		sCOXPRO = Integer.toString(Integer.parseInt(sCOXPRO));
-
 		String sFESOLA = linea.substring(Posiciones.AC_FESOLA_P, Posiciones.AC_FESOLA_P+Longitudes.FESOLA_L);
 		String sFESELA = linea.substring(Posiciones.AC_FESELA_P, Posiciones.AC_FESELA_P+Longitudes.FESELA_L);
 		String sFERELA = linea.substring(Posiciones.AC_FERELA_P, Posiciones.AC_FERELA_P+Longitudes.FERELA_L);
 		String sFERLLA = linea.substring(Posiciones.AC_FERLLA_P, Posiciones.AC_FERLLA_P+Longitudes.FERLLA_L);
-
 		String sCASPRE = linea.substring(Posiciones.AC_CASPRE_P, Posiciones.AC_CASPRE_P+Longitudes.CASPRE_L);
-		sCASPRE = Integer.toString(Integer.parseInt(sCASPRE));
 		String sCASUTR = linea.substring(Posiciones.AC_CASUTR_P, Posiciones.AC_CASUTR_P+Longitudes.CASUTR_L);
-		sCASUTR = Integer.toString(Integer.parseInt(sCASUTR));
 		String sCASUTC = linea.substring(Posiciones.AC_CASUTC_P, Posiciones.AC_CASUTC_P+Longitudes.CASUTC_L);
-		sCASUTC = Integer.toString(Integer.parseInt(sCASUTC));
 		String sCASUTG = linea.substring(Posiciones.AC_CASUTG_P, Posiciones.AC_CASUTG_P+Longitudes.CASUTG_L);
-		sCASUTG = Integer.toString(Integer.parseInt(sCASUTG));
-
-		String sBIARRE = linea.substring(Posiciones.AC_BIARRE_P, Posiciones.AC_BIARRE_P+Longitudes.BIARRE_L).trim();
-		if (sBIARRE.equals("")) sBIARRE = "#";
-
+		String sBIARRE = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BIARRE_P, Posiciones.AC_BIARRE_P+Longitudes.BIARRE_L),"#");
 		String sCADORM = linea.substring(Posiciones.AC_CADORM_P, Posiciones.AC_CADORM_P+Longitudes.CADORM_L);
-		sCADORM = Integer.toString(Integer.parseInt(sCADORM));
 		String sCABANO = linea.substring(Posiciones.AC_CABANO_P, Posiciones.AC_CABANO_P+Longitudes.CABANO_L);
-		sCABANO = Integer.toString(Integer.parseInt(sCABANO));
-
-		String sBIGAPA = linea.substring(Posiciones.AC_BIGAPA_P, Posiciones.AC_BIGAPA_P+Longitudes.BIGAPA_L).trim();
-		if (sBIGAPA.equals("")) sBIGAPA = "#";
-			
+		String sBIGAPA = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BIGAPA_P, Posiciones.AC_BIGAPA_P+Longitudes.BIGAPA_L),"#");
 		String sCAGAPA = linea.substring(Posiciones.AC_CAGAPA_P, Posiciones.AC_CAGAPA_P+Longitudes.CAGAPA_L);
-		sCAGAPA = Integer.toString(Integer.parseInt(sCAGAPA));
 		String sCASUTE = linea.substring(Posiciones.AC_CASUTE_P, Posiciones.AC_CASUTE_P+Longitudes.CASUTE_L);
-		sCASUTE = Integer.toString(Integer.parseInt(sCASUTE));
-	
-		String sBILIPO = linea.substring(Posiciones.AC_BILIPO_P, Posiciones.AC_BILIPO_P+Longitudes.BILIPO_L).trim();
-		if (sBILIPO.equals("")) sBILIPO = "#";
-
-		String sBILIAC = linea.substring(Posiciones.AC_BILIAC_P, Posiciones.AC_BILIAC_P+Longitudes.BILIAC_L).trim();
-		if (sBILIAC.equals("")) sBILIAC = "#";
-
-		String sBILIUS = linea.substring(Posiciones.AC_BILIUS_P, Posiciones.AC_BILIUS_P+Longitudes.BILIUS_L).trim();
-		if (sBILIUS.equals("")) sBILIUS = "#";
-
-		String sBIBOIN = linea.substring(Posiciones.AC_BIBOIN_P, Posiciones.AC_BIBOIN_P+Longitudes.BIBOIN_L).trim();
-		if (sBIBOIN.equals("")) sBIBOIN = "#";
-
-		String sBICEFI = linea.substring(Posiciones.AC_BICEFI_P, Posiciones.AC_BICEFI_P+Longitudes.BICEFI_L).trim();
-		if (sBICEFI.equals("")) sBICEFI = "#";
-
+		String sBILIPO = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BILIPO_P, Posiciones.AC_BILIPO_P+Longitudes.BILIPO_L),"#");
+		String sBILIAC = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BILIAC_P, Posiciones.AC_BILIAC_P+Longitudes.BILIAC_L),"#");
+		String sBILIUS = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BILIUS_P, Posiciones.AC_BILIUS_P+Longitudes.BILIUS_L),"#");
+		String sBIBOIN = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BIBOIN_P, Posiciones.AC_BIBOIN_P+Longitudes.BIBOIN_L),"#");
+		String sBICEFI = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BICEFI_P, Posiciones.AC_BICEFI_P+Longitudes.BICEFI_L),"#");
 		String sCASUCB = linea.substring(Posiciones.AC_CASUCB_P, Posiciones.AC_CASUCB_P+Longitudes.CASUCB_L);
-		sCASUCB = Integer.toString(Integer.parseInt(sCASUCB));
 		String sCASUCS = linea.substring(Posiciones.AC_CASUCS_P, Posiciones.AC_CASUCS_P+Longitudes.CASUCS_L);
-		sCASUCS = Integer.toString(Integer.parseInt(sCASUCS));
-
 		String sFEACON = linea.substring(Posiciones.AC_FEACON_P, Posiciones.AC_FEACON_P+Longitudes.FEACON_L);
-
-		String sIDAUTO = linea.substring(Posiciones.AC_IDAUTO_P, Posiciones.AC_IDAUTO_P+Longitudes.IDAUTO_L).trim();
-
+		String sIDAUTO = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_IDAUTO_P, Posiciones.AC_IDAUTO_P+Longitudes.IDAUTO_L));
 		String sFEDEMA = linea.substring(Posiciones.AC_FEDEMA_P, Posiciones.AC_FEDEMA_P+Longitudes.FEDEMA_L);
-	
-		String sYNOCUR = linea.substring(Posiciones.AC_YNOCUR_P, Posiciones.AC_YNOCUR_P+Longitudes.YNOCUR_L).trim();
-		String sOBRECO = linea.substring(Posiciones.AC_OBRECO_P, Posiciones.AC_OBRECO_P+Longitudes.OBRECO_L).trim();
-		String sYNOLEC = linea.substring(Posiciones.AC_YNOLEC_P, Posiciones.AC_YNOLEC_P+Longitudes.YNOLEC_L).trim();
-		String sNOLOJZ = linea.substring(Posiciones.AC_NOLOJZ_P, Posiciones.AC_NOLOJZ_P+Longitudes.NOLOJZ_L).trim();
-
+		String sYNOCUR = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_YNOCUR_P, Posiciones.AC_YNOCUR_P+Longitudes.YNOCUR_L));
+		String sOBRECO = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_OBRECO_P, Posiciones.AC_OBRECO_P+Longitudes.OBRECO_L));
+		String sYNOLEC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_YNOLEC_P, Posiciones.AC_YNOLEC_P+Longitudes.YNOLEC_L));
+		String sNOLOJZ = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NOLOJZ_P, Posiciones.AC_NOLOJZ_P+Longitudes.NOLOJZ_L));
 		String sFEREDE = linea.substring(Posiciones.AC_FEREDE_P, Posiciones.AC_FEREDE_P+Longitudes.FEREDE_L);
-
 		String sPOPROP = linea.substring(Posiciones.AC_POPROP_P, Posiciones.AC_POPROP_P+Longitudes.POPROP_L);
-		sPOPROP = Integer.toString(Integer.parseInt(sPOPROP));
 		String sCOGRAP = linea.substring(Posiciones.AC_COGRAP_P, Posiciones.AC_COGRAP_P+Longitudes.COGRAP_L);
-		sCOGRAP = Integer.toString(Integer.parseInt(sCOGRAP));
-
 		String sFEPREG = linea.substring(Posiciones.AC_FEPREG_P, Posiciones.AC_FEPREG_P+Longitudes.FEPREG_L);
 		String sFEPHAC = linea.substring(Posiciones.AC_FEPHAC_P, Posiciones.AC_FEPHAC_P+Longitudes.FEPHAC_L);
 		String sFEFOAC = linea.substring(Posiciones.AC_FEFOAC_P, Posiciones.AC_FEFOAC_P+Longitudes.FEFOAC_L);
 		String sFEVACT = linea.substring(Posiciones.AC_FEVACT_P, Posiciones.AC_FEVACT_P+Longitudes.FEVACT_L);
-
 		String sIMVACT = linea.substring(Posiciones.AC_IMVACT_P, Posiciones.AC_IMVACT_P+Longitudes.IMVACT_L);
-		sIMVACT = Integer.toString(Integer.parseInt(sIMVACT));
 		String sNUFIPR = linea.substring(Posiciones.AC_NUFIPR_P, Posiciones.AC_NUFIPR_P+Longitudes.NUFIPR_L);
-		sNUFIPR = Integer.toString(Integer.parseInt(sNUFIPR));
 		String sCOTPET = linea.substring(Posiciones.AC_COTPET_P, Posiciones.AC_COTPET_P+Longitudes.COTPET_L);
-		sCOTPET = Integer.toString(Integer.parseInt(sCOTPET));
-		
 		String sFEEMPT = linea.substring(Posiciones.AC_FEEMPT_P, Posiciones.AC_FEEMPT_P+Longitudes.FEEMPT_L);
 		String sFESORC = linea.substring(Posiciones.AC_FESORC_P, Posiciones.AC_FESORC_P+Longitudes.FESORC_L);
 		String sFESODE = linea.substring(Posiciones.AC_FESODE_P, Posiciones.AC_FESODE_P+Longitudes.FESODE_L);
 		String sFEREAC = linea.substring(Posiciones.AC_FEREAC_P, Posiciones.AC_FEREAC_P+Longitudes.FEREAC_L);
-
 		String sCOXSIA = linea.substring(Posiciones.AC_COXSIA_P, Posiciones.AC_COXSIA_P+Longitudes.COXSIA_L);
-	
 		if (sCOXSIA.trim().equals(""))
 			sCOXSIA = "0";
-	
 		String sNUJUZD = linea.substring(Posiciones.AC_NUJUZD_P, Posiciones.AC_NUJUZD_P+Longitudes.NUJUZD_L);
-		sNUJUZD = Integer.toString(Integer.parseInt(sNUJUZD));
-
-		String sNURCAT = linea.substring(Posiciones.AC_NURCAT_P, Posiciones.AC_NURCAT_P+Longitudes.NURCAT_L);
-
-		String sNOMPRC = linea.substring(Posiciones.AC_NOMPRC_P, Posiciones.AC_NOMPRC_P+Longitudes.NOMPRC_L).trim();
-		String sNUTPRC = linea.substring(Posiciones.AC_NUTPRC_P, Posiciones.AC_NUTPRC_P+Longitudes.NUTPRC_L).trim();
-		String sNOMADC = linea.substring(Posiciones.AC_NOMADC_P, Posiciones.AC_NOMADC_P+Longitudes.NOMADC_L).trim();
-		String sNUTADC = linea.substring(Posiciones.AC_NUTADC_P, Posiciones.AC_NUTADC_P+Longitudes.NUTADC_L).trim();
-
+		String sNURCAT = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NURCAT_P, Posiciones.AC_NURCAT_P+Longitudes.NURCAT_L));
+		String sNOMPRC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NOMPRC_P, Posiciones.AC_NOMPRC_P+Longitudes.NOMPRC_L));
+		String sNUTPRC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NUTPRC_P, Posiciones.AC_NUTPRC_P+Longitudes.NUTPRC_L));
+		String sNOMADC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NOMADC_P, Posiciones.AC_NOMADC_P+Longitudes.NOMADC_L));
+		String sNUTADC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NUTADC_P, Posiciones.AC_NUTADC_P+Longitudes.NUTADC_L));
 		String sIMPCOO = linea.substring(Posiciones.AC_IMPCOO_P, Posiciones.AC_IMPCOO_P+Longitudes.IMPCOO_L);
-		sIMPCOO = Integer.toString(Integer.parseInt(sIMPCOO));
-
-		String sCOENOR = linea.substring(Posiciones.AC_COENOR_P, Posiciones.AC_COENOR_P+Longitudes.COENOR_L); 
-
+		String sCOENOR = linea.substring(Posiciones.AC_COENOR_P, Posiciones.AC_COENOR_P+Longitudes.COENOR_L);
 		String sCOSPAT = linea.substring(Posiciones.AC_COSPAT_P, Posiciones.AC_COSPAT_P+Longitudes.COSPAT_L);
-		sCOSPAT = Integer.toString(Integer.parseInt(sCOSPAT));
 		String sCOSPAS = linea.substring(Posiciones.AC_COSPAS_P, Posiciones.AC_COSPAS_P+Longitudes.COSPAS_L);
-		sCOSPAS = Integer.toString(Integer.parseInt(sCOSPAS));
-
-		String sIDCOL3 = linea.substring(Posiciones.AC_IDCOL3_P, Posiciones.AC_IDCOL3_P+Longitudes.IDCOL3_L); 
-
-		String sBIOBNU = linea.substring(Posiciones.AC_BIOBNU_P, Posiciones.AC_BIOBNU_P+Longitudes.BIOBNU_L).trim();
-		if (sBIOBNU.equals("")) sBIOBNU = "#";
-
+		String sIDCOL3 = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_IDCOL3_P, Posiciones.AC_IDCOL3_P+Longitudes.IDCOL3_L));
+		String sBIOBNU = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BIOBNU_P, Posiciones.AC_BIOBNU_P+Longitudes.BIOBNU_L),"#");
 		String sPOBRAR = linea.substring(Posiciones.AC_POBRAR_P, Posiciones.AC_POBRAR_P+Longitudes.POBRAR_L);
-		sPOBRAR = Integer.toString(Integer.parseInt(sPOBRAR));
 
 		
 		
 		
 		
-		return new Activo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
+		return new DatosActivo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
 				sNUPOAC, sNUESAC, sNUPIAC, sNUPUAC, sNOMUIN, sCOPRAE, sNOPRAC,
 				sCOPOIN, sFEREAP, sCOREAE, sFEINAU, sFESOPO, sFESEPO, sFEREPO,
 				sFEADAC, sCODIJU, sCOSJUP, sCOSTLI, sCOSCAR, sCOESVE, sCOTSIN,
@@ -276,7 +191,7 @@ public class Parser {
 				sBIOBNU, sPOBRAR);
 	}
 
-	public static String escribirActivo (Activo activo)
+	public static String escribirActivo (DatosActivo activo)
 	{
 	
         String sCOACES = formateaCampoNumerico(activo.getCOACES(),Longitudes.COACES_L);
@@ -395,97 +310,49 @@ public class Parser {
 	{
 
 		String sCOACES = linea.substring(Posiciones.GA_COACES_P, Posiciones.GA_COACES_P+Longitudes.COACES_L);
-		sCOACES = Integer.toString(Integer.parseInt(sCOACES));
 		String sCOGRUG = linea.substring(Posiciones.GA_COGRUG_P, Posiciones.GA_COGRUG_P+Longitudes.COGRUG_L);
-		sCOGRUG = Integer.toString(Integer.parseInt(sCOGRUG));
 		String sCOTPGA = linea.substring(Posiciones.GA_COTPGA_P, Posiciones.GA_COTPGA_P+Longitudes.COTPGA_L);
-		sCOTPGA = Integer.toString(Integer.parseInt(sCOTPGA));
 		String sCOSBGA = linea.substring(Posiciones.GA_COSBGA_P, Posiciones.GA_COSBGA_P+Longitudes.COSBGA_L);
-		sCOSBGA = Integer.toString(Integer.parseInt(sCOSBGA));
-		
 		String sPTPAGO = linea.substring(Posiciones.GA_PTPAGO_P, Posiciones.GA_PTPAGO_P+Longitudes.PTPAGO_L);
-		if (sPTPAGO.trim().equals(""))
-			sPTPAGO = "0";
-
 		String sFEDEVE = linea.substring(Posiciones.GA_FEDEVE_P, Posiciones.GA_FEDEVE_P+Longitudes.FEDEVE_L);
 		String sFFGTVP = linea.substring(Posiciones.GA_FFGTVP_P, Posiciones.GA_FFGTVP_P+Longitudes.FFGTVP_L);
 		String sFEPAGA = linea.substring(Posiciones.GA_FEPAGA_P, Posiciones.GA_FEPAGA_P+Longitudes.FEPAGA_L);
 		String sFELIPG = linea.substring(Posiciones.GA_FELIPG_P, Posiciones.GA_FELIPG_P+Longitudes.FELIPG_L);
-
 		String sCOSIGA = linea.substring(Posiciones.GA_COSIGA_P, Posiciones.GA_COSIGA_P+Longitudes.COSIGA_L);
-		sCOSIGA = Integer.toString(Integer.parseInt(sCOSIGA));
-		
 		String sFEEESI = linea.substring(Posiciones.GA_FEEESI_P, Posiciones.GA_FEEESI_P+Longitudes.FEEESI_L);
 		String sFEECOI = linea.substring(Posiciones.GA_FEECOI_P, Posiciones.GA_FEECOI_P+Longitudes.FEECOI_L);
 		String sFEEAUI = linea.substring(Posiciones.GA_FEEAUI_P, Posiciones.GA_FEEAUI_P+Longitudes.FEEAUI_L);
 		String sFEEPAI = linea.substring(Posiciones.GA_FEEPAI_P, Posiciones.GA_FEEPAI_P+Longitudes.FEEPAI_L);
-	
 		String sIMNGAS = linea.substring(Posiciones.GA_IMNGAS_P, Posiciones.GA_IMNGAS_P+Longitudes.IMNGAS_L);
-		sIMNGAS = Integer.toString(Integer.parseInt(sIMNGAS));
-		
 		String sYCOS02 = linea.substring(Posiciones.GA_YCOS02_P, Posiciones.GA_YCOS02_P+Longitudes.YCOS02_L);
-		
 		String sIMRGAS = linea.substring(Posiciones.GA_IMRGAS_P, Posiciones.GA_IMRGAS_P+Longitudes.IMRGAS_L);
-		sIMRGAS = Integer.toString(Integer.parseInt(sIMRGAS));
-
 		String sYCOS04 = linea.substring(Posiciones.GA_YCOS04_P, Posiciones.GA_YCOS04_P+Longitudes.YCOS04_L);
-		
 		String sIMDGAS = linea.substring(Posiciones.GA_IMDGAS_P, Posiciones.GA_IMDGAS_P+Longitudes.IMDGAS_L);
-		sIMDGAS = Integer.toString(Integer.parseInt(sIMDGAS));
-		
 		String sYCOS06 = linea.substring(Posiciones.GA_YCOS06_P, Posiciones.GA_YCOS06_P+Longitudes.YCOS06_L);
-		
 		String sIMCOST = linea.substring(Posiciones.GA_IMCOST_P, Posiciones.GA_IMCOST_P+Longitudes.IMCOST_L);
-		sIMCOST = Integer.toString(Integer.parseInt(sIMCOST));
-		
 		String sYCOS08 = linea.substring(Posiciones.GA_YCOS08_P, Posiciones.GA_YCOS08_P+Longitudes.YCOS08_L);
-		
 		String sIMOGAS = linea.substring(Posiciones.GA_IMOGAS_P, Posiciones.GA_IMOGAS_P+Longitudes.IMOGAS_L);
-		sIMOGAS = Integer.toString(Integer.parseInt(sIMOGAS));
-		
 		String sYCOS10 = linea.substring(Posiciones.GA_YCOS10_P, Posiciones.GA_YCOS10_P+Longitudes.YCOS10_L);
-		
 		String sIMDTGA = linea.substring(Posiciones.GA_IMDTGA_P, Posiciones.GA_IMDTGA_P+Longitudes.IMDTGA_L);
-		sIMDTGA = Integer.toString(Integer.parseInt(sIMDTGA));
 		String sCOUNMO = linea.substring(Posiciones.GA_COUNMO_P, Posiciones.GA_COUNMO_P+Longitudes.COUNMO_L);
-		sCOUNMO = Integer.toString(Integer.parseInt(sCOUNMO));
 		String sIMIMGA = linea.substring(Posiciones.GA_IMIMGA_P, Posiciones.GA_IMIMGA_P+Longitudes.IMIMGA_L);
-		sIMIMGA = Integer.toString(Integer.parseInt(sIMIMGA));
 		String sCOIMPT = linea.substring(Posiciones.GA_COIMPT_P, Posiciones.GA_COIMPT_P+Longitudes.COIMPT_L);
-		sCOIMPT = Integer.toString(Integer.parseInt(sCOIMPT));
 		String sCOTNEG = linea.substring(Posiciones.GA_COTNEG_P, Posiciones.GA_COTNEG_P+Longitudes.COTNEG_L);
-		sCOTNEG = Integer.toString(Integer.parseInt(sCOTNEG));
 		String sCOENCX = linea.substring(Posiciones.GA_COENCX_P, Posiciones.GA_COENCX_P+Longitudes.COENCX_L);
-		sCOENCX = Integer.toString(Integer.parseInt(sCOENCX));
 		String sCOOFCX = linea.substring(Posiciones.GA_COOFCX_P, Posiciones.GA_COOFCX_P+Longitudes.COOFCX_L);
-		sCOOFCX = Integer.toString(Integer.parseInt(sCOOFCX));
 		String sNUCONE = linea.substring(Posiciones.GA_NUCONE_P, Posiciones.GA_NUCONE_P+Longitudes.NUCONE_L);
-		sNUCONE = Integer.toString(Integer.parseInt(sNUCONE));
 		String sNUPROF = linea.substring(Posiciones.GA_NUPROF_P, Posiciones.GA_NUPROF_P+Longitudes.NUPROF_L);
-		sNUPROF = Integer.toString(Integer.parseInt(sNUPROF));
-
 		String sFEAGTO = linea.substring(Posiciones.GA_FEAGTO_P, Posiciones.GA_FEAGTO_P+Longitudes.FEAGTO_L);
-
 		String sCOMONA = linea.substring(Posiciones.GA_COMONA_P, Posiciones.GA_COMONA_P+Longitudes.COMONA_L);
-		sCOMONA = Integer.toString(Integer.parseInt(sCOMONA));
-		
 		String sBIAUTO = linea.substring(Posiciones.GA_BIAUTO_P, Posiciones.GA_BIAUTO_P+Longitudes.BIAUTO_L);
-		
 		String sFEAUFA = linea.substring(Posiciones.GA_FEAUFA_P, Posiciones.GA_FEAUFA_P+Longitudes.FEAUFA_L);
-
 		String sCOTERR = linea.substring(Posiciones.GA_COTERR_P, Posiciones.GA_COTERR_P+Longitudes.COTERR_L);
-		sCOTERR = Integer.toString(Integer.parseInt(sCOTERR));
-
 		String sFMPAGN = linea.substring(Posiciones.GA_FMPAGN_P, Posiciones.GA_FMPAGN_P+Longitudes.FMPAGN_L);
 		String sFEPGPR = linea.substring(Posiciones.GA_FEPGPR_P, Posiciones.GA_FEPGPR_P+Longitudes.FEPGPR_L);
 		String sFEAPLI = linea.substring(Posiciones.GA_FEAPLI_P, Posiciones.GA_FEAPLI_P+Longitudes.FEAPLI_L);
-
 		String sCOAPII = linea.substring(Posiciones.GA_COAPII_P, Posiciones.GA_COAPII_P+Longitudes.COAPII_L);
 		String sCOSPII = linea.substring(Posiciones.GA_COSPII_P, Posiciones.GA_COSPII_P+Longitudes.COSPII_L);
-
-		String sNUCLII = linea.substring(Posiciones.GA_NUCLII_P, Posiciones.GA_NUCLII_P+Longitudes.NUCLII_L);                                              
-		
-		
+		String sNUCLII = linea.substring(Posiciones.GA_NUCLII_P, Posiciones.GA_NUCLII_P+Longitudes.NUCLII_L);
 		
 		
 		return new Gasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
@@ -843,6 +710,13 @@ public class Parser {
 				+ impuestorecurso.getFILLER();
 	}
 	
+	public static String escribirCierre (String sNUPROF, String sFEPFON)
+	{
+        String sFILLER = "                               ";
+
+		return formateaCampoNumerico(sNUPROF,Longitudes.NUPROF_L) + formateaCampoNumerico(sFEPFON,Longitudes.FEPFON_L) + sFILLER;
+	}
+	
 	public static void main(String[] args) throws IOException {
 
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, "main",	"Conexion Realizada");
@@ -852,7 +726,7 @@ public class Parser {
 		String linea = br.readLine();
 		br.close();
 
-		Activo activo = leerActivo(linea);
+		DatosActivo activo = leerActivo(linea);
 
 		activo.pintaActivo();
 

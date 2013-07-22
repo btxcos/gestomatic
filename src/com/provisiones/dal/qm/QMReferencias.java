@@ -18,22 +18,21 @@ public class QMReferencias
 
 	static String sTable = "e3_referencias_tbl";
 
-	static String sField1 = "e3_referencias_id";
+	static String sField1  = "cod_codtrn";
+	static String sField2  = "cod_cotdor";
+	static String sField3  = "idprov";    
+	static String sField4  = "cod_coacci";
+	static String sField5  = "coengp";    
+	static String sField6  = "nurcat_id";    
+	static String sField7  = "cod_bitc16";
+	static String sField8  = "tircat";    
+	static String sField9  = "cod_bitc17";
+	static String sField10 = "enemis";    
+	static String sField11 = "cotexa";    
+	static String sField12 = "cod_bitc09";
+	static String sField13 = "obtexc";    
+	static String sField14 = "obdeer";    
 
-	static String sField2  = "cod_codtrn";
-	static String sField3  = "cod_cotdor";
-	static String sField4  = "idprov";
-	static String sField5  = "cod_coacci";
-	static String sField6  = "coengp";
-	static String sField7  = "nurcat";
-	static String sField8  = "cod_bitc16";
-	static String sField9  = "tircat";
-	static String sField10 = "cod_bitc17";
-	static String sField11 = "enemis";
-	static String sField12 = "cotexa";
-	static String sField13 = "cod_bitc09";
-	static String sField14 = "obtexc";
-	static String sField15 = "obdeer";
 
 	public static boolean addReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral)
 
@@ -48,6 +47,7 @@ public class QMReferencias
 
 			stmt = conn.createStatement();
 			stmt.executeUpdate("INSERT INTO " + sTable + " ("
+					   + sField1  + ","
 				       + sField2  + ","              
 				       + sField3  + ","              
 				       + sField4  + ","              
@@ -60,8 +60,7 @@ public class QMReferencias
 				       + sField11 + ","              
 				       + sField12 + ","              
 				       + sField13 + ","              
-				       + sField14 + ","              
-				       + sField15 +  
+				       + sField14 +  
 				       ") VALUES ('" 
 				       + NuevaReferenciaCatastral.getCODTRN() + "','" 
 				       + NuevaReferenciaCatastral.getCOTDOR() + "','"
@@ -112,23 +111,23 @@ public class QMReferencias
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField2  + " = '"+ NuevaReferenciaCatastral.getCODTRN() + "','"
-					+ sField3  + " = '"+ NuevaReferenciaCatastral.getCOTDOR() + "','"
-					+ sField4  + " = '"+ NuevaReferenciaCatastral.getIDPROV() + "','"
-					+ sField5  + " = '"+ NuevaReferenciaCatastral.getCOACCI() + "','"
-					+ sField6  + " = '"+ NuevaReferenciaCatastral.getCOENGP() + "','"
-					+ sField7  + " = '"+ NuevaReferenciaCatastral.getNURCAT() + "','"
-					+ sField8  + " = '"+ NuevaReferenciaCatastral.getBITC16() + "','"
-					+ sField9  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "','"
-					+ sField10 + " = '"+ NuevaReferenciaCatastral.getBITC17() + "','"
-					+ sField11 + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "','"
-					+ sField12 + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "','"
-					+ sField13 + " = '"+ NuevaReferenciaCatastral.getBITC09() + "','"
-					+ sField14 + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "','"
-					+ sField15 + " = '"+ NuevaReferenciaCatastral.getOBDEER() + 
+					+ sField1  + " = '"+ NuevaReferenciaCatastral.getCODTRN() + "','"
+					+ sField2  + " = '"+ NuevaReferenciaCatastral.getCOTDOR() + "','"
+					+ sField3  + " = '"+ NuevaReferenciaCatastral.getIDPROV() + "','"
+					+ sField4  + " = '"+ NuevaReferenciaCatastral.getCOACCI() + "','"
+					+ sField5  + " = '"+ NuevaReferenciaCatastral.getCOENGP() + "','"
+					//+ sField6  + " = '"+ NuevaReferenciaCatastral.getNURCAT() + "','"
+					+ sField7  + " = '"+ NuevaReferenciaCatastral.getBITC16() + "','"
+					+ sField8  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "','"
+					+ sField9  + " = '"+ NuevaReferenciaCatastral.getBITC17() + "','"
+					+ sField10 + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "','"
+					+ sField11 + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "','"
+					+ sField12 + " = '"+ NuevaReferenciaCatastral.getBITC09() + "','"
+					+ sField13 + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "','"
+					+ sField14 + " = '"+ NuevaReferenciaCatastral.getOBDEER() + 
 					"' "+
 					" WHERE "
-					+ sField1 + " = '"+ sReferenciaCatastralID +"'");
+					+ sField6 + " = '"+ sReferenciaCatastralID +"'");
 			
 		} 
 		catch (SQLException ex) 
@@ -160,7 +159,7 @@ public class QMReferencias
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sReferenciaCatastralID + "' )");
+					" WHERE (" + sField6 + " = '" + sReferenciaCatastralID + "' )");
 		} 
 		catch (SQLException ex) 
 		{
@@ -215,6 +214,7 @@ public class QMReferencias
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
+				       + sField1  + ","
 				       + sField2  + ","              
 				       + sField3  + ","              
 				       + sField4  + ","              
@@ -227,11 +227,11 @@ public class QMReferencias
 				       + sField11 + ","              
 				       + sField12 + ","              
 				       + sField13 + ","              
-				       + sField14 + ","              
-				       + sField15 +            
+				       + sField14 +             
+         
        
 			"  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sReferenciaCatastralID	+ "')");
+					" WHERE (" + sField6 + " = '" + sReferenciaCatastralID	+ "')");
 
 			rs = pstmt.executeQuery();
 
@@ -245,21 +245,20 @@ public class QMReferencias
 				{
 					found = true;
 
-					sCOACES = "";
-					sCODTRN = rs.getString(sField2);
-					sCOTDOR = rs.getString(sField3);
-					sIDPROV = rs.getString(sField4);
-					sCOACCI = rs.getString(sField5);
-					sCOENGP = rs.getString(sField6);
-					sNURCAT = rs.getString(sField7);
-					sBITC16 = rs.getString(sField8);
-					sTIRCAT = rs.getString(sField9);
-					sBITC17 = rs.getString(sField10);
-					sENEMIS = rs.getString(sField11);
-					sCOTEXA = rs.getString(sField12);
-					sBITC09 = rs.getString(sField13);
-					sOBTEXC = rs.getString(sField14);
-					sOBDEER = rs.getString(sField15);
+					sCODTRN = rs.getString(sField1); 
+  					sCOTDOR = rs.getString(sField2); 
+  					sIDPROV = rs.getString(sField3); 
+  					sCOACCI = rs.getString(sField4); 
+  					sCOENGP = rs.getString(sField5); 
+  					sNURCAT = rs.getString(sField6); 
+  					sBITC16 = rs.getString(sField7); 
+  					sTIRCAT = rs.getString(sField8); 
+  					sBITC17 = rs.getString(sField9);
+  					sENEMIS = rs.getString(sField10);
+  					sCOTEXA = rs.getString(sField11);
+  					sBITC09 = rs.getString(sField12);
+  					sOBTEXC = rs.getString(sField13);
+  					sOBDEER = rs.getString(sField14);
 
 
 					//System.out.println(sField2 + ": " + sApplication);
