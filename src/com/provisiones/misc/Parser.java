@@ -67,11 +67,28 @@ public class Parser {
         
         while (sResultado.length() < iLongitud) 
         {
-        	sResultado=sResultado+" ";
+        	sResultado = sResultado+" ";
         }	
 		return sResultado;
 	}
 	
+	public static String formateaCampoAlfanumericoCodigo (String sCampo, int iLongitud, String sValorComodin)
+	{
+
+        String sResultado = sCampo;
+        
+		if (sCampo.equals(sValorComodin))
+		{
+			sResultado = " ";
+			while (sResultado.length() < iLongitud)
+			{
+				sResultado = sResultado + " ";
+			}
+			
+		}
+		
+		return sResultado;
+	}
 	
 	public static DatosActivo leerActivo (String linea)
 	{
@@ -154,9 +171,7 @@ public class Parser {
 		String sFESORC = linea.substring(Posiciones.AC_FESORC_P, Posiciones.AC_FESORC_P+Longitudes.FESORC_L);
 		String sFESODE = linea.substring(Posiciones.AC_FESODE_P, Posiciones.AC_FESODE_P+Longitudes.FESODE_L);
 		String sFEREAC = linea.substring(Posiciones.AC_FEREAC_P, Posiciones.AC_FEREAC_P+Longitudes.FEREAC_L);
-		String sCOXSIA = linea.substring(Posiciones.AC_COXSIA_P, Posiciones.AC_COXSIA_P+Longitudes.COXSIA_L);
-		if (sCOXSIA.trim().equals(""))
-			sCOXSIA = "0";
+		String sCOXSIA = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_COXSIA_P, Posiciones.AC_COXSIA_P+Longitudes.COXSIA_L),"0");
 		String sNUJUZD = linea.substring(Posiciones.AC_NUJUZD_P, Posiciones.AC_NUJUZD_P+Longitudes.NUJUZD_L);
 		String sNURCAT = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NURCAT_P, Posiciones.AC_NURCAT_P+Longitudes.NURCAT_L));
 		String sNOMPRC = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_NOMPRC_P, Posiciones.AC_NOMPRC_P+Longitudes.NOMPRC_L));
@@ -238,17 +253,17 @@ public class Parser {
         String sCASUTR = formateaCampoNumerico(activo.getCASUTR(),Longitudes.CASUTR_L);
         String sCASUTC = formateaCampoNumerico(activo.getCASUTC(),Longitudes.CASUTC_L);
         String sCASUTG = formateaCampoNumerico(activo.getCASUTG(),Longitudes.CASUTG_L);
-        String sBIARRE = formateaCampoAlfanumerico(activo.getBIARRE(),Longitudes.BIARRE_L); 
+        String sBIARRE = formateaCampoAlfanumericoCodigo(activo.getBIARRE(),Longitudes.BIARRE_L,"#"); 
         String sCADORM = formateaCampoNumerico(activo.getCADORM(),Longitudes.CADORM_L); 
         String sCABANO = formateaCampoNumerico(activo.getCABANO(),Longitudes.CABANO_L); 
-        String sBIGAPA = formateaCampoAlfanumerico(activo.getBIGAPA(),Longitudes.BIGAPA_L); 
+        String sBIGAPA = formateaCampoAlfanumericoCodigo(activo.getBIGAPA(),Longitudes.BIGAPA_L,"#"); 
         String sCAGAPA = formateaCampoNumerico(activo.getCAGAPA(),Longitudes.CAGAPA_L); 
         String sCASUTE = formateaCampoNumerico(activo.getCASUTE(),Longitudes.CASUTE_L); 
-        String sBILIPO = formateaCampoAlfanumerico(activo.getBILIPO(),Longitudes.BILIPO_L); 
-        String sBILIAC = formateaCampoAlfanumerico(activo.getBILIAC(),Longitudes.BILIAC_L); 
-        String sBILIUS = formateaCampoAlfanumerico(activo.getBILIUS(),Longitudes.BILIUS_L); 
-        String sBIBOIN = formateaCampoAlfanumerico(activo.getBIBOIN(),Longitudes.BIBOIN_L); 
-        String sBICEFI = formateaCampoAlfanumerico(activo.getBICEFI(),Longitudes.BICEFI_L); 
+        String sBILIPO = formateaCampoAlfanumericoCodigo(activo.getBILIPO(),Longitudes.BILIPO_L,"#"); 
+        String sBILIAC = formateaCampoAlfanumericoCodigo(activo.getBILIAC(),Longitudes.BILIAC_L,"#"); 
+        String sBILIUS = formateaCampoAlfanumericoCodigo(activo.getBILIUS(),Longitudes.BILIUS_L,"#"); 
+        String sBIBOIN = formateaCampoAlfanumericoCodigo(activo.getBIBOIN(),Longitudes.BIBOIN_L,"#"); 
+        String sBICEFI = formateaCampoAlfanumericoCodigo(activo.getBICEFI(),Longitudes.BICEFI_L,"#"); 
         String sCASUCB = formateaCampoNumerico(activo.getCASUCB(),Longitudes.CASUCB_L); 
         String sCASUCS = formateaCampoNumerico(activo.getCASUCS(),Longitudes.CASUCS_L); 
         String sFEACON = formateaCampoNumerico(activo.getFEACON(),Longitudes.FEACON_L); 
@@ -272,7 +287,8 @@ public class Parser {
         String sFESORC = formateaCampoNumerico(activo.getFESORC(),Longitudes.FESORC_L); 
         String sFESODE = formateaCampoNumerico(activo.getFESODE(),Longitudes.FESODE_L); 
         String sFEREAC = formateaCampoNumerico(activo.getFEREAC(),Longitudes.FEREAC_L); 
-        String sCOXSIA = formateaCampoNumerico(activo.getCOXSIA(),Longitudes.COXSIA_L); 
+        String sCOXSIA = formateaCampoAlfanumericoCodigo(activo.getCOXSIA(),Longitudes.COXSIA_L,"0"); 
+
         String sNUJUZD = formateaCampoNumerico(activo.getNUJUZD(),Longitudes.NUJUZD_L); 
         String sNURCAT = formateaCampoAlfanumerico(activo.getNURCAT(),Longitudes.NURCAT_L); 
         String sNOMPRC = formateaCampoAlfanumerico(activo.getNOMPRC(),Longitudes.NOMPRC_L); 
@@ -284,7 +300,8 @@ public class Parser {
         String sCOSPAT = formateaCampoNumerico(activo.getCOSPAT(),Longitudes.COSPAT_L); 
         String sCOSPAS = formateaCampoNumerico(activo.getCOSPAS(),Longitudes.COSPAS_L); 
         String sIDCOL3 = formateaCampoAlfanumerico(activo.getIDCOL3(),Longitudes.IDCOL3_L); 
-        String sBIOBNU = formateaCampoAlfanumerico(activo.getBIOBNU(),Longitudes.BIOBNU_L); 
+        String sBIOBNU = formateaCampoAlfanumericoCodigo(activo.getBIOBNU(),Longitudes.BIOBNU_L,"#");
+
         String sPOBRAR = formateaCampoNumerico(activo.getPOBRAR(),Longitudes.POBRAR_L);		
 		
 		return sCOACES + sNUINMU + sCOSOPA + sCOENAE + sCOESEN + sNOVIAS
@@ -344,7 +361,7 @@ public class Parser {
 		String sNUPROF = linea.substring(Posiciones.GA_NUPROF_P, Posiciones.GA_NUPROF_P+Longitudes.NUPROF_L);
 		String sFEAGTO = linea.substring(Posiciones.GA_FEAGTO_P, Posiciones.GA_FEAGTO_P+Longitudes.FEAGTO_L);
 		String sCOMONA = linea.substring(Posiciones.GA_COMONA_P, Posiciones.GA_COMONA_P+Longitudes.COMONA_L);
-		String sBIAUTO = linea.substring(Posiciones.GA_BIAUTO_P, Posiciones.GA_BIAUTO_P+Longitudes.BIAUTO_L);
+		String sBIAUTO = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.GA_BIAUTO_P, Posiciones.GA_BIAUTO_P+Longitudes.BIAUTO_L),"0");
 		String sFEAUFA = linea.substring(Posiciones.GA_FEAUFA_P, Posiciones.GA_FEAUFA_P+Longitudes.FEAUFA_L);
 		String sCOTERR = linea.substring(Posiciones.GA_COTERR_P, Posiciones.GA_COTERR_P+Longitudes.COTERR_L);
 		String sFMPAGN = linea.substring(Posiciones.GA_FMPAGN_P, Posiciones.GA_FMPAGN_P+Longitudes.FMPAGN_L);
@@ -402,7 +419,7 @@ public class Parser {
         String sNUPROF = formateaCampoNumerico(gasto.getNUPROF(),Longitudes.NUPROF_L);
         String sFEAGTO = formateaCampoNumerico(gasto.getFEAGTO(),Longitudes.FEAGTO_L);
         String sCOMONA = formateaCampoNumerico(gasto.getCOMONA(),Longitudes.COMONA_L);
-        String sBIAUTO = formateaCampoAlfanumerico(gasto.getBIAUTO(),Longitudes.BIAUTO_L);
+        String sBIAUTO = formateaCampoAlfanumericoCodigo(gasto.getBIAUTO(),Longitudes.BIAUTO_L,"0");
         String sFEAUFA = formateaCampoNumerico(gasto.getFEAUFA(),Longitudes.FEAUFA_L);
         String sCOTERR = formateaCampoNumerico(gasto.getCOTERR(),Longitudes.COTERR_L);
         String sFMPAGN = formateaCampoNumerico(gasto.getFMPAGN(),Longitudes.FMPAGN_L);

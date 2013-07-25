@@ -101,6 +101,46 @@ public class TableManager
 			stmt.executeUpdate("DROP TABLE e2_comunidades_tbl;");
 			stmt.executeUpdate("DROP TABLE e3_referencias_tbl;");
 			stmt.executeUpdate("DROP TABLE e4_impuestos_tbl;");
+			stmt.executeUpdate("DROP TABLE ga_gastos_tbl;");
+			stmt.executeUpdate("DROP TABLE provisiones_tbl;");
+			
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
+		}
+		finally 
+		{
+			if (stmt != null) 
+			{
+				try 
+				{
+					stmt.close();
+				} 
+				catch (SQLException sqlEx) 
+				{
+				} 
+				stmt = null;
+			}
+		}
+			
+		return true;
+	}
+	
+	public static boolean eliminarTablasMulti(Connection conn)
+	{
+		Statement stmt = null;
+
+		try 
+		{
+			stmt = conn.createStatement();
+			stmt.executeUpdate("DROP TABLE lista_impuestos_multi;");
+			stmt.executeUpdate("DROP TABLE lista_cuotas_multi;");
+			stmt.executeUpdate("DROP TABLE lista_gastos_multi;");
+			
 		} 
 		catch (SQLException ex) 
 		{

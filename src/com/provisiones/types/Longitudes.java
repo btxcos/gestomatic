@@ -211,4 +211,16 @@ public class Longitudes
 	public static final int CUOTAS_L = 400;
 	public static final int REFERENCIAS_L = 500;
 	public static final int IMPUESTOS_L = 400;
+	
+	//Tamaño de los FILLERS
+	public static final int FILLER_ACTIVOS_L = 19;
+	public static final int FILLER_RECHAZADOS_L = 118;
+	public static final int FILLER_AUTORIZADAS_L = 118;
+	public static final int FILLER_GASTOS_L = 118;
+	public static final int FILLER_CIERRE_L = 18;
+	public static final int FILLER_COMUNIDADES_L = 112;//118
+	public static final int FILLER_CUOTAS_L = 116;//114
+	public static final int FILLER_REFERENCIAS_L = 126;//124
+	public static final int FILLER_IMPUESTOS_L = 111;//109
+	
 }

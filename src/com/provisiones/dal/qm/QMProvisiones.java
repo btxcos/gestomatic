@@ -8,24 +8,27 @@ import java.sql.Statement;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.Activo;
+import com.provisiones.types.Provision;
 
-public class QMActivos 
+public class QMProvisiones 
 {
 	static String sClassName = QMCuotas.class.getName();
 
-	static String sTable = "ac_activos_tbl";
+	static String sTable = "provisiones_tbl";
 
-	static String sField1 = "activo_coaces_id";
+	static String sField1 = "nuprof_id";
 
-	static String sField2 = "cod_datos";
-	static String sField3 = "cod_comunidad";
-	static String sField4 = "cod_referencia";
+	static String sField2 = "fepfon";
+	static String sField3 = "fecha_validacion";
+	static String sField4 = "estado";
+	static String sField5 = "valortotal";
+	static String sField6 = "numgastos";
 	
-	public static boolean addActivo(Activo NuevoActivo)
+
+	public static boolean addProvision(Provision NuevaProvision)
 
 	{
-		String sMethod = "addActivo";
+		String sMethod = "addProvision";
 		Statement stmt = null;
 		Connection conn = null;
 
@@ -39,13 +42,17 @@ public class QMActivos
 					+ sField1 + ","
 					+ sField2 + ","
 					+ sField3 + "," 
-					+ sField4
+					+ sField4 + ","
+					+ sField5 + "," 
+					+ sField6
 					+ ") VALUES ('" 
-					+ NuevoActivo.getsCOACES() + "','"
-					+ NuevoActivo.getsCodDatos() + "','" 
-					+ NuevoActivo.getsCodComunidad()	+ "','" 
-					+ NuevoActivo.getsCodReferencia() + "' )");
-			
+					+ NuevaProvision.getsNUPROF() + "','"
+					+ NuevaProvision.getsFEPFON() + "','" 
+					+ NuevaProvision.getsFechaValidacion() + "','" 
+					+ NuevaProvision.getsEstado() + "','" 
+					+ NuevaProvision.getsValorTolal() + "','" 
+					+ NuevaProvision.getsNumGastos() + "' )");
+
 		} 
 		catch (SQLException ex) 
 		{
@@ -53,7 +60,7 @@ public class QMActivos
 			// System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: "
 			// + NuevaComunidad.getCOGRAP());
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: COACES: " + NuevoActivo.getsCOACES());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + NuevaProvision.getsNUPROF());
 
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
@@ -68,9 +75,9 @@ public class QMActivos
 		return true;
 	}
 
-	public static boolean modActivo(Activo NuevoActivo, String sCOACES) 
+	public static boolean modProvision(Provision NuevaProvision, String sNUPROF) 
 	{
-		String sMethod = "modActivo";
+		String sMethod = "modProvision";
 		Statement stmt = null;
 		boolean bExit = false;
 		Connection conn = null;
@@ -80,10 +87,12 @@ public class QMActivos
 		try {
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + " SET " 
-					+ sField2 + " = '" + NuevoActivo.getsCodDatos() + "','" 
-					+ sField3 + " = '" + NuevoActivo.getsCodComunidad() + "','" 
-					+ sField4 + " = '" + NuevoActivo.getsCodReferencia() + "' " 
-					+ " WHERE " + sField1 + " = '" + sCOACES + "'");
+					+ sField2 + " = '" + NuevaProvision.getsFEPFON() + "','" 
+					+ sField3 + " = '" + NuevaProvision.getsFechaValidacion() + "','"
+					+ sField4 + " = '" + NuevaProvision.getsEstado() + "','" 
+					+ sField5 + " = '" + NuevaProvision.getsValorTolal() + "','" 
+					+ sField6 + " = '" + NuevaProvision.getsNumGastos() + "' " 
+					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
 
 		} 
 		catch (SQLException ex) 
@@ -103,9 +112,9 @@ public class QMActivos
 		return bExit;
 	}
 
-	public static boolean delActivo(String sCOACES) 
+	public static boolean delProvision(String sNUPROF) 
 	{
-		String sMethod = "delActivo";
+		String sMethod = "delProvision";
 		Statement stmt = null;
 		Connection conn = null;
 
@@ -115,7 +124,7 @@ public class QMActivos
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sCOACES + "' )");
+					" WHERE (" + sField1 + " = '" + sNUPROF + "' )");
 		} 
 		catch (SQLException ex) 
 		{
@@ -133,19 +142,20 @@ public class QMActivos
 		return true;
 	}
 
-	public static Activo getActivo(String sCOACES) 
+	public static Provision getProvision(String sNUPROF) 
 	{
 
 
-		String sMethod = "getActivo";
+		String sMethod = "getProvision";
 
 		Statement stmt = null;
 		ResultSet rs = null;
 
-		String sCodDatos = "";
-		String sCodComunidad = "";
-		String sCodReferencia = "";
-
+		String sFEPFON = "";
+		String sFechaValidacion = "";
+		String sEstado = "";
+		String sValorTolal = "";
+		String sNumGastos = "";
 
 		PreparedStatement pstmt = null;
 		boolean found = false;
@@ -158,15 +168,15 @@ public class QMActivos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " + sField2 + "," + sField3
-					+ "," + sField4 +
+					+ "," + sField4 + "," + sField5 + "," + sField6 +
 					"  FROM " + sTable + " WHERE (" + sField1 + " = '"
-					+ sCOACES + "')");
+					+ sNUPROF + "')");
 
 			rs = pstmt.executeQuery();
 
 			System.out
 					.println("===================================================");
-			System.out.println(sField1 + ": " + sCOACES);
+			System.out.println(sField1 + ": " + sNUPROF);
 
 			if (rs != null) 
 			{
@@ -175,10 +185,12 @@ public class QMActivos
 				{
 					found = true;
 
-					sCodDatos = rs.getString(sField2);
-					sCodComunidad = rs.getString(sField3);
-					sCodReferencia = rs.getString(sField4);
-
+					sFEPFON = rs.getString(sField2);
+					sFechaValidacion = rs.getString(sField3);
+					sEstado = rs.getString(sField4);
+					sValorTolal = rs.getString(sField3);
+					sNumGastos = rs.getString(sField4);
+					
 					// System.out.println(sField2 + ": " + sApplication);
 					// System.out.println(sField3 + ": " + sContactCode);
 					// System.out.println(sField4 + ": " + sProjectCode);
@@ -205,6 +217,6 @@ public class QMActivos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return new Activo(sCOACES, sCodDatos, sCodComunidad, sCodReferencia);
+		return new Provision(sNUPROF, sFEPFON, sFechaValidacion, sEstado, sValorTolal, sNumGastos);
 	}
 }

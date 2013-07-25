@@ -63,8 +63,8 @@ public class QMListaImpuestos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND  " + sField2 + " = '" + sCodNURCAT + 
-							"AND  " + sField3 + " = '" + CodImpuestos +")");
+							"AND  " + sField2 + " = '" + sCodNURCAT + "' "+  
+							"AND  " + sField3 + " = '" + CodImpuestos +"')");
 		} 
 		catch (SQLException ex) 
 		{
