@@ -1,0 +1,339 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="100" header="Informacion">
+					<h:outputText value="North unit content." />
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<p:panelMenu style="width:100%">
+						<p:submenu label="Activos">
+							<p:menuitem value="Cargar Activos"
+								url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+							<p:menuitem value="Lista de Activos" url="http://www.google.es"
+								icon="ui-icon-search" />
+						</p:submenu>
+						<p:submenu label="Gastos">
+							<p:menuitem value="Cargar Gastos" url="http://www.noticias3d.com"
+								icon="ui-icon-arrowthick-1-n" />
+							<p:menuitem value="Lista de Gastos" url="http://www.google.es"
+								icon="ui-icon-search" />
+						</p:submenu>
+						<p:submenu label="Provisiones">
+							<p:menuitem value="Lista de Provisiones"
+								url="http://www.google.es" icon="ui-icon-search" />
+						</p:submenu>
+						<p:submenu label="Comunidades">
+							<p:submenu label="Comunidades" icon="ui-icon-home">
+								<p:menuitem value="Cargar Comunidades"
+									url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+								<p:menuitem value="Lista de Comunidades"
+									url="http://www.primefaces.org" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Cuotas" icon="ui-icon-calculator">
+								<p:menuitem value="Cargar Cuotas"
+									url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+								<p:menuitem value="Lista de Cuotas"
+									url="http://www.primefaces.org" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Referencias catastrales" icon="ui-icon-script">
+								<p:menuitem value="Cargar Referencias"
+									url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+								<p:menuitem value="Lista de Referencias"
+									url="http://www.primefaces.org" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Impuestos y tasas" icon="ui-icon-note">
+								<p:menuitem value="Cargar Impuestos"
+									url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+								<p:menuitem value="Lista de Impuestos"
+									url="http://www.primefaces.org" icon="ui-icon-search" />
+							</p:submenu>
+						</p:submenu>
+						<p:submenu label="Ref.">
+							<p:submenu label="Links" icon="ui-icon-extlink">
+								<p:submenu label="PrimeFaces" icon="ui-icon-heart">
+									<p:menuitem value="Home" url="http://www.primefaces.org"
+										icon="ui-icon-home" />
+									<p:menuitem value="Docs"
+										url="http://www.primefaces.org/documentation.html"
+										icon="ui-icon-document" />
+									<p:menuitem value="Download"
+										url="http://www.primefaces.org/downloads.html"
+										icon="ui-icon-arrowthick-1-s" />
+									<p:menuitem value="Support"
+										url="http://www.primefaces.org/support.html"
+										icon="ui-icon-wrench" />
+								</p:submenu>
+							</p:submenu>
+						</p:submenu>
+					</p:panelMenu>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<p:panel>
+						<h:panelGrid columns="1" cellpadding="5">
+							<p:fieldset legend="Informacion">
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Identificador de activo especial: " />
+											<p:inputText id="COACES" value="#{TestPF.taxId}"
+												disabled="true" />
+
+											<h:outputText value="Numero de provision de fondos: " />
+											<p:inputText id="NUPROF" value="????" disabled="true" />
+										</h:panelGrid>
+									</p:panel>
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha de entrada en la aplicacion: " />
+											<p:inputText id="FEAPLI" value="00000000" disabled="true" />
+
+											<h:outputText value="Codigo de aplicacion INFOCAM: " />
+											<p:inputText id="COAPII" value="168" disabled="true" />
+
+											<h:outputText value="Codigo de subaplicacion INFOCAM: " />
+											<p:inputText id="COSPII" value="GA" disabled="true" />
+
+											<h:outputText
+												value="Numero de cliente para intercambio de ficheros: " />
+											<p:inputText id="NUCLII" value="" disabled="true" />
+										</h:panelGrid>
+									</p:panel>
+
+								</h:panelGrid>
+							</p:fieldset>
+							<p:fieldset legend="Rechazo">
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Codigo de error: " />
+											<p:inputText id="COTERR" value="00" disabled="true" />
+
+											<h:outputText value="Indicador de autorizacion: " />
+											<p:inputText id="BIAUTO" value="" disabled="true" />
+										</h:panelGrid>
+									</p:panel>
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha de anulacion del gasto: " />
+											<p:inputText id="FEAGTO" value="00000000" disabled="true" />
+
+											<h:outputText value="Motivo de no autorizacion: " />
+											<p:inputText id="COMONA" value="" disabled="true" />
+										</h:panelGrid>
+									</p:panel>
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha de autorizacion del gasto: " />
+											<p:inputText id="FEAGTO" value="00000000" disabled="true" />
+
+											<h:outputText value="Fecha del pago al proveedor: " />
+											<p:inputText id="FEAGTO" value="00000000" disabled="true" />
+										</h:panelGrid>
+									</p:panel>
+								</h:panelGrid>
+							</p:fieldset>
+							<p:fieldset legend="Datos">
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Grupo de gasto: " />
+											<p:selectOneMenu id="COGRUG" value="#{TestPF.ssn}">
+												<f:selectItem itemLabel="Grupo" itemValue="" />
+												<f:selectItems value="#{TestPF.ssn}" />
+											</p:selectOneMenu>
+
+											<h:outputText value="Tipo de concepto de gasto:  " />
+											<p:selectOneMenu id="COTPGA" value="#{TestPF.ssn}">
+												<f:selectItem itemLabel="Tipo" itemValue="" />
+												<f:selectItems value="#{TestPF.ssn}" />
+											</p:selectOneMenu>
+
+											<h:outputText value="Subtipo de gasto: " />
+											<p:selectOneMenu id="COSBGA" value="#{TestPF.ssn}">
+												<f:selectItem itemLabel="Subtipo" itemValue="" />
+												<f:selectItems value="#{TestPF.ssn}" />
+											</p:selectOneMenu>
+
+											<h:outputText value="Periodicidad de pago: " />
+											<p:selectOneMenu id="PTPAGO" value="#{TestPF.ssn}">
+												<f:selectItem itemLabel="Periodicidad" itemValue="" />
+												<f:selectItems value="#{TestPF.ssn}" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+									</p:panel>
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha del devengo: " />
+											<p:inputMask value="#{TestPF.ssn}" mask="9999/99/99" />
+
+											<h:outputText value="Fecha de fin de periodo: " />
+											<p:inputMask value="#{TestPF.ssn}" mask="9999/99/99" />
+
+											<h:outputText value="Fecha del pago: " />
+											<p:inputMask value="#{TestPF.ssn}" mask="9999/99/99" />
+
+											<h:outputText value="Fecha limite del pago: " />
+											<p:inputMask value="#{TestPF.ssn}" mask="9999/99/99" />
+										</h:panelGrid>
+									</p:panel>
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Situacion del gasto: " />
+											<p:selectOneMenu id="COSIGA" value="#{TestPF.ssn}">
+												<f:selectItem itemLabel="Situacion" itemValue="" />
+												<f:selectItems value="#{TestPF.ssn}" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+									</p:panel>
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha de estado estimado del importe: " />
+											<p:inputMask value="#{TestPF.ssn}" mask="9999/99/99" />
+
+											<h:outputText value="Fecha de estado conocido del importe: " />
+											<p:inputMask value="#{TestPF.ssn}" mask="9999/99/99" />
+
+											<h:outputText
+												value="Fecha de estado autoriazado del importe: " />
+											<p:inputMask value="#{TestPF.ssn}" mask="9999/99/99" />
+
+											<h:outputText value="Fecha de estado pagado del importe: " />
+											<p:inputMask value="#{TestPF.ssn}" mask="9999/99/99" />
+										</h:panelGrid>
+									</p:panel>
+									<p:panel>
+										<h:panelGrid columns="4" cellpadding="5">
+											<h:outputText value="Importe del gasto: " />
+											<h:outputText value="-" />
+											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
+												<f:selectItem itemLabel="" itemValue="-" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{TestPF.ssn}" mask="999999.99" />
+
+											<h:outputText value="Recargo en el importe del gasto: " />
+											<h:outputText value="-" />
+											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
+												<f:selectItem itemLabel="" itemValue="-" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{TestPF.ssn}" mask="999999.99" />
+
+											<h:outputText value="Importe de demora del gasto: " />
+											<h:outputText value="-" />
+											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
+												<f:selectItem itemLabel="" itemValue="-" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{TestPF.ssn}" mask="999999.99" />
+
+											<h:outputText value="Importe de costas: " />
+											<h:outputText value="-" />
+											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
+												<f:selectItem itemLabel="" itemValue="-" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{TestPF.ssn}" mask="999999.99" />
+
+											<h:outputText value="Importe de otros incrementos: " />
+											<h:outputText value="-" />
+											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
+												<f:selectItem itemLabel="" itemValue="-" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{TestPF.ssn}" mask="999999.99" />
+
+											<h:outputText value="Importe de descuento de gastos: " />
+											<h:outputText value="-" />
+											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
+												<f:selectItem itemLabel="" itemValue="-" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{TestPF.ssn}" mask="999999.99" />
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Codigo de unidad monetaria: " />
+											<p:inputText id="COUNMO" value="268" disabled="true" />
+
+											<h:outputText value="Importe de impuestos del gasto: " />
+											<p:inputMask value="#{TestPF.date}" mask="99/99/9999" />
+
+											<h:outputText value="Tipo de impuesto: " />
+											<p:selectOneMenu id="COIMPT" value="#{TestPF.ssn}">
+												<f:selectItem itemLabel="Tipo" itemValue="" />
+												<f:selectItems value="#{TestPF.ssn}" />
+											</p:selectOneMenu>
+
+											<h:outputText value="Tipo de Negociado: " />
+											<p:selectOneMenu id="COTNEG" value="#{TestPF.ssn}">
+												<f:selectItem itemLabel="A cargo de..." itemValue="" />
+												<f:selectItems value="#{TestPF.ssn}" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+									</p:panel>
+
+									<p:fieldset legend="Conexion">
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Codigo de entidad: " />
+											<p:inputMask value="#{TestPF.date}" mask="99/99/9999" />
+
+											<h:outputText value="Oficina de emision: " />
+											<p:inputMask value="#{TestPF.phone}" mask="(999) 999-9999" />
+
+											<h:outputText value="Numero de conexion: " />
+											<p:inputMask value="#{TestPF.phoneExt}"
+												mask="(999) 999-9999? x99999" />
+
+											<h:outputText value="Fecha del pago por conexion: " />
+											<p:inputMask value="#{TestPF.date}" mask="99/99/9999" />
+										</h:panelGrid>
+									</p:fieldset>
+
+
+
+								</h:panelGrid>
+							</p:fieldset>
+						</h:panelGrid>
+					</p:panel>
+					<p:commandButton value="Reset" type="reset" />
+					<p:commandButton value="Submit" update="display"
+						oncomplete="dlg.show()" />
+
+
+					<p:dialog widgetVar="dlg" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="5">
+
+							<h:outputText value="Date: " />
+							<h:outputText value="#{TestPF.date}" />
+
+							<h:outputText value="Phone: " />
+							<h:outputText value="#{TestPF.phone}" />
+
+							<h:outputText value="Phone with Ext: " />
+							<h:outputText value="#{TestPF.phoneExt}" />
+
+							<h:outputText value="taxId: " />
+							<h:outputText value="#{TestPF.taxId}" />
+
+							<h:outputText value="SSN: " />
+							<h:outputText value="#{TestPF.ssn}" />
+
+							<h:outputText value="Product Key: " />
+							<h:outputText value="#{TestPF.productKey}" />
+
+						</h:panelGrid>
+					</p:dialog>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

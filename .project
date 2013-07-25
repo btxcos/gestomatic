@@ -35,6 +35,16 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>WebContent/WEB-INF/lib/commons-fileupload-1.3.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/Program%20Files%20(x86)/Java/jre6/lib/ext/commons-fileupload-1.3.jar</locationURI>
+		</link>
+		<link>
+			<name>WebContent/WEB-INF/lib/commons-io-2.4.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/Program%20Files%20(x86)/Java/jre6/lib/ext/commons-io-2.4.jar</locationURI>
+		</link>
+		<link>
 			<name>WebContent/WEB-INF/lib/primefaces-3.5.jar</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/Program%20Files%20(x86)/Java/jre6/lib/ext/primefaces-3.5.jar</locationURI>
