@@ -188,7 +188,7 @@ public class QMComunidades
 					+ sField30 + " = '"+ NuevaComunidad.getOBDEER() +
 					"' "+
 					" WHERE "
-					+ sField1 + " = '"+ sComunidadID +"'");
+					+ sField7 + " = '"+ sComunidadID +"'");
 			
 		} 
 		catch (SQLException ex) 

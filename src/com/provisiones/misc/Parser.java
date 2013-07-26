@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 
+import com.provisiones.types.Cierre;
 import com.provisiones.types.DatosActivo;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuota;
@@ -725,6 +726,14 @@ public class Parser {
 				+ sBITC19 + sFERERE + sBITC20 + sFEDEIN + sBITC21 + sBISODE
 				+ sBITC22 + sBIRESO + sCOTEXA + sBITC09 + sOBTEXC + sOBDEER
 				+ impuestorecurso.getFILLER();
+	}
+
+	public static Cierre LeerCierre(String linea)
+	{
+		String sNUPROF = linea.substring(0, Longitudes.NUPROF_L);
+		String sFEPFON = linea.substring(Longitudes.NUPROF_L+1, Longitudes.NUPROF_L+Longitudes.FEPFON_L+1);
+
+		return new Cierre(sNUPROF,sFEPFON);
 	}
 	
 	public static String escribirCierre (String sNUPROF, String sFEPFON)
