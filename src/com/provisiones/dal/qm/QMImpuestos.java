@@ -20,27 +20,28 @@ public class QMImpuestos
 
 	static String sField2  = "cod_codtrn";
 	static String sField3  = "cod_cotdor";
-	static String sField4  = "idprov";
+	static String sField4  = "idprov";    
 	static String sField5  = "cod_coacci";
-	static String sField6  = "coengp";
-	static String sField7  = "nurcat";
-	static String sField8  = "cod_cogruc";
-	static String sField9  = "cod_cotaca";
-	static String sField10 = "cod_cosbac";
-	static String sField11 = "cod_bitc18";
-	static String sField12 = "feprre";
-	static String sField13 = "cod_bitc19";
-	static String sField14 = "ferere";
-	static String sField15 = "cod_bitc20";
-	static String sField16 = "fedein";
-	static String sField17 = "cod_bitc21";
-	static String sField18 = "cod_bisode";
-	static String sField19 = "cod_bitc22";
-	static String sField20 = "cod_bireso";
-	static String sField21 = "cotexa";
-	static String sField22 = "cod_bitc09";
-	static String sField23 = "obtexc";
-	static String sField24 = "obdeer";
+	static String sField6  = "coengp";    
+	static String sField7  = "cod_coaces";
+	static String sField8  = "nurcat";    
+	static String sField9  = "cod_cogruc";
+	static String sField10 = "cod_cotaca";
+	static String sField11 = "cod_cosbac";
+	static String sField12 = "cod_bitc18";
+	static String sField13 = "feprre";    
+	static String sField14 = "cod_bitc19";
+	static String sField15 = "ferere";    
+	static String sField16 = "cod_bitc20";
+	static String sField17 = "fedein";    
+	static String sField18 = "cod_bitc21";
+	static String sField19 = "cod_bisode";
+	static String sField20 = "cod_bitc22";
+	static String sField21 = "cod_bireso";
+	static String sField22 = "cotexa";    
+	static String sField23 = "cod_bitc09";
+	static String sField24 = "obtexc";    
+	static String sField25 = "obdeer";		
 
 	public static boolean addImpuesto(ImpuestoRecurso NuevoImpuestoRecurso)
 
@@ -76,14 +77,16 @@ public class QMImpuestos
 				       + sField20 + ","              
 				       + sField21 + ","              
 				       + sField22 + ","              
-				       + sField23 + ","              
-				       + sField24 +  
+				       + sField23 + ","
+				       + sField24 + "," 
+				       + sField25 +  
 				       ") VALUES ('" 
 				       + NuevoImpuestoRecurso.getCODTRN() + "','" 
 				       + NuevoImpuestoRecurso.getCOTDOR() + "','"
 				       + NuevoImpuestoRecurso.getIDPROV() + "','"
 				       + NuevoImpuestoRecurso.getCOACCI() + "','"
 				       + NuevoImpuestoRecurso.getCOENGP() + "','"
+				       + NuevoImpuestoRecurso.getCOACES() + "','"
 				       + NuevoImpuestoRecurso.getNURCAT() + "','"
 				       + NuevoImpuestoRecurso.getCOGRUC() + "','"
 				       + NuevoImpuestoRecurso.getCOTACA() + "','"
@@ -142,24 +145,25 @@ public class QMImpuestos
 					+ sField4  + " = '"+ NuevoImpuestoRecurso.getIDPROV() + "','"
 					+ sField5  + " = '"+ NuevoImpuestoRecurso.getCOACCI() + "','"
 					+ sField6  + " = '"+ NuevoImpuestoRecurso.getCOENGP() + "','"
-					+ sField7  + " = '"+ NuevoImpuestoRecurso.getNURCAT() + "','"
-					+ sField8  + " = '"+ NuevoImpuestoRecurso.getCOGRUC() + "','"
-					+ sField9  + " = '"+ NuevoImpuestoRecurso.getCOTACA() + "','"
-					+ sField10 + " = '"+ NuevoImpuestoRecurso.getCOSBAC() + "','"
-					+ sField11 + " = '"+ NuevoImpuestoRecurso.getBITC18() + "','"
-					+ sField12 + " = '"+ NuevoImpuestoRecurso.getFEPRRE() + "','"
-					+ sField13 + " = '"+ NuevoImpuestoRecurso.getBITC19() + "','"
-					+ sField14 + " = '"+ NuevoImpuestoRecurso.getFERERE() + "','"
-					+ sField15 + " = '"+ NuevoImpuestoRecurso.getBITC20() + "','"
-					+ sField16 + " = '"+ NuevoImpuestoRecurso.getFEDEIN() + "','"
-					+ sField17 + " = '"+ NuevoImpuestoRecurso.getBITC21() + "','"
-					+ sField18 + " = '"+ NuevoImpuestoRecurso.getBISODE() + "','"
-					+ sField19 + " = '"+ NuevoImpuestoRecurso.getBITC22() + "','"
-					+ sField20 + " = '"+ NuevoImpuestoRecurso.getBIRESO() + "','"
-					+ sField21 + " = '"+ NuevoImpuestoRecurso.getCOTEXA() + "','"
-					+ sField22 + " = '"+ NuevoImpuestoRecurso.getBITC09() + "','"
-					+ sField23 + " = '"+ NuevoImpuestoRecurso.getOBTEXC() + "','"
-					+ sField24 + " = '"+ NuevoImpuestoRecurso.getOBDEER() +
+					+ sField7  + " = '"+ NuevoImpuestoRecurso.getCOACES() + "','"
+					+ sField8  + " = '"+ NuevoImpuestoRecurso.getNURCAT() + "','"
+					+ sField9  + " = '"+ NuevoImpuestoRecurso.getCOGRUC() + "','"
+					+ sField10 + " = '"+ NuevoImpuestoRecurso.getCOTACA() + "','"
+					+ sField11 + " = '"+ NuevoImpuestoRecurso.getCOSBAC() + "','"
+					+ sField12 + " = '"+ NuevoImpuestoRecurso.getBITC18() + "','"
+					+ sField13 + " = '"+ NuevoImpuestoRecurso.getFEPRRE() + "','"
+					+ sField14 + " = '"+ NuevoImpuestoRecurso.getBITC19() + "','"
+					+ sField15 + " = '"+ NuevoImpuestoRecurso.getFERERE() + "','"
+					+ sField16 + " = '"+ NuevoImpuestoRecurso.getBITC20() + "','"
+					+ sField17 + " = '"+ NuevoImpuestoRecurso.getFEDEIN() + "','"
+					+ sField18 + " = '"+ NuevoImpuestoRecurso.getBITC21() + "','"
+					+ sField19 + " = '"+ NuevoImpuestoRecurso.getBISODE() + "','"
+					+ sField20 + " = '"+ NuevoImpuestoRecurso.getBITC22() + "','"
+					+ sField21 + " = '"+ NuevoImpuestoRecurso.getBIRESO() + "','"
+					+ sField22 + " = '"+ NuevoImpuestoRecurso.getCOTEXA() + "','"
+					+ sField23 + " = '"+ NuevoImpuestoRecurso.getBITC09() + "','"
+					+ sField24 + " = '"+ NuevoImpuestoRecurso.getOBTEXC() + "','"
+					+ sField25 + " = '"+ NuevoImpuestoRecurso.getOBDEER() +
 					"' "+
 					" WHERE "
 					+ sField1 + " = '"+ sImpuestoRecursoID +"'");
@@ -280,8 +284,9 @@ public class QMImpuestos
 				       + sField20 + ","              
 				       + sField21 + ","              
 				       + sField22 + ","              
-				       + sField23 + ","              
-				       + sField24 +             
+				       + sField23 + ","
+				       + sField24 + "," 
+				       + sField25 +             
        
 			"  FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sImpuestoRecursoID	+ "')");
@@ -298,32 +303,32 @@ public class QMImpuestos
 				{
 					found = true;
 
-					sCOACES = "";
-					sCODTRN = rs.getString(sField2);
-					sCOTDOR = rs.getString(sField3);
-					sIDPROV = rs.getString(sField4);
-					sCOACCI = rs.getString(sField5);
-					sCOENGP = rs.getString(sField6);
-					sNURCAT = rs.getString(sField7);
-					sCOGRUC = rs.getString(sField8);
-					sCOTACA = rs.getString(sField9);
-					sCOSBAC = rs.getString(sField10);
-					sBITC18 = rs.getString(sField11);
-					sFEPRRE = rs.getString(sField12);
-					sBITC19 = rs.getString(sField13);
-					sFERERE = rs.getString(sField14);
-					sBITC20 = rs.getString(sField15);
-					sFEDEIN = rs.getString(sField16);
-					sBITC21 = rs.getString(sField17);
-					sBISODE = rs.getString(sField18);
-					sBITC22 = rs.getString(sField19);
-					sBIRESO = rs.getString(sField20);
-					sCOTEXA = rs.getString(sField21);
-					sBITC09 = rs.getString(sField22);
-					sOBTEXC = rs.getString(sField23);
-					sOBDEER = rs.getString(sField24);
+					sCODTRN = rs.getString(sField2); 
+					sCOTDOR = rs.getString(sField3); 
+					sIDPROV = rs.getString(sField4); 
+					sCOACCI = rs.getString(sField5); 
+					sCOENGP = rs.getString(sField6); 
+					sCOACES = rs.getString(sField7); 
+					sNURCAT = rs.getString(sField8); 
+					sCOGRUC = rs.getString(sField9); 
+					sCOTACA = rs.getString(sField10);
+					sCOSBAC = rs.getString(sField11);
+					sBITC18 = rs.getString(sField12);
+					sFEPRRE = rs.getString(sField13);
+					sBITC19 = rs.getString(sField14);
+					sFERERE = rs.getString(sField15);
+					sBITC20 = rs.getString(sField16);
+					sFEDEIN = rs.getString(sField17);
+					sBITC21 = rs.getString(sField18);
+					sBISODE = rs.getString(sField19);
+					sBITC22 = rs.getString(sField20);
+					sBIRESO = rs.getString(sField21);
+					sCOTEXA = rs.getString(sField22);
+					sBITC09 = rs.getString(sField23);
+					sOBTEXC = rs.getString(sField24);
+					sOBDEER = rs.getString(sField25);
 
-
+					
 					//System.out.println(sField2 + ": " + sApplication);
 					//System.out.println(sField3 + ": " + sContactCode);
 					//System.out.println(sField4 + ": " + sProjectCode);

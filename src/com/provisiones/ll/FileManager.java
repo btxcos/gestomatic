@@ -17,6 +17,7 @@ import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMDatosActivos;
 import com.provisiones.dal.qm.QMGastos;
+import com.provisiones.dal.qm.QMListaCuotas;
 import com.provisiones.dal.qm.QMListaGastos;
 import com.provisiones.misc.Longitudes;
 import com.provisiones.misc.Parser;
@@ -276,7 +277,7 @@ public class FileManager
     				sValidado = "X";
     			//lista_comunidades.add(comunidad);
     			
-    			QMComunidades.modComunidad(comunidad, comunidad.getNUDCOM(), sValidado);
+    			QMComunidades.modComunidad(comunidad, comunidad.getNUDCOM(), sValidado);***
 
 
     		}
@@ -317,7 +318,6 @@ public class FileManager
 
 		int contador=0;
 		
-		String sCodCuota = "";
 		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
 		
 			
@@ -331,17 +331,33 @@ public class FileManager
     		else
     		{
     			Cuota cuota = Parser.leerCuota(linea);
-
+    			
+    			String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
+    			String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
+    			
     			String sValidado = "";
     			
     			if (cuota.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+    			{
     				sValidado = "V";
+    				sBKOBDEER = cuota.getOBDEER();
+    			}
     			else
+    			{
     				sValidado = "X";
+        			sBKCOTDOR = cuota.getCOTDOR();
+        			sBKOBDEER = cuota.getOBDEER();
+        			cuota.setCOTDOR(ValoresDefecto.DEF_COTDOR);
+
+    			}
+ 			
+    			cuota.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
     			
-    			//lista_comunidades.add(comunidad);
-    			sCodCuota = "";//pendiente de informacion, impacta en tabla lista de cuotas multi
-    			QMCuotas.modCuota(cuota, sCodCuota);
+  				   				
+    			String sCodCuota = QMCuotas.getCuotaID(cuota);
+  				
+  				QMCuotas.modCuota(cuota, sCodCuota);
+    					
 
 
     		}
