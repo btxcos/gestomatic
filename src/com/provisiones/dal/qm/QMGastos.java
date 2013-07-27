@@ -61,7 +61,7 @@ public class QMGastos
 	static String sField42 = "coapii";
 	static String sField43 = "cospii";
 	static String sField44 = "nuclii";
-
+	
 	public static boolean addGasto (Gasto NuevoGasto) 
 	 
 	{
@@ -117,8 +117,8 @@ public class QMGastos
 				       + sField40 + ","              
 				       + sField41 + ","              
 				       + sField42 + ","              
-				       + sField43 + ","              
-				       + sField44 +                  
+				       + sField43 + ","
+				       + sField44 +                 
 				       					") VALUES ('"        
 				 				       + NuevoGasto.getCOGRUG() + "','"  
 								       + NuevoGasto.getCOTPGA() + "','"  
@@ -161,7 +161,7 @@ public class QMGastos
 								       + NuevoGasto.getFEPGPR() + "','"  
 								       + NuevoGasto.getFEAPLI() + "','"  
 								       + NuevoGasto.getCOAPII() + "','"  
-								       + NuevoGasto.getCOSPII() + "','"  
+								       + NuevoGasto.getCOSPII() + "','"
 								       + NuevoGasto.getNUCLII() + "' )");
 		} 
 		catch (SQLException ex) 
@@ -237,7 +237,8 @@ public class QMGastos
 					+ sField41 + " = '"+ NuevoGasto.getFEAPLI() + "','"
 					+ sField42 + " = '"+ NuevoGasto.getCOAPII() + "','"
 					+ sField43 + " = '"+ NuevoGasto.getCOSPII() + "','"
-					+ sField44 + " = '"+ NuevoGasto.getNUCLII() + "' "+
+					+ sField44 + " = '"+ NuevoGasto.getNUCLII() + 
+					"' "+
 					" WHERE "
 					+ sField1 + " = '"+ sGastoID +"'");
 			

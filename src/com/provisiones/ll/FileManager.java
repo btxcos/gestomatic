@@ -18,14 +18,15 @@ import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMDatosActivos;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMListaGastos;
+import com.provisiones.misc.Longitudes;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cierre;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuota;
 import com.provisiones.types.DatosActivo;
 import com.provisiones.types.Gasto;
-import com.provisiones.types.Longitudes;
 
 public class FileManager 
 {
@@ -44,6 +45,7 @@ public class FileManager
 
 		boolean bSalida = false;
 		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Guardando archivo...");
         UploadedFile file = event.getFile();
         String fileName = file.getFileName();
         //long fileSize = file.getSize();
@@ -56,7 +58,7 @@ public class FileManager
         is.close();
         out.close();
         bSalida = true;
-        
+        com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Completado con exito.");
         return bSalida;
 	}
 	
@@ -113,9 +115,9 @@ public class FileManager
         return bSalida;
 	}
 	
-	public static boolean leerGastosValidados(String sNombre) throws IOException 
+	public static boolean leerGastosRevisados(String sNombre) throws IOException 
 	{
-		String sMethod = "leerGastosValidados";
+		String sMethod = "leerGastosRevisados";
 
 		boolean bSalida = false;
 		
@@ -151,8 +153,17 @@ public class FileManager
     		else
     		{
     			Gasto gasto = Parser.leerGasto(linea);
+    			
+    			String sValidado = "";
+    			
+    			if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
+    				sValidado = "V";
+    			else
+    				sValidado = "X";
+    			
     			sCodGastos = QMListaGastos.getGastoID(gasto.getCOACES(), gasto.getNUPROF());
     			//lista_rechazados.add(sCodGastos);
+    			QMListaGastos.setValidado(sCodGastos, sValidado);
     			QMGastos.modGasto(gasto, sCodGastos);
 
     		}
@@ -168,7 +179,7 @@ public class FileManager
         return bSalida;
 	}
 
-	public static boolean leerCierres(String sNombre) throws IOException 
+	/*public static boolean leerCierres(String sNombre) throws IOException 
 	{
 
 		String sMethod = "leerCierres";
@@ -216,7 +227,7 @@ public class FileManager
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
 		
         return bSalida;
-	}
+	}*/
 	
 	public static boolean leerComunidades(String sNombre) throws IOException 
 	{
@@ -257,10 +268,15 @@ public class FileManager
     		else
     		{
     			Comunidad comunidad = Parser.leerComunidad(linea);
-
+    			String sValidado = "";
+    			
+    			if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+    				sValidado = "V";
+    			else
+    				sValidado = "X";
     			//lista_comunidades.add(comunidad);
     			
-    			QMComunidades.modComunidad(comunidad, comunidad.getNUDCOM());
+    			QMComunidades.modComunidad(comunidad, comunidad.getNUDCOM(), sValidado);
 
 
     		}
@@ -316,6 +332,13 @@ public class FileManager
     		{
     			Cuota cuota = Parser.leerCuota(linea);
 
+    			String sValidado = "";
+    			
+    			if (cuota.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+    				sValidado = "V";
+    			else
+    				sValidado = "X";
+    			
     			//lista_comunidades.add(comunidad);
     			sCodCuota = "";//pendiente de informacion, impacta en tabla lista de cuotas multi
     			QMCuotas.modCuota(cuota, sCodCuota);
@@ -364,25 +387,32 @@ public class FileManager
 				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 						"Rechazados");
 				
-				bSalida = leerGastosValidados(sNombre);
+				bSalida = leerGastosRevisados(sNombre);
 				//lista = new ArrayList<String>(leerGastosValidados(sNombre));
 				break;
 			case PA:
 				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 						"Autorizados");
-				bSalida = leerGastosValidados(sNombre);
+				bSalida = leerGastosRevisados(sNombre);
 				//lista = new ArrayList<String>(leerGastosValidados(sNombre));
 				break;
 			case GA:
 				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 						"Gastos");
-				bSalida = leerGastosValidados(sNombre);
+				
+				com.provisiones.misc.Utils
+				.debugTrace(true, sClassName, sMethod,
+						"El archivo de gastos debe de ser primero supervisado por la entidad.");
+				//bSalida = leerGastosRevisados(sNombre);
 				//lista = new ArrayList<String>(leerGastosValidados(sNombre));
 				break;
 			case PP:
 				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 						"Cierres");
-				bSalida = leerCierres(sNombre);
+				com.provisiones.misc.Utils
+				.debugTrace(true, sClassName, sMethod,
+						"El archivo de cierres debe comprobado por la entidad.");
+				//bSalida = leerCierres(sNombre);
 				//lista = new ArrayList<String>(leerCierres(sNombre));
 				break;
 			case E1:
@@ -394,19 +424,19 @@ public class FileManager
 			case E2:
 				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 						"Cuotas");
-				bSalida = leerGastosValidados(sNombre);
+				bSalida = leerCuotas(sNombre);
 				//lista = new ArrayList<String>();
 				break;
 			case E3:
 				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 						"Referencias Catastrales");
-				bSalida = leerGastosValidados(sNombre);
+				bSalida = leerReferencias(sNombre);
 				//lista = new ArrayList<String>();
 				break;
 			case E4:
 				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 						"Impuestos");
-				bSalida = leerGastosValidados(sNombre);
+				bSalida = leerImpuestos(sNombre);
 				//lista = new ArrayList<String>();
 				break;
 			default:

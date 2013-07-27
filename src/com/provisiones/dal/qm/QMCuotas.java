@@ -354,5 +354,100 @@ public class QMCuotas
 				sBITC12, sFFPAGO, sBITC13, sIMCUCO, sBITC14, sFAACTA, sBITC15,
 				sPTPAGO, sBITC09, sOBTEXC, sOBDEER);
 	}
+	
+	public static String getCuotaID(Cuota cuota)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "getCuotaID";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCuotaID = "";
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					+ sField1 + 
+					"  FROM " + sTable + 
+						" WHERE ("
+					       + sField2  +" = '" + cuota.getCODTRN() + "' AND "
+					       + sField3  +" = '" + cuota.getCOTDOR() + "' AND "
+					       + sField4  +" = '" + cuota.getIDPROV() + "' AND "
+					       + sField5  +" = '" + cuota.getCOACCI() + "' AND "
+					       + sField6  +" = '" + cuota.getCOCLDO() + "' AND "
+					       + sField7  +" = '" + cuota.getNUDCOM() + "' AND "
+					       + sField8  +" = '" + cuota.getCOENGP() + "' AND "
+					       + sField9  +" = '" + cuota.getCOGRUG() + "' AND "
+					       + sField10 +" = '" + cuota.getCOTACA() + "' AND "
+					       + sField11 +" = '" + cuota.getCOSBAC() + "' AND "
+					       + sField12 +" = '" + cuota.getBITC11() + "' AND "
+					       + sField13 +" = '" + cuota.getFIPAGO() + "' AND "
+					       + sField14 +" = '" + cuota.getBITC12() + "' AND "
+					       + sField15 +" = '" + cuota.getFFPAGO() + "' AND "
+					       + sField16 +" = '" + cuota.getBITC13() + "' AND "
+					       + sField17 +" = '" + cuota.getIMCUCO() + "' AND "
+					       + sField18 +" = '" + cuota.getBITC14() + "' AND "
+					       + sField19 +" = '" + cuota.getFAACTA() + "' AND "
+					       + sField20 +" = '" + cuota.getBITC15() + "' AND "
+					       + sField21 +" = '" + cuota.getPTPAGO() + "' AND "
+					       + sField22 +" = '" + cuota.getBITC09() + "' AND "
+					       + sField23 +" = '" + cuota.getOBTEXC() + "' AND "
+					       + sField22 +" = '" + cuota.getOBDEER() + "' )"); 
+
+			rs = pstmt.executeQuery();
+
+			//System.out.println("===================================================");
+			//System.out.println(sField1 + ": " + sCuotaID);
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					sCuotaID = rs.getString(sField1);
+					System.out.println(sField1 + ": " + sCuotaID);
+
+
+
+					//System.out.println(sField2 + ": " + sApplication);
+					//System.out.println(sField3 + ": " + sContactCode);
+					//System.out.println(sField4 + ": " + sProjectCode);
+					//System.out.println("===================================================");
+
+				}
+			}
+			if (found == false) 
+			{
+				System.out.println("No Information Found");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sCuotaID;
+	}
 
 }

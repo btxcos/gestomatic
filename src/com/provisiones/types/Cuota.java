@@ -263,6 +263,32 @@ public class Cuota
 		OBDEER = oBDEER;
 	}
 
-
+	public boolean equals(Cuota NuevaCuota)
+	{	
+		return (CODTRN == NuevaCuota.getCODTRN() && 
+				COTDOR == NuevaCuota.getCOTDOR()  && 
+				IDPROV == NuevaCuota.getIDPROV()  && 
+				COACCI == NuevaCuota.getCOACCI()  && 
+				COCLDO == NuevaCuota.getCOCLDO()  && 
+				NUDCOM == NuevaCuota.getNUDCOM()  && 
+				COENGP == NuevaCuota.getCOENGP()  && 
+				COACES == NuevaCuota.getCOACES()  && 
+				COGRUG == NuevaCuota.getCOGRUG()  && 
+				COTACA == NuevaCuota.getCOTACA()  && 
+				COSBAC == NuevaCuota.getCOSBAC()  && 
+				BITC11 == NuevaCuota.getBITC11()  && 
+				FIPAGO == NuevaCuota.getFIPAGO()  && 
+				BITC12 == NuevaCuota.getBITC12()  && 
+				FFPAGO == NuevaCuota.getFFPAGO()  && 
+				BITC13 == NuevaCuota.getBITC13()  && 
+				IMCUCO == NuevaCuota.getIMCUCO()  && 
+				BITC14 == NuevaCuota.getBITC14()  && 
+				FAACTA == NuevaCuota.getFAACTA()  && 
+				BITC15 == NuevaCuota.getBITC15()  && 
+				PTPAGO == NuevaCuota.getPTPAGO()  && 
+				BITC09 == NuevaCuota.getBITC09()  && 
+				OBTEXC == NuevaCuota.getOBTEXC()  && 
+				OBDEER == NuevaCuota.getOBDEER());
+	}
 
 }

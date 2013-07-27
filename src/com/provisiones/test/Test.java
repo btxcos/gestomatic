@@ -9,12 +9,12 @@ import java.sql.Timestamp;
 
 import com.provisiones.dal.ConnectionManager;
 
+import com.provisiones.misc.Longitudes;
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Posiciones;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.DatosActivo;
 import com.provisiones.types.Gasto;
-import com.provisiones.types.Longitudes;
-import com.provisiones.types.Posiciones;
 import com.provisiones.dal.TableManager;
 import com.provisiones.dal.qm.QMDatosActivos;
 

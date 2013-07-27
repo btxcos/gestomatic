@@ -4,6 +4,7 @@ package com.provisiones.dal.qm;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ReferenciaCatastral;
 
 import java.sql.Connection;
@@ -31,7 +32,9 @@ public class QMReferencias
 	static String sField11 = "cotexa";    
 	static String sField12 = "cod_bitc09";
 	static String sField13 = "obtexc";    
-	static String sField14 = "obdeer";    
+	static String sField14 = "obdeer";
+	
+	static String sField15 = "cod_validado";
 
 
 	public static boolean addReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral)
@@ -59,8 +62,9 @@ public class QMReferencias
 				       + sField10 + ","              
 				       + sField11 + ","              
 				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 +  
+				       + sField13 + ","
+				       + sField14 + ","
+				       + sField15 +  
 				       ") VALUES ('" 
 				       + NuevaReferenciaCatastral.getCODTRN() + "','" 
 				       + NuevaReferenciaCatastral.getCOTDOR() + "','"
@@ -75,7 +79,8 @@ public class QMReferencias
 				       + NuevaReferenciaCatastral.getCOTEXA() + "','"
 				       + NuevaReferenciaCatastral.getBITC09() + "','"
 				       + NuevaReferenciaCatastral.getOBTEXC() + "','"
-				       + NuevaReferenciaCatastral.getOBDEER() + "' )");
+				       + NuevaReferenciaCatastral.getOBDEER() + "','"
+				       + ValoresDefecto.DEF_VALIDADO + "' )");
 		} 
 		catch (SQLException ex) 
 		{
@@ -97,7 +102,7 @@ public class QMReferencias
 		ConnectionManager.CloseDBConnection(conn);
 		return true;
 	}
-	public static boolean modReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral, String sReferenciaCatastralID)
+	public static boolean modReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral, String sReferenciaCatastralID, String sValidado)
 	{
 		String sMethod = "modReferenciaCatastral";
 		Statement stmt = null;
@@ -124,7 +129,8 @@ public class QMReferencias
 					+ sField11 + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "','"
 					+ sField12 + " = '"+ NuevaReferenciaCatastral.getBITC09() + "','"
 					+ sField13 + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "','"
-					+ sField14 + " = '"+ NuevaReferenciaCatastral.getOBDEER() + 
+					+ sField14 + " = '"+ NuevaReferenciaCatastral.getOBDEER() + "','"
+					+ sField15 + " = '"+ sValidado + 
 					"' "+
 					" WHERE "
 					+ sField6 + " = '"+ sReferenciaCatastralID +"'");
@@ -226,8 +232,9 @@ public class QMReferencias
 				       + sField10 + ","              
 				       + sField11 + ","              
 				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 +             
+				       + sField13 + ","
+				       + sField14 + ","
+				       + sField15 +             
          
        
 			"  FROM " + sTable + 

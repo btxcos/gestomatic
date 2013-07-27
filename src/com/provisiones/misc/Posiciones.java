@@ -1,4 +1,4 @@
-package com.provisiones.types;
+package com.provisiones.misc;
 
 public class Posiciones 
 {

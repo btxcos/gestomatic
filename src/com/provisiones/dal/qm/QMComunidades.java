@@ -2,6 +2,7 @@ package com.provisiones.dal.qm;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
 
 import java.sql.Connection;
@@ -45,7 +46,9 @@ public class QMComunidades
 	static String sField27 = "nuccnt";    
 	static String sField28 = "cod_bitc09";
 	static String sField29 = "obtexc";    
-	static String sField30 = "obdeer";    
+	static String sField30 = "obdeer";
+	
+	static String sField31 = "cod_validado";
 
 	public static boolean addComunidad(Comunidad NuevaComunidad)
 
@@ -88,8 +91,9 @@ public class QMComunidades
 				       + sField26 + ","              
 				       + sField27 + ","              
 				       + sField28 + ","              
-				       + sField29 + ","              
-				       + sField30 +               
+				       + sField29 + ","
+				       + sField30 + "," 
+				       + sField31 +               
 				       ") VALUES ('" 
 				       + NuevaComunidad.getCODTRN() + "','" 
 				       + NuevaComunidad.getCOTDOR() + "','"
@@ -120,7 +124,8 @@ public class QMComunidades
 				       + NuevaComunidad.getNUCCNT() + "','"
 				       + NuevaComunidad.getBITC09() + "','"
 				       + NuevaComunidad.getOBTEXC() + "','"
-				       + NuevaComunidad.getOBDEER() + "' )");
+				       + NuevaComunidad.getOBDEER() + "','"
+				       + ValoresDefecto.DEF_VALIDADO + "' )");
 		} 
 		catch (SQLException ex) 
 		{
@@ -142,7 +147,7 @@ public class QMComunidades
 		ConnectionManager.CloseDBConnection(conn);
 		return true;
 	}
-	public static boolean modComunidad(Comunidad NuevaComunidad, String sComunidadID)
+	public static boolean modComunidad(Comunidad NuevaComunidad, String sComunidadID, String sValidado)
 	{
 		String sMethod = "modComunidad";
 		Statement stmt = null;
@@ -185,7 +190,8 @@ public class QMComunidades
 					+ sField27 + " = '"+ NuevaComunidad.getNUCCNT() + "','"
 					+ sField28 + " = '"+ NuevaComunidad.getBITC09() + "','"
 					+ sField29 + " = '"+ NuevaComunidad.getOBTEXC() + "','"
-					+ sField30 + " = '"+ NuevaComunidad.getOBDEER() +
+					+ sField30 + " = '"+ NuevaComunidad.getOBDEER() + "','"
+					+ sField31 + " = '"+ sValidado +
 					"' "+
 					" WHERE "
 					+ sField7 + " = '"+ sComunidadID +"'");
@@ -318,8 +324,9 @@ public class QMComunidades
 				       + sField26 + ","              
 				       + sField27 + ","              
 				       + sField28 + ","              
-				       + sField29 + ","              
-				       + sField30 +               
+				       + sField29 + ","
+				       + sField30 + "," 
+				       + sField31 +               
        
 			"  FROM " + sTable + 
 					" WHERE (" + sField7 + " = '" + sComunidadID	+ "')");

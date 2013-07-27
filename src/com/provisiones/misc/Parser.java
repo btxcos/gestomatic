@@ -12,8 +12,6 @@ import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuota;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.ImpuestoRecurso;
-import com.provisiones.types.Longitudes;
-import com.provisiones.types.Posiciones;
 import com.provisiones.types.ReferenciaCatastral;
 
 public class Parser {

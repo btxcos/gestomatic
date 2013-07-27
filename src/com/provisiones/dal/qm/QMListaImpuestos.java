@@ -18,6 +18,8 @@ public class QMListaImpuestos
 	static String sField1 = "cod_coaces";
 	static String sField2 = "cod_nurcat";
 	static String sField3 = "cod_impuestos";
+	
+	static String sField4 = "cod_validado";
 
 	public static boolean addRelacionImpuestos(String sCodCOACES, String sCodNURCAT, String CodImpuestos) 
 	{
@@ -156,5 +158,110 @@ public class QMListaImpuestos
 
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
+	}
+
+	public static boolean setValidado(String CodImpuestos, String sValidado)
+	{
+		String sMethod = "setValidado";
+		Statement stmt = null;
+		boolean bExit = false;
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			stmt.executeUpdate("UPDATE " + sTable + 
+					" SET " 
+					+ sField4 + " = '"+ sValidado + 
+					"' "+
+					" WHERE "
+					+ sField3 + " = '"+ CodImpuestos +"'");
+			
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt, sClassName, sMethod);
+			bExit = true;
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return bExit;
+	}
+	
+	public static String getValidado(String CodImpuestos)
+	{
+		String sMethod = "getValidado";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+
+		String sValidado = "";
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
+					" WHERE (" + sField3 + " = '" + CodImpuestos + "')");
+
+			rs = pstmt.executeQuery();
+			
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					sValidado = rs.getString(sField4);
+					System.out.println("===================================================");
+					System.out.println(sField3 + ": " + CodImpuestos);
+					System.out.println(sField4 + ": " + sValidado);
+
+
+				}
+			}
+			if (found == false) 
+			{
+ 
+				System.out.println("No Information Found");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return sValidado;
 	}
 }
