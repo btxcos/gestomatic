@@ -230,7 +230,7 @@ public class QMListaGastos
 		return result;
 	}
 
-	public static String  getGastoID(String sCodCOACES, String sCodNUPROF) 
+/*	public static String  getGastoID(String sCodCOACES, String sCodNUPROF) 
 	{
 		String sMethod = "getGastoID";
 
@@ -298,7 +298,7 @@ public class QMListaGastos
 
 		ConnectionManager.CloseDBConnection(conn);
 		return sResult;
-	}
+	}*/
 	
 	public static boolean setValidado(String sCodGasto, String sValidado)
 	{

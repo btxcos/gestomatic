@@ -411,4 +411,109 @@ public class QMComunidades
 				sNUCCDI, sNUCCNT, sBITC09, sOBTEXC, sOBDEER);
 	}
 
+	public static boolean setValidado(String sCodComunidad, String sValidado)
+	{
+		String sMethod = "setValidado";
+		Statement stmt = null;
+		boolean bExit = false;
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			stmt.executeUpdate("UPDATE " + sTable + 
+					" SET " 
+					+ sField31 + " = '"+ sValidado + 
+					"' "+
+					" WHERE "
+					+ sField7 + " = '"+ sCodComunidad +"'");
+			
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt, sClassName, sMethod);
+			bExit = true;
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return bExit;
+	}
+	
+	public static String getValidado(String sCodComunidad)
+	{
+		String sMethod = "getValidado";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+
+		String sValidado = "";
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField31 + "  FROM " + sTable + 
+					" WHERE (" + sField7 + " = '" + sCodComunidad + "')");
+
+			rs = pstmt.executeQuery();
+			
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					sValidado = rs.getString(sField31);
+					System.out.println("===================================================");
+					System.out.println(sField7 + ": " + sCodComunidad);
+					System.out.println(sField31 + ": " + sValidado);
+
+
+				}
+			}
+			if (found == false) 
+			{
+ 
+				System.out.println("No Information Found");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return sValidado;
+	}
+	
 }

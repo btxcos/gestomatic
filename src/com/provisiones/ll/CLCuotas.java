@@ -1,10 +1,8 @@
 package com.provisiones.ll;
 
-import java.util.ArrayList;
-
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMListaCuotas;
-import com.provisiones.dal.qm.QMListaImpuestos;
+import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuota;
 
@@ -13,57 +11,53 @@ public class CLCuotas
   
 	static String sClassName = CLCuotas.class.getName();
 	
-	public static boolean actualizaCuota(Cuota NuevaCuota)
+	public static boolean actualizaCuotaLeida(String linea)
 	{
-		String sMethod = "actualizaCuota";
+		String sMethod = "actualizaCuotaLeida";
 
 		boolean bSalida = false;
 		
-		String sCodCuota = "";
+		Cuota cuota = Parser.leerCuota(linea);
 		
-		Cuota CuotaAntigua = new Cuota(                  
-				NuevaCuota.getCODTRN(), 
-				ValoresDefecto.DEF_COTDOR, 
-				NuevaCuota.getIDPROV(), 
-				NuevaCuota.getCOACCI(), 
-				NuevaCuota.getCOCLDO(), 
-				NuevaCuota.getNUDCOM(), 
-				NuevaCuota.getCOENGP(), 
-				NuevaCuota.getCOACES(), 
-				NuevaCuota.getCOGRUG(), 
-				NuevaCuota.getCOTACA(), 
-				NuevaCuota.getCOSBAC(), 
-				NuevaCuota.getBITC11(), 
-				NuevaCuota.getFIPAGO(), 
-				NuevaCuota.getBITC12(), 
-				NuevaCuota.getFFPAGO(), 
-				NuevaCuota.getBITC13(), 
-				NuevaCuota.getIMCUCO(), 
-				NuevaCuota.getBITC14(), 
-				NuevaCuota.getFAACTA(), 
-				NuevaCuota.getBITC15(), 
-				NuevaCuota.getPTPAGO(), 
-				NuevaCuota.getBITC09(), 
-				NuevaCuota.getOBTEXC(), 
-				ValoresDefecto.DEF_OBDEER);
-
+		String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
+		String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
 		
-		ArrayList<String> lista_cuotas = QMListaCuotas.getCuotas(NuevaCuota.getCOACES(), NuevaCuota.getNUDCOM());
+		String sValidado = "";
 		
-		
-		for(int i=1; i < lista_cuotas.size() ; i++)
+		if (cuota.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
 		{
-			sCodCuota = lista_cuotas.get(i);
-			Cuota cuotaTemp = QMCuotas.getCuota(sCodCuota);
-			bSalida = cuotaTemp.equals(CuotaAntigua);
-			if (bSalida)
-			{
-				QMCuotas.modCuota(NuevaCuota, sCodCuota);
-				System.out.println("["+sClassName+"."+sMethod+"] Cuota encontrada!");
-			}
+			sValidado = "V";
+			sBKOBDEER = cuota.getOBDEER();
 		}
-		if (bSalida == false) 
+		else
 		{
+			sValidado = "X";
+			sBKCOTDOR = cuota.getCOTDOR();
+			sBKOBDEER = cuota.getOBDEER();
+			cuota.setCOTDOR(ValoresDefecto.DEF_COTDOR);
+
+		}
+		
+		cuota.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
+		
+			   				
+		String sCodCuota = QMCuotas.getCuotaID(cuota);
+		
+		bSalida = !(sCodCuota.equals(""));
+		
+		if (bSalida)
+		{
+		
+			cuota.setCOTDOR(sBKCOTDOR);
+			cuota.setCOTDOR(sBKOBDEER);
+			
+			QMCuotas.modCuota(cuota, sCodCuota);
+			QMListaCuotas.setValidado(sCodCuota, sValidado);
+		}
+		else 
+		{
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
 			System.out.println("No Information Found");
 		}
 		

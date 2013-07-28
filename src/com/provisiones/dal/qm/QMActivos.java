@@ -28,6 +28,8 @@ public class QMActivos
 		String sMethod = "addActivo";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = false; 
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -45,6 +47,8 @@ public class QMActivos
 					+ NuevoActivo.getsCodDatos() + "','" 
 					+ NuevoActivo.getsCodComunidad()	+ "','" 
 					+ NuevoActivo.getsCodReferencia() + "' )");
+
+			bSalida = true;
 			
 		} 
 		catch (SQLException ex) 
@@ -65,7 +69,7 @@ public class QMActivos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static boolean modActivo(Activo NuevoActivo, String sCOACES) 

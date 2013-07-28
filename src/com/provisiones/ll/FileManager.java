@@ -8,26 +8,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
-import com.provisiones.dal.qm.QMComunidades;
-import com.provisiones.dal.qm.QMCuotas;
-import com.provisiones.dal.qm.QMDatosActivos;
-import com.provisiones.dal.qm.QMGastos;
-import com.provisiones.dal.qm.QMListaCuotas;
-import com.provisiones.dal.qm.QMListaGastos;
 import com.provisiones.misc.Longitudes;
-import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
-import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.Cierre;
-import com.provisiones.types.Comunidad;
-import com.provisiones.types.Cuota;
-import com.provisiones.types.DatosActivo;
-import com.provisiones.types.Gasto;
 
 public class FileManager 
 {
@@ -91,6 +77,8 @@ public class FileManager
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Inicio: " + new Timestamp(date.getTime()));
 
 		int contador=0;
+		int registros = 0;
+
 		while((linea=br.readLine())!=null)
         {
 			contador++;
@@ -100,8 +88,8 @@ public class FileManager
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
-    			DatosActivo activo = Parser.leerActivo(linea);
-    			QMDatosActivos.addDatosActivo(activo);
+    			if (CLActivos.actualizaActivoLeido(linea))
+    				registros++;
     		}
             
         }
@@ -109,10 +97,12 @@ public class FileManager
 		
 		br.close();
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+		bSalida = ((contador-registros-1) == 0);
 		
-        bSalida = true;
-        
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+		
         return bSalida;
 	}
 	
@@ -140,8 +130,8 @@ public class FileManager
 		System.out.println("Inicio: " + new Timestamp(date.getTime()));
 
 		int contador=0;
+		int registros = 0;
 		
-		String sCodGastos = "";
 		//ArrayList<String> lista_rechazados = new ArrayList<String>(); 
 		
 		while((linea=br.readLine())!=null)
@@ -153,20 +143,7 @@ public class FileManager
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
-    			Gasto gasto = Parser.leerGasto(linea);
-    			
-    			String sValidado = "";
-    			
-    			if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
-    				sValidado = "V";
-    			else
-    				sValidado = "X";
-    			
-    			sCodGastos = QMListaGastos.getGastoID(gasto.getCOACES(), gasto.getNUPROF());
-    			//lista_rechazados.add(sCodGastos);
-    			QMListaGastos.setValidado(sCodGastos, sValidado);
-    			QMGastos.modGasto(gasto, sCodGastos);
-
+    			CLGastos.actualizaGastoLeido(linea);
     		}
             
         }
@@ -176,7 +153,8 @@ public class FileManager
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
 		
-        
+		bSalida = ((contador-registros-1) == 0);
+		
         return bSalida;
 	}
 
@@ -253,7 +231,9 @@ public class FileManager
 		java.util.Date date= new java.util.Date();
 		System.out.println("Inicio: " + new Timestamp(date.getTime()));
 
-		int contador=0;
+		int contador= 0 ;
+		int registros = 0;
+		bSalida = true;
 		
 		//String sNUDCOM = "";
 		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
@@ -268,28 +248,17 @@ public class FileManager
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
-    			Comunidad comunidad = Parser.leerComunidad(linea);
-    			String sValidado = "";
-    			
-    			if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
-    				sValidado = "V";
-    			else
-    				sValidado = "X";
-    			//lista_comunidades.add(comunidad);
-    			
-    			QMComunidades.modComunidad(comunidad, comunidad.getNUDCOM(), sValidado);***
-
-
+    			bSalida = bSalida && CLComunidades.actualizaComunidadLeida(linea);
+				registros++;
     		}
-            
         }
-		
-		
+	
 		br.close();
-		
+	
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-		
-        
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+ 
         return bSalida;
 	}
 	
@@ -316,7 +285,8 @@ public class FileManager
 		java.util.Date date= new java.util.Date();
 		System.out.println("Inicio: " + new Timestamp(date.getTime()));
 
-		int contador=0;
+		int contador= 0 ;
+		int registros = 0;
 		
 		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
 		
@@ -330,48 +300,120 @@ public class FileManager
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
-    			Cuota cuota = Parser.leerCuota(linea);
-    			
-    			String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
-    			String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
-    			
-    			String sValidado = "";
-    			
-    			if (cuota.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
-    			{
-    				sValidado = "V";
-    				sBKOBDEER = cuota.getOBDEER();
-    			}
-    			else
-    			{
-    				sValidado = "X";
-        			sBKCOTDOR = cuota.getCOTDOR();
-        			sBKOBDEER = cuota.getOBDEER();
-        			cuota.setCOTDOR(ValoresDefecto.DEF_COTDOR);
-
-    			}
- 			
-    			cuota.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
-    			
-  				   				
-    			String sCodCuota = QMCuotas.getCuotaID(cuota);
-    			
-    			cuota.setCOTDOR(sBKCOTDOR);
-    			cuota.setCOTDOR(sBKOBDEER);
-  				
-  				QMCuotas.modCuota(cuota, sCodCuota);
-  				QMListaCuotas.setValidado(sCodCuota, sValidado);
-
+    			if (CLCuotas.actualizaCuotaLeida(linea))
+    				registros++;
     		}
-            
         }
-		
 		
 		br.close();
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+        return bSalida;
+	}
+	
+	public static boolean leerReferencias(String sNombre) throws IOException 
+	{
+		String sMethod = "leerReferencias";
+
+		boolean bSalida = false;
 		
-        
+		File archivo = new File ("C:\\"+sNombre);
+		FileReader fr = new FileReader (archivo);
+		BufferedReader br = new BufferedReader(fr);
+		
+		String linea = "";
+
+		int i = 26; //Caracter ->
+		String aChar = new Character((char)i).toString();
+
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+
+		java.util.Date date= new java.util.Date();
+		System.out.println("Inicio: " + new Timestamp(date.getTime()));
+
+		int contador= 0 ;
+		int registros = 0;
+		
+		//String sNUDCOM = "";
+		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
+		
+			
+		while((linea=br.readLine())!=null)
+        {
+			contador++;
+    		if (linea.equals(aChar))
+    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+    		else if (linea.length()< (Longitudes.REFERENCIAS_L-Longitudes.FILLER_REFERENCIAS_L) )
+    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+    		else
+    		{
+    			CLReferencias.actualizaReferenciaLeida(linea);
+				registros++;
+    		}
+        }
+	
+		br.close();
+	
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+ 
+        return bSalida;
+	}
+
+	public static boolean leerImpuestos(String sNombre) throws IOException 
+	{
+		String sMethod = "leerImpuestos";
+
+		boolean bSalida = false;
+		
+		File archivo = new File ("C:\\"+sNombre);
+		FileReader fr = new FileReader (archivo);
+		BufferedReader br = new BufferedReader(fr);
+		
+		String linea = "";
+
+		int i = 26; //Caracter ->
+		String aChar = new Character((char)i).toString();
+
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+
+		java.util.Date date= new java.util.Date();
+		System.out.println("Inicio: " + new Timestamp(date.getTime()));
+
+		int contador= 0 ;
+		int registros = 0;
+		
+		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
+		
+			
+		while((linea=br.readLine())!=null)
+        {
+			contador++;
+    		if (linea.equals(aChar))
+    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+    		else if (linea.length()< (Longitudes.IMPUESTOS_L-Longitudes.FILLER_IMPUESTOS_L) )
+    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+    		else
+    		{
+    			if (CLImpuestos.actualizaImpuestoLeido(linea))
+    				registros++;
+    		}
+        }
+		
+		br.close();
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
         return bSalida;
 	}
 	
@@ -484,7 +526,10 @@ public class FileManager
 	public static void main(String[] args) throws IOException 
 	{
 		String sMethod = "main";
-
-		splitter("168ga2.txt");
+		
+		String sPrueba = "168ga2.txt";
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Probando el archivo "+ sPrueba);
+		splitter(sPrueba);
 	}
 }

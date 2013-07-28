@@ -361,4 +361,91 @@ public class QMImpuestos
 				sBIRESO, sCOTEXA, sBITC09, sOBTEXC, sOBDEER);
 	}
 
+	public static String getImpuestoRecursoID(ImpuestoRecurso impuesto)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "getImpuestoRecursoID";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sImpuestoID = "";
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					+ sField1 + 
+					"  FROM " + sTable + 
+						" WHERE ("
+					       + sField2  +" = '" + impuesto.getCODTRN() + "' AND "
+					       + sField3  +" = '" + impuesto.getCOTDOR() + "' AND "
+					       + sField4  +" = '" + impuesto.getIDPROV() + "' AND "
+					       + sField5  +" = '" + impuesto.getCOACCI() + "' AND "
+					       + sField6  +" = '" + impuesto.getCOENGP() + "' AND "
+					       + sField7  +" = '" + impuesto.getCOACES() + "' AND "
+					       + sField8  +" = '" + impuesto.getNURCAT() + "' AND "
+					       + sField9  +" = '" + impuesto.getCOGRUC() + "' AND "
+					       + sField10 +" = '" + impuesto.getCOTACA() + "' AND "
+					       + sField11 +" = '" + impuesto.getCOSBAC() + "' AND "
+					       + sField12 +" = '" + impuesto.getBITC18() + "' AND "
+					       + sField13 +" = '" + impuesto.getFEPRRE() + "' AND "
+					       + sField14 +" = '" + impuesto.getBITC19() + "' AND "
+					       + sField15 +" = '" + impuesto.getFERERE() + "' AND "
+					       + sField16 +" = '" + impuesto.getBITC20() + "' AND "
+					       + sField17 +" = '" + impuesto.getFEDEIN() + "' AND "
+					       + sField18 +" = '" + impuesto.getBITC21() + "' AND "
+					       + sField19 +" = '" + impuesto.getBISODE() + "' AND "
+					       + sField20 +" = '" + impuesto.getBITC22() + "' AND "
+					       + sField21 +" = '" + impuesto.getBIRESO() + "' AND "
+					       + sField22 +" = '" + impuesto.getCOTEXA() + "' AND "
+					       + sField23 +" = '" + impuesto.getBITC09() + "' AND "
+					       + sField24 +" = '" + impuesto.getOBTEXC() + "' AND "
+					       + sField25 +" = '" + impuesto.getOBDEER() + "' )"); 
+
+			rs = pstmt.executeQuery();
+
+			//System.out.println("===================================================");
+			//System.out.println(sField1 + ": " + sCuotaID);
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					sImpuestoID = rs.getString(sField1);
+					System.out.println(sField1 + ": " + sImpuestoID);
+				}
+			}
+			if (found == false) 
+			{
+				System.out.println("No Information Found");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sImpuestoID;
+	}
 }
