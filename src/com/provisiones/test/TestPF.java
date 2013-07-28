@@ -51,9 +51,8 @@ public class TestPF implements Serializable{
 	public void handleFileUpload(FileUploadEvent event)throws IOException 
     {
 			FileManager.guardarFichero(event);
-			//FileManager.leerActivos(event.getFile().getFileName());
 			FileManager.splitter(event.getFile().getFileName());
-			//if (f1.renameTo(f2)) --renombrar el fichero leido y ya en base de datos
+
 			setsCampo("El archivo " + event.getFile().getFileName() + " ha subido correctamente.");
 	        FacesMessage msg = new FacesMessage("Correcto!", event.getFile().getFileName() + " ha subido correctamente.");
 	        FacesContext.getCurrentInstance().addMessage(null, msg);  

@@ -143,18 +143,20 @@ public class FileManager
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
-    			CLGastos.actualizaGastoLeido(linea);
+    			if (CLGastos.actualizaGastoLeido(linea))
+    				registros++;
     		}
             
         }
 		
-		
 		br.close();
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
 		
 		bSalida = ((contador-registros-1) == 0);
 		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			
         return bSalida;
 	}
 
@@ -248,17 +250,19 @@ public class FileManager
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
-    			bSalida = bSalida && CLComunidades.actualizaComunidadLeida(linea);
-				registros++;
+    			if (CLComunidades.actualizaComunidadLeida(linea))
+    				registros++;
     		}
         }
 	
 		br.close();
 	
+		bSalida = ((contador-registros-1) == 0);
+		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
- 
+		
         return bSalida;
 	}
 	
@@ -307,9 +311,12 @@ public class FileManager
 		
 		br.close();
 		
+		bSalida = ((contador-registros-1) == 0);
+		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+		
         return bSalida;
 	}
 	
@@ -352,17 +359,19 @@ public class FileManager
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
-    			CLReferencias.actualizaReferenciaLeida(linea);
-				registros++;
+    			if (CLReferencias.actualizaReferenciaLeida(linea))
+    				registros++;
     		}
         }
 	
 		br.close();
 	
+		bSalida = ((contador-registros-1) == 0);
+		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
- 
+		 
         return bSalida;
 	}
 
@@ -410,10 +419,14 @@ public class FileManager
         }
 		
 		br.close();
+
+		bSalida = ((contador-registros-1) == 0);
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+		
+
         return bSalida;
 	}
 	
