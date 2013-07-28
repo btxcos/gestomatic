@@ -25,22 +25,23 @@ public class QMCuotas
 	static String sField6  = "cod_cocldo";
 	static String sField7  = "nudcom";
 	static String sField8  = "coengp";
-	static String sField9  = "cogrug";
-	static String sField10 = "cotaca";
-	static String sField11 = "cosbac";
-	static String sField12 = "cod_bitc11";
-	static String sField13 = "fipago";
-	static String sField14 = "cod_bitc12";
-	static String sField15 = "ffpago";
-	static String sField16 = "cod_bitc13";
-	static String sField17 = "imcuco";
-	static String sField18 = "cod_bitc14";
-	static String sField19 = "faacta";
-	static String sField20 = "cod_bitc15";
-	static String sField21 = "ptpago";
-	static String sField22 = "cod_bitc09";
-	static String sField23 = "obtexc";
-	static String sField24 = "obdeer";
+	static String sField9  = "cod_coaces";
+	static String sField10 = "cogrug";     
+	static String sField11 = "cotaca";     
+	static String sField12 = "cod_cosbac";     
+	static String sField13 = "cod_bitc11"; 
+	static String sField14 = "fipago";     
+	static String sField15 = "cod_bitc12"; 
+	static String sField16 = "ffpago";     
+	static String sField17 = "cod_bitc13"; 
+	static String sField18 = "imcuco";     
+	static String sField19 = "cod_bitc14"; 
+	static String sField20 = "faacta";     
+	static String sField21 = "cod_bitc15"; 
+	static String sField22 = "ptpago";     
+	static String sField23 = "cod_bitc09"; 
+	static String sField24 = "obtexc";     
+	static String sField25 = "obdeer";     
 
 	public static boolean addCuota(Cuota NuevaCuota)
 
@@ -77,7 +78,8 @@ public class QMCuotas
 				       + sField21 + ","              
 				       + sField22 + ","              
 				       + sField23 + ","              
-				       + sField24 + 
+				       + sField24 + ","
+				       + sField25 + 
 				       ") VALUES ('" 
 				       + NuevaCuota.getCODTRN() + "','" 
 				       + NuevaCuota.getCOTDOR() + "','"
@@ -86,6 +88,7 @@ public class QMCuotas
 				       + NuevaCuota.getCOCLDO() + "','"
 				       + NuevaCuota.getNUDCOM() + "','"
 				       + NuevaCuota.getCOENGP() + "','"
+				       + NuevaCuota.getCOACES() + "','"
 				       + NuevaCuota.getCOGRUG() + "','"
 				       + NuevaCuota.getCOTACA() + "','"
 				       + NuevaCuota.getCOSBAC() + "','"
@@ -144,22 +147,23 @@ public class QMCuotas
 					+ sField6  + " = '"+ NuevaCuota.getCOCLDO() + "','"
 					+ sField7  + " = '"+ NuevaCuota.getNUDCOM() + "','"
 					+ sField8  + " = '"+ NuevaCuota.getCOENGP() + "','"
-					+ sField9  + " = '"+ NuevaCuota.getCOGRUG() + "','"
-					+ sField10 + " = '"+ NuevaCuota.getCOTACA() + "','"
-					+ sField11 + " = '"+ NuevaCuota.getCOSBAC() + "','"
-					+ sField12 + " = '"+ NuevaCuota.getBITC11() + "','"
-					+ sField13 + " = '"+ NuevaCuota.getFIPAGO() + "','"
-					+ sField14 + " = '"+ NuevaCuota.getBITC12() + "','"
-					+ sField15 + " = '"+ NuevaCuota.getFFPAGO() + "','"
-					+ sField16 + " = '"+ NuevaCuota.getBITC13() + "','"
-					+ sField17 + " = '"+ NuevaCuota.getIMCUCO() + "','"
-					+ sField18 + " = '"+ NuevaCuota.getBITC14() + "','"
-					+ sField19 + " = '"+ NuevaCuota.getFAACTA() + "','"
-					+ sField20 + " = '"+ NuevaCuota.getBITC15() + "','"
-					+ sField21 + " = '"+ NuevaCuota.getPTPAGO() + "','"
-					+ sField22 + " = '"+ NuevaCuota.getBITC09() + "','"
-					+ sField23 + " = '"+ NuevaCuota.getOBTEXC() + "','"
-					+ sField24 + " = '"+ NuevaCuota.getOBDEER() +
+					+ sField9  + " = '"+ NuevaCuota.getCOACES() + "','"
+					+ sField10 + " = '"+ NuevaCuota.getCOGRUG() + "','"
+					+ sField11 + " = '"+ NuevaCuota.getCOTACA() + "','"
+					+ sField12 + " = '"+ NuevaCuota.getCOSBAC() + "','"
+					+ sField13 + " = '"+ NuevaCuota.getBITC11() + "','"
+					+ sField14 + " = '"+ NuevaCuota.getFIPAGO() + "','"
+					+ sField15 + " = '"+ NuevaCuota.getBITC12() + "','"
+					+ sField16 + " = '"+ NuevaCuota.getFFPAGO() + "','"
+					+ sField17 + " = '"+ NuevaCuota.getBITC13() + "','"
+					+ sField18 + " = '"+ NuevaCuota.getIMCUCO() + "','"
+					+ sField19 + " = '"+ NuevaCuota.getBITC14() + "','"
+					+ sField20 + " = '"+ NuevaCuota.getFAACTA() + "','"
+					+ sField21 + " = '"+ NuevaCuota.getBITC15() + "','"
+					+ sField22 + " = '"+ NuevaCuota.getPTPAGO() + "','"
+					+ sField23 + " = '"+ NuevaCuota.getBITC09() + "','"
+					+ sField24 + " = '"+ NuevaCuota.getOBTEXC() + "','"
+					+ sField25 + " = '"+ NuevaCuota.getOBDEER() +
 					"' "+
 					" WHERE "
 					+ sField1 + " = '"+ sCuotaID +"'");
@@ -278,8 +282,9 @@ public class QMCuotas
 				       + sField20 + ","              
 				       + sField21 + ","              
 				       + sField22 + ","              
-				       + sField23 + ","              
-				       + sField24 +              
+				       + sField23 + ","
+				       + sField24 + ","
+				       + sField25 +              
        
 			"  FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCuotaID	+ "')");
@@ -296,7 +301,6 @@ public class QMCuotas
 				{
 					found = true;
 
-					sCOACES = "";
 					sCODTRN = rs.getString(sField2);
 					sCOTDOR = rs.getString(sField3);
 					sIDPROV = rs.getString(sField4);
@@ -304,22 +308,23 @@ public class QMCuotas
 					sCOCLDO = rs.getString(sField6);
 					sNUDCOM = rs.getString(sField7);
 					sCOENGP = rs.getString(sField8);
-					sCOGRUG = rs.getString(sField9);
-					sCOTACA = rs.getString(sField10);
-					sCOSBAC = rs.getString(sField11);
-					sBITC11 = rs.getString(sField12);
-					sFIPAGO = rs.getString(sField13);
-					sBITC12 = rs.getString(sField14);
-					sFFPAGO = rs.getString(sField15);
-					sBITC13 = rs.getString(sField16);
-					sIMCUCO = rs.getString(sField17);
-					sBITC14 = rs.getString(sField18);
-					sFAACTA = rs.getString(sField19);
-					sBITC15 = rs.getString(sField20);
-					sPTPAGO = rs.getString(sField21);
-					sBITC09 = rs.getString(sField22);
-					sOBTEXC = rs.getString(sField23);
-					sOBDEER = rs.getString(sField24);
+					sCOACES = rs.getString(sField9); 
+					sCOGRUG = rs.getString(sField10);
+					sCOTACA = rs.getString(sField11);
+					sCOSBAC = rs.getString(sField12);
+					sBITC11 = rs.getString(sField13);
+					sFIPAGO = rs.getString(sField14);
+					sBITC12 = rs.getString(sField15);
+					sFFPAGO = rs.getString(sField16);
+					sBITC13 = rs.getString(sField17);
+					sIMCUCO = rs.getString(sField18);
+					sBITC14 = rs.getString(sField19);
+					sFAACTA = rs.getString(sField20);
+					sBITC15 = rs.getString(sField21);
+					sPTPAGO = rs.getString(sField22);
+					sBITC09 = rs.getString(sField23);
+					sOBTEXC = rs.getString(sField24);
+					sOBDEER = rs.getString(sField25);
 
 
 
@@ -387,22 +392,23 @@ public class QMCuotas
 					       + sField6  +" = '" + cuota.getCOCLDO() + "' AND "
 					       + sField7  +" = '" + cuota.getNUDCOM() + "' AND "
 					       + sField8  +" = '" + cuota.getCOENGP() + "' AND "
-					       + sField9  +" = '" + cuota.getCOGRUG() + "' AND "
-					       + sField10 +" = '" + cuota.getCOTACA() + "' AND "
-					       + sField11 +" = '" + cuota.getCOSBAC() + "' AND "
-					       + sField12 +" = '" + cuota.getBITC11() + "' AND "
-					       + sField13 +" = '" + cuota.getFIPAGO() + "' AND "
-					       + sField14 +" = '" + cuota.getBITC12() + "' AND "
-					       + sField15 +" = '" + cuota.getFFPAGO() + "' AND "
-					       + sField16 +" = '" + cuota.getBITC13() + "' AND "
-					       + sField17 +" = '" + cuota.getIMCUCO() + "' AND "
-					       + sField18 +" = '" + cuota.getBITC14() + "' AND "
-					       + sField19 +" = '" + cuota.getFAACTA() + "' AND "
-					       + sField20 +" = '" + cuota.getBITC15() + "' AND "
-					       + sField21 +" = '" + cuota.getPTPAGO() + "' AND "
-					       + sField22 +" = '" + cuota.getBITC09() + "' AND "
-					       + sField23 +" = '" + cuota.getOBTEXC() + "' AND "
-					       + sField22 +" = '" + cuota.getOBDEER() + "' )"); 
+					       + sField9  +" = '" + cuota.getCOACES() + "' AND "
+					       + sField10 +" = '" + cuota.getCOGRUG() + "' AND "
+					       + sField11 +" = '" + cuota.getCOTACA() + "' AND "
+					       + sField12 +" = '" + cuota.getCOSBAC() + "' AND "
+					       + sField13 +" = '" + cuota.getBITC11() + "' AND "
+					       + sField14 +" = '" + cuota.getFIPAGO() + "' AND "
+					       + sField15 +" = '" + cuota.getBITC12() + "' AND "
+					       + sField16 +" = '" + cuota.getFFPAGO() + "' AND "
+					       + sField17 +" = '" + cuota.getBITC13() + "' AND "
+					       + sField18 +" = '" + cuota.getIMCUCO() + "' AND "
+					       + sField19 +" = '" + cuota.getBITC14() + "' AND "
+					       + sField20 +" = '" + cuota.getFAACTA() + "' AND "
+					       + sField21 +" = '" + cuota.getBITC15() + "' AND "
+					       + sField22 +" = '" + cuota.getPTPAGO() + "' AND "
+					       + sField23 +" = '" + cuota.getBITC09() + "' AND "
+					       + sField24 +" = '" + cuota.getOBTEXC() + "' AND "
+					       + sField25 +" = '" + cuota.getOBDEER() + "' )");
 
 			rs = pstmt.executeQuery();
 
