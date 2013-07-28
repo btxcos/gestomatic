@@ -355,10 +355,12 @@ public class FileManager
     			
   				   				
     			String sCodCuota = QMCuotas.getCuotaID(cuota);
+    			
+    			cuota.setCOTDOR(sBKCOTDOR);
+    			cuota.setCOTDOR(sBKOBDEER);
   				
   				QMCuotas.modCuota(cuota, sCodCuota);
-    					
-
+  				QMListaCuotas.setValidado(sCodCuota, sValidado);
 
     		}
             
