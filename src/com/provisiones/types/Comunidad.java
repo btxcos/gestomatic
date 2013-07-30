@@ -155,4 +155,22 @@ public class Comunidad
 	public void setOBTEXC(String oBTEXC) {
 		OBTEXC = oBTEXC;
 	}
+	
+	public void pintaComunidad()
+	{
+		System.out.println("COCLDO:|"+COCLDO+"|");
+		System.out.println("NUDCOM:|"+NUDCOM+"|");
+		System.out.println("NOMCOC:|"+NOMCOC+"|");
+		System.out.println("NODCCO:|"+NODCCO+"|");
+		System.out.println("NOMPRC:|"+NOMPRC+"|");
+		System.out.println("NUTPRC:|"+NUTPRC+"|");
+		System.out.println("NOMADC:|"+NOMADC+"|");
+		System.out.println("NUTADC:|"+NUTADC+"|");
+		System.out.println("NODCAD:|"+NODCAD+"|");
+		System.out.println("NUCCEN:|"+NUCCEN+"|");
+		System.out.println("NUCCOF:|"+NUCCOF+"|");
+		System.out.println("NUCCDI:|"+NUCCDI+"|");
+		System.out.println("NUCCNT:|"+NUCCNT+"|");
+		System.out.println("OBTEXC:|"+OBTEXC+"|");
+	}
 }

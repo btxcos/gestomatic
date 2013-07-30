@@ -9,19 +9,21 @@ import java.util.ArrayList;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
 public class QMListaImpuestos 
 {
 	static String sClassName = QMListaImpuestos.class.getName();
 
 	static String sTable = "lista_impuestos_multi";
+	
 	static String sField1 = "cod_coaces";
 	static String sField2 = "cod_nurcat";
-	static String sField3 = "cod_impuestos";
-	
-	static String sField4 = "cod_validado";
+	static String sField3 = "cod_cosbac";
+	static String sField4 = "cod_movimiento";
+	static String sField5 = "cod_validado";
 
-	public static boolean addRelacionImpuestos(String sCodCOACES, String sCodNURCAT, String CodImpuestos) 
+	public static boolean addRelacionImpuestos(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC, String sCodMovimiento) 
 	{
 		String sMethod = "addRelacionImpuestos";
 		Statement stmt = null;
@@ -32,9 +34,18 @@ public class QMListaImpuestos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + 
-					" (" + sField1 + "," + sField2 + "," + sField3 +") " +
-					"VALUES ('" + sCodCOACES + "','"+ sCodNURCAT + "','"+ CodImpuestos + "')");
+			stmt.executeUpdate("INSERT INTO " + sTable + " (" 
+			+ sField1 + ","
+			+ sField2 + ","
+			+ sField3 + "," 
+			+ sField4 + "," 
+			+ sField5 + ") " 
+			+ "VALUES ('" 
+			+ sCodCOACES + "','"
+			+ sCodNURCAT + "','"
+			+ sCodCOSBAC + "','"
+			+ sCodMovimiento + "','"
+			+ ValoresDefecto.DEF_VALIDADO + "')");
 		} 
 		catch (SQLException ex) 
 		{
@@ -52,7 +63,7 @@ public class QMListaImpuestos
 		return true;
 	}
 
-	public static boolean delRelacionImpuestos(String sCodCOACES, String sCodNURCAT, String CodImpuestos) 
+	public static boolean delRelacionImpuestos(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC, String CodImpuestos) 
 	{
 		String sMethod = "delRelacionImpuestos";
 		Statement stmt = null;
@@ -65,8 +76,9 @@ public class QMListaImpuestos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND  " + sField2 + " = '" + sCodNURCAT + "' "+  
-							"AND  " + sField3 + " = '" + CodImpuestos +"')");
+							"AND  " + sField2 + " = '" + sCodNURCAT + "' "+
+							"AND  " + sField3 + " = '" + sCodCOSBAC + "' "+
+							"AND  " + sField4 + " = '" + CodImpuestos +"')");
 		} 
 		catch (SQLException ex) 
 		{
@@ -84,7 +96,7 @@ public class QMListaImpuestos
 		return true;
 	}
 
-	public static ArrayList<String>  getImpuestos(String sCodCOACES, String sCodNURCAT) 
+	public static ArrayList<String>  getImpuestos(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC) 
 	{
 		String sMethod = "getImpuestos";
 
@@ -107,8 +119,10 @@ public class QMListaImpuestos
 
 
 			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND" + sField2 + " = '" + sCodNURCAT + "' )");
+					" WHERE " +
+					"(" + sField1 + " = '" + sCodCOACES + "' " +
+					" AND " + sField2 + " = '" + sCodNURCAT +
+					" AND " + sField3 + " = '" + sCodCOSBAC +"' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -116,6 +130,7 @@ public class QMListaImpuestos
 			System.out.println("===================================================");
 			System.out.println(sField1 + ": " + sCodCOACES);
 			System.out.println(sField2 + ": " + sCodNURCAT);
+			System.out.println(sField3 + ": " + sCodCOSBAC);
 
 			
 
@@ -160,7 +175,7 @@ public class QMListaImpuestos
 		return result;
 	}
 
-	public static boolean setValidado(String CodImpuestos, String sValidado)
+	public static boolean setValidado(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC, String sCodMovimiento, String sValidado)
 	{
 		String sMethod = "setValidado";
 		Statement stmt = null;
@@ -176,8 +191,11 @@ public class QMListaImpuestos
 					" SET " 
 					+ sField4 + " = '"+ sValidado + 
 					"' "+
-					" WHERE "
-					+ sField3 + " = '"+ CodImpuestos +"'");
+					" WHERE "+
+					"(" + sField1 + " = '" + sCodCOACES + "' " +
+					" AND " + sField2 + " = '" + sCodNURCAT +
+					" AND " + sField3 + " = '" + sCodCOSBAC +
+					" AND " + sField4 + " = '" + sCodMovimiento +"' )");
 			
 		} 
 		catch (SQLException ex) 
@@ -197,7 +215,7 @@ public class QMListaImpuestos
 		return bExit;
 	}
 	
-	public static String getValidado(String CodImpuestos)
+	public static String getValidado(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC)
 	{
 		String sMethod = "getValidado";
 
@@ -221,7 +239,10 @@ public class QMListaImpuestos
 
 
 			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
-					" WHERE (" + sField3 + " = '" + CodImpuestos + "')");
+					" WHERE " +
+					"(" + sField1 + " = '" + sCodCOACES + "' " +
+					" AND " + sField2 + " = '" + sCodNURCAT +
+					" AND " + sField3 + " = '" + sCodCOSBAC +"' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -235,7 +256,9 @@ public class QMListaImpuestos
 
 					sValidado = rs.getString(sField4);
 					System.out.println("===================================================");
-					System.out.println(sField3 + ": " + CodImpuestos);
+					System.out.println(sField1 + ": " + sCodCOACES);
+					System.out.println(sField2 + ": " + sCodNURCAT);
+					System.out.println(sField3 + ": " + sCodCOSBAC);
 					System.out.println(sField4 + ": " + sValidado);
 
 

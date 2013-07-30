@@ -61,5 +61,13 @@ public class Provision
 	public void setsNumGastos(String sNumGastos) {
 		this.sNumGastos = sNumGastos;
 	}
-
+	public void pintaProvision()
+	{
+		System.out.println("sNUPROF         :|"+sNUPROF         +"|");
+		System.out.println("sFEPFON         :|"+sFEPFON         +"|");
+		System.out.println("sFechaValidacion:|"+sFechaValidacion+"|");
+		System.out.println("sEstado         :|"+sEstado         +"|");
+		System.out.println("sValorTolal     :|"+sValorTolal     +"|");
+		System.out.println("sNumGastos      :|"+sNumGastos      +"|");
+	}
 }

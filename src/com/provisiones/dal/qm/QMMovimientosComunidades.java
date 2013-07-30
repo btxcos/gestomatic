@@ -12,7 +12,7 @@ import java.sql.Statement;
 
 public class QMMovimientosComunidades
 {
-	static String sClassName = QMComunidades.class.getName();
+	static String sClassName = QMMovimientosComunidades.class.getName();
 
 	static String sTable = "e1_movimientos_tbl";
 
@@ -150,7 +150,7 @@ public class QMMovimientosComunidades
 		ConnectionManager.CloseDBConnection(conn);
 		return true;
 	}
-	public static boolean modMovimientoComunidad(MovimientoComunidad NuevoMovimientoComunidad, String sMovimientoComunidadID, String sValidado)
+	public static boolean modMovimientoComunidad(MovimientoComunidad NuevoMovimientoComunidad, String sMovimientoComunidadID)
 	{
 		String sMethod = "modMovimientoComunidad";
 		Statement stmt = null;
@@ -404,5 +404,109 @@ public class QMMovimientosComunidades
 				sNODCCO, sBITC03, sNOMPRC, sBITC04, sNUTPRC, sBITC05, sNOMADC,
 				sBITC06, sNUTADC, sBITC07, sNODCAD, sBITC08, sNUCCEN, sNUCCOF,
 				sNUCCDI, sNUCCNT, sBITC09, sOBTEXC, sOBDEER);
+	}
+
+	public static String getMovimientoComunidadID(MovimientoComunidad comunidad)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "getMovimientoComunidadID";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sMovimientoComunidadID = "";
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					+ sField1 + 
+					"  FROM " + sTable + 
+						" WHERE ("
+					       + sField2  +" = '" + comunidad.getCODTRN() + "' AND "
+					       + sField3  +" = '" + comunidad.getCOTDOR() + "' AND "
+					       + sField4  +" = '" + comunidad.getIDPROV() + "' AND "
+					       + sField5  +" = '" + comunidad.getCOACCI() + "' AND "
+					       + sField6  +" = '" + comunidad.getCOENGP() + "' AND "
+					       + sField7  +" = '" + comunidad.getCOCLDO() + "' AND "
+					       + sField8  +" = '" + comunidad.getNUDCOM() + "' AND "
+					       + sField9  +" = '" + comunidad.getBITC10() + "' AND "
+					       + sField10 +" = '" + comunidad.getCOACES() + "' AND "
+					       + sField11 +" = '" + comunidad.getBITC01() + "' AND "
+					       + sField12 +" = '" + comunidad.getNOMCOC() + "' AND "
+					       + sField13 +" = '" + comunidad.getBITC02() + "' AND "
+					       + sField14 +" = '" + comunidad.getNODCCO() + "' AND "
+					       + sField15 +" = '" + comunidad.getBITC03() + "' AND "
+					       + sField16 +" = '" + comunidad.getNOMPRC() + "' AND "
+					       + sField17 +" = '" + comunidad.getBITC04() + "' AND "
+					       + sField18 +" = '" + comunidad.getNUTPRC() + "' AND "
+					       + sField19 +" = '" + comunidad.getBITC05() + "' AND "
+					       + sField20 +" = '" + comunidad.getNOMADC() + "' AND "
+					       + sField21 +" = '" + comunidad.getBITC06() + "' AND "
+					       + sField22 +" = '" + comunidad.getNUTADC() + "' AND "
+					       + sField23 +" = '" + comunidad.getBITC07() + "' AND "
+					       + sField24 +" = '" + comunidad.getNODCAD() + "' AND "
+					       + sField25 +" = '" + comunidad.getBITC08() + "' AND "
+					       + sField26 +" = '" + comunidad.getNUCCEN() + "' AND "
+					       + sField27 +" = '" + comunidad.getNUCCOF() + "' AND "
+					       + sField28 +" = '" + comunidad.getNUCCDI() + "' AND "
+					       + sField29 +" = '" + comunidad.getNUCCNT() + "' AND "
+					       + sField30 +" = '" + comunidad.getBITC09() + "' AND "
+					       + sField31 +" = '" + comunidad.getOBTEXC() + "' AND "
+					       + sField32 +" = '" + comunidad.getOBDEER() + "' )"); 
+
+
+			rs = pstmt.executeQuery();
+
+			//System.out.println("===================================================");
+			//System.out.println(sField1 + ": " + sMovimientoComunidadID);
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					sMovimientoComunidadID = rs.getString(sField1);
+					System.out.println(sField1 + ": " + sMovimientoComunidadID);
+
+
+
+					//System.out.println(sField2 + ": " + sApplication);
+					//System.out.println(sField3 + ": " + sContactCode);
+					//System.out.println(sField4 + ": " + sProjectCode);
+					//System.out.println("===================================================");
+
+				}
+			}
+			if (found == false) 
+			{
+				System.out.println("No Information Found");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sMovimientoComunidadID;
 	}
 }

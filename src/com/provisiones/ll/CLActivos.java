@@ -1,10 +1,8 @@
 package com.provisiones.ll;
 
 import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.dal.qm.QMDatosActivos;
 import com.provisiones.misc.Parser;
 import com.provisiones.types.Activo;
-import com.provisiones.types.DatosActivo;
 
 
 public class CLActivos 
@@ -17,11 +15,28 @@ public class CLActivos
 
 		boolean bSalida = false;
 		
-		DatosActivo activo = Parser.leerActivo(linea);
+		Activo activo = Parser.leerActivo(linea);
 		
-		String sCodActivo = QMActivos.addDatosActivo(activo);
+		String sCodActivo =  activo.getCOACES();
+				
+		bSalida = QMActivos.addActivo(activo);
+		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCodActivo|"+sCodActivo+"|");
-		QMActivos.addActivo(new Activo(activo.getCOACES(), sCodActivo, sMethod, sMethod));
+		
+		/*
+		QMActivos.getActivo(activo.getCOACES()).pintaActivo();
+		
+		activo.setNUINMU("666");
+		
+		QMActivos.modActivo(activo, activo.getCOACES());
+		
+		QMActivos.getActivo(activo.getCOACES()).pintaActivo();
+		
+		QMActivos.delActivo(activo.getCOACES());
+		
+		//*/
+		
+		bSalida =  bSalida && !sCodActivo.equals("");
 		
 		if (!bSalida)
 		{

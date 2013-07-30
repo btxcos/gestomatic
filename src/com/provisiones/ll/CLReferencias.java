@@ -1,9 +1,11 @@
 package com.provisiones.ll;
 
-import com.provisiones.dal.qm.QMReferencias;
+import com.provisiones.dal.qm.QMListaReferencias;
+import com.provisiones.dal.qm.QMMovimientosReferencias;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ReferenciaCatastral;
+import com.provisiones.types.MovimientoReferenciaCatastral;
+
 
 public class CLReferencias 
 {
@@ -15,7 +17,7 @@ public class CLReferencias
 
 		boolean bSalida = false;
 		
-		ReferenciaCatastral referencia = Parser.leerReferenciaCatastral(linea);
+		MovimientoReferenciaCatastral referencia = Parser.leerReferenciaCatastral(linea);
 		
 		String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
 		String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
@@ -39,9 +41,9 @@ public class CLReferencias
 		referencia.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
 		
 			   				
-		String sCodReferencia = referencia.getNURCAT();
+		String sCodMovimientoReferencia = referencia.getNURCAT();
 		
-		bSalida = !(sCodReferencia.equals(""));
+		bSalida = !(sCodMovimientoReferencia.equals(""));
 		
 		if (bSalida)
 		{
@@ -49,7 +51,8 @@ public class CLReferencias
 			referencia.setCOTDOR(sBKCOTDOR);
 			referencia.setCOTDOR(sBKOBDEER);
 			
-			bSalida = QMReferencias.modReferenciaCatastral(referencia, sCodReferencia,sValidado);
+			bSalida = QMMovimientosReferencias.modMovimientoReferenciaCatastral(referencia, sCodMovimientoReferencia);
+			QMListaReferencias.setValidado(referencia.getNURCAT(), referencia.getCOACES(), sCodMovimientoReferencia, sValidado);
 		}
 		else 
 		{

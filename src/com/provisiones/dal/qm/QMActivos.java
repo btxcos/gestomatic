@@ -14,7 +14,7 @@ public class QMActivos
 {
 	static String sClassName = QMActivos.class.getName();
 
-	static String sTable = "ac_datos_tbl";
+	static String sTable = "ac_activos_tbl";
 
 	static String sField1 = "coaces_id";
 
@@ -110,16 +110,15 @@ public class QMActivos
 	static String sField91 = "cod_biobnu";
 	static String sField92 = "pobrar";
 
-	public static String addActivo (Activo NuevoActivo) 
+	public static boolean addActivo (Activo NuevoActivo) 
 	 
 	{
 		String sMethod = "addActivo";
 		Statement stmt = null;
 		Connection conn = null;
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
 		
-		String sCodActivo = "";
+		boolean bSalida = false;
+
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
@@ -128,7 +127,8 @@ public class QMActivos
 			
 			stmt = conn.createStatement();
 			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-				       + sField2  + ","              
+				       + sField1  + ","
+				       + sField2  + ","
 				       + sField3  + ","              
 				       + sField4  + ","              
 				       + sField5  + ","              
@@ -219,7 +219,8 @@ public class QMActivos
 				       + sField90 + ","              
 				       + sField91 + ","              
 				       + sField92 +                  
-				       					") VALUES ('"        
+				       					") VALUES ('"   
+				       + NuevoActivo.getCOACES() + "','"
 				       + NuevoActivo.getNUINMU() + "','"  
 				       + NuevoActivo.getCOSOPA() + "','"  
 				       + NuevoActivo.getCOENAE() + "','"  
@@ -311,63 +312,30 @@ public class QMActivos
 				       + NuevoActivo.getIDCOL3() + "','"  
 				       + NuevoActivo.getBIOBNU() + "','"  
 				       + NuevoActivo.getPOBRAR() + "' )");
+			
+			bSalida = true;
 		} 
 		catch (SQLException ex) 
 		{
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSJUP: " + NuevoActivo.getCOSJUP());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTSIN: " + NuevoActivo.getCOTSIN());
-			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevoActivo.getCOGRAP());
-			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoActivo.getCOACES());
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
-		try 
-		{
-			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT LAST_INSERT_ID()");
-
-			rs = pstmt.executeQuery();
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					sCodActivo = rs.toString();
-				}
-			}
-			else
-			{
-				System.out.println("No Information Found");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs, sClassName, sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
 		ConnectionManager.CloseDBConnection(conn);
-		return sCodActivo;
+		return bSalida;
 	}
-	public static boolean modActivo(Activo NuevoActivo, String sActivoID)
+	public static boolean modActivo(Activo NuevoActivo, String sCodCOACES)
 	{
 		String sMethod = "modActivo";
 		Statement stmt = null;
@@ -381,99 +349,99 @@ public class QMActivos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField2  + " = '"+ NuevoActivo.getNUINMU() + "','"
-					+ sField3  + " = '"+ NuevoActivo.getCOSOPA() + "','"
-					+ sField4  + " = '"+ NuevoActivo.getCOENAE() + "','"
-					+ sField5  + " = '"+ NuevoActivo.getCOESEN() + "','"
-					+ sField6  + " = '"+ NuevoActivo.getNOVIAS() + "','"
-					+ sField7  + " = '"+ NuevoActivo.getNUPOAC() + "','"
-					+ sField8  + " = '"+ NuevoActivo.getNUESAC() + "','"
-					+ sField9  + " = '"+ NuevoActivo.getNUPIAC() + "','"
-					+ sField10 + " = '"+ NuevoActivo.getNUPUAC() + "','"
-					+ sField11 + " = '"+ NuevoActivo.getNOMUIN() + "','"
-					+ sField12 + " = '"+ NuevoActivo.getCOPRAE() + "','"
-					+ sField13 + " = '"+ NuevoActivo.getNOPRAC() + "','"
-					+ sField14 + " = '"+ NuevoActivo.getCOPOIN() + "','"
-					+ sField15 + " = '"+ NuevoActivo.getFEREAP() + "','"
-					+ sField16 + " = '"+ NuevoActivo.getCOREAE() + "','"
-					+ sField17 + " = '"+ NuevoActivo.getFEINAU() + "','"
-					+ sField18 + " = '"+ NuevoActivo.getFESOPO() + "','"
-					+ sField19 + " = '"+ NuevoActivo.getFESEPO() + "','"
-					+ sField20 + " = '"+ NuevoActivo.getFEREPO() + "','"
-					+ sField21 + " = '"+ NuevoActivo.getFEADAC() + "','"
-					+ sField22 + " = '"+ NuevoActivo.getCODIJU() + "','"
-					+ sField23 + " = '"+ NuevoActivo.getCOSJUP() + "','"
-					+ sField24 + " = '"+ NuevoActivo.getCOSTLI() + "','"
-					+ sField25 + " = '"+ NuevoActivo.getCOSCAR() + "','"
-					+ sField26 + " = '"+ NuevoActivo.getCOESVE() + "','"
-					+ sField27 + " = '"+ NuevoActivo.getCOTSIN() + "','"
-					+ sField28 + " = '"+ NuevoActivo.getNUFIRE() + "','"
-					+ sField29 + " = '"+ NuevoActivo.getNUREGP() + "','"
-					+ sField30 + " = '"+ NuevoActivo.getNOMUI0() + "','"
-					+ sField31 + " = '"+ NuevoActivo.getNULIBE() + "','"
-					+ sField32 + " = '"+ NuevoActivo.getNUTOME() + "','"
-					+ sField33 + " = '"+ NuevoActivo.getNUFOLE() + "','"
-					+ sField34 + " = '"+ NuevoActivo.getNUINSR() + "','"
-					+ sField35 + " = '"+ NuevoActivo.getCOSOCU() + "','"
-					+ sField36 + " = '"+ NuevoActivo.getCOXPRO() + "','"
-					+ sField37 + " = '"+ NuevoActivo.getFESOLA() + "','"
-					+ sField38 + " = '"+ NuevoActivo.getFESELA() + "','"
-					+ sField39 + " = '"+ NuevoActivo.getFERELA() + "','"
-					+ sField40 + " = '"+ NuevoActivo.getFERLLA() + "','"
-					+ sField41 + " = '"+ NuevoActivo.getCASPRE() + "','"
-					+ sField42 + " = '"+ NuevoActivo.getCASUTR() + "','"
-					+ sField43 + " = '"+ NuevoActivo.getCASUTC() + "','"
-					+ sField44 + " = '"+ NuevoActivo.getCASUTG() + "','"
-					+ sField45 + " = '"+ NuevoActivo.getBIARRE() + "','"
-					+ sField46 + " = '"+ NuevoActivo.getCADORM() + "','"
-					+ sField47 + " = '"+ NuevoActivo.getCABANO() + "','"
-					+ sField48 + " = '"+ NuevoActivo.getBIGAPA() + "','"
-					+ sField49 + " = '"+ NuevoActivo.getCAGAPA() + "','"
-					+ sField50 + " = '"+ NuevoActivo.getCASUTE() + "','"
-					+ sField51 + " = '"+ NuevoActivo.getBILIPO() + "','"
-					+ sField52 + " = '"+ NuevoActivo.getBILIAC() + "','"
-					+ sField53 + " = '"+ NuevoActivo.getBILIUS() + "','"
-					+ sField54 + " = '"+ NuevoActivo.getBIBOIN() + "','"
-					+ sField55 + " = '"+ NuevoActivo.getBICEFI() + "','"
-					+ sField56 + " = '"+ NuevoActivo.getCASUCB() + "','"
-					+ sField57 + " = '"+ NuevoActivo.getCASUCS() + "','"
-					+ sField58 + " = '"+ NuevoActivo.getFEACON() + "','"
-					+ sField59 + " = '"+ NuevoActivo.getIDAUTO() + "','"
-					+ sField60 + " = '"+ NuevoActivo.getFEDEMA() + "','"
-					+ sField61 + " = '"+ NuevoActivo.getYNOCUR() + "','"
-					+ sField62 + " = '"+ NuevoActivo.getOBRECO() + "','"
-					+ sField63 + " = '"+ NuevoActivo.getYNOLEC() + "','"
-					+ sField64 + " = '"+ NuevoActivo.getNOLOJZ() + "','"
-					+ sField65 + " = '"+ NuevoActivo.getFEREDE() + "','"
-					+ sField66 + " = '"+ NuevoActivo.getPOPROP() + "','"
-					+ sField67 + " = '"+ NuevoActivo.getCOGRAP() + "','"
-					+ sField68 + " = '"+ NuevoActivo.getFEPREG() + "','"
-					+ sField69 + " = '"+ NuevoActivo.getFEPHAC() + "','"
-					+ sField70 + " = '"+ NuevoActivo.getFEFOAC() + "','"
-					+ sField71 + " = '"+ NuevoActivo.getFEVACT() + "','"
-					+ sField72 + " = '"+ NuevoActivo.getIMVACT() + "','"
-					+ sField73 + " = '"+ NuevoActivo.getNUFIPR() + "','"
-					+ sField74 + " = '"+ NuevoActivo.getCOTPET() + "','"
-					+ sField75 + " = '"+ NuevoActivo.getFEEMPT() + "','"
-					+ sField76 + " = '"+ NuevoActivo.getFESORC() + "','"
-					+ sField77 + " = '"+ NuevoActivo.getFESODE() + "','"
-					+ sField78 + " = '"+ NuevoActivo.getFEREAC() + "','"
-					+ sField79 + " = '"+ NuevoActivo.getCOXSIA() + "','"
-					+ sField80 + " = '"+ NuevoActivo.getNUJUZD() + "','"
-					+ sField81 + " = '"+ NuevoActivo.getNURCAT() + "','"
-					+ sField82 + " = '"+ NuevoActivo.getNOMPRC() + "','"
-					+ sField83 + " = '"+ NuevoActivo.getNUTPRC() + "','"
-					+ sField84 + " = '"+ NuevoActivo.getNOMADC() + "','"
-					+ sField85 + " = '"+ NuevoActivo.getNUTADC() + "','"
-					+ sField86 + " = '"+ NuevoActivo.getIMPCOO() + "','"
-					+ sField87 + " = '"+ NuevoActivo.getCOENOR() + "','"
-					+ sField88 + " = '"+ NuevoActivo.getCOSPAT() + "','"
-					+ sField89 + " = '"+ NuevoActivo.getCOSPAS() + "','"
-					+ sField90 + " = '"+ NuevoActivo.getIDCOL3() + "','"
-					+ sField91 + " = '"+ NuevoActivo.getBIOBNU() + "','"
+					+ sField2  + " = '"+ NuevoActivo.getNUINMU() + "', "
+					+ sField3  + " = '"+ NuevoActivo.getCOSOPA() + "', "
+					+ sField4  + " = '"+ NuevoActivo.getCOENAE() + "', "
+					+ sField5  + " = '"+ NuevoActivo.getCOESEN() + "', "
+					+ sField6  + " = '"+ NuevoActivo.getNOVIAS() + "', "
+					+ sField7  + " = '"+ NuevoActivo.getNUPOAC() + "', "
+					+ sField8  + " = '"+ NuevoActivo.getNUESAC() + "', "
+					+ sField9  + " = '"+ NuevoActivo.getNUPIAC() + "', "
+					+ sField10 + " = '"+ NuevoActivo.getNUPUAC() + "', "
+					+ sField11 + " = '"+ NuevoActivo.getNOMUIN() + "', "
+					+ sField12 + " = '"+ NuevoActivo.getCOPRAE() + "', "
+					+ sField13 + " = '"+ NuevoActivo.getNOPRAC() + "', "
+					+ sField14 + " = '"+ NuevoActivo.getCOPOIN() + "', "
+					+ sField15 + " = '"+ NuevoActivo.getFEREAP() + "', "
+					+ sField16 + " = '"+ NuevoActivo.getCOREAE() + "', "
+					+ sField17 + " = '"+ NuevoActivo.getFEINAU() + "', "
+					+ sField18 + " = '"+ NuevoActivo.getFESOPO() + "', "
+					+ sField19 + " = '"+ NuevoActivo.getFESEPO() + "', "
+					+ sField20 + " = '"+ NuevoActivo.getFEREPO() + "', "
+					+ sField21 + " = '"+ NuevoActivo.getFEADAC() + "', "
+					+ sField22 + " = '"+ NuevoActivo.getCODIJU() + "', "
+					+ sField23 + " = '"+ NuevoActivo.getCOSJUP() + "', "
+					+ sField24 + " = '"+ NuevoActivo.getCOSTLI() + "', "
+					+ sField25 + " = '"+ NuevoActivo.getCOSCAR() + "', "
+					+ sField26 + " = '"+ NuevoActivo.getCOESVE() + "', "
+					+ sField27 + " = '"+ NuevoActivo.getCOTSIN() + "', "
+					+ sField28 + " = '"+ NuevoActivo.getNUFIRE() + "', "
+					+ sField29 + " = '"+ NuevoActivo.getNUREGP() + "', "
+					+ sField30 + " = '"+ NuevoActivo.getNOMUI0() + "', "
+					+ sField31 + " = '"+ NuevoActivo.getNULIBE() + "', "
+					+ sField32 + " = '"+ NuevoActivo.getNUTOME() + "', "
+					+ sField33 + " = '"+ NuevoActivo.getNUFOLE() + "', "
+					+ sField34 + " = '"+ NuevoActivo.getNUINSR() + "', "
+					+ sField35 + " = '"+ NuevoActivo.getCOSOCU() + "', "
+					+ sField36 + " = '"+ NuevoActivo.getCOXPRO() + "', "
+					+ sField37 + " = '"+ NuevoActivo.getFESOLA() + "', "
+					+ sField38 + " = '"+ NuevoActivo.getFESELA() + "', "
+					+ sField39 + " = '"+ NuevoActivo.getFERELA() + "', "
+					+ sField40 + " = '"+ NuevoActivo.getFERLLA() + "', "
+					+ sField41 + " = '"+ NuevoActivo.getCASPRE() + "', "
+					+ sField42 + " = '"+ NuevoActivo.getCASUTR() + "', "
+					+ sField43 + " = '"+ NuevoActivo.getCASUTC() + "', "
+					+ sField44 + " = '"+ NuevoActivo.getCASUTG() + "', "
+					+ sField45 + " = '"+ NuevoActivo.getBIARRE() + "', "
+					+ sField46 + " = '"+ NuevoActivo.getCADORM() + "', "
+					+ sField47 + " = '"+ NuevoActivo.getCABANO() + "', "
+					+ sField48 + " = '"+ NuevoActivo.getBIGAPA() + "', "
+					+ sField49 + " = '"+ NuevoActivo.getCAGAPA() + "', "
+					+ sField50 + " = '"+ NuevoActivo.getCASUTE() + "', "
+					+ sField51 + " = '"+ NuevoActivo.getBILIPO() + "', "
+					+ sField52 + " = '"+ NuevoActivo.getBILIAC() + "', "
+					+ sField53 + " = '"+ NuevoActivo.getBILIUS() + "', "
+					+ sField54 + " = '"+ NuevoActivo.getBIBOIN() + "', "
+					+ sField55 + " = '"+ NuevoActivo.getBICEFI() + "', "
+					+ sField56 + " = '"+ NuevoActivo.getCASUCB() + "', "
+					+ sField57 + " = '"+ NuevoActivo.getCASUCS() + "', "
+					+ sField58 + " = '"+ NuevoActivo.getFEACON() + "', "
+					+ sField59 + " = '"+ NuevoActivo.getIDAUTO() + "', "
+					+ sField60 + " = '"+ NuevoActivo.getFEDEMA() + "', "
+					+ sField61 + " = '"+ NuevoActivo.getYNOCUR() + "', "
+					+ sField62 + " = '"+ NuevoActivo.getOBRECO() + "', "
+					+ sField63 + " = '"+ NuevoActivo.getYNOLEC() + "', "
+					+ sField64 + " = '"+ NuevoActivo.getNOLOJZ() + "', "
+					+ sField65 + " = '"+ NuevoActivo.getFEREDE() + "', "
+					+ sField66 + " = '"+ NuevoActivo.getPOPROP() + "', "
+					+ sField67 + " = '"+ NuevoActivo.getCOGRAP() + "', "
+					+ sField68 + " = '"+ NuevoActivo.getFEPREG() + "', "
+					+ sField69 + " = '"+ NuevoActivo.getFEPHAC() + "', "
+					+ sField70 + " = '"+ NuevoActivo.getFEFOAC() + "', "
+					+ sField71 + " = '"+ NuevoActivo.getFEVACT() + "', "
+					+ sField72 + " = '"+ NuevoActivo.getIMVACT() + "', "
+					+ sField73 + " = '"+ NuevoActivo.getNUFIPR() + "', "
+					+ sField74 + " = '"+ NuevoActivo.getCOTPET() + "', "
+					+ sField75 + " = '"+ NuevoActivo.getFEEMPT() + "', "
+					+ sField76 + " = '"+ NuevoActivo.getFESORC() + "', "
+					+ sField77 + " = '"+ NuevoActivo.getFESODE() + "', "
+					+ sField78 + " = '"+ NuevoActivo.getFEREAC() + "', "
+					+ sField79 + " = '"+ NuevoActivo.getCOXSIA() + "', "
+					+ sField80 + " = '"+ NuevoActivo.getNUJUZD() + "', "
+					+ sField81 + " = '"+ NuevoActivo.getNURCAT() + "', "
+					+ sField82 + " = '"+ NuevoActivo.getNOMPRC() + "', "
+					+ sField83 + " = '"+ NuevoActivo.getNUTPRC() + "', "
+					+ sField84 + " = '"+ NuevoActivo.getNOMADC() + "', "
+					+ sField85 + " = '"+ NuevoActivo.getNUTADC() + "', "
+					+ sField86 + " = '"+ NuevoActivo.getIMPCOO() + "', "
+					+ sField87 + " = '"+ NuevoActivo.getCOENOR() + "', "
+					+ sField88 + " = '"+ NuevoActivo.getCOSPAT() + "', "
+					+ sField89 + " = '"+ NuevoActivo.getCOSPAS() + "', "
+					+ sField90 + " = '"+ NuevoActivo.getIDCOL3() + "', "
+					+ sField91 + " = '"+ NuevoActivo.getBIOBNU() + "', "
 					+ sField92 + " = '"+ NuevoActivo.getPOBRAR() + "' "+
 					" WHERE "
-					+ sField1 + " = '"+ sActivoID +"'");
+					+ sField1 + " = '"+ sCodCOACES +"'");
 			
 		} 
 		catch (SQLException ex) 
@@ -493,7 +461,7 @@ public class QMActivos
 		return bExit;
 	}
 
-	public static boolean delDatosActivo(String sActivoID)
+	public static boolean delActivo(String sCodCOACES)
 	{
 		String sMethod = "delActivo";
 		Statement stmt = null;
@@ -505,7 +473,7 @@ public class QMActivos
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sActivoID + "' )");
+					" WHERE (" + sField1 + " = '" + sCodCOACES + "' )");
 		} 
 		catch (SQLException ex) 
 		{
@@ -523,7 +491,7 @@ public class QMActivos
 		return true;
 	}
 
-	public static Activo getActivo(String sActivoID)
+	public static Activo getActivo(String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		
 		String sMethod = "getActivo";
@@ -636,7 +604,8 @@ public class QMActivos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  + ","              
+					   + sField1  + ","
+					   + sField2  + ","              
 				       + sField3  + ","              
 				       + sField4  + ","              
 				       + sField5  + ","              
@@ -728,12 +697,12 @@ public class QMActivos
 				       + sField91 + ","              
 				       + sField92 +        
 			"  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sActivoID	+ "')");
+					" WHERE (" + sField1 + " = '" + sCodCOACES	+ "')");
 
 			rs = pstmt.executeQuery();
 
 			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sActivoID);
+			System.out.println(sField1 + ": " + sCodCOACES);
 
 			if (rs != null) 
 			{
@@ -742,7 +711,7 @@ public class QMActivos
 				{
 					found = true;
 
-					sCOACES = "";
+					sCOACES = rs.getString(sField1);
 					sNUINMU = rs.getString(sField2);
 					sCOSOPA = rs.getString(sField3);
 					sCOENAE = rs.getString(sField4);

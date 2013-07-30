@@ -35,7 +35,7 @@ public class GestorCargas implements Serializable
 
 	public void handleFileUpload(FileUploadEvent event)throws IOException 
     {
-		String sMethod = "guardarFichero";
+		String sMethod = "handleFileUpload";
 
 		Utils.standardIO2File("");//Salida por fichero de texto
 		

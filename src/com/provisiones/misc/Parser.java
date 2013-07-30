@@ -8,12 +8,12 @@ import java.io.IOException;
 
 import com.provisiones.types.Cierre;
 import com.provisiones.types.Activo;
-import com.provisiones.types.Comunidad;
-import com.provisiones.types.Cuota;
 import com.provisiones.types.Gasto;
-import com.provisiones.types.ImpuestoRecurso;
+
 import com.provisiones.types.MovimientoComunidad;
-import com.provisiones.types.ReferenciaCatastral;
+import com.provisiones.types.MovimientoCuota;
+import com.provisiones.types.MovimientoImpuestoRecurso;
+import com.provisiones.types.MovimientoReferenciaCatastral;
 
 public class Parser {
 
@@ -533,7 +533,7 @@ public class Parser {
 				+ comunidad.getFILLER();
 	}
 
-	public static Cuota leerCuota (String linea)
+	public static MovimientoCuota leerCuota (String linea)
 	{
 
 		String sCODTRN = linea.substring(Posiciones.E2_CODTRN_P, Posiciones.E2_CODTRN_P+Longitudes.CODTRN_L);
@@ -562,13 +562,13 @@ public class Parser {
 		String sOBDEER = linea.substring(Posiciones.E2_OBDEER_P, Posiciones.E2_OBDEER_P+Longitudes.OBDEER_L);
 		
 		
-		return new Cuota(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOCLDO, sNUDCOM,
+		return new MovimientoCuota(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOCLDO, sNUDCOM,
 				sCOENGP, sCOACES, sCOGRUG, sCOTACA, sCOSBAC, sBITC11, sFIPAGO,
 				sBITC12, sFFPAGO, sBITC13, sIMCUCO, sBITC14, sFAACTA, sBITC15,
 				sPTPAGO, sBITC09, sOBTEXC, sOBDEER);
 	}
 	
-	public static String escribirCuota (Cuota cuota)
+	public static String escribirCuota (MovimientoCuota cuota)
 	{
 
         String sCODTRN = formateaCampoAlfanumerico(cuota.getCODTRN(),Longitudes.CODTRN_L);
@@ -606,7 +606,7 @@ public class Parser {
 				+ cuota.getFILLER();
 	}
 	
-	public static ReferenciaCatastral leerReferenciaCatastral (String linea)
+	public static MovimientoReferenciaCatastral leerReferenciaCatastral (String linea)
 	{
 
 		String sCODTRN = linea.substring(Posiciones.E3_CODTRN_P, Posiciones.E3_CODTRN_P+Longitudes.CODTRN_L);
@@ -626,12 +626,12 @@ public class Parser {
 		String sOBDEER = linea.substring(Posiciones.E3_OBDEER_P, Posiciones.E3_OBDEER_P+Longitudes.OBDEER_L);
 		
 		
-		return new ReferenciaCatastral(sCODTRN, sCOTDOR, sIDPROV, sCOACCI,
+		return new MovimientoReferenciaCatastral(sCODTRN, sCOTDOR, sIDPROV, sCOACCI,
 				sCOENGP, sCOACES, sNURCAT, sBITC16, sTIRCAT, sBITC17, sENEMIS,
 				sCOTEXA, sBITC09, sOBTEXC, sOBDEER);
 	}
 	
-	public static String escribirReferenciaCatastral (ReferenciaCatastral referenciacatrastral)
+	public static String escribirReferenciaCatastral (MovimientoReferenciaCatastral referenciacatrastral)
 	{
 
         String sCODTRN = formateaCampoAlfanumerico(referenciacatrastral.getCODTRN(),Longitudes.CODTRN_L);
@@ -657,7 +657,7 @@ public class Parser {
 				+ referenciacatrastral.getFILLER();
 	}
 
-	public static ImpuestoRecurso leerImpuestoRecurso (String linea)
+	public static MovimientoImpuestoRecurso leerImpuestoRecurso (String linea)
 	{
 
 		String sCODTRN = linea.substring(Posiciones.E4_CODTRN_P, Posiciones.E4_CODTRN_P+Longitudes.CODTRN_L);
@@ -685,13 +685,13 @@ public class Parser {
 		String sOBTEXC = linea.substring(Posiciones.E4_OBTEXC_P, Posiciones.E4_OBTEXC_P+Longitudes.OBTEXC_L);
 		String sOBDEER = linea.substring(Posiciones.E4_OBDEER_P, Posiciones.E4_OBDEER_P+Longitudes.OBDEER_L);
 		
-		return new ImpuestoRecurso(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOENGP,
+		return new MovimientoImpuestoRecurso(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOENGP,
 				sCOACES, sNURCAT, sCOGRUC, sCOTACA, sCOSBAC, sBITC18, sFEPRRE,
 				sBITC19, sFERERE, sBITC20, sFEDEIN, sBITC21, sBISODE, sBITC22,
 				sBIRESO, sCOTEXA, sBITC09, sOBTEXC, sOBDEER);
 	}
 	
-	public static String escribirImpuestoRecurso (ImpuestoRecurso impuestorecurso)
+	public static String escribirImpuestoRecurso (MovimientoImpuestoRecurso impuestorecurso)
 	{
 
         String sCODTRN = formateaCampoAlfanumerico(impuestorecurso.getCODTRN(),Longitudes.CODTRN_L);
@@ -751,7 +751,7 @@ public class Parser {
 		String linea = br.readLine();
 		br.close();
 
-		DatosActivo activo = leerActivo(linea);
+		Activo activo = leerActivo(linea);
 
 		activo.pintaActivo();
 

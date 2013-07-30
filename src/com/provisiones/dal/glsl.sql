@@ -166,6 +166,8 @@ CREATE TABLE IF NOT EXISTS `ac_activos_tbl` (
 
 -- Volcando datos para la tabla glsl.ac_activos_tbl: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `ac_activos_tbl` DISABLE KEYS */;
+INSERT INTO `ac_activos_tbl` (`coaces_id`, `nuinmu`, `cod_cosopa`, `cod_coenae`, `cod_coesen`, `novias`, `nupoac`, `nuesac`, `nupiac`, `nupuac`, `nomuin`, `cod_coprae`, `noprac`, `copoin`, `fereap`, `cod_coreae`, `feinau`, `fesopo`, `fesepo`, `ferepo`, `feadac`, `cod_codiju`, `cod_cosjup`, `cod_costli`, `cod_coscar`, `cod_coesve`, `cod_cotsin`, `nufire`, `nuregp`, `nomui0`, `nulibe`, `nutome`, `nufole`, `nuinsr`, `cod_cosocu`, `cod_coxpro`, `fesola`, `fesela`, `ferela`, `ferlla`, `caspre`, `casutr`, `casutc`, `casutg`, `cod_biarre`, `cadorm`, `cabano`, `cod_bigapa`, `cagapa`, `casute`, `cod_bilipo`, `cod_biliac`, `cod_bilius`, `cod_biboin`, `cod_bicefi`, `casucb`, `casucs`, `feacon`, `idauto`, `fedema`, `ynocur`, `obreco`, `ynolec`, `nolojz`, `ferede`, `poprop`, `cod_cograp`, `fepreg`, `fephac`, `fefoac`, `fevact`, `imvact`, `nufipr`, `cod_cotpet`, `feempt`, `fesorc`, `fesode`, `fereac`, `cod_coxsia`, `nujuzd`, `nurcat`, `nomprc`, `nutprc`, `nomadc`, `nutadc`, `impcoo`, `coenor`, `cod_cospat`, `cod_cospas`, `idcol3`, `cod_biobnu`, `pobrar`) VALUES
+	(3295613, 113116148, 0, 1, 2, 'SANTIAGO RAMON Y CAJAL Nº3', '', '', '6', '2', 'HUMANES DE MADRID', 28, 'MADRID', 28970, 0, 3, 20120531, 0, 0, 0, 20111122, 2, 7, 1, 2, 9, 'VI01', '6109', 1, 'FUENLABRADA', 150, 1310, 96, 11, 5, 5, 0, 0, 0, 0, 0, 6833, 8815, 0, 'N', 3, 1, '#', 0, 0, '#', '#', '#', '#', '#', 0, 0, 1978, '2062/09', 20091026, 'ANA ISABEL CRESPO RODRIGUEZ', '20369/', 'JOSE FERNANDO CORNEJO PABLOS', 'FUENLABRADA', 0, 100000, 1, 20120529, 20120321, 20101029, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, '0069905VK3506N0026AF', '', '', '', '', 0, 2038, 81, 1, '0753', '0', 0);
 /*!40000 ALTER TABLE `ac_activos_tbl` ENABLE KEYS */;
 
 
@@ -803,7 +805,7 @@ CREATE TABLE IF NOT EXISTS `cospat_tbl` (
   PRIMARY KEY (`cospat_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- Volcando datos para la tabla glsl.cospat_tbl: ~331 rows (aproximadamente)
+-- Volcando datos para la tabla glsl.cospat_tbl: ~605 rows (aproximadamente)
 /*!40000 ALTER TABLE `cospat_tbl` DISABLE KEYS */;
 INSERT INTO `cospat_tbl` (`cospat_id`, `descripcion`) VALUES
 	(1, 'BANKIA'),
@@ -1719,9 +1721,12 @@ CREATE TABLE IF NOT EXISTS `e1_comunidades_tbl` (
   `nuccdi` tinyint(2) unsigned NOT NULL,
   `nuccnt` bigint(10) unsigned NOT NULL,
   `obtexc` varchar(110) COLLATE latin1_spanish_ci NOT NULL,
+  `cod_estado` char(1) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`nudcom_id`),
   KEY `cod_cocldo` (`cod_cocldo`),
-  CONSTRAINT `e1_comunidades_tbl_ibfk_1` FOREIGN KEY (`cod_cocldo`) REFERENCES `cocldo_tbl` (`cocldo_id`)
+  KEY `cod_estado` (`cod_estado`),
+  CONSTRAINT `e1_comunidades_tbl_ibfk_1` FOREIGN KEY (`cod_cocldo`) REFERENCES `cocldo_tbl` (`cocldo_id`),
+  CONSTRAINT `e1_comunidades_tbl_ibfk_2` FOREIGN KEY (`cod_estado`) REFERENCES `estados_tbl` (`estado_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- Volcando datos para la tabla glsl.e1_comunidades_tbl: ~0 rows (aproximadamente)
@@ -1814,14 +1819,17 @@ CREATE TABLE IF NOT EXISTS `e2_cuotas_tbl` (
   `faacta` int(8) unsigned NOT NULL,
   `cod_ptpago` char(1) COLLATE latin1_spanish_ci NOT NULL,
   `obtexc` varchar(110) COLLATE latin1_spanish_ci NOT NULL,
+  `cod_estado` char(1) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`cod_nudcom`,`cod_cosbac`),
   KEY `cod_cocldo` (`cod_cocldo`),
   KEY `cod_cosbac` (`cod_cosbac`),
   KEY `cod_ptpago` (`cod_ptpago`),
+  KEY `cod_estado` (`cod_estado`),
   CONSTRAINT `e2_cuotas_tbl_ibfk_1` FOREIGN KEY (`cod_cocldo`) REFERENCES `cocldo_tbl` (`cocldo_id`),
   CONSTRAINT `e2_cuotas_tbl_ibfk_2` FOREIGN KEY (`cod_nudcom`) REFERENCES `e1_comunidades_tbl` (`nudcom_id`),
   CONSTRAINT `e2_cuotas_tbl_ibfk_3` FOREIGN KEY (`cod_cosbac`) REFERENCES `cosbga_t22_tbl` (`cosbga_id`),
-  CONSTRAINT `e2_cuotas_tbl_ibfk_4` FOREIGN KEY (`cod_ptpago`) REFERENCES `ptpago_tbl` (`ptpago_id`)
+  CONSTRAINT `e2_cuotas_tbl_ibfk_4` FOREIGN KEY (`cod_ptpago`) REFERENCES `ptpago_tbl` (`ptpago_id`),
+  CONSTRAINT `e2_cuotas_tbl_ibfk_5` FOREIGN KEY (`cod_estado`) REFERENCES `estados_tbl` (`estado_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- Volcando datos para la tabla glsl.e2_cuotas_tbl: ~0 rows (aproximadamente)
@@ -1936,7 +1944,10 @@ CREATE TABLE IF NOT EXISTS `e3_referencias_tbl` (
   `enemis` varchar(60) COLLATE latin1_spanish_ci NOT NULL,
   `cotexa` bigint(10) unsigned NOT NULL,
   `obtexc` varchar(110) COLLATE latin1_spanish_ci NOT NULL,
-  PRIMARY KEY (`nurcat_id`)
+  `cod_estado` char(1) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`nurcat_id`),
+  KEY `cod_estado` (`cod_estado`),
+  CONSTRAINT `e3_referencias_tbl_ibfk_1` FOREIGN KEY (`cod_estado`) REFERENCES `estados_tbl` (`estado_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- Volcando datos para la tabla glsl.e3_referencias_tbl: ~0 rows (aproximadamente)
@@ -1955,14 +1966,17 @@ CREATE TABLE IF NOT EXISTS `e4_impuestos_tbl` (
   `cod_bireso` char(1) COLLATE latin1_spanish_ci NOT NULL,
   `cotexa` bigint(10) unsigned NOT NULL,
   `obtexc` varchar(110) COLLATE latin1_spanish_ci NOT NULL,
+  `cod_estado` char(1) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`cod_nurcat`,`cod_cosbac`),
   KEY `cod_cosbac` (`cod_cosbac`),
   KEY `cod_bisode` (`cod_bisode`),
   KEY `cod_bireso` (`cod_bireso`),
+  KEY `cod_estado` (`cod_estado`),
   CONSTRAINT `e4_impuestos_tbl_ibfk_1` FOREIGN KEY (`cod_nurcat`) REFERENCES `e3_referencias_tbl` (`nurcat_id`) ON DELETE CASCADE,
   CONSTRAINT `e4_impuestos_tbl_ibfk_2` FOREIGN KEY (`cod_cosbac`) REFERENCES `cosbga_t21_tbl` (`cosbga_id`),
   CONSTRAINT `e4_impuestos_tbl_ibfk_3` FOREIGN KEY (`cod_bisode`) REFERENCES `unaria_tbl` (`unaria_id`),
-  CONSTRAINT `e4_impuestos_tbl_ibfk_4` FOREIGN KEY (`cod_bireso`) REFERENCES `unaria_tbl` (`unaria_id`)
+  CONSTRAINT `e4_impuestos_tbl_ibfk_4` FOREIGN KEY (`cod_bireso`) REFERENCES `unaria_tbl` (`unaria_id`),
+  CONSTRAINT `e4_impuestos_tbl_ibfk_5` FOREIGN KEY (`cod_estado`) REFERENCES `estados_tbl` (`estado_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- Volcando datos para la tabla glsl.e4_impuestos_tbl: ~0 rows (aproximadamente)
@@ -1980,8 +1994,8 @@ CREATE TABLE IF NOT EXISTS `e4_movimientos_tbl` (
   `coengp` mediumint(5) unsigned NOT NULL,
   `cod_coaces` int(9) unsigned NOT NULL,
   `cod_nurcat` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
-  `cod_cogruc` tinyint(2) unsigned NOT NULL,
-  `cod_cotaca` tinyint(2) unsigned NOT NULL,
+  `cogruc` tinyint(2) unsigned NOT NULL,
+  `cotaca` tinyint(2) unsigned NOT NULL,
   `cod_cosbac` tinyint(2) unsigned NOT NULL,
   `cod_bitc18` char(1) COLLATE latin1_spanish_ci NOT NULL,
   `feprre` int(8) unsigned NOT NULL,
@@ -2013,6 +2027,11 @@ CREATE TABLE IF NOT EXISTS `e4_movimientos_tbl` (
   KEY `cod_bireso` (`cod_bireso`),
   KEY `cod_bitc09` (`cod_bitc09`),
   CONSTRAINT `e4_movimientos_tbl_ibfk_1` FOREIGN KEY (`cod_codtrn`) REFERENCES `codtrn_tbl` (`codtrn_id`),
+  CONSTRAINT `e4_movimientos_tbl_ibfk_10` FOREIGN KEY (`cod_bitc21`) REFERENCES `unaria_tbl` (`unaria_id`),
+  CONSTRAINT `e4_movimientos_tbl_ibfk_11` FOREIGN KEY (`cod_bisode`) REFERENCES `unaria_tbl` (`unaria_id`),
+  CONSTRAINT `e4_movimientos_tbl_ibfk_12` FOREIGN KEY (`cod_bitc22`) REFERENCES `unaria_tbl` (`unaria_id`),
+  CONSTRAINT `e4_movimientos_tbl_ibfk_13` FOREIGN KEY (`cod_bireso`) REFERENCES `unaria_tbl` (`unaria_id`),
+  CONSTRAINT `e4_movimientos_tbl_ibfk_14` FOREIGN KEY (`cod_bitc09`) REFERENCES `ternaria_tbl` (`ternaria_id`),
   CONSTRAINT `e4_movimientos_tbl_ibfk_2` FOREIGN KEY (`cod_cotdor`) REFERENCES `cotdor_e3_tbl` (`cotdor_id`),
   CONSTRAINT `e4_movimientos_tbl_ibfk_3` FOREIGN KEY (`cod_coacci`) REFERENCES `coacci_e3_tbl` (`coacci_id`),
   CONSTRAINT `e4_movimientos_tbl_ibfk_4` FOREIGN KEY (`cod_coaces`) REFERENCES `ac_activos_tbl` (`coaces_id`),
@@ -2020,17 +2039,28 @@ CREATE TABLE IF NOT EXISTS `e4_movimientos_tbl` (
   CONSTRAINT `e4_movimientos_tbl_ibfk_6` FOREIGN KEY (`cod_cosbac`) REFERENCES `cosbga_t21_tbl` (`cosbga_id`),
   CONSTRAINT `e4_movimientos_tbl_ibfk_7` FOREIGN KEY (`cod_bitc18`) REFERENCES `unaria_tbl` (`unaria_id`),
   CONSTRAINT `e4_movimientos_tbl_ibfk_8` FOREIGN KEY (`cod_bitc19`) REFERENCES `unaria_tbl` (`unaria_id`),
-  CONSTRAINT `e4_movimientos_tbl_ibfk_9` FOREIGN KEY (`cod_bitc20`) REFERENCES `unaria_tbl` (`unaria_id`),
-  CONSTRAINT `e4_movimientos_tbl_ibfk_10` FOREIGN KEY (`cod_bitc21`) REFERENCES `unaria_tbl` (`unaria_id`),
-  CONSTRAINT `e4_movimientos_tbl_ibfk_11` FOREIGN KEY (`cod_bisode`) REFERENCES `unaria_tbl` (`unaria_id`),
-  CONSTRAINT `e4_movimientos_tbl_ibfk_12` FOREIGN KEY (`cod_bitc22`) REFERENCES `unaria_tbl` (`unaria_id`),
-  CONSTRAINT `e4_movimientos_tbl_ibfk_13` FOREIGN KEY (`cod_bireso`) REFERENCES `unaria_tbl` (`unaria_id`),
-  CONSTRAINT `e4_movimientos_tbl_ibfk_14` FOREIGN KEY (`cod_bitc09`) REFERENCES `ternaria_tbl` (`ternaria_id`)
+  CONSTRAINT `e4_movimientos_tbl_ibfk_9` FOREIGN KEY (`cod_bitc20`) REFERENCES `unaria_tbl` (`unaria_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- Volcando datos para la tabla glsl.e4_movimientos_tbl: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `e4_movimientos_tbl` DISABLE KEYS */;
 /*!40000 ALTER TABLE `e4_movimientos_tbl` ENABLE KEYS */;
+
+
+-- Volcando estructura para tabla glsl.estados_tbl
+CREATE TABLE IF NOT EXISTS `estados_tbl` (
+  `estado_id` char(1) COLLATE latin1_spanish_ci NOT NULL,
+  `descripcion` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`estado_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- Volcando datos para la tabla glsl.estados_tbl: ~2 rows (aproximadamente)
+/*!40000 ALTER TABLE `estados_tbl` DISABLE KEYS */;
+INSERT INTO `estados_tbl` (`estado_id`, `descripcion`) VALUES
+	('A', 'De Alta'),
+	('B', 'De Baja'),
+	('P', 'Pendiente');
+/*!40000 ALTER TABLE `estados_tbl` ENABLE KEYS */;
 
 
 -- Volcando estructura para tabla glsl.ga_gastos_tbl

@@ -1,10 +1,10 @@
 package com.provisiones.ll;
 
-import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMListaCuotas;
+import com.provisiones.dal.qm.QMMovimientosCuotas;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.Cuota;
+import com.provisiones.types.MovimientoCuota;
 
 public class CLCuotas 
 {
@@ -17,7 +17,7 @@ public class CLCuotas
 
 		boolean bSalida = false;
 		
-		Cuota cuota = Parser.leerCuota(linea);
+		MovimientoCuota cuota = Parser.leerCuota(linea);
 		
 		String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
 		String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
@@ -41,9 +41,9 @@ public class CLCuotas
 		cuota.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
 		
 			   				
-		String sCodCuota = QMCuotas.getCuotaID(cuota);
+		String sCodMovimiento = QMMovimientosCuotas.getMovimientoCuotaID(cuota);
 		
-		bSalida = !(sCodCuota.equals(""));
+		bSalida = !(sCodMovimiento.equals(""));
 		
 		if (bSalida)
 		{
@@ -51,8 +51,8 @@ public class CLCuotas
 			cuota.setCOTDOR(sBKCOTDOR);
 			cuota.setCOTDOR(sBKOBDEER);
 			
-			QMCuotas.modCuota(cuota, sCodCuota);
-			QMListaCuotas.setValidado(sCodCuota, sValidado);
+			QMMovimientosCuotas.modMovimientoCuota(cuota, sCodMovimiento);
+			QMListaCuotas.setValidado(cuota.getCOACES(),cuota.getNUDCOM(), cuota.getCOSBAC(), sCodMovimiento, sValidado);
 		}
 		else 
 		{

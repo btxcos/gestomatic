@@ -3,8 +3,7 @@ package com.provisiones.pl;
 import java.io.Serializable;
 
 import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.dal.qm.QMDatosActivos;
-import com.provisiones.types.DatosActivo;
+import com.provisiones.types.Activo;
 
 public class GestorGastos implements Serializable 
 {
@@ -55,7 +54,7 @@ public class GestorGastos implements Serializable
 	private String COSPII = "";
 	private String NUCLII = "";
 
-	private DatosActivo Activo = QMDatosActivos.getDatosActivo("");
+	private Activo Activo = QMActivos.getActivo("");
 
 	//Métodos de acceso
 	

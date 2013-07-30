@@ -1,28 +1,15 @@
 package com.provisiones.test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.Timestamp;
 
-import com.provisiones.dal.ConnectionManager;
-import com.provisiones.dal.qm.QMDatosActivos;
 import com.provisiones.ll.FileManager;
-import com.provisiones.misc.Parser;
-import com.provisiones.misc.Utils;
-import com.provisiones.types.DatosActivo;
 
 import javax.faces.application.FacesMessage;  
 import javax.faces.context.FacesContext;  
   
 import org.primefaces.event.FileUploadEvent;  
-import org.primefaces.model.UploadedFile;  
+
 
 public class TestPF implements Serializable{  
 	  

@@ -2,6 +2,7 @@ package com.provisiones.dal.qm;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
 
 import java.sql.Connection;
@@ -31,7 +32,10 @@ public class QMComunidades
 	static String sField11 = "nuccof";    
 	static String sField12 = "nuccdi";    
 	static String sField13 = "nuccnt";    
-	static String sField14 = "obtexc";    
+	static String sField14 = "obtexc";
+
+	static String sField15 = "cod_estado";
+	
 
 	public static boolean addComunidad(Comunidad NuevaComunidad)
 
@@ -58,8 +62,9 @@ public class QMComunidades
 				       + sField10 + ","              
 				       + sField11 + ","              
 				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 +               
+				       + sField13 + ","
+				       + sField14 + "," 
+				       + sField15 +               
 				       ") VALUES ('" 
 				       + NuevaComunidad.getCOCLDO() + "','" 
 				       + NuevaComunidad.getNUDCOM() + "','"
@@ -74,7 +79,8 @@ public class QMComunidades
 				       + NuevaComunidad.getNUCCOF() + "','"
 				       + NuevaComunidad.getNUCCDI() + "','"
 				       + NuevaComunidad.getNUCCNT() + "','"
-				       + NuevaComunidad.getOBTEXC() + "' )");
+				       + NuevaComunidad.getOBTEXC() + "','" 
+				       + ValoresDefecto.DEF_PENDIENTE + "' )");
 		} 
 		catch (SQLException ex) 
 		{
@@ -300,5 +306,110 @@ public class QMComunidades
 				sNUCCDI,
 				sNUCCNT,
 				sOBTEXC);
+	}
+	
+	public static boolean setEstado(String sCodNUDCOM, String sEstado)
+	{
+		String sMethod = "setEstado";
+		Statement stmt = null;
+		boolean bExit = false;
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			stmt.executeUpdate("UPDATE " + sTable + 
+					" SET " 
+					+ sField15 + " = '"+ sEstado + 
+					"' "+
+					" WHERE "+
+					"(" + sField2 + " = '" + sCodNUDCOM + "')");
+			
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt, sClassName, sMethod);
+			bExit = true;
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return bExit;
+	}
+	
+	public static String getEstado(String sCodNUDCOM)
+	{
+		String sMethod = "getEstado";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+
+		String sEstado = "";
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField15 + "  FROM " + sTable + 
+					" WHERE " +
+					"(" + sField2 + " = '" + sCodNUDCOM + "')");
+
+			rs = pstmt.executeQuery();
+			
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					sEstado = rs.getString(sField15);
+					System.out.println("===================================================");
+					System.out.println(sField4 + ": " + sEstado);
+
+
+				}
+			}
+			if (found == false) 
+			{
+ 
+				System.out.println("No Information Found");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return sEstado;
 	}
 }

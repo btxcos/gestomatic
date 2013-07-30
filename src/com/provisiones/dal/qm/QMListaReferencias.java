@@ -10,21 +10,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class QMListaComunidades
+public class QMListaReferencias
 {
-	static String sClassName = QMComunidades.class.getName();
+	static String sClassName = QMListaReferencias.class.getName();
 
-	static String sTable = "lista_comunidades_multi";
+	static String sTable = "lista_referencias_multi";
 
-	static String sField1  = "cod_nudcom";
+	static String sField1  = "cod_nurcat";
 	static String sField2  = "cod_coaces";    
 	static String sField3  = "cod_movimiento";    
 	static String sField4  = "cod_validado";
 
-	public static boolean addRelacionComunidad(String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
+	public static boolean addRelacionReferencia(String sCodNURCAT, String sCodCOACES, String sCodMovimiento)
 
 	{
-		String sMethod = "addRelacionComunidad";
+		String sMethod = "addRelacionReferencia";
 		Statement stmt = null;
 		Connection conn = null;
 
@@ -39,7 +39,7 @@ public class QMListaComunidades
 				       + sField3  + ","              
 				       + sField4  +               
 				       ") VALUES ('" 
-				       + sCodNUDCOM + "','" 
+				       + sCodNURCAT + "','" 
 				       + sCodCOACES + "','"
 				       + sCodMovimiento + "','"
 				       + ValoresDefecto.DEF_VALIDADO + "' )");
@@ -48,9 +48,9 @@ public class QMListaComunidades
 		{
 
 
-			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaComunidad.getCOGRAP());
+			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaReferencia.getCOGRAP());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 			
@@ -67,9 +67,9 @@ public class QMListaComunidades
 		return true;
 	}
 
-	public static boolean delRelacionComunidad(String sCodMovimiento)
+	public static boolean delRelacionReferencia(String sCodMovimiento)
 	{
-		String sMethod = "delRelacionComunidad";
+		String sMethod = "delRelacionReferencia";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -98,10 +98,10 @@ public class QMListaComunidades
 		return true;
 	}
 
-	public static boolean existeRelacionComunidad(String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
+	public static boolean existeRelacionReferencia(String sCodNURCAT, String sCodCOACES, String sCodMovimiento)
 	{//pendiente de coaces, de la tabla activos
 		
-		String sMethod = "existeRelacionComunidad";
+		String sMethod = "existeRelacionReferencia";
 
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -124,7 +124,7 @@ public class QMListaComunidades
        
 			"  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodNUDCOM + "' AND " 
+					"(" + sField1 + " = '" + sCodNURCAT + "' AND " 
 					+ sField2 + " = '" + sCodCOACES + "' AND " 
 					+ sField3 + " = '" + sCodMovimiento	+ "')");
 
@@ -154,7 +154,7 @@ public class QMListaComunidades
 		return found;
 	}
 
-	public static boolean setValidado(String sCodNUDCOM, String sCodCOACES, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(String sCodNURCAT, String sCodCOACES, String sCodMovimiento, String sValidado)
 	{
 		String sMethod = "setValidado";
 		Statement stmt = null;
@@ -171,7 +171,7 @@ public class QMListaComunidades
 					+ sField4 + " = '"+ sValidado + 
 					"' "+
 					" WHERE "+
-					"(" + sField1 + " = '" + sCodNUDCOM + "' AND " 
+					"(" + sField1 + " = '" + sCodNURCAT + "' AND " 
 					+ sField2 + " = '" + sCodCOACES + "' AND " 
 					+ sField3 + " = '" + sCodMovimiento	+ "')");
 			
@@ -193,7 +193,7 @@ public class QMListaComunidades
 		return bExit;
 	}
 	
-	public static String getValidado(String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
+	public static String getValidado(String sCodNURCAT, String sCodCOACES, String sCodMovimiento)
 	{
 		String sMethod = "getValidado";
 
@@ -218,7 +218,7 @@ public class QMListaComunidades
 
 			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodNUDCOM + "' AND " 
+					"(" + sField1 + " = '" + sCodNURCAT + "' AND " 
 					+ sField2 + " = '" + sCodCOACES + "' AND " 
 					+ sField3 + " = '" + sCodMovimiento	+ "')");
 

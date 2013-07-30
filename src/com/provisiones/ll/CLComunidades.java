@@ -1,9 +1,10 @@
 package com.provisiones.ll;
 
-import com.provisiones.dal.qm.QMComunidades;
+import com.provisiones.dal.qm.QMListaComunidades;
+import com.provisiones.dal.qm.QMMovimientosComunidades;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.Comunidad;
+import com.provisiones.types.MovimientoComunidad;
 
 
 public class CLComunidades 
@@ -16,7 +17,7 @@ public class CLComunidades
 
 		boolean bSalida = false;
 		
-		Comunidad comunidad = Parser.leerComunidad(linea);
+		MovimientoComunidad comunidad = Parser.leerComunidad(linea);
 		
 		String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
 		String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
@@ -40,17 +41,35 @@ public class CLComunidades
 		comunidad.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
 		
 			   				
-		String sCodComunidad = comunidad.getNUDCOM();
+		String sCodMovimiento = QMMovimientosComunidades.getMovimientoComunidadID(comunidad);
 		
-		bSalida = !(sCodComunidad.equals(""));
+		bSalida = !(sCodMovimiento.equals(""));
 		
 		if (bSalida)
 		{
-		
+			String sAccion = comunidad.getCOACCI();
+			
+			//Accion	Estado	Validado
+			/*
+			
+			if (sAccion.equals("A") && sValidado.equals("X"))
+			{
+				
+			}
+			if (sAccion.equals("A") && sValidado.equals("V"))
+			{
+				
+			}
+			if (sAccion.equals("A") && sValidado.equals("X"))
+			{
+				
+			}*/
+			
 			comunidad.setCOTDOR(sBKCOTDOR);
 			comunidad.setCOTDOR(sBKOBDEER);
 			
-			bSalida = QMComunidades.modComunidad(comunidad, sCodComunidad,sValidado);
+			bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
+			QMListaComunidades.setValidado(comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento, sValidado);
 		}
 		else 
 		{
