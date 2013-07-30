@@ -402,5 +402,56 @@ public class QMReferencias
 		ConnectionManager.CloseDBConnection(conn);
 		return sValidado;
 	}
+
+	public static boolean verificarReferenciaCatastral(String sCodReferencia)
+	{
+		String sMethod = "verificarReferenciaCatastral";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField15 + "  FROM " + sTable + 
+					" WHERE (" + sField6 + " = '" + sCodReferencia + "')");
+
+			rs = pstmt.executeQuery();
+			
+			found = (rs != null);
+			
+			if (found == false) 
+			{
+ 				System.out.println("No Information Found");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
+	}
 	
 }

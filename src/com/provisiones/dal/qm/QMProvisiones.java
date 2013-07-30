@@ -219,4 +219,60 @@ public class QMProvisiones
 		ConnectionManager.CloseDBConnection(conn);
 		return new Provision(sNUPROF, sFEPFON, sFechaValidacion, sEstado, sValorTolal, sNumGastos);
 	}
+	
+	public static boolean verificarProvision(String sNUPROF) 
+	{
+
+
+		String sMethod = "getProvision";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+
+		boolean found = false;
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+
+		try {
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " + sField2 + "," + sField3
+					+ "," + sField4 + "," + sField5 + "," + sField6 +
+					"  FROM " + sTable + " WHERE (" + sField1 + " = '"
+					+ sNUPROF + "')");
+
+			rs = pstmt.executeQuery();
+
+			System.out
+					.println("===================================================");
+			System.out.println(sField1 + ": " + sNUPROF);
+			
+			found = (rs != null); 
+
+			if (found == false) 
+			{
+				System.out.println("No Information Found");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs, sClassName, sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
+	}
 }

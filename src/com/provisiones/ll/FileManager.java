@@ -14,6 +14,7 @@ import org.primefaces.model.UploadedFile;
 
 import com.provisiones.misc.Longitudes;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
 public class FileManager 
 {
@@ -68,7 +69,7 @@ public class FileManager
 		int i = 26; //Caracter ->
 		String aChar = new Character((char)i).toString();
 
-		Utils.standardIO2File("");//Salida por fichero de texto
+		
 		
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
@@ -121,9 +122,6 @@ public class FileManager
 		int i = 26; //Caracter ->
 		String aChar = new Character((char)i).toString();
 
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 		java.util.Date date= new java.util.Date();
@@ -224,9 +222,6 @@ public class FileManager
 
 		int i = 26; //Caracter ->
 		String aChar = new Character((char)i).toString();
-
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
@@ -281,9 +276,6 @@ public class FileManager
 		int i = 26; //Caracter ->
 		String aChar = new Character((char)i).toString();
 
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 		java.util.Date date= new java.util.Date();
@@ -335,9 +327,6 @@ public class FileManager
 		int i = 26; //Caracter ->
 		String aChar = new Character((char)i).toString();
 
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 		java.util.Date date= new java.util.Date();
@@ -390,9 +379,6 @@ public class FileManager
 		int i = 26; //Caracter ->
 		String aChar = new Character((char)i).toString();
 
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 		java.util.Date date= new java.util.Date();
@@ -437,8 +423,12 @@ public class FileManager
 		boolean bSalida = false;
 		
 		//ArrayList<String> lista;
+		
 
-		if (sNombre.substring(0, 1).equals("")) 
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+				"|"+sNombre+"|"+sNombre.substring(0, 3)+"|");
+		
+		if (sNombre.substring(0, 3).equals(ValoresDefecto.DEF_COAPII)) 
 		{
 			String sTipo = sNombre.substring(3, 5).toUpperCase();
 
@@ -447,9 +437,9 @@ public class FileManager
 
 			System.out.println("Tipo:|" + sTipo + "|");
 
-			TIPOSFICHERO Tipo = TIPOSFICHERO.valueOf(sTipo);
+			TIPOSFICHERO COSPII = TIPOSFICHERO.valueOf(sTipo);
 
-			switch (Tipo) {
+			switch (COSPII) {
 			case AC:
 				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 						"Activos");
@@ -476,7 +466,7 @@ public class FileManager
 				com.provisiones.misc.Utils
 				.debugTrace(true, sClassName, sMethod,
 						"El archivo de gastos debe de ser primero supervisado por la entidad.");
-				//bSalida = leerGastosRevisados(sNombre);
+				bSalida = leerGastosRevisados(sNombre);
 				//lista = new ArrayList<String>(leerGastosValidados(sNombre));
 				break;
 			case PP:
@@ -540,7 +530,7 @@ public class FileManager
 	{
 		String sMethod = "main";
 		
-		String sPrueba = "168ga2.txt";
+		String sPrueba = "168AC3.txt";
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Probando el archivo "+ sPrueba);
 		splitter(sPrueba);

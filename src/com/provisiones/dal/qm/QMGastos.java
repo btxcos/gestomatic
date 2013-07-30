@@ -13,11 +13,11 @@ import java.sql.Statement;
 
 public class QMGastos
 {
-	static String sClassName = QMDatosActivos.class.getName();
+	static String sClassName = QMGastos.class.getName();
 
 	static String sTable = "ga_gastos_tbl";
 
-	static String sField1  = "ga_gastos_id";
+	static String sField1  = "ga_gasto_id";
 	
 	static String sField2  = "cod_coaces";
 	static String sField3  = "cod_cogrug";    
@@ -71,6 +71,7 @@ public class QMGastos
 		Statement stmt = null;
 		Connection conn = null;
 		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Abriendo conexion.");
 		conn = ConnectionManager.OpenDBConnection();
 		
 		try 
@@ -183,6 +184,8 @@ public class QMGastos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Cerrando conexion.");
+		
 		return true;
 	}
 	public static boolean modGasto(Gasto NuevoGasto, String sGastoID)

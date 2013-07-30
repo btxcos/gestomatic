@@ -6,13 +6,13 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
     version="2.1">
 	<managed-bean>
-		<managed-bean-name>TestPF</managed-bean-name>
-		<managed-bean-class>com.provisiones.test.TestPF</managed-bean-class>
-		<managed-bean-scope>application</managed-bean-scope>
+		<managed-bean-name>GestorIndice</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorIndice</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>gestorIndice</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorIndice</managed-bean-class>
+		<managed-bean-name>GestorCargas</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorCargas</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

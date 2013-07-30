@@ -7,11 +7,12 @@ import java.io.IOException;
 
 
 import com.provisiones.types.Cierre;
-import com.provisiones.types.DatosActivo;
+import com.provisiones.types.Activo;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuota;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.ImpuestoRecurso;
+import com.provisiones.types.MovimientoComunidad;
 import com.provisiones.types.ReferenciaCatastral;
 
 public class Parser {
@@ -89,7 +90,7 @@ public class Parser {
 		return sResultado;
 	}
 	
-	public static DatosActivo leerActivo (String linea)
+	public static Activo leerActivo (String linea)
 	{
 
 		String sCOACES = linea.substring(Posiciones.AC_COACES_P, Posiciones.AC_COACES_P+Longitudes.COACES_L);
@@ -189,7 +190,7 @@ public class Parser {
 		
 		
 		
-		return new DatosActivo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
+		return new Activo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
 				sNUPOAC, sNUESAC, sNUPIAC, sNUPUAC, sNOMUIN, sCOPRAE, sNOPRAC,
 				sCOPOIN, sFEREAP, sCOREAE, sFEINAU, sFESOPO, sFESEPO, sFEREPO,
 				sFEADAC, sCODIJU, sCOSJUP, sCOSTLI, sCOSCAR, sCOESVE, sCOTSIN,
@@ -205,7 +206,7 @@ public class Parser {
 				sBIOBNU, sPOBRAR);
 	}
 
-	public static String escribirActivo (DatosActivo activo)
+	public static String escribirActivo (Activo activo)
 	{
 	
         String sCOACES = formateaCampoNumerico(activo.getCOACES(),Longitudes.COACES_L);
@@ -442,7 +443,7 @@ public class Parser {
 				+ gasto.getFILLER();
 	}
 	
-	public static Comunidad leerComunidad (String linea)
+	public static MovimientoComunidad leerComunidad (String linea)
 	{
 
 		String sCODTRN = linea.substring(Posiciones.E1_CODTRN_P, Posiciones.E1_CODTRN_P+Longitudes.CODTRN_L);
@@ -479,14 +480,14 @@ public class Parser {
 
 		
 		
-		return new Comunidad(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOENGP,
+		return new MovimientoComunidad(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOENGP,
 				sCOCLDO, sNUDCOM, sBITC10, sCOACES, sBITC01, sNOMCOC, sBITC02,
 				sNODCCO, sBITC03, sNOMPRC, sBITC04, sNUTPRC, sBITC05, sNOMADC,
 				sBITC06, sNUTADC, sBITC07, sNODCAD, sBITC08, sNUCCEN, sNUCCOF,
 				sNUCCDI, sNUCCNT, sBITC09, sOBTEXC, sOBDEER);
 	}
 	
-	public static String escribirComunidad (Comunidad comunidad)
+	public static String escribirComunidad (MovimientoComunidad comunidad)
 	{
 
         String sCODTRN = formateaCampoAlfanumerico(comunidad.getCODTRN(),Longitudes.CODTRN_L);

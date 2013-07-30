@@ -23,6 +23,9 @@ public class CLGastos
 		String sValidado = "";
 		String sBKCOTERR = "";
 		
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Comprobando gasto leido...");
+		
 		if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
 			sValidado = "V";
 		else
@@ -45,6 +48,7 @@ public class CLGastos
 		}
 		else 
 		{
+			QMGastos.addGasto(gasto);
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
 			System.out.println("No Information Found");

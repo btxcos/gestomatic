@@ -2,6 +2,7 @@ package com.provisiones.misc;
 
 public class ValoresDefecto 
 {
+	public static final String DEF_COAPII = "168";
 	
 	public static final String DEF_VALIDADO = "P";
 	

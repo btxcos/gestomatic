@@ -16,6 +16,7 @@ public class QMListaGastos
 	static String sClassName = QMListaGastos.class.getName();
 
 	static String sTable = "lista_gastos_multi";
+
 	static String sField1 = "cod_coaces";
 	static String sField2 = "cod_nuprof";
 	static String sField3 = "cod_gasto";

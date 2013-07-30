@@ -10,7 +10,7 @@
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="100" header="Informacion">
-					<h:outputText value="Contenido superior." />
+					<h:outputText value="North unit content." />
 				</p:layoutUnit>
 
 				<p:layoutUnit position="west" size="20%" header="Menus">
@@ -78,7 +78,16 @@
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
-					<h:outputText value="Contenido Central." />
+					<p:panel>
+						<h:panelGrid columns="1" cellpadding="5">
+    				<p:fileUpload fileUploadListener="#{GestorCargas.handleFileUpload}" mode="advanced" dragDropSupport="true"  
+            update="messages" allowTypes="/(\.|\/)(txt)$/" />  
+  
+				    <p:growl id="messages" showDetail="true"/>
+						<h:outputText value="resultado: " />
+						<p:inputText id="RES" value="#{GestorCargas.sCampo}" disabled="true" />
+						</h:panelGrid>
+					</p:panel>
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>
