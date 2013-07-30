@@ -12,7 +12,7 @@ import java.sql.Statement;
 
 public class QMListaComunidades
 {
-	static String sClassName = QMComunidades.class.getName();
+	static String sClassName = QMListaComunidades.class.getName();
 
 	static String sTable = "lista_comunidades_multi";
 
@@ -27,6 +27,8 @@ public class QMListaComunidades
 		String sMethod = "addRelacionComunidad";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -56,7 +58,9 @@ public class QMListaComunidades
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -64,7 +68,7 @@ public class QMListaComunidades
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static boolean delRelacionComunidad(String sCodMovimiento)
@@ -72,6 +76,8 @@ public class QMListaComunidades
 		String sMethod = "delRelacionComunidad";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -88,6 +94,8 @@ public class QMListaComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -95,7 +103,7 @@ public class QMListaComunidades
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static boolean existeRelacionComunidad(String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
@@ -105,6 +113,8 @@ public class QMListaComunidades
 
 		Statement stmt = null;
 		ResultSet rs = null;
+		
+		boolean bSalida = true;
 
 		PreparedStatement pstmt = null;
 		boolean found = false;
@@ -120,7 +130,7 @@ public class QMListaComunidades
 			pstmt = conn.prepareStatement("SELECT "
 				       + sField1  + ","              
 				       + sField2  + ","
-				       + sField3  + "," +               
+				       + sField3  + " " +               
        
 			"  FROM " + sTable + 
 					" WHERE " +
@@ -144,6 +154,8 @@ public class QMListaComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -151,14 +163,14 @@ public class QMListaComunidades
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return found;
+		return (found && bSalida);
 	}
 
 	public static boolean setValidado(String sCodNUDCOM, String sCodCOACES, String sCodMovimiento, String sValidado)
 	{
 		String sMethod = "setValidado";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -182,15 +194,16 @@ public class QMListaComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 	
 	public static String getValidado(String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)

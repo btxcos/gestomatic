@@ -43,6 +43,8 @@ public class QMComunidades
 		String sMethod = "addComunidad";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -92,7 +94,9 @@ public class QMComunidades
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -100,13 +104,13 @@ public class QMComunidades
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
-	public static boolean modComunidad(Comunidad NuevaComunidad, String sComunidadID, String sValidado)
+	public static boolean modComunidad(Comunidad NuevaComunidad, String sComunidadID)
 	{
 		String sMethod = "modComunidad";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -116,19 +120,19 @@ public class QMComunidades
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField1  + " = '"+ NuevaComunidad.getCOCLDO() + "','"
-					//+ sField2  + " = '"+ NuevaComunidad.getNUDCOM() + "','"
-					+ sField3  + " = '"+ NuevaComunidad.getNOMCOC() + "','"
-					+ sField4  + " = '"+ NuevaComunidad.getNODCCO() + "','"
-					+ sField5  + " = '"+ NuevaComunidad.getNOMPRC() + "','"
-					+ sField6  + " = '"+ NuevaComunidad.getNUTPRC() + "','"
-					+ sField7  + " = '"+ NuevaComunidad.getNOMADC() + "','"
-					+ sField8  + " = '"+ NuevaComunidad.getNUTADC() + "','"
-					+ sField9  + " = '"+ NuevaComunidad.getNODCAD() + "','"
-					+ sField10 + " = '"+ NuevaComunidad.getNUCCEN() + "','"
-					+ sField11 + " = '"+ NuevaComunidad.getNUCCOF() + "','"
-					+ sField12 + " = '"+ NuevaComunidad.getNUCCDI() + "','"
-					+ sField13 + " = '"+ NuevaComunidad.getNUCCNT() + "','"
+					+ sField1  + " = '"+ NuevaComunidad.getCOCLDO() + "', "
+					//+ sField2  + " = '"+ NuevaComunidad.getNUDCOM() + "', "
+					+ sField3  + " = '"+ NuevaComunidad.getNOMCOC() + "', "
+					+ sField4  + " = '"+ NuevaComunidad.getNODCCO() + "', "
+					+ sField5  + " = '"+ NuevaComunidad.getNOMPRC() + "', "
+					+ sField6  + " = '"+ NuevaComunidad.getNUTPRC() + "', "
+					+ sField7  + " = '"+ NuevaComunidad.getNOMADC() + "', "
+					+ sField8  + " = '"+ NuevaComunidad.getNUTADC() + "', "
+					+ sField9  + " = '"+ NuevaComunidad.getNODCAD() + "', "
+					+ sField10 + " = '"+ NuevaComunidad.getNUCCEN() + "', "
+					+ sField11 + " = '"+ NuevaComunidad.getNUCCOF() + "', "
+					+ sField12 + " = '"+ NuevaComunidad.getNUCCDI() + "', "
+					+ sField13 + " = '"+ NuevaComunidad.getNUCCNT() + "', "
 					+ sField14 + " = '"+ NuevaComunidad.getOBTEXC() +
 					"' "+
 					" WHERE "
@@ -141,15 +145,16 @@ public class QMComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delComunidad(String sComunidadID)
@@ -157,6 +162,8 @@ public class QMComunidades
 		String sMethod = "delComunidad";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -172,6 +179,8 @@ public class QMComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -179,7 +188,7 @@ public class QMComunidades
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static Comunidad getComunidad(String sComunidadID)
@@ -238,7 +247,7 @@ public class QMComunidades
 			rs = pstmt.executeQuery();
 
 			System.out.println("===================================================");
-			System.out.println(sField7 + ": " + sComunidadID);
+			System.out.println(sField2 + ": " + sComunidadID);
 
 			if (rs != null) 
 			{
@@ -312,7 +321,7 @@ public class QMComunidades
 	{
 		String sMethod = "setEstado";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -334,15 +343,16 @@ public class QMComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 	
 	public static String getEstado(String sCodNUDCOM)

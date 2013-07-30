@@ -40,6 +40,8 @@ public class QMMovimientosReferencias
 		String sMethod = "addMovimientoReferenciaCatastral";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -87,7 +89,9 @@ public class QMMovimientosReferencias
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -95,13 +99,13 @@ public class QMMovimientosReferencias
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 	public static boolean modMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral, String sMovimientoReferenciaCatastralID)
 	{
 		String sMethod = "modMovimientoReferenciaCatastral";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -111,19 +115,19 @@ public class QMMovimientosReferencias
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField2  + " = '"+ NuevoMovimientoReferenciaCatastral.getCODTRN() + "','"
-					+ sField3  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTDOR() + "','"
-					+ sField4  + " = '"+ NuevoMovimientoReferenciaCatastral.getIDPROV() + "','"
-					+ sField5  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACCI() + "','"
-					+ sField6  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOENGP() + "','"
-					+ sField7  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "','"
-					+ sField8  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "','"
-					+ sField9  + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "','"
-					+ sField10 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "','"
-					+ sField11 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "','"
-					+ sField12 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "','"
-					+ sField13 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "','"
-					+ sField14 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "','"
+					+ sField2  + " = '"+ NuevoMovimientoReferenciaCatastral.getCODTRN() + "', "
+					+ sField3  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTDOR() + "', "
+					+ sField4  + " = '"+ NuevoMovimientoReferenciaCatastral.getIDPROV() + "', "
+					+ sField5  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACCI() + "', "
+					+ sField6  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOENGP() + "', "
+					+ sField7  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "', "
+					+ sField8  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "', "
+					+ sField9  + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
+					+ sField10 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "', "
+					+ sField11 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
+					+ sField12 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "', "
+					+ sField13 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
+					+ sField14 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
 					+ sField15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBDEER() + 
 					"' "+
 					" WHERE "
@@ -136,15 +140,17 @@ public class QMMovimientosReferencias
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
+
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delMovimientoReferenciaCatastral(String sMovimientoReferenciaCatastralID)
@@ -152,6 +158,8 @@ public class QMMovimientosReferencias
 		String sMethod = "delMovimientoReferenciaCatastral";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -167,6 +175,8 @@ public class QMMovimientosReferencias
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -174,7 +184,7 @@ public class QMMovimientosReferencias
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static MovimientoReferenciaCatastral getMovimientoReferenciaCatastral(String sMovimientoReferenciaCatastralID)
@@ -294,6 +304,7 @@ public class QMMovimientosReferencias
 		Statement stmt = null;
 		ResultSet rs = null;
 
+		boolean bSalida = true;
 
 		PreparedStatement pstmt = null;
 		boolean found = false;
@@ -327,6 +338,8 @@ public class QMMovimientosReferencias
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -335,7 +348,7 @@ public class QMMovimientosReferencias
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
-		return found;
+		return (found && bSalida);
 	}
 	
 }

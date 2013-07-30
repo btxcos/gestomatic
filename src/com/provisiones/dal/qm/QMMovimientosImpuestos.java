@@ -49,6 +49,8 @@ public class QMMovimientosImpuestos
 		String sMethod = "addMovimientoImpuestoRecurso";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -116,7 +118,9 @@ public class QMMovimientosImpuestos
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -124,13 +128,13 @@ public class QMMovimientosImpuestos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 	public static boolean modMovimientoImpuestoRecurso(MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso, String sMovimientoImpuestoRecursoID)
 	{
 		String sMethod = "modMovimientoImpuestoRecurso";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -140,29 +144,29 @@ public class QMMovimientosImpuestos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField2  + " = '"+ NuevoMovimientoImpuestoRecurso.getCODTRN() + "','"
-					+ sField3  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTDOR() + "','"
-					+ sField4  + " = '"+ NuevoMovimientoImpuestoRecurso.getIDPROV() + "','"
-					+ sField5  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOACCI() + "','"
-					+ sField6  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOENGP() + "','"
-					+ sField7  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOACES() + "','"
-					+ sField8  + " = '"+ NuevoMovimientoImpuestoRecurso.getNURCAT() + "','"
-					+ sField9  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOGRUC() + "','"
-					+ sField10 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTACA() + "','"
-					+ sField11 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOSBAC() + "','"
-					+ sField12 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC18() + "','"
-					+ sField13 + " = '"+ NuevoMovimientoImpuestoRecurso.getFEPRRE() + "','"
-					+ sField14 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC19() + "','"
-					+ sField15 + " = '"+ NuevoMovimientoImpuestoRecurso.getFERERE() + "','"
-					+ sField16 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC20() + "','"
-					+ sField17 + " = '"+ NuevoMovimientoImpuestoRecurso.getFEDEIN() + "','"
-					+ sField18 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC21() + "','"
-					+ sField19 + " = '"+ NuevoMovimientoImpuestoRecurso.getBISODE() + "','"
-					+ sField20 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC22() + "','"
-					+ sField21 + " = '"+ NuevoMovimientoImpuestoRecurso.getBIRESO() + "','"
-					+ sField22 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTEXA() + "','"
-					+ sField23 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC09() + "','"
-					+ sField24 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBTEXC() + "','"
+					+ sField2  + " = '"+ NuevoMovimientoImpuestoRecurso.getCODTRN() + "', "
+					+ sField3  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTDOR() + "', "
+					+ sField4  + " = '"+ NuevoMovimientoImpuestoRecurso.getIDPROV() + "', "
+					+ sField5  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOACCI() + "', "
+					+ sField6  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOENGP() + "', "
+					+ sField7  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOACES() + "', "
+					+ sField8  + " = '"+ NuevoMovimientoImpuestoRecurso.getNURCAT() + "', "
+					+ sField9  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOGRUC() + "', "
+					+ sField10 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTACA() + "', "
+					+ sField11 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOSBAC() + "', "
+					+ sField12 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC18() + "', "
+					+ sField13 + " = '"+ NuevoMovimientoImpuestoRecurso.getFEPRRE() + "', "
+					+ sField14 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC19() + "', "
+					+ sField15 + " = '"+ NuevoMovimientoImpuestoRecurso.getFERERE() + "', "
+					+ sField16 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC20() + "', "
+					+ sField17 + " = '"+ NuevoMovimientoImpuestoRecurso.getFEDEIN() + "', "
+					+ sField18 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC21() + "', "
+					+ sField19 + " = '"+ NuevoMovimientoImpuestoRecurso.getBISODE() + "', "
+					+ sField20 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC22() + "', "
+					+ sField21 + " = '"+ NuevoMovimientoImpuestoRecurso.getBIRESO() + "', "
+					+ sField22 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTEXA() + "', "
+					+ sField23 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC09() + "', "
+					+ sField24 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBTEXC() + "', "
 					+ sField25 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBDEER() +
 					"' "+
 					" WHERE "
@@ -175,15 +179,17 @@ public class QMMovimientosImpuestos
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
+
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delMovimientoImpuestoRecurso(String sMovimientoImpuestoRecursoID)
@@ -191,6 +197,8 @@ public class QMMovimientosImpuestos
 		String sMethod = "delMovimientoImpuestoRecurso";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -206,6 +214,8 @@ public class QMMovimientosImpuestos
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -213,7 +223,7 @@ public class QMMovimientosImpuestos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static MovimientoImpuestoRecurso getMovimientoImpuestoRecurso(String sMovimientoImpuestoRecursoID)

@@ -19,12 +19,12 @@ public class QMMovimientosComunidades
 	static String sField1 = "e1_movimiento_id";
 	
 	static String sField2 = "cod_codtrn";
-	static String sField3 = "cotdor";
+	static String sField3 = "cod_cotdor";
 	static String sField4 = "idprov";
 	static String sField5 = "cod_coacci";
 	static String sField6 = "coengp";
 	static String sField7 = "cod_cocldo";
-	static String sField8 = "nudcom_id";
+	static String sField8 = "cod_nudcom";
 	static String sField9 = "cod_bitc10";
 	static String sField10 = "cod_coaces";
 	static String sField11 = "cod_bitc01";
@@ -59,6 +59,8 @@ public class QMMovimientosComunidades
 		String sMethod = "addMovimientoComunidad";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -140,7 +142,9 @@ public class QMMovimientosComunidades
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -148,13 +152,13 @@ public class QMMovimientosComunidades
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 	public static boolean modMovimientoComunidad(MovimientoComunidad NuevoMovimientoComunidad, String sMovimientoComunidadID)
 	{
 		String sMethod = "modMovimientoComunidad";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -164,36 +168,36 @@ public class QMMovimientosComunidades
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField2  + " = '"+ NuevoMovimientoComunidad.getCODTRN() + "','" 
-					+ sField3  + " = '"+ NuevoMovimientoComunidad.getCOTDOR() + "','" 
-					+ sField4  + " = '"+ NuevoMovimientoComunidad.getIDPROV() + "','" 
-					+ sField5  + " = '"+ NuevoMovimientoComunidad.getCOACCI() + "','" 
-					+ sField6  + " = '"+ NuevoMovimientoComunidad.getCOENGP() + "','" 
-					+ sField7  + " = '"+ NuevoMovimientoComunidad.getCOCLDO() + "','" 
-					+ sField8  + " = '"+ NuevoMovimientoComunidad.getNUDCOM() + "','" 
-					+ sField9  + " = '"+ NuevoMovimientoComunidad.getBITC10() + "','" 
-					+ sField10 + " = '"+ NuevoMovimientoComunidad.getCOACES() + "','" 
-					+ sField11 + " = '"+ NuevoMovimientoComunidad.getBITC01() + "','" 
-					+ sField12 + " = '"+ NuevoMovimientoComunidad.getNOMCOC() + "','" 
-					+ sField13 + " = '"+ NuevoMovimientoComunidad.getBITC02() + "','" 
-					+ sField14 + " = '"+ NuevoMovimientoComunidad.getNODCCO() + "','" 
-					+ sField15 + " = '"+ NuevoMovimientoComunidad.getBITC03() + "','" 
-					+ sField16 + " = '"+ NuevoMovimientoComunidad.getNOMPRC() + "','" 
-					+ sField17 + " = '"+ NuevoMovimientoComunidad.getBITC04() + "','" 
-					+ sField18 + " = '"+ NuevoMovimientoComunidad.getNUTPRC() + "','" 
-					+ sField19 + " = '"+ NuevoMovimientoComunidad.getBITC05() + "','" 
-					+ sField20 + " = '"+ NuevoMovimientoComunidad.getNOMADC() + "','" 
-					+ sField21 + " = '"+ NuevoMovimientoComunidad.getBITC06() + "','" 
-					+ sField22 + " = '"+ NuevoMovimientoComunidad.getNUTADC() + "','" 
-					+ sField23 + " = '"+ NuevoMovimientoComunidad.getBITC07() + "','" 
-					+ sField24 + " = '"+ NuevoMovimientoComunidad.getNODCAD() + "','" 
-					+ sField25 + " = '"+ NuevoMovimientoComunidad.getBITC08() + "','" 
-					+ sField26 + " = '"+ NuevoMovimientoComunidad.getNUCCEN() + "','" 
-					+ sField27 + " = '"+ NuevoMovimientoComunidad.getNUCCOF() + "','" 
-					+ sField28 + " = '"+ NuevoMovimientoComunidad.getNUCCDI() + "','" 
-					+ sField29 + " = '"+ NuevoMovimientoComunidad.getNUCCNT() + "','" 
-					+ sField30 + " = '"+ NuevoMovimientoComunidad.getBITC09() + "','" 
-					+ sField31 + " = '"+ NuevoMovimientoComunidad.getOBTEXC() + "','" 
+					+ sField2  + " = '"+ NuevoMovimientoComunidad.getCODTRN() + "', " 
+					+ sField3  + " = '"+ NuevoMovimientoComunidad.getCOTDOR() + "', " 
+					+ sField4  + " = '"+ NuevoMovimientoComunidad.getIDPROV() + "', " 
+					+ sField5  + " = '"+ NuevoMovimientoComunidad.getCOACCI() + "', " 
+					+ sField6  + " = '"+ NuevoMovimientoComunidad.getCOENGP() + "', " 
+					+ sField7  + " = '"+ NuevoMovimientoComunidad.getCOCLDO() + "', " 
+					+ sField8  + " = '"+ NuevoMovimientoComunidad.getNUDCOM() + "', " 
+					+ sField9  + " = '"+ NuevoMovimientoComunidad.getBITC10() + "', " 
+					+ sField10 + " = '"+ NuevoMovimientoComunidad.getCOACES() + "', " 
+					+ sField11 + " = '"+ NuevoMovimientoComunidad.getBITC01() + "', " 
+					+ sField12 + " = '"+ NuevoMovimientoComunidad.getNOMCOC() + "', " 
+					+ sField13 + " = '"+ NuevoMovimientoComunidad.getBITC02() + "', " 
+					+ sField14 + " = '"+ NuevoMovimientoComunidad.getNODCCO() + "', " 
+					+ sField15 + " = '"+ NuevoMovimientoComunidad.getBITC03() + "', " 
+					+ sField16 + " = '"+ NuevoMovimientoComunidad.getNOMPRC() + "', " 
+					+ sField17 + " = '"+ NuevoMovimientoComunidad.getBITC04() + "', " 
+					+ sField18 + " = '"+ NuevoMovimientoComunidad.getNUTPRC() + "', " 
+					+ sField19 + " = '"+ NuevoMovimientoComunidad.getBITC05() + "', " 
+					+ sField20 + " = '"+ NuevoMovimientoComunidad.getNOMADC() + "', " 
+					+ sField21 + " = '"+ NuevoMovimientoComunidad.getBITC06() + "', " 
+					+ sField22 + " = '"+ NuevoMovimientoComunidad.getNUTADC() + "', " 
+					+ sField23 + " = '"+ NuevoMovimientoComunidad.getBITC07() + "', " 
+					+ sField24 + " = '"+ NuevoMovimientoComunidad.getNODCAD() + "', " 
+					+ sField25 + " = '"+ NuevoMovimientoComunidad.getBITC08() + "', " 
+					+ sField26 + " = '"+ NuevoMovimientoComunidad.getNUCCEN() + "', " 
+					+ sField27 + " = '"+ NuevoMovimientoComunidad.getNUCCOF() + "', " 
+					+ sField28 + " = '"+ NuevoMovimientoComunidad.getNUCCDI() + "', " 
+					+ sField29 + " = '"+ NuevoMovimientoComunidad.getNUCCNT() + "', " 
+					+ sField30 + " = '"+ NuevoMovimientoComunidad.getBITC09() + "', " 
+					+ sField31 + " = '"+ NuevoMovimientoComunidad.getOBTEXC() + "', " 
 					+ sField32 + " = '"+ NuevoMovimientoComunidad.getOBDEER() +
 					"' "+
 					" WHERE "
@@ -206,15 +210,16 @@ public class QMMovimientosComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delMovimientoComunidad(String sMovimientoComunidadID)
@@ -222,6 +227,8 @@ public class QMMovimientosComunidades
 		String sMethod = "delMovimientoComunidad";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -237,6 +244,8 @@ public class QMMovimientosComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -244,7 +253,7 @@ public class QMMovimientosComunidades
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static MovimientoComunidad getMovimientoComunidad(String sMovimientoComunidadID)
@@ -332,7 +341,7 @@ public class QMMovimientosComunidades
 				       + sField32 +               
        
 			"  FROM " + sTable + 
-					" WHERE (" + sField7 + " = '" + sMovimientoComunidadID	+ "')");
+					" WHERE (" + sField1 + " = '" + sMovimientoComunidadID	+ "')");
 
 			rs = pstmt.executeQuery();
 

@@ -12,7 +12,7 @@ import com.provisiones.types.Provision;
 
 public class QMProvisiones 
 {
-	static String sClassName = QMCuotas.class.getName();
+	static String sClassName = QMProvisiones.class.getName();
 
 	static String sTable = "provisiones_tbl";
 
@@ -31,6 +31,8 @@ public class QMProvisiones
 		String sMethod = "addProvision";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -65,6 +67,8 @@ public class QMProvisiones
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -72,14 +76,14 @@ public class QMProvisiones
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static boolean modProvision(Provision NuevaProvision, String sNUPROF) 
 	{
 		String sMethod = "modProvision";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
@@ -87,10 +91,10 @@ public class QMProvisiones
 		try {
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + " SET " 
-					+ sField2 + " = '" + NuevaProvision.getsFEPFON() + "','" 
-					+ sField3 + " = '" + NuevaProvision.getsFechaValidacion() + "','"
-					+ sField4 + " = '" + NuevaProvision.getsEstado() + "','" 
-					+ sField5 + " = '" + NuevaProvision.getsValorTolal() + "','" 
+					+ sField2 + " = '" + NuevaProvision.getsFEPFON() + "', " 
+					+ sField3 + " = '" + NuevaProvision.getsFechaValidacion() + "', "
+					+ sField4 + " = '" + NuevaProvision.getsEstado() + "', " 
+					+ sField5 + " = '" + NuevaProvision.getsValorTolal() + "', " 
 					+ sField6 + " = '" + NuevaProvision.getsNumGastos() + "' " 
 					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
 
@@ -101,15 +105,16 @@ public class QMProvisiones
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delProvision(String sNUPROF) 
@@ -117,6 +122,8 @@ public class QMProvisiones
 		String sMethod = "delProvision";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -132,6 +139,8 @@ public class QMProvisiones
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -139,7 +148,7 @@ public class QMProvisiones
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static Provision getProvision(String sNUPROF) 
@@ -228,6 +237,8 @@ public class QMProvisiones
 
 		Statement stmt = null;
 		ResultSet rs = null;
+		
+		boolean bSalida = true;
 
 
 		PreparedStatement pstmt = null;
@@ -266,6 +277,8 @@ public class QMProvisiones
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -273,6 +286,6 @@ public class QMProvisiones
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return found;
+		return (found && bSalida);
 	}
 }

@@ -31,6 +31,8 @@ public class QMReferencias
 		String sMethod = "addReferenciaCatastral";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -62,7 +64,9 @@ public class QMReferencias
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -70,14 +74,14 @@ public class QMReferencias
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 	public static boolean modReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral, String sCodNURCAT)
 	{
 		String sMethod = "modReferenciaCatastral";
 	
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -87,10 +91,10 @@ public class QMReferencias
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField1  + " = '"+ NuevaReferenciaCatastral.getNURCAT() + "','"
-					+ sField2  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "','"
-					+ sField3  + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "','"
-					+ sField4  + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "','"
+					+ sField1  + " = '"+ NuevaReferenciaCatastral.getNURCAT() + "', "
+					+ sField2  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "', "
+					+ sField3  + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "', "
+					+ sField4  + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "', "
 					+ sField5  + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "' "+
 					" WHERE "
 					+ sField1 + " = '"+ sCodNURCAT +"'");
@@ -102,15 +106,16 @@ public class QMReferencias
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delReferenciaCatastral(String sCodNURCAT)
@@ -118,6 +123,8 @@ public class QMReferencias
 		String sMethod = "delReferenciaCatastral";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -133,6 +140,8 @@ public class QMReferencias
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -140,7 +149,7 @@ public class QMReferencias
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static ReferenciaCatastral getReferenciaCatastral(String sCodNURCAT)
@@ -231,7 +240,7 @@ public class QMReferencias
 	{
 		String sMethod = "setEstado";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -253,15 +262,16 @@ public class QMReferencias
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 	
 	public static String getEstado(String sCodNURCAT)

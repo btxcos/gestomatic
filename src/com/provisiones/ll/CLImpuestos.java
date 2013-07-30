@@ -48,7 +48,7 @@ public class CLImpuestos
 		{
 		
 			impuesto.setCOTDOR(sBKCOTDOR);
-			impuesto.setCOTDOR(sBKOBDEER);
+			impuesto.setOBDEER(sBKOBDEER);
 			
 			QMMovimientosImpuestos.modMovimientoImpuestoRecurso(impuesto, sCodMovimientoImpuesto);
 			QMListaImpuestos.setValidado( impuesto.getCOACES(), impuesto.getNURCAT(), impuesto.getCOSBAC(),sCodMovimientoImpuesto, sValidado);

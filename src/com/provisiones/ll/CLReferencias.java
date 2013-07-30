@@ -49,7 +49,7 @@ public class CLReferencias
 		{
 		
 			referencia.setCOTDOR(sBKCOTDOR);
-			referencia.setCOTDOR(sBKOBDEER);
+			referencia.setOBDEER(sBKOBDEER);
 			
 			bSalida = QMMovimientosReferencias.modMovimientoReferenciaCatastral(referencia, sCodMovimientoReferencia);
 			QMListaReferencias.setValidado(referencia.getNURCAT(), referencia.getCOACES(), sCodMovimientoReferencia, sValidado);

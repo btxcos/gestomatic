@@ -117,7 +117,7 @@ public class QMActivos
 		Statement stmt = null;
 		Connection conn = null;
 		
-		boolean bSalida = false;
+		boolean bSalida = true;
 
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -313,7 +313,6 @@ public class QMActivos
 				       + NuevoActivo.getBIOBNU() + "','"  
 				       + NuevoActivo.getPOBRAR() + "' )");
 			
-			bSalida = true;
 		} 
 		catch (SQLException ex) 
 		{
@@ -339,7 +338,9 @@ public class QMActivos
 	{
 		String sMethod = "modActivo";
 		Statement stmt = null;
-		boolean bExit = false;
+		
+		boolean bSalida = true;
+		
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -442,7 +443,7 @@ public class QMActivos
 					+ sField92 + " = '"+ NuevoActivo.getPOBRAR() + "' "+
 					" WHERE "
 					+ sField1 + " = '"+ sCodCOACES +"'");
-			
+					
 		} 
 		catch (SQLException ex) 
 		{
@@ -450,15 +451,17 @@ public class QMActivos
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
+			
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delActivo(String sCodCOACES)
@@ -467,6 +470,8 @@ public class QMActivos
 		Statement stmt = null;
 		Connection conn = null;
 		
+		boolean bSalida = true;
+		
 		conn = ConnectionManager.OpenDBConnection();
 
 		try 
@@ -474,6 +479,7 @@ public class QMActivos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' )");
+			
 		} 
 		catch (SQLException ex) 
 		{
@@ -481,6 +487,8 @@ public class QMActivos
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -488,7 +496,7 @@ public class QMActivos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static Activo getActivo(String sCodCOACES)

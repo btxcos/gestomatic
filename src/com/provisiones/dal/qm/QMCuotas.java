@@ -35,6 +35,8 @@ public class QMCuotas
 		String sMethod = "addCuota";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -69,7 +71,9 @@ public class QMCuotas
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -77,13 +81,13 @@ public class QMCuotas
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 	public static boolean modCuota(Cuota NuevaCuota, String sCodNUDCOM, String sCodCOSBAC)
 	{
 		String sMethod = "modCuota";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -93,14 +97,14 @@ public class QMCuotas
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField1  + " = '"+ NuevaCuota.getCOCLDO() + "','"
-					+ sField2  + " = '"+ NuevaCuota.getNUDCOM() + "','"
-					+ sField3  + " = '"+ NuevaCuota.getCOSBAC() + "','"
-					+ sField4  + " = '"+ NuevaCuota.getFIPAGO() + "','"
-					+ sField5  + " = '"+ NuevaCuota.getFFPAGO() + "','"
-					+ sField6  + " = '"+ NuevaCuota.getIMCUCO() + "','"
-					+ sField7  + " = '"+ NuevaCuota.getFAACTA() + "','"
-					+ sField8  + " = '"+ NuevaCuota.getPTPAGO() + "','"
+					+ sField1  + " = '"+ NuevaCuota.getCOCLDO() + "', "
+					+ sField2  + " = '"+ NuevaCuota.getNUDCOM() + "', "
+					+ sField3  + " = '"+ NuevaCuota.getCOSBAC() + "', "
+					+ sField4  + " = '"+ NuevaCuota.getFIPAGO() + "', "
+					+ sField5  + " = '"+ NuevaCuota.getFFPAGO() + "', "
+					+ sField6  + " = '"+ NuevaCuota.getIMCUCO() + "', "
+					+ sField7  + " = '"+ NuevaCuota.getFAACTA() + "', "
+					+ sField8  + " = '"+ NuevaCuota.getPTPAGO() + "', "
 					+ sField9 + " = '"+ NuevaCuota.getOBTEXC() + 
 					"' "+
 					" WHERE " +
@@ -114,15 +118,16 @@ public class QMCuotas
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delCuota(String sNUDCOM, String sCOSBAC)
@@ -130,6 +135,8 @@ public class QMCuotas
 		String sMethod = "delCuota";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -147,6 +154,8 @@ public class QMCuotas
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -154,7 +163,7 @@ public class QMCuotas
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static Cuota getCuota(String sCodNUDCOM, String sCodCOSBAC)
@@ -334,7 +343,7 @@ public class QMCuotas
 	{
 		String sMethod = "setEstado";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -357,15 +366,16 @@ public class QMCuotas
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 	
 	public static String getEstado(String sCodNUDCOM, String sCodCOSBAC)

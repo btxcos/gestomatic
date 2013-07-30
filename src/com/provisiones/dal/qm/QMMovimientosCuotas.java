@@ -49,6 +49,8 @@ public class QMMovimientosCuotas
 		String sMethod = "addMovimientoCuota";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -116,7 +118,9 @@ public class QMMovimientosCuotas
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -124,13 +128,13 @@ public class QMMovimientosCuotas
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 	public static boolean modMovimientoCuota(MovimientoCuota NuevoMovimientoCuota, String sMovimientoCuotaID)
 	{
 		String sMethod = "modMovimientoCuota";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -140,29 +144,29 @@ public class QMMovimientosCuotas
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField2  + " = '"+ NuevoMovimientoCuota.getCODTRN() + "','"
-					+ sField3  + " = '"+ NuevoMovimientoCuota.getCOTDOR() + "','"
-					+ sField4  + " = '"+ NuevoMovimientoCuota.getIDPROV() + "','"
-					+ sField5  + " = '"+ NuevoMovimientoCuota.getCOACCI() + "','"
-					+ sField6  + " = '"+ NuevoMovimientoCuota.getCOCLDO() + "','"
-					+ sField7  + " = '"+ NuevoMovimientoCuota.getNUDCOM() + "','"
-					+ sField8  + " = '"+ NuevoMovimientoCuota.getCOENGP() + "','"
-					+ sField9  + " = '"+ NuevoMovimientoCuota.getCOACES() + "','"
-					+ sField10 + " = '"+ NuevoMovimientoCuota.getCOGRUG() + "','"
-					+ sField11 + " = '"+ NuevoMovimientoCuota.getCOTACA() + "','"
-					+ sField12 + " = '"+ NuevoMovimientoCuota.getCOSBAC() + "','"
-					+ sField13 + " = '"+ NuevoMovimientoCuota.getBITC11() + "','"
-					+ sField14 + " = '"+ NuevoMovimientoCuota.getFIPAGO() + "','"
-					+ sField15 + " = '"+ NuevoMovimientoCuota.getBITC12() + "','"
-					+ sField16 + " = '"+ NuevoMovimientoCuota.getFFPAGO() + "','"
-					+ sField17 + " = '"+ NuevoMovimientoCuota.getBITC13() + "','"
-					+ sField18 + " = '"+ NuevoMovimientoCuota.getIMCUCO() + "','"
-					+ sField19 + " = '"+ NuevoMovimientoCuota.getBITC14() + "','"
-					+ sField20 + " = '"+ NuevoMovimientoCuota.getFAACTA() + "','"
-					+ sField21 + " = '"+ NuevoMovimientoCuota.getBITC15() + "','"
-					+ sField22 + " = '"+ NuevoMovimientoCuota.getPTPAGO() + "','"
-					+ sField23 + " = '"+ NuevoMovimientoCuota.getBITC09() + "','"
-					+ sField24 + " = '"+ NuevoMovimientoCuota.getOBTEXC() + "','"
+					+ sField2  + " = '"+ NuevoMovimientoCuota.getCODTRN() + "', "
+					+ sField3  + " = '"+ NuevoMovimientoCuota.getCOTDOR() + "', "
+					+ sField4  + " = '"+ NuevoMovimientoCuota.getIDPROV() + "', "
+					+ sField5  + " = '"+ NuevoMovimientoCuota.getCOACCI() + "', "
+					+ sField6  + " = '"+ NuevoMovimientoCuota.getCOCLDO() + "', "
+					+ sField7  + " = '"+ NuevoMovimientoCuota.getNUDCOM() + "', "
+					+ sField8  + " = '"+ NuevoMovimientoCuota.getCOENGP() + "', "
+					+ sField9  + " = '"+ NuevoMovimientoCuota.getCOACES() + "', "
+					+ sField10 + " = '"+ NuevoMovimientoCuota.getCOGRUG() + "', "
+					+ sField11 + " = '"+ NuevoMovimientoCuota.getCOTACA() + "', "
+					+ sField12 + " = '"+ NuevoMovimientoCuota.getCOSBAC() + "', "
+					+ sField13 + " = '"+ NuevoMovimientoCuota.getBITC11() + "', "
+					+ sField14 + " = '"+ NuevoMovimientoCuota.getFIPAGO() + "', "
+					+ sField15 + " = '"+ NuevoMovimientoCuota.getBITC12() + "', "
+					+ sField16 + " = '"+ NuevoMovimientoCuota.getFFPAGO() + "', "
+					+ sField17 + " = '"+ NuevoMovimientoCuota.getBITC13() + "', "
+					+ sField18 + " = '"+ NuevoMovimientoCuota.getIMCUCO() + "', "
+					+ sField19 + " = '"+ NuevoMovimientoCuota.getBITC14() + "', "
+					+ sField20 + " = '"+ NuevoMovimientoCuota.getFAACTA() + "', "
+					+ sField21 + " = '"+ NuevoMovimientoCuota.getBITC15() + "', "
+					+ sField22 + " = '"+ NuevoMovimientoCuota.getPTPAGO() + "', "
+					+ sField23 + " = '"+ NuevoMovimientoCuota.getBITC09() + "', "
+					+ sField24 + " = '"+ NuevoMovimientoCuota.getOBTEXC() + "', "
 					+ sField25 + " = '"+ NuevoMovimientoCuota.getOBDEER() +
 					"' "+
 					" WHERE "
@@ -175,15 +179,16 @@ public class QMMovimientosCuotas
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delMovimientoCuota(String sMovimientoCuotaID)
@@ -191,6 +196,8 @@ public class QMMovimientosCuotas
 		String sMethod = "delMovimientoCuota";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -206,6 +213,8 @@ public class QMMovimientosCuotas
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -213,7 +222,7 @@ public class QMMovimientosCuotas
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static MovimientoCuota getMovimientoCuota(String sMovimientoCuotaID)

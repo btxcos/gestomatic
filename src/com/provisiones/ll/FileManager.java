@@ -239,6 +239,13 @@ public class FileManager
 		while((linea=br.readLine())!=null)
         {
 			contador++;
+
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, 
+					"TAMS (linea|"+linea.length()+
+					"|Comunidades:|"+Longitudes.COMUNIDADES_L+
+					"|Filler:|"+Longitudes.FILLER_COMUNIDADES_L+
+					"| Resta:|"+(Longitudes.COMUNIDADES_L-Longitudes.FILLER_COMUNIDADES_L)+"|");
+
     		if (linea.equals(aChar))
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
     		else if (linea.length()< (Longitudes.COMUNIDADES_L-Longitudes.FILLER_COMUNIDADES_L) )

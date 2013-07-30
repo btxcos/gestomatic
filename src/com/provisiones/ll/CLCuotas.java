@@ -49,7 +49,7 @@ public class CLCuotas
 		{
 		
 			cuota.setCOTDOR(sBKCOTDOR);
-			cuota.setCOTDOR(sBKOBDEER);
+			cuota.setOBDEER(sBKOBDEER);
 			
 			QMMovimientosCuotas.modMovimientoCuota(cuota, sCodMovimiento);
 			QMListaCuotas.setValidado(cuota.getCOACES(),cuota.getNUDCOM(), cuota.getCOSBAC(), sCodMovimiento, sValidado);

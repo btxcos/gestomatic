@@ -35,6 +35,8 @@ public class QMImpuestos
 		String sMethod = "addImpuesto";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -74,7 +76,9 @@ public class QMImpuestos
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally
 		{
@@ -82,13 +86,13 @@ public class QMImpuestos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 	public static boolean modImpuestoRecurso(ImpuestoRecurso NuevoImpuestoRecurso, String sCodNURCAT, String sCodCOSBAC)
 	{
 		String sMethod = "modImpuestoRecurso";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -98,14 +102,14 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField1 + " = '"+ NuevoImpuestoRecurso.getNURCAT() + "','"
-					+ sField2 + " = '"+ NuevoImpuestoRecurso.getCOSBAC() + "','"
-					+ sField3 + " = '"+ NuevoImpuestoRecurso.getFEPRRE() + "','"
-					+ sField4 + " = '"+ NuevoImpuestoRecurso.getFERERE() + "','"
-					+ sField5 + " = '"+ NuevoImpuestoRecurso.getFEDEIN() + "','"
-					+ sField6 + " = '"+ NuevoImpuestoRecurso.getBISODE() + "','"
-					+ sField7 + " = '"+ NuevoImpuestoRecurso.getBIRESO() + "','"
-					+ sField8 + " = '"+ NuevoImpuestoRecurso.getCOTEXA() + "','"
+					+ sField1 + " = '"+ NuevoImpuestoRecurso.getNURCAT() + "', "
+					+ sField2 + " = '"+ NuevoImpuestoRecurso.getCOSBAC() + "', "
+					+ sField3 + " = '"+ NuevoImpuestoRecurso.getFEPRRE() + "', "
+					+ sField4 + " = '"+ NuevoImpuestoRecurso.getFERERE() + "', "
+					+ sField5 + " = '"+ NuevoImpuestoRecurso.getFEDEIN() + "', "
+					+ sField6 + " = '"+ NuevoImpuestoRecurso.getBISODE() + "', "
+					+ sField7 + " = '"+ NuevoImpuestoRecurso.getBIRESO() + "', "
+					+ sField8 + " = '"+ NuevoImpuestoRecurso.getCOTEXA() + "', "
 					+ sField9 + " = '"+ NuevoImpuestoRecurso.getOBTEXC() +
 					"' "+
 					" WHERE "+
@@ -119,15 +123,16 @@ public class QMImpuestos
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 
 	public static boolean delImpuestoRecurso(String sCodNURCAT, String sCodCOSBAC)
@@ -135,6 +140,8 @@ public class QMImpuestos
 		String sMethod = "delImpuestoRecurso";
 		Statement stmt = null;
 		Connection conn = null;
+		
+		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -152,6 +159,8 @@ public class QMImpuestos
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
@@ -159,7 +168,7 @@ public class QMImpuestos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return true;
+		return bSalida;
 	}
 
 	public static ImpuestoRecurso getImpuestoRecurso(String sCodNURCAT, String sCodCOSBAC)
@@ -355,7 +364,7 @@ public class QMImpuestos
 	{
 		String sMethod = "setEstado";
 		Statement stmt = null;
-		boolean bExit = false;
+		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
@@ -378,15 +387,17 @@ public class QMImpuestos
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
 		} 
 		finally 
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			bExit = true;
+
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bExit;
+		return bSalida;
 	}
 	
 	public static String getEstado(String sCodNURCAT, String sCodCOSBAC)
