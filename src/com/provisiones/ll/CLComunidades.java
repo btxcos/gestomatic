@@ -101,6 +101,8 @@ public class CLComunidades
 			
 			//comunidad.pintaMovimientoComunidad();
 			
+			//comunidad.setBITC01("#");
+			
 			//QMMovimientosComunidades.addMovimientoComunidad(comunidad);
 			
 			//QMListaComunidades.

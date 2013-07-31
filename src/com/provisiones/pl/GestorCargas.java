@@ -45,7 +45,9 @@ public class GestorCargas implements Serializable
 		FileManager.splitter(event.getFile().getFileName());
 
 		setsCampo("El archivo " + event.getFile().getFileName() + " ha subido correctamente.");
+		
 		FacesMessage msg = new FacesMessage("Correcto!", event.getFile().getFileName() + " ha subido correctamente.");
+		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"<<< handleFileUpload");

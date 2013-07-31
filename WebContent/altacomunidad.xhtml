@@ -1,0 +1,267 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="33%" header="Alta Comunidad">
+
+	
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText value="CODTRN: " />
+											<p:inputText id="CODTRN" value="EE41"
+												disabled="true" />
+
+											<h:outputText value="IDPROV: " />
+											<p:inputText id="IDPROV" value="123456789" disabled="true" />
+
+											<h:outputText value="COENGP: " />
+											<p:inputText id="COENGP" value="00000" disabled="true" />
+
+										</h:panelGrid>
+									</p:panel>
+									<p:fieldset legend="Control de errores">
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText value="COTDOR: " />
+											<p:inputText id="COTDOR" value="000" disabled="true" />
+											<p:inputText id="COTDOR_D" value="" disabled="true" />
+
+											<h:outputText value="OBDEER: " />
+											<p:inputText id="OBDEER" value="" disabled="true" />
+
+										</h:panelGrid>
+									</p:fieldset>
+
+								</h:panelGrid>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<p:panelMenu style="width:100%">
+						<p:submenu label="Activos">
+							<p:menuitem value="Cargar Activos"
+								url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+							<p:menuitem value="Lista de Activos" url="http://www.google.es"
+								icon="ui-icon-search" />
+						</p:submenu>
+						<p:submenu label="Gastos">
+							<p:menuitem value="Cargar Gastos" url="http://www.noticias3d.com"
+								icon="ui-icon-arrowthick-1-n" />
+							<p:menuitem value="Lista de Gastos" url="http://www.google.es"
+								icon="ui-icon-search" />
+						</p:submenu>
+						<p:submenu label="Provisiones">
+							<p:menuitem value="Lista de Provisiones"
+								url="http://www.google.es" icon="ui-icon-search" />
+						</p:submenu>
+						<p:submenu label="Comunidades">
+							<p:submenu label="Comunidades" icon="ui-icon-home">
+								<p:menuitem value="Cargar Comunidades"
+									url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+								<p:menuitem value="Lista de Comunidades"
+									url="http://www.primefaces.org" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Cuotas" icon="ui-icon-calculator">
+								<p:menuitem value="Cargar Cuotas"
+									url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+								<p:menuitem value="Lista de Cuotas"
+									url="http://www.primefaces.org" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Referencias catastrales" icon="ui-icon-script">
+								<p:menuitem value="Cargar Referencias"
+									url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+								<p:menuitem value="Lista de Referencias"
+									url="http://www.primefaces.org" icon="ui-icon-search" />
+							</p:submenu>
+							<p:submenu label="Impuestos y tasas" icon="ui-icon-note">
+								<p:menuitem value="Cargar Impuestos"
+									url="http://www.noticias3d.com" icon="ui-icon-arrowthick-1-n" />
+								<p:menuitem value="Lista de Impuestos"
+									url="http://www.primefaces.org" icon="ui-icon-search" />
+							</p:submenu>
+						</p:submenu>
+						<p:submenu label="Ref.">
+							<p:submenu label="Links" icon="ui-icon-extlink">
+								<p:submenu label="PrimeFaces" icon="ui-icon-heart">
+									<p:menuitem value="Home" url="http://www.primefaces.org"
+										icon="ui-icon-home" />
+									<p:menuitem value="Docs"
+										url="http://www.primefaces.org/documentation.html"
+										icon="ui-icon-document" />
+									<p:menuitem value="Download"
+										url="http://www.primefaces.org/downloads.html"
+										icon="ui-icon-arrowthick-1-s" />
+									<p:menuitem value="Support"
+										url="http://www.primefaces.org/support.html"
+										icon="ui-icon-wrench" />
+								</p:submenu>
+							</p:submenu>
+						</p:submenu>
+					</p:panelMenu>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<p:panel>
+						<h:panelGrid columns="1" cellpadding="5">
+
+									<p:fieldset legend="Comunidad de proprietarios">
+										<h:panelGrid columns="3" cellpadding="5">
+											
+											<h:outputText value="NUDCOM: " />
+											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.NOMCOC}">
+												<f:selectItem itemLabel="Clase" itemValue="" />
+												<f:selectItems value="#{GestorComunidades.COCLDO}" />
+											</p:selectOneMenu>
+											<p:inputText id="NUDCOM" value="#{GestorComunidades.NOMCOC}" />
+
+											<h:outputText value="NOMCOC: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NOMCOC}" mask="99999999" />
+
+											<h:outputText value="NODCCO: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NODCCO}" mask="99999999" />
+
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Presidente">
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText value="NOMPRC: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NOMPRC}" mask="99999999" />
+
+											<h:outputText value="NUTPRC: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NUTPRC}" mask="99999999" />
+
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Administrador">
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText value="NOMADC: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NOMADC}" mask="99999999" />
+
+											<h:outputText value="NUTADC: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NUTADC}" mask="99999999" />
+
+											<h:outputText value="NUDCAD: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NUDCAD}" mask="99999999" />
+
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Cuenta corriente de la Comunidad">
+										<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText value="NUCC: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NUCCEN}" mask="9999" />
+											<p:inputMask value="#{GestorComunidades.NUCCOF}" mask="9999" />
+											<p:inputMask value="#{GestorComunidades.NUCCDI}" mask="99" />
+											<p:inputMask value="#{GestorComunidades.NUCCNT}" mask="9999999999" />
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Observaciones">
+										<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText value="OBTEXC: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.NOMCOC}" mask="99999999" />
+
+
+										</h:panelGrid>
+									</p:fieldset>
+
+						</h:panelGrid>
+					</p:panel>
+					<p:commandButton value="Reset" type="reset" />
+					<p:commandButton value="Submit" update="display"
+						oncomplete="dlg.show()" />
+
+
+					<p:dialog widgetVar="dlg" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="5">
+
+							<h:outputText value="COCLDO: " />
+							<h:outputText value="#{GestorComunidades.COCLDO}" />
+								
+							<h:outputText value="NUDCOM: " />
+							<h:outputText value="#{GestorComunidades.NUDCOM}" />
+								
+							<h:outputText value="NOMCOC: " />
+							<h:outputText value="#{GestorComunidades.NOMCOC}" />
+
+							<h:outputText value="NODCCO: " />
+							<h:outputText value="#{GestorComunidades.NODCCO}" />
+
+							<h:outputText value="NOMPRC: " />
+							<h:outputText value="#{GestorComunidades.NOMPRC}" />
+
+							<h:outputText value="NUTPRC: " />
+							<h:outputText value="#{GestorComunidades.NUTPRC}" />
+
+							<h:outputText value="NOMADC: " />
+							<h:outputText value="#{GestorComunidades.NOMADC}" />
+
+							<h:outputText value="NUTADC: " />
+							<h:outputText value="#{GestorComunidades.NUTADC}" />
+
+							<h:outputText value="NODCAD: " />
+							<h:outputText value="#{GestorComunidades.NODCAD}" />
+
+							<h:outputText value="NUCCEN: " />
+							<h:outputText value="#{GestorComunidades.NUCCEN}" />
+
+							<h:outputText value="NUCCOF: " />
+							<h:outputText value="#{GestorComunidades.NUCCOF}" />
+
+							<h:outputText value="NUCCDI: " />
+							<h:outputText value="#{GestorComunidades.NUCCDI}" />
+
+							<h:outputText value="NUCCNT: " />
+							<h:outputText value="#{GestorComunidades.NUCCNT}" />
+
+							<h:outputText value="OBTEXC: " />
+							<h:outputText value="#{GestorComunidades.OBTEXC}" />
+
+								
+						</h:panelGrid>
+					</p:dialog>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

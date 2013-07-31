@@ -43,14 +43,17 @@ public class QMMovimientosCuotas
 	static String sField24 = "obtexc";     
 	static String sField25 = "obdeer";     
 
-	public static boolean addMovimientoCuota(MovimientoCuota NuevoMovimientoCuota)
+	public static int addMovimientoCuota(MovimientoCuota NuevoMovimientoCuota)
 
 	{
 		String sMethod = "addMovimientoCuota";
 		Statement stmt = null;
 		Connection conn = null;
+		ResultSet resulset = null;
 		
-		boolean bSalida = true;
+		int iCodigo = 0;
+		
+		//boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -106,7 +109,14 @@ public class QMMovimientosCuotas
 				       + NuevoMovimientoCuota.getPTPAGO() + "','"
 				       + NuevoMovimientoCuota.getBITC09() + "','"
 				       + NuevoMovimientoCuota.getOBTEXC() + "','"
-				       + NuevoMovimientoCuota.getOBDEER() + "' )");
+				       + NuevoMovimientoCuota.getOBDEER() + "' )", Statement.RETURN_GENERATED_KEYS);
+			
+			resulset = stmt.getGeneratedKeys();
+			
+			if (resulset.next()) 
+			{
+				iCodigo= resulset.getInt(1);
+			} 
 		} 
 		catch (SQLException ex) 
 		{
@@ -120,7 +130,7 @@ public class QMMovimientosCuotas
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
 			
-			bSalida = false;
+			//bSalida = false;
 		} 
 		finally
 		{
@@ -128,7 +138,7 @@ public class QMMovimientosCuotas
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
+		return iCodigo; //bSalida;
 	}
 	public static boolean modMovimientoCuota(MovimientoCuota NuevoMovimientoCuota, String sMovimientoCuotaID)
 	{

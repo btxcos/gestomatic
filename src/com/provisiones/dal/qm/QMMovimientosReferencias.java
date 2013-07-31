@@ -34,15 +34,18 @@ public class QMMovimientosReferencias
 
 
 
-	public static boolean addMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
+	public static int addMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
 
 	{
 		String sMethod = "addMovimientoReferenciaCatastral";
 		Statement stmt = null;
 		Connection conn = null;
+		ResultSet resulset = null;
 		
-		boolean bSalida = true;
+		int iCodigo = 0;
 
+		//boolean bSalida = true;
+		
 		conn = ConnectionManager.OpenDBConnection();
 
 		try {
@@ -77,7 +80,14 @@ public class QMMovimientosReferencias
 				       + NuevoMovimientoReferenciaCatastral.getCOTEXA() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getBITC09() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getOBTEXC() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getOBDEER() + "' )");
+				       + NuevoMovimientoReferenciaCatastral.getOBDEER() + "' )", Statement.RETURN_GENERATED_KEYS);
+			
+			resulset = stmt.getGeneratedKeys();
+			
+			if (resulset.next()) 
+			{
+				iCodigo= resulset.getInt(1);
+			} 
 		} 
 		catch (SQLException ex) 
 		{
@@ -91,7 +101,7 @@ public class QMMovimientosReferencias
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
 			
-			bSalida = false;
+			//bSalida = false;
 		} 
 		finally
 		{
@@ -99,7 +109,7 @@ public class QMMovimientosReferencias
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
+		return iCodigo;//bSalida;
 	}
 	public static boolean modMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral, String sMovimientoReferenciaCatastralID)
 	{

@@ -43,14 +43,15 @@ public class QMMovimientosImpuestos
 	static String sField24 = "obtexc";    
 	static String sField25 = "obdeer";		
 
-	public static boolean addMovimientoImpuestoRecurso(MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso)
+	public static int addMovimientoImpuestoRecurso(MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso)
 
 	{
 		String sMethod = "addMovimientoImpuestoRecurso";
 		Statement stmt = null;
 		Connection conn = null;
+		ResultSet resulset = null;
 		
-		boolean bSalida = true;
+		int iCodigo = 0;
 
 		conn = ConnectionManager.OpenDBConnection();
 
@@ -106,7 +107,14 @@ public class QMMovimientosImpuestos
 				       + NuevoMovimientoImpuestoRecurso.getCOTEXA() + "','"
 				       + NuevoMovimientoImpuestoRecurso.getBITC09() + "','"
 				       + NuevoMovimientoImpuestoRecurso.getOBTEXC() + "','"
-				       + NuevoMovimientoImpuestoRecurso.getOBDEER() + "' )");
+				       + NuevoMovimientoImpuestoRecurso.getOBDEER() + "' )", Statement.RETURN_GENERATED_KEYS);
+			
+			resulset = stmt.getGeneratedKeys();
+			
+			if (resulset.next()) 
+			{
+				iCodigo= resulset.getInt(1);
+			} 
 		} 
 		catch (SQLException ex) 
 		{
@@ -120,7 +128,7 @@ public class QMMovimientosImpuestos
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
 			
-			bSalida = false;
+			//bSalida = false;
 		} 
 		finally
 		{
@@ -128,7 +136,7 @@ public class QMMovimientosImpuestos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
+		return iCodigo;//bSalida;
 	}
 	public static boolean modMovimientoImpuestoRecurso(MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso, String sMovimientoImpuestoRecursoID)
 	{

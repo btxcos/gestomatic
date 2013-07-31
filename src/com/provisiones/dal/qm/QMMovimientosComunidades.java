@@ -53,15 +53,18 @@ public class QMMovimientosComunidades
 	
 
 
-	public static boolean addMovimientoComunidad(MovimientoComunidad NuevoMovimientoComunidad)
+	public static int addMovimientoComunidad(MovimientoComunidad NuevoMovimientoComunidad)
 
 	{
 		String sMethod = "addMovimientoComunidad";
 		Statement stmt = null;
 		Connection conn = null;
+		ResultSet resulset = null;
 		
-		boolean bSalida = true;
+		int iCodigo = 0;
 
+		//boolean bSalida = true;
+		
 		conn = ConnectionManager.OpenDBConnection();
 
 		try {
@@ -130,7 +133,14 @@ public class QMMovimientosComunidades
 				       + NuevoMovimientoComunidad.getNUCCNT() + "','"
 				       + NuevoMovimientoComunidad.getBITC09() + "','"
 				       + NuevoMovimientoComunidad.getOBTEXC() + "','"
-				       + NuevoMovimientoComunidad.getOBDEER() + "' )");
+				       + NuevoMovimientoComunidad.getOBDEER() + "' )", Statement.RETURN_GENERATED_KEYS);
+			
+			resulset = stmt.getGeneratedKeys();
+			
+			if (resulset.next()) 
+			{
+				iCodigo= resulset.getInt(1);
+			} 
 		} 
 		catch (SQLException ex) 
 		{
@@ -143,16 +153,21 @@ public class QMMovimientosComunidades
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+
+			//bSalida = false;
 			
-			bSalida = false;
 		} 
 		finally
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(resulset,sClassName,sMethod);
 		}
+
+		System.out.println("["+sClassName+"."+sMethod+"] iCodigo: |" + iCodigo +"|");
+		
 		ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
+		return iCodigo;//bSalida
 	}
 	public static boolean modMovimientoComunidad(MovimientoComunidad NuevoMovimientoComunidad, String sMovimientoComunidadID)
 	{
