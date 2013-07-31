@@ -1,114 +1,214 @@
 package com.provisiones.pl;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.faces.event.ActionEvent;
+
+import com.provisiones.dal.qm.QMComunidades;
+import com.provisiones.misc.Utils;
+import com.provisiones.types.Comunidad;
 
 public class GestorComunidades implements Serializable 
 {
 
-	/**
-	 * 
-	 */
+	static String sClassName = GestorComunidades.class.getName();
+	
 	private static final long serialVersionUID = 5043001456385781939L;
 
-	String COCLDO = "COCLDO";
-	String NUDCOM = "NUDCOM";
-	String NOMCOC = "NOMCOC";
-	String NODCCO = "NODCCO";
-	String NOMPRC = "NOMPRC";
-	String NUTPRC = "NUTPRC";
-	String NOMADC = "NOMADC";
-	String NUTADC = "NUTADC";
-	String NODCAD = "NODCAD";
-	String NUCCEN = "NUCCEN";
-	String NUCCOF = "NUCCOF";
-	String NUCCDI = "NUCCDI";
-	String NUCCNT = "NUCCNT";
-	String OBTEXC = "OBTEXC";
+	String sCOCLDO = "";
+	String sNUDCOM = "";
+	String sNOMCOC = "";
+	String sNODCCO = "";
+	String sNOMPRC = "";
+	String sNUTPRC = "";
+	String sNOMADC = "";
+	String sNUTADC = "";
+	String sNODCAD = "";
+	String sNUCCEN = "";
+	String sNUCCOF = "";
+	String sNUCCDI = "";
+	String sNUCCNT = "";
+	String sOBTEXC = "";
+	
+	private Map<String,String> tiposdocumentoHM = new LinkedHashMap<String, String>();
+	
+	public GestorComunidades()
+	{
+		tiposdocumentoHM.put("D.N.I.",                     "1");
+		tiposdocumentoHM.put("C.I.F.",                     "2");
+		tiposdocumentoHM.put("Tarjeta Residente.",         "3");
+		tiposdocumentoHM.put("Pasaporte",                  "4");
+		tiposdocumentoHM.put("C.I.F país extranjero.",     "5");
+		tiposdocumentoHM.put("D.N.I país extranjero.",     "7");
+		tiposdocumentoHM.put("Tarj. identif. diplomática.","8");
+		tiposdocumentoHM.put("Menor.",                     "9");
+		tiposdocumentoHM.put("Otros persona física.",      "F");
+		tiposdocumentoHM.put("Otros persona jurídica.",    "J");
 
-	public String getCOCLDO() {
-		return COCLDO;
 	}
-	public void setCOCLDO(String cOCLDO) {
-		COCLDO = cOCLDO;
+	
+	
+	public void realizaAlta(ActionEvent event)throws IOException 
+    {
+		String sMethod = "realizaAlta";
+		
+		Comunidad comunidad = new Comunidad(sCOCLDO, 
+				sNUDCOM, 
+				sNOMCOC, 
+				sNODCCO, 
+				sNOMPRC, 
+				sNUTPRC, 
+				sNOMADC, 
+				sNUTADC, 
+				sNODCAD, 
+				sNUCCEN, 
+				sNUCCOF, 
+				sNUCCDI, 
+				sNUCCNT, 
+				sOBTEXC);
+
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
+		comunidad.pintaComunidad();
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la comunidad...");
+		
+		QMComunidades.addComunidad(comunidad);
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
+
+	} 
+
+	public Map<String, String> getTiposdocumentoHM() {
+		return tiposdocumentoHM;
 	}
-	public String getNUDCOM() {
-		return NUDCOM;
+
+
+
+	public void setTiposdocumentoHM(Map<String, String> tiposdocumentoHM) {
+		this.tiposdocumentoHM = tiposdocumentoHM;
 	}
-	public void setNUDCOM(String nUDCOM) {
-		NUDCOM = nUDCOM;
+
+
+
+	public String getsCOCLDO() {
+		return sCOCLDO;
 	}
-	public String getNOMCOC() {
-		return NOMCOC;
+
+	public void setsCOCLDO(String sCOCLDO) {
+		this.sCOCLDO = sCOCLDO;
 	}
-	public void setNOMCOC(String nOMCOC) {
-		NOMCOC = nOMCOC;
+
+	public String getsNUDCOM() {
+		return sNUDCOM;
 	}
-	public String getNODCCO() {
-		return NODCCO;
+
+	public void setsNUDCOM(String sNUDCOM) {
+		this.sNUDCOM = sNUDCOM;
 	}
-	public void setNODCCO(String nODCCO) {
-		NODCCO = nODCCO;
+
+	public String getsNOMCOC() {
+		return sNOMCOC;
 	}
-	public String getNOMPRC() {
-		return NOMPRC;
+
+	public void setsNOMCOC(String sNOMCOC) {
+		this.sNOMCOC = sNOMCOC;
 	}
-	public void setNOMPRC(String nOMPRC) {
-		NOMPRC = nOMPRC;
+
+	public String getsNODCCO() {
+		return sNODCCO;
 	}
-	public String getNUTPRC() {
-		return NUTPRC;
+
+	public void setsNODCCO(String sNODCCO) {
+		this.sNODCCO = sNODCCO;
 	}
-	public void setNUTPRC(String nUTPRC) {
-		NUTPRC = nUTPRC;
+
+	public String getsNOMPRC() {
+		return sNOMPRC;
 	}
-	public String getNOMADC() {
-		return NOMADC;
+
+	public void setsNOMPRC(String sNOMPRC) {
+		this.sNOMPRC = sNOMPRC;
 	}
-	public void setNOMADC(String nOMADC) {
-		NOMADC = nOMADC;
+
+	public String getsNUTPRC() {
+		return sNUTPRC;
 	}
-	public String getNUTADC() {
-		return NUTADC;
+
+	public void setsNUTPRC(String sNUTPRC) {
+		this.sNUTPRC = sNUTPRC;
 	}
-	public void setNUTADC(String nUTADC) {
-		NUTADC = nUTADC;
+
+	public String getsNOMADC() {
+		return sNOMADC;
 	}
-	public String getNODCAD() {
-		return NODCAD;
+
+	public void setsNOMADC(String sNOMADC) {
+		this.sNOMADC = sNOMADC;
 	}
-	public void setNODCAD(String nODCAD) {
-		NODCAD = nODCAD;
+
+	public String getsNUTADC() {
+		return sNUTADC;
 	}
-	public String getNUCCEN() {
-		return NUCCEN;
+
+	public void setsNUTADC(String sNUTADC) {
+		this.sNUTADC = sNUTADC;
 	}
-	public void setNUCCEN(String nUCCEN) {
-		NUCCEN = nUCCEN;
+
+	public String getsNODCAD() {
+		return sNODCAD;
 	}
-	public String getNUCCOF() {
-		return NUCCOF;
+
+	public void setsNODCAD(String sNODCAD) {
+		this.sNODCAD = sNODCAD;
 	}
-	public void setNUCCOF(String nUCCOF) {
-		NUCCOF = nUCCOF;
+
+	public String getsNUCCEN() {
+		return sNUCCEN;
 	}
-	public String getNUCCDI() {
-		return NUCCDI;
+
+	public void setsNUCCEN(String sNUCCEN) {
+		this.sNUCCEN = sNUCCEN;
 	}
-	public void setNUCCDI(String nUCCDI) {
-		NUCCDI = nUCCDI;
+
+	public String getsNUCCOF() {
+		return sNUCCOF;
 	}
-	public String getNUCCNT() {
-		return NUCCNT;
+
+	public void setsNUCCOF(String sNUCCOF) {
+		this.sNUCCOF = sNUCCOF;
 	}
-	public void setNUCCNT(String nUCCNT) {
-		NUCCNT = nUCCNT;
+
+	public String getsNUCCDI() {
+		return sNUCCDI;
 	}
-	public String getOBTEXC() {
-		return OBTEXC;
+
+	public void setsNUCCDI(String sNUCCDI) {
+		this.sNUCCDI = sNUCCDI;
 	}
-	public void setOBTEXC(String oBTEXC) {
-		OBTEXC = oBTEXC;
+
+	public String getsNUCCNT() {
+		return sNUCCNT;
 	}
+
+	public void setsNUCCNT(String sNUCCNT) {
+		this.sNUCCNT = sNUCCNT;
+	}
+
+	public String getsOBTEXC() {
+		return sOBTEXC;
+	}
+
+	public void setsOBTEXC(String sOBTEXC) {
+		this.sOBTEXC = sOBTEXC;
+	}
+
+
+
+
 	
 	
 	

@@ -15,5 +15,10 @@
 		<managed-bean-class>com.provisiones.pl.GestorCargas</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorComunidades</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorComunidades</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

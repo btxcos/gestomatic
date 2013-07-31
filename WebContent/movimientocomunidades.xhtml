@@ -113,55 +113,76 @@
 						<h:panelGrid columns="1" cellpadding="5">
 
 									<p:fieldset legend="Comunidad de proprietarios">
-										<h:panelGrid columns="2" cellpadding="5">
-											
-											<h:outputText value="COCLDO: " />
-											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}">
-												<f:selectItem itemLabel="Documento" itemValue="" />
-												<f:selectItems value="#{GestorComunidades.tiposdocumentoHM}" />
-											</p:selectOneMenu>
+										<h:panelGrid columns="3" cellpadding="5">
 											
 											<h:outputText value="NUDCOM: " />
-											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" />
+											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}">
+												<f:selectItem itemLabel="Clase" itemValue="" />
+												<f:selectItems value="#{GestorComunidades.COCLDOHM}" />
+											</p:selectOneMenu>
+											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNOMCOC}" />
 
 											<h:outputText value="NOMCOC: " />
-											<p:inputText id="NOMCOC" value="#{GestorComunidades.sNOMCOC}" />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.sNOMCOC}" mask="99999999" />
 
 											<h:outputText value="NODCCO: " />
-											<p:inputText id="NODCCO" value="#{GestorComunidades.sNODCCO}" />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.sNODCCO}" mask="99999999" />
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Presidente">
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText value="NOMPRC: " />
-											<p:inputText id="NOMPRC" value="#{GestorComunidades.sNOMPRC}" />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.sNOMPRC}" mask="99999999" />
 
 											<h:outputText value="NUTPRC: " />
-											<p:inputText id="NUTPRC" value="#{GestorComunidades.sNUTPRC}" />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.sNUTPRC}" mask="99999999" />
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Administrador">
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText value="NOMADC: " />
-											<p:inputText id="NOMADC" value="#{GestorComunidades.sNOMADC}" />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.sNOMADC}" mask="99999999" />
 
 											<h:outputText value="NUTADC: " />
-											<p:inputText id="NUTADC" value="#{GestorComunidades.sNUTADC}" />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.sNUTADC}" mask="99999999" />
 
-											<h:outputText value="NODCAD: " />
-											<p:inputText id="NODCAD" value="#{GestorComunidades.sNODCAD}" />
+											<h:outputText value="NUDCAD: " />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.sNUDCAD}" mask="99999999" />
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Cuenta corriente de la Comunidad">
-										<h:panelGrid columns="5" cellpadding="5">
+										<h:panelGrid columns="6" cellpadding="5">
 
 											<h:outputText value="NUCC: " />
-
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
 											<p:inputMask value="#{GestorComunidades.sNUCCEN}" mask="9999" />
 											<p:inputMask value="#{GestorComunidades.sNUCCOF}" mask="9999" />
 											<p:inputMask value="#{GestorComunidades.sNUCCDI}" mask="99" />
@@ -171,11 +192,13 @@
 									</p:fieldset>
 
 									<p:fieldset legend="Observaciones">
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="6" cellpadding="5">
 
 											<h:outputText value="OBTEXC: " />
-
-											<p:inputText id="OBTEXC" value="#{GestorComunidades.sOBTEXC}" />
+											<p:selectManyCheckbox value="#">
+												<f:selectItem itemLabel="" itemValue="S" />
+											</p:selectManyCheckbox>
+											<p:inputMask value="#{GestorComunidades.sNOMCOC}" mask="99999999" />
 
 
 										</h:panelGrid>
