@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.qm.QMComunidades;
@@ -51,9 +53,11 @@ public class GestorComunidades implements Serializable
 	}
 	
 	
-	public void realizaAlta(ActionEvent event)throws IOException 
+	public void realizaAlta(ActionEvent actionEvent)throws IOException 
     {
 		String sMethod = "realizaAlta";
+		
+		FacesMessage msg;
 		
 		Comunidad comunidad = new Comunidad(sCOCLDO, 
 				sNUDCOM, 
@@ -72,16 +76,45 @@ public class GestorComunidades implements Serializable
 
 		Utils.standardIO2File("");//Salida por fichero de texto
 		
-		comunidad.pintaComunidad();
-		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la comunidad...");
 		
-		QMComunidades.addComunidad(comunidad);
+		comunidad.pintaComunidad();
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
+		if (QMComunidades.addComunidad(comunidad))
+		{
+		
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
+		
+			msg = new FacesMessage("Correcto!", "La comunidad "+ comunidad.getNOMCOC() + "se ha creado correctamente.");
+			borrarCampos();
+		}
+		else
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la comunidad "+ comunidad.getNOMCOC() + ". Por favor, revise los datos.",null);
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		//return "index.xhtml";
 
 	} 
 
+	public void borrarCampos()
+	{
+		this.sCOCLDO = "";
+		this.sNUDCOM = "";
+		this.sNOMCOC = "";
+		this.sNODCCO = "";
+		this.sNOMPRC = "";
+		this.sNUTPRC = "";
+		this.sNOMADC = "";
+		this.sNUTADC = "";
+		this.sNODCAD = "";
+		this.sNUCCEN = "";
+		this.sNUCCOF = "";
+		this.sNUCCDI = "";
+		this.sNUCCNT = "";
+		this.sOBTEXC = "";
+	}
+	
 	public Map<String, String> getTiposdocumentoHM() {
 		return tiposdocumentoHM;
 	}

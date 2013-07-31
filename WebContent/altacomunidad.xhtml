@@ -109,63 +109,102 @@
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
-					<p:panel>
+					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
 
 									<p:fieldset legend="Comunidad de proprietarios">
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="3" cellpadding="5">
 											
-											<h:outputText value="COCLDO: " />
-											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}">
+											<h:outputText for="COCLDO" value="COCLDO: " />
+											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}" required="true" >
 												<f:selectItem itemLabel="Documento" itemValue="" />
 												<f:selectItems value="#{GestorComunidades.tiposdocumentoHM}" />
+												<f:validateLength minimum="1" /> 
 											</p:selectOneMenu>
+											<p:message for="COCLDO" display="icon"/>
 											
-											<h:outputText value="NUDCOM: " />
-											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" />
+											<h:outputText for="NUDCOM" value="NUDCOM: " />
+											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" size="10" required="true" >
+												<f:validateLength minimum="1" maximum="10" />
+											</p:inputText>
+											<p:message for="NUDCOM" display="icon"/>
 
-											<h:outputText value="NOMCOC: " />
-											<p:inputText id="NOMCOC" value="#{GestorComunidades.sNOMCOC}" />
+											<h:outputText for="NOMCOC" value="NOMCOC: " />
+											<p:inputText id="NOMCOC" value="#{GestorComunidades.sNOMCOC}" size="60" required="true" >
+												<f:validateLength minimum="1" maximum="60" />
+											</p:inputText>
+											<p:message for="NOMCOC" display="icon"/>
 
-											<h:outputText value="NODCCO: " />
-											<p:inputText id="NODCCO" value="#{GestorComunidades.sNODCCO}" />
+											<h:outputText for="NODCCO"  value="NODCCO: " />
+											<p:inputText id="NODCCO" value="#{GestorComunidades.sNODCCO}" size="60">
+												<f:validateLength minimum="1" maximum="60" />
+											</p:inputText>
+											<p:message for="NODCCO" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Presidente">
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="3" cellpadding="5">
 
-											<h:outputText value="NOMPRC: " />
-											<p:inputText id="NOMPRC" value="#{GestorComunidades.sNOMPRC}" />
+											<h:outputText for="NOMPRC" value="NOMPRC: " />
+											<p:inputText id="NOMPRC" value="#{GestorComunidades.sNOMPRC}" size="55">
+												<f:validateLength maximum="55" />
+											</p:inputText>
+											<p:message for="NOMPRC" display="icon"/>
 
-											<h:outputText value="NUTPRC: " />
-											<p:inputText id="NUTPRC" value="#{GestorComunidades.sNUTPRC}" />
+											<h:outputText for="NUTPRC" value="NUTPRC: " />
+											<p:inputText id="NUTPRC" value="#{GestorComunidades.sNUTPRC}" size="14">
+												<f:validateLength maximum="14" />
+											</p:inputText>
+											<p:message for="NUTPRC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Administrador">
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="3" cellpadding="5">
 
-											<h:outputText value="NOMADC: " />
-											<p:inputText id="NOMADC" value="#{GestorComunidades.sNOMADC}" />
+											<h:outputText for="NOMADC" value="NOMADC: " />
+											<p:inputText id="NOMADC" value="#{GestorComunidades.sNOMADC}" size="55">
+												<f:validateLength maximum="55" />
+											</p:inputText>
+											<p:message for="NOMADC" display="icon"/>
 
-											<h:outputText value="NUTADC: " />
-											<p:inputText id="NUTADC" value="#{GestorComunidades.sNUTADC}" />
+											<h:outputText for="NUTADC" value="NUTADC: " />
+											<p:inputText id="NUTADC" value="#{GestorComunidades.sNUTADC}" size="14">
+												<f:validateLength maximum="14" />
+											</p:inputText>
+											<p:message for="NUTADC" display="icon"/>
 
-											<h:outputText value="NODCAD: " />
-											<p:inputText id="NODCAD" value="#{GestorComunidades.sNODCAD}" />
+											<h:outputText for="NODCAD" value="NODCAD: " />
+											<p:inputText id="NODCAD" value="#{GestorComunidades.sNODCAD}" size="60">
+												<f:validateLength maximum="60" />
+											</p:inputText>
+											<p:message for="NODCAD" display="icon"/>
+
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Cuenta corriente de la Comunidad">
-										<h:panelGrid columns="5" cellpadding="5">
+										<h:panelGrid columns="6" cellpadding="5">
 
-											<h:outputText value="NUCC: " />
+											<h:outputText for="NUCCNT" value="NUCC: " />
 
-											<p:inputMask value="#{GestorComunidades.sNUCCEN}" mask="9999" />
-											<p:inputMask value="#{GestorComunidades.sNUCCOF}" mask="9999" />
-											<p:inputMask value="#{GestorComunidades.sNUCCDI}" mask="99" />
-											<p:inputMask value="#{GestorComunidades.sNUCCNT}" mask="9999999999" />
+											<p:inputMask id="NUCCEN" value="#{GestorComunidades.sNUCCEN}" mask="9999" size="4" required="true">
+												<f:validateLength minimum="1" maximum="4" />
+											</p:inputMask>
+											
+											<p:inputMask id="NUCCOF" value="#{GestorComunidades.sNUCCOF}" mask="9999" size="4" required="true">
+												<f:validateLength minimum="1" maximum="4" />
+											</p:inputMask>
+											
+											<p:inputMask id="NUCCDI" value="#{GestorComunidades.sNUCCDI}" mask="99" size="2" required="true">
+												<f:validateLength minimum="1" maximum="2" />
+											</p:inputMask>
+											
+											<p:inputMask id="NUCCNT" value="#{GestorComunidades.sNUCCNT}" mask="9999999999" size="10" required="true">
+												<f:validateLength minimum="1" maximum="10" />
+											</p:inputMask>
+											<p:message for="NUCCNT" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -173,10 +212,14 @@
 									<p:fieldset legend="Observaciones">
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText value="OBTEXC: " />
+											<h:outputText for="OBTEXC" value="OBTEXC: " />
 
-											<p:inputText id="OBTEXC" value="#{GestorComunidades.sOBTEXC}" />
+											<p:inputText id="OBTEXC" value="#{GestorComunidades.sOBTEXC}" size="110">
+												<f:validateLength maximum="110" />
+											</p:inputText>
+											<p:message for="OBTEXC" display="icon"/>
 
+											 <p:messages id="msgs"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -184,58 +227,7 @@
 						</h:panelGrid>
 					</p:panel>
 					<p:commandButton value="Reset" type="reset" />
-					<p:commandButton value="Submit" update="display"
-						oncomplete="dlg.show()" />
-
-
-					<p:dialog widgetVar="dlg" modal="true">
-						<h:panelGrid id="display" columns="2" cellpadding="5">
-
-							<h:outputText value="COCLDO: " />
-							<h:outputText value="#{GestorComunidades.sCOCLDO}" />
-								
-							<h:outputText value="NUDCOM: " />
-							<h:outputText value="#{GestorComunidades.sNUDCOM}" />
-								
-							<h:outputText value="NOMCOC: " />
-							<h:outputText value="#{GestorComunidades.sNOMCOC}" />
-
-							<h:outputText value="NODCCO: " />
-							<h:outputText value="#{GestorComunidades.sNODCCO}" />
-
-							<h:outputText value="NOMPRC: " />
-							<h:outputText value="#{GestorComunidades.sNOMPRC}" />
-
-							<h:outputText value="NUTPRC: " />
-							<h:outputText value="#{GestorComunidades.sNUTPRC}" />
-
-							<h:outputText value="NOMADC: " />
-							<h:outputText value="#{GestorComunidades.sNOMADC}" />
-
-							<h:outputText value="NUTADC: " />
-							<h:outputText value="#{GestorComunidades.sNUTADC}" />
-
-							<h:outputText value="NODCAD: " />
-							<h:outputText value="#{GestorComunidades.sNODCAD}" />
-
-							<h:outputText value="NUCCEN: " />
-							<h:outputText value="#{GestorComunidades.sNUCCEN}" />
-
-							<h:outputText value="NUCCOF: " />
-							<h:outputText value="#{GestorComunidades.sNUCCOF}" />
-
-							<h:outputText value="NUCCDI: " />
-							<h:outputText value="#{GestorComunidades.sNUCCDI}" />
-
-							<h:outputText value="NUCCNT: " />
-							<h:outputText value="#{GestorComunidades.sNUCCNT}" />
-
-							<h:outputText value="OBTEXC: " />
-							<h:outputText value="#{GestorComunidades.sOBTEXC}" />
-
-								
-						</h:panelGrid>
-					</p:dialog>
+					<p:commandButton value="Submit" update="panel" actionListener="#{GestorComunidades.realizaAlta}" />
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>
