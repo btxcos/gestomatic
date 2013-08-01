@@ -226,8 +226,9 @@
 
 						</h:panelGrid>
 					</p:panel>
-					<p:commandButton value="Reset" type="reset" />
-					<p:commandButton value="Submit" update="panel" actionListener="#{GestorComunidades.realizaAlta}" />
+					<p:commandButton value="Limpiar Plantilla" type="reset" />
+					<p:commandButton value="Registrar Datos" update="panel" actionListener="#{GestorComunidades.realizaAlta}" />
+					<p:commandButton value="Salir" action="#{GestorComunidades.salir}" />
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>

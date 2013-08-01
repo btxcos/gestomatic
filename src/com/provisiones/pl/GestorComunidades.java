@@ -85,7 +85,7 @@ public class GestorComunidades implements Serializable
 		
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
 		
-			msg = new FacesMessage("Correcto!", "La comunidad "+ comunidad.getNOMCOC() + "se ha creado correctamente.");
+			msg = new FacesMessage(FacesMessage.FACES_MESSAGES, "La comunidad "+ comunidad.getNOMCOC() + "se ha creado correctamente.");
 			borrarCampos();
 		}
 		else
@@ -113,6 +113,15 @@ public class GestorComunidades implements Serializable
 		this.sNUCCDI = "";
 		this.sNUCCNT = "";
 		this.sOBTEXC = "";
+	}
+	
+	public String salir()
+	{
+		String sPagina = "index.xhtml";
+		
+		borrarCampos();
+		
+		return sPagina;
 	}
 	
 	public Map<String, String> getTiposdocumentoHM() {
