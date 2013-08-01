@@ -85,11 +85,11 @@ public class GestorComunidades implements Serializable
 		
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
 		
-			msg = new FacesMessage("La comunidad "+ comunidad.getNOMCOC() + "se ha creado correctamente.");
+			msg = new FacesMessage("La comunidad '"+ comunidad.getNOMCOC() + "', con documento '"+comunidad.getNUDCOM()+"', se ha creado correctamente.");
 			borrarCampos();
 		}
 		else
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la comunidad "+ comunidad.getNOMCOC() + ". Por favor, revise los datos.",null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la comunidad '"+ comunidad.getNOMCOC() + "', con documento '"+comunidad.getNUDCOM()+"'. Por favor, revise los datos.",null);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
