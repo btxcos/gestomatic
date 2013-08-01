@@ -85,7 +85,7 @@ public class GestorComunidades implements Serializable
 		
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
 		
-			msg = new FacesMessage(FacesMessage.FACES_MESSAGES, "La comunidad "+ comunidad.getNOMCOC() + "se ha creado correctamente.");
+			msg = new FacesMessage("La comunidad "+ comunidad.getNOMCOC() + "se ha creado correctamente.");
 			borrarCampos();
 		}
 		else
