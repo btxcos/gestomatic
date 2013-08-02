@@ -19,6 +19,7 @@ public class CLComunidades
 		
 		String sEstado = QMComunidades.getEstado(movimiento.getCOCLDO(), movimiento.getNUDCOM());
 		
+		comunidad.pintaComunidad();
 		
 		if (sEstado.equals("P"))
 		{

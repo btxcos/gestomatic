@@ -8,6 +8,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMListaComunidades;
@@ -23,11 +24,11 @@ public class GestorMovimientosComunidades implements Serializable
 
 	private static final long serialVersionUID = -9157997142376942992L;
 
-	private String sCODTRN = "";
-	private String sCOTDOR = "";
-	private String sIDPROV = "";
+	private String sCODTRN = "EE41";
+	private String sCOTDOR = "000";
+	private String sIDPROV = "123456789";
 	private String sCOACCI = "";
-	private String sCOENGP = "";
+	private String sCOENGP = "00000";
 	private String sCOCLDO = "";
 	private String sNUDCOM = "";
 	private String sBITC10 = "";
@@ -91,17 +92,99 @@ public class GestorMovimientosComunidades implements Serializable
 	
 	public GestorMovimientosComunidades()
 	{
-		tiposdocumentoHM.put("D.N.I.",                     "1");
 		tiposdocumentoHM.put("C.I.F.",                     "2");
-		tiposdocumentoHM.put("Tarjeta Residente.",         "3");
-		tiposdocumentoHM.put("Pasaporte",                  "4");
 		tiposdocumentoHM.put("C.I.F país extranjero.",     "5");
-		tiposdocumentoHM.put("D.N.I país extranjero.",     "7");
-		tiposdocumentoHM.put("Tarj. identif. diplomática.","8");
-		tiposdocumentoHM.put("Menor.",                     "9");
-		tiposdocumentoHM.put("Otros persona física.",      "F");
 		tiposdocumentoHM.put("Otros persona jurídica.",    "J");
+	}
 
+	public void borrarCampos()
+	{
+		this.sCOCLDO = "";
+		this.sNUDCOM = "";
+		this.sNOMCOC = "";
+		this.sNODCCO = "";
+		this.sNOMPRC = "";
+		this.sNUTPRC = "";
+		this.sNOMADC = "";
+		this.sNUTADC = "";
+		this.sNODCAD = "";
+		this.sNUCCEN = "";
+		this.sNUCCOF = "";
+		this.sNUCCDI = "";
+		this.sNUCCNT = "";
+		this.sOBTEXC = "";
+	}
+
+	public void comprobarCOACES(ActionEvent actionEvent)
+	{
+		String sMethod = "cargarComunidad";
+		
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
+		FacesMessage msg;
+		
+		
+		
+		if (QMActivos.existeActivo(sCOACES))
+		{
+			msg = new FacesMessage("El activo '"+sCOACES.toUpperCase()+"' se encuentra registrado.",null);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El activo '"+sCOACES.toUpperCase()+"' se encuentra registrado.");
+		}
+		else
+		{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado aun. Por favor, revise los datos.",null);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado aun. Por favor, revise los datos.");
+
+		}
+			
+		
+	}
+	
+	
+	public void cargarComunidad(ActionEvent actionEvent)
+	{
+		String sMethod = "cargarComunidad";
+		
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
+		Comunidad comunidad = QMComunidades.getComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		
+		this.sCOCLDO = comunidad.getCOCLDO();
+		this.sNUDCOM = comunidad.getNUDCOM();
+		this.sNOMCOC = comunidad.getNOMCOC();
+		this.sNODCCO = comunidad.getNODCCO();
+		this.sNOMPRC = comunidad.getNOMPRC();
+		this.sNUTPRC = comunidad.getNUTPRC();
+		this.sNOMADC = comunidad.getNOMADC();
+		this.sNUTADC = comunidad.getNUTADC();
+		this.sNODCAD = comunidad.getNODCAD();
+		this.sNUCCEN = comunidad.getNUCCEN();
+		this.sNUCCOF = comunidad.getNUCCOF();
+		this.sNUCCDI = comunidad.getNUCCDI();
+		this.sNUCCNT = comunidad.getNUCCNT();
+		this.sOBTEXC = comunidad.getOBTEXC();
+
+		
+		FacesMessage msg;
+		
+		if (comunidad.getNUDCOM().equals(""))
+		{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
+		}
+		else
+		{
+			msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
+		}
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+	
+		
 	}
 	
 	public void registraMovimiento(ActionEvent actionEvent)
@@ -116,9 +199,13 @@ public class GestorMovimientosComunidades implements Serializable
 		
 		FacesMessage msg;
 		
-		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se ha realizado ninguna operativa con la comunidad '"+ comunidad.getNOMCOC() + "', se ha realizado una accion no permitida. Por favor, revise los datos.",null);
+		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se ha realizado ninguna operativa con la comunidad '"+ comunidad.getNOMCOC() + "'. Se ha realizado una accion no permitida. Por favor, revise los datos.",null);
 		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Comprobando estado...");
 		String sEstado = QMComunidades.getEstado(movimiento.getCOCLDO(), movimiento.getNUDCOM());
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
 		
 		if  ((sEstado.equals("P") && movimiento.getCOACCI().equals("B")) 
 				|| (sEstado.equals("P") && movimiento.getCOACCI().equals("M"))
@@ -164,8 +251,8 @@ public class GestorMovimientosComunidades implements Serializable
 			//OK
 			MovimientoComunidad movimiento_revisado = CLComunidades.revisaMovimiento(movimiento);
 			
-			if (movimiento_revisado.getCOACCI().equals("A"))
-			{
+			movimiento_revisado.pintaMovimientoComunidad();
+			
 				int indice = QMMovimientosComunidades.addMovimientoComunidad(movimiento_revisado);
 				if (indice == 0)
 				{
@@ -199,7 +286,6 @@ public class GestorMovimientosComunidades implements Serializable
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la relaccion de movimientos para '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.",null);
 					QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 				}
-			}
 			
 		}
 		

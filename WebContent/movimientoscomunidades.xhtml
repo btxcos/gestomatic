@@ -10,7 +10,7 @@
 		<h:form>
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Movimientos Comunidad">
+				<p:layoutUnit position="north" size="33%" header="Alta Comunidad">
 
 	
 								<h:panelGrid columns="2" cellpadding="5">
@@ -52,104 +52,66 @@
 				<p:layoutUnit position="center">
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
-									
-									<p:fieldset legend="Comunidad de proprietarios">
-										<h:panelGrid columns="1" cellpadding="5">
-													<p:selectOneRadio id="options" value="">  
-            								<f:selectItem itemLabel="Alta" itemValue="1" />  
-            								<f:selectItem itemLabel="Baja" itemValue="2" />  
-            								<f:selectItem itemLabel="Modificacion" itemValue="3" />  
-        									</p:selectOneRadio>											
-											<p:panel>
-												<h:panelGrid columns="7" cellpadding="5">
-													<h:outputText for="COCLDO" value="Documento: " />
-													<p:selectOneMenu id="COCLDO" value="#{GestorMovimientosComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
-														<f:selectItem itemLabel="Elija..." itemValue="" />
-														<f:selectItems value="#{GestorMovimientosComunidades.tiposdocumentoHM}" />
-														<f:validateLength minimum="1" /> 
-													</p:selectOneMenu>
-																										
-													<h:outputText for="NUDCOM" value="Numero: " />
-													<p:inputText id="NUDCOM" value="#{GestorMovimientosComunidades.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
-													</p:inputText>
-													<p:commandButton id="selectButton" icon="ui-icon-search"/>
-													
-													<p:message for="COCLDO" display="icon"/>
-													<p:message for="NUDCOM" display="icon"/>
-													
-												</h:panelGrid>
-										  </p:panel>
-											
 
-											<p:panel>                                  												
-												<h:panelGrid columns="3" cellpadding="5">											
-													<h:outputText for="NOMCOC" value="Nombre comunidad: " />
-													<p:inputText id="NOMCOC" value="#{GestorMovimientosComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
-														</p:inputText>
-													<p:message for="NOMCOC" display="icon"/>
-                      		
-													<h:outputText for="NODCCO"  value="Correo electronico: " />
-													<p:inputText id="NODCCO" value="#{GestorMovimientosComunidades.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta.">
-														<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-													</p:inputText>
-													<p:message for="NODCCO" display="icon"/>
-												</h:panelGrid>
-										  </p:panel>
-										  
+									<p:fieldset legend="Comunidad de proprietarios">
+										<h:panelGrid columns="3" cellpadding="5">
+											
+											<h:outputText for="COCLDO" value="Documento: " />
+											<p:selectOneMenu id="COCLDO" value="#{GestorMovimientoComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
+												<f:selectItem itemLabel="Elija..." itemValue="" />
+												<f:selectItems value="#{GestorMovimientoComunidades.tiposdocumentoHM}" />
+												<f:validateLength minimum="1" /> 
+											</p:selectOneMenu>
+											<p:message for="COCLDO" display="icon"/>
+											
+											<h:outputText for="NUDCOM" value="Numero: " />
+											<p:inputText id="NUDCOM" value="#{GestorMovimientoComunidades.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
+											</p:inputText>
+											<p:message for="NUDCOM" display="icon"/>
+
+											<h:outputText for="NOMCOC" value="Nombre comunidad: " />
+											<p:inputText id="NOMCOC" value="#{GestorMovimientoComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
+											</p:inputText>
+											<p:message for="NOMCOC" display="icon"/>
+
+											<h:outputText for="NODCCO"  value="Correo electronico: " />
+											<p:inputText id="NODCCO" value="#{GestorMovimientoComunidades.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta.">
+												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+											</p:inputText>
+											<p:message for="NODCCO" display="icon"/>
+
 										</h:panelGrid>
 									</p:fieldset>
-
-									<p:panel>
-										<h:panelGrid columns="5" cellpadding="5">
-
-												
-											<h:outputText for="COACES" value="COACES: " />
-											<p:inputText id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" size="9" maxlength="9">
-											</p:inputText>
-											<p:message for="COACES" display="icon"/>
-											<p:commandButton id="selectButton2" icon="ui-icon-search"/>	
-												
-											<p:selectOneRadio id="options2" value="">  
-            						<f:selectItem itemLabel="Alta" itemValue="1" />  
-            						<f:selectItem itemLabel="Baja" itemValue="2" />  
-            						<f:selectItem itemLabel="No incluir" itemValue="3" />  
-        							</p:selectOneRadio>		
-												
-
-										</h:panelGrid>
-									</p:panel>
-
 									<p:fieldset legend="Presidente">
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="NOMPRC" value="NOMPRC: " />
-											<p:inputText id="NOMPRC" value="#{GestorMovimientosComunidades.sNOMPRC}" size="55" maxlength="55">
+											<p:inputText id="NOMPRC" value="#{GestorMovimientoComunidades.sNOMPRC}" size="55" maxlength="55">
 											</p:inputText>
 											<p:message for="NOMPRC" display="icon"/>
 
 											<h:outputText for="NUTPRC" value="NUTPRC: " />
-											<p:inputText id="NUTPRC" value="#{GestorMovimientosComunidades.sNUTPRC}" size="14" maxlength="14">
+											<p:inputText id="NUTPRC" value="#{GestorMovimientoComunidades.sNUTPRC}" size="14" maxlength="14">
 											</p:inputText>
 											<p:message for="NUTPRC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
-
 									<p:fieldset legend="Administrador">
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="NOMADC" value="NOMADC: " />
-											<p:inputText id="NOMADC" value="#{GestorMovimientosComunidades.sNOMADC}" size="55" maxlength="55">
+											<p:inputText id="NOMADC" value="#{GestorMovimientoComunidades.sNOMADC}" size="55" maxlength="55">
 											</p:inputText>
 											<p:message for="NOMADC" display="icon"/>
 
 											<h:outputText for="NUTADC" value="NUTADC: " />
-											<p:inputText id="NUTADC" value="#{GestorMovimientosComunidades.sNUTADC}" size="14" maxlength="14">
+											<p:inputText id="NUTADC" value="#{GestorMovimientoComunidades.sNUTADC}" size="14" maxlength="14">
 											</p:inputText>
 											<p:message for="NUTADC" display="icon"/>
 
 											<h:outputText for="NODCAD" value="NODCAD: " />
-											<p:inputText id="NODCAD" value="#{GestorMovimientosComunidades.sNODCAD}" size="60" maxlength="60" validatorMessage="La direccion de correo del administrador es incorrecta." >
+											<p:inputText id="NODCAD" value="#{GestorMovimientoComunidades.sNODCAD}" size="60" maxlength="60" validatorMessage="La direccion de correo del administrador es incorrecta." >
 												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 											</p:inputText>
 											<p:message for="NODCAD" display="icon"/>
@@ -157,53 +119,49 @@
 
 										</h:panelGrid>
 									</p:fieldset>
-
 									<p:fieldset legend="Cuenta corriente de la Comunidad">
-										<h:panelGrid columns="9" cellpadding="5">
+										<h:panelGrid columns="6" cellpadding="5">
 
 											<h:outputText for="NUCCNT" value="NUCC: " />
 
-											<p:inputMask id="NUCCEN" validatorMessage="El digito de entidad debe tener 4 digitos" value="#{GestorMovimientosComunidades.sNUCCEN}" mask="9999" size="4" required="true" requiredMessage="Falta el codigo de entidad de la cuenta de la comunidad.">
+											<p:inputMask id="NUCCEN" validatorMessage="El digito de entidad debe tener 4 digitos" value="#{GestorMovimientoComunidades.sNUCCEN}" mask="9999" size="4" required="true" requiredMessage="Falta el codigo de entidad de la cuenta de la comunidad.">
 												<f:validateLength minimum="4"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCOF" validatorMessage="El numero de oficina debe tener 4 digitos" value="#{GestorMovimientosComunidades.sNUCCOF}" mask="9999" size="4" required="true" requiredMessage="Falta el codigo de oficina de la cuenta de la comunidad.">
+											<p:inputMask id="NUCCOF" validatorMessage="El numero de oficina debe tener 4 digitos" value="#{GestorMovimientoComunidades.sNUCCOF}" mask="9999" size="4" required="true" requiredMessage="Falta el codigo de oficina de la cuenta de la comunidad.">
 												<f:validateLength minimum="4"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCDI" validatorMessage="El digito de control debe tener 2 digitos" value="#{GestorMovimientosComunidades.sNUCCDI}" mask="99" size="2" required="true" requiredMessage="Falta el digito de control de la cuenta de la comunidad.">
+											<p:inputMask id="NUCCDI" validatorMessage="El digito de control debe tener 2 digitos" value="#{GestorMovimientoComunidades.sNUCCDI}" mask="99" size="2" required="true" requiredMessage="Falta el digito de control de la cuenta de la comunidad.">
 												<f:validateLength minimum="2"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCNT" validatorMessage="El numero de cuenta debe tener 10 digitos" value="#{GestorMovimientosComunidades.sNUCCNT}" mask="9999999999" size="10" required="true" requiredMessage="Falta el numero de cuenta de la comunidad.">
+											<p:inputMask id="NUCCNT" validatorMessage="El numero de cuenta debe tener 10 digitos" value="#{GestorMovimientoComunidades.sNUCCNT}" mask="9999999999" size="10" required="true" requiredMessage="Falta el numero de cuenta de la comunidad.">
 												<f:validateLength minimum="10"/>
 											</p:inputMask>
-											<p:message for="NUCCEN" display="icon"/>
-											<p:message for="NUCCOF" display="icon"/>
-											<p:message for="NUCCDI" display="icon"/>
 											<p:message for="NUCCNT" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
-									
+
 									<p:fieldset legend="Observaciones">
 										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="OBTEXC" value="OBTEXC: " />
 
-											<p:inputText id="OBTEXC" value="#{GestorMovimientosComunidades.sOBTEXC}" size="110" maxlength="110" >
+											<p:inputText id="OBTEXC" value="#{GestorMovimientoComunidades.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
 											<p:message for="OBTEXC" display="icon"/>
-												
-												<p:messages id="msgs"/>
-													
+
+											 <p:messages id="msgs"/>
+
 										</h:panelGrid>
 									</p:fieldset>
 
 						</h:panelGrid>
 					</p:panel>
 					<p:commandButton value="Limpiar Plantilla" type="reset" />
-					<p:commandButton value="Registrar Datos" update="panel" actionListener="#{GestorMovimientosComunidades.registraMovimiento}" />
+					<p:commandButton value="Registrar Datos" update="panel" actionListener="#{GestorMovimientoComunidades.registraMovimiento}" />
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>

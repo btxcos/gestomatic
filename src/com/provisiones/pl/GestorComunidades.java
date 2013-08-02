@@ -39,17 +39,9 @@ public class GestorComunidades implements Serializable
 	
 	public GestorComunidades()
 	{
-		tiposdocumentoHM.put("D.N.I.",                     "1");
 		tiposdocumentoHM.put("C.I.F.",                     "2");
-		tiposdocumentoHM.put("Tarjeta Residente.",         "3");
-		tiposdocumentoHM.put("Pasaporte",                  "4");
 		tiposdocumentoHM.put("C.I.F país extranjero.",     "5");
-		tiposdocumentoHM.put("D.N.I país extranjero.",     "7");
-		tiposdocumentoHM.put("Tarj. identif. diplomática.","8");
-		tiposdocumentoHM.put("Menor.",                     "9");
-		tiposdocumentoHM.put("Otros persona física.",      "F");
 		tiposdocumentoHM.put("Otros persona jurídica.",    "J");
-
 	}
 	
 	
