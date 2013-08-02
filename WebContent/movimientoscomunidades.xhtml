@@ -52,15 +52,16 @@
 				<p:layoutUnit position="center">
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
+									
 									<p:fieldset legend="Comunidad de proprietarios">
 										<h:panelGrid columns="1" cellpadding="5">
-													<p:selectOneRadio id="options" value="#{formBean.number}">  
+													<p:selectOneRadio id="options" value="">  
             								<f:selectItem itemLabel="Alta" itemValue="1" />  
             								<f:selectItem itemLabel="Baja" itemValue="2" />  
             								<f:selectItem itemLabel="Modificacion" itemValue="3" />  
         									</p:selectOneRadio>											
 											<p:panel>
-												<h:panelGrid columns="5" cellpadding="5">
+												<h:panelGrid columns="7" cellpadding="5">
 													<h:outputText for="COCLDO" value="Documento: " />
 													<p:selectOneMenu id="COCLDO" value="#{GestorMovimientosComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
@@ -71,19 +72,20 @@
 													<h:outputText for="NUDCOM" value="Numero: " />
 													<p:inputText id="NUDCOM" value="#{GestorMovimientosComunidades.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
 													</p:inputText>
-													<p:commandButton id="selectButton" icon="ui-icon-search" actionListener="#{GestorMovimientosComunidades.registraMovimiento}"/>
+													<p:commandButton id="selectButton" icon="ui-icon-search"/>
+													
+													<p:message for="COCLDO" display="icon"/>
+													<p:message for="NUDCOM" display="icon"/>
+													
 												</h:panelGrid>
 										  </p:panel>
-											<p:message for="COCLDO" display="icon"/>
-											<p:message for="NUDCOM" display="icon"/>
+											
 
 											<p:panel>                                  												
 												<h:panelGrid columns="3" cellpadding="5">											
 													<h:outputText for="NOMCOC" value="Nombre comunidad: " />
-													<p:inplace id="ajaxInplace" editor="true">  
-														<p:inputText id="NOMCOC" value="#{GestorMovimientosComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
+													<p:inputText id="NOMCOC" value="#{GestorMovimientosComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
 														</p:inputText>
-													</p:inplace> 
 													<p:message for="NOMCOC" display="icon"/>
                       		
 													<h:outputText for="NODCCO"  value="Correo electronico: " />
@@ -93,22 +95,30 @@
 													<p:message for="NODCCO" display="icon"/>
 												</h:panelGrid>
 										  </p:panel>
+										  
 										</h:panelGrid>
 									</p:fieldset>
+
 									<p:panel>
-										<h:panelGrid columns="6" cellpadding="5">
+										<h:panelGrid columns="5" cellpadding="5">
 
-											<h:outputText for="COACES" value="COACES: " />
-
-											<p:inputMask id="COACES" value="#{GestorMovimientosComunidades.sNUCCEN}" size="9" required="true" requiredMessage="Falta el codigo de activo.">
-											</p:inputMask>
-											 <p:commandButton id="selectButton" icon="ui-icon-search" actionListener="#{GestorMovimientosComunidades.registraMovimiento}"/>
-											<p:message for="COACES" display="icon"/>
 												
-												<p:messages id="msgs"/>
+											<h:outputText for="COACES" value="COACES: " />
+											<p:inputText id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" size="9" maxlength="9">
+											</p:inputText>
+											<p:message for="COACES" display="icon"/>
+											<p:commandButton id="selectButton2" icon="ui-icon-search"/>	
+												
+											<p:selectOneRadio id="options2" value="">  
+            						<f:selectItem itemLabel="Alta" itemValue="1" />  
+            						<f:selectItem itemLabel="Baja" itemValue="2" />  
+            						<f:selectItem itemLabel="No incluir" itemValue="3" />  
+        							</p:selectOneRadio>		
+												
 
 										</h:panelGrid>
 									</p:panel>
+
 									<p:fieldset legend="Presidente">
 										<h:panelGrid columns="3" cellpadding="5">
 
@@ -124,6 +134,7 @@
 
 										</h:panelGrid>
 									</p:fieldset>
+
 									<p:fieldset legend="Administrador">
 										<h:panelGrid columns="3" cellpadding="5">
 
@@ -146,8 +157,9 @@
 
 										</h:panelGrid>
 									</p:fieldset>
+
 									<p:fieldset legend="Cuenta corriente de la Comunidad">
-										<h:panelGrid columns="6" cellpadding="5">
+										<h:panelGrid columns="9" cellpadding="5">
 
 											<h:outputText for="NUCCNT" value="NUCC: " />
 
@@ -166,11 +178,14 @@
 											<p:inputMask id="NUCCNT" validatorMessage="El numero de cuenta debe tener 10 digitos" value="#{GestorMovimientosComunidades.sNUCCNT}" mask="9999999999" size="10" required="true" requiredMessage="Falta el numero de cuenta de la comunidad.">
 												<f:validateLength minimum="10"/>
 											</p:inputMask>
+											<p:message for="NUCCEN" display="icon"/>
+											<p:message for="NUCCOF" display="icon"/>
+											<p:message for="NUCCDI" display="icon"/>
 											<p:message for="NUCCNT" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
-
+									
 									<p:fieldset legend="Observaciones">
 										<h:panelGrid columns="2" cellpadding="5">
 
@@ -179,8 +194,12 @@
 											<p:inputText id="OBTEXC" value="#{GestorMovimientosComunidades.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
 											<p:message for="OBTEXC" display="icon"/>
+												
+												<p:messages id="msgs"/>
+													
 										</h:panelGrid>
 									</p:fieldset>
+
 						</h:panelGrid>
 					</p:panel>
 					<p:commandButton value="Limpiar Plantilla" type="reset" />

@@ -6,17 +6,20 @@ import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMListaComunidades;
 import com.provisiones.dal.qm.QMMovimientosComunidades;
 import com.provisiones.ll.CLComunidades;
+import com.provisiones.misc.Utils;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.MovimientoComunidad;
 
 public class GestorMovimientosComunidades implements Serializable 
 {
+	static String sClassName = GestorMovimientosComunidades.class.getName();
 
 	private static final long serialVersionUID = -9157997142376942992L;
 
@@ -51,6 +54,38 @@ public class GestorMovimientosComunidades implements Serializable
 	private String sBITC09 = "";
 	private String sOBTEXC = "";
 	private String sOBDEER = "";
+	
+	/*private String sCODTRN = "CODTRN";
+	private String sCOTDOR = "COTDOR";
+	private String sIDPROV = "IDPROV";
+	private String sCOACCI = "COACCI";
+	private String sCOENGP = "COENGP";
+	private String sCOCLDO = "COCLDO";
+	private String sNUDCOM = "NUDCOM";
+	private String sBITC10 = "BITC10";
+	private String sCOACES = "COACES";
+	private String sBITC01 = "BITC01";
+	private String sNOMCOC = "NOMCOC";
+	private String sBITC02 = "BITC02";
+	private String sNODCCO = "NODCCO";
+	private String sBITC03 = "BITC03";
+	private String sNOMPRC = "NOMPRC";
+	private String sBITC04 = "BITC04";
+	private String sNUTPRC = "NUTPRC";
+	private String sBITC05 = "BITC05";
+	private String sNOMADC = "NOMADC";
+	private String sBITC06 = "BITC06";
+	private String sNUTADC = "NUTADC";
+	private String sBITC07 = "BITC07";
+	private String sNODCAD = "NODCAD";
+	private String sBITC08 = "BITC08";
+	private String sNUCCEN = "NUCCEN";
+	private String sNUCCOF = "NUCCOF";
+	private String sNUCCDI = "NUCCDI";
+	private String sNUCCNT = "NUCCNT";
+	private String sBITC09 = "BITC09";
+	private String sOBTEXC = "OBTEXC";
+	private String sOBDEER = "OBDEER";*/
 
 	private Map<String,String> tiposdocumentoHM = new LinkedHashMap<String, String>();
 	
@@ -69,9 +104,11 @@ public class GestorMovimientosComunidades implements Serializable
 
 	}
 	
-	public void registraMovimiento()
+	public void registraMovimiento(ActionEvent actionEvent)
 	{
+		String sMethod = "registraMovimiento";
 		
+		Utils.standardIO2File("");//Salida por fichero de texto
 		
 		MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
 		
@@ -89,31 +126,37 @@ public class GestorMovimientosComunidades implements Serializable
 				|| (sEstado.equals("P") && movimiento.getCOACCI().equals("X")))
 		{
 			//error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la comunidad '"+ comunidad.getNOMCOC() + "', se ha realizado una accion no permitida. Por favor, revise los datos.");
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la comunidad '"+ comunidad.getNOMCOC() + "', se ha realizado una accion no permitida. Por favor, revise los datos.",null);
 		}
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
 		{
 			//error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al modificar la comunidad '"+ comunidad.getNOMCOC() + "', ya esta dada de alta. Por favor, revise los datos.");
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar la comunidad '"+ comunidad.getNOMCOC() + "', ya esta dada de alta. Por favor, revise los datos.",null);
 		}
 		else if ((sEstado.equals("A") && movimiento.getCOACCI().equals("X") && movimiento.getCOACES().equals(""))
 				|| (sEstado.equals("A") && movimiento.getCOACCI().equals("E") && movimiento.getCOACES().equals("")))
 		{
 			//error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al modificar un activo de la comunidad '"+ comunidad.getNOMCOC() + "', el activo esta vacio. Por favor, revise los datos.");
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar un activo de la comunidad '"+ comunidad.getNOMCOC() + "', el activo esta vacio. Por favor, revise los datos.",null);
 		}
 		else if (sEstado.equals("B"))
 		{
 			//error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+ comunidad.getNOMCOC() + "' fue dada de baja. Por favor, revise los datos.");
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La comunidad '"+ comunidad.getNOMCOC() + "' fue dada de baja. Por favor, revise los datos.",null);
 		}
 		else if (sEstado.equals(""))
 		{
 			//error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "No existe la comunidad '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.");
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No existe la comunidad '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.",null);
 		}
 		else if (movimiento.getCOACCI().equals("B") && QMCuotas.tieneCuotas(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 		{
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "No puede darse de baja la comunidad '"+ comunidad.getNOMCOC() + "' por que tiene cuotas asignadas. Por favor, revise los datos.");
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No puede darse de baja la comunidad '"+ comunidad.getNOMCOC() + "' por que tiene cuotas asignadas. Por favor, revise los datos.",null);
 		}
 		else
@@ -127,6 +170,7 @@ public class GestorMovimientosComunidades implements Serializable
 				if (indice == 0)
 				{
 					//error
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta un movimiento en la comunidad '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.");
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta un movimiento en la comunidad '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.",null);
 				}
 				else if (QMListaComunidades.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
@@ -135,11 +179,13 @@ public class GestorMovimientosComunidades implements Serializable
 					if (QMComunidades.setEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), "A"))
 					{
 						//OK
+						com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El movimiento numero "+ indice +" de la comunidad '"+ comunidad.getNOMCOC() + "', con documento '"+comunidad.getNUDCOM()+"', se ha creado correctamente.");
 						msg = new FacesMessage("El movimiento numero "+ indice +" de la comunidad '"+ comunidad.getNOMCOC() + "', con documento '"+comunidad.getNUDCOM()+"', se ha creado correctamente.");
 					}
 					else
 					{
 						//error y rollback
+						com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al actualizar el estado de la comunidad '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.");
 						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al actualizar el estado de la comunidad '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.",null);
 						QMListaComunidades.delRelacionComunidad(Integer.toString(indice));
 						QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
@@ -149,6 +195,7 @@ public class GestorMovimientosComunidades implements Serializable
 				else
 				{
 					//error y rollback
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la relaccion de movimientos para '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.");
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la relaccion de movimientos para '"+ comunidad.getNOMCOC() + "'. Por favor, revise los datos.",null);
 					QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 				}
@@ -156,6 +203,7 @@ public class GestorMovimientosComunidades implements Serializable
 			
 		}
 		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
