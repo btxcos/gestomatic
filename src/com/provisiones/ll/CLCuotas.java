@@ -52,7 +52,7 @@ public class CLCuotas
 			cuota.setOBDEER(sBKOBDEER);
 			
 			QMMovimientosCuotas.modMovimientoCuota(cuota, sCodMovimiento);
-			QMListaCuotas.setValidado(cuota.getCOACES(),cuota.getNUDCOM(), cuota.getCOSBAC(), sCodMovimiento, sValidado);
+			QMListaCuotas.setValidado(cuota.getCOACES(),cuota.getCOCLDO(),cuota.getNUDCOM(), cuota.getCOSBAC(), sCodMovimiento, sValidado);
 		}
 		else 
 		{

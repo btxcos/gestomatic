@@ -56,25 +56,25 @@
 									<p:fieldset legend="Comunidad de proprietarios">
 										<h:panelGrid columns="3" cellpadding="5">
 											
-											<h:outputText for="COCLDO" value="Documento: " />
+											<h:outputText for="COCLDO" value="Tipo de documento: " />
 											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
-												<f:selectItem itemLabel="Elija..." itemValue="" />
+												<f:selectItem itemLabel="Documento" itemValue="" />
 												<f:selectItems value="#{GestorComunidades.tiposdocumentoHM}" />
 												<f:validateLength minimum="1" /> 
 											</p:selectOneMenu>
 											<p:message for="COCLDO" display="icon"/>
 											
-											<h:outputText for="NUDCOM" value="Numero: " />
+											<h:outputText for="NUDCOM" value="NUDCOM: " />
 											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
 											</p:inputText>
 											<p:message for="NUDCOM" display="icon"/>
 
-											<h:outputText for="NOMCOC" value="Nombre comunidad: " />
+											<h:outputText for="NOMCOC" value="NOMCOC: " />
 											<p:inputText id="NOMCOC" value="#{GestorComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
 											</p:inputText>
 											<p:message for="NOMCOC" display="icon"/>
 
-											<h:outputText for="NODCCO"  value="Correo electronico: " />
+											<h:outputText for="NODCCO"  value="NODCCO: " />
 											<p:inputText id="NODCCO" value="#{GestorComunidades.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta.">
 												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 											</p:inputText>

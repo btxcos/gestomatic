@@ -18,12 +18,13 @@ public class QMListaCuotas
 	static String sTable = "lista_cuotas_multi";
 
 	static String sField1 = "cod_coaces";
-	static String sField2 = "cod_nudcom";
-	static String sField3 = "cod_cosbac";
-	static String sField4 = "cod_movimiento";
-	static String sField5 = "cod_validado";
+	static String sField2 = "cod_cocldo";
+	static String sField3 = "cod_nudcom";
+	static String sField4 = "cod_cosbac";
+	static String sField5 = "cod_movimiento";
+	static String sField6 = "cod_validado";
 
-	public static boolean addRelacionCuotas(String sCodCOACES, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento) 
+	public static boolean addRelacionCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento) 
 	{
 		String sMethod = "addRelacionCuotas";
 		Statement stmt = null;
@@ -40,10 +41,12 @@ public class QMListaCuotas
 			+ sField1 + ","
 			+ sField2 + ","
 			+ sField3 + "," 
-			+ sField4 + "," 
-			+ sField5 + ") " 
+			+ sField4 + ","
+			+ sField5 + ","
+			+ sField6 + ") " 
 			+ "VALUES ('" 
 			+ sCodCOACES + "','"
+			+ sCodCOCLDO + "','"
 			+ sCodNUDCOM + "','"
 			+ sCodCOSBAC + "','"
 			+ sCodMovimiento + "','"
@@ -81,7 +84,7 @@ public class QMListaCuotas
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField4 + " = '" + sCodMovimiento +"')");
+					" WHERE (" + sField5 + " = '" + sCodMovimiento +"')");
 		} 
 		catch (SQLException ex) 
 		{
@@ -101,7 +104,7 @@ public class QMListaCuotas
 		return bSalida;
 	}
 
-	public static ArrayList<String>  getCuotas(String sCodCOACES, String sCodNUDCOM, String sCodCOSBAC) 
+	public static ArrayList<String>  getCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC) 
 	{
 		String sMethod = "getCuotas";
 
@@ -125,16 +128,18 @@ public class QMListaCuotas
 
 			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND" + sField2 + " = '" + sCodNUDCOM + "'" +
-							"AND" + sField3 + " = '" + sCodCOSBAC + "' )");
+							"AND" + sField2 + " = '" + sCodCOCLDO + "'" +
+							"AND" + sField3 + " = '" + sCodNUDCOM + "'" +
+							"AND" + sField4 + " = '" + sCodCOSBAC + "' )");
 
 			rs = pstmt.executeQuery();
 			
 			
 			System.out.println("===================================================");
 			System.out.println(sField1 + ": " + sCodCOACES);
-			System.out.println(sField2 + ": " + sCodNUDCOM);
-			System.out.println(sField3 + ": " + sCodCOSBAC);
+			System.out.println(sField2 + ": " + sCodCOCLDO);
+			System.out.println(sField3 + ": " + sCodNUDCOM);
+			System.out.println(sField4 + ": " + sCodCOSBAC);
 
 			
 
@@ -179,7 +184,7 @@ public class QMListaCuotas
 		return result;
 	}
 	
-	public static ArrayList<String>  getCuotasPendientes(String sCodCOACES, String sCodNUDCOM, String sCodCOSBAC) 
+	public static ArrayList<String>  getCuotasPendientes(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC) 
 	{
 		String sMethod = "getCuotasPendientes";
 
@@ -201,20 +206,22 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + sField5 + "  FROM " + sTable + 
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND" + sField2 + " = '" + sCodNUDCOM + "' " +
-							"AND" + sField3 + " = '" + sCodCOSBAC + "' " +
-							"AND" + sField5 + " = '" + "P" + "' )");
+							"AND" + sField2 + " = '" + sCodCOCLDO + "' " +
+							"AND" + sField3 + " = '" + sCodNUDCOM + "' " +
+							"AND" + sField4 + " = '" + sCodCOSBAC + "' " +
+							"AND" + sField6 + " = '" + "P" + "' )");
 
 			rs = pstmt.executeQuery();
 			
 			
 			System.out.println("===================================================");
 			System.out.println(sField1 + ": " + sCodCOACES);
-			System.out.println(sField2 + ": " + sCodNUDCOM);
-			System.out.println(sField3 + ": " + sCodCOSBAC);
+			System.out.println(sField2 + ": " + sCodCOCLDO);
+			System.out.println(sField3 + ": " + sCodNUDCOM);
+			System.out.println(sField4 + ": " + sCodCOSBAC);
 
 			
 
@@ -228,7 +235,7 @@ public class QMListaCuotas
 				{
 					found = true;
 
-					result.add(rs.getString(sField4));
+					result.add(rs.getString(sField5));
 					System.out.println(result.get(i));
 
 					System.out.println("===================================================");
@@ -259,7 +266,7 @@ public class QMListaCuotas
 		return result;
 	}
 
-	public static boolean setValidado(String sCodCOACES, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento, String sValidado)
 	{
 		String sMethod = "setValidado";
 		Statement stmt = null;
@@ -273,13 +280,14 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField5 + " = '"+ sValidado + 
+					+ sField6 + " = '"+ sValidado + 
 					"' "+
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					"AND" + sField2 + " = '" + sCodNUDCOM + "' " +
-					"AND" + sField3 + " = '" + sCodCOSBAC + "' " +
-					"AND" + sField4 + " = '" + sCodMovimiento +"' )");
+					"AND" + sField2 + " = '" + sCodCOCLDO + "' " +
+					"AND" + sField3 + " = '" + sCodNUDCOM + "' " +
+					"AND" + sField4 + " = '" + sCodCOSBAC + "' " +
+					"AND" + sField5 + " = '" + sCodMovimiento +"' )");
 
 			
 		} 
@@ -301,7 +309,7 @@ public class QMListaCuotas
 		return bSalida;
 	}
 	
-	public static String getValidado(String sCodCOACES, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento)
+	public static String getValidado(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento)
 	{
 		String sMethod = "getValidado";
 
@@ -324,12 +332,13 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField5 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					"AND" + sField2 + " = '" + sCodNUDCOM + "' " +
-					"AND" + sField3 + " = '" + sCodCOSBAC + "' " +
-					"AND" + sField4 + " = '" + sCodMovimiento +"' )");
+					"AND" + sField2 + " = '" + sCodCOCLDO + "' " +
+					"AND" + sField3 + " = '" + sCodNUDCOM + "' " +
+					"AND" + sField4 + " = '" + sCodCOSBAC + "' " +
+					"AND" + sField5 + " = '" + sCodMovimiento +"' )");
 
 
 			rs = pstmt.executeQuery();
@@ -345,9 +354,10 @@ public class QMListaCuotas
 					sValidado = rs.getString(sField5);
 					System.out.println("===================================================");
 					System.out.println(sField1 + ": " + sCodCOACES);
-					System.out.println(sField2 + ": " + sCodNUDCOM);
-					System.out.println(sField3 + ": " + sCodCOSBAC);
-					System.out.println(sField4 + ": " + sCodMovimiento);
+					System.out.println(sField2 + ": " + sCodCOCLDO);
+					System.out.println(sField3 + ": " + sCodNUDCOM);
+					System.out.println(sField4 + ": " + sCodCOSBAC);
+					System.out.println(sField5 + ": " + sCodMovimiento);
 
 				}
 			}

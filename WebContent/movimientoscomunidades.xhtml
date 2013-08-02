@@ -78,16 +78,19 @@
 											<p:message for="NUDCOM" display="icon"/>
 
 											<p:panel>                                  												
-												<h:panelGrid columns="3" cellpadding="5">											<h:outputText for="NOMCOC" value="Nombre comunidad: " />
-											<p:inputText id="NOMCOC" value="#{GestorMovimientosComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
-											</p:inputText>
-											<p:message for="NOMCOC" display="icon"/>
-
-											<h:outputText for="NODCCO"  value="Correo electronico: " />
-											<p:inputText id="NODCCO" value="#{GestorMovimientosComunidades.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta.">
-												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-											</p:inputText>
-											<p:message for="NODCCO" display="icon"/>
+												<h:panelGrid columns="3" cellpadding="5">											
+													<h:outputText for="NOMCOC" value="Nombre comunidad: " />
+													<p:inplace id="ajaxInplace" editor="true">  
+														<p:inputText id="NOMCOC" value="#{GestorMovimientosComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
+														</p:inputText>
+													</p:inplace> 
+													<p:message for="NOMCOC" display="icon"/>
+                      		
+													<h:outputText for="NODCCO"  value="Correo electronico: " />
+													<p:inputText id="NODCCO" value="#{GestorMovimientosComunidades.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta.">
+														<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+													</p:inputText>
+													<p:message for="NODCCO" display="icon"/>
 												</h:panelGrid>
 										  </p:panel>
 										</h:panelGrid>

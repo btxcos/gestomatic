@@ -106,7 +106,7 @@ public class QMComunidades
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
-	public static boolean modComunidad(Comunidad NuevaComunidad, String sComunidadID)
+	public static boolean modComunidad(Comunidad NuevaComunidad, String sCodCOCLDO, String sCodNUDCOM)
 	{
 		String sMethod = "modComunidad";
 		Statement stmt = null;
@@ -120,7 +120,7 @@ public class QMComunidades
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField1  + " = '"+ NuevaComunidad.getCOCLDO() + "', "
+					//+ sField1  + " = '"+ NuevaComunidad.getCOCLDO() + "', "
 					//+ sField2  + " = '"+ NuevaComunidad.getNUDCOM() + "', "
 					+ sField3  + " = '"+ NuevaComunidad.getNOMCOC() + "', "
 					+ sField4  + " = '"+ NuevaComunidad.getNODCCO() + "', "
@@ -135,9 +135,10 @@ public class QMComunidades
 					+ sField13 + " = '"+ NuevaComunidad.getNUCCNT() + "', "
 					+ sField14 + " = '"+ NuevaComunidad.getOBTEXC() +
 					"' "+
-					" WHERE "
-					+ sField2 + " = '"+ sComunidadID +"'");
-			
+					" WHERE " +
+					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
+						sField2 + " = '"+ sCodNUDCOM +"')");
+
 		} 
 		catch (SQLException ex) 
 		{
@@ -157,7 +158,7 @@ public class QMComunidades
 		return bSalida;
 	}
 
-	public static boolean delComunidad(String sComunidadID)
+	public static boolean delComunidad(String sCodCOCLDO, String sCodNUDCOM)
 	{
 		String sMethod = "delComunidad";
 		Statement stmt = null;
@@ -171,7 +172,9 @@ public class QMComunidades
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField2 + " = '" + sComunidadID + "' )");
+					" WHERE " +
+					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
+					sField2 + " = '"+ sCodNUDCOM +"')");
 		} 
 		catch (SQLException ex) 
 		{
@@ -191,7 +194,7 @@ public class QMComunidades
 		return bSalida;
 	}
 
-	public static Comunidad getComunidad(String sComunidadID)
+	public static Comunidad getComunidad(String sCodCOCLDO, String sCodNUDCOM)
 	{//pendiente de coaces, de la tabla activos
 		
 		String sMethod = "getComunidad";
@@ -242,12 +245,15 @@ public class QMComunidades
 				       + sField14 +               
        
 			"  FROM " + sTable + 
-					" WHERE (" + sField2 + " = '" + sComunidadID	+ "')");
+					" WHERE " +
+					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
+					sField2 + " = '"+ sCodNUDCOM +"')");
 
 			rs = pstmt.executeQuery();
 
 			System.out.println("===================================================");
-			System.out.println(sField2 + ": " + sComunidadID);
+			System.out.println(sField1 + ": " + sCodCOCLDO);
+			System.out.println(sField2 + ": " + sCodNUDCOM);
 
 			if (rs != null) 
 			{
@@ -317,7 +323,7 @@ public class QMComunidades
 				sOBTEXC);
 	}
 	
-	public static boolean setEstado(String sCodNUDCOM, String sEstado)
+	public static boolean setEstado(String sCodCOCLDO, String sCodNUDCOM, String sEstado)
 	{
 		String sMethod = "setEstado";
 		Statement stmt = null;
@@ -334,7 +340,8 @@ public class QMComunidades
 					+ sField15 + " = '"+ sEstado + 
 					"' "+
 					" WHERE "+
-					"(" + sField2 + " = '" + sCodNUDCOM + "')");
+					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
+					sField2 + " = '"+ sCodNUDCOM +"')");
 			
 		} 
 		catch (SQLException ex) 
@@ -355,7 +362,7 @@ public class QMComunidades
 		return bSalida;
 	}
 	
-	public static String getEstado(String sCodNUDCOM)
+	public static String getEstado(String sCodCOCLDO, String sCodNUDCOM)
 	{
 		String sMethod = "getEstado";
 
@@ -380,7 +387,8 @@ public class QMComunidades
 
 			pstmt = conn.prepareStatement("SELECT " + sField15 + "  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField2 + " = '" + sCodNUDCOM + "')");
+					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
+					sField2 + " = '"+ sCodNUDCOM +"')");
 
 			rs = pstmt.executeQuery();
 			
