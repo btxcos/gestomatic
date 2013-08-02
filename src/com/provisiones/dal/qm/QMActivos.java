@@ -13,6 +13,8 @@ import java.sql.Statement;
 public class QMActivos
 {
 	static String sClassName = QMActivos.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "ac_activos_tbl";
 
@@ -121,6 +123,8 @@ public class QMActivos
 
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		try 
 		{
@@ -313,6 +317,8 @@ public class QMActivos
 				       + NuevoActivo.getBIOBNU() + "','"  
 				       + NuevoActivo.getPOBRAR() + "' )");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
@@ -344,6 +350,8 @@ public class QMActivos
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		try 
 		{
@@ -443,10 +451,13 @@ public class QMActivos
 					+ sField92 + " = '"+ NuevoActivo.getPOBRAR() + "' "+
 					" WHERE "
 					+ sField1 + " = '"+ sCodCOACES +"'");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 					
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoActivo.getCOACES());
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -473,6 +484,8 @@ public class QMActivos
 		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -480,9 +493,12 @@ public class QMActivos
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' )");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -606,6 +622,8 @@ public class QMActivos
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -706,11 +724,14 @@ public class QMActivos
 				       + sField92 +        
 			"  FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES	+ "')");
+			
+			
 
 			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
-			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sCodCOACES);
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
 
 			if (rs != null) 
 			{
@@ -812,22 +833,19 @@ public class QMActivos
 					sBIOBNU = rs.getString(sField91);
 					sPOBRAR = rs.getString(sField92);
 
-
-					//System.out.println(sField2 + ": " + sApplication);
-					//System.out.println(sField3 + ": " + sContactCode);
-					//System.out.println(sField4 + ": " + sProjectCode);
-					//System.out.println("===================================================");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

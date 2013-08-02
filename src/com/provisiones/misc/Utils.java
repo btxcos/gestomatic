@@ -15,7 +15,10 @@ public class Utils
 	
 	public static void debugTrace(boolean bEnable, String sClass, String sMethod, String sMsg)
 	{
-		if (bEnable)
+		boolean bContrazas = true;
+		//String sTimeStamp = "";
+		
+		if (bContrazas && bEnable)
 		{
 			System.out.println("["+sClass+"."+sMethod+"] "+sMsg);
 		}

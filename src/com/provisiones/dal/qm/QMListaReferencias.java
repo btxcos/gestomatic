@@ -13,6 +13,8 @@ import java.sql.Statement;
 public class QMListaReferencias
 {
 	static String sClassName = QMListaReferencias.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "lista_referencias_multi";
 
@@ -31,8 +33,11 @@ public class QMListaReferencias
 		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
-		try {
+		try 
+		{
 
 			stmt = conn.createStatement();
 			stmt.executeUpdate("INSERT INTO " + sTable + " ("
@@ -45,13 +50,12 @@ public class QMListaReferencias
 				       + sCodCOACES + "','"
 				       + sCodMovimiento + "','"
 				       + ValoresDefecto.DEF_VALIDADO + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
 
-
-			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaReferencia.getCOGRAP());
-			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
@@ -80,6 +84,8 @@ public class QMListaReferencias
 		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -87,9 +93,12 @@ public class QMListaReferencias
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE " +
 					"(" + sField3 + " = '" + sCodMovimiento	+ "')");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -122,6 +131,8 @@ public class QMListaReferencias
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -140,16 +151,23 @@ public class QMListaReferencias
 
 			rs = pstmt.executeQuery();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 			found = (rs != null); 
 
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
+			else
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -175,6 +193,8 @@ public class QMListaReferencias
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -187,9 +207,14 @@ public class QMListaReferencias
 					+ sField2 + " = '" + sCodCOACES + "' AND " 
 					+ sField3 + " = '" + sCodMovimiento	+ "')");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -223,6 +248,8 @@ public class QMListaReferencias
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -237,6 +264,7 @@ public class QMListaReferencias
 
 			rs = pstmt.executeQuery();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -246,8 +274,10 @@ public class QMListaReferencias
 					found = true;
 
 					sValidado = rs.getString(sField4);
-					System.out.println("===================================================");
-					System.out.println(sField4 + ": " + sValidado);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField4 + ": " + sValidado);
 
 
 				}
@@ -255,12 +285,15 @@ public class QMListaReferencias
 			if (found == false) 
 			{
  
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

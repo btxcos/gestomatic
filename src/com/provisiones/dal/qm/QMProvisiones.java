@@ -13,6 +13,8 @@ import com.provisiones.types.Provision;
 public class QMProvisiones 
 {
 	static String sClassName = QMProvisiones.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "provisiones_tbl";
 
@@ -35,6 +37,8 @@ public class QMProvisiones
 		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -54,14 +58,12 @@ public class QMProvisiones
 					+ NuevaProvision.getsEstado() + "','" 
 					+ NuevaProvision.getsValorTolal() + "','" 
 					+ NuevaProvision.getsNumGastos() + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
 		{
-
-			// System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: "
-			// + NuevaComunidad.getCOGRAP());
-
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + NuevaProvision.getsNUPROF());
 
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
@@ -87,8 +89,11 @@ public class QMProvisiones
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
-		try {
+		try 
+		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + " SET " 
 					+ sField2 + " = '" + NuevaProvision.getsFEPFON() + "', " 
@@ -97,10 +102,13 @@ public class QMProvisiones
 					+ sField5 + " = '" + NuevaProvision.getsValorTolal() + "', " 
 					+ sField6 + " = '" + NuevaProvision.getsNumGastos() + "' " 
 					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
 
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: SQLState: " + ex.getSQLState());
@@ -126,15 +134,20 @@ public class QMProvisiones
 		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sNUPROF + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
 
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: SQLState: " + ex.getSQLState());
@@ -172,8 +185,11 @@ public class QMProvisiones
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
-		try {
+		try 
+		{
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " + sField2 + "," + sField3
@@ -182,10 +198,10 @@ public class QMProvisiones
 					+ sNUPROF + "')");
 
 			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
-			System.out
-					.println("===================================================");
-			System.out.println(sField1 + ": " + sNUPROF);
+
 
 			if (rs != null) 
 			{
@@ -200,21 +216,21 @@ public class QMProvisiones
 					sValorTolal = rs.getString(sField3);
 					sNumGastos = rs.getString(sField4);
 					
-					// System.out.println(sField2 + ": " + sApplication);
-					// System.out.println(sField3 + ": " + sContactCode);
-					// System.out.println(sField4 + ": " + sProjectCode);
-					// System.out.println("===================================================");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
 
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
@@ -248,6 +264,8 @@ public class QMProvisiones
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try {
 			stmt = conn.createStatement();
@@ -258,21 +276,26 @@ public class QMProvisiones
 					+ sNUPROF + "')");
 
 			rs = pstmt.executeQuery();
-
-			System.out
-					.println("===================================================");
-			System.out.println(sField1 + ": " + sNUPROF);
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
 			found = (rs != null); 
 
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+			else
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField1 + ": " + sNUPROF);
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
 
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());

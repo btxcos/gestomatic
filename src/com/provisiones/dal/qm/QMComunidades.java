@@ -14,6 +14,8 @@ import java.sql.Statement;
 public class QMComunidades
 {
 	static String sClassName = QMComunidades.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "e1_comunidades_tbl";
 
@@ -47,6 +49,8 @@ public class QMComunidades
 		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try {
 
@@ -83,13 +87,15 @@ public class QMComunidades
 				       + NuevaComunidad.getNUCCNT() + "','"
 				       + NuevaComunidad.getOBTEXC() + "','" 
 				       + ValoresDefecto.DEF_PENDIENTE + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
 
 
-			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaComunidad.getCOGRAP());
 			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevaComunidad.getCOCLDO());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevaComunidad.getNUDCOM());
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
@@ -115,6 +121,8 @@ public class QMComunidades
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -138,10 +146,14 @@ public class QMComunidades
 					" WHERE " +
 					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
 						sField2 + " = '"+ sCodNUDCOM +"')");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevaComunidad.getCOCLDO());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevaComunidad.getNUDCOM());
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -167,6 +179,8 @@ public class QMComunidades
 		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -175,9 +189,13 @@ public class QMComunidades
 					" WHERE " +
 					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
 					sField2 + " = '"+ sCodNUDCOM +"')");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -223,6 +241,8 @@ public class QMComunidades
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -248,12 +268,14 @@ public class QMComunidades
 					" WHERE " +
 					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
 					sField2 + " = '"+ sCodNUDCOM +"')");
+			
 
 			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
-			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sCodCOCLDO);
-			System.out.println(sField2 + ": " + sCodNUDCOM);
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOCLDO);
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCodNUDCOM);
 
 			if (rs != null) 
 			{
@@ -278,23 +300,22 @@ public class QMComunidades
 					sOBTEXC = rs.getString(sField14); 
 
 
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
 
-					//System.out.println(sField2 + ": " + sApplication);
-					//System.out.println(sField3 + ": " + sContactCode);
-					//System.out.println(sField4 + ": " + sProjectCode);
-					//System.out.println("===================================================");
 
 				}
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -332,6 +353,8 @@ public class QMComunidades
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -343,9 +366,13 @@ public class QMComunidades
 					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
 					sField2 + " = '"+ sCodNUDCOM +"')");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -379,6 +406,8 @@ public class QMComunidades
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -392,6 +421,8 @@ public class QMComunidades
 
 			rs = pstmt.executeQuery();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 			
 			if (rs != null) 
 			{
@@ -401,8 +432,12 @@ public class QMComunidades
 					found = true;
 
 					sEstado = rs.getString(sField15);
-					System.out.println("===================================================");
-					System.out.println(sField4 + ": " + sEstado);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField15 + ": " + sEstado);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOCLDO);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCodNUDCOM);
 
 
 				}
@@ -410,12 +445,14 @@ public class QMComunidades
 			if (found == false) 
 			{
  
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

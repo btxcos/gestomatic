@@ -14,6 +14,8 @@ import com.provisiones.misc.ValoresDefecto;
 public class QMListaGastos 
 {
 	static String sClassName = QMListaGastos.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "lista_gastos_multi";
 
@@ -33,6 +35,8 @@ public class QMListaGastos
 		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -40,9 +44,14 @@ public class QMListaGastos
 			stmt.executeUpdate("INSERT INTO " + sTable + 
 					" (" + sField1 + "," + sField2 + "," + sField3 + "," + sField4 +") " +
 					"VALUES ('" + sCodCOACES + "','"+ sCodNUPROF + "','"+ sCodGasto + "','"+ ValoresDefecto.DEF_VALIDADO + "')");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPROF: " + sCodNUPROF);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -68,6 +77,8 @@ public class QMListaGastos
 		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -76,9 +87,14 @@ public class QMListaGastos
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
 							"AND  " + sField2 + " = '" + sCodNUPROF +"'"+
 							"AND  " + sField3 + " = '" + sCodGasto +"')");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPROF: " + sCodNUPROF);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -111,6 +127,8 @@ public class QMListaGastos
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -122,11 +140,9 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
-			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sCodCOACES);
-
-			
+		
 			int i = 0;
 			
 			if (rs != null) 
@@ -138,20 +154,25 @@ public class QMListaGastos
 
 					result.add(rs.getString(sField3));
 					System.out.println(result.get(i));
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					System.out.println("===================================================");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,result.get(i)); 
+					
 					i++;
 				}
 			}
 			if (found == false) 
 			{
 				result = new ArrayList<String>(); 
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -183,6 +204,8 @@ public class QMListaGastos
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -194,10 +217,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			
-			System.out.println("===================================================");
-			System.out.println(sField2 + ": " + sCodNUPROF);
-
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 			int i = 0;
 			
@@ -209,21 +229,24 @@ public class QMListaGastos
 					found = true;
 
 					result.add(rs.getString(sField3));
-					System.out.println(result.get(i));
 
-					System.out.println("===================================================");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCodNUPROF);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,result.get(i)); 
+					
 					i++;
 				}
 			}
 			if (found == false) 
 			{
 				result = new ArrayList<String>(); 
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPROF: " + sCodNUPROF);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -318,6 +341,8 @@ public class QMListaGastos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -328,9 +353,12 @@ public class QMListaGastos
 					" WHERE "
 					+ sField3 + " = '"+ sCodGasto +"'");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -364,6 +392,8 @@ public class QMListaGastos
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -375,6 +405,8 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 			
 			if (rs != null) 
 			{
@@ -384,9 +416,10 @@ public class QMListaGastos
 					found = true;
 
 					sValidado = rs.getString(sField4);
-					System.out.println("===================================================");
-					System.out.println(sField3 + ": " + sCodGasto);
-					System.out.println(sField4 + ": " + sValidado);
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField3 + ": " + sCodGasto);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField4 + ": " + sValidado);
 
 
 				}
@@ -394,12 +427,13 @@ public class QMListaGastos
 			if (found == false) 
 			{
  
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

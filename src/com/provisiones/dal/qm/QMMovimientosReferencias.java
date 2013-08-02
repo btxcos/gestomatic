@@ -13,6 +13,8 @@ import java.sql.Statement;
 public class QMMovimientosReferencias
 {
 	static String sClassName = QMMovimientosReferencias.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "e3_movimientos_tbl";
 
@@ -47,6 +49,8 @@ public class QMMovimientosReferencias
 		//boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try {
 
@@ -84,6 +88,8 @@ public class QMMovimientosReferencias
 			
 			resulset = stmt.getGeneratedKeys();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 			if (resulset.next()) 
 			{
 				iCodigo= resulset.getInt(1);
@@ -96,6 +102,8 @@ public class QMMovimientosReferencias
 			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaComunidad.getCOGRAP());
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + NuevoMovimientoReferenciaCatastral.getNURCAT());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoMovimientoReferenciaCatastral.getCOACES());
+			
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -107,6 +115,7 @@ public class QMMovimientosReferencias
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(resulset,sClassName,sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return iCodigo;//bSalida;
@@ -119,6 +128,8 @@ public class QMMovimientosReferencias
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		try 
 		{
@@ -143,9 +154,12 @@ public class QMMovimientosReferencias
 					" WHERE "
 					+ sField1 + " = '"+ sMovimientoReferenciaCatastralID +"'");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoReferenciaCatastralID: " + sMovimientoReferenciaCatastralID);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -172,15 +186,20 @@ public class QMMovimientosReferencias
 		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sMovimientoReferenciaCatastralID + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoReferenciaCatastralID: " + sMovimientoReferenciaCatastralID);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -229,6 +248,8 @@ public class QMMovimientosReferencias
 		
 		conn = ConnectionManager.OpenDBConnection();
 
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -254,9 +275,8 @@ public class QMMovimientosReferencias
 					" WHERE (" + sField1 + " = '" + sMovimientoReferenciaCatastralID	+ "')");
 
 			rs = pstmt.executeQuery();
-
-			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sMovimientoReferenciaCatastralID);
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -279,17 +299,22 @@ public class QMMovimientosReferencias
   					sBITC09 = rs.getString(sField13);
   					sOBTEXC = rs.getString(sField14);
   					sOBDEER = rs.getString(sField15);
+  					
+  					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+  					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sMovimientoReferenciaCatastralID);
 
 				}
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoReferenciaCatastralID: " + sMovimientoReferenciaCatastralID);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -323,6 +348,8 @@ public class QMMovimientosReferencias
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -334,16 +361,21 @@ public class QMMovimientosReferencias
 
 			rs = pstmt.executeQuery();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 			found = (rs != null);
 			
 			if (found == false) 
 			{
- 				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
+			else
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: CodReferencia: " + sCodReferencia);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

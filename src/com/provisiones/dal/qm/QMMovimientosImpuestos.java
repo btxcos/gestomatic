@@ -13,6 +13,8 @@ import java.sql.Statement;
 public class QMMovimientosImpuestos 
 {
 	static String sClassName = QMMovimientosImpuestos.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "e4_movimientos_tbl";
 
@@ -54,6 +56,8 @@ public class QMMovimientosImpuestos
 		int iCodigo = 0;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try {
 
@@ -111,6 +115,8 @@ public class QMMovimientosImpuestos
 			
 			resulset = stmt.getGeneratedKeys();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 			if (resulset.next()) 
 			{
 				iCodigo= resulset.getInt(1);
@@ -118,11 +124,9 @@ public class QMMovimientosImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-
-
-			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaComunidad.getCOGRAP());
-			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoMovimientoImpuestoRecurso.getCOACES());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + NuevoMovimientoImpuestoRecurso.getNURCAT());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevoMovimientoImpuestoRecurso.getCOSBAC());
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -134,6 +138,7 @@ public class QMMovimientosImpuestos
 		{
 
 			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(resulset,sClassName,sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return iCodigo;//bSalida;
@@ -146,6 +151,8 @@ public class QMMovimientosImpuestos
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		try 
 		{
@@ -180,9 +187,12 @@ public class QMMovimientosImpuestos
 					" WHERE "
 					+ sField1 + " = '"+ sMovimientoImpuestoRecursoID +"'");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoImpuestoRecursoID: " + sMovimientoImpuestoRecursoID);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -209,15 +219,20 @@ public class QMMovimientosImpuestos
 		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sMovimientoImpuestoRecursoID + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoImpuestoRecursoID: " + sMovimientoImpuestoRecursoID);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -275,6 +290,8 @@ public class QMMovimientosImpuestos
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -310,9 +327,8 @@ public class QMMovimientosImpuestos
 					" WHERE (" + sField1 + " = '" + sMovimientoImpuestoRecursoID	+ "')");
 
 			rs = pstmt.executeQuery();
-
-			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sMovimientoImpuestoRecursoID);
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -345,17 +361,22 @@ public class QMMovimientosImpuestos
 					sBITC09 = rs.getString(sField23);
 					sOBTEXC = rs.getString(sField24);
 					sOBDEER = rs.getString(sField25);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField1 + ": " + sMovimientoImpuestoRecursoID);
 
 				}
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoImpuestoRecursoID: " + sMovimientoImpuestoRecursoID);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -389,6 +410,8 @@ public class QMMovimientosImpuestos
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -424,9 +447,8 @@ public class QMMovimientosImpuestos
 					       + sField25 +" = '" + impuesto.getOBDEER() + "' )"); 
 
 			rs = pstmt.executeQuery();
-
-			//System.out.println("===================================================");
-			//System.out.println(sField1 + ": " + sCuotaID);
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -436,17 +458,24 @@ public class QMMovimientosImpuestos
 					found = true;
 
 					sImpuestoID = rs.getString(sField1);
-					System.out.println(sField1 + ": " + sImpuestoID);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField1 + ": " + sImpuestoID);
 				}
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + impuesto.getCOACES());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + impuesto.getNURCAT());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + impuesto.getCOSBAC());
+
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

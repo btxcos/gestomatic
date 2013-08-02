@@ -14,6 +14,8 @@ import java.sql.Statement;
 public class QMImpuestos 
 {
 	static String sClassName = QMImpuestos.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "e4_impuestos_tbl";
 
@@ -39,6 +41,8 @@ public class QMImpuestos
 		boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try {
 
@@ -64,13 +68,12 @@ public class QMImpuestos
 				       + NuevoImpuestoRecurso.getCOTEXA() + "','"
 				       + NuevoImpuestoRecurso.getOBTEXC() + "','" 
 				       + ValoresDefecto.DEF_PENDIENTE + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-
-
-			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaComunidad.getCOGRAP());
-			
+		
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + NuevoImpuestoRecurso.getNURCAT());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevoImpuestoRecurso.getCOSBAC());
 			
@@ -88,6 +91,7 @@ public class QMImpuestos
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
+
 	public static boolean modImpuestoRecurso(ImpuestoRecurso NuevoImpuestoRecurso, String sCodNURCAT, String sCodCOSBAC)
 	{
 		String sMethod = "modImpuestoRecurso";
@@ -96,6 +100,8 @@ public class QMImpuestos
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		try 
 		{
@@ -116,9 +122,13 @@ public class QMImpuestos
 					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
 					 sField2 + " = '" + sCodCOSBAC + "' )");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -144,6 +154,8 @@ public class QMImpuestos
 		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -152,9 +164,13 @@ public class QMImpuestos
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
 							 sField2 + " = '" + sCodCOSBAC + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -198,6 +214,8 @@ public class QMImpuestos
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -220,10 +238,8 @@ public class QMImpuestos
 					 sField2 + " = '" + sCodCOSBAC + "' )");
 
 			rs = pstmt.executeQuery();
-
-			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sCodNURCAT);
-			System.out.println(sField2 + ": " + sCodCOSBAC);
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -243,21 +259,23 @@ public class QMImpuestos
 					sOBTEXC = rs.getString(sField9);
 
 					
-					//System.out.println(sField2 + ": " + sApplication);
-					//System.out.println(sField3 + ": " + sContactCode);
-					//System.out.println(sField4 + ": " + sProjectCode);
-					//System.out.println("===================================================");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNURCAT);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCOSBAC);
 
 				}
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -369,6 +387,8 @@ public class QMImpuestos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -380,9 +400,13 @@ public class QMImpuestos
 					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
 						sField2 + " = '" + sCodCOSBAC + "' )");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -417,6 +441,8 @@ public class QMImpuestos
 		Connection conn = null;
 
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -427,6 +453,8 @@ public class QMImpuestos
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
 					sField2 + " = '" + sCodCOSBAC + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			rs = pstmt.executeQuery();
 			
@@ -439,8 +467,10 @@ public class QMImpuestos
 					found = true;
 
 					sEstado = rs.getString(sField10);
-					System.out.println("===================================================");
-					System.out.println(sField10 + ": " + sEstado);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField10 + ": " + sEstado);
 
 
 				}
@@ -448,12 +478,14 @@ public class QMImpuestos
 			if (found == false) 
 			{
  
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

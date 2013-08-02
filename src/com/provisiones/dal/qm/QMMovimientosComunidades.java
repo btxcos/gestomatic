@@ -13,6 +13,8 @@ import java.sql.Statement;
 public class QMMovimientosComunidades
 {
 	static String sClassName = QMMovimientosComunidades.class.getName();
+	
+	static boolean bTrazas = true;
 
 	static String sTable = "e1_movimientos_tbl";
 
@@ -66,6 +68,8 @@ public class QMMovimientosComunidades
 		//boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try {
 
@@ -137,6 +141,8 @@ public class QMMovimientosComunidades
 			
 			resulset = stmt.getGeneratedKeys();
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 			if (resulset.next()) 
 			{
 				iCodigo= resulset.getInt(1);
@@ -146,9 +152,9 @@ public class QMMovimientosComunidades
 		{
 
 
-			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevoMovimientoComunidad.getCOGRAP());
-			
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevoMovimientoComunidad.getCOCLDO());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevoMovimientoComunidad.getNUDCOM());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoMovimientoComunidad.getCOACES());
 			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -177,6 +183,8 @@ public class QMMovimientosComunidades
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		try 
 		{
@@ -218,10 +226,13 @@ public class QMMovimientosComunidades
 					" WHERE "
 					+ sField1 + " = '"+ sMovimientoComunidadID +"'");
 			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
 		} 
 		catch (SQLException ex) 
 		{
-
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoComunidadID: " + sMovimientoComunidadID);
+			
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
@@ -246,15 +257,20 @@ public class QMMovimientosComunidades
 		boolean bSalida = true;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sMovimientoComunidadID + "' )");
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoComunidadID: " + sMovimientoComunidadID);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -317,6 +333,8 @@ public class QMMovimientosComunidades
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -359,9 +377,8 @@ public class QMMovimientosComunidades
 					" WHERE (" + sField1 + " = '" + sMovimientoComunidadID	+ "')");
 
 			rs = pstmt.executeQuery();
-
-			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sMovimientoComunidadID);
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -401,17 +418,22 @@ public class QMMovimientosComunidades
 					sBITC09 = rs.getString(sField30); 
 					sOBTEXC = rs.getString(sField31); 
 					sOBDEER = rs.getString(sField32); 
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sMovimientoComunidadID);
+
 
 				}
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoComunidadID: " + sMovimientoComunidadID);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -446,6 +468,8 @@ public class QMMovimientosComunidades
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -490,8 +514,8 @@ public class QMMovimientosComunidades
 
 			rs = pstmt.executeQuery();
 
-			//System.out.println("===================================================");
-			//System.out.println(sField1 + ": " + sMovimientoComunidadID);
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
 
 			if (rs != null) 
 			{
@@ -501,14 +525,11 @@ public class QMMovimientosComunidades
 					found = true;
 
 					sMovimientoComunidadID = rs.getString(sField1);
-					System.out.println(sField1 + ": " + sMovimientoComunidadID);
+					
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-
-
-					//System.out.println(sField2 + ": " + sApplication);
-					//System.out.println(sField3 + ": " + sContactCode);
-					//System.out.println(sField4 + ": " + sProjectCode);
-					//System.out.println("===================================================");
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField1 + ": " + sMovimientoComunidadID);
 
 				}
 			}
@@ -520,6 +541,9 @@ public class QMMovimientosComunidades
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + comunidad.getCOCLDO());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + comunidad.getNUDCOM());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + comunidad.getCOACES());
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
