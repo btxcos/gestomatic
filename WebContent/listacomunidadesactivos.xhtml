@@ -59,62 +59,99 @@
 
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
+									<p:fieldset legend="Comunidad de proprietarios">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="7" cellpadding="5">
+													<h:outputText for="COCLDO" value="Documento: " />
+													<p:selectOneMenu id="COCLDO" value="#{GestorTablaComunidadActivo.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
+														<f:selectItem itemLabel="Elija..." itemValue="" />
+														<f:selectItems value="#{GestorMovimientosComunidades.tiposdocumentoHM}" />
+														<f:validateLength minimum="1" /> 
+													</p:selectOneMenu>
+													<p:message for="COCLDO" display="icon"/>
+											
+													<h:outputText for="NUDCOM" value="Numero: " />
+														<p:inputText id="NUDCOM" value="#{GestorTablaComunidadActivo.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
+														</p:inputText>
+													<p:message for="NUDCOM" display="icon"/>
+													<p:commandButton value="Cargar" update="panel, msgs, popup" actionListener="#{GestorMovimientosComunidades.cargarComunidad}" />
+														
+													
+												</h:panelGrid>
+										  </p:panel>
+											<p:panel>                                  
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="NOMCOC" value="Nombre comunidad: " />
+														<p:inputText id="NOMCOC" value="#{GestorTablaComunidadActivo.sNOMCOC}" size="60" maxlength="60" disabled="true">
+														</p:inputText>
+													<p:message for="NOMCOC" display="icon"/>
+
+													<h:outputText for="NODCCO"  value="Correo electronico: " />
+														<p:inputText id="NODCCO" value="#{GestorTablaComunidadActivo.sNODCCO}" size="60"  maxlength="60" disabled="true">
+														</p:inputText>
+													<p:message for="NODCCO" display="icon"/>
+												</h:panelGrid>
+										  </p:panel>
+										</h:panelGrid>
+									</p:fieldset>
 
 									<p:fieldset legend="Activo">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorTablaComunidadActivo.sCOACES}" size="9" maxlength="9" disabled="true">
+														<p:inputText id="COACES" value="#{GestorTablaComunidadActivo.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Dar de Alta" update="popup, form:activos" actionListener="#{GestorTablaComunidadActivo.buscaActivos}"/>	
+													<p:commandButton value="Dar de Alta" update="popup" actionListener="#{GestorTablaComunidadActivo.buscaActivos}"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar un activo" update="panel" oncomplete="dlgBuscar.show()"/>		
+										<p:commandButton value="Buscar un activo" update="panel, form:activos" oncomplete="dlgBuscar.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 								</h:panelGrid>
 							</p:panel>
-							<p:panel id="panel">
+							
+							<p:panel id="panelTablaActivosComunidad">
 								<h:panelGrid columns="1" cellpadding="5">
 
-							<p:contextMenu for="activosComunidad">  
-								 <p:menuitem value="Dar de Baja" update="activos, form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorTablaComunidadActivo.borrarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
-							</p:contextMenu>  
-									
-							<p:dataTable id="activosComunidad" var="activo" value="#{GestorTablaComunidadActivo.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorTablaComunidadActivo.activoseleccionado}" selectionMode="single">  
-									
-								<p:column headerText="Codigo Activo">  
-								    #{activo.COACES}  
-								</p:column>  
-								
-								<p:column headerText="Municipio">  
-								    #{activo.NOMUIN}  
-								</p:column>  
-								
-								<p:column headerText="Via">  
-								    #{activo.NOVIAS}  
-								</p:column>  
-								
-								<p:column headerText="Portal">  
-								    #{activo.NUPOAC}  
-								</p:column>  
-								
-								<p:column headerText="Piso">  
-								    #{activo.NUPIAC}  
-								</p:column>  
-								
-								<p:column headerText="Puerta">  
-								    #{activo.NUPUAC}  
-								</p:column>  
-									
-							</p:dataTable> 
+									<p:contextMenu for="activosComunidad">  
+										 <p:menuitem value="Dar de Baja" update="activos, form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorTablaComunidadActivo.bajaActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+									</p:contextMenu>  
+											
+									<p:dataTable id="activosComunidad" var="activo" value="#{GestorTablaComunidadActivo.tablaactivos}" rowKey="#{activo.COACES}"  
+											              selection="#{GestorTablaComunidadActivo.activoseleccionado}" selectionMode="single">  
+											
+										<p:column headerText="Codigo Activo">  
+										    #{activo.COACES}  
+										</p:column>  
+										
+										<p:column headerText="Municipio">  
+										    #{activo.NOMUIN}  
+										</p:column>  
+										
+										<p:column headerText="Via">  
+										    #{activo.NOVIAS}  
+										</p:column>  
+										
+										<p:column headerText="Portal">  
+										    #{activo.NUPOAC}  
+										</p:column>  
+										
+										<p:column headerText="Piso">  
+										    #{activo.NUPIAC}  
+										</p:column>  
+										
+										<p:column headerText="Puerta">  
+										    #{activo.NUPUAC}  
+										</p:column>  
+											
+									</p:dataTable> 
 
 								</h:panelGrid>
 						</p:panel>
-					
+
 					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
@@ -193,6 +230,7 @@
 											</p:panel>
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
+													
 													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorTablaComunidadActivo.buscaActivos}" oncomplete="dlgTabla.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorTablaComunidadActivo.borrarPlantilla}" />	
 
