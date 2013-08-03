@@ -3,12 +3,14 @@ package com.provisiones.dal.qm;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.Activo;
+import com.provisiones.types.ActivoTabla;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class QMActivos
 {
@@ -944,4 +946,119 @@ public class QMActivos
 		return found;
 	}
 	
+	public static ArrayList<ActivoTabla> buscaActivos(ActivoTabla activo)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "getActivo";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOACES = "";
+		String sCOPOIN = "";
+		String sNOMUIN = "";
+		String sNOPRAC = "";
+		String sNOVIAS = "";
+		String sNUPIAC = "";
+		String sNUPOAC = "";
+		String sNUPUAC = "";
+		
+		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					   +  sField1 + ","        
+					   + sField14 + ","
+					   + sField11 + ","
+					   + sField13 + ","
+					   +  sField6 + ","
+					   +  sField9 + ","
+					   +  sField7 + ","
+					   + sField10 + 
+					   "  FROM " + sTable + 
+					   " WHERE ("
+
+					   + sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					    + sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					    + sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					    + sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + sField10 + " LIKE '%" + activo.getNUPUAC()	+ 			   
+					   "%')");
+			
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sCOACES = rs.getString(sField1);
+					sCOPOIN = rs.getString(sField14);
+					sNOMUIN = rs.getString(sField11);
+					sNOPRAC = rs.getString(sField13);
+					sNOVIAS = rs.getString(sField6);
+					sNUPIAC = rs.getString(sField9);
+					sNUPOAC = rs.getString(sField7);
+					sNUPUAC = rs.getString(sField10);
+					
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					
+					result.add(activoencontrado);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCOACES);
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COPOIN: " + activo.getCOPOIN());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOMUIN: " + activo.getNOMUIN());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOPRAC: " + activo.getNOPRAC());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOVIAS: " + activo.getNOVIAS());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPIAC: " + activo.getNUPIAC());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPOAC: " + activo.getNUPOAC());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPUAC: " + activo.getNUPUAC());
+			
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
 }

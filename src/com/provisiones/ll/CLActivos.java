@@ -1,13 +1,23 @@
 package com.provisiones.ll;
 
+import java.util.ArrayList;
+
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.misc.Parser;
 import com.provisiones.types.Activo;
+import com.provisiones.types.ActivoTabla;
 
 
 public class CLActivos 
 {
 	static String sClassName = CLActivos.class.getName();
+	
+	
+	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla activobuscado)
+	{
+			
+		return QMActivos.buscaActivos(activobuscado);
+	}
 	
 	public static boolean actualizaActivoLeido(String linea)
 	{

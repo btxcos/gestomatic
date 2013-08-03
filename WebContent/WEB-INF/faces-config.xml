@@ -25,5 +25,10 @@
 		<managed-bean-class>com.provisiones.pl.GestorMovimientosComunidades</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorTablaComunidadActivo</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorTablaComunidadActivo</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

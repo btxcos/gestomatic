@@ -16,6 +16,7 @@ public class CLComunidades
 {
 	static String sClassName = CLComunidades.class.getName();
 	
+
 	
 	public static int registraMovimiento(MovimientoComunidad movimiento)
 	{
@@ -34,6 +35,11 @@ public class CLComunidades
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
 		
+		if (movimiento.getCOACCI().equals(""))
+		{
+			//error
+			iCodigo = -8;
+		}
 		if  ((sEstado.equals("P") && movimiento.getCOACCI().equals("B")) 
 				|| (sEstado.equals("P") && movimiento.getCOACCI().equals("M"))
 				|| (sEstado.equals("P") && movimiento.getCOACCI().equals("E"))
