@@ -535,9 +535,9 @@ public class QMMovimientosComunidades
 			}
 			if (found == false) 
 			{
-				System.out.println("No Information Found");
-			}
-
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}			
+			
 		} 
 		catch (SQLException ex) 
 		{

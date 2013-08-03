@@ -363,14 +363,21 @@ public class QMMovimientosReferencias
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
-			found = (rs != null);
-			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+				}
+			}
 			if (found == false) 
 			{
 				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
-			else
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
 		} 
 		catch (SQLException ex) 
