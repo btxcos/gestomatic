@@ -58,6 +58,28 @@ public class GestorTablaComunidadActivo implements Serializable
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 	}
+    public void seleccionarActivo(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "borrarActivo";
+
+    	FacesMessage msg;
+    	
+    	
+    	
+    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
+    	
+    	this.sCOACES  = activoseleccionado.getCOACES();
+    	
+    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+    	
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		//return "listacomunidadesactivos.xhtml";
+    }
+    
     public void borrarActivo(ActionEvent actionEvent) 
     {  
     	
@@ -67,18 +89,21 @@ public class GestorTablaComunidadActivo implements Serializable
     	
     	
     	
-    	this.sCOACESBuscado = activoseleccionado.getCOACES();
+    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
     	
-    	msg = new FacesMessage("Activo "+ sCOACESBuscado +" Seleccionado.");
+    	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACESBuscado+"|");
+    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+    	
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
     	
     	
     	tablaactivos.remove(activoseleccionado);  
     	
 		
-		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		//return "listacomunidadesactivos.xhtml";
     }
 
     public void borrarPlantilla(ActionEvent actionEvent) 
@@ -90,7 +115,8 @@ public class GestorTablaComunidadActivo implements Serializable
     	this.sNOVIAS = "";
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
-    	this.sNUPUAC = ""; 
+    	this.sNUPUAC = "";
+    	this.sCOACESBuscado =  "";
     } 
     
 	public String getsCOACES() {
@@ -158,7 +184,12 @@ public class GestorTablaComunidadActivo implements Serializable
 		this.tablaactivos = tablaactivos;
 	}
 	
-	
+	public String getsCOACESBuscado() {
+		return sCOACESBuscado;
+	}
+	public void setsCOACESBuscado(String sCOACESBuscado) {
+		this.sCOACESBuscado = sCOACESBuscado;
+	}
 	
 
 }
