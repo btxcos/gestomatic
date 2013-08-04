@@ -1,5 +1,7 @@
 package com.provisiones.ll;
 
+import java.util.ArrayList;
+
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMCuotas;
@@ -8,6 +10,7 @@ import com.provisiones.dal.qm.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.QMMovimientosComunidades;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.MovimientoComunidad;
 
@@ -16,7 +19,11 @@ public class CLComunidades
 {
 	static String sClassName = CLComunidades.class.getName();
 	
-
+	public static ArrayList<ActivoTabla> buscarActivosComunidad (String sCodCOCLDO, String sCodNUDCOM)
+	{
+			
+		return QMListaComunidadesActivos.buscaActivosComunidad(sCodCOCLDO, sCodNUDCOM);
+	}
 	
 	public static int registraMovimiento(MovimientoComunidad movimiento)
 	{
@@ -128,6 +135,11 @@ public class CLComunidades
 		return comunidad;
 	}
 	
+	public static ArrayList<ActivoTabla> buscarActivosDisponibles (ActivoTabla activobuscado)
+	{
+			
+		return QMListaComunidadesActivos.buscaActivosDisponibles(activobuscado);
+	}
 	
 	
 	public static int comprobarActivo (String sCOACES)

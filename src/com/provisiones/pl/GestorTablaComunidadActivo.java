@@ -7,7 +7,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.ActivoTabla;
@@ -34,22 +33,24 @@ public class GestorTablaComunidadActivo implements Serializable
 	private String sNOMCOC = "";
 	private String sNODCCO = "";
 	
+	public GestorTablaComunidadActivo()
+	{
+		Utils.standardIO2File("");//Salida por fichero de texto
+	}
 	
 
-	private String sCOACESBuscado = "";
-	
-	private ActivoTabla activoseleccionado;
-	
-	private ArrayList<ActivoTabla> tablaactivos; 
 
-	private ArrayList<ActivoTabla> tablaactivoscomunidad;
+	private ActivoTabla activoseleccionado = null;
+	
+	private ArrayList<ActivoTabla> tablaactivos = null;
+
+	private ArrayList<ActivoTabla> tablaactivoscomunidad = null;
 	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 		
 		String sMethod = "buscaActivos";
 		
-		Utils.standardIO2File("");//Salida por fichero de texto
 		
 		FacesMessage msg;
 		
@@ -60,7 +61,7 @@ public class GestorTablaComunidadActivo implements Serializable
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
-		this.setTablaactivos(CLActivos.buscarActivos(buscaactivos));
+		this.setTablaactivos(CLComunidades.buscarActivosDisponibles(buscaactivos));
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 
@@ -69,7 +70,44 @@ public class GestorTablaComunidadActivo implements Serializable
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 	}
-    public void seleccionarActivo(ActionEvent actionEvent) 
+
+	public void cargarComunidad(ActionEvent actionEvent)
+	{
+		String sMethod = "cargarComunidad";
+		
+		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		
+		this.sCOCLDO = comunidad.getCOCLDO();
+		this.sNUDCOM = comunidad.getNUDCOM();
+		this.sNOMCOC = comunidad.getNOMCOC();
+		this.sNODCCO = comunidad.getNODCCO();
+		
+		FacesMessage msg;
+		
+		if (comunidad.getNUDCOM().equals(""))
+		{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
+		}
+		else
+		{
+			
+			this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
+			
+			msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
+		}
+		
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+	}
+
+	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
     	
     	String sMethod = "seleccionarActivo";
@@ -91,10 +129,10 @@ public class GestorTablaComunidadActivo implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
 
-    public void altaActivo(ActionEvent actionEvent) 
+    public void altaActivoComunidad(ActionEvent actionEvent) 
     {  
     	
-    	String sMethod = "bajaActivo";
+    	String sMethod = "altaActivoComunidad";
 
     	FacesMessage msg;
 
@@ -111,7 +149,11 @@ public class GestorTablaComunidadActivo implements Serializable
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
     	
     	
-    	tablaactivos.remove(activoseleccionado);  
+    	//tablaactivos.remove(activoseleccionado); 
+    	
+    	// comprobar el activo, no este ya asignado.
+    	
+    	this.sCOACES  = "";
     	
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -119,16 +161,18 @@ public class GestorTablaComunidadActivo implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
     
-    public void bajaActivo(ActionEvent actionEvent) 
+    public void bajaActivoComunidad(ActionEvent actionEvent) 
     {  
     	
-    	String sMethod = "bajaActivo";
+    	String sMethod = "bajaActivoComunidad";
 
     	FacesMessage msg;
 
     	//this.sCOACESBuscado = activoseleccionado.getCOACES();
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
+    	
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
     	
     	//buscar activo y borrarlo
     	
@@ -140,16 +184,18 @@ public class GestorTablaComunidadActivo implements Serializable
     	
     	
     	tablaactivos.remove(activoseleccionado);  
-    	
+    	this.sCOACES  = "";
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		//return "listacomunidadesactivos.xhtml";
     }
 
-    public void borrarPlantilla(ActionEvent actionEvent) 
+    
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
     	this.sCOACES = "";
+
     	this.sCOPOIN = "";
     	this.sNOMUIN = "";
     	this.sNOPRAC = "";
@@ -157,41 +203,34 @@ public class GestorTablaComunidadActivo implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
-    	this.sCOACESBuscado =  "";
-    } 
+    	
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+   	
+    }
     
-	public void cargarComunidad(ActionEvent actionEvent)
-	{
-		String sMethod = "cargarComunidad";
-		
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-		
-		this.sCOCLDO = comunidad.getCOCLDO();
-		this.sNUDCOM = comunidad.getNUDCOM();
-		this.sNOMCOC = comunidad.getNOMCOC();
-		this.sNODCCO = comunidad.getNODCCO();
-		
-		FacesMessage msg;
-		
-		if (comunidad.getNUDCOM().equals(""))
-		{
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
-			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
-		}
-		else
-		{
-			msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
-			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
-		}
-		
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-				
-	}
+    public void limpiarPlantilla(ActionEvent actionEvent) 
+    {  
+    	this.sCOCLDO = "";
+    	this.sNUDCOM = "";
+    	this.sNOMCOC = "";
+    	this.sNODCCO = "";
+
+    	this.sCOACES = "";
+
+    	this.sCOPOIN = "";
+    	this.sNOMUIN = "";
+    	this.sNOPRAC = "";
+    	this.sNOVIAS = "";
+    	this.sNUPIAC = "";
+    	this.sNUPOAC = "";
+    	this.sNUPUAC = "";
+    	
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+    	this.tablaactivoscomunidad = null;
+   	
+    } 
     
     
 	public String getsCOCLDO() {
@@ -291,13 +330,5 @@ public class GestorTablaComunidadActivo implements Serializable
 	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
 		this.tablaactivos = tablaactivos;
 	}
-	
-	public String getsCOACESBuscado() {
-		return sCOACESBuscado;
-	}
-	public void setsCOACESBuscado(String sCOACESBuscado) {
-		this.sCOACESBuscado = sCOACESBuscado;
-	}
-	
 
 }
