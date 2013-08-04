@@ -131,7 +131,7 @@ public class GestorTablaComunidadActivo implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
 
-	public FacesMessage nuevoMovimiento (String sCodCOACCI)
+	public FacesMessage nuevoMovimiento(String sCodCOACCI)
 	{
 		String sMethod = "nuevoMovimiento";
 
@@ -233,17 +233,13 @@ public class GestorTablaComunidadActivo implements Serializable
     	
     	//buscar activo y darlo de alta en la comunidad
     	
-    	
-    	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
-    	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
     	
     	
     	//tablaactivos.remove(activoseleccionado); 
     	
 
-    	nuevoMovimiento("X");
+    	msg = nuevoMovimiento("X");
 
     	
     	this.sCOACES  = "";

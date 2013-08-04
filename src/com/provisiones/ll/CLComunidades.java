@@ -19,6 +19,61 @@ public class CLComunidades
 {
 	static String sClassName = CLComunidades.class.getName();
 	
+	public static MovimientoComunidad convierteComunidadenMovimiento(Comunidad comunidad, String sCodCOACES, String sCodCOACCI)
+	{
+		
+		return new MovimientoComunidad(ValoresDefecto.DEF_E1_CODTRN,
+				ValoresDefecto.DEF_COTDOR,
+				ValoresDefecto.DEF_IDPROV,
+				sCodCOACCI,
+				ValoresDefecto.DEF_COENGP,
+				comunidad.getCOCLDO(),
+				comunidad.getNUDCOM(),
+				"",
+				sCodCOACES,
+				"",
+				comunidad.getNOMCOC(),
+				"",
+				comunidad.getNODCCO(),
+				"",
+				comunidad.getNOMPRC(),
+				"",
+				comunidad.getNUTPRC(),
+				"",
+				comunidad.getNOMADC(),
+				"",
+				comunidad.getNUTADC(),
+				"",
+				comunidad.getNODCAD(),
+				"",
+				comunidad.getNUCCEN(),
+				comunidad.getNUCCOF(),
+				comunidad.getNUCCDI(),
+				comunidad.getNUCCNT(),
+				"",
+				comunidad.getOBTEXC(),
+				"");
+		
+	}
+	public static Comunidad convierteMovimientoenComunidad(MovimientoComunidad movimiento)
+	{
+		return new Comunidad(movimiento.getCOCLDO(),
+				movimiento.getNUDCOM(),
+				movimiento.getNOMCOC(),
+				movimiento.getNODCCO(),
+				movimiento.getNOMPRC(),
+				movimiento.getNUTPRC(),
+				movimiento.getNOMADC(),
+				movimiento.getNUTADC(),
+				movimiento.getNODCAD(),
+				movimiento.getNUCCEN(),
+				movimiento.getNUCCOF(),
+				movimiento.getNUCCDI(),
+				movimiento.getNUCCNT(),
+				movimiento.getOBTEXC());
+	}
+	
+	
 	public static ArrayList<ActivoTabla> buscarActivosComunidad (String sCodCOCLDO, String sCodNUDCOM)
 	{
 
@@ -41,16 +96,24 @@ public class CLComunidades
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
-		
+
+		if (sEstado.equals("P") && movimiento.getCOACCI().equals("X"))
+		{
+			Comunidad comunidad = QMComunidades.getComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM());
+			String sCOACES = movimiento.getCOACES();
+			
+			movimiento = revisaMovimiento(convierteComunidadenMovimiento(comunidad,sCOACES,"A"));
+
+		}
+
 		if (movimiento.getCOACCI().equals(""))
 		{
 			//error accion vacia
 			iCodigo = -8;
 		}
-		if  ((sEstado.equals("P") && movimiento.getCOACCI().equals("B")) 
+		else if  ((sEstado.equals("P") && movimiento.getCOACCI().equals("B")) 
 				|| (sEstado.equals("P") && movimiento.getCOACCI().equals("M"))
-				|| (sEstado.equals("P") && movimiento.getCOACCI().equals("E"))
-				|| (sEstado.equals("P") && movimiento.getCOACCI().equals("X")))
+				|| (sEstado.equals("P") && movimiento.getCOACCI().equals("E")))
 		{
 			//error comunidad pendiente
 			iCodigo = -1;
@@ -104,19 +167,56 @@ public class CLComunidades
 						case A:case B:case M:
 							if (QMListaComunidades.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), Integer.toString(indice)))
 							{
-									
-								if (QMComunidades.setEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), "A"))
+								//distinguir entre alta, baja y modificacion para asociar estado
+								
+								if (movimiento.getCOACCI().equals("A"))
 								{
-									//OK 
-									iCodigo = 0;
+								
+									if (QMComunidades.setEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), "A"))
+									{
+										//OK 
+										iCodigo = 0; 
+									}
+									else
+									{
+										//error y rollback
+										iCodigo = -11;
+										QMListaComunidades.delRelacionComunidad(Integer.toString(indice));
+										QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
+										
+									}
+								}
+								else if (movimiento.getCOACCI().equals("B"))
+								{
+									
+									if (QMComunidades.setEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), "B"))
+									{
+										//OK 
+										iCodigo = 0; 
+									}
+									else
+									{
+										//error y rollback
+										iCodigo = -11;
+										QMListaComunidades.delRelacionComunidad(Integer.toString(indice));
+										QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
+										
+									}
 								}
 								else
 								{
-									//error y rollback
-									iCodigo = -11;
-									QMListaComunidades.delRelacionComunidad(Integer.toString(indice));
-									QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
-										
+									
+									if (QMComunidades.modComunidad(convierteMovimientoenComunidad(movimiento), movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+									{	
+										//OK 
+										iCodigo = 0;
+									}
+									else
+									{
+										iCodigo = -11;
+										QMListaComunidades.delRelacionComunidad(Integer.toString(indice));
+										QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
+									}
 								}
 							}
 							else
@@ -125,33 +225,19 @@ public class CLComunidades
 									iCodigo = -12;
 									QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 							}
-							
 							break;
 						case E:case X:
 							if (QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
 							{
-									
-								if (QMComunidades.setEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), "A"))
-								{
-									//OK 
-									iCodigo = 0;
-								}
-								else
-								{
-									//error y rollback
-									iCodigo = -11;
-									QMListaComunidades.delRelacionComunidad(Integer.toString(indice));
-									QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
-										
-								}
+								//OK 
+								iCodigo = 0;
 							}
 							else
 							{
 								//error y rollback
-									iCodigo = -12;
-									QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
+								iCodigo = -12;
+								QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 							}
-
 							break;
 					}	
 				}
