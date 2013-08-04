@@ -19,11 +19,6 @@ import com.provisiones.misc.ValoresDefecto;
 public class FileManager 
 {
 
-	public enum TIPOSFICHERO 
-	{
-		AC, RG, PA, GA, PP, E1, E2, E3, E4
-	}
-	
 	static String sClassName = FileManager.class.getName();
 	static boolean bEnable = true;
 	
@@ -444,7 +439,7 @@ public class FileManager
 
 			System.out.println("Tipo:|" + sTipo + "|");
 
-			TIPOSFICHERO COSPII = TIPOSFICHERO.valueOf(sTipo);
+			ValoresDefecto.TIPOSFICHERO COSPII = ValoresDefecto.TIPOSFICHERO.valueOf(sTipo);
 
 			switch (COSPII) {
 			case AC:

@@ -10,6 +10,7 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.MovimientoComunidad;
 
@@ -19,11 +20,11 @@ public class GestorMovimientosComunidades implements Serializable
 
 	private static final long serialVersionUID = -9157997142376942992L;
 
-	private String sCODTRN = "EE41";
-	private String sCOTDOR = "000";
-	private String sIDPROV = "123456789";
+	private String sCODTRN = ValoresDefecto.DEF_E1_CODTRN;
+	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
+	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
 	private String sCOACCI = "";
-	private String sCOENGP = "00000";
+	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 	private String sCOCLDO = "";
 	private String sNUDCOM = "";
 	private String sBITC10 = "";

@@ -61,7 +61,7 @@
 									<p:fieldset legend="Comunidad de proprietarios" id="panelComunidad">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="7" cellpadding="5">
+												<h:panelGrid columns="8" cellpadding="5">
 													<h:outputText for="COCLDO" value="Documento: " />
 													<p:selectOneMenu id="COCLDO" value="#{GestorTablaComunidadActivo.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
@@ -75,8 +75,17 @@
 														</p:inputText>
 													<p:message for="NUDCOM" display="icon"/>
 													<p:commandButton value="Cargar" update="activosComunidad, panelComunidad, msgs, popup" actionListener="#{GestorTablaComunidadActivo.cargarComunidad}" />
-														
-													
+
+													<p:ajaxStatus  id="pensandoComunidad">
+														<f:facet name="start">
+															<h:graphicImage value="/recursos/loadingBar.gif" />  
+														</f:facet>  
+
+														<f:facet name="complete">  
+															<h:outputText value="" />  
+														</f:facet>
+													</p:ajaxStatus>
+
 												</h:panelGrid>
 										  </p:panel>
 											<p:panel>                                  
@@ -241,7 +250,7 @@
 													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorTablaComunidadActivo.buscaActivos}" oncomplete="dlgTabla.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorTablaComunidadActivo.limpiarPlantillaActivo}" />	
 
-														<p:ajaxStatus  id="ajaxStatusPanel">  
+														<p:ajaxStatus  id="pensandoActivo">  
 															<f:facet name="start">  
 																<h:graphicImage value="/recursos/loadingBar.gif" />  
 															</f:facet>  
@@ -249,6 +258,7 @@
 															<f:facet name="complete">  
 																<h:outputText value="" />  
 															</f:facet>  
+
 														</p:ajaxStatus> 
 												</h:panelGrid>
 											</p:panel>

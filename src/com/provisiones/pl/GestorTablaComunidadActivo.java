@@ -9,8 +9,10 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
+import com.provisiones.types.MovimientoComunidad;
 
 public class GestorTablaComunidadActivo implements Serializable 
 {
@@ -129,6 +131,95 @@ public class GestorTablaComunidadActivo implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
 
+	public FacesMessage nuevoMovimiento (String sCodCOACCI)
+	{
+		String sMethod = "nuevoMovimiento";
+
+		FacesMessage msg;
+		
+    	MovimientoComunidad movimiento = new MovimientoComunidad (
+    			ValoresDefecto.DEF_E1_CODTRN, 
+    			ValoresDefecto.DEF_COTDOR, 
+    			ValoresDefecto.DEF_IDPROV, 
+    			sCodCOACCI, 
+    			ValoresDefecto.DEF_COENGP, 
+    			sCOCLDO.toUpperCase(), 
+    			sNUDCOM.toUpperCase(), 
+    			"S", 
+    			sCOACES.toUpperCase(), 
+    			"#", "", 
+    			"#", "", 
+    			"#", "", 
+    			"#", "", 
+    			"#", "", 
+    			"#", "", 
+    			"#", "", 
+    			"#", "", "", "", "", 
+    			"#", "", 
+    			"");
+    	
+
+		
+		int iSalida = CLComunidades.registraMovimiento(movimiento);
+		
+		switch (iSalida) 
+		{
+		case 0: //Sin errores
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El movimiento en la comunidad '"+ movimiento.getNOMCOC() + "', con documento '"+movimiento.getNUDCOM()+"', se ha creado correctamente.");
+			msg = new FacesMessage("El movimiento en la comunidad '"+ movimiento.getNOMCOC() + "', con documento '"+movimiento.getNUDCOM()+"', se ha creado correctamente.");
+			break;
+		case -1: //Error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la comunidad '"+ movimiento.getNOMCOC() + "', se ha realizado una accion no permitida. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la comunidad '"+ movimiento.getNOMCOC() + "', se ha realizado una accion no permitida. Por favor, revise los datos.",null);
+			break;
+		case -2: //Error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al modificar la comunidad '"+ movimiento.getNOMCOC() + "', ya esta dada de alta. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar la comunidad '"+ movimiento.getNOMCOC() + "', ya esta dada de alta. Por favor, revise los datos.",null);
+			break;
+		case -3: //Error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al modificar un activo de la comunidad '"+ movimiento.getNOMCOC() + "', el activo esta vacio. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar un activo de la comunidad '"+ movimiento.getNOMCOC() + "', el activo esta vacio. Por favor, revise los datos.",null);
+			break;
+		case -4: //Error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+ movimiento.getNOMCOC() + "' fue dada de baja. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La comunidad '"+ movimiento.getNOMCOC() + "' fue dada de baja. Por favor, revise los datos.",null);
+			break;
+		case -5: //Error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "No existe la comunidad con identificador '"+ movimiento.getNUDCOM() + "'. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No existe la comunidad con identificador '"+ sNUDCOM + "'. Por favor, revise los datos.",null);
+			break;
+		case -6: //Error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "No puede darse de baja la comunidad '"+ movimiento.getNOMCOC() + "' por que tiene cuotas asignadas. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No puede darse de baja la comunidad '"+ movimiento.getNOMCOC() + "' por que tiene cuotas asignadas. Por favor, revise los datos.",null);
+			break;
+		case -7: //Error
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta un movimiento en la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta un movimiento en la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
+			break;
+		case -8: //Error COACCI = "";
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta un movimiento. No se ha elegido una accion valida. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta un movimiento. No se ha elegido una accion valida. Por favor, revise los datos.",null);
+			break;
+		case -11: //Error con rollback
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al actualizar el estado de la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al actualizar el estado de la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
+			break;
+		case -12: //Error con rollback
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la relaccion de movimientos para '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la relaccion de movimientos para '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
+			break;
+		default: //error generico
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El cambio solicitado ha producido un error desconocido. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El cambio solicitado ha producido un error desconocido. Por favor, revise los datos.",null);
+			break;
+		}
+		
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
+		
+		return msg;
+	}
+	
     public void altaActivoComunidad(ActionEvent actionEvent) 
     {  
     	
@@ -151,7 +242,9 @@ public class GestorTablaComunidadActivo implements Serializable
     	
     	//tablaactivos.remove(activoseleccionado); 
     	
-    	// comprobar el activo, no este ya asignado.
+
+    	nuevoMovimiento("X");
+
     	
     	this.sCOACES  = "";
     	
@@ -183,7 +276,10 @@ public class GestorTablaComunidadActivo implements Serializable
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
     	
     	
-    	tablaactivos.remove(activoseleccionado);  
+    	tablaactivos.remove(activoseleccionado);
+    	
+    	nuevoMovimiento("E");
+    	
     	this.sCOACES  = "";
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
