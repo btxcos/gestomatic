@@ -1143,6 +1143,7 @@ public class Activo
 
 	public void pintaActivo()
 	{
+		System.out.println("(ACTIVO)");
 		System.out.println("COACES:|"+COACES+"|");
 		System.out.println("NUINMU:|"+NUINMU+"|");
 		System.out.println("COSOPA:|"+COSOPA+"|");

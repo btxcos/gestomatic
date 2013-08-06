@@ -265,6 +265,7 @@ public class MovimientoCuota
 	
 	public void pintaMovimientoCuota()
 	{
+		System.out.println("(MOVIMIENTO CUOTA)");
 		System.out.println("CODTRN:|"+CODTRN+"|");
 		System.out.println("COTDOR:|"+COTDOR+"|");
 		System.out.println("IDPROV:|"+IDPROV+"|");

@@ -300,13 +300,23 @@ public class QMCuotas
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 
-		boolean found = true;
+		boolean found = false;
 		
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
+		String sQuery = "SELECT "              
+			       + sField3  +       
+			       "  FROM " + sTable + 
+				" WHERE " +
+				"("	+ sField1  + " = '"+ sCodCOCLDO +"' AND " +
+					sField2  + " = '"+ sCodNUDCOM +"' AND " +
+			      sField10  + " <> 'B' )";
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 
 		try 
 		{

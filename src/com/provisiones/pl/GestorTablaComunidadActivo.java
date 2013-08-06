@@ -42,7 +42,8 @@ public class GestorTablaComunidadActivo implements Serializable
 	
 
 
-	private ActivoTabla activoseleccionado = null;
+	private ActivoTabla activoseleccionadoalta = null;
+	private ActivoTabla activoseleccionadobaja = null;
 	
 	private ArrayList<ActivoTabla> tablaactivos = null;
 
@@ -120,7 +121,7 @@ public class GestorTablaComunidadActivo implements Serializable
     	
     	//this.sCOACESBuscado = activoseleccionado.getCOACES();
     	
-    	this.sCOACES  = activoseleccionado.getCOACES();
+    	this.sCOACES  = activoseleccionadoalta.getCOACES();
     	
     	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
     	
@@ -167,6 +168,14 @@ public class GestorTablaComunidadActivo implements Serializable
 		case 0: //Sin errores
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El movimiento en la comunidad '"+ movimiento.getNOMCOC() + "', con documento '"+movimiento.getNUDCOM()+"', se ha creado correctamente.");
 			msg = new FacesMessage("El movimiento en la comunidad '"+ movimiento.getNOMCOC() + "', con documento '"+movimiento.getNUDCOM()+"', se ha creado correctamente.");
+			if (sCodCOACCI.equals("X"))
+			{
+				tablaactivoscomunidad.add(activoseleccionadoalta);
+			}
+			else if (sCodCOACCI.equals("E"))
+			{
+				tablaactivoscomunidad.remove(activoseleccionadobaja);
+			}
 			break;
 		case -1: //Error
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la comunidad '"+ movimiento.getNOMCOC() + "', se ha realizado una accion no permitida. Por favor, revise los datos.");
@@ -229,14 +238,12 @@ public class GestorTablaComunidadActivo implements Serializable
 
     	//this.sCOACESBuscado = activoseleccionado.getCOACES();
     	
-    	this.sCOACES  = activoseleccionado.getCOACES();
+    	this.sCOACES  = activoseleccionadoalta.getCOACES();
     	
     	//buscar activo y darlo de alta en la comunidad
     	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
     	
-    	
-    	//tablaactivos.remove(activoseleccionado); 
     	
 
     	msg = nuevoMovimiento("X");
@@ -257,9 +264,14 @@ public class GestorTablaComunidadActivo implements Serializable
 
     	FacesMessage msg;
 
-    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
+    	if (activoseleccionadobaja == null)
+    	{
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Esto esta vacio hermano!!!");
+    	}
     	
-    	this.sCOACES  = activoseleccionado.getCOACES();
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+activoseleccionadobaja.getCOACES()+"|");
+    	
+    	this.sCOACES  = activoseleccionadobaja.getCOACES();
     	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
     	
@@ -270,11 +282,9 @@ public class GestorTablaComunidadActivo implements Serializable
     	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
     	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+   	
+    	msg = nuevoMovimiento("E");
     	
-    	
-    	tablaactivos.remove(activoseleccionado);
-    	
-    	nuevoMovimiento("E");
     	
     	this.sCOACES  = "";
 		
@@ -296,7 +306,7 @@ public class GestorTablaComunidadActivo implements Serializable
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
     	
-    	this.activoseleccionado = null;
+    	this.activoseleccionadobaja = null;
     	this.tablaactivos = null;
    	
     }
@@ -318,7 +328,8 @@ public class GestorTablaComunidadActivo implements Serializable
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
     	
-    	this.activoseleccionado = null;
+    	this.activoseleccionadoalta = null;
+    	this.activoseleccionadobaja = null;
     	this.tablaactivos = null;
     	this.tablaactivoscomunidad = null;
    	
@@ -407,12 +418,23 @@ public class GestorTablaComunidadActivo implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 
-	public ActivoTabla getActivoseleccionado() {
-		return activoseleccionado;
+
+	
+	
+	public ActivoTabla getActivoseleccionadoalta() {
+		return activoseleccionadoalta;
 	}
 
-	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
-		this.activoseleccionado = activoseleccionado;
+	public void setActivoseleccionadoalta(ActivoTabla activoseleccionadoalta) {
+		this.activoseleccionadoalta = activoseleccionadoalta;
+	}
+
+	public ActivoTabla getActivoseleccionadobaja() {
+		return activoseleccionadobaja;
+	}
+
+	public void setActivoseleccionadobaja(ActivoTabla activoseleccionadobaja) {
+		this.activoseleccionadobaja = activoseleccionadobaja;
 	}
 
 	public ArrayList<ActivoTabla> getTablaactivos() {

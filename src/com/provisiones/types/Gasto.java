@@ -554,6 +554,7 @@ public class Gasto
 	}
 	public void pintaGasto()
 	{
+		System.out.println("(GASTO)");
 		System.out.println("COACES:|"+COACES+"|");
 		System.out.println("COGRUG:|"+COGRUG+"|");
 		System.out.println("COTPGA:|"+COTPGA+"|");

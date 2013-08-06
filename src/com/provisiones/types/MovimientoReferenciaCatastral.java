@@ -171,6 +171,7 @@ public class MovimientoReferenciaCatastral
 
 	public void pintaMovimientoReferenciaCatastral()
 	{
+		System.out.println("(MOVIMIENTO REFERENCIA CATASTRAL)");
 		System.out.println("CODTRN:|"+CODTRN+"|");
 		System.out.println("COTDOR:|"+COTDOR+"|");
 		System.out.println("IDPROV:|"+IDPROV+"|");

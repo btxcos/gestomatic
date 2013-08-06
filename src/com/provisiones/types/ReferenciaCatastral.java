@@ -65,6 +65,7 @@ public class ReferenciaCatastral
 
 	public void pintaReferenciaCatastral()
 	{
+		System.out.println("(REFERENCIA CATASTRAL)");
 		System.out.println("NURCAT:|"+NURCAT+"|");
 		System.out.println("TIRCAT:|"+TIRCAT+"|");
 		System.out.println("ENEMIS:|"+ENEMIS+"|");

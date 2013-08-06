@@ -21,6 +21,9 @@ public class CLComunidades
 	
 	public static MovimientoComunidad convierteComunidadenMovimiento(Comunidad comunidad, String sCodCOACES, String sCodCOACCI)
 	{
+		String sMethod = "convierteComunidadenMovimiento";
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
 		
 		return new MovimientoComunidad(ValoresDefecto.DEF_E1_CODTRN,
 				ValoresDefecto.DEF_COTDOR,
@@ -57,6 +60,10 @@ public class CLComunidades
 	}
 	public static Comunidad convierteMovimientoenComunidad(MovimientoComunidad movimiento)
 	{
+		String sMethod = "convierteMovimientoenComunidad";
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		
 		return new Comunidad(movimiento.getCOCLDO(),
 				movimiento.getNUDCOM(),
 				movimiento.getNOMCOC(),
@@ -147,10 +154,18 @@ public class CLComunidades
 		else
 		{
 			//OK correcto estado y accion
+			
+			//Comunidad comunidad_modificada = convierteMovimientoenComunidad(movimiento);
+			
 			MovimientoComunidad movimiento_revisado = CLComunidades.revisaMovimiento(movimiento);
 			
-			movimiento_revisado.pintaMovimientoComunidad();
-			
+			if (movimiento_revisado.getCOACCI().equals("#"))
+			{	
+				//error peticion de baja de una comunidad con cuotas
+				iCodigo = -9;	
+			}
+			else
+			{
 				int indice = QMMovimientosComunidades.addMovimientoComunidad(movimiento_revisado);
 				
 				if (indice == 0)
@@ -171,6 +186,28 @@ public class CLComunidades
 								
 								if (movimiento.getCOACCI().equals("A"))
 								{
+									com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Dando de Alta...");
+									if (QMComunidades.getEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM()).equals("P"))
+									{
+										
+										com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "COACES:|"+movimiento_revisado.getCOACES()+"|");
+										if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().equals(""))
+										{
+											//OK 
+											iCodigo = 0;
+										}
+										else if (QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+										{
+											//OK 
+											iCodigo = 0;
+										}
+										else
+										{
+											//error y rollback
+											iCodigo = -12;
+											QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
+										}
+									}
 								
 									if (QMComunidades.setEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), "A"))
 									{
@@ -188,7 +225,7 @@ public class CLComunidades
 								}
 								else if (movimiento.getCOACCI().equals("B"))
 								{
-									
+									com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Dando de Baja...");
 									if (QMComunidades.setEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), "B"))
 									{
 										//OK 
@@ -203,8 +240,14 @@ public class CLComunidades
 										
 									}
 								}
-								else
+								else //M
 								{
+								
+									
+									com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Modificando...");
+									
+									movimiento.pintaMovimientoComunidad();
+									movimiento_revisado.pintaMovimientoComunidad();
 									
 									if (QMComunidades.modComunidad(convierteMovimientoenComunidad(movimiento), movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 									{	
@@ -226,8 +269,10 @@ public class CLComunidades
 									QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 							}
 							break;
-						case E:case X:
-							if (QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+						case X:
+							String sMovimientoAlta = QMListaComunidadesActivos.getActivoVinculadoComunidadID(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES());
+							
+							if (sMovimientoAlta.equals("") && QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
 							{
 								//OK 
 								iCodigo = 0;
@@ -239,12 +284,28 @@ public class CLComunidades
 								QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 							}
 							break;
+						case E:
+							String sMovimientoBaja = QMListaComunidadesActivos.getActivoVinculadoComunidadID(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES());
+							
+							
+							if (!sMovimientoBaja.equals("") && QMListaComunidadesActivos.delRelacionComunidad(sMovimientoBaja))
+							{
+								//OK 
+								iCodigo = 0;
+							}
+							else
+							{
+								//error y rollback
+								iCodigo = -12;
+								QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), sMovimientoBaja);
+							}							
+							break;
 					}	
 				}
-			
+			}
 		}
 
-		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de Salida:|"+iCodigo+"|");
 		return iCodigo;
 	}
 	
@@ -287,11 +348,31 @@ public class CLComunidades
 	
 	public static MovimientoComunidad revisaMovimiento(MovimientoComunidad movimiento)
 	{
+		String sMethod = "revisaMovimiento";
+		
 		Comunidad comunidad = QMComunidades.getComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM());
 		
 		String sEstado = QMComunidades.getEstado(movimiento.getCOCLDO(), movimiento.getNUDCOM());
 		
 		comunidad.pintaComunidad();
+		
+		movimiento.pintaMovimientoComunidad();
+		
+		MovimientoComunidad movimiento_revisado = new MovimientoComunidad("", "", "", "", "", "", "", "", "0", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "0", "0", "0", "0", "", "", "");
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Revisando Estado:|"+sEstado+"| Accion: |"+movimiento.getCOACCI()+"|");
+		
+		movimiento_revisado.setCODTRN(movimiento.getCODTRN());
+		movimiento_revisado.setCOTDOR(movimiento.getCOTDOR());
+		movimiento_revisado.setIDPROV(movimiento.getIDPROV());
+		movimiento_revisado.setCOACCI(movimiento.getCOACCI());
+		movimiento_revisado.setCOENGP(movimiento.getCOENGP());
+		movimiento_revisado.setCOCLDO(movimiento.getCOCLDO());
+		movimiento_revisado.setNUDCOM(movimiento.getNUDCOM());
+		
+		movimiento_revisado.setOBDEER(movimiento.getOBDEER());
+		
+				
 		
 		if (sEstado.equals("P"))
 		{
@@ -300,217 +381,252 @@ public class CLComunidades
 				
 				if (movimiento.getNOMCOC().equals(""))
 				{
-					movimiento.setBITC01("#");
+					movimiento_revisado.setBITC01("#");
 				}
 				else
 				{
-					movimiento.setBITC01("S");
+					movimiento_revisado.setBITC01("S");
+					movimiento_revisado.setNOMCOC(movimiento.getNOMCOC());
 				}
 
 				if (movimiento.getNODCCO().equals(""))
 				{
-					movimiento.setBITC02("#");
+					movimiento_revisado.setBITC02("#");
 				}
 				else
 				{
-					movimiento.setBITC02("S");
+					movimiento_revisado.setBITC02("S");
+					movimiento_revisado.setNODCCO(movimiento.getNODCCO());
 				}
 
 				if (movimiento.getNOMPRC().equals(""))
 				{
-					movimiento.setBITC03("#");
+					movimiento_revisado.setBITC03("#");
 				}
 				else
 				{
-					movimiento.setBITC03("S");
+					movimiento_revisado.setBITC03("S");
+					movimiento_revisado.setNOMPRC(movimiento.getNOMPRC());
 				}
 				
 				if (movimiento.getNUTPRC().equals(""))
 				{
-					movimiento.setBITC04("#");
+					movimiento_revisado.setBITC04("#");
 				}
 				else
 				{
-					movimiento.setBITC04("S");
+					movimiento_revisado.setBITC04("S");
+					movimiento_revisado.setNUTPRC(movimiento.getNUTPRC());
 				}
 				
 				if (movimiento.getNOMADC().equals(""))
 				{
-					movimiento.setBITC05("#");
+					movimiento_revisado.setBITC05("#");
 				}
 				else
 				{
-					movimiento.setBITC05("S");
+					movimiento_revisado.setBITC05("S");
+					movimiento_revisado.setNOMADC(movimiento.getNOMADC());
 				}
 				
 				if (movimiento.getNUTADC().equals(""))
 				{
-					movimiento.setBITC06("#");
+					movimiento_revisado.setBITC06("#");
 				}
 				else
 				{
-					movimiento.setBITC06("S");
+					movimiento_revisado.setBITC06("S");
+					movimiento_revisado.setNUTADC(movimiento.getNUTADC());
 				}
 				
 				if (movimiento.getNODCAD().equals(""))
 				{
-					movimiento.setBITC07("#");
+					movimiento_revisado.setBITC07("#");
 				}
 				else
 				{
-					movimiento.setBITC07("S");
+					movimiento_revisado.setBITC07("S");
+					movimiento_revisado.setNODCAD(movimiento.getNODCAD());
 				}
 				
 				if (movimiento.getNUCCEN().equals("") && movimiento.getNUCCOF().equals("") && movimiento.getNUCCDI().equals("") && movimiento.getNUCCNT().equals(""))
 				{
-					movimiento.setBITC08("#");
+					movimiento_revisado.setBITC08("#");
 				}
 				else
 				{
-					movimiento.setBITC08("S");
+					movimiento_revisado.setBITC08("S");
+					movimiento_revisado.setNUCCEN(movimiento.getNUCCEN());
+					movimiento_revisado.setNUCCOF(movimiento.getNUCCOF());
+					movimiento_revisado.setNUCCDI(movimiento.getNUCCDI());
+					movimiento_revisado.setNUCCNT(movimiento.getNUCCNT());
 				}
 				
 				if (movimiento.getOBTEXC().equals(""))
 				{
-					movimiento.setBITC09("#");
+					movimiento_revisado.setBITC09("#");
 				}
 				else
 				{
-					movimiento.setBITC09("A");
+					movimiento_revisado.setBITC09("A");
+					movimiento_revisado.setOBTEXC(movimiento.getOBTEXC());
 				}
 				
 				if (movimiento.getCOACES().equals(""))
 				{
-					movimiento.setBITC10("#");
+					movimiento_revisado.setBITC10("#");
 				}
 				else
 				{
-					movimiento.setBITC10("S");
+					movimiento_revisado.setBITC10("S");
+					movimiento_revisado.setCOACES(movimiento.getCOACES());
 				}
 			}
 
 		}
-		if (sEstado.equals("A"))
+		else if (sEstado.equals("A"))
 		{	
 			if (movimiento.getCOACCI().equals("M"))
 			{
+				boolean bCambio = false;
+				
 				if (movimiento.getNOMCOC().equals(comunidad.getNOMCOC()))
 				{
-					movimiento.setBITC01("#");
+					movimiento_revisado.setBITC01("#");
 				}
 				else
 				{
-					movimiento.setBITC01("S");
+					movimiento_revisado.setBITC01("S");
+					movimiento_revisado.setNOMCOC(movimiento.getNOMCOC());
+					bCambio = true;
 				}
 
 				if (movimiento.getNODCCO().equals(comunidad.getNODCCO()))
 				{
-					movimiento.setBITC02("#");
+					movimiento_revisado.setBITC02("#");
 				}
 				else
 				{
-					movimiento.setBITC02("S");
+					movimiento_revisado.setBITC02("S");
+					movimiento_revisado.setNODCCO(movimiento.getNODCCO());
+					bCambio = true;
 				}
 
 				if (movimiento.getNOMPRC().equals(comunidad.getNOMPRC()))
 				{
-					movimiento.setBITC03("#");
+					movimiento_revisado.setBITC03("#");
 				}
 				else
 				{
-					movimiento.setBITC03("S");
+					movimiento_revisado.setBITC03("S");
+					movimiento_revisado.setNOMPRC(movimiento.getNOMPRC());
+					bCambio = true;
 				}
 				
 				if (movimiento.getNUTPRC().equals(comunidad.getNUTPRC()))
 				{
-					movimiento.setBITC04("#");
+					movimiento_revisado.setBITC04("#");
 				}
 				else
 				{
-					movimiento.setBITC04("S");
+					movimiento_revisado.setBITC04("S");
+					movimiento_revisado.setNUTPRC(movimiento.getNUTPRC());
+					bCambio = true;
 				}
 				
 				if (movimiento.getNOMADC().equals(comunidad.getNOMADC()))
 				{
-					movimiento.setBITC05("#");
+					movimiento_revisado.setBITC05("#");
 				}
 				else
 				{
-					movimiento.setBITC05("S");
+					movimiento_revisado.setBITC05("S");
+					movimiento_revisado.setNOMADC(movimiento.getNOMADC());
+					bCambio = true;
 				}
 				
 				if (movimiento.getNUTADC().equals(comunidad.getNUTADC()))
 				{
-					movimiento.setBITC06("#");
+					movimiento_revisado.setBITC06("#");
 				}
 				else
 				{
-					movimiento.setBITC06("S");
+					movimiento_revisado.setBITC06("S");
+					movimiento_revisado.setNUTADC(movimiento.getNUTADC());
+					bCambio = true;
 				}
 				
 				if (movimiento.getNODCAD().equals(comunidad.getNODCAD()))
 				{
-					movimiento.setBITC07("#");
+					movimiento_revisado.setBITC07("#");
 				}
 				else
 				{
-					movimiento.setBITC07("S");
+					movimiento_revisado.setBITC07("S");
+					movimiento_revisado.setNODCAD(movimiento.getNODCAD());
+					bCambio = true;
 				}
 				
 				if (movimiento.getNUCCEN().equals(comunidad.getNUCCEN()) && movimiento.getNUCCOF().equals(comunidad.getNUCCOF()) && movimiento.getNUCCDI().equals(comunidad.getNUCCDI()) && movimiento.getNUCCNT().equals(comunidad.getNUCCNT()))
 				{
-					movimiento.setBITC08("#");
+					movimiento_revisado.setBITC08("#");
+
 				}
 				else
 				{
-					movimiento.setBITC08("S");
+					movimiento_revisado.setBITC08("S");
+					movimiento_revisado.setNUCCEN(movimiento.getNUCCEN());
+					movimiento_revisado.setNUCCOF(movimiento.getNUCCOF());
+					movimiento_revisado.setNUCCDI(movimiento.getNUCCDI());
+					movimiento_revisado.setNUCCNT(movimiento.getNUCCNT());
+					bCambio = true;
 				}
 				
 				if (movimiento.getOBTEXC().equals(comunidad.getOBTEXC()))
 				{
-					movimiento.setBITC09("#");
+					movimiento_revisado.setBITC09("#");
 				}
 				else
 				{
-					movimiento.setBITC09("M");
+					movimiento_revisado.setBITC09("M");
+					movimiento_revisado.setOBTEXC(movimiento.getOBTEXC());
+					bCambio = true;
 				}
-				movimiento.setCOACES("");
-				movimiento.setBITC10("#");
+				movimiento_revisado.setCOACES("0");
+				movimiento_revisado.setBITC10("#");
+				
+				if (!bCambio)
+					movimiento_revisado.setCOACCI("#");
 
 			}
-			if (movimiento.getCOACCI().equals("X") || movimiento.getCOACCI().equals("E"))
+			else //X, E o B
 			{
+				
+				movimiento_revisado.setBITC01("#");
+				movimiento_revisado.setBITC02("#");
+				movimiento_revisado.setBITC03("#");
+				movimiento_revisado.setBITC04("#");
+				movimiento_revisado.setBITC05("#");
+				movimiento_revisado.setBITC06("#");
+				movimiento_revisado.setBITC07("#");
+				movimiento_revisado.setBITC08("#");
+				movimiento_revisado.setBITC09("#");
 
-				movimiento.setBITC01("#");
-				movimiento.setNOMCOC("");
-				movimiento.setBITC02("#");
-				movimiento.setNODCCO("");
-				movimiento.setBITC03("#");
-				movimiento.setNOMPRC("");
-				movimiento.setBITC04("#");
-				movimiento.setNUTPRC("");
-				movimiento.setBITC05("#");
-				movimiento.setNOMADC("");
-				movimiento.setBITC06("#");
-				movimiento.setNUTADC("");
-				movimiento.setBITC07("#");
-				movimiento.setNODCAD("");
-				movimiento.setBITC08("#");
-				movimiento.setNUCCEN("");
-				movimiento.setNUCCOF("");
-				movimiento.setNUCCDI("");
-				movimiento.setNUCCNT("");
-				movimiento.setBITC09("#");
-				movimiento.setOBTEXC("");
-
-				if (!movimiento.getCOACES().equals(""))
+				if (movimiento.getCOACCI().equals("X") || movimiento.getCOACCI().equals("E"))
 				{
-					movimiento.setBITC10("S");
+					movimiento_revisado.setBITC10("S");
+					movimiento_revisado.setCOACES(movimiento.getCOACES());
 				}
+				else
+					movimiento_revisado.setBITC10("#");
 			}
+
 		}
 
-		return movimiento;
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Revisado! Nuevo movimiento:");
+		movimiento_revisado.pintaMovimientoComunidad();
+		
+		return movimiento_revisado;
 
 	}
 	

@@ -273,6 +273,7 @@ public class MovimientoComunidad
 	
 	public void pintaMovimientoComunidad()
 	{
+		System.out.println("(MOVIMIENTO COMUNIDAD)");
 		System.out.println("CODTRN:|"+CODTRN+"|");
 		System.out.println("COTDOR:|"+COTDOR+"|");
 		System.out.println("IDPROV:|"+IDPROV+"|");

@@ -106,6 +106,7 @@ public class ImpuestoRecurso
 
 	public void pintaImpuestoRecurso()
 	{
+		System.out.println("(IMPUESTO/RECURSO)");
 		System.out.println("NURCAT:|"+NURCAT+"|");
 		System.out.println("COSBAC:|"+COSBAC+"|");
 		System.out.println("FEPRRE:|"+FEPRRE+"|");

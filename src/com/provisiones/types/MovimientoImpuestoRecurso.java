@@ -264,6 +264,7 @@ public class MovimientoImpuestoRecurso
 
 	public void pintaMovimientoImpuestoRecurso()
 	{
+		System.out.println("(MOVIMIENTO IMPUESTO/RECURSO)");
 		System.out.println("CODTRN:|"+CODTRN+"|");
 		System.out.println("COTDOR:|"+COTDOR+"|");
 		System.out.println("IDPROV:|"+IDPROV+"|");

@@ -63,6 +63,7 @@ public class Provision
 	}
 	public void pintaProvision()
 	{
+		System.out.println("(PROVISION)");
 		System.out.println("sNUPROF         :|"+sNUPROF         +"|");
 		System.out.println("sFEPFON         :|"+sFEPFON         +"|");
 		System.out.println("sFechaValidacion:|"+sFechaValidacion+"|");

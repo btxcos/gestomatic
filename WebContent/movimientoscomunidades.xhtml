@@ -67,7 +67,7 @@
             						<f:selectItem itemLabel="Modificacion" itemValue="M" />
         							</p:selectOneRadio>
 											<p:panel>
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="8" cellpadding="5">
 													<h:outputText for="COCLDO" value="Documento: " />
 													<p:selectOneMenu id="COCLDO" value="#{GestorMovimientosComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
@@ -81,8 +81,7 @@
 														</p:inputText>
 													<p:message for="NUDCOM" display="icon"/>
 													<p:commandButton value="Cargar" update="panel, msgs, popup" actionListener="#{GestorMovimientosComunidades.cargarComunidad}" />
-														
-													
+
 												</h:panelGrid>
 										  </p:panel>
 											<p:panel>                                  

@@ -125,6 +125,7 @@ public class Cuota
 	
 	public void pintaCuota()
 	{
+		System.out.println("(CUOTA)");
 		System.out.println("COCLDO:|"+COCLDO+"|");
 		System.out.println("NUDCOM:|"+NUDCOM+"|");
 		System.out.println("COSBAC:|"+COSBAC+"|");

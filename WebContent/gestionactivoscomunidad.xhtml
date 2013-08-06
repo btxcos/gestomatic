@@ -112,7 +112,7 @@
 														<p:inputText id="COACES" value="#{GestorTablaComunidadActivo.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Dar de Alta" update="popup, COACES" actionListener="#{GestorTablaComunidadActivo.altaActivoComunidad}"/>	
+													<p:commandButton value="Dar de Alta" update="msgs, popup, COACES, activosComunidad" actionListener="#{GestorTablaComunidadActivo.altaActivoComunidad}"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
@@ -125,11 +125,11 @@
 								<h:panelGrid columns="1" cellpadding="5">
 
 									<p:contextMenu for="activosComunidad">  
-										 <p:menuitem value="Dar de Baja" update="activos, form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorTablaComunidadActivo.bajaActivoComunidad}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+										 <p:menuitem value="Dar de Baja" update="activosComunidad, COACES, popup, msgs" icon="ui-icon-check" actionListener="#{GestorTablaComunidadActivo.bajaActivoComunidad}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
 									</p:contextMenu>  
 											
 									<p:dataTable id="activosComunidad" var="activo" value="#{GestorTablaComunidadActivo.tablaactivoscomunidad}" rowKey="#{activo.COACES}"  
-											              selection="#{GestorTablaComunidadActivo.activoseleccionado}" selectionMode="single">  
+											              selection="#{GestorTablaComunidadActivo.activoseleccionadobaja}" selectionMode="single">  
 											
 										<p:column headerText="Codigo Activo">  
 										    #{activo.COACES}  
@@ -171,7 +171,7 @@
 							</p:contextMenu>  
 									
 							<p:dataTable id="activos" var="activo" value="#{GestorTablaComunidadActivo.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorTablaComunidadActivo.activoseleccionado}" selectionMode="single">  
+									              selection="#{GestorTablaComunidadActivo.activoseleccionadoalta}" selectionMode="single">  
 									
 								<p:column headerText="Codigo Activo">  
 								    #{activo.COACES}  

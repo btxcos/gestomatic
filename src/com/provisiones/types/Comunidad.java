@@ -158,6 +158,7 @@ public class Comunidad
 	
 	public void pintaComunidad()
 	{
+		System.out.println("(COMUNIDAD)");
 		System.out.println("COCLDO:|"+COCLDO+"|");
 		System.out.println("NUDCOM:|"+NUDCOM+"|");
 		System.out.println("NOMCOC:|"+NOMCOC+"|");
