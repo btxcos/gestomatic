@@ -163,6 +163,12 @@ public class CLComunidades
 		return comunidad;
 	}
 	
+	public static boolean consultaEstadoComunidad(String sCOCLDO, String sNUDCOM)
+	{
+		return QMComunidades.getEstado(sCOCLDO,sNUDCOM).equals("A");
+	}
+	
+	
 	
 	public static MovimientoComunidad convierteComunidadenMovimiento(Comunidad comunidad, String sCodCOACES, String sCodCOACCI)
 	{

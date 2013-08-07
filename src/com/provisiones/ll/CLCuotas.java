@@ -80,8 +80,12 @@ public class CLCuotas
 	
 	public static ArrayList<ActivoTabla> buscarActivosComunidadDisponibles (ActivoTabla activo, String sCodCOCLDO, String sCodNUDCOM)
 	{
-
-		return QMListaCuotas.buscaActivosComunidadDisponibles(activo, sCodCOCLDO, sCodNUDCOM);
+		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
+		
+		if (CLComunidades.consultaEstadoComunidad(sCodCOCLDO, sCodNUDCOM))
+			result = QMListaCuotas.buscaActivosComunidadDisponibles(activo, sCodCOCLDO, sCodNUDCOM); 
+			
+		return result;
 	}
 	
 	public static int comprobarActivo (String sCOCLDO, String sNUDCOM, String sCOACES)
@@ -169,7 +173,22 @@ public class CLCuotas
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
 		
-		if (movimiento.getCOACCI().equals(""))
+		if (movimiento.getFIPAGO().equals("#"))
+		{
+			//error fecha de inicio incorrecta
+			iCodigo = -7;
+		}
+		else if (movimiento.getFFPAGO().equals("#"))
+		{
+			//error fecha de fin incorrecta
+			iCodigo = -8;
+		}
+		else if (movimiento.getFAACTA().equals("#"))
+		{
+			//error fecha de acta incorrecta
+			iCodigo = -9;
+		}
+		else if (movimiento.getCOACCI().equals(""))
 		{
 			//error accion vacia
 			iCodigo = -1;
@@ -215,7 +234,7 @@ public class CLCuotas
 					switch (COACCES) 
 					{
 						case A:
-							Cuota cuotadealta = convierteMovimientoenCuota(movimiento);
+							Cuota cuotadealta = convierteMovimientoenCuota(movimiento_revisado);
 
 							com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la cuota...");
 							cuotadealta.pintaCuota();

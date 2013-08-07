@@ -481,10 +481,13 @@ public class QMListaCuotas
 					   " WHERE ("
 
 					   + QMListaComunidadesActivos.sField1 + " = '" + sCodCOCLDO	+ "' AND "  
-					   + QMListaComunidadesActivos.sField2 + " = '" + sCodNUDCOM	+ "' AND "
-					   + QMListaComunidadesActivos.sField3 + " NOT IN  (SELECT "
-					   +  sField1 + 
-					   "  FROM " + sTable +  "))))";
+					   + QMListaComunidadesActivos.sField2 + " = '" + sCodNUDCOM	+ "' " +
+					   	//	"AND "
+					   //+ QMListaComunidadesActivos.sField3 + 
+					   //" NOT IN  (SELECT "
+					   //+  sField1 + 
+					   //"  FROM " + sTable +  ")" +
+					   ")))";
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 		
@@ -521,12 +524,13 @@ public class QMListaCuotas
 					   " WHERE ("
 
 					   + QMListaComunidadesActivos.sField1 + " = '" + sCodCOCLDO	+ "' AND "  
-					   + QMListaComunidadesActivos.sField2 + " = '" + sCodNUDCOM	+ "' AND "
-					   + QMListaComunidadesActivos.sField3 + " NOT IN  (SELECT "
-					   +  sField1 + 
-					   "  FROM " + sTable + 
-					   
-					   "))))");
+					   + QMListaComunidadesActivos.sField2 + " = '" + sCodNUDCOM	+ "' " +
+					   	//	"AND "
+					   //+ QMListaComunidadesActivos.sField3 + 
+					   //" NOT IN  (SELECT "
+					   //+  sField1 + 
+					   //"  FROM " + sTable +  ")" +
+					   ")))");
 
 			
 

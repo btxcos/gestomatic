@@ -48,6 +48,7 @@ public class QMCuotas
 
 			stmt = conn.createStatement();
 			stmt.executeUpdate("INSERT INTO " + sTable + " ("
+					   + sField1  + ","  
 				       + sField2  + ","              
 				       + sField3  + ","              
 				       + sField4  + ","              
@@ -223,7 +224,8 @@ public class QMCuotas
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  + ","              
+					   + sField1  + ","
+					   + sField2  + ","              
 				       + sField3  + ","              
 				       + sField4  + ","              
 				       + sField5  + ","              

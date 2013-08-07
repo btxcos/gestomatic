@@ -78,33 +78,44 @@ public class GestorTablaComunidadActivo implements Serializable
 	{
 		String sMethod = "cargarComunidad";
 		
-		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-		
-		this.sCOCLDO = comunidad.getCOCLDO();
-		this.sNUDCOM = comunidad.getNUDCOM();
-		this.sNOMCOC = comunidad.getNOMCOC();
-		this.sNODCCO = comunidad.getNODCCO();
-		
 		FacesMessage msg;
 		
-		if (comunidad.getNUDCOM().equals(""))
-		{
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
+		/*if (CLComunidades.consultaEstadoComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()))
+		{*/
+		
+			Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		
+			this.sCOCLDO = comunidad.getCOCLDO();
+			this.sNUDCOM = comunidad.getNUDCOM();
+			this.sNOMCOC = comunidad.getNOMCOC();
+			this.sNODCCO = comunidad.getNODCCO();
+		
+		
+		
+			if (comunidad.getNUDCOM().equals(""))
+			{
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
-		}
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
+			}
+			else
+			{
+			
+				this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
+			
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
+			
+				msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
+			
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
+			}
+		/*}
 		else
 		{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' fue dada de baja en el sistema.",null);
 			
-			this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
-			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
-			
-			msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
-			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
-		}
-		
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' fue dada de baja en el sistema.");
+		}*/	
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				

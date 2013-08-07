@@ -2,7 +2,11 @@ package com.provisiones.pl;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -168,29 +172,42 @@ public class GestorCuotas implements Serializable
 	{
 		String sMethod = "cargarComunidad";
 		
-		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-		
-		this.sCOCLDO = comunidad.getCOCLDO();
-		this.sNUDCOM = comunidad.getNUDCOM();
-		this.sNOMCOC = comunidad.getNOMCOC();
-		this.sNODCCO = comunidad.getNODCCO();
-		
 		FacesMessage msg;
 		
-		if (comunidad.getNUDCOM().equals(""))
+		if (CLComunidades.consultaEstadoComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()))
 		{
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
+			Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		
+			this.sCOCLDO = comunidad.getCOCLDO();
+			this.sNUDCOM = comunidad.getNUDCOM();
+			this.sNOMCOC = comunidad.getNOMCOC();
+			this.sNODCCO = comunidad.getNODCCO();
+		
+		
+		
+			if (comunidad.getNUDCOM().equals(""))
+			{
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
+			}	
+			else
+			{
+			
+				msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
+			
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
+			}
 		}
 		else
 		{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta dada de alta en el sistema.",null);
 			
-			msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta dada de alta en el sistema.");
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
+			this.sCOCLDO = "";
+			this.sNUDCOM = "";
 		}
-		
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				
@@ -278,30 +295,8 @@ public class GestorCuotas implements Serializable
 		
 	}
 	
-	public String compruebaPago(String sTipoPago)
-	{
-		String sMethod = "compruebaPago";
-			
-		String sTipo = bDevolucion ? "5"+ sTipoPago : sTipoPago;
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de pago:|"+sTipo+"|");
-		
-		
-		return sTipo;
-	}
 
-	public String compruebaImporte(String sImporte)
-	{
-		String sMethod = "compruebaImporte";
-		
-		sImporte.replaceFirst("-", "");
-			
-		String sImporteReal = bDevolucion ? "-"+ sImporte : sImporte;
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
-		
-		return sImporteReal;
-	}
+	
 	
 	public void registraMovimiento(ActionEvent actionEvent)
 	{
@@ -314,24 +309,24 @@ public class GestorCuotas implements Serializable
 				sCODTRN.toUpperCase(), 
 				sCOTDOR.toUpperCase(), 
 				sIDPROV.toUpperCase(), 
-				sCOACCI.toUpperCase(), 
+				"A",//sCOACCI.toUpperCase(), 
 				sCOCLDO.toUpperCase(), 
 				sNUDCOM.toUpperCase(), 
 				sCOENGP.toUpperCase(), 
 				sCOACES.toUpperCase(), 
 				ValoresDefecto.DEF_COGRUG_E2, 
 				ValoresDefecto.DEF_COTACA_E2, 
-				sCOSBAC.toUpperCase(), 
+				Utils.compruebaPago(bDevolucion,sCOSBAC.toUpperCase()), 
 				"", 
-				sFIPAGO.toUpperCase(), 
+				Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
 				"", 
-				sFFPAGO.toUpperCase(), 
+				Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
 				"", 
-				sIMCUCO.toUpperCase(), 
+				Utils.compruebaImporte(false,sIMCUCO.toUpperCase()), 
 				"", 
-				sFAACTA.toUpperCase(), 
+				Utils.compruebaFecha(sFAACTA.toUpperCase()), 
 				"", 
-				sPTPAGO.toUpperCase(), 
+				sPTPAGO.toUpperCase(),
 				"", 
 				sOBTEXC.toUpperCase(), 
 				sOBDEER.toUpperCase());
@@ -339,6 +334,8 @@ public class GestorCuotas implements Serializable
 		FacesMessage msg;
 		
 		int iSalida = CLCuotas.registraMovimiento(movimiento);
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
 		
 		switch (iSalida) 
 		{

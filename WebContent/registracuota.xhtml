@@ -7,7 +7,7 @@
 	<h:head>
 	</h:head>
 	<h:body>
-		<h:form id="form">
+		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="33%" header="Alta Comunidad">
@@ -44,7 +44,7 @@
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorCuotas.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-											<p:commandButton value="Alta Cuota" />
+											<p:commandButton value="Alta Cuota" update="panel, popup, msgs" actionListener="#{GestorCuotas.registraMovimiento}"/>
 										</h:panelGrid>
 											<p:messages id="msgs"/>
 									</p:fieldset>
@@ -150,7 +150,7 @@
 													<p:message for="FIPAGO" display="icon"/>
 
 													<h:outputText for="FFPAGO" value="FFPAGO: " />
-													<p:inputMask id="FFPAGO" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorCuotas.sFIPAGO}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FFPAGO" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorCuotas.sFFPAGO}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:message for="FFPAGO" display="icon"/>
@@ -163,7 +163,7 @@
 													<p:message for="IMCUCO" display="icon"/>
 
 													<h:outputText for="FAACTA" value="FAACTA: " />
-													<p:inputMask id="FAACTA" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorCuotas.sFIPAGO}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FAACTA" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorCuotas.sFAACTA}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:message for="FAACTA" display="icon"/>

@@ -157,41 +157,51 @@ public class GestorMovimientosComunidades implements Serializable
 	{
 		String sMethod = "cargarComunidad";
 		
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-		
-		this.sCOCLDO = comunidad.getCOCLDO();
-		this.sNUDCOM = comunidad.getNUDCOM();
-		this.sNOMCOC = comunidad.getNOMCOC();
-		this.sNODCCO = comunidad.getNODCCO();
-		this.sNOMPRC = comunidad.getNOMPRC();
-		this.sNUTPRC = comunidad.getNUTPRC();
-		this.sNOMADC = comunidad.getNOMADC();
-		this.sNUTADC = comunidad.getNUTADC();
-		this.sNODCAD = comunidad.getNODCAD();
-		this.sNUCCEN = comunidad.getNUCCEN();
-		this.sNUCCOF = comunidad.getNUCCOF();
-		this.sNUCCDI = comunidad.getNUCCDI();
-		this.sNUCCNT = comunidad.getNUCCNT();
-		this.sOBTEXC = comunidad.getOBTEXC();
-
-		
 		FacesMessage msg;
 		
-		if (comunidad.getNUDCOM().equals(""))
-		{
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
+		/*if (CLComunidades.consultaEstadoComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()))
+		{*/
+		
+			Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		
+			this.sCOCLDO = comunidad.getCOCLDO();
+			this.sNUDCOM = comunidad.getNUDCOM();
+			this.sNOMCOC = comunidad.getNOMCOC();
+			this.sNODCCO = comunidad.getNODCCO();
+			this.sNOMPRC = comunidad.getNOMPRC();
+			this.sNUTPRC = comunidad.getNUTPRC();
+			this.sNOMADC = comunidad.getNOMADC();
+			this.sNUTADC = comunidad.getNUTADC();
+			this.sNODCAD = comunidad.getNODCAD();
+			this.sNUCCEN = comunidad.getNUCCEN();
+			this.sNUCCOF = comunidad.getNUCCOF();
+			this.sNUCCDI = comunidad.getNUCCDI();
+			this.sNUCCNT = comunidad.getNUCCNT();
+			this.sOBTEXC = comunidad.getOBTEXC();
+
+		
+		
+		
+			if (comunidad.getNUDCOM().equals(""))
+			{
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
-		}
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
+			}
+			else
+			{
+				msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
+			
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
+			}
+		
+		/*}
 		else
 		{
-			msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta dada de alta en el sistema.",null);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
-		}
-		
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta dada de alta en el sistema.");
+		}*/
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				
