@@ -27,28 +27,28 @@ public class GestorMovimientosComunidades implements Serializable
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 	private String sCOCLDO = "";
 	private String sNUDCOM = "";
-	private String sBITC10 = "";
+	//private String sBITC10 = "";
 	private String sCOACES = "";
-	private String sBITC01 = "";
+	//private String sBITC01 = "";
 	private String sNOMCOC = "";
-	private String sBITC02 = "";
+	//private String sBITC02 = "";
 	private String sNODCCO = "";
-	private String sBITC03 = "";
+	//private String sBITC03 = "";
 	private String sNOMPRC = "";
-	private String sBITC04 = "";
+	//private String sBITC04 = "";
 	private String sNUTPRC = "";
-	private String sBITC05 = "";
+	//private String sBITC05 = "";
 	private String sNOMADC = "";
-	private String sBITC06 = "";
+	//private String sBITC06 = "";
 	private String sNUTADC = "";
-	private String sBITC07 = "";
+	//private String sBITC07 = "";
 	private String sNODCAD = "";
-	private String sBITC08 = "";
+	//private String sBITC08 = "";
 	private String sNUCCEN = "";
 	private String sNUCCOF = "";
 	private String sNUCCDI = "";
 	private String sNUCCNT = "";
-	private String sBITC09 = "";
+	//private String sBITC09 = "";
 	private String sOBTEXC = "";
 	private String sOBDEER = "";
 	
@@ -110,6 +110,7 @@ public class GestorMovimientosComunidades implements Serializable
 		this.sNUCCNT = "";
 		this.sOBTEXC = "";
 	}
+	
 	public void limpiarPlantilla(ActionEvent actionEvent)
 	{
 		borrarCampos();
@@ -202,7 +203,8 @@ public class GestorMovimientosComunidades implements Serializable
 		
 		Utils.standardIO2File("");//Salida por fichero de texto
 		
-		MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
+		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
+		MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), "", sCOACES.toUpperCase(), "", sNOMCOC.toUpperCase(), "", sNODCCO.toUpperCase(), "", sNOMPRC.toUpperCase(), "", sNUTPRC.toUpperCase(), "", sNOMADC.toUpperCase(), "", sNUTADC.toUpperCase(), "", sNODCAD.toUpperCase(), "", sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), "", sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
 		
 		FacesMessage msg;
 		
@@ -313,108 +315,108 @@ public class GestorMovimientosComunidades implements Serializable
 	public void setsNUDCOM(String sNUDCOM) {
 		this.sNUDCOM = sNUDCOM;
 	}
-	public String getsBITC10() {
+	/*public String getsBITC10() {
 		return sBITC10;
 	}
 	public void setsBITC10(String sBITC10) {
 		this.sBITC10 = sBITC10;
-	}
+	}*/
 	public String getsCOACES() {
 		return sCOACES;
 	}
 	public void setsCOACES(String sCOACES) {
 		this.sCOACES = sCOACES;
 	}
-	public String getsBITC01() {
+	/*public String getsBITC01() {
 		return sBITC01;
 	}
 	public void setsBITC01(String sBITC01) {
 		this.sBITC01 = sBITC01;
-	}
+	}*/
 	public String getsNOMCOC() {
 		return sNOMCOC;
 	}
 	public void setsNOMCOC(String sNOMCOC) {
 		this.sNOMCOC = sNOMCOC;
 	}
-	public String getsBITC02() {
+	/*public String getsBITC02() {
 		return sBITC02;
 	}
 	public void setsBITC02(String sBITC02) {
 		this.sBITC02 = sBITC02;
-	}
+	}*/
 	public String getsNODCCO() {
 		return sNODCCO;
 	}
 	public void setsNODCCO(String sNODCCO) {
 		this.sNODCCO = sNODCCO;
 	}
-	public String getsBITC03() {
+	/*public String getsBITC03() {
 		return sBITC03;
 	}
 	public void setsBITC03(String sBITC03) {
 		this.sBITC03 = sBITC03;
-	}
+	}*/
 	public String getsNOMPRC() {
 		return sNOMPRC;
 	}
 	public void setsNOMPRC(String sNOMPRC) {
 		this.sNOMPRC = sNOMPRC;
 	}
-	public String getsBITC04() {
+	/*public String getsBITC04() {
 		return sBITC04;
 	}
 	public void setsBITC04(String sBITC04) {
 		this.sBITC04 = sBITC04;
-	}
+	}*/
 	public String getsNUTPRC() {
 		return sNUTPRC;
 	}
 	public void setsNUTPRC(String sNUTPRC) {
 		this.sNUTPRC = sNUTPRC;
 	}
-	public String getsBITC05() {
+	/*public String getsBITC05() {
 		return sBITC05;
 	}
 	public void setsBITC05(String sBITC05) {
 		this.sBITC05 = sBITC05;
-	}
+	}*/
 	public String getsNOMADC() {
 		return sNOMADC;
 	}
 	public void setsNOMADC(String sNOMADC) {
 		this.sNOMADC = sNOMADC;
 	}
-	public String getsBITC06() {
+	/*public String getsBITC06() {
 		return sBITC06;
 	}
 	public void setsBITC06(String sBITC06) {
 		this.sBITC06 = sBITC06;
-	}
+	}*/
 	public String getsNUTADC() {
 		return sNUTADC;
 	}
 	public void setsNUTADC(String sNUTADC) {
 		this.sNUTADC = sNUTADC;
 	}
-	public String getsBITC07() {
+	/*public String getsBITC07() {
 		return sBITC07;
 	}
 	public void setsBITC07(String sBITC07) {
 		this.sBITC07 = sBITC07;
-	}
+	}*/
 	public String getsNODCAD() {
 		return sNODCAD;
 	}
 	public void setsNODCAD(String sNODCAD) {
 		this.sNODCAD = sNODCAD;
 	}
-	public String getsBITC08() {
+	/*public String getsBITC08() {
 		return sBITC08;
 	}
 	public void setsBITC08(String sBITC08) {
 		this.sBITC08 = sBITC08;
-	}
+	}*/
 	public String getsNUCCEN() {
 		return sNUCCEN;
 	}
@@ -439,12 +441,12 @@ public class GestorMovimientosComunidades implements Serializable
 	public void setsNUCCNT(String sNUCCNT) {
 		this.sNUCCNT = sNUCCNT;
 	}
-	public String getsBITC09() {
+	/*public String getsBITC09() {
 		return sBITC09;
 	}
 	public void setsBITC09(String sBITC09) {
 		this.sBITC09 = sBITC09;
-	}
+	}*/
 	public String getsOBTEXC() {
 		return sOBTEXC;
 	}

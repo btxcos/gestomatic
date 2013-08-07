@@ -201,6 +201,88 @@ public class QMListaComunidadesActivos
 		return (found && bSalida);
 	}
 
+	public static boolean activoPerteneceComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "activoPerteneceComunidad";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		boolean bSalida = true;
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		String sQuery = "SELECT "
+			       + sField4  +               
+			       
+		"  FROM " + sTable + 
+				" WHERE " +
+				"(" + sField3 + " = '" + sCodCOACES + "')";
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+				       + sField4  +               
+       
+			"  FROM " + sTable + 
+					" WHERE ("
+			+ sField1 + " = '" + sCodCOCLDO + "' AND " 
+			+ sField2 + " = '" + sCodNUDCOM + "' AND "
+			+ sField3 + " = '" + sCodCOACES + "')");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+			
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return (found && bSalida);
+	}
+
 	public static boolean activoVinculadoComunidad(String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		
@@ -280,7 +362,7 @@ public class QMListaComunidadesActivos
 		ConnectionManager.CloseDBConnection(conn);
 		return (found && bSalida);
 	}
-
+	
 	public static String getActivoVinculadoComunidadID(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		
@@ -664,7 +746,7 @@ public class QMListaComunidadesActivos
 
 					   +  sField3 + 
 					   "  FROM " + sTable + 
-					   " WHERE TRUE))");
+					   " ))");
 
 			
 
