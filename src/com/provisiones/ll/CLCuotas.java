@@ -2,22 +2,15 @@ package com.provisiones.ll;
 
 import java.util.ArrayList;
 
-import javax.faces.application.FacesMessage;
-
 import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMCuotas;
-import com.provisiones.dal.qm.QMListaComunidades;
 import com.provisiones.dal.qm.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.QMListaCuotas;
-import com.provisiones.dal.qm.QMMovimientosComunidades;
 import com.provisiones.dal.qm.QMMovimientosCuotas;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuota;
-import com.provisiones.types.MovimientoComunidad;
 import com.provisiones.types.MovimientoCuota;
 
 public class CLCuotas 

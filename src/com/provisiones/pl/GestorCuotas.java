@@ -1,12 +1,7 @@
 package com.provisiones.pl;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,16 +9,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.provisiones.dal.qm.QMComunidades;
-import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuotas;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
-import com.provisiones.types.Cuota;
-import com.provisiones.types.MovimientoComunidad;
 import com.provisiones.types.MovimientoCuota;
 
 public class GestorCuotas implements Serializable 
