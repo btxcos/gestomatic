@@ -18,7 +18,7 @@ public class Utils
 {
 	static String sClassName = Utils.class.getName();
 	
-	static boolean bTraza = false;
+	static boolean bTraza = true;
 	
 	public static void debugTrace(boolean bEnable, String sClass, String sMethod, String sMsg)
 	{
@@ -153,6 +153,9 @@ public class Utils
 			
 			sImporteReal = bNegativo ? "-"+ sEuros + sCentimos : sEuros + sCentimos;
 		}
+		else if (sImporte.equals(""))
+			sImporteReal= "0";
+		
 		debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
 		
 		return sImporteReal;
@@ -196,10 +199,60 @@ public class Utils
 				sFechaFormateada = "#";
 			} 
 		}
-		//else
-			//sFechaFormateada = "0";
+		else
+			sFechaFormateada = "0";
 		
 		return sFechaFormateada;
-	}	
+	}
 	
+	public static String recuperaImporte(boolean bNegativo, String sImporte)
+	{
+		String sMethod = "recuperaImporte";
+		
+		String sImporteReal = "";
+		
+		if (sImporte.length()>3)
+		{
+			String sEuros = sImporte.substring(0, sImporte.length()-2);
+			String sCentimos = sImporte.substring(sImporte.length()-2,sImporte.length());
+		
+			debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
+			debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
+		
+			
+			sImporteReal = bNegativo ? "-"+ sEuros + "." + sCentimos : sEuros + "." + sCentimos;
+		}
+		debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
+		
+		return sImporteReal;
+	}
+	
+	public static String recuperaFecha(String sFecha)
+	{
+		String sMethod = "recuperaFecha";
+		
+		debugTrace(bTraza, sClassName, sMethod, "Fecha:|"+sFecha+"|");
+		
+		String sFechaFormateada = "";
+		
+		if (!sFecha.equals("0"))
+		{
+			String sAño = sFecha.substring(0, 4);
+			String sMes = sFecha.substring(4, 6);
+			String sDia = sFecha.substring(6, 8);
+			
+		
+			debugTrace(bTraza, sClassName, sMethod, "sDia:|"+sDia+"|");
+			debugTrace(bTraza, sClassName, sMethod, "sMes:|"+sMes+"|");
+			debugTrace(bTraza, sClassName, sMethod, "sAño:|"+sAño+"|");
+		
+		
+			
+			sFechaFormateada = sDia+"/"+sMes+"/"+sAño;
+		
+			debugTrace(bTraza, sClassName, sMethod, "Fecha:|"+sFechaFormateada+"|");
+		}
+		
+		return sFechaFormateada;
+	}
 }

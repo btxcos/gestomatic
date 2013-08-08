@@ -26,7 +26,7 @@ public class GestorCuotas implements Serializable
 	private String sCODTRN = ValoresDefecto.DEF_E2_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
 	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
-	private String sCOACCI = "";
+	private String sCOACCI = "A";
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 
 	private String sCOCLDO = "";
@@ -307,7 +307,7 @@ public class GestorCuotas implements Serializable
 				sCOACES.toUpperCase(), 
 				ValoresDefecto.DEF_COGRUG_E2, 
 				ValoresDefecto.DEF_COTACA_E2, 
-				Utils.compruebaPago(bDevolucion,sCOSBAC.toUpperCase()), 
+				Utils.compruebaPago(false,sCOSBAC.toUpperCase()), 
 				"", 
 				Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
 				"", 

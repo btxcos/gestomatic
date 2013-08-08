@@ -3,12 +3,14 @@ package com.provisiones.dal.qm;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.ReferenciaTabla;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class QMListaReferencias
 {
@@ -315,5 +317,96 @@ public class QMListaReferencias
 
 		ConnectionManager.CloseDBConnection(conn);
 		return sValidado;
+	}
+	
+	public static ArrayList<ReferenciaTabla> buscaReferenciaActivo(String sCodCOACES)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "buscaActivosComunidad";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String NURCAT = "";
+		String TIRCAT = "";
+		String ENEMIS = "";
+		
+		ArrayList<ReferenciaTabla> result = new ArrayList<ReferenciaTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					   + QMReferencias.sField1 + ","        
+					   + QMReferencias.sField2 + ","
+					   + QMReferencias.sField3 + 
+					   
+					   "  FROM " + QMReferencias.sTable + 
+					   " WHERE " 
+					   + QMReferencias.sField1 + " IN " +
+					   "(SELECT " + sField1 + 
+					   " FROM " + sTable +
+					   " WHERE "
+					   + sField2 +  " = '" + sCodCOACES	+ "')");
+			
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					NURCAT = rs.getString(QMReferencias.sField1);
+					TIRCAT = rs.getString(QMReferencias.sField2);
+					ENEMIS = rs.getString(QMReferencias.sField3);
+					
+					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(NURCAT, TIRCAT, ENEMIS);
+					
+					result.add(referenciaencontrada);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField3 + ": " + sCodCOACES);
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
 	}
 }

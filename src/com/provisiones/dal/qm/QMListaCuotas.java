@@ -590,25 +590,26 @@ public class QMListaCuotas
 		return result;
 	}
 	
-	public static ArrayList<CuotaTabla> buscaCuotasActivos(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM)
+	public static ArrayList<CuotaTabla> buscaCuotasActivo(String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		
-		String sMethod = "buscaActivosComunidadDisponibles";
+		String sMethod = "buscaCuotasActivo";
 
 		Statement stmt = null;
 		ResultSet rs = null;
 
-		String COCLDO = "";
-		String NUDCOM = "";
-		String COSBAC = "";
-		String DesCOSBAC = "";
-		String FIPAGO = "";
-		String FFPAGO = "";
-		String IMCUCO = "";
-		String FAACTA = "";
-		String PTPAGO = "";
-		String DesPTPAGO = "";
-		String OBTEXC = "";
+		String sCOCLDO = "";
+		String sDesCOCLDO = "";
+		String sNUDCOM = "";
+		String sCOSBAC = "";
+		String sDesCOSBAC = "";
+		String sFIPAGO = "";
+		String sFFPAGO = "";
+		String sIMCUCO = "";
+		String sFAACTA = "";
+		String sPTPAGO = "";
+		String sDesPTPAGO = "";
+		String sOBTEXC = "";
 		
 		ArrayList<CuotaTabla> result = new ArrayList<CuotaTabla>();
 		
@@ -719,6 +720,184 @@ public class QMListaCuotas
 				{
 					found = true;
 					
+					sCOCLDO     = rs.getString(QMCuotas.sField1);
+					sDesCOCLDO  = QMCodigosControl.getDesCOCLDO(sCOCLDO);
+					sNUDCOM     = rs.getString(QMCuotas.sField2);
+					sCOSBAC     = rs.getString(QMCuotas.sField3);
+					sDesCOSBAC  = QMCodigosControl.getDesCOSBGA_E2(sCOSBAC);
+					
+					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sFIPAGO:|"+rs.getString(QMCuotas.sField4)+"|");
+					sFIPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField4));
+					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sFFPAGO:|"+rs.getString(QMCuotas.sField5)+"|");
+					sFFPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField5));
+					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sIMCUCO:|"+rs.getString(QMCuotas.sField6)+"|");
+					sIMCUCO     = Utils.recuperaImporte(false,rs.getString(QMCuotas.sField6));
+					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sFAACTA:|"+rs.getString(QMCuotas.sField7)+"|");
+					sFAACTA     = Utils.recuperaFecha(rs.getString(QMCuotas.sField7));
+					sPTPAGO     = rs.getString(QMCuotas.sField8);
+					sDesPTPAGO  = QMCodigosControl.getDesPTPAGO(sPTPAGO);
+					sOBTEXC     = rs.getString(QMCuotas.sField9);  
+
+					
+					CuotaTabla cuotaencontrada = new CuotaTabla(
+							sCOCLDO,
+							sDesCOCLDO,
+							sNUDCOM,
+							sCOSBAC,
+							sDesCOSBAC,
+							sFIPAGO,
+							sFFPAGO,
+							sIMCUCO,
+							sFAACTA,
+							sPTPAGO,
+							sDesPTPAGO,
+							sOBTEXC);
+					
+					result.add(cuotaencontrada);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaActivosConCuotas(ActivoTabla activo)
+	{//pendiente de coaces, de la tabla activos
+
+		String sMethod = "buscaActivosConCuotas";
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOACES = "";
+		String sCOPOIN = "";
+		String sNOMUIN = "";
+		String sNOPRAC = "";
+		String sNOVIAS = "";
+		String sNUPIAC = "";
+		String sNUPOAC = "";
+		String sNUPUAC = "";
+		
+		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		String sQuery = "SELECT "
+					
+					   + QMActivos.sField1 + ","        
+					   + QMActivos.sField14 + ","
+					   + QMActivos.sField11 + ","
+					   + QMActivos.sField13 + ","
+					   + QMActivos.sField6 + ","
+					   + QMActivos.sField9 + ","
+					   + QMActivos.sField7 + ","
+					   + QMActivos.sField10 + 
+
+					   " FROM " + QMActivos.sTable + 
+					   " WHERE ("
+
+					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+
+					   + QMActivos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable +
+					   " WHERE " + sField2 + " IN (SELECT "
+   					   + QMCuotas.sField1 + 
+   					   " FROM " + QMCuotas.sTable +
+   					   " WHERE " + QMCuotas.sField10 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
+   					   + sField3 + " IN (SELECT "
+   					   + QMCuotas.sField2 + 
+   					   " FROM " + QMCuotas.sTable +
+   					   " WHERE " + QMCuotas.sField10 + " = '"+ ValoresDefecto.DEF_ALTA + "')))";
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			
+			pstmt = conn.prepareStatement("SELECT "
+					
+					   + QMActivos.sField1 + ","        
+					   + QMActivos.sField14 + ","
+					   + QMActivos.sField11 + ","
+					   + QMActivos.sField13 + ","
+					   + QMActivos.sField6 + ","
+					   + QMActivos.sField9 + ","
+					   + QMActivos.sField7 + ","
+					   + QMActivos.sField10 + 
+
+					   " FROM " + QMActivos.sTable + 
+					   " WHERE ("
+
+					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+
+					   + QMActivos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable +
+					   " WHERE " + 
+					   
+					   sField2 + " IN (SELECT "
+					   + QMCuotas.sField1 + 
+   					   " FROM " + QMCuotas.sTable +
+   					   " WHERE " + QMCuotas.sField10 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
+
+   					   + sField3 + " IN (SELECT "
+   					   + QMCuotas.sField2 + 
+   					   " FROM " + QMCuotas.sTable +
+   					   " WHERE " + QMCuotas.sField10 + " = '"+ ValoresDefecto.DEF_ALTA + "')))");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
 					sCOACES = rs.getString(QMActivos.sField1);
 					sCOPOIN = rs.getString(QMActivos.sField14);
 					sNOMUIN = rs.getString(QMActivos.sField11);
@@ -756,5 +935,6 @@ public class QMListaCuotas
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
+
 	}
 }

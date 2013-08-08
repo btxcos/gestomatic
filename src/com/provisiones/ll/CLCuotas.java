@@ -11,6 +11,7 @@ import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Cuota;
+import com.provisiones.types.CuotaTabla;
 import com.provisiones.types.MovimientoCuota;
 
 public class CLCuotas 
@@ -79,6 +80,16 @@ public class CLCuotas
 			result = QMListaCuotas.buscaActivosComunidadDisponibles(activo, sCodCOCLDO, sCodNUDCOM); 
 			
 		return result;
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivosConCuotas (ActivoTabla activo)
+	{
+		return QMListaCuotas.buscaActivosConCuotas(activo);
+	}
+
+	public static ArrayList<CuotaTabla> buscarCuotasActivo (String sCOACES)
+	{
+		return QMListaCuotas.buscaCuotasActivo(sCOACES);
 	}
 	
 	public static int comprobarActivo (String sCOCLDO, String sNUDCOM, String sCOACES)
@@ -296,8 +307,18 @@ public class CLCuotas
 						case M:
 							if (QMListaCuotas.addRelacionCuotas(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
 							{
-								//OK 
-								iCodigo = 0; 
+								Cuota cuotamodificada = QMCuotas.getCuota( movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC());
+								if(QMCuotas.modCuota(convierteMovimientoenCuota(movimiento), movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
+								{
+									//OK 
+									iCodigo = 0;
+								}
+								else
+								{
+									QMCuotas.addCuota(cuotamodificada);
+									QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
+									iCodigo = -12;									
+								}
 
 							}
 							else
@@ -328,7 +349,7 @@ public class CLCuotas
 		
 		movimiento.pintaMovimientoCuota();
 		
-		MovimientoCuota movimiento_revisado = new MovimientoCuota("", "", "", "", "", "", "", "0", "", "", "", "", "0", "", "0", "", "0", "", "0", "", "", "", "", "");
+		MovimientoCuota movimiento_revisado = new MovimientoCuota("", "", "", "", "", "", "", "0", "", "", "", "", "0", "", "0", "", "0", "", "0", "", "0", "", "", "");
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Revisando Accion: |"+movimiento.getCOACCI()+"|");
 		
@@ -353,7 +374,7 @@ public class CLCuotas
 			if (movimiento.getCOACCI().equals("A"))
 			{
 				
-				if (movimiento.getFIPAGO().equals(""))
+				if (movimiento.getFIPAGO().equals("0"))
 				{
 					movimiento_revisado.setBITC11("#");
 				}
@@ -363,7 +384,7 @@ public class CLCuotas
 					movimiento_revisado.setFIPAGO(movimiento.getFIPAGO());
 				}
 
-				if (movimiento.getFFPAGO().equals(""))
+				if (movimiento.getFFPAGO().equals("0"))
 				{
 					movimiento_revisado.setBITC12("#");
 				}
@@ -373,7 +394,7 @@ public class CLCuotas
 					movimiento_revisado.setFFPAGO(movimiento.getFFPAGO());
 				}
 
-				if (movimiento.getIMCUCO().equals(""))
+				if (movimiento.getIMCUCO().equals("0"))
 				{
 					movimiento_revisado.setBITC13("#");
 				}
@@ -383,7 +404,7 @@ public class CLCuotas
 					movimiento_revisado.setIMCUCO(movimiento.getIMCUCO());
 				}
 				
-				if (movimiento.getFAACTA().equals(""))
+				if (movimiento.getFAACTA().equals("0"))
 				{
 					movimiento_revisado.setBITC14("#");
 				}
@@ -416,7 +437,7 @@ public class CLCuotas
 				
 
 			}
-			if (movimiento.getCOACCI().equals("M"))
+			else if (movimiento.getCOACCI().equals("M"))
 			{
 				boolean bCambio = false;
 				
@@ -502,6 +523,17 @@ public class CLCuotas
 					movimiento_revisado.setCOACCI("#");
 
 			}
+			else if (movimiento.getCOACCI().equals("B"))
+			{
+				movimiento_revisado.setBITC11("#");
+				movimiento_revisado.setBITC12("#");
+				movimiento_revisado.setBITC13("#");
+				movimiento_revisado.setBITC14("#");
+				movimiento_revisado.setBITC15("#");
+				movimiento_revisado.setBITC09("#");
+			}
+			else
+				movimiento_revisado.setCOACCI("");
 
 
 		

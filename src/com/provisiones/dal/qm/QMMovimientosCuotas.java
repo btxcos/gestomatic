@@ -60,6 +60,59 @@ public class QMMovimientosCuotas
 		conn = ConnectionManager.OpenDBConnection();
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
+		String sQuery = "INSERT INTO " + sTable + " ("
+			       + sField2  + ","              
+			       + sField3  + ","              
+			       + sField4  + ","              
+			       + sField5  + ","              
+			       + sField6  + ","              
+			       + sField7  + ","              
+			       + sField8  + ","              
+			       + sField9  + ","              
+			       + sField10 + ","              
+			       + sField11 + ","              
+			       + sField12 + ","              
+			       + sField13 + ","              
+			       + sField14 + ","              
+			       + sField15 + ","              
+			       + sField16 + ","              
+			       + sField17 + ","              
+			       + sField18 + ","              
+			       + sField19 + ","              
+			       + sField20 + ","              
+			       + sField21 + ","              
+			       + sField22 + ","              
+			       + sField23 + ","              
+			       + sField24 + ","
+			       + sField25 + 
+			       ") VALUES ('" 
+			       + NuevoMovimientoCuota.getCODTRN() + "','" 
+			       + NuevoMovimientoCuota.getCOTDOR() + "','"
+			       + NuevoMovimientoCuota.getIDPROV() + "','"
+			       + NuevoMovimientoCuota.getCOACCI() + "','"
+			       + NuevoMovimientoCuota.getCOCLDO() + "','"
+			       + NuevoMovimientoCuota.getNUDCOM() + "','"
+			       + NuevoMovimientoCuota.getCOENGP() + "','"
+			       + NuevoMovimientoCuota.getCOACES() + "','"
+			       + NuevoMovimientoCuota.getCOGRUG() + "','"
+			       + NuevoMovimientoCuota.getCOTACA() + "','"
+			       + NuevoMovimientoCuota.getCOSBAC() + "','"
+			       + NuevoMovimientoCuota.getBITC11() + "','"
+			       + NuevoMovimientoCuota.getFIPAGO() + "','"
+			       + NuevoMovimientoCuota.getBITC12() + "','"
+			       + NuevoMovimientoCuota.getFFPAGO() + "','"
+			       + NuevoMovimientoCuota.getBITC13() + "','"
+			       + NuevoMovimientoCuota.getIMCUCO() + "','"
+			       + NuevoMovimientoCuota.getBITC14() + "','"
+			       + NuevoMovimientoCuota.getFAACTA() + "','"
+			       + NuevoMovimientoCuota.getBITC15() + "','"
+			       + NuevoMovimientoCuota.getPTPAGO() + "','"
+			       + NuevoMovimientoCuota.getBITC09() + "','"
+			       + NuevoMovimientoCuota.getOBTEXC() + "','"
+			       + NuevoMovimientoCuota.getOBDEER() + "' )";
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 
 		try {
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
 <faces-config
     xmlns="http://java.sun.com/xml/ns/javaee"
@@ -33,6 +33,16 @@
 	<managed-bean>
 		<managed-bean-name>GestorCuotas</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.GestorCuotas</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDatosGenerales</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorDatosGenerales</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorMovimientosCuotas</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorMovimientosCuotas</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
