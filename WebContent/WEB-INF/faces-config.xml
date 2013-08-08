@@ -45,5 +45,10 @@
 		<managed-bean-class>com.provisiones.pl.GestorMovimientosCuotas</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorActivos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorActivos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>
