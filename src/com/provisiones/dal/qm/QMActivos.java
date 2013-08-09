@@ -949,7 +949,7 @@ public class QMActivos
 	public static ArrayList<ActivoTabla> buscaActivos(ActivoTabla activo)
 	{//pendiente de coaces, de la tabla activos
 		
-		String sMethod = "getActivo";
+		String sMethod = "buscaActivos";
 
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -1027,9 +1027,9 @@ public class QMActivos
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCOACES);
 				}
 			}
 			if (found == false) 

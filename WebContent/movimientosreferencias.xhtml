@@ -1,0 +1,324 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form id="form" onkeypress="return event.keyCode != 13">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="33%" header="Alta Comunidad">
+
+ 
+								<h:panelGrid columns="3" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText value="CODTRN: " />
+											<p:inputText id="CODTRN" value="#{GestorMovimientosCuotas.sCODTRN}"
+												disabled="true" />
+
+											<h:outputText value="IDPROV: " />
+											<p:inputText id="IDPROV" value="#{GestorMovimientosCuotas.sIDPROV}" disabled="true" />
+
+											<h:outputText value="COENGP: " />
+											<p:inputText id="COENGP" value="#{GestorMovimientosCuotas.sCOENGP}" disabled="true" />
+
+										</h:panelGrid>
+									</p:panel>
+									<p:fieldset legend="Control de errores">
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText value="COTDOR: " />
+											<p:inputText id="COTDOR" value="000" disabled="true" />
+											<p:inputText id="COTDOR_D" value="" disabled="true" />
+
+											<h:outputText value="OBDEER: " />
+											<p:inputText id="OBDEER" value="#{GestorMovimientosCuotas.sOBDEER}" disabled="true" />
+
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Acciones">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosCuotas.limpiarPlantillaCuotas}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+											<p:commandButton value="Registrar" update="panel, popup, msgs" actionListener="#{GestorMovimientosCuotas.registraMovimiento}"/>
+										</h:panelGrid>
+											<p:messages id="msgs"/>
+									</p:fieldset>
+								</h:panelGrid>
+				</p:layoutUnit>
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+				<p:growl id="popup" />
+
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+									<p:panel >
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:selectOneRadio id="options" value="#{GestorMovimientosCuotas.sCOACCI}">
+            						<f:selectItem itemLabel="Baja" itemValue="B" />  
+            						<f:selectItem itemLabel="Modificacion" itemValue="M" />
+        							</p:selectOneRadio>
+										</h:panelGrid>
+									</p:panel>
+									<p:fieldset legend="Activo">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="COACES" value="Codigo de activo: " />
+														<p:inputText id="COACES" value="#{GestorMovimientosCuotas.sCOACES}" size="9" maxlength="9">
+														</p:inputText>
+													<p:message for="COACES" display="icon"/>
+													<p:commandButton value="Cargar Cuotas" update="msgs, popup, COACES, form:cuotas" actionListener="#{GestorMovimientosCuotas.cargarCuotas}" oncomplete="dlgTablaCuotas.show()"/>	
+												</h:panelGrid>
+											</p:panel>
+										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Comunidad de proprietarios" id="panelComunidad">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="5" cellpadding="5">
+
+													<h:outputText for="COCLDO" value="Documento: " />
+														<p:inputText id="DesCOCLDO" value="#{GestorMovimientosCuotas.sDesCOCLDO}" size="30" maxlength="30" disabled="true">
+														</p:inputText>
+
+													<h:outputText for="NUDCOM" value="Numero: " />
+														<p:inputText id="NUDCOM" value="#{GestorMovimientosCuotas.sNUDCOM}" size="10" maxlength="10" disabled="true">
+														</p:inputText>
+
+
+												</h:panelGrid>
+										  </p:panel>
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Pago" id="panelPago">
+										<h:panelGrid columns="1" cellpadding="5">
+
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+
+													<h:outputText for="COSBAC" value="Concepto: " />
+													<p:inputText id="DesCOSBAC" value="#{GestorMovimientosCuotas.sDesCOSBAC}" size="30" maxlength="30" disabled="true">
+														</p:inputText>
+
+												</h:panelGrid>
+
+										  </p:panel>
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="IMCUCO" value="IMCUCO: " />
+													<p:inputText id="IMCUCO" value="#{GestorMovimientosCuotas.sIMCUCO}" size="15" maxlength="15" validatorMessage="El importe de la cuota introducido es incorrecto." >
+														<f:validateRegex pattern="[0-9]+([\.|,][0-9]{2})?$" />
+													</p:inputText>
+													<h:outputText for="IMCUCO" value="€" />
+													<p:message for="IMCUCO" display="icon"/>
+												</h:panelGrid>
+										  </p:panel>
+										  
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+
+													<h:outputText for="FIPAGO" value="FIPAGO: " />
+													<p:inputMask id="FIPAGO" validatorMessage="La fecha del primer pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosCuotas.sFIPAGO}" mask="99/99/9999" size="10" >
+														<f:validateLength minimum="10"/>
+													</p:inputMask>
+													<p:message for="FIPAGO" display="icon"/>
+
+													<h:outputText for="FFPAGO" value="FFPAGO: " />
+													<p:inputMask id="FFPAGO" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosCuotas.sFFPAGO}" mask="99/99/9999" size="10" >
+														<f:validateLength minimum="10"/>
+													</p:inputMask>
+													<p:message for="FFPAGO" display="icon"/>
+
+
+
+
+													<h:outputText for="FAACTA" value="FAACTA: " />
+													<p:inputMask id="FAACTA" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosCuotas.sFAACTA}" mask="99/99/9999" size="10" >
+														<f:validateLength minimum="10"/>
+													</p:inputMask>
+													<p:message for="FAACTA" display="icon"/>
+
+													<h:outputText for="PTPAGO" value="Periodicidad: " />
+													<p:inputText id="DesPTPAGO" value="#{GestorMovimientosCuotas.sDesPTPAGO}" size="20" maxlength="20" disabled="true">
+														</p:inputText>
+
+												</h:panelGrid>
+										  </p:panel>
+
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Observaciones">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="OBTEXC" value="OBTEXC: " />
+
+											<p:inputText id="OBTEXC" value="#{GestorMovimientosCuotas.sOBTEXC}" size="110" maxlength="110" >
+											</p:inputText>
+											<p:message for="OBTEXC" display="icon"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+								</h:panelGrid>
+							</p:panel>
+
+
+					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
+    				
+							<p:contextMenu for="activos">  
+								<p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosCuotas.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="activos" var="activo" value="#{GestorMovimientosCuotas.tablaactivos}" rowKey="#{activo.COACES}"  
+									              selection="#{GestorMovimientosCuotas.activoseleccionado}" selectionMode="single">  
+									
+								<p:column headerText="Codigo Activo">  
+								    #{activo.COACES}  
+								</p:column>  
+								
+								<p:column headerText="Comunidad Autonoma">  
+								    #{activo.NOPRAC}  
+								</p:column>  
+
+								<p:column headerText="Municipio">  
+								    #{activo.NOMUIN}  
+								</p:column>  
+								
+								<p:column headerText="Via">  
+								    #{activo.NOVIAS}  
+								</p:column>  
+								
+								<p:column headerText="Portal">  
+								    #{activo.NUPOAC}  
+								</p:column>  
+								
+								<p:column headerText="Piso">  
+								    #{activo.NUPIAC}  
+								</p:column>  
+								
+								<p:column headerText="Puerta">  
+								    #{activo.NUPUAC}  
+								</p:column>  
+									
+							</p:dataTable> 
+					</p:dialog>
+
+					<p:dialog header="Cuotas disponibles: " widgetVar="dlgTablaCuotas" resizable="false">  
+    				
+							<p:contextMenu for="cuotas">  
+								<p:menuitem value="Seleccionar" update="panel, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosCuotas.seleccionarCuota}" oncomplete="dlgTablaCuotas.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="cuotas" var="cuota" value="#{GestorMovimientosCuotas.tablacuotas}" rowKey="#{cuota.DCOSBAC}"  
+									              selection="#{GestorMovimientosCuotas.cuotaseleccionada}" selectionMode="single">  
+									
+								<p:column headerText="Cuota">  
+								    #{cuota.DCOSBAC}  
+								</p:column>  
+
+								<p:column headerText="Importe">  
+								    #{cuota.IMCUCO}  
+								</p:column>  
+
+								<p:column headerText="Periodicidad">  
+								    #{cuota.DPTPAGO}  
+								</p:column>  
+								
+								<p:column headerText="Primer Pago">  
+								    #{cuota.FIPAGO}  
+								</p:column>  
+
+								<p:column headerText="Ultimo Pago">  
+								    #{cuota.FFPAGO}  
+								</p:column>  
+								
+								<p:column headerText="Fecha de Acta">  
+								    #{FAACTA.NUPOAC}  
+								</p:column>  
+
+							</p:dataTable> 
+					</p:dialog>
+
+					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscar" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+														<p:inputText id="NOPRAC" value="#{GestorMovimientosCuotas.sNOPRAC}" size="18" maxlength="18">
+														</p:inputText>
+													<p:message for="NOPRAC" display="icon"/>
+
+													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+														<p:inputText id="NOMUIN" value="#{GestorMovimientosCuotas.sNOMUIN}" size="30" maxlength="30">
+														</p:inputText>
+													<p:message for="NOMUIN" display="icon"/>
+
+													<h:outputText for="COPOIN" value="Codigo Postal: " />
+														<p:inputText id="COPOIN" value="#{GestorMovimientosCuotas.sCOPOIN}" size="5" maxlength="5">
+														</p:inputText>
+													<p:message for="COPOIN" display="icon"/>
+
+													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+														<p:inputText id="NOVIAS" value="#{GestorMovimientosCuotas.sNOVIAS}" size="60" maxlength="60">
+														</p:inputText>
+													<p:message for="NOVIAS" display="icon"/>
+
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+														<p:inputText id="NUPOAC" value="#{GestorMovimientosCuotas.sNUPOAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPOAC" display="icon"/>
+
+													<h:outputText for="NUPIAC" value="Piso: " />
+														<p:inputText id="NUPIAC" value="#{GestorMovimientosCuotas.sNUPIAC}" size="11" maxlength="11">
+														</p:inputText>
+													<p:message for="NUPIAC" display="icon"/>
+
+													<h:outputText for="NUPUAC" value="Puerta: " />
+														<p:inputText id="NUPUAC" value="#{GestorMovimientosCuotas.sNUPUAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPUAC" display="icon"/>
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosCuotas.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosCuotas.limpiarPlantillaActivo}" />	
+
+														<p:ajaxStatus  id="pensandoActivo">  
+															<f:facet name="start">  
+																<h:graphicImage value="/recursos/loadingBar.gif" />  
+															</f:facet>  
+
+															<f:facet name="complete">  
+																<h:outputText value="" />  
+															</f:facet>  
+
+														</p:ajaxStatus> 
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

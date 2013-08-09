@@ -29,8 +29,8 @@
 
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-													<p:commandButton value="Buscar" update="msgs, popup, activos" actionListener="#{GestorActivos.buscaActivos}"/>	
-													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar" actionListener="#{GestorActivos.limpiarPlantilla}" />	
+											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorActivos.limpiarPlantillaCuotas}"/>
+											<p:commandButton value="Registrar" update="panel, popup, msgs" actionListener="#{GestorActivos.registraMovimiento}"/>
 										</h:panelGrid>
 											<p:messages id="msgs"/>
 									</p:fieldset>
@@ -85,15 +85,33 @@
 													<p:message for="NUPUAC" display="icon"/>
 												</h:panelGrid>
 											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, activos, panel" actionListener="#{GestorActivos.buscaActivos}"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorActivos.limpiarPlantillaActivo}" />	
+
+														<p:ajaxStatus  id="pensandoActivo">  
+															<f:facet name="start">  
+																<h:graphicImage value="/recursos/loadingBar.gif" />  
+															</f:facet>  
+
+															<f:facet name="complete">  
+																<h:outputText value="" />  
+															</f:facet>  
+
+														</p:ajaxStatus> 
+												</h:panelGrid>
+											</p:panel>
 											<p:panel id="panelTablaActivos">
 												<h:panelGrid columns="1" cellpadding="5">
 													<p:contextMenu for="activos">
-														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" actionListener="#{GestorActivos.cargarDetalles}" url="gestionactivos.xhtml"/>
-														<p:menuitem value="Comunidad" update="form:popup" icon="ui-icon-home" actionListener="#{GestorActivos.cargarComunidad}" url="movimientoscomunidades.xhtml"/>
-														<p:menuitem value="Cuotas" update="form:popup" icon="ui-icon-calculator" actionListener="#{GestorActivos.cargarCuota}" url="movimientoscuotas.xhtml"/>
-														<p:menuitem value="Referencia Catastral" update="form:popup" icon="ui-icon-script" actionListener="#{GestorActivos.cargarReferencia}" url="index.xhtml"/>
-														<p:menuitem value="Impuestos y Recursos" update="form:popup" icon="ui-icon-note" actionListener="#{GestorActivos.cargarImpuestos}" url="index.xhtml"/>
-														<p:menuitem value="Gastos" update="form:popup" icon="ui-icon-cart" actionListener="#{GestorActivos.cargarGastos}" url="gastos.xhtml"/>
+														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" actionListener="#{GestorActivos.cargarDetalles}"/>
+														<p:menuitem value="Comunidad" update="form:popup" icon="ui-icon-home" actionListener="#{GestorActivos.cargarComunidad}"/>
+														<p:menuitem value="Cuotas" update="form:popup" icon="ui-icon-calculator" actionListener="#{GestorActivos.cargarCuota}"/>
+														<p:menuitem value="Referencia Catastral" update="form:popup" icon="ui-icon-script" actionListener="#{GestorActivos.cargarReferencia}"/>
+														<p:menuitem value="Impuestos y Recursos" update="form:popup" icon="ui-icon-note" actionListener="#{GestorActivos.cargarImpuestos}"/>
+														<p:menuitem value="Gastos" update="form:popup" icon="ui-icon-cart" actionListener="#{GestorActivos.cargarGastos}"/>
 														
 													</p:contextMenu>  
 															
@@ -106,31 +124,31 @@
 															Activos
 														</f:facet>
 															
-														<p:column sortBy="#{activo.COACES}" headerText="Codigo Activo">  
+														<p:column headerText="Codigo Activo">  
 														    #{activo.COACES}  
 														</p:column>  
 														
-														<p:column sortBy="#{activo.NOPRAC}" headerText="Comunidad Autonoma">  
+														<p:column headerText="Comunidad Autonoma">  
 														    #{activo.NOPRAC}  
 														</p:column>  
             							
-														<p:column sortBy="#{activo.NOMUIN}" headerText="Municipio">  
+														<p:column headerText="Municipio">  
 														    #{activo.NOMUIN}  
 														</p:column>  
 														
-														<p:column sortBy="#{activo.NOVIAS}" headerText="Via">  
+														<p:column headerText="Via">  
 														    #{activo.NOVIAS}  
 														</p:column>  
 														
-														<p:column sortBy="#{activo.NUPOAC}" headerText="Portal">  
+														<p:column headerText="Portal">  
 														    #{activo.NUPOAC}  
 														</p:column>  
 														
-														<p:column sortBy="#{activo.NUPIAC}" headerText="Piso">  
+														<p:column headerText="Piso">  
 														    #{activo.NUPIAC}  
 														</p:column>  
 														
-														<p:column sortBy="#{activo.NUPUAC}" headerText="Puerta">  
+														<p:column headerText="Puerta">  
 														    #{activo.NUPUAC}  
 														</p:column>  
 															
