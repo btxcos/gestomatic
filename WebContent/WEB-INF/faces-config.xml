@@ -50,5 +50,35 @@
 		<managed-bean-class>com.provisiones.pl.GestorActivos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesActivo</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorDetallesActivo</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesGasto</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorDetallesGasto</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesProvision</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorDetallesProvision</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorGastos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorGastos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorImpuestosRecursos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorImpuestosRecursos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorReferenciasCatastrales</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorReferenciasCatastrales</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>
