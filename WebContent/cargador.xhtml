@@ -10,7 +10,7 @@
 		<h:form>
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Informacion">
+				<p:layoutUnit position="north" size="28%" header="Cargar Archivo">
 								<h:panelGrid columns="4" cellpadding="5">
 									<p:fieldset legend="Info">
 										<h:panelGrid columns="3" cellpadding="5">
@@ -19,7 +19,7 @@
 											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
 												<p:messages id="msgs"/>
 											</p:notificationBar>  
-											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+
 											<p:growl id="popup" />
 										</h:panelGrid>
 									</p:fieldset>
@@ -32,14 +32,20 @@
 
 				<p:layoutUnit position="center">
 					<p:panel>
-						<h:panelGrid columns="1" cellpadding="5">
+						<h:panelGrid columns="2" cellpadding="5">
 						<p:fileUpload fileUploadListener="#{GestorCargas.handleFileUpload}" mode="advanced" dragDropSupport="true"  
-							update="popup, msgs" allowTypes="/(\.|\/)(txt)$/" />  
+							update="popup, msgs" allowTypes="/(\.|\/)(txt)$/" /> 
+						<p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">  
+							<f:facet name="start">  
+								<h:graphicImage value="recursos/loadingBar.gif" />  
+							</f:facet>  
+
+							<f:facet name="complete">  
+								<h:outputText value="" />  
+							</f:facet>
+						</p:ajaxStatus> 
 						</h:panelGrid>
 					</p:panel>
-					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
-						<p:graphicImage value="recursos/loadingBar.gif" />
-					</p:dialog> 
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>
