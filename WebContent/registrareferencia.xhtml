@@ -17,10 +17,6 @@
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText value="CODTRN: " />
-											<p:inputText id="CODTRN" value="EE41"
-												disabled="true" />
-
 											<h:outputText value="IDPROV: " />
 											<p:inputText id="IDPROV" value="123456789" disabled="true" />
 
@@ -29,19 +25,17 @@
 
 										</h:panelGrid>
 									</p:panel>
-									<p:fieldset legend="Control de errores">
+									<p:fieldset legend="Info">
 										<h:panelGrid columns="3" cellpadding="5">
-
-											<h:outputText value="COTDOR: " />
-											<p:inputText id="COTDOR" value="000" disabled="true" />
-											<p:inputText id="COTDOR_D" value="" disabled="true" />
-
-											<h:outputText value="OBDEER: " />
-											<p:inputText id="OBDEER" value="" disabled="true" />
-
+											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+												<p:messages id="msgs"/>
+											</p:notificationBar>  
+											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+											<p:growl id="popup" />
 										</h:panelGrid>
 									</p:fieldset>
-
 								</h:panelGrid>
 				</p:layoutUnit>
 
@@ -153,15 +147,14 @@
 											</p:inputText>
 											<p:message for="OBTEXC" display="icon"/>
 
-											 <p:messages id="msgs"/>
-
 										</h:panelGrid>
 									</p:fieldset>
 
 						</h:panelGrid>
 					</p:panel>
-					<p:commandButton value="Limpiar Plantilla" type="reset" />
-					<p:commandButton value="Registrar Datos" update="panel" actionListener="#{GestorComunidades.realizaAlta}" />
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>

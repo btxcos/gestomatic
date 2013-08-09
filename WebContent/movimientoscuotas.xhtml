@@ -17,10 +17,6 @@
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText value="CODTRN: " />
-											<p:inputText id="CODTRN" value="#{GestorMovimientosCuotas.sCODTRN}"
-												disabled="true" />
-
 											<h:outputText value="IDPROV: " />
 											<p:inputText id="IDPROV" value="#{GestorMovimientosCuotas.sIDPROV}" disabled="true" />
 
@@ -29,33 +25,31 @@
 
 										</h:panelGrid>
 									</p:panel>
-									<p:fieldset legend="Control de errores">
-										<h:panelGrid columns="3" cellpadding="5">
 
-											<h:outputText value="COTDOR: " />
-											<p:inputText id="COTDOR" value="000" disabled="true" />
-											<p:inputText id="COTDOR_D" value="" disabled="true" />
-
-											<h:outputText value="OBDEER: " />
-											<p:inputText id="OBDEER" value="#{GestorMovimientosCuotas.sOBDEER}" disabled="true" />
-
-										</h:panelGrid>
-									</p:fieldset>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosCuotas.limpiarPlantillaCuotas}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 											<p:commandButton value="Registrar" update="panel, popup, msgs" actionListener="#{GestorMovimientosCuotas.registraMovimiento}"/>
 										</h:panelGrid>
-											<p:messages id="msgs"/>
 									</p:fieldset>
 								</h:panelGrid>
+									<p:fieldset legend="Info">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+												<p:messages id="msgs"/>
+											</p:notificationBar>  
+											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+											<p:growl id="popup" />
+										</h:panelGrid>
+									</p:fieldset>
 				</p:layoutUnit>
 				<p:layoutUnit position="west" size="20%" header="Menus">
 					<ui:include src="menu.xhtml"/>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
-				<p:growl id="popup" />
 
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
@@ -315,6 +309,9 @@
 													
 										</h:panelGrid>
 									</p:fieldset>
+					</p:dialog>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
 					</p:dialog>
 				</p:layoutUnit>
 			</p:layout>

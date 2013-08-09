@@ -17,10 +17,6 @@
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText value="CODTRN: " />
-											<p:inputText id="CODTRN" value="#{GestorCuotas.sCODTRN}"
-												disabled="true" />
-
 											<h:outputText value="IDPROV: " />
 											<p:inputText id="IDPROV" value="#{GestorCuotas.sIDPROV}" disabled="true" />
 
@@ -29,24 +25,23 @@
 
 										</h:panelGrid>
 									</p:panel>
-									<p:fieldset legend="Control de errores">
-										<h:panelGrid columns="3" cellpadding="5">
-
-											<h:outputText value="COTDOR: " />
-											<p:inputText id="COTDOR" value="000" disabled="true" />
-											<p:inputText id="COTDOR_D" value="" disabled="true" />
-
-											<h:outputText value="OBDEER: " />
-											<p:inputText id="OBDEER" value="#{GestorCuotas.sOBDEER}" disabled="true" />
-
-										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorCuotas.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 											<p:commandButton value="Alta Cuota" update="panel, popup, msgs" actionListener="#{GestorCuotas.registraMovimiento}"/>
 										</h:panelGrid>
-											<p:messages id="msgs"/>
+									</p:fieldset>
+									<p:fieldset legend="Info">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+												<p:messages id="msgs"/>
+											</p:notificationBar>  
+											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+											<p:growl id="popup" />
+										</h:panelGrid>
 									</p:fieldset>
 								</h:panelGrid>
 				</p:layoutUnit>
@@ -55,7 +50,6 @@
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
-				<p:growl id="popup" />
 
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
@@ -302,6 +296,9 @@
 										</h:panelGrid>
 									</p:fieldset>
 					</p:dialog>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>
