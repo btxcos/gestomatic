@@ -9,491 +9,407 @@ public class GestorGastos implements Serializable
 {
 	private static final long serialVersionUID = 476229907564908389L;
 
-	private String COACES = "";
-	private String COGRUG = "";
-	private String COTPGA = "";
-	private String COSBGA = "";
-	private String PTPAGO = "";
-	private String FEDEVE = "";
-	private String FFGTVP = "";
-	private String FEPAGA = "";
-	private String FELIPG = "";
-	private String COSIGA = "";
-	private String FEEESI = "";
-	private String FEECOI = "";
-	private String FEEAUI = "";
-	private String FEEPAI = "";
-	private String IMNGAS = "";
-	private String YCOS02 = "";
-	private String IMRGAS = "";
-	private String YCOS04 = "";
-	private String IMDGAS = "";
-	private String YCOS06 = "";
-	private String IMCOST = "";
-	private String YCOS08 = "";
-	private String IMOGAS = "";
-	private String YCOS10 = "";
-	private String IMDTGA = "";
-	private String COUNMO = "";
-	private String IMIMGA = "";
-	private String COIMPT = "";
-	private String COTNEG = "";
-	private String COENCX = "";
-	private String COOFCX = "";
-	private String NUCONE = "";
-	private String NUPROF = "";
-	private String FEAGTO = "";
-	private String COMONA = "";
-	private String BIAUTO = "";
-	private String FEAUFA = "";
-	private String COTERR = "";
-	private String FMPAGN = "";
-	private String FEPGPR = "";
-	private String FEAPLI = "";
-	private String COAPII = "";
-	private String COSPII = "";
-	private String NUCLII = "";
+	private String sCOACES = "";
+	private String sCOGRUG = "";
+	private String sCOTPGA = "";
+	private String sCOSBGA = "";
+	private String sPTPAGO = "";
+	private String sFEDEVE = "";
+	private String sFFGTVP = "";
+	private String sFEPAGA = "";
+	private String sFELIPG = "";
+	private String sCOSIGA = "";
+	private String sFEEESI = "";
+	private String sFEECOI = "";
+	private String sFEEAUI = "";
+	private String sFEEPAI = "";
+	private String sIMNGAS = "";
+	private String sYCOS02 = "";
+	private String sIMRGAS = "";
+	private String sYCOS04 = "";
+	private String sIMDGAS = "";
+	private String sYCOS06 = "";
+	private String sIMCOST = "";
+	private String sYCOS08 = "";
+	private String sIMOGAS = "";
+	private String sYCOS10 = "";
+	private String sIMDTGA = "";
+	private String sCOUNMO = "";
+	private String sIMIMGA = "";
+	private String sCOIMPT = "";
+	private String sCOTNEG = "";
+	private String sCOENCX = "";
+	private String sCOOFCX = "";
+	private String sNUCONE = "";
+	private String sNUPROF = "";
+	private String sFEAGTO = "";
+	private String sCOMONA = "";
+	private String sBIAUTO = "";
+	private String sFEAUFA = "";
+	private String sCOTERR = "";
+	private String sFMPAGN = "";
+	private String sFEPGPR = "";
+	private String sFEAPLI = "";
+	private String sCOAPII = "";
+	private String sCOSPII = "";
+	private String sNUCLII = "";
 
 	private Activo Activo = QMActivos.getActivo("");
 
 	//Métodos de acceso
-	
-	public String getCOACES() {
-		return COACES;
-	}
-
 
-	public void setCOACES(String cOACES) {
-		COACES = cOACES;
+	public String getsCOACES() {
+		return sCOACES;
 	}
 
-
-	public String getCOGRUG() {
-		return COGRUG;
+	public void setsCOACES(String sCOACES) {
+		this.sCOACES = sCOACES;
 	}
 
-
-	public void setCOGRUG(String cOGRUG) {
-		COGRUG = cOGRUG;
+	public String getsCOGRUG() {
+		return sCOGRUG;
 	}
-
 
-	public String getCOTPGA() {
-		return COTPGA;
+	public void setsCOGRUG(String sCOGRUG) {
+		this.sCOGRUG = sCOGRUG;
 	}
 
-
-	public void setCOTPGA(String cOTPGA) {
-		COTPGA = cOTPGA;
+	public String getsCOTPGA() {
+		return sCOTPGA;
 	}
 
-
-	public String getCOSBGA() {
-		return COSBGA;
+	public void setsCOTPGA(String sCOTPGA) {
+		this.sCOTPGA = sCOTPGA;
 	}
-
 
-	public void setCOSBGA(String cOSBGA) {
-		COSBGA = cOSBGA;
+	public String getsCOSBGA() {
+		return sCOSBGA;
 	}
 
-
-	public String getPTPAGO() {
-		return PTPAGO;
+	public void setsCOSBGA(String sCOSBGA) {
+		this.sCOSBGA = sCOSBGA;
 	}
 
-
-	public void setPTPAGO(String pTPAGO) {
-		PTPAGO = pTPAGO;
+	public String getsPTPAGO() {
+		return sPTPAGO;
 	}
-
 
-	public String getFEDEVE() {
-		return FEDEVE;
+	public void setsPTPAGO(String sPTPAGO) {
+		this.sPTPAGO = sPTPAGO;
 	}
 
-
-	public void setFEDEVE(String fEDEVE) {
-		FEDEVE = fEDEVE;
+	public String getsFEDEVE() {
+		return sFEDEVE;
 	}
-
 
-	public String getFFGTVP() {
-		return FFGTVP;
+	public void setsFEDEVE(String sFEDEVE) {
+		this.sFEDEVE = sFEDEVE;
 	}
 
-
-	public void setFFGTVP(String fFGTVP) {
-		FFGTVP = fFGTVP;
+	public String getsFFGTVP() {
+		return sFFGTVP;
 	}
 
-
-	public String getFEPAGA() {
-		return FEPAGA;
+	public void setsFFGTVP(String sFFGTVP) {
+		this.sFFGTVP = sFFGTVP;
 	}
-
 
-	public void setFEPAGA(String fEPAGA) {
-		FEPAGA = fEPAGA;
+	public String getsFEPAGA() {
+		return sFEPAGA;
 	}
 
-
-	public String getFELIPG() {
-		return FELIPG;
+	public void setsFEPAGA(String sFEPAGA) {
+		this.sFEPAGA = sFEPAGA;
 	}
 
-
-	public void setFELIPG(String fELIPG) {
-		FELIPG = fELIPG;
+	public String getsFELIPG() {
+		return sFELIPG;
 	}
-
 
-	public String getCOSIGA() {
-		return COSIGA;
+	public void setsFELIPG(String sFELIPG) {
+		this.sFELIPG = sFELIPG;
 	}
 
-
-	public void setCOSIGA(String cOSIGA) {
-		COSIGA = cOSIGA;
+	public String getsCOSIGA() {
+		return sCOSIGA;
 	}
 
-
-	public String getFEEESI() {
-		return FEEESI;
+	public void setsCOSIGA(String sCOSIGA) {
+		this.sCOSIGA = sCOSIGA;
 	}
-
 
-	public void setFEEESI(String fEEESI) {
-		FEEESI = fEEESI;
+	public String getsFEEESI() {
+		return sFEEESI;
 	}
 
-
-	public String getFEECOI() {
-		return FEECOI;
+	public void setsFEEESI(String sFEEESI) {
+		this.sFEEESI = sFEEESI;
 	}
-
 
-	public void setFEECOI(String fEECOI) {
-		FEECOI = fEECOI;
+	public String getsFEECOI() {
+		return sFEECOI;
 	}
 
-
-	public String getFEEAUI() {
-		return FEEAUI;
+	public void setsFEECOI(String sFEECOI) {
+		this.sFEECOI = sFEECOI;
 	}
 
-
-	public void setFEEAUI(String fEEAUI) {
-		FEEAUI = fEEAUI;
+	public String getsFEEAUI() {
+		return sFEEAUI;
 	}
-
 
-	public String getFEEPAI() {
-		return FEEPAI;
+	public void setsFEEAUI(String sFEEAUI) {
+		this.sFEEAUI = sFEEAUI;
 	}
 
-
-	public void setFEEPAI(String fEEPAI) {
-		FEEPAI = fEEPAI;
+	public String getsFEEPAI() {
+		return sFEEPAI;
 	}
 
-
-	public String getIMNGAS() {
-		return IMNGAS;
+	public void setsFEEPAI(String sFEEPAI) {
+		this.sFEEPAI = sFEEPAI;
 	}
-
 
-	public void setIMNGAS(String iMNGAS) {
-		IMNGAS = iMNGAS;
+	public String getsIMNGAS() {
+		return sIMNGAS;
 	}
 
-
-	public String getYCOS02() {
-		return YCOS02;
+	public void setsIMNGAS(String sIMNGAS) {
+		this.sIMNGAS = sIMNGAS;
 	}
 
-
-	public void setYCOS02(String yCOS02) {
-		YCOS02 = yCOS02;
+	public String getsYCOS02() {
+		return sYCOS02;
 	}
-
 
-	public String getIMRGAS() {
-		return IMRGAS;
+	public void setsYCOS02(String sYCOS02) {
+		this.sYCOS02 = sYCOS02;
 	}
 
-
-	public void setIMRGAS(String iMRGAS) {
-		IMRGAS = iMRGAS;
+	public String getsIMRGAS() {
+		return sIMRGAS;
 	}
-
 
-	public String getYCOS04() {
-		return YCOS04;
+	public void setsIMRGAS(String sIMRGAS) {
+		this.sIMRGAS = sIMRGAS;
 	}
 
-
-	public void setYCOS04(String yCOS04) {
-		YCOS04 = yCOS04;
+	public String getsYCOS04() {
+		return sYCOS04;
 	}
 
-
-	public String getIMDGAS() {
-		return IMDGAS;
+	public void setsYCOS04(String sYCOS04) {
+		this.sYCOS04 = sYCOS04;
 	}
-
 
-	public void setIMDGAS(String iMDGAS) {
-		IMDGAS = iMDGAS;
+	public String getsIMDGAS() {
+		return sIMDGAS;
 	}
 
-
-	public String getYCOS06() {
-		return YCOS06;
+	public void setsIMDGAS(String sIMDGAS) {
+		this.sIMDGAS = sIMDGAS;
 	}
 
-
-	public void setYCOS06(String yCOS06) {
-		YCOS06 = yCOS06;
+	public String getsYCOS06() {
+		return sYCOS06;
 	}
-
 
-	public String getIMCOST() {
-		return IMCOST;
+	public void setsYCOS06(String sYCOS06) {
+		this.sYCOS06 = sYCOS06;
 	}
 
-
-	public void setIMCOST(String iMCOST) {
-		IMCOST = iMCOST;
+	public String getsIMCOST() {
+		return sIMCOST;
 	}
 
-
-	public String getYCOS08() {
-		return YCOS08;
+	public void setsIMCOST(String sIMCOST) {
+		this.sIMCOST = sIMCOST;
 	}
-
 
-	public void setYCOS08(String yCOS08) {
-		YCOS08 = yCOS08;
+	public String getsYCOS08() {
+		return sYCOS08;
 	}
 
-
-	public String getIMOGAS() {
-		return IMOGAS;
+	public void setsYCOS08(String sYCOS08) {
+		this.sYCOS08 = sYCOS08;
 	}
-
 
-	public void setIMOGAS(String iMOGAS) {
-		IMOGAS = iMOGAS;
+	public String getsIMOGAS() {
+		return sIMOGAS;
 	}
 
-
-	public String getYCOS10() {
-		return YCOS10;
+	public void setsIMOGAS(String sIMOGAS) {
+		this.sIMOGAS = sIMOGAS;
 	}
 
-
-	public void setYCOS10(String yCOS10) {
-		YCOS10 = yCOS10;
+	public String getsYCOS10() {
+		return sYCOS10;
 	}
-
 
-	public String getIMDTGA() {
-		return IMDTGA;
+	public void setsYCOS10(String sYCOS10) {
+		this.sYCOS10 = sYCOS10;
 	}
 
-
-	public void setIMDTGA(String iMDTGA) {
-		IMDTGA = iMDTGA;
+	public String getsIMDTGA() {
+		return sIMDTGA;
 	}
 
-
-	public String getCOUNMO() {
-		return COUNMO;
+	public void setsIMDTGA(String sIMDTGA) {
+		this.sIMDTGA = sIMDTGA;
 	}
-
 
-	public void setCOUNMO(String cOUNMO) {
-		COUNMO = cOUNMO;
+	public String getsCOUNMO() {
+		return sCOUNMO;
 	}
 
-
-	public String getIMIMGA() {
-		return IMIMGA;
+	public void setsCOUNMO(String sCOUNMO) {
+		this.sCOUNMO = sCOUNMO;
 	}
 
-
-	public void setIMIMGA(String iMIMGA) {
-		IMIMGA = iMIMGA;
+	public String getsIMIMGA() {
+		return sIMIMGA;
 	}
-
 
-	public String getCOIMPT() {
-		return COIMPT;
+	public void setsIMIMGA(String sIMIMGA) {
+		this.sIMIMGA = sIMIMGA;
 	}
 
-
-	public void setCOIMPT(String cOIMPT) {
-		COIMPT = cOIMPT;
+	public String getsCOIMPT() {
+		return sCOIMPT;
 	}
-
 
-	public String getCOTNEG() {
-		return COTNEG;
+	public void setsCOIMPT(String sCOIMPT) {
+		this.sCOIMPT = sCOIMPT;
 	}
 
-
-	public void setCOTNEG(String cOTNEG) {
-		COTNEG = cOTNEG;
+	public String getsCOTNEG() {
+		return sCOTNEG;
 	}
 
-
-	public String getCOENCX() {
-		return COENCX;
+	public void setsCOTNEG(String sCOTNEG) {
+		this.sCOTNEG = sCOTNEG;
 	}
-
 
-	public void setCOENCX(String cOENCX) {
-		COENCX = cOENCX;
+	public String getsCOENCX() {
+		return sCOENCX;
 	}
 
-
-	public String getCOOFCX() {
-		return COOFCX;
+	public void setsCOENCX(String sCOENCX) {
+		this.sCOENCX = sCOENCX;
 	}
 
-
-	public void setCOOFCX(String cOOFCX) {
-		COOFCX = cOOFCX;
+	public String getsCOOFCX() {
+		return sCOOFCX;
 	}
-
 
-	public String getNUCONE() {
-		return NUCONE;
+	public void setsCOOFCX(String sCOOFCX) {
+		this.sCOOFCX = sCOOFCX;
 	}
 
-
-	public void setNUCONE(String nUCONE) {
-		NUCONE = nUCONE;
+	public String getsNUCONE() {
+		return sNUCONE;
 	}
 
-
-	public String getNUPROF() {
-		return NUPROF;
+	public void setsNUCONE(String sNUCONE) {
+		this.sNUCONE = sNUCONE;
 	}
-
 
-	public void setNUPROF(String nUPROF) {
-		NUPROF = nUPROF;
+	public String getsNUPROF() {
+		return sNUPROF;
 	}
 
-
-	public String getFEAGTO() {
-		return FEAGTO;
+	public void setsNUPROF(String sNUPROF) {
+		this.sNUPROF = sNUPROF;
 	}
-
 
-	public void setFEAGTO(String fEAGTO) {
-		FEAGTO = fEAGTO;
+	public String getsFEAGTO() {
+		return sFEAGTO;
 	}
 
-
-	public String getCOMONA() {
-		return COMONA;
+	public void setsFEAGTO(String sFEAGTO) {
+		this.sFEAGTO = sFEAGTO;
 	}
 
-
-	public void setCOMONA(String cOMONA) {
-		COMONA = cOMONA;
+	public String getsCOMONA() {
+		return sCOMONA;
 	}
-
 
-	public String getBIAUTO() {
-		return BIAUTO;
+	public void setsCOMONA(String sCOMONA) {
+		this.sCOMONA = sCOMONA;
 	}
 
-
-	public void setBIAUTO(String bIAUTO) {
-		BIAUTO = bIAUTO;
+	public String getsBIAUTO() {
+		return sBIAUTO;
 	}
 
-
-	public String getFEAUFA() {
-		return FEAUFA;
+	public void setsBIAUTO(String sBIAUTO) {
+		this.sBIAUTO = sBIAUTO;
 	}
-
 
-	public void setFEAUFA(String fEAUFA) {
-		FEAUFA = fEAUFA;
+	public String getsFEAUFA() {
+		return sFEAUFA;
 	}
 
-
-	public String getCOTERR() {
-		return COTERR;
+	public void setsFEAUFA(String sFEAUFA) {
+		this.sFEAUFA = sFEAUFA;
 	}
 
-
-	public void setCOTERR(String cOTERR) {
-		COTERR = cOTERR;
+	public String getsCOTERR() {
+		return sCOTERR;
 	}
-
 
-	public String getFMPAGN() {
-		return FMPAGN;
+	public void setsCOTERR(String sCOTERR) {
+		this.sCOTERR = sCOTERR;
 	}
 
-
-	public void setFMPAGN(String fMPAGN) {
-		FMPAGN = fMPAGN;
+	public String getsFMPAGN() {
+		return sFMPAGN;
 	}
 
-
-	public String getFEPGPR() {
-		return FEPGPR;
+	public void setsFMPAGN(String sFMPAGN) {
+		this.sFMPAGN = sFMPAGN;
 	}
-
 
-	public void setFEPGPR(String fEPGPR) {
-		FEPGPR = fEPGPR;
+	public String getsFEPGPR() {
+		return sFEPGPR;
 	}
 
-
-	public String getFEAPLI() {
-		return FEAPLI;
+	public void setsFEPGPR(String sFEPGPR) {
+		this.sFEPGPR = sFEPGPR;
 	}
 
-
-	public void setFEAPLI(String fEAPLI) {
-		FEAPLI = fEAPLI;
+	public String getsFEAPLI() {
+		return sFEAPLI;
 	}
-
 
-	public String getCOAPII() {
-		return COAPII;
+	public void setsFEAPLI(String sFEAPLI) {
+		this.sFEAPLI = sFEAPLI;
 	}
 
-
-	public void setCOAPII(String cOAPII) {
-		COAPII = cOAPII;
+	public String getsCOAPII() {
+		return sCOAPII;
 	}
 
-
-	public String getCOSPII() {
-		return COSPII;
+	public void setsCOAPII(String sCOAPII) {
+		this.sCOAPII = sCOAPII;
 	}
 
+	public String getsCOSPII() {
+		return sCOSPII;
+	}
 
-	public void setCOSPII(String cOSPII) {
-		COSPII = cOSPII;
+	public void setsCOSPII(String sCOSPII) {
+		this.sCOSPII = sCOSPII;
 	}
 
+	public String getsNUCLII() {
+		return sNUCLII;
+	}
 
-	public String getNUCLII() {
-		return NUCLII;
+	public void setsNUCLII(String sNUCLII) {
+		this.sNUCLII = sNUCLII;
 	}
 
 
-	public void setNUCLII(String nUCLII) {
-		NUCLII = nUCLII;
-	}
+
 }

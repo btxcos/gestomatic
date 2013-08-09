@@ -4,12 +4,16 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.provisiones.misc.ValoresDefecto;
+
 public class GestorDatosGenerales implements Serializable 
 {
 
 
 	private static final long serialVersionUID = -669897445986653574L;
 
+	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
+	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 
 	
 	private Map<String,String> tiposdocumentoHM = new LinkedHashMap<String, String>();
@@ -65,6 +69,30 @@ public class GestorDatosGenerales implements Serializable
 	}
 	public void setTipospagoHM(Map<String, String> tipospagoHM) {
 		this.tipospagoHM = tipospagoHM;
+	}
+
+
+
+	public String getsIDPROV() {
+		return sIDPROV;
+	}
+
+
+
+	public void setsIDPROV(String sIDPROV) {
+		this.sIDPROV = sIDPROV;
+	}
+
+
+
+	public String getsCOENGP() {
+		return sCOENGP;
+	}
+
+
+
+	public void setsCOENGP(String sCOENGP) {
+		this.sCOENGP = sCOENGP;
 	}
 	
 	

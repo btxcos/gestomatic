@@ -75,11 +75,11 @@
 									</p:fieldset>
 											<p:panel id="panelTablaActivos">
 												<h:panelGrid columns="1" cellpadding="5">
-													<p:contextMenu for="activos">
+													<p:contextMenu for="tablaActivos">
 														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" actionListener="#{GestorActivos.cargarDetalles}" url="detallesprovision.xhtml"/>
 													</p:contextMenu>  
 															
-													<p:dataTable id="activos" var="activo" value="#{GestorActivos.tablaactivos}" rowKey="#{activo.COACES}"  
+													<p:dataTable id="tablaActivos" var="activo" value="#{GestorActivos.tablaactivos}" rowKey="#{activo.COACES}"  
 															selection="#{GestorActivos.activoseleccionado}" selectionMode="single"
 																paginator="true" paginatorPosition="bottom" rows="10" 
 																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
