@@ -14,17 +14,17 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 
-public class GestorReferenciasCatastrales implements Serializable 
+public class GestorMovimientosReferenciasCatastrales implements Serializable 
 {
 
-	static String sClassName = GestorReferenciasCatastrales.class.getName();
+	static String sClassName = GestorMovimientosReferenciasCatastrales.class.getName();
 	
-	private static final long serialVersionUID = 2458459163051982275L;
-	
+	private static final long serialVersionUID = -1805847552638917701L;
+
 	private String sCODTRN = ValoresDefecto.DEF_E3_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
 	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
-	private String sCOACCI = "A";
+	private String sCOACCI = "";
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 	
 	private String sNURCAT = "";
@@ -51,9 +51,9 @@ public class GestorReferenciasCatastrales implements Serializable
 	private ActivoTabla activoseleccionado = null;
 	
 	
-	public GestorReferenciasCatastrales()
+	public GestorMovimientosReferenciasCatastrales()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
+		
 	}
 
 	public void buscaActivos (ActionEvent actionEvent)
@@ -85,6 +85,7 @@ public class GestorReferenciasCatastrales implements Serializable
 	{
 		String sMethod = "comprobarCOACES";
 		
+		Utils.standardIO2File("");//Salida por fichero de texto
 		
 		FacesMessage msg;
 		
@@ -118,6 +119,7 @@ public class GestorReferenciasCatastrales implements Serializable
 	{
 		String sMethod = "comprobarCOACES";
 		
+		Utils.standardIO2File("");//Salida por fichero de texto
 		
 		FacesMessage msg;
 		
@@ -192,12 +194,14 @@ public class GestorReferenciasCatastrales implements Serializable
 	{
 		String sMethod = "registraMovimiento";
 		
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
 		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
 		MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
 				sCODTRN.toUpperCase(), 
 				sCOTDOR.toUpperCase(), 
 				sIDPROV.toUpperCase(), 
-				"A",//sCOACCI.toUpperCase(), 
+				sCOACCI.toUpperCase(), 
 				sCOENGP.toUpperCase(), 
 				sCOACES.toUpperCase(), 
 				sNURCAT.toUpperCase(),
@@ -284,52 +288,93 @@ public class GestorReferenciasCatastrales implements Serializable
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
-	
+
+	public String getsCODTRN() {
+		return sCODTRN;
+	}
+
+	public void setsCODTRN(String sCODTRN) {
+		this.sCODTRN = sCODTRN;
+	}
+
+	public String getsCOTDOR() {
+		return sCOTDOR;
+	}
+
+	public void setsCOTDOR(String sCOTDOR) {
+		this.sCOTDOR = sCOTDOR;
+	}
+
+	public String getsIDPROV() {
+		return sIDPROV;
+	}
+
+	public void setsIDPROV(String sIDPROV) {
+		this.sIDPROV = sIDPROV;
+	}
+
+	public String getsCOACCI() {
+		return sCOACCI;
+	}
+
+	public void setsCOACCI(String sCOACCI) {
+		this.sCOACCI = sCOACCI;
+	}
+
+	public String getsCOENGP() {
+		return sCOENGP;
+	}
+
+	public void setsCOENGP(String sCOENGP) {
+		this.sCOENGP = sCOENGP;
+	}
+
 	public String getsNURCAT() {
 		return sNURCAT;
 	}
+
 	public void setsNURCAT(String sNURCAT) {
 		this.sNURCAT = sNURCAT;
 	}
+
 	public String getsTIRCAT() {
 		return sTIRCAT;
 	}
+
 	public void setsTIRCAT(String sTIRCAT) {
 		this.sTIRCAT = sTIRCAT;
 	}
+
 	public String getsENEMIS() {
 		return sENEMIS;
 	}
+
 	public void setsENEMIS(String sENEMIS) {
 		this.sENEMIS = sENEMIS;
 	}
+
 	public String getsCOTEXA() {
 		return sCOTEXA;
 	}
+
 	public void setsCOTEXA(String sCOTEXA) {
 		this.sCOTEXA = sCOTEXA;
 	}
+
 	public String getsOBTEXC() {
 		return sOBTEXC;
 	}
+
 	public void setsOBTEXC(String sOBTEXC) {
 		this.sOBTEXC = sOBTEXC;
 	}
 
-	public ArrayList<ActivoTabla> getTablaactivos() {
-		return tablaactivos;
+	public String getsOBDEER() {
+		return sOBDEER;
 	}
 
-	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
-		this.tablaactivos = tablaactivos;
-	}
-
-	public ActivoTabla getActivoseleccionado() {
-		return activoseleccionado;
-	}
-
-	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
-		this.activoseleccionado = activoseleccionado;
+	public void setsOBDEER(String sOBDEER) {
+		this.sOBDEER = sOBDEER;
 	}
 
 	public String getsCOACES() {
@@ -396,52 +441,21 @@ public class GestorReferenciasCatastrales implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 
-	public String getsCODTRN() {
-		return sCODTRN;
+	public ArrayList<ActivoTabla> getTablaactivos() {
+		return tablaactivos;
 	}
 
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
+	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
+		this.tablaactivos = tablaactivos;
 	}
 
-	public String getsCOTDOR() {
-		return sCOTDOR;
+	public ActivoTabla getActivoseleccionado() {
+		return activoseleccionado;
 	}
 
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
+	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
+		this.activoseleccionado = activoseleccionado;
 	}
-
-	public String getsIDPROV() {
-		return sIDPROV;
-	}
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
-	}
-
-	public String getsCOACCI() {
-		return sCOACCI;
-	}
-
-	public void setsCOACCI(String sCOACCI) {
-		this.sCOACCI = sCOACCI;
-	}
-
-	public String getsCOENGP() {
-		return sCOENGP;
-	}
-
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
-	}
-
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
-	}
-
+	
+	
 }

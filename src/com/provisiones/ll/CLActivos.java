@@ -18,6 +18,12 @@ public class CLActivos
 			
 		return QMActivos.buscaActivos(activobuscado);
 	}
+
+	public static boolean compruebaActivo (String sCodCOACES)
+	{
+			
+		return QMActivos.existeActivo(sCodCOACES);
+	}
 	
 	public static boolean actualizaActivoLeido(String linea)
 	{

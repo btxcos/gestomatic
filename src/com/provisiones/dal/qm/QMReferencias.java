@@ -56,7 +56,7 @@ public class QMReferencias
 				       + NuevaReferenciaCatastral.getENEMIS() + "','"
 				       + NuevaReferenciaCatastral.getCOTEXA() + "','"
 				       + NuevaReferenciaCatastral.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_PENDIENTE + "' )");
+				       + ValoresDefecto.DEF_ALTA + "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 

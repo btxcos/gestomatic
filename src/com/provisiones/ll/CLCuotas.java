@@ -307,7 +307,7 @@ public class CLCuotas
 						case M:
 							if (QMListaCuotas.addRelacionCuotas(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
 							{
-								Cuota cuotamodificada = QMCuotas.getCuota( movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC());
+								//Cuota cuotamodificada = QMCuotas.getCuota( movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC());
 								if(QMCuotas.modCuota(convierteMovimientoenCuota(movimiento), movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
 								{
 									//OK 
@@ -315,7 +315,6 @@ public class CLCuotas
 								}
 								else
 								{
-									QMCuotas.addCuota(cuotamodificada);
 									QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
 									iCodigo = -12;									
 								}
