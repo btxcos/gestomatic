@@ -135,6 +135,22 @@ public class Utils
 		
 		return sTipo;
 	}
+	
+	public static String compruebaCodigo(String sCodigo)
+	{
+		String sMethod = "compruebaCodigo";
+			
+		String sCodigoRevisado = sCodigo;
+		
+		if (sCodigoRevisado.equals(""))
+		{
+			sCodigoRevisado = "#";
+		}
+		
+		debugTrace(bTraza, sClassName, sMethod, "Codigo:|"+sCodigoRevisado+"|");
+		
+		return sCodigoRevisado;
+	}
 
 	public static String compruebaImporte(boolean bNegativo, String sImporte)
 	{
@@ -254,5 +270,21 @@ public class Utils
 		}
 		
 		return sFechaFormateada;
+	}
+	
+	public static String recuperaCodigo(String sCodigo)
+	{
+		String sMethod = "compruebaCodigo";
+			
+		String sCodigoRevisado = sCodigo;
+		
+		if (sCodigoRevisado.equals("#"))
+		{
+			sCodigoRevisado = "";
+		}
+		
+		debugTrace(bTraza, sClassName, sMethod, "Codigo:|"+sCodigoRevisado+"|");
+		
+		return sCodigoRevisado;
 	}
 }
