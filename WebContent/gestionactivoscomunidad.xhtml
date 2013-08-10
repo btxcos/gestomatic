@@ -29,7 +29,6 @@
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel, activosComunidad" actionListener="#{GestorTablaComunidadActivo.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 										</h:panelGrid>
-											<p:messages id="msgs"/>
 									</p:fieldset>
 									<p:fieldset legend="Info">
 										<h:panelGrid columns="3" cellpadding="5">
@@ -59,7 +58,7 @@
 													<h:outputText for="COCLDO" value="Documento: " />
 													<p:selectOneMenu id="COCLDO" value="#{GestorTablaComunidadActivo.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
-														<f:selectItems value="#{GestorMovimientosComunidades.tiposdocumentoHM}" />
+														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
 													<p:message for="COCLDO" display="icon"/>
@@ -123,8 +122,11 @@
 									</p:contextMenu>  
 											
 									<p:dataTable id="activosComunidad" var="activo" value="#{GestorTablaComunidadActivo.tablaactivoscomunidad}" rowKey="#{activo.COACES}"  
-											              selection="#{GestorTablaComunidadActivo.activoseleccionadobaja}" selectionMode="single">  
-											
+																selection="#{GestorTablaComunidadActivo.activoseleccionadobaja}" selectionMode="single"
+																paginator="true" paginatorPosition="bottom" rows="10" 
+																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+																rowsPerPageTemplate="5,10,15">
+
 										<p:column headerText="Codigo Activo">  
 										    #{activo.COACES}  
 										</p:column>  
@@ -165,8 +167,11 @@
 							</p:contextMenu>  
 									
 							<p:dataTable id="activos" var="activo" value="#{GestorTablaComunidadActivo.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorTablaComunidadActivo.activoseleccionadoalta}" selectionMode="single">  
-									
+																selection="#{GestorTablaComunidadActivo.activoseleccionadoalta}" selectionMode="single"
+																paginator="true" paginatorPosition="bottom" rows="10" 
+																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+																rowsPerPageTemplate="5,10,15">
+
 								<p:column headerText="Codigo Activo">  
 								    #{activo.COACES}  
 								</p:column>  

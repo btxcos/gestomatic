@@ -65,7 +65,7 @@
 													<h:outputText for="COCLDO" value="Documento: " />
 													<p:selectOneMenu id="COCLDO" value="#{GestorMovimientosComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
-														<f:selectItems value="#{GestorMovimientosComunidades.tiposdocumentoHM}" />
+														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
 													<p:message for="COCLDO" display="icon"/>
