@@ -993,7 +993,7 @@ public class QMActivos
 
 					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + rs.getString(sField1));
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField81 + ": " + rs.getString(sField81));
 				}
 			}
 			if (found == false) 

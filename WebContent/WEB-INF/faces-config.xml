@@ -80,5 +80,15 @@
 		<managed-bean-class>com.provisiones.pl.GestorReferenciasCatastrales</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorMovimientosReferenciasCatastrales</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorMovimientosReferenciasCatastrales</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorMovimientosImpuestosRecursos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorMovimientosImpuestosRecursos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

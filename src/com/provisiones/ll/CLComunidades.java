@@ -759,5 +759,29 @@ public class CLComunidades
 		return iCodigo;
 	}
 	
+	public static int registraPrealta(Comunidad comunidad)
+	{
+		int iCodigo = 0;
+		
+		comunidad.pintaComunidad();
+		
+		if (comunidad.getCOCLDO().equals("") || comunidad.getNUDCOM().equals(""))
+		{
+			//Error, faltan datos identificativos
+			iCodigo = -2;
+		}
+		else if (QMComunidades.addComunidad(comunidad))
+		{
+			//OK
+			iCodigo = 0;
+		}
+		else
+		{
+			//Error
+			iCodigo = -1;
+		}
+	
+		return iCodigo;
+	}
 
 }

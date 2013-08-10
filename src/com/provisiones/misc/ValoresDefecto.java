@@ -14,9 +14,13 @@ public class ValoresDefecto
 	public static final String DEF_IDPROV = "68942184";
 	
 	public static final String DEF_COENGP = "00000";
+	public static final String DEF_COTEXA = "0000000000";
 
 	public static final String DEF_COGRUG_E2 = "2";
 	public static final String DEF_COTACA_E2 = "2";
+	
+	public static final String DEF_COGRUG_E4 = "2";
+	public static final String DEF_COTACA_E4 = "1";
 	
 	public static final String DEF_ALTA = "A";
 	public static final String DEF_BAJA = "B";

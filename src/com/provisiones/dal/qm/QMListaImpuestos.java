@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.ActivoTabla;
 
 public class QMListaImpuestos 
 {
@@ -76,7 +77,7 @@ public class QMListaImpuestos
 		return bSalida;
 	}
 
-	public static boolean delRelacionImpuestos(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC, String CodImpuestos) 
+	public static boolean delRelacionImpuestos(String sCodMovimiento) 
 	{
 		String sMethod = "delRelacionImpuestos";
 		Statement stmt = null;
@@ -92,19 +93,13 @@ public class QMListaImpuestos
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND  " + sField2 + " = '" + sCodNURCAT + "' "+
-							"AND  " + sField3 + " = '" + sCodCOSBAC + "' "+
-							"AND  " + sField4 + " = '" + CodImpuestos +"')");
+					" WHERE (" + sField4 + " = '" + sCodMovimiento +"')");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
-
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: CodMovimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -119,6 +114,144 @@ public class QMListaImpuestos
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaActivosAsociados(ActivoTabla activo)
+	{//pendiente de coaces, de la tabla activos
+
+		String sMethod = "buscaActivosAsociados";
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOACES = "";
+		String sCOPOIN = "";
+		String sNOMUIN = "";
+		String sNOPRAC = "";
+		String sNOVIAS = "";
+		String sNUPIAC = "";
+		String sNUPOAC = "";
+		String sNUPUAC = "";
+		
+		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		String sQuery = "SELECT "
+					
+					   + QMActivos.sField1 + ","        
+					   + QMActivos.sField14 + ","
+					   + QMActivos.sField11 + ","
+					   + QMActivos.sField13 + ","
+					   + QMActivos.sField6 + ","
+					   + QMActivos.sField9 + ","
+					   + QMActivos.sField7 + ","
+					   + QMActivos.sField10 + 
+
+					   " FROM " + QMActivos.sTable + 
+					   " WHERE ("
+
+					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+
+					   + QMActivos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable + "))";
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			
+			pstmt = conn.prepareStatement("SELECT "
+					
+					   + QMActivos.sField1 + ","        
+					   + QMActivos.sField14 + ","
+					   + QMActivos.sField11 + ","
+					   + QMActivos.sField13 + ","
+					   + QMActivos.sField6 + ","
+					   + QMActivos.sField9 + ","
+					   + QMActivos.sField7 + ","
+					   + QMActivos.sField10 + 
+
+					   " FROM " + QMActivos.sTable + 
+					   " WHERE ("
+
+					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+
+					   + QMActivos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable + "))");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sCOACES = rs.getString(QMActivos.sField1);
+					sCOPOIN = rs.getString(QMActivos.sField14);
+					sNOMUIN = rs.getString(QMActivos.sField11);
+					sNOPRAC = rs.getString(QMActivos.sField13);
+					sNOVIAS = rs.getString(QMActivos.sField6);
+					sNUPIAC = rs.getString(QMActivos.sField9);
+					sNUPOAC = rs.getString(QMActivos.sField7);
+					sNUPUAC = rs.getString(QMActivos.sField10);
+					
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					
+					result.add(activoencontrado);
+					
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+
 	}
 
 	public static ArrayList<String>  getImpuestos(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC) 

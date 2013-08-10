@@ -27,9 +27,9 @@
 									</p:panel>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Limpiar Plantilla" type="reset" />
-											<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorReferenciasCatastrales.registraMovimiento}" />
-											<p:selectOneRadio id="options" value="#{GestorReferenciasCatastrales.sCOACCI}">
+											<p:commandButton value="Limpiar Plantilla" update="panel, msgs, popup" actionListener="#{GestorMovimientosReferenciasCatastrales.limpiarPlantilla}"/>
+											<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorMovimientosReferenciasCatastrales.registraMovimiento}" />
+											<p:selectOneRadio id="options" value="#{GestorMovimientosReferenciasCatastrales.sCOACCI}">
 												<f:selectItem itemLabel="Baja" itemValue="B" />  
 												<f:selectItem itemLabel="Modificacion" itemValue="M" />
 											</p:selectOneRadio>
@@ -62,10 +62,10 @@
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorReferenciasCatastrales.sCOACES}" size="9" maxlength="9">
+														<p:inputText id="COACES" value="#{GestorMovimientosReferenciasCatastrales.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Comprobar" update="msgs, popup, COACES, NURCAT" actionListener="#{GestorReferenciasCatastrales.comprobarActivoMovimiento}"/>	
+													<p:commandButton value="Comprobar" update="msgs, popup, panel" actionListener="#{GestorMovimientosReferenciasCatastrales.comprobarActivoMovimiento}"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar un activo" update="COACES, NURCAT, form:activos" oncomplete="dlgBuscar.show()"/>		
@@ -76,12 +76,12 @@
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="NURCAT" value="NURCAT: " />
-											<p:inputText id="NURCAT" value="#{GestorReferenciasCatastrales.sNURCAT}" size="20" maxlength="20" disabled="true">
+											<p:inputText id="NURCAT" value="#{GestorMovimientosReferenciasCatastrales.sNURCAT}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
 											<p:message for="NURCAT" display="icon"/>
 
 											<h:outputText for="TIRCAT" value="TIRCAT: " />
-											<p:inputText id="TIRCAT" value="#{GestorReferenciasCatastrales.sTIRCAT}" size="60" maxlength="60">
+											<p:inputText id="TIRCAT" value="#{GestorMovimientosReferenciasCatastrales.sTIRCAT}" size="60" maxlength="60">
 											</p:inputText>
 
 										</h:panelGrid>
@@ -91,11 +91,11 @@
 										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="ENEMIS"  value="ENEMIS: " />
-											<p:inputText id="ENEMIS" value="#{GestorReferenciasCatastrales.sENEMIS}" size="60"  maxlength="60">
+											<p:inputText id="ENEMIS" value="#{GestorMovimientosReferenciasCatastrales.sENEMIS}" size="60"  maxlength="60">
 											</p:inputText>
 
 											<h:outputText for="COTEXA" value="COTEXA: " />
-											<p:inputText id="COTEXA" value="#{GestorReferenciasCatastrales.sCOTEXA}" size="10" maxlength="14">
+											<p:inputText id="COTEXA" value="#{GestorMovimientosReferenciasCatastrales.sCOTEXA}" size="10" maxlength="14">
 											</p:inputText>
 
 
@@ -107,7 +107,7 @@
 
 											<h:outputText for="OBTEXC" value="OBTEXC: " />
 
-											<p:inputText id="OBTEXC" value="#{GestorReferenciasCatastrales.sOBTEXC}" size="110" maxlength="110" >
+											<p:inputText id="OBTEXC" value="#{GestorMovimientosReferenciasCatastrales.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
 											<p:message for="OBTEXC" display="icon"/>
 
@@ -119,11 +119,11 @@
 					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
-								<p:menuitem value="Seleccionar" update="form:COACES, form:NURCAT, form:msgs, form:popup" icon="ui-icon-check" actionListener="#{GestorReferenciasCatastrales.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+								<p:menuitem value="Seleccionar" update="form:panel, form:msgs, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosReferenciasCatastrales.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
 							</p:contextMenu>  
 									
-							<p:dataTable id="activos" var="activo" value="#{GestorReferenciasCatastrales.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorReferenciasCatastrales.activoseleccionado}" selectionMode="single"  
+							<p:dataTable id="activos" var="activo" value="#{GestorMovimientosReferenciasCatastrales.tablaactivos}" rowKey="#{activo.COACES}"  
+									              selection="#{GestorMovimientosReferenciasCatastrales.activoseleccionado}" selectionMode="single"  
 																paginator="true" paginatorPosition="bottom" rows="10" 
 																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
 																rowsPerPageTemplate="5,10,15">  
@@ -164,37 +164,37 @@
 											<p:panel id="panelBuscar" >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
-														<p:inputText id="NOPRAC" value="#{GestorReferenciasCatastrales.sNOPRAC}" size="18" maxlength="18">
+														<p:inputText id="NOPRAC" value="#{GestorMovimientosReferenciasCatastrales.sNOPRAC}" size="18" maxlength="18">
 														</p:inputText>
 													<p:message for="NOPRAC" display="icon"/>
 
 													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
-														<p:inputText id="NOMUIN" value="#{GestorReferenciasCatastrales.sNOMUIN}" size="30" maxlength="30">
+														<p:inputText id="NOMUIN" value="#{GestorMovimientosReferenciasCatastrales.sNOMUIN}" size="30" maxlength="30">
 														</p:inputText>
 													<p:message for="NOMUIN" display="icon"/>
 
 													<h:outputText for="COPOIN" value="Codigo Postal: " />
-														<p:inputText id="COPOIN" value="#{GestorReferenciasCatastrales.sCOPOIN}" size="5" maxlength="5">
+														<p:inputText id="COPOIN" value="#{GestorMovimientosReferenciasCatastrales.sCOPOIN}" size="5" maxlength="5">
 														</p:inputText>
 													<p:message for="COPOIN" display="icon"/>
 
 													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
-														<p:inputText id="NOVIAS" value="#{GestorReferenciasCatastrales.sNOVIAS}" size="60" maxlength="60">
+														<p:inputText id="NOVIAS" value="#{GestorMovimientosReferenciasCatastrales.sNOVIAS}" size="60" maxlength="60">
 														</p:inputText>
 													<p:message for="NOVIAS" display="icon"/>
 
 													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
-														<p:inputText id="NUPOAC" value="#{GestorReferenciasCatastrales.sNUPOAC}" size="17" maxlength="17">
+														<p:inputText id="NUPOAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPOAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPOAC" display="icon"/>
 
 													<h:outputText for="NUPIAC" value="Piso: " />
-														<p:inputText id="NUPIAC" value="#{GestorReferenciasCatastrales.sNUPIAC}" size="11" maxlength="11">
+														<p:inputText id="NUPIAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPIAC}" size="11" maxlength="11">
 														</p:inputText>
 													<p:message for="NUPIAC" display="icon"/>
 
 													<h:outputText for="NUPUAC" value="Puerta: " />
-														<p:inputText id="NUPUAC" value="#{GestorReferenciasCatastrales.sNUPUAC}" size="17" maxlength="17">
+														<p:inputText id="NUPUAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPUAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPUAC" display="icon"/>
 												</h:panelGrid>
@@ -202,8 +202,8 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorReferenciasCatastrales.buscaActivos}" oncomplete="dlgTabla.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorReferenciasCatastrales.limpiarPlantillaActivo}" />
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosReferenciasCatastrales.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosReferenciasCatastrales.limpiarPlantillaActivo}" />
 
 												</h:panelGrid>
 											</p:panel>

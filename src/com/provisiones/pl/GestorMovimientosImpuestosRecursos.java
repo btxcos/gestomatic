@@ -14,16 +14,17 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoImpuestoRecurso;
 
-public class GestorImpuestosRecursos implements Serializable 
+public class GestorMovimientosImpuestosRecursos implements Serializable 
 {
-	static String sClassName = GestorImpuestosRecursos.class.getName();
 
-	private static final long serialVersionUID = -6693758981602847934L;
+	static String sClassName = GestorMovimientosImpuestosRecursos.class.getName();
 	
+	private static final long serialVersionUID = -6724439464144511204L;
+
 	private String sCODTRN = ValoresDefecto.DEF_E4_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
 	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
-	private String sCOACCI = "A";
+	private String sCOACCI = "";
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 
 	private String sNURCAT = "";
@@ -55,7 +56,7 @@ public class GestorImpuestosRecursos implements Serializable
 	
 	private ActivoTabla activoseleccionado = null;
 
-	public GestorImpuestosRecursos()
+	public GestorMovimientosImpuestosRecursos()
 	{
 		Utils.standardIO2File("");//Salida por fichero de texto
 	}
@@ -119,7 +120,7 @@ public class GestorImpuestosRecursos implements Serializable
 				sCODTRN.toUpperCase(), 
 				sCOTDOR.toUpperCase(), 
 				sIDPROV.toUpperCase(), 
-				"A",//sCOACCI.toUpperCase(), 
+				sCOACCI.toUpperCase(), 
 				sCOENGP.toUpperCase(), 
 				sCOACES.toUpperCase(),
 				sNURCAT.toUpperCase(),
@@ -262,7 +263,7 @@ public class GestorImpuestosRecursos implements Serializable
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
-		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
+		this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(buscaactivos));
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 
@@ -499,6 +500,8 @@ public class GestorImpuestosRecursos implements Serializable
 	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
 		this.activoseleccionado = activoseleccionado;
 	}
+	
+	
 	
 	
 	

@@ -48,7 +48,8 @@ public class QMImpuestos
 
 			stmt = conn.createStatement();
 			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-				       + sField2  + ","              
+				       + sField1  + ","
+				       + sField2  + "," 
 				       + sField3  + ","              
 				       + sField4  + ","              
 				       + sField5  + ","              
@@ -67,7 +68,7 @@ public class QMImpuestos
 				       + NuevoImpuestoRecurso.getBIRESO() + "','"
 				       + NuevoImpuestoRecurso.getCOTEXA() + "','"
 				       + NuevoImpuestoRecurso.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_PENDIENTE + "' )");
+				       + ValoresDefecto.DEF_ALTA + "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 

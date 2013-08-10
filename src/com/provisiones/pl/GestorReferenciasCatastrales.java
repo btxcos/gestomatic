@@ -113,37 +113,8 @@ public class GestorReferenciasCatastrales implements Serializable
 		
 	}
 	
-	
-	public void comprobarActivoMovimiento(ActionEvent actionEvent)
+	public void borrarPlantillaActivo()
 	{
-		String sMethod = "comprobarCOACES";
-		
-		
-		FacesMessage msg;
-		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
-    	
-    	if (sNURCAT.equals(""))
-    	{
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe un numero de referencia catastral asociado.");
-    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe un numero de referencia catastral asociado.",null);
-    		
-    	}
-    	else
-		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El activo '"+sCOACES.toUpperCase()+"' esta asociado.");
-			msg = new FacesMessage("El activo '"+sCOACES.toUpperCase()+"' esta asociado.",null);
-		}
-		
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);	
-		
-	}
-	
-    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
-    {  
-    	this.sCOACES = "";
-
     	this.sCOPOIN = "";
     	this.sNOMUIN = "";
     	this.sNOPRAC = "";
@@ -151,11 +122,44 @@ public class GestorReferenciasCatastrales implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+	}
+	
+	
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+    	this.sCOACES = "";
+
+    	borrarPlantillaActivo();
     	
     	this.activoseleccionado = null;
     	this.tablaactivos = null;
    	
     }
+    
+	public void borrarPlantillaReferencia()
+	{
+		this.sCOACES = "";
+        this.sNURCAT = "";
+        this.sTIRCAT = "";
+        this.sENEMIS = "";
+        this.sCOTEXA = "";
+        this.sOBTEXC = "";
+	}
+    
+    public void limpiarPlantilla(ActionEvent actionEvent) 
+    {  
+    	
+
+    	borrarPlantillaActivo();
+    	
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+    	
+    	borrarPlantillaReferencia();
+   	
+    }
+    
+
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
@@ -188,9 +192,9 @@ public class GestorReferenciasCatastrales implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
 	
-	public void registraMovimiento(ActionEvent actionEvent)
+	public void realizaAlta(ActionEvent actionEvent)
 	{
-		String sMethod = "registraMovimiento";
+		String sMethod = "realizaAlta";
 		
 		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
 		MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (

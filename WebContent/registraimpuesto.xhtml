@@ -7,28 +7,28 @@
 	<h:head>
 	</h:head>
 	<h:body>
-		<h:form>
+		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Alta Impuestos y Recursos">
+				<p:layoutUnit position="north" size="33%" header="Alta Cuota">
 
-	
+ 
 								<h:panelGrid columns="3" cellpadding="5">
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText value="IDPROV: " />
-											<p:inputText id="IDPROV" value="#{GestorDatosGenerales.sIDPROV}" disabled="true" />
+											<p:inputText id="IDPROV" value="#{GestorImpuestosRecursos.sIDPROV}" disabled="true" />
 
 											<h:outputText value="COENGP: " />
-											<p:inputText id="COENGP" value="#{GestorDatosGenerales.sCOENGP}" disabled="true" />
+											<p:inputText id="COENGP" value="#{GestorImpuestosRecursos.sCOENGP}" disabled="true" />
 
 										</h:panelGrid>
 									</p:panel>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Limpiar Plantilla" type="reset" />
-											<p:commandButton value="Registrar Datos" update="panel" actionListener="#{GestorComunidades.realizaAlta}" />
+											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorImpuestosRecursos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+											<p:commandButton value="Alta" update="panel, popup, msgs" actionListener="#{GestorImpuestosRecursos.realizaAlta}"/>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -44,120 +44,240 @@
 									</p:fieldset>
 								</h:panelGrid>
 				</p:layoutUnit>
-
 				<p:layoutUnit position="west" size="20%" header="Menus">
 					<ui:include src="menu.xhtml"/>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
+
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
 
-									<p:fieldset legend="Comunidad de proprietarios">
+									<p:fieldset legend="Activo">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="COACES" value="Codigo de activo: " />
+														<p:inputText id="COACES" value="#{GestorImpuestosRecursos.sCOACES}" size="9" maxlength="9">
+														</p:inputText>
+													<p:message for="COACES" display="icon"/>
+													<p:commandButton value="Comprobar" update="msgs, popup, panel" actionListener="#{GestorImpuestosRecursos.comprobarActivo}"/>	
+												</h:panelGrid>
+											</p:panel>
+										<p:commandButton value="Buscar un activo" update="COACES, NURCAT, form:activos" oncomplete="dlgBuscar.show()"/>		
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Referencia Catastral">
 										<h:panelGrid columns="3" cellpadding="5">
-											
-											<h:outputText for="COCLDO" value="Tipo de documento: " />
-											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
-												<f:selectItem itemLabel="Documento" itemValue="" />
-												<f:selectItems value="#{GestorComunidades.tiposdocumentoHM}" />
-												<f:validateLength minimum="1" /> 
-											</p:selectOneMenu>
-											<p:message for="COCLDO" display="icon"/>
-											
-											<h:outputText for="NUDCOM" value="NUDCOM: " />
-											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
-											</p:inputText>
-											<p:message for="NUDCOM" display="icon"/>
 
-											<h:outputText for="NOMCOC" value="NOMCOC: " />
-											<p:inputText id="NOMCOC" value="#{GestorComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
+											<h:outputText for="NURCAT" value="NURCAT: " />
+											<p:inputText id="NURCAT" value="#{GestorImpuestosRecursos.sNURCAT}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
-											<p:message for="NOMCOC" display="icon"/>
-
-											<h:outputText for="NODCCO"  value="NODCCO: " />
-											<p:inputText id="NODCCO" value="#{GestorComunidades.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta.">
-												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-											</p:inputText>
-											<p:message for="NODCCO" display="icon"/>
+											<p:message for="NURCAT" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
-									<p:fieldset legend="Presidente">
-										<h:panelGrid columns="3" cellpadding="5">
 
-											<h:outputText for="NOMPRC" value="NOMPRC: " />
-											<p:inputText id="NOMPRC" value="#{GestorComunidades.sNOMPRC}" size="55" maxlength="55">
-											</p:inputText>
-											<p:message for="NOMPRC" display="icon"/>
+									<p:fieldset legend="Solicitud" id="panelPago">
+										<h:panelGrid columns="1" cellpadding="5">
 
-											<h:outputText for="NUTPRC" value="NUTPRC: " />
-											<p:inputText id="NUTPRC" value="#{GestorComunidades.sNUTPRC}" size="14" maxlength="14">
-											</p:inputText>
-											<p:message for="NUTPRC" display="icon"/>
+											<p:panel >
+												<h:panelGrid columns="5" cellpadding="5">
 
-										</h:panelGrid>
-									</p:fieldset>
-									<p:fieldset legend="Administrador">
-										<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="COSBAC" value="Concepto: " />
+													<p:selectOneMenu id="COSBAC" value="#{GestorImpuestosRecursos.sCOSBAC}" >
+														<f:selectItem itemLabel="Elija..." itemValue="" />
+														<f:selectItems value="#{GestorDatosGenerales.tiposcosbga_t21HM}" />
+														<f:validateLength minimum="1" /> 
+													</p:selectOneMenu>
+													<p:message for="COSBAC" display="icon"/>
 
-											<h:outputText for="NOMADC" value="NOMADC: " />
-											<p:inputText id="NOMADC" value="#{GestorComunidades.sNOMADC}" size="55" maxlength="55">
-											</p:inputText>
-											<p:message for="NOMADC" display="icon"/>
+												</h:panelGrid>
+										  </p:panel>
 
-											<h:outputText for="NUTADC" value="NUTADC: " />
-											<p:inputText id="NUTADC" value="#{GestorComunidades.sNUTADC}" size="14" maxlength="14">
-											</p:inputText>
-											<p:message for="NUTADC" display="icon"/>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
 
-											<h:outputText for="NODCAD" value="NODCAD: " />
-											<p:inputText id="NODCAD" value="#{GestorComunidades.sNODCAD}" size="60" maxlength="60" validatorMessage="La direccion de correo del administrador es incorrecta." >
-												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-											</p:inputText>
-											<p:message for="NODCAD" display="icon"/>
+													<h:outputText for="FEPRRE" value="FEPRRE: " />
+													<p:inputMask id="FEPRRE" validatorMessage="La fecha del primer pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10" >
+														<f:validateLength minimum="10"/>
+													</p:inputMask>
+													<p:message for="FEPRRE" display="icon"/>
+
+												</h:panelGrid>
+										  </p:panel>
 
 
 										</h:panelGrid>
 									</p:fieldset>
-									<p:fieldset legend="Cuenta corriente de la Comunidad">
-										<h:panelGrid columns="6" cellpadding="5">
+									
+									<p:fieldset legend="Resolucion">
+										<h:panelGrid columns="3" cellpadding="5">
 
-											<h:outputText for="NUCCNT" value="NUCC: " />
-
-											<p:inputMask id="NUCCEN" validatorMessage="El digito de entidad debe tener 4 digitos" value="#{GestorComunidades.sNUCCEN}" mask="9999" size="4" required="true" requiredMessage="Falta el codigo de entidad de la cuenta de la comunidad.">
-												<f:validateLength minimum="4"/>
-											</p:inputMask>
-											
-											<p:inputMask id="NUCCOF" validatorMessage="El numero de oficina debe tener 4 digitos" value="#{GestorComunidades.sNUCCOF}" mask="9999" size="4" required="true" requiredMessage="Falta el codigo de oficina de la cuenta de la comunidad.">
-												<f:validateLength minimum="4"/>
-											</p:inputMask>
-											
-											<p:inputMask id="NUCCDI" validatorMessage="El digito de control debe tener 2 digitos" value="#{GestorComunidades.sNUCCDI}" mask="99" size="2" required="true" requiredMessage="Falta el digito de control de la cuenta de la comunidad.">
-												<f:validateLength minimum="2"/>
-											</p:inputMask>
-											
-											<p:inputMask id="NUCCNT" validatorMessage="El numero de cuenta debe tener 10 digitos" value="#{GestorComunidades.sNUCCNT}" mask="9999999999" size="10" required="true" requiredMessage="Falta el numero de cuenta de la comunidad.">
+											<h:outputText for="FERERE" value="FERERE: " />
+											<p:inputMask id="FERERE" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFERERE}" mask="99/99/9999" size="10" >
 												<f:validateLength minimum="10"/>
 											</p:inputMask>
-											<p:message for="NUCCNT" display="icon"/>
+											<p:message for="FERERE" display="icon"/>
+
+											<h:outputText for="BIRESO" value="BIRESO: " />
+											<p:selectOneMenu id="BIRESO" value="#{GestorImpuestosRecursos.sBIRESO}">
+												<f:selectItem itemLabel="Elija..." itemValue="" />
+												<f:selectItems value="#{GestorDatosGenerales.tiposbiresoHM}" />
+												<f:validateLength minimum="1" /> 
+											</p:selectOneMenu>
+											<p:message for="BIRESO" display="icon"/>
+
+											<h:outputText for="COTEXA" value="COTEXA: " />
+											<p:inputText id="COTEXA" value="#{GestorImpuestosRecursos.sCOTEXA}" size="10" maxlength="10">
+											</p:inputText>
 
 										</h:panelGrid>
 									</p:fieldset>
+
+
+									<p:fieldset legend="Devolucion">
+										<h:panelGrid columns="3" cellpadding="5">
+
+													<h:outputText for="FEDEIN" value="FEDEIN: " />
+													<p:inputMask id="FEDEIN" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFEDEIN}" mask="99/99/9999" size="10" >
+														<f:validateLength minimum="10"/>
+													</p:inputMask>
+													<p:message for="FEDEIN" display="icon"/>
+
+													<h:outputText for="BISODE" value="BISODE: " />
+													<p:selectOneMenu id="BISODE" value="#{GestorImpuestosRecursos.sBISODE}">
+														<f:selectItem itemLabel="Elija..." itemValue="" />
+														<f:selectItems value="#{GestorDatosGenerales.tiposbinariaHM}" />
+														<f:validateLength minimum="1" /> 
+													</p:selectOneMenu>
+													<p:message for="BISODE" display="icon"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+
 
 									<p:fieldset legend="Observaciones">
 										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="OBTEXC" value="OBTEXC: " />
 
-											<p:inputText id="OBTEXC" value="#{GestorComunidades.sOBTEXC}" size="110" maxlength="110" >
+											<p:inputText id="OBTEXC" value="#{GestorImpuestosRecursos.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
 											<p:message for="OBTEXC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
 
-						</h:panelGrid>
-					</p:panel>
+								</h:panelGrid>
+							</p:panel>
+
+
+					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
+    				
+							<p:contextMenu for="activos">  
+								<p:menuitem value="Seleccionar" update="form:COACES, form:NURCAT, form:popup" icon="ui-icon-check" actionListener="#{GestorImpuestosRecursos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="activos" var="activo" value="#{GestorImpuestosRecursos.tablaactivos}" rowKey="#{activo.COACES}"  
+									              selection="#{GestorImpuestosRecursos.activoseleccionado}" selectionMode="single">  
+									
+								<p:column headerText="Codigo Activo">  
+								    #{activo.COACES}  
+								</p:column>  
+								
+								<p:column headerText="Comunidad Autonoma">  
+								    #{activo.NOPRAC}  
+								</p:column>  
+
+								<p:column headerText="Municipio">  
+								    #{activo.NOMUIN}  
+								</p:column>  
+								
+								<p:column headerText="Via">  
+								    #{activo.NOVIAS}  
+								</p:column>  
+								
+								<p:column headerText="Portal">  
+								    #{activo.NUPOAC}  
+								</p:column>  
+								
+								<p:column headerText="Piso">  
+								    #{activo.NUPIAC}  
+								</p:column>  
+								
+								<p:column headerText="Puerta">  
+								    #{activo.NUPUAC}  
+								</p:column>  
+									
+							</p:dataTable> 
+					</p:dialog>
+					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscar" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+														<p:inputText id="NOPRAC" value="#{GestorImpuestosRecursos.sNOPRAC}" size="18" maxlength="18">
+														</p:inputText>
+													<p:message for="NOPRAC" display="icon"/>
+
+													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+														<p:inputText id="NOMUIN" value="#{GestorImpuestosRecursos.sNOMUIN}" size="30" maxlength="30">
+														</p:inputText>
+													<p:message for="NOMUIN" display="icon"/>
+
+													<h:outputText for="COPOIN" value="Codigo Postal: " />
+														<p:inputText id="COPOIN" value="#{GestorImpuestosRecursos.sCOPOIN}" size="5" maxlength="5">
+														</p:inputText>
+													<p:message for="COPOIN" display="icon"/>
+
+													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+														<p:inputText id="NOVIAS" value="#{GestorImpuestosRecursos.sNOVIAS}" size="60" maxlength="60">
+														</p:inputText>
+													<p:message for="NOVIAS" display="icon"/>
+
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+														<p:inputText id="NUPOAC" value="#{GestorImpuestosRecursos.sNUPOAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPOAC" display="icon"/>
+
+													<h:outputText for="NUPIAC" value="Piso: " />
+														<p:inputText id="NUPIAC" value="#{GestorImpuestosRecursos.sNUPIAC}" size="11" maxlength="11">
+														</p:inputText>
+													<p:message for="NUPIAC" display="icon"/>
+
+													<h:outputText for="NUPUAC" value="Puerta: " />
+														<p:inputText id="NUPUAC" value="#{GestorImpuestosRecursos.sNUPUAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPUAC" display="icon"/>
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorImpuestosRecursos.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorImpuestosRecursos.limpiarPlantillaActivo}" />	
+
+														<p:ajaxStatus  id="pensandoActivo">  
+															<f:facet name="start">  
+																<h:graphicImage value="/recursos/loadingBar.gif" />  
+															</f:facet>  
+
+															<f:facet name="complete">  
+																<h:outputText value="" />  
+															</f:facet>  
+
+														</p:ajaxStatus> 
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
 						<p:graphicImage value="recursos/loadingBar.gif" />
 					</p:dialog> 

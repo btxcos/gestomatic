@@ -4,95 +4,118 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.provisiones.misc.ValoresDefecto;
-
 public class GestorDatosGenerales implements Serializable 
 {
 
 
 	private static final long serialVersionUID = -669897445986653574L;
 
-	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
-	private String sCOENGP = ValoresDefecto.DEF_COENGP;
+	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposptpagoHM = new LinkedHashMap<String, String>();
 
+	private Map<String,String> tiposcosbga_t21HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t22HM = new LinkedHashMap<String, String>();
 	
-	private Map<String,String> tiposdocumentoHM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposperiodicidadHM = new LinkedHashMap<String, String>();
-	private Map<String,String> tipospagoHM = new LinkedHashMap<String, String>();
-
+	private Map<String,String> tiposbiresoHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposbinariaHM = new LinkedHashMap<String, String>();
+	
 	public GestorDatosGenerales()
 	{
-		tiposdocumentoHM.put("C.I.F.",                     "2");
-		tiposdocumentoHM.put("C.I.F país extranjero.",     "5");
-		tiposdocumentoHM.put("Otros persona jurídica.",    "J");
+		tiposcocldoHM.put("C.I.F.",                     "2");
+		tiposcocldoHM.put("C.I.F país extranjero.",     "5");
+		tiposcocldoHM.put("Otros persona jurídica.",    "J");
 		
+		tiposbiresoHM.put("FAVORABLE",   "F");
+		tiposbiresoHM.put("DESFAVORABLE","D");
 		
-		tiposperiodicidadHM.put("APERIODICO",      "1");
-		tiposperiodicidadHM.put("MENSUAL",         "2");
-		tiposperiodicidadHM.put("BIMENSUAL",       "3");
-		tiposperiodicidadHM.put("TRIMESTRAL",      "4");
-		tiposperiodicidadHM.put("CUATRIMESTRAL",   "5");
-		tiposperiodicidadHM.put("SEMESTRAL",       "6");
-		tiposperiodicidadHM.put("ANUAL",           "7");
-		tiposperiodicidadHM.put("VARIOS PERIODOS", "8");
+		tiposbinariaHM.put("SI","S");
+		tiposbinariaHM.put("NO","N");
+
+		tiposptpagoHM.put("APERIODICO",      "1");
+		tiposptpagoHM.put("MENSUAL",         "2");
+		tiposptpagoHM.put("BIMENSUAL",       "3");
+		tiposptpagoHM.put("TRIMESTRAL",      "4");
+		tiposptpagoHM.put("CUATRIMESTRAL",   "5");
+		tiposptpagoHM.put("SEMESTRAL",       "6");
+		tiposptpagoHM.put("ANUAL",           "7");
+		tiposptpagoHM.put("VARIOS PERIODOS", "8");
+
+		tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
+		tiposcosbga_t21HM.put("IBIS",                                 "1");
+		tiposcosbga_t21HM.put("Tasas basura",                         "2");
+		tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
+		tiposcosbga_t21HM.put("Tasas agua",                           "4");
+		tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
+		tiposcosbga_t21HM.put("Otras tasas",                          "6");
+		/*tiposcosbga_t21HM.put("Devolución Impuestos e IBIS",         "50");
+		tiposcosbga_t21HM.put("Devolución IBIS",                     "51");
+		tiposcosbga_t21HM.put("Devolución Tasas basura",             "52");
+		tiposcosbga_t21HM.put("Devolución Tasas alcantarillado",     "53");
+		tiposcosbga_t21HM.put("Devolución Tasas agua",               "54");
+		tiposcosbga_t21HM.put("Devolución Contribuciones especiales","55");
+		tiposcosbga_t21HM.put("Devolución Otras tasas",              "56");*/
 		
-		tipospagoHM.put("Comunidad",	                   	"0");  
-		tipospagoHM.put("Ordinaria",                     	"1");  
-		tipospagoHM.put("Extras Comunidad",              	"2");  
-		tipospagoHM.put("Mancomunidad",                  	"3");  
-		tipospagoHM.put("Extras Mancomunidad",           	"4");  
-		tipospagoHM.put("Obras comunidad",               	"5");  
-		/*tipospagoHM.put("Devolucion Comunidades",        	"50"); 
-		tipospagoHM.put("Devolucion Ordinaria",          	"51"); 
-		tipospagoHM.put("Devolucion Extras Comunidad",   	"52"); 
-		tipospagoHM.put("Devolucion Mancomunidad",       	"53"); 
-		tipospagoHM.put("Devolucion Extras Mancomunidad",	"54"); 
-		tipospagoHM.put("Devolucion Obras comunidad",   	"55");*/ 
-	}
-	
-	
-	
-	public Map<String, String> getTiposdocumentoHM() {
-		return tiposdocumentoHM;
-	}
-	public void setTiposdocumentoHM(Map<String, String> tiposdocumentoHM) {
-		this.tiposdocumentoHM = tiposdocumentoHM;
-	}
-	public Map<String, String> getTiposperiodicidadHM() {
-		return tiposperiodicidadHM;
-	}
-	public void setTiposperiodicidadHM(Map<String, String> tiposperiodicidadHM) {
-		this.tiposperiodicidadHM = tiposperiodicidadHM;
-	}
-	public Map<String, String> getTipospagoHM() {
-		return tipospagoHM;
-	}
-	public void setTipospagoHM(Map<String, String> tipospagoHM) {
-		this.tipospagoHM = tipospagoHM;
+		tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
+		tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
+		tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
+		tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
+		tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
+		tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
+		/*tiposcosbga_t22HM.put("Devolucion Comunidades",        	"50"); 
+		tiposcosbga_t22HM.put("Devolucion Ordinaria",          	"51"); 
+		tiposcosbga_t22HM.put("Devolucion Extras Comunidad",   	"52"); 
+		tiposcosbga_t22HM.put("Devolucion Mancomunidad",       	"53"); 
+		tiposcosbga_t22HM.put("Devolucion Extras Mancomunidad",	"54"); 
+		tiposcosbga_t22HM.put("Devolucion Obras comunidad",   	"55");*/
+		
 	}
 
-
-
-	public String getsIDPROV() {
-		return sIDPROV;
+	public Map<String, String> getTiposcocldoHM() {
+		return tiposcocldoHM;
 	}
 
-
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
+	public void setTiposcocldoHM(Map<String, String> tiposcocldoHM) {
+		this.tiposcocldoHM = tiposcocldoHM;
 	}
 
-
-
-	public String getsCOENGP() {
-		return sCOENGP;
+	public Map<String, String> getTiposptpagoHM() {
+		return tiposptpagoHM;
 	}
 
+	public void setTiposptpagoHM(Map<String, String> tiposptpagoHM) {
+		this.tiposptpagoHM = tiposptpagoHM;
+	}
 
+	public Map<String, String> getTiposcosbga_t21HM() {
+		return tiposcosbga_t21HM;
+	}
 
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
+	public void setTiposcosbga_t21HM(Map<String, String> tiposcosbga_t21HM) {
+		this.tiposcosbga_t21HM = tiposcosbga_t21HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t22HM() {
+		return tiposcosbga_t22HM;
+	}
+
+	public void setTiposcosbga_t22HM(Map<String, String> tiposcosbga_t22HM) {
+		this.tiposcosbga_t22HM = tiposcosbga_t22HM;
+	}
+
+	public Map<String, String> getTiposbiresoHM() {
+		return tiposbiresoHM;
+	}
+
+	public void setTiposbiresoHM(Map<String, String> tiposbiresoHM) {
+		this.tiposbiresoHM = tiposbiresoHM;
+	}
+
+	public Map<String, String> getTiposbinariaHM() {
+		return tiposbinariaHM;
+	}
+
+	public void setTiposbinariaHM(Map<String, String> tiposbinariaHM) {
+		this.tiposbinariaHM = tiposbinariaHM;
 	}
 	
 	

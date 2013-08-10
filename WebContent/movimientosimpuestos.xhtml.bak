@@ -29,10 +29,6 @@
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 											<p:commandButton value="Alta" update="panel, popup, msgs" actionListener="#{GestorMovimientosImpuestosRecursos.realizaAlta}"/>
-											<p:selectOneRadio id="options" value="#{GestorMovimientosImpuestosRecursos.sCOACCI}">
-												<f:selectItem itemLabel="Baja" itemValue="B" />  
-												<f:selectItem itemLabel="Modificacion" itemValue="M" />
-											</p:selectOneRadio>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">

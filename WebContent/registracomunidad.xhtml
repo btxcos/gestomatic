@@ -18,17 +18,17 @@
 										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText value="IDPROV: " />
-											<p:inputText id="IDPROV" value="#{GestorDatosGenerales.sIDPROV}" disabled="true" />
+											<p:inputText id="IDPROV" value="#{GestorComunidades.sIDPROV}" disabled="true" />
 
 											<h:outputText value="COENGP: " />
-											<p:inputText id="COENGP" value="#{GestorDatosGenerales.sCOENGP}" disabled="true" />
+											<p:inputText id="COENGP" value="#{GestorComunidades.sCOENGP}" disabled="true" />
 
 										</h:panelGrid>
 									</p:panel>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" type="reset" />
-											<p:commandButton value="Registrar Datos" update="panel" actionListener="#{GestorComunidades.realizaAlta}" />
+											<p:commandButton value="Alta" update="panel" actionListener="#{GestorComunidades.realizaAlta}" />
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -61,7 +61,7 @@
 											<h:outputText for="COCLDO" value="Documento: " />
 											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
 												<f:selectItem itemLabel="Elija..." itemValue="" />
-												<f:selectItems value="#{GestorComunidades.tiposdocumentoHM}" />
+												<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
 												<f:validateLength minimum="1" /> 
 											</p:selectOneMenu>
 											<p:message for="COCLDO" display="icon"/>

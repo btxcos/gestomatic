@@ -3,17 +3,12 @@ package com.provisiones.ll;
 import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.dal.qm.QMCuotas;
-import com.provisiones.dal.qm.QMListaCuotas;
 import com.provisiones.dal.qm.QMListaReferencias;
-import com.provisiones.dal.qm.QMMovimientosCuotas;
 import com.provisiones.dal.qm.QMMovimientosReferencias;
 import com.provisiones.dal.qm.QMReferencias;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.Cuota;
-import com.provisiones.types.MovimientoCuota;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 import com.provisiones.types.ReferenciaCatastral;
 
@@ -118,14 +113,34 @@ public class CLReferencias
 		return QMActivos.getReferenciaCatastral(sCodCOACES);
 	}
 	
+	public static String referenciaCatastralListada(String sCodCOACES)
+	{
+		return QMListaReferencias.referenciaAsociada(sCodCOACES);
+	}
+	
 	public static ArrayList<ActivoTabla> buscarActivosSinReferencias (ActivoTabla activo)
 	{
 		return QMListaReferencias.buscaActivosNoAsociados(activo);
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivosConReferencias (ActivoTabla activo)
+	{
+		return QMListaReferencias.buscaActivosAsociados(activo);
 	}
 
 	public static boolean estaAsociado(String sCodCOACES)
 	{
 		return QMListaReferencias.activoAsociado(sCodCOACES);
+	}
+
+	public static String estadoReferencia(String sCodNURCAT)
+	{
+		return QMReferencias.getEstado(sCodNURCAT);
+	}
+	
+	public static ReferenciaCatastral buscaReferencia (String sCodNURCAT)
+	{
+		return QMReferencias.getReferenciaCatastral(sCodNURCAT);
 	}
 	
 	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento)

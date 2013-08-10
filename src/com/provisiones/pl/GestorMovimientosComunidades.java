@@ -1,8 +1,6 @@
 package com.provisiones.pl;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -27,70 +25,25 @@ public class GestorMovimientosComunidades implements Serializable
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 	private String sCOCLDO = "";
 	private String sNUDCOM = "";
-	//private String sBITC10 = "";
 	private String sCOACES = "";
-	//private String sBITC01 = "";
 	private String sNOMCOC = "";
-	//private String sBITC02 = "";
 	private String sNODCCO = "";
-	//private String sBITC03 = "";
 	private String sNOMPRC = "";
-	//private String sBITC04 = "";
 	private String sNUTPRC = "";
-	//private String sBITC05 = "";
 	private String sNOMADC = "";
-	//private String sBITC06 = "";
 	private String sNUTADC = "";
-	//private String sBITC07 = "";
 	private String sNODCAD = "";
-	//private String sBITC08 = "";
 	private String sNUCCEN = "";
 	private String sNUCCOF = "";
 	private String sNUCCDI = "";
 	private String sNUCCNT = "";
-	//private String sBITC09 = "";
+
 	private String sOBTEXC = "";
 	private String sOBDEER = "";
 	
-	/*private String sCODTRN = "CODTRN";
-	private String sCOTDOR = "COTDOR";
-	private String sIDPROV = "IDPROV";
-	private String sCOACCI = "COACCI";
-	private String sCOENGP = "COENGP";
-	private String sCOCLDO = "COCLDO";
-	private String sNUDCOM = "NUDCOM";
-	private String sBITC10 = "BITC10";
-	private String sCOACES = "COACES";
-	private String sBITC01 = "BITC01";
-	private String sNOMCOC = "NOMCOC";
-	private String sBITC02 = "BITC02";
-	private String sNODCCO = "NODCCO";
-	private String sBITC03 = "BITC03";
-	private String sNOMPRC = "NOMPRC";
-	private String sBITC04 = "BITC04";
-	private String sNUTPRC = "NUTPRC";
-	private String sBITC05 = "BITC05";
-	private String sNOMADC = "NOMADC";
-	private String sBITC06 = "BITC06";
-	private String sNUTADC = "NUTADC";
-	private String sBITC07 = "BITC07";
-	private String sNODCAD = "NODCAD";
-	private String sBITC08 = "BITC08";
-	private String sNUCCEN = "NUCCEN";
-	private String sNUCCOF = "NUCCOF";
-	private String sNUCCDI = "NUCCDI";
-	private String sNUCCNT = "NUCCNT";
-	private String sBITC09 = "BITC09";
-	private String sOBTEXC = "OBTEXC";
-	private String sOBDEER = "OBDEER";*/
-
-	private Map<String,String> tiposdocumentoHM = new LinkedHashMap<String, String>();
-	
 	public GestorMovimientosComunidades()
 	{
-		tiposdocumentoHM.put("C.I.F.",                     "2");
-		tiposdocumentoHM.put("C.I.F país extranjero.",     "5");
-		tiposdocumentoHM.put("Otros persona jurídica.",    "J");
+		Utils.standardIO2File("");//Salida por fichero de texto
 	}
 
 	public void borrarCampos()
@@ -121,7 +74,7 @@ public class GestorMovimientosComunidades implements Serializable
 	{
 		String sMethod = "comprobarCOACES";
 		
-		Utils.standardIO2File("");//Salida por fichero de texto
+		
 		
 		FacesMessage msg;
 		
@@ -211,7 +164,7 @@ public class GestorMovimientosComunidades implements Serializable
 	{
 		String sMethod = "registraMovimiento";
 		
-		Utils.standardIO2File("");//Salida por fichero de texto
+		
 		
 		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
 		MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), "", sCOACES.toUpperCase(), "", sNOMCOC.toUpperCase(), "", sNODCCO.toUpperCase(), "", sNOMPRC.toUpperCase(), "", sNUTPRC.toUpperCase(), "", sNOMADC.toUpperCase(), "", sNUTADC.toUpperCase(), "", sNODCAD.toUpperCase(), "", sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), "", sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
@@ -470,15 +423,4 @@ public class GestorMovimientosComunidades implements Serializable
 		this.sOBDEER = sOBDEER;
 	}
 
-
-	public Map<String,String> getTiposdocumentoHM() {
-		return tiposdocumentoHM;
-	}
-
-
-	public void setTiposdocumentoHM(Map<String,String> tiposdocumentoHM) {
-		this.tiposdocumentoHM = tiposdocumentoHM;
-	}
-	
-	
 }

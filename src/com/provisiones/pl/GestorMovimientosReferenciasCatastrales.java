@@ -7,12 +7,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoReferenciaCatastral;
+import com.provisiones.types.ReferenciaCatastral;
 
 public class GestorMovimientosReferenciasCatastrales implements Serializable 
 {
@@ -53,7 +53,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	
 	public GestorMovimientosReferenciasCatastrales()
 	{
-		
+		Utils.standardIO2File("");//Salida por fichero de texto
 	}
 
 	public void buscaActivos (ActionEvent actionEvent)
@@ -71,7 +71,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
-		this.setTablaactivos(CLReferencias.buscarActivosSinReferencias(buscaactivos));
+		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 
@@ -81,60 +81,35 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 	}
 	
-	public void comprobarActivo(ActionEvent actionEvent)
-	{
-		String sMethod = "comprobarCOACES";
-		
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		FacesMessage msg;
-		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
-    	
-    	if (sNURCAT.equals(""))
-    	{
-    		msg = new FacesMessage(FacesMessage.SEVERITY_WARN,"No existe un numero de referencia catastral asociado.",null);
-    		FacesContext.getCurrentInstance().addMessage(null, msg);
-    		
-    	}
-
-		if (CLActivos.compruebaActivo(sCOACES))
-		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
-			msg = new FacesMessage("El activo '"+sCOACES.toUpperCase()+"' esta disponible.",null);
-		}
-		else
-		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El activo '"+sCOACES.toUpperCase()+"' no esta registrado en el sistema. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El activo '"+sCOACES.toUpperCase()+"' no esta registrado en el sistema. Por favor, revise los datos.",null);
-		}
-		
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);	
-		
-	}
-	
-	
 	public void comprobarActivoMovimiento(ActionEvent actionEvent)
 	{
 		String sMethod = "comprobarCOACES";
 		
-		Utils.standardIO2File("");//Salida por fichero de texto
+		
 		
 		FacesMessage msg;
 		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	this.sNURCAT  = CLReferencias.referenciaCatastralListada(sCOACES);
     	
-    	if (sNURCAT.equals(""))
+  	
+    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
     	{
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe un numero de referencia catastral asociado.");
-    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe un numero de referencia catastral asociado.",null);
-    		
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
+    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
     	}
     	else
 		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El activo '"+sCOACES.toUpperCase()+"' esta asociado.");
-			msg = new FacesMessage("El activo '"+sCOACES.toUpperCase()+"' esta asociado.",null);
+    		ReferenciaCatastral referencia = CLReferencias.buscaReferencia(sNURCAT);
+   
+    		this.sTIRCAT = referencia.getTIRCAT();
+    		this.sENEMIS = referencia.getENEMIS();
+    		this.sCOTEXA = referencia.getCOTEXA();
+    		this.sOBTEXC = referencia.getOBTEXC();
+    		
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+
+			msg = new FacesMessage("Encontrada referencia para el activo '"+sCOACES.toUpperCase()+"'.",null);
 		}
 		
 		
@@ -142,10 +117,8 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 	}
 	
-    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
-    {  
-    	this.sCOACES = "";
-
+	public void borrarPlantillaActivo()
+	{
     	this.sCOPOIN = "";
     	this.sNOMUIN = "";
     	this.sNOPRAC = "";
@@ -153,9 +126,40 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+	}
+	
+	
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+    	this.sCOACES = "";
+
+    	borrarPlantillaActivo();
     	
     	this.activoseleccionado = null;
     	this.tablaactivos = null;
+   	
+    }
+    
+	public void borrarPlantillaReferencia()
+	{
+		this.sCOACES = "";
+        this.sNURCAT = "";
+        this.sTIRCAT = "";
+        this.sENEMIS = "";
+        this.sCOTEXA = "";
+        this.sOBTEXC = "";
+	}
+    
+    public void limpiarPlantilla(ActionEvent actionEvent) 
+    {  
+    	
+
+    	borrarPlantillaActivo();
+    	
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+    	
+    	borrarPlantillaReferencia();
    	
     }
 	
@@ -173,17 +177,25 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.sCOACES  = activoseleccionado.getCOACES();
     	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
     	
-    	if (sNURCAT.equals(""))
+    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
     	{
-    		msg = new FacesMessage(FacesMessage.SEVERITY_WARN,"No existe un numero de referencia catastral asociado.",null);
-    		FacesContext.getCurrentInstance().addMessage(null, msg);
+    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"La referencia catastral seleccionada no esta de alta.",null);
     		
     	}
-    		
+    	else
+    	{	
+    		ReferenciaCatastral referencia = CLReferencias.buscaReferencia(sNURCAT);
+    		   
+    		this.sTIRCAT = referencia.getTIRCAT();
+    		this.sENEMIS = referencia.getENEMIS();
+    		this.sCOTEXA = referencia.getCOTEXA();
+    		this.sOBTEXC = referencia.getOBTEXC();
     	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+    		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+    	}
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
@@ -194,7 +206,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	{
 		String sMethod = "registraMovimiento";
 		
-		Utils.standardIO2File("");//Salida por fichero de texto
+		
 		
 		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
 		MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
@@ -223,8 +235,8 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La cuota se ha creado correctamente.");
-			msg = new FacesMessage("La cuota se ha creado correctamente.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La referencia catastral se ha modificado correctamente.");
+			msg = new FacesMessage("La referencia catastral se ha modificado correctamente.");
 			break;
 		case -1: //Error
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El Numero de referencia catastral no ha sido informado. Por favor, revise los datos.");
