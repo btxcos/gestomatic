@@ -190,10 +190,6 @@ public class GestorMovimientosCuotas implements Serializable
 
     	FacesMessage msg;
     	
-    	
-    	
-
-    	
     	this.sCOCLDO = cuotaseleccionada.getCOCLDO(); 
     	this.sDesCOCLDO = cuotaseleccionada.getDCOCLDO();
     	this.sNUDCOM = cuotaseleccionada.getNUDCOM();
@@ -207,19 +203,21 @@ public class GestorMovimientosCuotas implements Serializable
     	this.sDesPTPAGO = cuotaseleccionada.getDPTPAGO();
     	this.sOBTEXC = cuotaseleccionada.getOBTEXC();
     	
+
+    	//comprobar
     	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+    	msg = new FacesMessage("'"+ sDesCOSBAC +"' Seleccionado.");
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Cuota seleccionada: |"+sCOACES+"|");
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		//return "listacomunidadesactivos.xhtml";
     }
 	
-	public void registraMovimiento(ActionEvent actionEvent)
+	public void registraDatos(ActionEvent actionEvent)
 	{
-		String sMethod = "registraMovimiento";
+		String sMethod = "registraDatos";
 		
 		Utils.standardIO2File("");//Salida por fichero de texto
 		

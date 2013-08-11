@@ -17,18 +17,18 @@
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText value="IDPROV: " />
-											<p:inputText id="IDPROV" value="#{GestorReferenciasCatastrales.sIDPROV}" disabled="true" />
+											<h:outputText value="CODTRN: " />
+											<p:inputText id="CODTRN" value="#{GestorMovimientosReferenciasCatastrales.sCODTRN}" disabled="true" />
 
-											<h:outputText value="COENGP: " />
-											<p:inputText id="COENGP" value="#{GestorReferenciasCatastrales.sCOENGP}" disabled="true" />
+											<h:outputText value="IDPROV: " />
+											<p:inputText id="IDPROV" value="#{GestorMovimientosReferenciasCatastrales.sIDPROV}" disabled="true" />
 
 										</h:panelGrid>
 									</p:panel>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel, msgs, popup" actionListener="#{GestorMovimientosReferenciasCatastrales.limpiarPlantilla}"/>
-											<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorMovimientosReferenciasCatastrales.registraMovimiento}" />
+											<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorMovimientosReferenciasCatastrales.registraDatos}" />
 											<p:selectOneRadio id="options" value="#{GestorMovimientosReferenciasCatastrales.sCOACCI}">
 												<f:selectItem itemLabel="Baja" itemValue="B" />  
 												<f:selectItem itemLabel="Modificacion" itemValue="M" />

@@ -17,18 +17,23 @@
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 
+											<h:outputText value="CODTRN: " />                                                          
+											<p:inputText id="CODTRN" value="#{GestorMovimientosComunidades.sCODTRN}" disabled="true" />
+
 											<h:outputText value="IDPROV: " />
 											<p:inputText id="IDPROV" value="#{GestorMovimientosComunidades.sIDPROV}" disabled="true" />
-
-											<h:outputText value="COENGP: " />
-											<p:inputText id="COENGP" value="#{GestorMovimientosComunidades.sCOENGP}" disabled="true" />
 
 										</h:panelGrid>
 									</p:panel>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosComunidades.limpiarPlantilla}" />
-											<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorMovimientosComunidades.registraMovimiento}" />
+											<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorMovimientosComunidades.registraDatos}" />
+											<p:selectOneRadio id="options" value="#{GestorMovimientosComunidades.sCOACCI}">
+			            						<f:selectItem itemLabel="Alta" itemValue="A" />  
+            									<f:selectItem itemLabel="Baja" itemValue="B" />  
+            									<f:selectItem itemLabel="Modificacion" itemValue="M" />
+        									</p:selectOneRadio>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -55,11 +60,6 @@
 
 									<p:fieldset legend="Comunidad de proprietarios">
 										<h:panelGrid columns="1" cellpadding="5">
-											<p:selectOneRadio id="options" value="#{GestorMovimientosComunidades.sCOACCI}">
-            						<f:selectItem itemLabel="Alta" itemValue="A" />  
-            						<f:selectItem itemLabel="Baja" itemValue="B" />  
-            						<f:selectItem itemLabel="Modificacion" itemValue="M" />
-        							</p:selectOneRadio>
 											<p:panel>
 												<h:panelGrid columns="8" cellpadding="5">
 													<h:outputText for="COCLDO" value="Documento: " />

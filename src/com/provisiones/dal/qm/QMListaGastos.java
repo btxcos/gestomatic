@@ -153,12 +153,11 @@ public class QMListaGastos
 					found = true;
 
 					result.add(rs.getString(sField3));
-					System.out.println(result.get(i));
-					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+										
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,result.get(i)); 
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCodCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
 					
 					i++;
 				}
@@ -230,9 +229,9 @@ public class QMListaGastos
 
 					result.add(rs.getString(sField3));
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCodNUPROF);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,result.get(i)); 
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField2 + ": " + sCodNUPROF);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
 					
 					i++;
 				}

@@ -17,11 +17,11 @@
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 
+											<h:outputText value="CODTRN: " />
+											<p:inputText id="CODTRN" value="#{GestorMovimientosCuotas.sCODTRN}" disabled="true" />
+
 											<h:outputText value="IDPROV: " />
 											<p:inputText id="IDPROV" value="#{GestorMovimientosCuotas.sIDPROV}" disabled="true" />
-
-											<h:outputText value="COENGP: " />
-											<p:inputText id="COENGP" value="#{GestorMovimientosCuotas.sCOENGP}" disabled="true" />
 
 										</h:panelGrid>
 									</p:panel>
@@ -29,7 +29,11 @@
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosCuotas.limpiarPlantillaCuotas}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-											<p:commandButton value="Registrar" update="panel, popup, msgs" actionListener="#{GestorMovimientosCuotas.registraMovimiento}"/>
+											<p:commandButton value="Registrar Datos" update="panel, popup, msgs" actionListener="#{GestorMovimientosCuotas.registraDatos}"/>
+											<p:selectOneRadio id="options" value="#{GestorMovimientosCuotas.sCOACCI}">
+            									<f:selectItem itemLabel="Baja" itemValue="B" />  
+            									<f:selectItem itemLabel="Modificacion" itemValue="M" />
+        									</p:selectOneRadio>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -54,14 +58,6 @@
 
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
-									<p:panel >
-										<h:panelGrid columns="1" cellpadding="5">
-											<p:selectOneRadio id="options" value="#{GestorMovimientosCuotas.sCOACCI}">
-            						<f:selectItem itemLabel="Baja" itemValue="B" />  
-            						<f:selectItem itemLabel="Modificacion" itemValue="M" />
-        							</p:selectOneRadio>
-										</h:panelGrid>
-									</p:panel>
 									<p:fieldset legend="Activo">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
@@ -241,7 +237,7 @@
 								</p:column>  
 								
 								<p:column headerText="Fecha de Acta">  
-								    #{FAACTA.NUPOAC}  
+								    #{cuota.FAACTA}  
 								</p:column>  
 
 							</p:dataTable> 

@@ -564,9 +564,9 @@ public class QMListaCuotas
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
 				}
 			}
 			if (found == false) 
@@ -725,14 +725,9 @@ public class QMListaCuotas
 					sNUDCOM     = rs.getString(QMCuotas.sField2);
 					sCOSBAC     = rs.getString(QMCuotas.sField3);
 					sDesCOSBAC  = QMCodigosControl.getDesCOSBGA_E2(sCOSBAC);
-					
-					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sFIPAGO:|"+rs.getString(QMCuotas.sField4)+"|");
 					sFIPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField4));
-					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sFFPAGO:|"+rs.getString(QMCuotas.sField5)+"|");
 					sFFPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField5));
-					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sIMCUCO:|"+rs.getString(QMCuotas.sField6)+"|");
 					sIMCUCO     = Utils.recuperaImporte(false,rs.getString(QMCuotas.sField6));
-					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sFAACTA:|"+rs.getString(QMCuotas.sField7)+"|");
 					sFAACTA     = Utils.recuperaFecha(rs.getString(QMCuotas.sField7));
 					sPTPAGO     = rs.getString(QMCuotas.sField8);
 					sDesPTPAGO  = QMCodigosControl.getDesPTPAGO(sPTPAGO);
@@ -755,9 +750,9 @@ public class QMListaCuotas
 					
 					result.add(cuotaencontrada);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCodCOACES);
 				}
 			}
 			if (found == false) 
@@ -911,9 +906,9 @@ public class QMListaCuotas
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
 				}
 			}
 			if (found == false) 

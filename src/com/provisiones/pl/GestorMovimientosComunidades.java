@@ -160,9 +160,9 @@ public class GestorMovimientosComunidades implements Serializable
 				
 	}
 	
-	public void registraMovimiento(ActionEvent actionEvent)
+	public void registraDatos(ActionEvent actionEvent)
 	{
-		String sMethod = "registraMovimiento";
+		String sMethod = "registraDatos";
 		
 		
 		

@@ -659,9 +659,9 @@ public class QMListaComunidadesActivos
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
 				}
 			}
 			if (found == false) 
@@ -780,9 +780,9 @@ public class QMListaComunidadesActivos
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
 				}
 			}
 			if (found == false) 
@@ -882,9 +882,9 @@ public class QMListaComunidadesActivos
 					
 					result.add(comunidadencontrada);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField3 + ": " + sCodCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField3 + ": " + sCodCOACES);
 				}
 			}
 			if (found == false) 

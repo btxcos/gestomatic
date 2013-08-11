@@ -11,6 +11,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
+import com.provisiones.types.ImpuestoRecursoTabla;
 
 public class QMListaImpuestos 
 {
@@ -253,75 +254,166 @@ public class QMListaImpuestos
 		return result;
 
 	}
+	
 
-	public static ArrayList<String>  getImpuestos(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC) 
-	{
-		String sMethod = "getImpuestos";
+
+	public static ArrayList<ImpuestoRecursoTabla> buscaImpuestosActivo(String sCodCOACES)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "buscaImpuestosActivo";
 
 		Statement stmt = null;
 		ResultSet rs = null;
 
+		String sCOSBAC = "";
+		String sDesCOSBAC = "";
+		String sFEPRRE = "";
+		String sFERERE = "";
+		String sFEDEIN = "";
+		String sBISODE = "";
+		String sDesBISODE = "";
+		String sBIRESO = "";
+		String sDesBIRESO = "";
+		String sOBTEXC = "";
+		
+		ArrayList<ImpuestoRecursoTabla> result = new ArrayList<ImpuestoRecursoTabla>();
+		
 
 		PreparedStatement pstmt = null;
 		boolean found = false;
-	
 		
-		ArrayList<String> result = new ArrayList<String>(); 
 		Connection conn = null;
-
+		
 		conn = ConnectionManager.OpenDBConnection();
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
+		String sQuery = "SELECT "
+					
+					   + QMImpuestos.sField1 + ","        
+					   + QMImpuestos.sField2 + ","
+					   + QMImpuestos.sField3 + ","
+					   + QMImpuestos.sField4 + ","
+					   + QMImpuestos.sField5 + ","
+					   + QMImpuestos.sField6 + ","
+					   + QMImpuestos.sField7 + ","
+					   + QMImpuestos.sField8 + ","
+					   + QMImpuestos.sField9 +
+					    
+
+					   " FROM " + QMImpuestos.sTable + 
+					   " WHERE ("
+
+					   + QMImpuestos.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
+
+					   + QMImpuestos.sField1 +" IN (SELECT "
+					   +  sField2 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
+
+					   + QMImpuestos.sField2 +" IN (SELECT "
+					   +  sField3 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )";					   
+					   
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
+			
+			pstmt = conn.prepareStatement("SELECT "
+					
+					   + QMImpuestos.sField1 + ","        
+					   + QMImpuestos.sField2 + ","
+					   + QMImpuestos.sField3 + ","
+					   + QMImpuestos.sField4 + ","
+					   + QMImpuestos.sField5 + ","
+					   + QMImpuestos.sField6 + ","
+					   + QMImpuestos.sField7 + ","
+					   + QMImpuestos.sField8 + ","
+					   + QMImpuestos.sField9 +
+					    
+
+					   " FROM " + QMImpuestos.sTable + 
+					   " WHERE ("
+
+					   + QMImpuestos.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
+
+					   + QMImpuestos.sField1 +" IN (SELECT "
+					   +  sField2 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
+
+					   + QMImpuestos.sField2 +" IN (SELECT "
+					   +  sField3 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )");
+
+			
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					" AND " + sField2 + " = '" + sCodNURCAT +
-					" AND " + sField3 + " = '" + sCodCOSBAC +"' )");
+			
 
 			rs = pstmt.executeQuery();
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
 			
-			int i = 0;
-			
+
 			if (rs != null) 
 			{
-				
+
 				while (rs.next()) 
 				{
 					found = true;
+					
 
-					result.add(rs.getString(sField3));
+					
+					sCOSBAC     = rs.getString(QMImpuestos.sField2);
+					sDesCOSBAC  = QMCodigosControl.getDesCOSBGA_E4(sCOSBAC);
+					sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.sField3));
+					sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.sField4));
+					sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.sField5));
+					sBISODE     = rs.getString(QMImpuestos.sField6);
+					sDesBISODE  = QMCodigosControl.getDesBINARIA(sBISODE);
+					sBIRESO     = rs.getString(QMImpuestos.sField7);
+					sDesBIRESO  = QMCodigosControl.getDesBIRESO(sBIRESO);
+					sOBTEXC     = rs.getString(QMImpuestos.sField9);  
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCodNURCAT);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField3 + ": " + sCodCOSBAC);
+					
+					ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
+							sCOSBAC,
+							sDesCOSBAC,
+							sFEPRRE,
+							sFERERE,
+							sFEDEIN,
+							sBISODE,
+							sDesBISODE,
+							sBIRESO,
+							sDesBIRESO,
+							sOBTEXC);
+					
+					result.add(impuestoencontrado);
+					
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,result.get(i));
-					i++;
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCodCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				result = new ArrayList<String>(); 
 				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
-
-
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
@@ -331,7 +423,6 @@ public class QMListaImpuestos
 			Utils.closeResultSet(rs,sClassName,sMethod);
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
-
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}

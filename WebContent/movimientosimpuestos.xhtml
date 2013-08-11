@@ -17,18 +17,18 @@
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 
+											<h:outputText value="CODTRN: " />
+											<p:inputText id="CODTRN" value="#{GestorMovimientosImpuestosRecursos.sCODTRN}" disabled="true" />
+
 											<h:outputText value="IDPROV: " />
 											<p:inputText id="IDPROV" value="#{GestorMovimientosImpuestosRecursos.sIDPROV}" disabled="true" />
-
-											<h:outputText value="COENGP: " />
-											<p:inputText id="COENGP" value="#{GestorMovimientosImpuestosRecursos.sCOENGP}" disabled="true" />
 
 										</h:panelGrid>
 									</p:panel>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-											<p:commandButton value="Alta" update="panel, popup, msgs" actionListener="#{GestorMovimientosImpuestosRecursos.realizaAlta}"/>
+											<p:commandButton value="Registrar Datos" update="panel, popup, msgs" actionListener="#{GestorMovimientosImpuestosRecursos.registraDatos}"/>
 											<p:selectOneRadio id="options" value="#{GestorMovimientosImpuestosRecursos.sCOACCI}">
 												<f:selectItem itemLabel="Baja" itemValue="B" />  
 												<f:selectItem itemLabel="Modificacion" itemValue="M" />
@@ -64,8 +64,8 @@
 													<h:outputText for="COACES" value="Codigo de activo: " />
 														<p:inputText id="COACES" value="#{GestorMovimientosImpuestosRecursos.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
-													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Comprobar" update="msgs, popup, panel" actionListener="#{GestorMovimientosImpuestosRecursos.comprobarActivo}"/>	
+													<p:message for="COACES" display="icon"/>	
+													<p:commandButton value="Cargar Impuestos" update="msgs, popup, COACES, form:impuestos" actionListener="#{GestorMovimientosImpuestosRecursos.cargarImpuestos}" oncomplete="dlgTablaImpuestos.show()"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar un activo" update="COACES, NURCAT, form:activos" oncomplete="dlgBuscar.show()"/>		
@@ -76,7 +76,7 @@
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="NURCAT" value="NURCAT: " />
-											<p:inputText id="NURCAT" value="#{GestorMovimientosImpuestosRecursos.sNURCAT}" size="20" maxlength="20" disabled="true">
+											<p:inputText id="NURCAT" value="#{GestorMovimientosImpuestosRecursos.sNURCAT}" size="24" maxlength="20" disabled="true">
 											</p:inputText>
 											<p:message for="NURCAT" display="icon"/>
 
@@ -90,12 +90,7 @@
 												<h:panelGrid columns="5" cellpadding="5">
 
 													<h:outputText for="COSBAC" value="Concepto: " />
-													<p:selectOneMenu id="COSBAC" value="#{GestorMovimientosImpuestosRecursos.sCOSBAC}" >
-														<f:selectItem itemLabel="Elija..." itemValue="" />
-														<f:selectItems value="#{GestorDatosGenerales.tiposcosbga_t21HM}" />
-														<f:validateLength minimum="1" /> 
-													</p:selectOneMenu>
-													<p:message for="COSBAC" display="icon"/>
+													<p:inputText id="COSBAC" value="#{GestorMovimientosImpuestosRecursos.sDesCOSBAC}" disabled="true" />
 
 												</h:panelGrid>
 										  </p:panel>
@@ -178,6 +173,42 @@
 								</h:panelGrid>
 							</p:panel>
 
+					<p:dialog header="Impuestos disponibles: " widgetVar="dlgTablaImpuestos" resizable="false">  
+    				
+							<p:contextMenu for="impuestos">  
+								<p:menuitem value="Seleccionar" update="panel, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosImpuestosRecursos.seleccionarImpuesto}" oncomplete="dlgTablaImpuestos.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="impuestos" var="impuesto" value="#{GestorMovimientosImpuestosRecursos.tablaimpuestos}" rowKey="#{impuesto.DCOSBAC}"  
+									              selection="#{GestorMovimientosImpuestosRecursos.impuestoseleccionado}" selectionMode="single">  
+									
+								<p:column headerText="Impuesto">  
+								    #{impuesto.DCOSBAC}  
+								</p:column>  
+
+								
+								<p:column headerText="Fecha Solicitud">  
+								    #{impuesto.FEPRRE}  
+								</p:column>  
+
+								<p:column headerText="Fecha Resolucion">  
+								    #{impuesto.FERERE}  
+								</p:column>
+
+								<p:column headerText="Fecha Devolucion">  
+								    #{impuesto.FEDEIN}  
+								</p:column>
+
+								<p:column headerText="Solicita Devolucion">  
+								    #{impuesto.DBISODE}  
+								</p:column>
+
+								<p:column headerText="Resolucion">  
+								    #{impuesto.DBIRESO}  
+								</p:column>
+
+							</p:dataTable> 
+					</p:dialog>
 
 					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
     				

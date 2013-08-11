@@ -9,6 +9,7 @@ import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.ImpuestoRecurso;
+import com.provisiones.types.ImpuestoRecursoTabla;
 import com.provisiones.types.MovimientoImpuestoRecurso;
 
 public class CLImpuestos 
@@ -124,6 +125,10 @@ public class CLImpuestos
 		return QMListaImpuestos.buscaActivosAsociados(activo);
 	}
 
+	public static ArrayList<ImpuestoRecursoTabla> buscarImpuestosActivos (String sCodCOACES)
+	{
+		return QMListaImpuestos.buscaImpuestosActivo(sCodCOACES);
+	}
 	
 	
 	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento)

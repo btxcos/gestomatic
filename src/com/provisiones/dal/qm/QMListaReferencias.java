@@ -383,9 +383,9 @@ public class QMListaReferencias
 					
 					result.add(referenciaencontrada);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField3 + ": " + sCodCOACES);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField3 + ": " + sCodCOACES);
 				}
 			}
 			if (found == false) 
@@ -687,6 +687,7 @@ public class QMListaReferencias
 
 	}
 	
+
 	public static boolean activoAsociado(String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		

@@ -12,6 +12,7 @@ import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
+import com.provisiones.types.ImpuestoRecursoTabla;
 import com.provisiones.types.MovimientoImpuestoRecurso;
 
 public class GestorMovimientosImpuestosRecursos implements Serializable 
@@ -38,6 +39,9 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	private String sCOTEXA = "0000000000";
 	private String sOBTEXC = "";
 	
+	private String sDesCOSBAC = "";
+	private String sDesBISODE = "";
+	private String sDesBIRESO = "";
 	
 	private String sOBDEER = "";
 	
@@ -53,8 +57,11 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	private String sNUPUAC = "";
 	
 	private ArrayList<ActivoTabla> tablaactivos = null;
-	
 	private ActivoTabla activoseleccionado = null;
+	
+	private ArrayList<ImpuestoRecursoTabla> tablaimpuestos = null;
+	private ImpuestoRecursoTabla impuestoseleccionado = null;
+	
 
 	public GestorMovimientosImpuestosRecursos()
 	{
@@ -111,9 +118,72 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
    	
     }
     
-	public void realizaAlta(ActionEvent actionEvent)
+	public void cargarImpuestos(ActionEvent actionEvent)
 	{
-		String sMethod = "realizaAlta";
+		String sMethod = "cargarImpuestos";
+		
+		FacesMessage msg;
+
+		
+    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	
+    	if (!sNURCAT.equals("") && !CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+		{
+    		
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando impuestos...");
+    		
+    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(sCOACES.toUpperCase());
+    		
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.");
+
+    		msg = new FacesMessage("Encontrados "+getTablaimpuestos().size()+" impuestos relacionadas.");
+    		
+		}
+    	else
+    	{
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
+    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
+        }
+    	
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+	}
+	
+	public void seleccionarImpuesto(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarImpuesto";
+
+    	FacesMessage msg;
+    	
+    	this.sCOSBAC = impuestoseleccionado.getCOSBAC();
+    	this.sDesCOSBAC = impuestoseleccionado.getDCOSBAC();
+    	this.sFEPRRE = impuestoseleccionado.getFEPRRE();
+    	this.sFERERE = impuestoseleccionado.getFERERE();
+    	this.sFEDEIN = impuestoseleccionado.getFEDEIN();
+    	this.sBISODE = impuestoseleccionado.getBISODE();
+    	this.sDesBISODE = impuestoseleccionado.getDBISODE();
+    	this.sBIRESO = impuestoseleccionado.getBIRESO();
+    	this.sDesBIRESO = impuestoseleccionado.getBIRESO();
+    	this.sOBTEXC = impuestoseleccionado.getOBTEXC();
+    	
+    	
+    	msg = new FacesMessage("'"+sDesCOSBAC +"' Seleccionado.");
+    	
+    	
+    	
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Impuesto seleccionado: |"+sCOSBAC+"|"+sDesCOSBAC+"|");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+    }
+    
+	public void registraDatos(ActionEvent actionEvent)
+	{
+		String sMethod = "registraDatos";
 		
 		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
 		MovimientoImpuestoRecurso movimiento = new MovimientoImpuestoRecurso (
@@ -273,34 +343,6 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		
 	}
 	
-	public void comprobarActivo(ActionEvent actionEvent)
-	{
-		String sMethod = "comprobarCOACES";
-		
-		
-		FacesMessage msg;
-		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
-    	
-    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
-    	{
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
-    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
-    	}
-    	else
-		{
-    		
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
-
-			msg = new FacesMessage("Encontrada referencia para el activo '"+sCOACES.toUpperCase()+"'.",null);
-		}
-		
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);	
-		
-	}
-
 	public String getsCODTRN() {
 		return sCODTRN;
 	}
@@ -499,6 +541,46 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
 	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
 		this.activoseleccionado = activoseleccionado;
+	}
+
+	public ImpuestoRecursoTabla getImpuestoseleccionado() {
+		return impuestoseleccionado;
+	}
+
+	public void setImpuestoseleccionado(ImpuestoRecursoTabla impuestoseleccionado) {
+		this.impuestoseleccionado = impuestoseleccionado;
+	}
+
+	public ArrayList<ImpuestoRecursoTabla> getTablaimpuestos() {
+		return tablaimpuestos;
+	}
+
+	public void setTablaimpuestos(ArrayList<ImpuestoRecursoTabla> tablaimpuestos) {
+		this.tablaimpuestos = tablaimpuestos;
+	}
+
+	public String getsDesCOSBAC() {
+		return sDesCOSBAC;
+	}
+
+	public void setsDesCOSBAC(String sDesCOSBAC) {
+		this.sDesCOSBAC = sDesCOSBAC;
+	}
+
+	public String getsDesBISODE() {
+		return sDesBISODE;
+	}
+
+	public void setsDesBISODE(String sDesBISODE) {
+		this.sDesBISODE = sDesBISODE;
+	}
+
+	public String getsDesBIRESO() {
+		return sDesBIRESO;
+	}
+
+	public void setsDesBIRESO(String sDesBIRESO) {
+		this.sDesBIRESO = sDesBIRESO;
 	}
 	
 	

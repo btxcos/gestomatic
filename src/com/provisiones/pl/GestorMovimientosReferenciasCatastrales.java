@@ -202,9 +202,9 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
 	
-	public void registraMovimiento(ActionEvent actionEvent)
+	public void registraDatos(ActionEvent actionEvent)
 	{
-		String sMethod = "registraMovimiento";
+		String sMethod = "registraDatos";
 		
 		
 		
