@@ -158,12 +158,12 @@ public class GestorImpuestosRecursos implements Serializable
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El Numero de referencia catastral no ha sido informado. Por favor, revise los datos.",null);
 			break;
 		case -2: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear la referencia, se ha realizado una accion no permitida. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la referencia, se ha realizado una accion no permitida. Por favor, revise los datos.",null);
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear el impuesto, se ha realizado una accion no permitida. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear el impuesto, se ha realizado una accion no permitida. Por favor, revise los datos.",null);
 			break;
 		case -3: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear la referencia, ya esta dada de alta. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la referencia, ya esta dada de alta. Por favor, revise los datos.",null);
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear el impuesto, ya esta dada de alta. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear el impuesto, ya esta dada de alta. Por favor, revise los datos.",null);
 			break;
 			
 		case -4: //Error
@@ -180,16 +180,16 @@ public class GestorImpuestosRecursos implements Serializable
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La modificacion solicitada no incluye cambios. Por favor, revise los datos.",null);
 			break;
 		case -7: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear el momiviento de cuota. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear el momiviento de cuota. Por favor, revise los datos.",null);
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear el momiviento de el impuesto. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear el momiviento de el impuesto. Por favor, revise los datos.",null);
 			break;
 		/*case -7: //Error
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la cuota. Por favor, revise los datos.");
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la cuota. Por favor, revise los datos.",null);
 			break;*/
 		case -8: //Error COACCI = "";
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear una relaccion de cuotas. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear una relaccion de cuotas. Por favor, revise los datos.",null);
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear una relaccion de referencias. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear una relaccion de referencias. Por favor, revise los datos.",null);
 			break;//"Error al registrar el movimiento, no hay motivo del cambio. Por favor, revise los datos."
 			
 		/*case -9: //Error COACCI = "";

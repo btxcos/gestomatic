@@ -223,8 +223,8 @@ public class GestorReferenciasCatastrales implements Serializable
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La cuota se ha creado correctamente.");
-			msg = new FacesMessage("La cuota se ha creado correctamente.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La referencia se ha creado correctamente.");
+			msg = new FacesMessage("La referencia se ha creado correctamente.");
 			break;
 		case -1: //Error
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El Numero de referencia catastral no ha sido informado. Por favor, revise los datos.");
@@ -253,16 +253,16 @@ public class GestorReferenciasCatastrales implements Serializable
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La modificacion solicitada no incluye cambios. Por favor, revise los datos.",null);
 			break;
 		case -7: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear el momiviento de cuota. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear el momiviento de cuota. Por favor, revise los datos.",null);
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear el momiviento de referencia. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear el momiviento de referencia. Por favor, revise los datos.",null);
 			break;
 		/*case -7: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la cuota. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la cuota. Por favor, revise los datos.",null);
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la referencia. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la referencia. Por favor, revise los datos.",null);
 			break;*/
 		case -8: //Error COACCI = "";
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear una relaccion de cuotas. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear una relaccion de cuotas. Por favor, revise los datos.",null);
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear una relaccion de referencias. Por favor, revise los datos.");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear una relaccion de referencias. Por favor, revise los datos.",null);
 			break;//"Error al registrar el movimiento, no hay motivo del cambio. Por favor, revise los datos."
 			
 		/*case -9: //Error COACCI = "";
