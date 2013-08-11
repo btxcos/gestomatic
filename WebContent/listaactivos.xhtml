@@ -96,12 +96,12 @@
 											<p:panel id="panelTablaActivos">
 												<h:panelGrid columns="1" cellpadding="5">
 													<p:contextMenu for="activos">
-														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" actionListener="#{GestorActivos.cargarDetalles}" url="detallesactivo.xhtml"/>
-														<p:menuitem value="Comunidad" update="form:popup" icon="ui-icon-home" actionListener="#{GestorActivos.cargarComunidad}" url="movimientoscomunidades.xhtml"/>
-														<p:menuitem value="Cuotas" update="form:popup" icon="ui-icon-calculator" actionListener="#{GestorActivos.cargarCuota}" url="movimientoscuotas.xhtml"/>
-														<p:menuitem value="Referencia Catastral" update="form:popup" icon="ui-icon-script" actionListener="#{GestorActivos.cargarReferencia}" url="movimientosreferencias.xhtml"/>
-														<p:menuitem value="Impuestos y Recursos" update="form:popup" icon="ui-icon-note" actionListener="#{GestorActivos.cargarImpuestos}" url="movimientosimpuestos.xhtml"/>
-														<p:menuitem value="Gastos" update="form:popup" icon="ui-icon-cart" actionListener="#{GestorActivos.cargarGastos}" url="gastos.xhtml"/>
+														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" action="#{GestorActivos.cargarDetalles}"/>
+														<p:menuitem value="Comunidad" update="form:popup" icon="ui-icon-home" action="#{GestorActivos.cargarComunidad}"/>
+														<p:menuitem value="Cuotas" update="form:popup" icon="ui-icon-calculator" action="#{GestorActivos.cargarCuota}"/>
+														<p:menuitem value="Referencia Catastral" update="form:popup" icon="ui-icon-script" action="#{GestorActivos.cargarReferencia}"/>
+														<p:menuitem value="Impuestos y Recursos" update="form:popup" icon="ui-icon-note" action="#{GestorActivos.cargarImpuestos}"/>
+														<p:menuitem value="Gastos" update="form:popup" icon="ui-icon-cart" action="#{GestorActivos.cargarGastos}"/>
 														
 													</p:contextMenu>  
 															

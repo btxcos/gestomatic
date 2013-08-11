@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 
 import com.provisiones.ll.CLActivos;
-import com.provisiones.ll.CLCuotas;
+
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.pl.detalles.GestorDetallesActivo;
 import com.provisiones.types.ActivoTabla;
 
 public class GestorActivos implements Serializable 
@@ -200,61 +202,78 @@ public class GestorActivos implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
 	
-	public String cargarComunidad(ActionEvent actionEvent) 
+	public String cargarComunidad() 
     {  
     	
     	String sMethod = "cargarComunidad";
+    	
+    	this.sCOACES = activoseleccionado.getCOACES();
     	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
     	return "movimientoscomunidades.xhtml";
     }
 
-	public String cargarCuota(ActionEvent actionEvent) 
+	public String cargarCuota() 
     {  
     	
     	String sMethod = "cargarCuota";
     	
+    	this.sCOACES = activoseleccionado.getCOACES();
+    	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
-    	return "movimientoscuota.xhtml";
+    	return "movimientoscuotas.xhtml";
     }
 	
-	public String cargarReferencia(ActionEvent actionEvent) 
+	public String cargarReferencia() 
     {  
     	
     	String sMethod = "cargarReferencia";
     	
+    	this.sCOACES = activoseleccionado.getCOACES();
+    	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
-    	return "index.xhtml";
+    	return "movimientosreferencias.xhtml";
     }
 	
-	public String cargarImpuestos(ActionEvent actionEvent) 
+	public String cargarImpuestos() 
     {  
     	
     	String sMethod = "cargarImpuestos";
     	
+    	this.sCOACES = activoseleccionado.getCOACES();
+    	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
-    	return "index.xhtml";
+    	return "movimientosimpuestos.xhtml";
     }
-	public String cargarGastos(ActionEvent actionEvent) 
+	public String cargarGastos() 
     {  
     	
     	String sMethod = "cargarGastos";
+    	
+    	this.sCOACES = activoseleccionado.getCOACES();
     	
     	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
     	return "gastos.xhtml";
     }
 
-	public String cargarDetalles(ActionEvent actionEvent) 
+	public String cargarDetalles() 
     {  
     	
     	String sMethod = "cargarDetalles";
     	
-    	return "gestionactivos.xhtml";
+    	this.sCOACES = activoseleccionado.getCOACES();
+    	
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCOACES:|"+sCOACES+"|");
+    	
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	
+    	
+    	return "detallesactivo.xhtml";
     }
 	
 	public String getsCOACES() {

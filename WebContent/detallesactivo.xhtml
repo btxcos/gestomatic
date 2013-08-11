@@ -10,13 +10,13 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Detalles del Activo #{GestorDetallesGasto.sCOACES}">
+				<p:layoutUnit position="north" size="33%" header="Detalles del Activo #{GestorDetallesActivo.sCOACES}">
 
  
 								<h:panelGrid columns="3" cellpadding="5">
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Volver" url="listaactivos.xhtml"/>
+											<p:commandButton value="Volver" action="#{GestorDetallesActivo.volver}"/>
 										</h:panelGrid>
 											<p:messages id="msgs"/>
 									</p:fieldset>
@@ -31,183 +31,375 @@
 
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
-									<p:fieldset legend="Activo #{GestorDetallesGasto.sCOACES}">
+									<p:fieldset legend="Activo #{GestorDetallesActivo.sCOACES}">
 										<h:panelGrid columns="1" cellpadding="5">
 
 											<h:outputText for="COACES" value="COACES: " />
-												<p:inputText id="COACES" value="#{GestorDetallesGasto.sCOACES}" size="18" maxlength="18"  disabled="true">
+												<p:inputText id="COACES" value="#{GestorDetallesActivo.sCOACES}" size="9" maxlength="9"  disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COGRUG" value="COGRUG: " />
-												<p:inputText id="COGRUG" value="#{GestorDetallesGasto.sCOGRUG}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUINMU" value="NUINMU: " />
+												<p:inputText id="NUINMU" value="#{GestorDetallesActivo.sNUINMU}" size="9" maxlength="9" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COTPGA" value="COACES: " />
-												<p:inputText id="COTPGA" value="#{GestorDetallesGasto.sCOTPGA}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COSOPA" value="COSOPA: " />
+												<p:inputText id="COSOPA" value="#{GestorDetallesActivo.sCOSOPA}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COSBGA" value="COSBGA: " />
-												<p:inputText id="COSBGA" value="#{GestorDetallesGasto.sCOSBGA}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COENAE" value="COENAE: " />
+												<p:inputText id="COENAE" value="#{GestorDetallesActivo.sCOENAE}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="PTPAGO" value="PTPAGO: " />
-												<p:inputText id="PTPAGO" value="#{GestorDetallesGasto.sPTPAGO}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COESEN" value="COESEN: " />
+												<p:inputText id="COESEN" value="#{GestorDetallesActivo.sCOESEN}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEDEVE" value="FEDEVE: " />
-												<p:inputText id="FEDEVE" value="#{GestorDetallesGasto.sFEDEVE}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NOVIAS" value="NOVIAS: " />
+												<p:inputText id="NOVIAS" value="#{GestorDetallesActivo.sNOVIAS}" size="60" maxlength="60" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FFGTVP" value="FFGTVP: " />
-												<p:inputText id="FFGTVP" value="#{GestorDetallesGasto.sFFGTVP}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUPOAC" value="NUPOAC: " />
+												<p:inputText id="NUPOAC" value="#{GestorDetallesActivo.sNUPOAC}" size="17" maxlength="17" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEPAGA" value="FEPAGA: " />
-												<p:inputText id="FEPAGA" value="#{GestorDetallesGasto.sFEPAGA}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUESAC" value="NUESAC: " />
+												<p:inputText id="NUESAC" value="#{GestorDetallesActivo.sNUESAC}" size="5" maxlength="5" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FELIPG" value="FELIPG: " />
-												<p:inputText id="FELIPG" value="#{GestorDetallesGasto.sFELIPG}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUPIAC" value="NUPIAC: " />
+												<p:inputText id="NUPIAC" value="#{GestorDetallesActivo.sNUPIAC}" size="11" maxlength="11" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COSIGA" value="COSIGA: " />
-												<p:inputText id="COSIGA" value="#{GestorDetallesGasto.sCOSIGA}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUPUAC" value="NUPUAC: " />
+												<p:inputText id="NUPUAC" value="#{GestorDetallesActivo.sNUPUAC}" size="17" maxlength="17" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEEESI" value="FEEESI: " />
-												<p:inputText id="FEEESI" value="#{GestorDetallesGasto.sFEEESI}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NOMUIN" value="NOMUIN: " />
+												<p:inputText id="NOMUIN" value="#{GestorDetallesActivo.sNOMUIN}" size="30" maxlength="30" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEECOI" value="FEECOI: " />
-												<p:inputText id="FEECOI" value="#{GestorDetallesGasto.sFEECOI}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COPRAE" value="COPRAE: " />
+												<p:inputText id="COPRAE" value="#{GestorDetallesActivo.sCOPRAE}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEEAUI" value="FEEAUI: " />
-												<p:inputText id="FEEAUI" value="#{GestorDetallesGasto.sFEEAUI}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NOPRAC" value="NOPRAC: " />
+												<p:inputText id="NOPRAC" value="#{GestorDetallesActivo.sNOPRAC}" size="18" maxlength="18" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEEPAI" value="FEEPAI: " />
-												<p:inputText id="FEEPAI" value="#{GestorDetallesGasto.sFEEPAI}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COPOIN" value="COPOIN: " />
+												<p:inputText id="COPOIN" value="#{GestorDetallesActivo.sCOPOIN}" size="5" maxlength="5" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="IMNGAS" value="IMNGAS: " />
-												<p:inputText id="IMNGAS" value="#{GestorDetallesGasto.sIMNGAS}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FEREAP" value="FEREAP: " />
+												<p:inputText id="FEREAP" value="#{GestorDetallesActivo.sFEREAP}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="YCOS02" value="YCOS02: " />
-												<p:inputText id="YCOS02" value="#{GestorDetallesGasto.sYCOS02}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COREAE" value="COREAE: " />
+												<p:inputText id="COREAE" value="#{GestorDetallesActivo.sCOREAE}" size="5" maxlength="5" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="IMRGAS" value="IMRGAS: " />
-												<p:inputText id="IMRGAS" value="#{GestorDetallesGasto.sIMRGAS}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FEINAU" value="FEINAU: " />
+												<p:inputText id="FEINAU" value="#{GestorDetallesActivo.sFEINAU}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="YCOS04" value="YCOS04: " />
-												<p:inputText id="YCOS04" value="#{GestorDetallesGasto.sYCOS04}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FESOPO" value="FESOPO: " />
+												<p:inputText id="FESOPO" value="#{GestorDetallesActivo.sFESOPO}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="IMDGAS" value="IMDGAS: " />
-												<p:inputText id="IMDGAS" value="#{GestorDetallesGasto.sIMDGAS}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FESEPO" value="FESEPO: " />
+												<p:inputText id="FESEPO" value="#{GestorDetallesActivo.sFESEPO}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="YCOS06" value="YCOS06: " />
-												<p:inputText id="YCOS06" value="#{GestorDetallesGasto.sYCOS06}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FEREPO" value="FEREPO: " />
+												<p:inputText id="FEREPO" value="#{GestorDetallesActivo.sFEREPO}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="IMCOST" value="IMCOST: " />
-												<p:inputText id="IMCOST" value="#{GestorDetallesGasto.sIMCOST}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FEADAC" value="IMCOST: " />
+												<p:inputText id="FEADAC" value="#{GestorDetallesActivo.sFEADAC}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="YCOS08" value="YCOS08: " />
-												<p:inputText id="YCOS08" value="#{GestorDetallesGasto.sYCOS08}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="CODIJU" value="CODIJU: " />
+												<p:inputText id="CODIJU" value="#{GestorDetallesActivo.sCODIJU}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="IMOGAS" value="IMOGAS: " />
-												<p:inputText id="IMOGAS" value="#{GestorDetallesGasto.sIMOGAS}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COSJUP" value="COSJUP: " />
+												<p:inputText id="COSJUP" value="#{GestorDetallesActivo.sCOSJUP}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="YCOS10" value="YCOS10: " />
-												<p:inputText id="YCOS10" value="#{GestorDetallesGasto.sYCOS10}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COSTLI" value="COSTLI: " />
+												<p:inputText id="COSTLI" value="#{GestorDetallesActivo.sCOSTLI}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="IMDTGA" value="IMDTGA: " />
-												<p:inputText id="IMDTGA" value="#{GestorDetallesGasto.sIMDTGA}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COSCAR" value="COSCAR: " />
+												<p:inputText id="COSCAR" value="#{GestorDetallesActivo.sCOSCAR}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COUNMO" value="COUNMO: " />
-												<p:inputText id="COUNMO" value="#{GestorDetallesGasto.sCOUNMO}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COESVE" value="COESVE: " />
+												<p:inputText id="COESVE" value="#{GestorDetallesActivo.sCOESVE}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="IMIMGA" value="IMIMGA: " />
-												<p:inputText id="IMIMGA" value="#{GestorDetallesGasto.sIMIMGA}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COTSIN" value="COTSIN: " />
+												<p:inputText id="COTSIN" value="#{GestorDetallesActivo.sCOTSIN}" size="4" maxlength="4" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COIMPT" value="COIMPT: " />
-												<p:inputText id="COIMPT" value="#{GestorDetallesGasto.sCOIMPT}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUFIRE" value="NUFIRE: " />
+												<p:inputText id="NUFIRE" value="#{GestorDetallesActivo.sNUFIRE}" size="9" maxlength="9" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COTNEG" value="COTNEG: " />
-												<p:inputText id="COTNEG" value="#{GestorDetallesGasto.sCOTNEG}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUREGP" value="NUREGP: " />
+												<p:inputText id="NUREGP" value="#{GestorDetallesActivo.sNUREGP}" size="3" maxlength="3" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COENCX" value="COENCX: " />
-												<p:inputText id="COENCX" value="#{GestorDetallesGasto.sCOENCX}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NOMUI0" value="NOMUI0: " />
+												<p:inputText id="NOMUI0" value="#{GestorDetallesActivo.sNOMUI0}" size="30" maxlength="30" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COOFCX" value="COOFCX: " />
-												<p:inputText id="COOFCX" value="#{GestorDetallesGasto.sCOOFCX}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NULIBE" value="NULIBE: " />
+												<p:inputText id="NULIBE" value="#{GestorDetallesActivo.sNULIBE}" size="6" maxlength="6" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="NUCONE" value="NUCONE: " />
-												<p:inputText id="NUCONE" value="#{GestorDetallesGasto.sNUCONE}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUTOME" value="NUTOME: " />
+												<p:inputText id="NUTOME" value="#{GestorDetallesActivo.sNUTOME}" size="6" maxlength="6" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="NUPROF" value="NUPROF: " />
-												<p:inputText id="NUPROF" value="#{GestorDetallesGasto.sNUPROF}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUFOLE" value="NUFOLE: " />
+												<p:inputText id="NUFOLE" value="#{GestorDetallesActivo.sNUFOLE}" size="6" maxlength="6" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEAGTO" value="FEAGTO: " />
-												<p:inputText id="FEAGTO" value="#{GestorDetallesGasto.sFEAGTO}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="NUINSR" value="NUINSR: " />
+												<p:inputText id="NUINSR" value="#{GestorDetallesActivo.sNUINSR}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COMONA" value="COMONA: " />
-												<p:inputText id="COMONA" value="#{GestorDetallesGasto.sCOMONA}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COSOCU" value="COSOCU: " />
+												<p:inputText id="COSOCU" value="#{GestorDetallesActivo.sCOSOCU}" size="2" maxlength="2" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="BIAUTO" value="BIAUTO: " />
-												<p:inputText id="BIAUTO" value="#{GestorDetallesGasto.sBIAUTO}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="COXPRO" value="COXPRO: " />
+												<p:inputText id="COXPRO" value="#{GestorDetallesActivo.sCOXPRO}" size="5" maxlength="5" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEAUFA" value="FEAUFA: " />
-												<p:inputText id="FEAUFA" value="#{GestorDetallesGasto.sFEAUFA}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FESOLA" value="FESOLA: " />
+												<p:inputText id="FESOLA" value="#{GestorDetallesActivo.sFESOLA}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COTERR" value="COTERR: " />
-												<p:inputText id="COTERR" value="#{GestorDetallesGasto.sCOTERR}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FESELA" value="FESELA: " />
+												<p:inputText id="FESELA" value="#{GestorDetallesActivo.sFESELA}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FMPAGN" value="FMPAGN: " />
-												<p:inputText id="FMPAGN" value="#{GestorDetallesGasto.sFMPAGN}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FERELA" value="FERELA: " />
+												<p:inputText id="FERELA" value="#{GestorDetallesActivo.sFERELA}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEPGPR" value="FEPGPR: " />
-												<p:inputText id="FEPGPR" value="#{GestorDetallesGasto.sFEPGPR}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="FERLLA" value="FERLLA: " />
+												<p:inputText id="FERLLA" value="#{GestorDetallesActivo.sFERLLA}" size="8" maxlength="8" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="FEAPLI" value="FEAPLI: " />
-												<p:inputText id="FEAPLI" value="#{GestorDetallesGasto.sFEAPLI}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="CASPRE" value="CASPRE: " />
+												<p:inputText id="CASPRE" value="#{GestorDetallesActivo.sCASPRE}" size="11" maxlength="11" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COAPII" value="COAPII: " />
-												<p:inputText id="COAPII" value="#{GestorDetallesGasto.sCOAPII}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="CASUTR" value="CASUTR: " />
+												<p:inputText id="CASUTR" value="#{GestorDetallesActivo.sCASUTR}" size="11" maxlength="18" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="COSPII" value="COSPII: " />
-												<p:inputText id="COSPII" value="#{GestorDetallesGasto.sCOSPII}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="CASUTC" value="CASUTC: " />
+												<p:inputText id="CASUTC" value="#{GestorDetallesActivo.sCASUTC}" size="11" maxlength="11" disabled="true">
 												</p:inputText>
 
-											<h:outputText for="NUCLII" value="NUCLII: " />
-												<p:inputText id="NUCLII" value="#{GestorDetallesGasto.sNUCLII}" size="18" maxlength="18" disabled="true">
+											<h:outputText for="CASUTG" value="CASUTG: " />
+												<p:inputText id="CASUTG" value="#{GestorDetallesActivo.sCASUTG}" size="11" maxlength="11" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="BIARRE" value="BIARRE: " />
+												<p:inputText id="BIARRE" value="#{GestorDetallesActivo.sBIARRE}" size="1" maxlength="1" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="CADORM" value="CADORM: " />
+												<p:inputText id="CADORM" value="#{GestorDetallesActivo.sCADORM}" size="4" maxlength="4" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="CABANO" value="CABANO: " />
+												<p:inputText id="CABANO" value="#{GestorDetallesActivo.sCABANO}" size="4" maxlength="4" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="BIGAPA" value="BIGAPA: " />
+												<p:inputText id="BIGAPA" value="#{GestorDetallesActivo.sBIGAPA}" size="1" maxlength="1" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="CAGAPA" value="CAGAPA: " />
+												<p:inputText id="CAGAPA" value="#{GestorDetallesActivo.sCAGAPA}" size="5" maxlength="5" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="CASUTE" value="CASUTE: " />
+												<p:inputText id="CASUTE" value="#{GestorDetallesActivo.sCASUTE}" size="9" maxlength="9" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="BILIPO" value="BILIPO: " />
+												<p:inputText id="BILIPO" value="#{GestorDetallesActivo.sBILIPO}" size="1" maxlength="1" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="BILIAC" value="BILIAC: " />
+												<p:inputText id="BILIAC" value="#{GestorDetallesActivo.sBILIAC}" size="1" maxlength="1" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="BILIUS" value="BILIUS: " />
+												<p:inputText id="BILIUS" value="#{GestorDetallesActivo.sBILIUS}" size="1" maxlength="1" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="BIBOIN" value="BIBOIN: " />
+												<p:inputText id="BIBOIN" value="#{GestorDetallesActivo.sBIBOIN}" size="1" maxlength="1" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="BICEFI" value="BICEFI: " />
+												<p:inputText id="BICEFI" value="#{GestorDetallesActivo.sBICEFI}" size="1" maxlength="1" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="CASUCB" value="CASUCB: " />
+												<p:inputText id="CASUCB" value="#{GestorDetallesActivo.sCASUCB}" size="9" maxlength="9" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="CASUCS" value="CASUCS: " />
+												<p:inputText id="CASUCS" value="#{GestorDetallesActivo.sCASUCS}" size="9" maxlength="9" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEACON" value="FEACON: " />
+												<p:inputText id="FEACON" value="#{GestorDetallesActivo.sFEACON}" size="4" maxlength="4" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="IDAUTO" value="IDAUTO: " />
+												<p:inputText id="IDAUTO" value="#{GestorDetallesActivo.sIDAUTO}" size="10" maxlength="10" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEDEMA" value="FEDEMA: " />
+												<p:inputText id="FEDEMA" value="#{GestorDetallesActivo.sFEDEMA}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="YNOCUR" value="YNOCUR: " />
+												<p:inputText id="YNOCUR" value="#{GestorDetallesActivo.sYNOCUR}" size="30" maxlength="30" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="OBRECO" value="OBRECO: " />
+												<p:inputText id="OBRECO" value="#{GestorDetallesActivo.sOBRECO}" size="6" maxlength="6" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="YNOLEC" value="YNOLEC: " />
+												<p:inputText id="YNOLEC" value="#{GestorDetallesActivo.sYNOLEC}" size="30" maxlength="30" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="NOLOJZ" value="NOLOJZ: " />
+												<p:inputText id="NOLOJZ" value="#{GestorDetallesActivo.sNOLOJZ}" size="30" maxlength="30" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEREDE" value="FEREDE: " />
+												<p:inputText id="FEREDE" value="#{GestorDetallesActivo.sFEREDE}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="POPROP" value="POPROP: " />
+												<p:inputText id="POPROP" value="#{GestorDetallesActivo.sPOPROP}" size="6" maxlength="6" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="COGRAP" value="COGRAP: " />
+												<p:inputText id="COGRAP" value="#{GestorDetallesActivo.sCOGRAP}" size="2" maxlength="2" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEPREG" value="FEPREG: " />
+												<p:inputText id="FEPREG" value="#{GestorDetallesActivo.sFEPREG}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEPHAC" value="FEPHAC: " />
+												<p:inputText id="FEPHAC" value="#{GestorDetallesActivo.sFEPHAC}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEFOAC" value="FEFOAC: " />
+												<p:inputText id="FEFOAC" value="#{GestorDetallesActivo.sFEFOAC}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEVACT" value="FEVACT: " />
+												<p:inputText id="FEVACT" value="#{GestorDetallesActivo.sFEVACT}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="IMVACT" value="IMVACT: " />
+												<p:inputText id="IMVACT" value="#{GestorDetallesActivo.sIMVACT}" size="15" maxlength="15" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="NUFIPR" value="NUFIPR: " />
+												<p:inputText id="NUFIPR" value="#{GestorDetallesActivo.sNUFIPR}" size="9" maxlength="9" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="COTPET" value="COTPET: " />
+												<p:inputText id="COTPET" value="#{GestorDetallesActivo.sCOTPET}" size="2" maxlength="2" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEEMPT" value="FEEMPT: " />
+												<p:inputText id="FEEMPT" value="#{GestorDetallesActivo.sFEEMPT}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FESORC" value="FESORC: " />
+												<p:inputText id="FESORC" value="#{GestorDetallesActivo.sFESORC}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FESODE" value="FESODE: " />
+												<p:inputText id="FESODE" value="#{GestorDetallesActivo.sFESODE}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="FEREAC" value="FEREAC: " />
+												<p:inputText id="FEREAC" value="#{GestorDetallesActivo.sFEREAC}" size="8" maxlength="8" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="COXSIA" value="COXSIA: " />
+												<p:inputText id="COXSIA" value="#{GestorDetallesActivo.sCOXSIA}" size="2" maxlength="2" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="NUJUZD" value="NUJUZD: " />
+												<p:inputText id="NUJUZD" value="#{GestorDetallesActivo.sNUJUZD}" size="2" maxlength="2" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="NURCAT" value="NURCAT: " />
+												<p:inputText id="NURCAT" value="#{GestorDetallesActivo.sNURCAT}" size="20" maxlength="20" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="NOMPRC" value="NOMPRC: " />
+												<p:inputText id="NOMPRC" value="#{GestorDetallesActivo.sNOMPRC}" size="55" maxlength="55" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="NUTPRC" value="NUTPRC: " />
+												<p:inputText id="NUTPRC" value="#{GestorDetallesActivo.sNUTPRC}" size="14" maxlength="14" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="NOMADC" value="NOMADC: " />
+												<p:inputText id="NOMADC" value="#{GestorDetallesActivo.sNOMADC}" size="55" maxlength="55" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="NUTADC" value="NUTADC: " />
+												<p:inputText id="NUTADC" value="#{GestorDetallesActivo.sNUTADC}" size="14" maxlength="14" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="IMPCOO" value="IMPCOO: " />
+												<p:inputText id="IMPCOO" value="#{GestorDetallesActivo.sIMPCOO}" size="15" maxlength="15" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="COENOR" value="COENOR: " />
+												<p:inputText id="COENOR" value="#{GestorDetallesActivo.sCOENOR}" size="5" maxlength="5" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="COSPAT" value="COSPAT: " />
+												<p:inputText id="COSPAT" value="#{GestorDetallesActivo.sCOSPAT}" size="5" maxlength="5" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="COSPAS" value="COSPAS: " />
+												<p:inputText id="COSPAS" value="#{GestorDetallesActivo.sCOSPAS}" size="5" maxlength="5" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="IDCOL3" value="IDCOL3: " />
+												<p:inputText id="IDCOL3" value="#{GestorDetallesActivo.sIDCOL3}" size="4" maxlength="4" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="BIOBNU" value="BIOBNU: " />
+												<p:inputText id="BIOBNU" value="#{GestorDetallesActivo.sBIOBNU}" size="1" maxlength="1" disabled="true">
+												</p:inputText>
+
+											<h:outputText for="POBRAR" value="POBRAR: " />
+												<p:inputText id="POBRAR" value="#{GestorDetallesActivo.sPOBRAR}" size="6" maxlength="6" disabled="true">
 												</p:inputText>
 
 										</h:panelGrid>

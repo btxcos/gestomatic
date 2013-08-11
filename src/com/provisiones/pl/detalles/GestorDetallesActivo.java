@@ -2,10 +2,20 @@ package com.provisiones.pl.detalles;
 
 import java.io.Serializable;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
+import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.misc.Utils;
+import com.provisiones.pl.GestorActivos;
+import com.provisiones.types.Activo;
+
 public class GestorDetallesActivo implements Serializable 
 {
 
 	private static final long serialVersionUID = 6852249796176190672L;
+
+	static String sClassName = GestorDetallesActivo.class.getName();
 	
 	private String sCOACES = "";
 	private String sNUINMU = "";
@@ -102,6 +112,149 @@ public class GestorDetallesActivo implements Serializable
 	
 	public GestorDetallesActivo()
 	{
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
+		getCOACESElegido();
+    	//FacesContext FCInstance = FacesContext.getCurrentInstance();
+    	//String theBeanName = "GestorActivos";
+    	//GestorActivos bean = (GestorActivos) FCInstance.getELContext().getELResolver().getValue(FCInstance.getELContext(), null, theBeanName);
+    	
+		//String sValor = bean.getsCOACES();
+
+	}
+	public String volver()
+	{
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		
+		session.removeAttribute("GestorDetallesActivo");
+		
+		return "listaactivos.xhtml";
+	}
+	
+	public void getCOACESElegido()
+	{
+		
+		/*FacesContext context = javax.faces.context.FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+		GestorActivos bean = (GestorActivos) context.getELContext().getELResolver().getValue(context.getELContext(), null, "GestorActivos");
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, "GestorDetallesActivo", "sCOACESbean:|"+bean.getsCOACES()+"|");
+		
+		GestorActivos nB =(GestorActivos) session.getAttribute("GestorActivos");
+
+		
+		
+		String sValor = nB.getsCOACES();*/
+		
+		String sValor = ((GestorActivos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorActivos")).getsCOACES();
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, "GestorDetallesActivo", "sCOACESnB:|"+sValor+"|");
+
+		
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, "GestorDetallesActivo", "sCOACES:|"+sCOACES+"|");
+		
+		
+		if (!sValor.equals(""))
+		{
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, "GestorDetallesActivo", "It's Works!!!");
+		
+			Activo activo = QMActivos.getActivo(sValor);
+		
+		this.sCOACES = activo.getCOACES();
+		this.sNUINMU = activo.getNUINMU();
+		this.sCOSOPA = activo.getCOSOPA();
+		this.sCOENAE = activo.getCOENAE();
+		this.sCOESEN = activo.getCOESEN();
+		this.sNOVIAS = activo.getNOVIAS();
+		this.sNUPOAC = activo.getNUPOAC();
+		this.sNUESAC = activo.getNUESAC();
+		this.sNUPIAC = activo.getNUPIAC();
+		this.sNUPUAC = activo.getNUPUAC();
+		this.sNOMUIN = activo.getNOMUIN();
+		this.sCOPRAE = activo.getCOPRAE();
+		this.sNOPRAC = activo.getNOPRAC();
+		this.sCOPOIN = activo.getCOPOIN();
+		this.sFEREAP = activo.getFEREAP();
+		this.sCOREAE = activo.getCOREAE();
+		this.sFEINAU = activo.getFEINAU();
+		this.sFESOPO = activo.getFESOPO();
+		this.sFESEPO = activo.getFESEPO();
+		this.sFEREPO = activo.getFEREPO();
+		this.sFEADAC = activo.getFEADAC();
+		this.sCODIJU = activo.getCODIJU();
+		this.sCOSJUP = activo.getCOSJUP();
+		this.sCOSTLI = activo.getCOSTLI();
+		this.sCOSCAR = activo.getCOSCAR();
+		this.sCOESVE = activo.getCOESVE();
+		this.sCOTSIN = activo.getCOTSIN();
+		this.sNUFIRE = activo.getNUFIRE();
+		this.sNUREGP = activo.getNUREGP();
+		this.sNOMUI0 = activo.getNOMUI0();
+		this.sNULIBE = activo.getNULIBE();
+		this.sNUTOME = activo.getNUTOME();
+		this.sNUFOLE = activo.getNUFOLE();
+		this.sNUINSR = activo.getNUINSR();
+		this.sCOSOCU = activo.getCOSOCU();
+		this.sCOXPRO = activo.getCOXPRO();
+		this.sFESOLA = activo.getFESOLA();
+		this.sFESELA = activo.getFESELA();
+		this.sFERELA = activo.getFERELA();
+		this.sFERLLA = activo.getFERLLA();
+		this.sCASPRE = activo.getCASPRE();
+		this.sCASUTR = activo.getCASUTR();
+		this.sCASUTC = activo.getCASUTC();
+		this.sCASUTG = activo.getCASUTG();
+		this.sBIARRE = activo.getBIARRE();
+		this.sCADORM = activo.getCADORM();
+		this.sCABANO = activo.getCABANO();
+		this.sBIGAPA = activo.getBIGAPA();
+		this.sCAGAPA = activo.getCAGAPA();
+		this.sCASUTE = activo.getCASUTE();
+		this.sBILIPO = activo.getBILIPO();
+		this.sBILIAC = activo.getBILIAC();
+		this.sBILIUS = activo.getBILIUS();
+		this.sBIBOIN = activo.getBIBOIN();
+		this.sBICEFI = activo.getBICEFI();
+		this.sCASUCB = activo.getCASUCB();
+		this.sCASUCS = activo.getCASUCS();
+		this.sFEACON = activo.getFEACON();
+		this.sIDAUTO = activo.getIDAUTO();
+		this.sFEDEMA = activo.getFEDEMA();
+		this.sYNOCUR = activo.getYNOCUR();
+		this.sOBRECO = activo.getOBRECO();
+		this.sYNOLEC = activo.getYNOLEC();
+		this.sNOLOJZ = activo.getNOLOJZ();
+		this.sFEREDE = activo.getFEREDE();
+		this.sPOPROP = activo.getPOPROP();
+		this.sCOGRAP = activo.getCOGRAP();
+		this.sFEPREG = activo.getFEPREG();
+		this.sFEPHAC = activo.getFEPHAC();
+		this.sFEFOAC = activo.getFEFOAC();
+		this.sFEVACT = activo.getFEVACT();
+		this.sIMVACT = activo.getIMVACT();
+		this.sNUFIPR = activo.getNUFIPR();
+		this.sCOTPET = activo.getCOTPET();
+		this.sFEEMPT = activo.getFEEMPT();
+		this.sFESORC = activo.getFESORC();
+		this.sFESODE = activo.getFESODE();
+		this.sFEREAC = activo.getFEREAC();
+		this.sCOXSIA = activo.getCOXSIA();
+		this.sNUJUZD = activo.getNUJUZD();
+		this.sNURCAT = activo.getNURCAT();
+		this.sNOMPRC = activo.getNOMPRC();
+		this.sNUTPRC = activo.getNUTPRC();
+		this.sNOMADC = activo.getNOMADC();
+		this.sNUTADC = activo.getNUTADC();
+		this.sIMPCOO = activo.getIMPCOO();
+		this.sCOENOR = activo.getCOENOR();
+		this.sCOSPAT = activo.getCOSPAT();
+		this.sCOSPAS = activo.getCOSPAS();
+		this.sIDCOL3 = activo.getIDCOL3();
+		this.sBIOBNU = activo.getBIOBNU();
+		this.sPOBRAR = activo.getPOBRAR();
+		}
 		
 	}
 

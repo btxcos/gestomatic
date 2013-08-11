@@ -3,14 +3,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-					<p:panelMenu style="width:100%">
+					<p:slideMenu style="width:95%" backLabel="Retroceder">
 						<p:submenu label="Activos">
 							<p:menuitem value="Cargar"
 								url="cargador.xhtml" icon="ui-icon-arrowthick-1-n" />
 							<p:menuitem value="Lista de Activos" 
 								url="listaactivos.xhtml" icon="ui-icon-search" />
 						</p:submenu>
-						<p:submenu label="Gastos">
+						<p:submenu label="Gastos" async="true">
 							<p:menuitem value="Cargar Gastos" 
 								url="cargador.xhtml" icon="ui-icon-arrowthick-1-n" />
 							<p:menuitem value="Lista de Gastos" 
@@ -59,5 +59,5 @@
 									url="movimientosimpuestos.xhtml" icon="ui-icon-document" />	
 							</p:submenu>
 						</p:submenu>
-					</p:panelMenu>
+					</p:slideMenu>
 </html>
