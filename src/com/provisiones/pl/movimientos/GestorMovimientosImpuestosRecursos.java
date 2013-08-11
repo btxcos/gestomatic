@@ -1,4 +1,4 @@
-package com.provisiones.pl;
+package com.provisiones.pl.movimientos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,31 +7,41 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.MovimientoReferenciaCatastral;
-import com.provisiones.types.ReferenciaCatastral;
+import com.provisiones.types.ImpuestoRecursoTabla;
+import com.provisiones.types.MovimientoImpuestoRecurso;
 
-public class GestorMovimientosReferenciasCatastrales implements Serializable 
+public class GestorMovimientosImpuestosRecursos implements Serializable 
 {
 
-	static String sClassName = GestorMovimientosReferenciasCatastrales.class.getName();
+	static String sClassName = GestorMovimientosImpuestosRecursos.class.getName();
 	
-	private static final long serialVersionUID = -1805847552638917701L;
+	private static final long serialVersionUID = -6724439464144511204L;
 
-	private String sCODTRN = ValoresDefecto.DEF_E3_CODTRN;
+	private String sCODTRN = ValoresDefecto.DEF_E4_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
 	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
 	private String sCOACCI = "";
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
-	
+
 	private String sNURCAT = "";
-	private String sTIRCAT = "";
-	private String sENEMIS = "";
-	private String sCOTEXA = "";
+
+	private String sCOSBAC = "";
+	private String sFEPRRE = "";
+	private String sFERERE = "";
+	private String sFEDEIN = "";
+	private String sBISODE = "";
+	private String sBIRESO = "";
+	private String sCOTEXA = "0000000000";
 	private String sOBTEXC = "";
+	
+	private String sDesCOSBAC = "";
+	private String sDesBISODE = "";
+	private String sDesBIRESO = "";
 	
 	private String sOBDEER = "";
 	
@@ -47,74 +57,15 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private String sNUPUAC = "";
 	
 	private ArrayList<ActivoTabla> tablaactivos = null;
-	
 	private ActivoTabla activoseleccionado = null;
 	
+	private ArrayList<ImpuestoRecursoTabla> tablaimpuestos = null;
+	private ImpuestoRecursoTabla impuestoseleccionado = null;
 	
-	public GestorMovimientosReferenciasCatastrales()
+
+	public GestorMovimientosImpuestosRecursos()
 	{
 		Utils.standardIO2File("");//Salida por fichero de texto
-	}
-
-	public void buscaActivos (ActionEvent actionEvent)
-	{
-		
-		String sMethod = "buscaActivosComunidad";
-		
-		
-		FacesMessage msg;
-		
-		ActivoTabla buscaactivos = new ActivoTabla(
-				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
-		
-		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
-
-		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-	}
-	
-	public void comprobarActivoMovimiento(ActionEvent actionEvent)
-	{
-		String sMethod = "comprobarCOACES";
-		
-		
-		
-		FacesMessage msg;
-		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralListada(sCOACES);
-    	
-  	
-    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
-    	{
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
-    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
-    	}
-    	else
-		{
-    		ReferenciaCatastral referencia = CLReferencias.buscaReferencia(sNURCAT);
-   
-    		this.sTIRCAT = referencia.getTIRCAT();
-    		this.sENEMIS = referencia.getENEMIS();
-    		this.sCOTEXA = referencia.getCOTEXA();
-    		this.sOBTEXC = referencia.getOBTEXC();
-    		
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
-
-			msg = new FacesMessage("Encontrada referencia para el activo '"+sCOACES.toUpperCase()+"'.",null);
-		}
-		
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);	
-		
 	}
 	
 	public void borrarPlantillaActivo()
@@ -140,12 +91,16 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
    	
     }
     
-	public void borrarPlantillaReferencia()
+	public void borrarPlantillaImpuestos()
 	{
 		this.sCOACES = "";
         this.sNURCAT = "";
-        this.sTIRCAT = "";
-        this.sENEMIS = "";
+        this.sCOSBAC = "";
+        this.sFEPRRE = "";
+        this.sFERERE = "";
+        this.sFEDEIN = "";
+        this.sBISODE = "";
+        this.sBIRESO = "";
         this.sCOTEXA = "";
         this.sOBTEXC = "";
 	}
@@ -159,68 +114,99 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.activoseleccionado = null;
     	this.tablaactivos = null;
     	
-    	borrarPlantillaReferencia();
+    	borrarPlantillaImpuestos();
    	
     }
+    
+	public void cargarImpuestos(ActionEvent actionEvent)
+	{
+		String sMethod = "cargarImpuestos";
+		
+		FacesMessage msg;
+
+		
+    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	
+    	if (!sNURCAT.equals("") && !CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+		{
+    		
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando impuestos...");
+    		
+    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(sCOACES.toUpperCase());
+    		
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.");
+
+    		msg = new FacesMessage("Encontrados "+getTablaimpuestos().size()+" impuestos relacionadas.");
+    		
+		}
+    	else
+    	{
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
+    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
+        }
+    	
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+	}
 	
-	public void seleccionarActivo(ActionEvent actionEvent) 
+	public void seleccionarImpuesto(ActionEvent actionEvent) 
     {  
     	
-    	String sMethod = "seleccionarActivo";
+    	String sMethod = "seleccionarImpuesto";
 
     	FacesMessage msg;
     	
+    	this.sCOSBAC = impuestoseleccionado.getCOSBAC();
+    	this.sDesCOSBAC = impuestoseleccionado.getDCOSBAC();
+    	this.sFEPRRE = impuestoseleccionado.getFEPRRE();
+    	this.sFERERE = impuestoseleccionado.getFERERE();
+    	this.sFEDEIN = impuestoseleccionado.getFEDEIN();
+    	this.sBISODE = impuestoseleccionado.getBISODE();
+    	this.sDesBISODE = impuestoseleccionado.getDBISODE();
+    	this.sBIRESO = impuestoseleccionado.getBIRESO();
+    	this.sDesBIRESO = impuestoseleccionado.getBIRESO();
+    	this.sOBTEXC = impuestoseleccionado.getOBTEXC();
     	
     	
-    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
+    	msg = new FacesMessage("'"+sDesCOSBAC +"' Seleccionado.");
     	
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
     	
-    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
-    	{
-    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"La referencia catastral seleccionada no esta de alta.",null);
-    		
-    	}
-    	else
-    	{	
-    		ReferenciaCatastral referencia = CLReferencias.buscaReferencia(sNURCAT);
-    		   
-    		this.sTIRCAT = referencia.getTIRCAT();
-    		this.sENEMIS = referencia.getENEMIS();
-    		this.sCOTEXA = referencia.getCOTEXA();
-    		this.sOBTEXC = referencia.getOBTEXC();
     	
-    		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
-    	
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
-    	}
+    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Impuesto seleccionado: |"+sCOSBAC+"|"+sDesCOSBAC+"|");
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
-		//return "listacomunidadesactivos.xhtml";
     }
-	
+    
 	public void registraDatos(ActionEvent actionEvent)
 	{
 		String sMethod = "registraDatos";
 		
-		
-		
 		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
-		MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
+		MovimientoImpuestoRecurso movimiento = new MovimientoImpuestoRecurso (
 				sCODTRN.toUpperCase(), 
 				sCOTDOR.toUpperCase(), 
 				sIDPROV.toUpperCase(), 
 				sCOACCI.toUpperCase(), 
 				sCOENGP.toUpperCase(), 
-				sCOACES.toUpperCase(), 
+				sCOACES.toUpperCase(),
 				sNURCAT.toUpperCase(),
+				ValoresDefecto.DEF_COGRUG_E4, 
+				ValoresDefecto.DEF_COTACA_E4, 
+				sCOSBAC.toUpperCase(),
 				"", 
-				sTIRCAT.toUpperCase(),
+				Utils.compruebaFecha(sFEPRRE.toUpperCase()),
 				"", 
-				sENEMIS.toUpperCase(),
+				Utils.compruebaFecha(sFERERE.toUpperCase()),
+				"", 
+				Utils.compruebaFecha(sFEDEIN.toUpperCase()),
+				"", 
+				Utils.compruebaCodigo(sBISODE.toUpperCase()),
+				"", 
+				Utils.compruebaCodigo(sBIRESO.toUpperCase()),
 				sCOTEXA.toUpperCase(),
 				"", 
 				sOBTEXC.toUpperCase(), 
@@ -228,15 +214,15 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 		FacesMessage msg;
 		
-		int iSalida = CLReferencias.registraMovimiento(movimiento);
+		int iSalida = CLImpuestos.registraMovimiento(movimiento);
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
 		
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La referencia catastral se ha modificado correctamente.");
-			msg = new FacesMessage("La referencia catastral se ha modificado correctamente.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La cuota se ha creado correctamente.");
+			msg = new FacesMessage("La cuota se ha creado correctamente.");
 			break;
 		case -1: //Error
 			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El Numero de referencia catastral no ha sido informado. Por favor, revise los datos.");
@@ -300,7 +286,63 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
+	
+	public void seleccionarActivo(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarActivo";
 
+    	FacesMessage msg;
+    	
+
+    	this.sCOACES  = activoseleccionado.getCOACES();
+    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	
+    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
+    	{
+    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"La referencia catastral seleccionada no esta de alta.",null);
+    		this.sNURCAT  = "";
+    	}
+    	else
+    	{	
+    	
+    		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
+    	
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+    	}
+
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		//return "listacomunidadesactivos.xhtml";
+    }
+	
+	public void buscaActivos (ActionEvent actionEvent)
+	{
+		
+		String sMethod = "buscaActivosComunidad";
+		
+		
+		FacesMessage msg;
+		
+		ActivoTabla buscaactivos = new ActivoTabla(
+				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		
+		this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(buscaactivos));
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+
+		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+	}
+	
 	public String getsCODTRN() {
 		return sCODTRN;
 	}
@@ -349,20 +391,52 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		this.sNURCAT = sNURCAT;
 	}
 
-	public String getsTIRCAT() {
-		return sTIRCAT;
+	public String getsCOSBAC() {
+		return sCOSBAC;
 	}
 
-	public void setsTIRCAT(String sTIRCAT) {
-		this.sTIRCAT = sTIRCAT;
+	public void setsCOSBAC(String sCOSBAC) {
+		this.sCOSBAC = sCOSBAC;
 	}
 
-	public String getsENEMIS() {
-		return sENEMIS;
+	public String getsFEPRRE() {
+		return sFEPRRE;
 	}
 
-	public void setsENEMIS(String sENEMIS) {
-		this.sENEMIS = sENEMIS;
+	public void setsFEPRRE(String sFEPRRE) {
+		this.sFEPRRE = sFEPRRE;
+	}
+
+	public String getsFERERE() {
+		return sFERERE;
+	}
+
+	public void setsFERERE(String sFERERE) {
+		this.sFERERE = sFERERE;
+	}
+
+	public String getsFEDEIN() {
+		return sFEDEIN;
+	}
+
+	public void setsFEDEIN(String sFEDEIN) {
+		this.sFEDEIN = sFEDEIN;
+	}
+
+	public String getsBISODE() {
+		return sBISODE;
+	}
+
+	public void setsBISODE(String sBISODE) {
+		this.sBISODE = sBISODE;
+	}
+
+	public String getsBIRESO() {
+		return sBIRESO;
+	}
+
+	public void setsBIRESO(String sBIRESO) {
+		this.sBIRESO = sBIRESO;
 	}
 
 	public String getsCOTEXA() {
@@ -468,6 +542,49 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
 		this.activoseleccionado = activoseleccionado;
 	}
+
+	public ImpuestoRecursoTabla getImpuestoseleccionado() {
+		return impuestoseleccionado;
+	}
+
+	public void setImpuestoseleccionado(ImpuestoRecursoTabla impuestoseleccionado) {
+		this.impuestoseleccionado = impuestoseleccionado;
+	}
+
+	public ArrayList<ImpuestoRecursoTabla> getTablaimpuestos() {
+		return tablaimpuestos;
+	}
+
+	public void setTablaimpuestos(ArrayList<ImpuestoRecursoTabla> tablaimpuestos) {
+		this.tablaimpuestos = tablaimpuestos;
+	}
+
+	public String getsDesCOSBAC() {
+		return sDesCOSBAC;
+	}
+
+	public void setsDesCOSBAC(String sDesCOSBAC) {
+		this.sDesCOSBAC = sDesCOSBAC;
+	}
+
+	public String getsDesBISODE() {
+		return sDesBISODE;
+	}
+
+	public void setsDesBISODE(String sDesBISODE) {
+		this.sDesBISODE = sDesBISODE;
+	}
+
+	public String getsDesBIRESO() {
+		return sDesBIRESO;
+	}
+
+	public void setsDesBIRESO(String sDesBIRESO) {
+		this.sDesBIRESO = sDesBIRESO;
+	}
+	
+	
+	
 	
 	
 }

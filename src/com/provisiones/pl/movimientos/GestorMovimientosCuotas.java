@@ -1,4 +1,4 @@
-package com.provisiones.pl;
+package com.provisiones.pl.movimientos;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.provisiones.pl;
+package com.provisiones.pl.detalles;
 
 import java.io.Serializable;
 

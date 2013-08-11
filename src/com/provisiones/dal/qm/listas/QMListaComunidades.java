@@ -1,4 +1,4 @@
-package com.provisiones.dal.qm;
+package com.provisiones.dal.qm.listas;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;

@@ -1,7 +1,7 @@
 package com.provisiones.ll;
 
 import com.provisiones.dal.qm.QMGastos;
-import com.provisiones.dal.qm.QMListaGastos;
+import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;

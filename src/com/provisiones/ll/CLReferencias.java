@@ -3,9 +3,9 @@ package com.provisiones.ll;
 import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.dal.qm.QMListaReferencias;
-import com.provisiones.dal.qm.QMMovimientosReferencias;
 import com.provisiones.dal.qm.QMReferencias;
+import com.provisiones.dal.qm.listas.QMListaReferencias;
+import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;

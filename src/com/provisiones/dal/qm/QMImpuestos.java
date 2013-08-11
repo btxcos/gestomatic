@@ -17,19 +17,19 @@ public class QMImpuestos
 	
 	static boolean bTrazas = true;
 
-	static String sTable = "e4_impuestos_tbl";
+	public static final String sTable = "e4_impuestos_tbl";
 
-	static String sField1  = "cod_nurcat";    
-	static String sField2 = "cod_cosbac";
-	static String sField3 = "feprre";    
-	static String sField4 = "ferere";    
-	static String sField5 = "fedein";    
-	static String sField6 = "cod_bisode";
-	static String sField7 = "cod_bireso";
-	static String sField8 = "cotexa";    
-	static String sField9 = "obtexc";
+	public static final String sField1  = "cod_nurcat";    
+	public static final String sField2 = "cod_cosbac";
+	public static final String sField3 = "feprre";    
+	public static final String sField4 = "ferere";    
+	public static final String sField5 = "fedein";    
+	public static final String sField6 = "cod_bisode";
+	public static final String sField7 = "cod_bireso";
+	public static final String sField8 = "cotexa";    
+	public static final String sField9 = "obtexc";
 
-	static String sField10 = "cod_estado";
+	public static final String sField10 = "cod_estado";
 
 	public static boolean addImpuesto(ImpuestoRecurso NuevoImpuestoRecurso)
 

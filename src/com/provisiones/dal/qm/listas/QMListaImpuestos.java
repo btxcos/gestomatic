@@ -1,4 +1,4 @@
-package com.provisiones.dal.qm;
+package com.provisiones.dal.qm.listas;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.dal.qm.QMCodigosControl;
+import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;

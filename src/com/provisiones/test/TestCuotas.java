@@ -1,6 +1,6 @@
 package com.provisiones.test;
 
-import com.provisiones.dal.qm.QMListaCuotas;
+import com.provisiones.dal.qm.listas.QMListaCuotas;
 
 public class TestCuotas {
 

@@ -1,4 +1,4 @@
-package com.provisiones.dal.qm;
+package com.provisiones.dal.qm.movimientos;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
@@ -24,15 +24,16 @@ public class QMMovimientosReferencias
 	static String sField4  = "idprov";      
 	static String sField5  = "cod_coacci";  
 	static String sField6  = "coengp";       
-	static String sField7  = "nurcat_id";   
-	static String sField8  = "cod_bitc16";  
-	static String sField9  = "tircat";      
-	static String sField10 = "cod_bitc17";  
-	static String sField11 = "enemis";      
-	static String sField12 = "cotexa";      
-	static String sField13 = "cod_bitc09";  
-	static String sField14 = "obtexc";      
-	static String sField15 = "obdeer";      
+	static String sField7  = "cod_coaces";
+	static String sField8  = "nurcat_id";   
+	static String sField9  = "cod_bitc16";  
+	static String sField10 = "tircat";      
+	static String sField11 = "cod_bitc17";  
+	static String sField12 = "enemis";      
+	static String sField13 = "cotexa";      
+	static String sField14 = "cod_bitc09";  
+	static String sField15 = "obtexc";    
+	static String sField16 = "obdeer";   
 
 
 
@@ -69,13 +70,15 @@ public class QMMovimientosReferencias
 				       + sField12 + ","              
 				       + sField13 + ","
 				       + sField14 + ","
-				       + sField15 +  
+				       + sField15 + ","
+				       + sField16 +  
 				       ") VALUES ('" 
 				       + NuevoMovimientoReferenciaCatastral.getCODTRN() + "','" 
 				       + NuevoMovimientoReferenciaCatastral.getCOTDOR() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getIDPROV() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getCOACCI() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getCOENGP() + "','"
+				       + NuevoMovimientoReferenciaCatastral.getCOACES() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getNURCAT() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getBITC16() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getTIRCAT() + "','"
@@ -141,15 +144,16 @@ public class QMMovimientosReferencias
 					+ sField4  + " = '"+ NuevoMovimientoReferenciaCatastral.getIDPROV() + "', "
 					+ sField5  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACCI() + "', "
 					+ sField6  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOENGP() + "', "
-					+ sField7  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "', "
-					+ sField8  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "', "
-					+ sField9  + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
-					+ sField10 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "', "
-					+ sField11 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
-					+ sField12 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "', "
-					+ sField13 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
-					+ sField14 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
-					+ sField15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBDEER() + 
+					+ sField7  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACES() + "', "
+					+ sField8  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "', "
+					+ sField9  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "', "
+					+ sField10 + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
+					+ sField11 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "', "
+					+ sField12 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
+					+ sField13 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "', "
+					+ sField14 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
+					+ sField15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
+					+ sField16 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBDEER() + 
 					"' "+
 					" WHERE "
 					+ sField1 + " = '"+ sMovimientoReferenciaCatastralID +"'");
@@ -268,7 +272,8 @@ public class QMMovimientosReferencias
 				       + sField12 + ","              
 				       + sField13 + ","
 				       + sField14 + ","
-				       + sField15 +             
+				       + sField15 + ","
+				       + sField16 +             
          
        
 			"  FROM " + sTable + 
@@ -290,15 +295,16 @@ public class QMMovimientosReferencias
   					sIDPROV = rs.getString(sField4); 
   					sCOACCI = rs.getString(sField5); 
   					sCOENGP = rs.getString(sField6); 
-  					sNURCAT = rs.getString(sField7); 
-  					sBITC16 = rs.getString(sField8); 
-  					sTIRCAT = rs.getString(sField9); 
-  					sBITC17 = rs.getString(sField10);
-  					sENEMIS = rs.getString(sField11);
-  					sCOTEXA = rs.getString(sField12);
-  					sBITC09 = rs.getString(sField13);
-  					sOBTEXC = rs.getString(sField14);
-  					sOBDEER = rs.getString(sField15);
+  					sCOACES = rs.getString(sField7); 
+  					sNURCAT = rs.getString(sField8); 
+  					sBITC16 = rs.getString(sField9); 
+  					sTIRCAT = rs.getString(sField10);
+  					sBITC17 = rs.getString(sField11);
+  					sENEMIS = rs.getString(sField12);
+  					sCOTEXA = rs.getString(sField13);
+  					sBITC09 = rs.getString(sField14);
+  					sOBTEXC = rs.getString(sField15);
+  					sOBDEER = rs.getString(sField16);
   					
   					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
@@ -356,8 +362,8 @@ public class QMMovimientosReferencias
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField15 + "  FROM " + sTable + 
-					" WHERE (" + sField6 + " = '" + sCodReferencia + "')");
+			pstmt = conn.prepareStatement("SELECT " + sField16 + "  FROM " + sTable + 
+					" WHERE (" + sField3 + " = '" + sCodReferencia + "')");
 
 			rs = pstmt.executeQuery();
 			

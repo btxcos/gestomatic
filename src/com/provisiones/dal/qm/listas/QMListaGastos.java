@@ -1,4 +1,4 @@
-package com.provisiones.dal.qm;
+package com.provisiones.dal.qm.listas;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

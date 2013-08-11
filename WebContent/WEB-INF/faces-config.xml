@@ -6,6 +6,11 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
     version="2.1">
 	<managed-bean>
+		<managed-bean-name>GestorDatosGenerales</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorDatosGenerales</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>GestorIndice</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.GestorIndice</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -21,11 +26,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>GestorMovimientosComunidades</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorMovimientosComunidades</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>GestorTablaComunidadActivo</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.GestorTablaComunidadActivo</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -33,41 +33,6 @@
 	<managed-bean>
 		<managed-bean-name>GestorCuotas</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.GestorCuotas</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>GestorDatosGenerales</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorDatosGenerales</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>GestorMovimientosCuotas</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorMovimientosCuotas</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>GestorActivos</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorActivos</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>GestorDetallesActivo</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorDetallesActivo</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>GestorDetallesGasto</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorDetallesGasto</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>GestorDetallesProvision</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorDetallesProvision</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>GestorGastos</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorGastos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
@@ -81,13 +46,48 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>GestorMovimientosComunidades</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.movimientos.GestorMovimientosComunidades</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorMovimientosCuotas</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.movimientos.GestorMovimientosCuotas</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>GestorMovimientosReferenciasCatastrales</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorMovimientosReferenciasCatastrales</managed-bean-class>
+		<managed-bean-class>com.provisiones.pl.movimientos.GestorMovimientosReferenciasCatastrales</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>GestorMovimientosImpuestosRecursos</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorMovimientosImpuestosRecursos</managed-bean-class>
+		<managed-bean-class>com.provisiones.pl.movimientos.GestorMovimientosImpuestosRecursos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorActivos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorActivos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorGastos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorGastos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesActivo</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.detalles.GestorDetallesActivo</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesGasto</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.detalles.GestorDetallesGasto</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesProvision</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.detalles.GestorDetallesProvision</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMCuotas;
-import com.provisiones.dal.qm.QMListaComunidadesActivos;
-import com.provisiones.dal.qm.QMListaCuotas;
-import com.provisiones.dal.qm.QMMovimientosCuotas;
+import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
+import com.provisiones.dal.qm.listas.QMListaCuotas;
+import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;

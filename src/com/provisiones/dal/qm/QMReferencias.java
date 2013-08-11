@@ -17,15 +17,15 @@ public class QMReferencias
 	
 	static boolean bTrazas = true;
 
-	static String sTable = "e3_referencias_tbl";
+	public static final String sTable = "e3_referencias_tbl";
 
-	static String sField1  = "nurcat_id";    
-	static String sField2  = "tircat";    
-	static String sField3 = "enemis";    
-	static String sField4 = "cotexa";    
-	static String sField5 = "obtexc";
+	public static final String sField1  = "nurcat_id";    
+	public static final String sField2  = "tircat";    
+	public static final String sField3 = "enemis";    
+	public static final String sField4 = "cotexa";    
+	public static final String sField5 = "obtexc";
 	
-	static String sField6 = "cod_estado";
+	public static final String sField6 = "cod_estado";
 
 	public static boolean addReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral)
 

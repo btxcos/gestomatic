@@ -17,19 +17,19 @@ public class QMCuotas
 	
 	static boolean bTrazas = true;
 
-	static String sTable = "e2_cuotas_tbl";
+	public static final String sTable = "e2_cuotas_tbl";
 
-	static String sField1  = "cod_cocldo";
-	static String sField2  = "cod_nudcom";
-	static String sField3  = "cod_cosbac";
-	static String sField4  = "fipago";    
-	static String sField5  = "ffpago";    
-	static String sField6  = "imcuco";    
-	static String sField7  = "faacta";    
-	static String sField8  = "cod_ptpago";
-	static String sField9  = "obtexc";
+	public static final String sField1  = "cod_cocldo";
+	public static final String sField2  = "cod_nudcom";
+	public static final String sField3  = "cod_cosbac";
+	public static final String sField4  = "fipago";    
+	public static final String sField5  = "ffpago";    
+	public static final String sField6  = "imcuco";    
+	public static final String sField7  = "faacta";    
+	public static final String sField8  = "cod_ptpago";
+	public static final String sField9  = "obtexc";
 
-	static String sField10 = "cod_estado";
+	public static final String sField10 = "cod_estado";
 
 	public static boolean addCuota(Cuota NuevaCuota)
 

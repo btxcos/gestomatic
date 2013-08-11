@@ -17,26 +17,26 @@ public class QMComunidades
 	
 	static boolean bTrazas = true;
 
-	static String sTable = "e1_comunidades_tbl";
+	public static final String sTable = "e1_comunidades_tbl";
 
-	static String sField1  = "cod_cocldo";
+	public static final String sField1  = "cod_cocldo";
 	
-	static String sField2  = "nudcom_id"; 
+	public static final String sField2  = "nudcom_id"; 
 	
-	static String sField3  = "nomcoc";    
-	static String sField4  = "nodcco";    
-	static String sField5  = "nomprc";    
-	static String sField6  = "nutprc";    
-	static String sField7  = "nomadc";    
-	static String sField8  = "nutadc";    
-	static String sField9  = "nodcad";    
-	static String sField10 = "nuccen";    
-	static String sField11 = "nuccof";    
-	static String sField12 = "nuccdi";    
-	static String sField13 = "nuccnt";    
-	static String sField14 = "obtexc";
+	public static final String sField3  = "nomcoc";    
+	public static final String sField4  = "nodcco";    
+	public static final String sField5  = "nomprc";    
+	public static final String sField6  = "nutprc";    
+	public static final String sField7  = "nomadc";    
+	public static final String sField8  = "nutadc";    
+	public static final String sField9  = "nodcad";    
+	public static final String sField10 = "nuccen";    
+	public static final String sField11 = "nuccof";    
+	public static final String sField12 = "nuccdi";    
+	public static final String sField13 = "nuccnt";    
+	public static final String sField14 = "obtexc";
 
-	static String sField15 = "cod_estado";
+	public static final String sField15 = "cod_estado";
 	
 
 	public static boolean addComunidad(Comunidad NuevaComunidad)

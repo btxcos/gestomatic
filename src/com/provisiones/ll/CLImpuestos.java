@@ -3,8 +3,8 @@ package com.provisiones.ll;
 import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMImpuestos;
-import com.provisiones.dal.qm.QMListaImpuestos;
-import com.provisiones.dal.qm.QMMovimientosImpuestos;
+import com.provisiones.dal.qm.listas.QMListaImpuestos;
+import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;

@@ -16,15 +16,15 @@ public class QMProvisiones
 	
 	static boolean bTrazas = true;
 
-	static String sTable = "provisiones_tbl";
+	public static final String sTable = "provisiones_tbl";
 
-	static String sField1 = "nuprof_id";
+	public static final String sField1 = "nuprof_id";
 
-	static String sField2 = "fepfon";
-	static String sField3 = "fecha_validacion";
-	static String sField4 = "estado";
-	static String sField5 = "valortotal";
-	static String sField6 = "numgastos";
+	public static final String sField2 = "fepfon";
+	public static final String sField3 = "fecha_validacion";
+	public static final String sField4 = "estado";
+	public static final String sField5 = "valortotal";
+	public static final String sField6 = "numgastos";
 	
 
 	public static boolean addProvision(Provision NuevaProvision)
