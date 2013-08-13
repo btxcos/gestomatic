@@ -713,53 +713,52 @@ public class CLComunidades
 							}
 							break;
 						case X:
-							if (QMListaComunidades.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), Integer.toString(indice)))
-							{
 								String sMovimientoAlta = QMListaComunidadesActivos.getActivoVinculadoComunidadID(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES());
-							
-								if (sMovimientoAlta.equals("") && QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
-								{
-									//OK 
-									iCodigo = 0;
-								}
-								else
+								if (sMovimientoAlta.equals(""))
 								{
 									//error y rollback
 									iCodigo = -12;
-									QMListaComunidades.delRelacionComunidad(Integer.toString(indice));
 									QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 								}
-							}
-							else
-							{
-								//error y rollback
-								iCodigo = -12;
-								QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
-							}
+								else
+								{							
+									if (QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+									{
+										//OK 
+										iCodigo = 0;
+									}
+									else
+									{
+										//error y rollback
+										iCodigo = -12;
+										QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
+									}
+								}
 							break;
 						case E:
-							if (QMListaComunidades.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), Integer.toString(indice)))
-							{
 								String sMovimientoBaja = QMListaComunidadesActivos.getActivoVinculadoComunidadID(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES());
-							
-								if (!sMovimientoBaja.equals("") && QMListaComunidadesActivos.delRelacionComunidad(sMovimientoBaja))
-								{
-									//OK 
-									iCodigo = 0;
-								}
-								else
+								
+								if (sMovimientoBaja.equals(""))
 								{
 									//error y rollback
 									iCodigo = -12;
-									QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), sMovimientoBaja);
+									QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 								}
-							}
-							else
-							{
-								//error y rollback
-								iCodigo = -12;
-								QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
-							}							
+								else
+								{	
+									if (QMListaComunidadesActivos.delRelacionComunidad(sMovimientoBaja))
+									{
+										//OK 
+										iCodigo = 0;
+									}
+									else
+									{
+										//error y rollback
+										iCodigo = -12;
+										QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
+										QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), sMovimientoBaja);
+									}
+								}
 							break;
 					}	
 				}
