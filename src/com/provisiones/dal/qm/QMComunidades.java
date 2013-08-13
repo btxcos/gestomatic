@@ -86,7 +86,7 @@ public class QMComunidades
 				       + NuevaComunidad.getNUCCDI() + "','"
 				       + NuevaComunidad.getNUCCNT() + "','"
 				       + NuevaComunidad.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_PENDIENTE + "' )");
+				       + ValoresDefecto.DEF_ALTA + "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 

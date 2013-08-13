@@ -4,6 +4,7 @@ import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Cuota;
 import com.provisiones.types.Gasto;
 
 public class CLGastos 
@@ -57,5 +58,10 @@ public class CLGastos
 		
 		return bSalida;
 	}
+	
+	/*public static Gasto convierteCuotaenGasto(Cuota cuota)
+	{
+		Return
+	}*/
 	
 }

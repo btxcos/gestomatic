@@ -73,8 +73,7 @@
 
 										</h:panelGrid>
 									</p:fieldset>
-											<p:panel id="panelTablaActivos">
-												<h:panelGrid columns="1" cellpadding="5">
+
 													<p:contextMenu for="tablaActivos">
 														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" actionListener="#{GestorActivos.cargarDetalles}" url="detallesprovision.xhtml"/>
 													</p:contextMenu>  
@@ -85,7 +84,7 @@
 																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
 																rowsPerPageTemplate="5,10,15">  
 														<f:facet name="header">  
-															Activos
+															Provisiones
 														</f:facet>
 															
 														<p:column sortBy="#{activo.COACES}" headerText="Codigo Activo">  
@@ -117,8 +116,7 @@
 														</p:column>  
 															
 													</p:dataTable>
-												</h:panelGrid>
-											</p:panel >
+
 													
 								</h:panelGrid>
 							</p:panel>

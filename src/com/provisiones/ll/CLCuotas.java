@@ -233,9 +233,9 @@ public class CLCuotas
 				else
 				{	
 			
-					ValoresDefecto.TIPOSACCIONES COACCES = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
+					ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
 				
-					switch (COACCES) 
+					switch (COACCI)
 					{
 						case A:
 							Cuota cuotadealta = convierteMovimientoenCuota(movimiento_revisado);

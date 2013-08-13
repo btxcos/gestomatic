@@ -1,6 +1,8 @@
 package com.provisiones.pl;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.types.Activo;
@@ -8,6 +10,8 @@ import com.provisiones.types.Activo;
 public class GestorGastos implements Serializable 
 {
 	private static final long serialVersionUID = 476229907564908389L;
+	
+	static String sClassName = GestorGastos.class.getName();
 
 	private String sCOACES = "";
 	private String sCOGRUG = "";
@@ -53,10 +57,158 @@ public class GestorGastos implements Serializable
 	private String sCOAPII = "";
 	private String sCOSPII = "";
 	private String sNUCLII = "";
+	
+	private Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcotpga_g1HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpga_g2HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpga_g3HM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcosbga_t11HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t12HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t21HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t22HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t23HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
 
-	private Activo Activo = QMActivos.getActivo("");
 
-	//Métodos de acceso
+	public GestorGastos()
+	{
+		tiposcotpga_g1HM.put("Plusvalia", "1");
+		tiposcotpga_g1HM.put("Notaria",   "2");
+
+		tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
+		tiposcotpga_g2HM.put("Comunidades",     "2");
+		tiposcotpga_g2HM.put("Suministros",     "3");
+		
+		tiposcotpga_g3HM.put("Honorarios","2");
+		tiposcotpga_g3HM.put("Licencias", "3");
+		
+		
+		
+		tiposcosbga_t11HM.put("Plusvalia", "0");
+		//tiposcosbga_t11HM.put("Devolucion Plusvalia", "50");
+		tiposcosbga_t12HM.put("Notaria",   "1");
+		//tiposcosbga_t12HM.put("Devolucion Notaria",     "51");
+
+		tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
+		tiposcosbga_t21HM.put("IBIS",                                 "1");
+		tiposcosbga_t21HM.put("Tasas basura",                         "2");
+		tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
+		tiposcosbga_t21HM.put("Tasas agua",                           "4");
+		tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
+		tiposcosbga_t21HM.put("Otras tasas",                          "6");
+		/*tiposcosbga_t21HM.put("Devolución Impuestos e IBIS",         "50");
+		tiposcosbga_t21HM.put("Devolución IBIS",                     "51");
+		tiposcosbga_t21HM.put("Devolución Tasas basura",             "52");
+		tiposcosbga_t21HM.put("Devolución Tasas alcantarillado",     "53");
+		tiposcosbga_t21HM.put("Devolución Tasas agua",               "54");
+		tiposcosbga_t21HM.put("Devolución Contribuciones especiales","55");
+		tiposcosbga_t21HM.put("Devolución Otras tasas",              "56");*/
+		
+		tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
+		tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
+		tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
+		tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
+		tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
+		tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
+		/*tiposcosbga_t22HM.put("Devolucion Comunidades",       "50"); 
+		tiposcosbga_t22HM.put("Devolucion Ordinaria",          	"51"); 
+		tiposcosbga_t22HM.put("Devolucion Extras Comunidad",   	"52"); 
+		tiposcosbga_t22HM.put("Devolucion Mancomunidad",       	"53"); 
+		tiposcosbga_t22HM.put("Devolucion Extras Mancomunidad",	"54"); 
+		tiposcosbga_t22HM.put("Devolucion Obras comunidad",   	"55");*/
+		
+		
+		tiposcosbga_t23HM.put("Suministros",               "0");
+		tiposcosbga_t23HM.put("Suministro luz",            "1");
+		tiposcosbga_t23HM.put("Suministro agua",           "2");
+		tiposcosbga_t23HM.put("Suministro gas",            "3");
+		/*tiposcosbga_t23HM.put("Devolucion Suministros",  "50");
+		tiposcosbga_t23HM.put("Devolucion Suministro luz", "51");
+		tiposcosbga_t23HM.put("Devolucion Suministro agua","52");
+		tiposcosbga_t23HM.put("Devolución Suministro gas", "53");*/
+		
+		tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
+		tiposcosbga_t32HM.put("Prescripcion",            "1");  
+		tiposcosbga_t32HM.put("Colaboracion",            "2");  
+		tiposcosbga_t32HM.put("Otros honorarios",        "3");  
+		tiposcosbga_t32HM.put("Servicios varios",        "4");
+		
+		tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
+	}
+	public void cambiaGrupo()
+	{
+		tiposcotpgaHM = new LinkedHashMap<String, String>();
+		tiposcosbgaHM = new LinkedHashMap<String, String>();
+	}
+	
+	public void cambiaTipo()
+	{
+		String sMethod = "cambiaTipo";
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCOGRUG:|"+sCOGRUG+"|");
+		if (sCOGRUG !=null && !sCOGRUG.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUG)) 
+			{
+				case 1:
+					tiposcotpgaHM = tiposcotpga_g1HM;
+					break;
+				case 2:
+					tiposcotpgaHM = tiposcotpga_g2HM;
+					break;
+				case 3:
+					tiposcotpgaHM = tiposcotpga_g3HM;
+					break;
+				default:
+					tiposcotpgaHM = new LinkedHashMap<String, String>();
+					break;
+			}
+			tiposcosbgaHM = new LinkedHashMap<String, String>();
+			sCOTPGA = "";
+			sCOSBGA = "";
+		}
+	}
+
+	public void cambiaSubtipo()
+	{
+		String sMethod = "cambiaTipo";
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCOTPGA:|"+sCOGRUG+"| sCOTPGA:|"+sCOTPGA+"|");
+		
+		if (sCOTPGA !=null && !sCOTPGA.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUG+sCOTPGA)) 
+			{
+				case 11:
+					tiposcosbgaHM = tiposcosbga_t11HM;
+					break;
+				case 12:
+					tiposcosbgaHM = tiposcosbga_t12HM;
+					break;
+				case 21:
+					tiposcosbgaHM = tiposcosbga_t21HM;
+					break;
+				case 22:
+					tiposcosbgaHM = tiposcosbga_t22HM;
+					break;
+				case 23:
+					tiposcosbgaHM = tiposcosbga_t23HM;
+					break;
+				case 32:
+					tiposcosbgaHM = tiposcosbga_t32HM;
+					break;
+				case 33:
+					tiposcosbgaHM = tiposcosbga_t33HM;
+					break;
+				default:
+					tiposcosbgaHM = new LinkedHashMap<String, String>();
+					break;
+			}
+
+		}
+	}
 
 	public String getsCOACES() {
 		return sCOACES;
@@ -410,6 +562,91 @@ public class GestorGastos implements Serializable
 		this.sNUCLII = sNUCLII;
 	}
 
+	public Map<String, String> getTiposcotpgaHM() {
+		return tiposcotpgaHM;
+	}
+
+	public void setTiposcotpgaHM(Map<String, String> tiposcotpgaHM) {
+		this.tiposcotpgaHM = tiposcotpgaHM;
+	}
+
+	public Map<String, String> getTiposcosbgaHM() {
+		return tiposcosbgaHM;
+	}
+
+	public void setTiposcosbgaHM(Map<String, String> tiposcosbgaHM) {
+		this.tiposcosbgaHM = tiposcosbgaHM;
+	}
+
+	public Map<String, String> getTiposcotpga_g1HM() {
+		return tiposcotpga_g1HM;
+	}
+
+	public void setTiposcotpga_g1HM(Map<String, String> tiposcotpga_g1HM) {
+		this.tiposcotpga_g1HM = tiposcotpga_g1HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g2HM() {
+		return tiposcotpga_g2HM;
+	}
+
+	public void setTiposcotpga_g2HM(Map<String, String> tiposcotpga_g2HM) {
+		this.tiposcotpga_g2HM = tiposcotpga_g2HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g3HM() {
+		return tiposcotpga_g3HM;
+	}
+
+	public void setTiposcotpga_g3HM(Map<String, String> tiposcotpga_g3HM) {
+		this.tiposcotpga_g3HM = tiposcotpga_g3HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t11HM() {
+		return tiposcosbga_t11HM;
+	}
+
+	public void setTiposcosbga_t11HM(Map<String, String> tiposcosbga_t11HM) {
+		this.tiposcosbga_t11HM = tiposcosbga_t11HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t21HM() {
+		return tiposcosbga_t21HM;
+	}
+
+	public void setTiposcosbga_t21HM(Map<String, String> tiposcosbga_t21HM) {
+		this.tiposcosbga_t21HM = tiposcosbga_t21HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t22HM() {
+		return tiposcosbga_t22HM;
+	}
+
+	public void setTiposcosbga_t22HM(Map<String, String> tiposcosbga_t22HM) {
+		this.tiposcosbga_t22HM = tiposcosbga_t22HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t23HM() {
+		return tiposcosbga_t23HM;
+	}
+
+	public void setTiposcosbga_t23HM(Map<String, String> tiposcosbga_t23HM) {
+		this.tiposcosbga_t23HM = tiposcosbga_t23HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t32HM() {
+		return tiposcosbga_t32HM;
+	}
+
+	public void setTiposcosbga_t32HM(Map<String, String> tiposcosbga_t32HM) {
+		this.tiposcosbga_t32HM = tiposcosbga_t32HM;
+	}
+	public Map<String,String> getTiposcosbga_t12HM() {
+		return tiposcosbga_t12HM;
+	}
+	public void setTiposcosbga_t12HM(Map<String,String> tiposcosbga_t12HM) {
+		this.tiposcosbga_t12HM = tiposcosbga_t12HM;
+	}
 
 
 }

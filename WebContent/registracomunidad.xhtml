@@ -7,7 +7,7 @@
 	<h:head>
 	</h:head>
 	<h:body>
-		<h:form>
+		<h:form id="form">
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="33%" header="Registrar Comunidad">
@@ -28,7 +28,7 @@
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Limpiar Plantilla" type="reset" />
-											<p:commandButton value="Alta" update="panel" actionListener="#{GestorComunidades.realizaAlta}" />
+											<p:commandButton value="Alta" update="panel, popup, msgs" actionListener="#{GestorComunidades.realizaAlta}" />
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -157,9 +157,131 @@
 
 										</h:panelGrid>
 									</p:fieldset>
+									
+								<p:fieldset legend="Asociar Activo">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="COACES" value="Codigo de activo: " />
+														<p:inputText id="COACES" value="#{GestorComunidades.sCOACES}" size="9" maxlength="9">
+														</p:inputText>
+													<p:message for="COACES" display="icon"/>
+													<p:commandButton value="Comprobar" update="msgs, popup, COACES, activos" actionListener="#{GestorComunidades.comprobarActivo}"/>	
+												</h:panelGrid>
+											</p:panel>
+										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										</h:panelGrid>
+									</p:fieldset>
+
 
 						</h:panelGrid>
 					</p:panel>
+					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
+    				
+							<p:contextMenu for="activos">  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorComunidades.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="activos" var="activo" value="#{GestorComunidades.tablaactivos}" rowKey="#{activo.COACES}"  
+																selection="#{GestorComunidades.activoseleccionado}" selectionMode="single"
+																paginator="true" paginatorPosition="bottom" rows="10" 
+																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+																rowsPerPageTemplate="5,10,15">
+									
+								<p:column headerText="Codigo Activo">  
+								    #{activo.COACES}  
+								</p:column>  
+								
+								<p:column headerText="Comunidad Autonoma">  
+								    #{activo.NOPRAC}  
+								</p:column>  
+
+								<p:column headerText="Municipio">  
+								    #{activo.NOMUIN}  
+								</p:column>  
+								
+								<p:column headerText="Via">  
+								    #{activo.NOVIAS}  
+								</p:column>  
+								
+								<p:column headerText="Portal">  
+								    #{activo.NUPOAC}  
+								</p:column>  
+								
+								<p:column headerText="Piso">  
+								    #{activo.NUPIAC}  
+								</p:column>  
+								
+								<p:column headerText="Puerta">  
+								    #{activo.NUPUAC}  
+								</p:column>  
+									
+							</p:dataTable> 
+					</p:dialog>
+					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscar" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+														<p:inputText id="NOPRAC" value="#{GestorComunidades.sNOPRAC}" size="18" maxlength="18">
+														</p:inputText>
+													<p:message for="NOPRAC" display="icon"/>
+
+													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+														<p:inputText id="NOMUIN" value="#{GestorComunidades.sNOMUIN}" size="30" maxlength="30">
+														</p:inputText>
+													<p:message for="NOMUIN" display="icon"/>
+
+													<h:outputText for="COPOIN" value="Codigo Postal: " />
+														<p:inputText id="COPOIN" value="#{GestorComunidades.sCOPOIN}" size="5" maxlength="5">
+														</p:inputText>
+													<p:message for="COPOIN" display="icon"/>
+
+													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+														<p:inputText id="NOVIAS" value="#{GestorComunidades.sNOVIAS}" size="60" maxlength="60">
+														</p:inputText>
+													<p:message for="NOVIAS" display="icon"/>
+
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+														<p:inputText id="NUPOAC" value="#{GestorComunidades.sNUPOAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPOAC" display="icon"/>
+
+													<h:outputText for="NUPIAC" value="Piso: " />
+														<p:inputText id="NUPIAC" value="#{GestorComunidades.sNUPIAC}" size="11" maxlength="11">
+														</p:inputText>
+													<p:message for="NUPIAC" display="icon"/>
+
+													<h:outputText for="NUPUAC" value="Puerta: " />
+														<p:inputText id="NUPUAC" value="#{GestorComunidades.sNUPUAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPUAC" display="icon"/>
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, form:activos, form:popup, form:msgs" actionListener="#{GestorComunidades.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorComunidades.limpiarPlantillaActivo}" />	
+
+														<p:ajaxStatus  id="pensandoActivo">  
+															<f:facet name="start">  
+																<h:graphicImage value="/recursos/loadingBar.gif" />  
+															</f:facet>  
+
+															<f:facet name="complete">  
+																<h:outputText value="" />  
+															</f:facet>  
+
+														</p:ajaxStatus> 
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
 						<p:graphicImage value="recursos/loadingBar.gif" />
 					</p:dialog> 

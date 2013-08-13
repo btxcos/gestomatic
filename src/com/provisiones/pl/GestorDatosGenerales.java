@@ -13,8 +13,20 @@ public class GestorDatosGenerales implements Serializable
 	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposptpagoHM = new LinkedHashMap<String, String>();
 
+	private Map<String,String> tiposcogrugHM = new LinkedHashMap<String, String>();
+	//private Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
+	//private Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcotpga_g1HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpga_g2HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpga_g3HM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcosbga_t11HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbga_t21HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbga_t22HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t23HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
+	
 	
 	private Map<String,String> tiposbiresoHM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposbinariaHM = new LinkedHashMap<String, String>();
@@ -39,6 +51,27 @@ public class GestorDatosGenerales implements Serializable
 		tiposptpagoHM.put("SEMESTRAL",       "6");
 		tiposptpagoHM.put("ANUAL",           "7");
 		tiposptpagoHM.put("VARIOS PERIODOS", "8");
+		
+		tiposcogrugHM.put("Compraventa",      "1");
+		tiposcogrugHM.put("Pendientes",       "2");
+		tiposcogrugHM.put("Acciones",         "3");
+
+		tiposcotpga_g1HM.put("Plusvalia", "1");
+		tiposcotpga_g1HM.put("Notaria",   "2");
+
+		tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
+		tiposcotpga_g2HM.put("Comunidades",     "2");
+		tiposcotpga_g2HM.put("Suministros",     "3");
+		
+		tiposcotpga_g3HM.put("Honorarios","2");
+		tiposcotpga_g3HM.put("Licencias", "3");
+		
+		
+		
+		tiposcosbga_t11HM.put("Plusvalia", "0");
+		tiposcosbga_t11HM.put("Notaria",   "1");
+		/*tiposcosbga_t11HM.put("Devolucion Plusvalia", "50");
+		tiposcosbga_t11HM.put("Devolucion Notaria",     "51");*/
 
 		tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
 		tiposcosbga_t21HM.put("IBIS",                                 "1");
@@ -61,12 +94,29 @@ public class GestorDatosGenerales implements Serializable
 		tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
 		tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
 		tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
-		/*tiposcosbga_t22HM.put("Devolucion Comunidades",        	"50"); 
+		/*tiposcosbga_t22HM.put("Devolucion Comunidades",       "50"); 
 		tiposcosbga_t22HM.put("Devolucion Ordinaria",          	"51"); 
 		tiposcosbga_t22HM.put("Devolucion Extras Comunidad",   	"52"); 
 		tiposcosbga_t22HM.put("Devolucion Mancomunidad",       	"53"); 
 		tiposcosbga_t22HM.put("Devolucion Extras Mancomunidad",	"54"); 
 		tiposcosbga_t22HM.put("Devolucion Obras comunidad",   	"55");*/
+		
+		
+		tiposcosbga_t23HM.put("Suministros",               "0");
+		tiposcosbga_t23HM.put("Suministro luz",            "1");
+		tiposcosbga_t23HM.put("Suministro agua",           "2");
+		tiposcosbga_t23HM.put("Suministro gas",            "3");
+		/*tiposcosbga_t23HM.put("Devolucion Suministros",  "50");
+		tiposcosbga_t23HM.put("Devolucion Suministro luz", "51");
+		tiposcosbga_t23HM.put("Devolucion Suministro agua","52");
+		tiposcosbga_t23HM.put("Devolución Suministro gas", "53");*/
+		
+		tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
+		tiposcosbga_t32HM.put("Prescripcion",            "1");  
+		tiposcosbga_t32HM.put("Colaboracion",            "2");  
+		tiposcosbga_t32HM.put("Otros honorarios",        "3");  
+		tiposcosbga_t32HM.put("Servicios varios",        "4");  
+
 		
 	}
 
@@ -86,6 +136,46 @@ public class GestorDatosGenerales implements Serializable
 		this.tiposptpagoHM = tiposptpagoHM;
 	}
 
+	public Map<String, String> getTiposcogrugHM() {
+		return tiposcogrugHM;
+	}
+
+	public void setTiposcogrugHM(Map<String, String> tiposcogrugHM) {
+		this.tiposcogrugHM = tiposcogrugHM;
+	}
+
+	public Map<String, String> getTiposcotpga_g1HM() {
+		return tiposcotpga_g1HM;
+	}
+
+	public void setTiposcotpga_g1HM(Map<String, String> tiposcotpga_g1HM) {
+		this.tiposcotpga_g1HM = tiposcotpga_g1HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g2HM() {
+		return tiposcotpga_g2HM;
+	}
+
+	public void setTiposcotpga_g2HM(Map<String, String> tiposcotpga_g2HM) {
+		this.tiposcotpga_g2HM = tiposcotpga_g2HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g3HM() {
+		return tiposcotpga_g3HM;
+	}
+
+	public void setTiposcotpga_g3HM(Map<String, String> tiposcotpga_g3HM) {
+		this.tiposcotpga_g3HM = tiposcotpga_g3HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t11HM() {
+		return tiposcosbga_t11HM;
+	}
+
+	public void setTiposcosbga_t11HM(Map<String, String> tiposcosbga_t11HM) {
+		this.tiposcosbga_t11HM = tiposcosbga_t11HM;
+	}
+
 	public Map<String, String> getTiposcosbga_t21HM() {
 		return tiposcosbga_t21HM;
 	}
@@ -100,6 +190,22 @@ public class GestorDatosGenerales implements Serializable
 
 	public void setTiposcosbga_t22HM(Map<String, String> tiposcosbga_t22HM) {
 		this.tiposcosbga_t22HM = tiposcosbga_t22HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t23HM() {
+		return tiposcosbga_t23HM;
+	}
+
+	public void setTiposcosbga_t23HM(Map<String, String> tiposcosbga_t23HM) {
+		this.tiposcosbga_t23HM = tiposcosbga_t23HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t32HM() {
+		return tiposcosbga_t32HM;
+	}
+
+	public void setTiposcosbga_t32HM(Map<String, String> tiposcosbga_t32HM) {
+		this.tiposcosbga_t32HM = tiposcosbga_t32HM;
 	}
 
 	public Map<String, String> getTiposbiresoHM() {
@@ -117,7 +223,6 @@ public class GestorDatosGenerales implements Serializable
 	public void setTiposbinariaHM(Map<String, String> tiposbinariaHM) {
 		this.tiposbinariaHM = tiposbinariaHM;
 	}
-	
-	
 
+	
 }

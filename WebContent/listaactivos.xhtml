@@ -93,8 +93,8 @@
 													<p:message for="NUPUAC" display="icon"/>
 												</h:panelGrid>
 											</p:panel>
-											<p:panel id="panelTablaActivos">
-												<h:panelGrid columns="1" cellpadding="5">
+										</h:panelGrid>
+									</p:fieldset>
 													<p:contextMenu for="activos">
 														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" action="#{GestorActivos.cargarDetalles}"/>
 														<p:menuitem value="Comunidad" update="form:popup" icon="ui-icon-home" action="#{GestorActivos.cargarComunidad}"/>
@@ -143,11 +143,8 @@
 														</p:column>  
 															
 													</p:dataTable>
-												</h:panelGrid>
-											</p:panel >
 													
-										</h:panelGrid>
-									</p:fieldset>
+
 								</h:panelGrid>
 							</p:panel>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
