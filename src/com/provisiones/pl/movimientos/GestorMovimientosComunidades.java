@@ -296,7 +296,7 @@ public class GestorMovimientosComunidades implements Serializable
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			sMsg = "La modificacion se ha realizado correctamente.";
+			sMsg = "El movimiento se ha registrado correctamente.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(sMsg,null);
 			break;

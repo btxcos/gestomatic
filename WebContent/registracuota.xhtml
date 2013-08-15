@@ -52,12 +52,28 @@
 
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
+
+									<p:fieldset legend="Activo">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="COACES" value="Codigo de activo: " />
+														<p:inputText id="COACES" value="#{GestorCuotas.sCOACES}" size="9" maxlength="9">
+														</p:inputText>
+													<p:message for="COACES" display="icon"/>
+													<p:commandButton value="Buscar Comunidad" update="msgs, popup, COACES, panelComunidad" actionListener="#{GestorCuotas.buscarComunidad}"/>	
+												</h:panelGrid>
+											</p:panel>
+										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										</h:panelGrid>
+									</p:fieldset>
+
 									<p:fieldset legend="Comunidad de proprietarios" id="panelComunidad">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel >
 												<h:panelGrid columns="8" cellpadding="5">
 													<h:outputText for="COCLDO" value="Documento: " />
-													<p:selectOneMenu id="COCLDO" value="#{GestorCuotas.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
+													<p:selectOneMenu id="COCLDO" value="#{GestorCuotas.sCOCLDO}">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
 														<f:validateLength minimum="1" /> 
@@ -65,7 +81,7 @@
 													<p:message for="COCLDO" display="icon"/>
 											
 													<h:outputText for="NUDCOM" value="Numero: " />
-														<p:inputText id="NUDCOM" value="#{GestorCuotas.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
+														<p:inputText id="NUDCOM" value="#{GestorCuotas.sNUDCOM}" size="10" maxlength="10">
 														</p:inputText>
 													<p:message for="NUDCOM" display="icon"/>
 													<p:commandButton value="Cargar" update="panelComunidad, msgs, popup" actionListener="#{GestorCuotas.cargarComunidad}" />
@@ -95,21 +111,6 @@
 													<p:message for="NODCCO" display="icon"/>
 												</h:panelGrid>
 										  </p:panel>
-										</h:panelGrid>
-									</p:fieldset>
-
-									<p:fieldset legend="Activo">
-										<h:panelGrid columns="2" cellpadding="5">
-											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
-													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorCuotas.sCOACES}" size="9" maxlength="9">
-														</p:inputText>
-													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Comprobar" update="msgs, popup, COACES" actionListener="#{GestorCuotas.comprobarActivo}"/>	
-												</h:panelGrid>
-											</p:panel>
-										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 
@@ -275,7 +276,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorCuotas.buscaActivosComunidad}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorCuotas.buscaActivosConComunidad}" oncomplete="dlgTabla.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorCuotas.limpiarPlantillaActivo}" />	
 
 														<p:ajaxStatus  id="pensandoActivo">  

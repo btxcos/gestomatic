@@ -135,6 +135,12 @@ public class CLComunidades
 		return QMListaComunidadesActivos.buscaComunidadPorActivo(sCodCOACES);
 	}
 	
+	public static boolean existeComunidad (String sCodCOCLDO, String sCodNUDCOM)
+	{
+
+		return QMComunidades.existeComunidad(sCodCOCLDO, sCodNUDCOM);
+	}
+	
 	public static ArrayList<ActivoTabla> buscarActivosSinComunidad (ActivoTabla activofiltro)
 	{
 			
@@ -568,14 +574,14 @@ public class CLComunidades
 
 		if (movimiento.getCOACCI().equals(""))
 		{
-			//error 001 - CODIGO DE ACCION DEBE SER A,M,B,X 
+			//Error 001 - CODIGO DE ACCION DEBE SER A,M,B,X o E
 			iCodigo = -1;
 		}
 		else if ((sEstado.equals("A") && movimiento.getCOACCI().equals("X") && movimiento.getCOACES().equals(""))
 				|| (sEstado.equals("A") && movimiento.getCOACCI().equals("E") && movimiento.getCOACES().equals(""))
 				|| (movimiento.getCOACCI().equals("A") && !movimiento.getCOACES().equals("") && !QMActivos.existeActivo(movimiento.getCOACES())))
 		{
-			//error 003 - NO EXISTE EL ACTIVO
+			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
 		}
 		else if (movimiento.getNUDCOM().equals(""))
@@ -591,32 +597,32 @@ public class CLComunidades
 		}	
 		else if ( movimiento.getCOACCI().equals("A") && QMListaComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 		{
-			//error 009 - YA EXISTE ESTA COMUNIDAD
+			//Error 009 - YA EXISTE ESTA COMUNIDAD
 			iCodigo = -9;
 		}		
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("X") && QMListaComunidadesActivos.activoPerteneceComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOACES()))
 		{
-			//error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
+			//Error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
 			iCodigo = -10;
 		}
 		else if (movimiento.getCOACCI().equals("X") && !QMListaComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 		{
-			//error 011 - LA COMUNIDAD NO EXISTE. ACTIVO NO SE PUEDE DAR DE ALTA
+			//Error 011 - LA COMUNIDAD NO EXISTE. ACTIVO NO SE PUEDE DAR DE ALTA
 			iCodigo = -11;
 		}
 		else if (movimiento.getCOACCI().equals("M") && !QMListaComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 		{
-			//error 012 - LA COMUNIDAD NO EXISTE. NO SE PUEDE MODIFICAR
+			//Error 012 - LA COMUNIDAD NO EXISTE. NO SE PUEDE MODIFICAR
 			iCodigo = -12;
 		}
 		else if (movimiento.getCOACCI().equals("B") && !QMListaComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 		{
-			//error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
+			//Error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
 			iCodigo = -26;
 		}
 		else if (movimiento.getCOACCI().equals("B") && QMCuotas.tieneCuotas(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 		{
-			//error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
+			//Error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
 			iCodigo = -27;			
 		}
 		else if (movimiento.getCOCLDO().equals(""))
@@ -627,17 +633,17 @@ public class CLComunidades
 
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
 		{
-			//error alta de una comunidad en alta
+			//Error alta de una comunidad en alta
 			iCodigo = -801;
 		}
 		else if (sEstado.equals("B"))
 		{
-			//error comunidad de baja no puede recibir mas movimientos
+			//Error comunidad de baja no puede recibir mas movimientos
 			iCodigo = -802;
 		}
 		else if (sEstado.equals("") && !movimiento.getCOACCI().equals("A"))
 		{
-			//error estado no disponible
+			//Error estado no disponible
 			iCodigo = -803;
 		}
 
@@ -651,7 +657,7 @@ public class CLComunidades
 			
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
-				//error modificacion sin cambios
+				//Error modificacion sin cambios
 				iCodigo = -804;	
 			}
 			else
@@ -661,7 +667,7 @@ public class CLComunidades
 				
 				if (indice == 0)
 				{
-					//error al crear un movimiento
+					//Error al crear un movimiento
 					iCodigo = -901;
 				}
 				else
@@ -695,7 +701,7 @@ public class CLComunidades
 									}
 									else
 									{
-										//error y rollback - error al registrar el activo durante el alta
+										//Error y Rollback - error al registrar el activo durante el alta
 										iCodigo = -903;
 										QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 										QMComunidades.delComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM());
@@ -704,7 +710,7 @@ public class CLComunidades
 								}
 								else
 								{
-									//error y rollback - error al registrar la relaccion
+									//Error y Rollback - error al registrar la relaccion
 										iCodigo = -902;
 										QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 										QMComunidades.delComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM());
@@ -712,7 +718,7 @@ public class CLComunidades
 							}
 							else
 							{
-								//error y rollback - error al registrar la comuidad
+								//Error y Rollback - error al registrar la comuidad
 									iCodigo = -901;
 									QMMovimientosComunidades.delMovimientoComunidad(Integer.toString(indice));
 							}

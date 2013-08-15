@@ -288,7 +288,7 @@ public class QMListaComunidadesActivos
 	}
 
 	public static boolean activoVinculadoComunidad(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "activoVinculadoComunidad";
 

@@ -176,41 +176,95 @@ public class CLCuotas
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
+
 		
-		if (movimiento.getFIPAGO().equals("#"))
+		if (movimiento.getCOACCI().equals(""))
 		{
-			//error fecha de inicio incorrecta
-			iCodigo = -7;
-		}
-		else if (movimiento.getFFPAGO().equals("#"))
-		{
-			//error fecha de fin incorrecta
-			iCodigo = -8;
-		}
-		else if (movimiento.getFAACTA().equals("#"))
-		{
-			//error fecha de acta incorrecta
-			iCodigo = -9;
-		}
-		else if (movimiento.getCOACCI().equals(""))
-		{
-			//error accion vacia
+			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
+		else if (!QMActivos.existeActivo(movimiento.getCOACES()) && !movimiento.getCOACCI().equals("B"))
+		{
+			//Error 003 - NO EXISTE EL ACTIVO
+			iCodigo = -3;
+		}		
+		else if (movimiento.getNUDCOM().equals(""))
+		{
+			//Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO O NULO
+			iCodigo = -4;
+		}
+		else if (movimiento.getFIPAGO().equals("#") || movimiento.getFIPAGO().equals("0"))
+		{
+			//Error 033 - LA FECHA DE PRIMER PAGO DEBE SER LOGICA Y OBLIGATORIA
+			iCodigo = -33;
+		}
+		else if (movimiento.getFFPAGO().equals("#") || movimiento.getFFPAGO().equals("0"))
+		{
+			//Error 034 - LA FECHA DE ULTIMO PAGO DEBE SER LOGICA Y OBLIGATORIA
+			iCodigo = -34;
+		}
+		else if (Integer.parseInt(movimiento.getFFPAGO()) <  Integer.parseInt(movimiento.getFIPAGO()))
+		{
+			//Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
+			iCodigo = -35;
+		}
+		else if (Integer.parseInt(movimiento.getIMCUCO()) > 0)
+		{
+			//Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO
+			iCodigo = -36;
+		}		
+		else if (!CLComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+		{
+			//Error 041 - LA COMUNIDAD NO EXISTE EN LA TABLA DE COMUNIDADES GMAE10
+			iCodigo = -41;
+		}		
+
+		else if (movimiento.getCOACCI().equals("A") && 
+				QMListaComunidadesActivos.activoVinculadoComunidad(movimiento.getCOACES()) && 
+				!QMListaComunidadesActivos.activoPerteneceComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+		{
+			//Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
+			iCodigo = -42;
+		}
+		else if (movimiento.getCOACCI().equals("M") &&  
+				!QMListaComunidadesActivos.activoPerteneceComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+		{
+			//Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
+			iCodigo = -43;
+		}
+		
+		else if (movimiento.getPTPAGO().equals(""))
+		{
+			//Error 044 - NO EXISTE PERIOCIDAD DE PAGO
+			iCodigo = -44;
+		}
+		else if (movimiento.getCOACCI().equals("M") &&  
+				!QMListaComunidadesActivos.activoPerteneceComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+		{
+			//Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
+			iCodigo = -45;
+		}		
+		
+		else if (movimiento.getFAACTA().equals("#") || movimiento.getFAACTA().equals("0"))
+		{
+			//Error 046 - LA FECHA DEL ACTA DEBE SER LOGICA Y OBLIGATORIA 
+			iCodigo = -46;
+		}
+
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
 		{
-			//error alta de una comunidad en alta
-			iCodigo = -2;
+			//Error alta de una comunidad en alta
+			iCodigo = -801;
+		}
+		else if (sEstado.equals("B"))
+		{
+			//error comunidad de baja
+			iCodigo = -802;
 		}
 		else if (sEstado.equals("") && !movimiento.getCOACCI().equals("A"))
 		{
 			//error estado no disponible
-			iCodigo = -3;
-		}		
-		else if (sEstado.equals("B") && !movimiento.getCOACCI().equals("A"))
-		{
-			//error comunidad de baja no recibe altas
-			iCodigo = -4;
+			iCodigo = -803;
 		}
 		else
 		{
@@ -219,7 +273,7 @@ public class CLCuotas
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
 				//error modificacion sin cambios
-				iCodigo = -5;	
+				iCodigo = -804;	
 			}
 			else
 			{
@@ -228,7 +282,7 @@ public class CLCuotas
 				if (indice == 0)
 				{
 					//error al crear un movimiento
-					iCodigo = -6;
+					iCodigo = -900;
 				}
 				else
 				{	
@@ -257,51 +311,37 @@ public class CLCuotas
 									//error relacion cuota no creada - Rollback
 									QMCuotas.delCuota(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC());
 									QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
-									iCodigo = -12;
+									iCodigo = -902;
 								}
 							}
 							else
 							{
 								//error cuota no creada - Rollback
 								QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
-								iCodigo = -11;
+								iCodigo = -901;
 							}
 							break;
 						case B:
 							if (QMListaCuotas.addRelacionCuotas(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
 							{
-								//OK
-								//if (QMCuotas.delCuota(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
-								//{
-									if (QMCuotas.setEstado(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC(), "B"))
-									{
-										//OK 
-										iCodigo = 0; 
-									}
-									else
-									{
-										Cuota cuotadebaja = convierteMovimientoenCuota(movimiento);
-										//error estado no establecido - Rollback
-										QMCuotas.addCuota(cuotadebaja);
-										QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
-										QMListaCuotas.delRelacionCuotas(Integer.toString(indice));
-										iCodigo = -13;
-									}
-								/*}
+								if (QMCuotas.setEstado(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC(), "B"))
+								{
+									//OK 
+									iCodigo = 0; 
+								}
 								else
 								{
-									
-									//error relacion cuota no borrada - Rollback
-									QMListaCuotas.delRelacionCuotas(Integer.toString(indice));
+									//error estado no establecido - Rollback
 									QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
-									iCodigo = -14;
-								}*/
+									QMListaCuotas.delRelacionCuotas(Integer.toString(indice));
+									iCodigo = -903;
+								}
 							}
 							else
 							{
 								//error relacion cuota no creada - Rollback
 								QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
-								iCodigo = -12;
+								iCodigo = -902;
 							}
 							break;
 						case M:
@@ -315,8 +355,10 @@ public class CLCuotas
 								}
 								else
 								{
+									//Error cuota no modificada
 									QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
-									iCodigo = -12;									
+									QMListaCuotas.delRelacionCuotas(Integer.toString(indice));
+									iCodigo = -904;									
 								}
 
 							}
@@ -324,7 +366,7 @@ public class CLCuotas
 							{
 								//error relacion cuota no creada - Rollback
 								QMMovimientosCuotas.delMovimientoCuota(Integer.toString(indice));
-								iCodigo = -12;
+								iCodigo = -902;
 							}
 							break;
 						default:
