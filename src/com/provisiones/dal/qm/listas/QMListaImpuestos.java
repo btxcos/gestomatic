@@ -122,7 +122,7 @@ public class QMListaImpuestos
 
 	public static boolean existeRelacionImpuesto(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC)
 	{
-		String sMethod = "getValidado";
+		String sMethod = "existeRelacionImpuesto";
 
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -145,7 +145,7 @@ public class QMListaImpuestos
 			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					" AND " + sField2 + " = '" + sCodNURCAT +
+					" AND " + sField2 + " = '" + sCodNURCAT + "' " +
 					" AND " + sField3 + " = '" + sCodCOSBAC +"' )");
 
 			rs = pstmt.executeQuery();
@@ -524,8 +524,8 @@ public class QMListaImpuestos
 					"' "+
 					" WHERE "+
 					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					" AND " + sField2 + " = '" + sCodNURCAT +
-					" AND " + sField3 + " = '" + sCodCOSBAC +
+					" AND " + sField2 + " = '" + sCodNURCAT + "' " +
+					" AND " + sField3 + " = '" + sCodCOSBAC + "' " +
 					" AND " + sField4 + " = '" + sCodMovimiento +"' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
@@ -581,8 +581,8 @@ public class QMListaImpuestos
 			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					" AND " + sField2 + " = '" + sCodNURCAT +
-					" AND " + sField3 + " = '" + sCodCOSBAC +"' )");
+					" AND " + sField2 + " = '" + sCodNURCAT + "' " +
+					" AND " + sField3 + " = '" + sCodCOSBAC + "' )");
 
 			rs = pstmt.executeQuery();
 			

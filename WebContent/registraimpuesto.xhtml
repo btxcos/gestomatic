@@ -61,7 +61,7 @@
 														<p:inputText id="COACES" value="#{GestorImpuestosRecursos.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Comprobar" update="msgs, popup, panel" actionListener="#{GestorImpuestosRecursos.comprobarActivo}"/>	
+													<p:commandButton value="Cargar Referencia" update="msgs, popup, panel" actionListener="#{GestorImpuestosRecursos.cargarReferencia}"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar un activo" update="COACES, NURCAT, form:activos" oncomplete="dlgBuscar.show()"/>		
@@ -130,7 +130,7 @@
 											<p:message for="BIRESO" display="icon"/>
 
 											<h:outputText for="COTEXA" value="COTEXA: " />
-											<p:inputText id="COTEXA" value="#{GestorImpuestosRecursos.sCOTEXA}" size="10" maxlength="10">
+											<p:inputText id="COTEXA" value="#{GestorImpuestosRecursos.sCOTEXA}" size="10" maxlength="10" disabled="true">
 											</p:inputText>
 
 										</h:panelGrid>

@@ -147,7 +147,7 @@ public class GestorImpuestosRecursos implements Serializable
 		
 		int iSalida = CLImpuestos.registraMovimiento(movimiento);
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
+		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
 		
 		switch (iSalida) 
 		{
@@ -312,6 +312,18 @@ public class GestorImpuestosRecursos implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		case -805: //Error 805 - fecha de resolucion es invalida
+			sMsg = "ERROR:805 - La fecha de resolucion es invalida. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -806: //Error 806 - fecha de devolucion es invalida
+			sMsg = "ERROR:806 -  La fecha de devolucion es invalida. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
 		case -900: //Error 900 - al crear un movimiento
 			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
@@ -351,7 +363,7 @@ public class GestorImpuestosRecursos implements Serializable
 		}
 		
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
+		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
@@ -365,7 +377,7 @@ public class GestorImpuestosRecursos implements Serializable
     	
 
     	this.sCOACES  = activoseleccionado.getCOACES();
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
     	
     	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
     	{
@@ -377,8 +389,8 @@ public class GestorImpuestosRecursos implements Serializable
     	
     		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
     	
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
     	}
 
 		
@@ -400,11 +412,11 @@ public class GestorImpuestosRecursos implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
 		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 
 		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		
@@ -412,25 +424,25 @@ public class GestorImpuestosRecursos implements Serializable
 		
 	}
 	
-	public void comprobarActivo(ActionEvent actionEvent)
+	public void cargarReferencia(ActionEvent actionEvent)
 	{
-		String sMethod = "comprobarCOACES";
+		String sMethod = "cargarReferencia";
 		
 		
 		FacesMessage msg;
 		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
     	
     	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
     	{
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
+    		Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
     		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
     	}
     	else
 		{
     		
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
 
 			msg = new FacesMessage("Encontrada referencia para el activo '"+sCOACES.toUpperCase()+"'.",null);
 		}

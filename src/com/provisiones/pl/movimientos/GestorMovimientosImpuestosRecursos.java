@@ -125,26 +125,27 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		FacesMessage msg;
 
 		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
     	
-    	if (!sNURCAT.equals("") && !CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+
+    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
 		{
     		
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
 
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando impuestos...");
+    		Utils.debugTrace(true, sClassName, sMethod, "Buscando impuestos...");
     		
     		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(sCOACES.toUpperCase());
     		
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.");
+    		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.");
 
     		msg = new FacesMessage("Encontrados "+getTablaimpuestos().size()+" impuestos relacionadas.");
     		
 		}
     	else
     	{
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
+    		Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
     		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
         }
     	
@@ -175,7 +176,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
     	
     	
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Impuesto seleccionado: |"+sCOSBAC+"|"+sDesCOSBAC+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "Impuesto seleccionado: |"+sCOSBAC+"|"+sDesCOSBAC+"|");
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
@@ -218,12 +219,12 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		
 		int iSalida = CLImpuestos.registraMovimiento(movimiento);
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
+		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
 		
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			sMsg = "El impuesto o recurso se ha creado correctamente.";
+			sMsg = "El movimiento se ha registrado correctamente.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(sMsg,null);
 			break;
@@ -383,6 +384,18 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		case -805: //Error 805 - fecha de resolucion es invalida
+			sMsg = "ERROR:805 - La fecha de resolucion es invalida. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -806: //Error 806 - fecha de devolucion es invalida
+			sMsg = "ERROR:806 -  La fecha de devolucion es invalida. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
 		case -900: //Error 900 - al crear un movimiento
 			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
@@ -422,7 +435,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		}
 		
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
+		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
@@ -436,7 +449,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
     	
 
     	this.sCOACES  = activoseleccionado.getCOACES();
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
     	
     	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
     	{
@@ -448,8 +461,8 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
     	
     		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
     	
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
     	}
 
 		
@@ -471,11 +484,11 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
 		this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(buscaactivos));
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 
 		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		

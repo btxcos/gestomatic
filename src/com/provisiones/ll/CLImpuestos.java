@@ -7,6 +7,7 @@ import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.ImpuestoRecurso;
@@ -62,8 +63,8 @@ public class CLImpuestos
 		}
 		else 
 		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
+			Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
+			Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
 			System.out.println("No Information Found");
 		}
 		
@@ -74,7 +75,7 @@ public class CLImpuestos
 	{
 		String sMethod = "convierteImpuestoenMovimiento";
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
 		
 		return new MovimientoImpuestoRecurso(
 				ValoresDefecto.DEF_E3_CODTRN,
@@ -107,7 +108,7 @@ public class CLImpuestos
 	{
 		String sMethod = "convierteMovimientoenImpuesto";
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
 		
 		return new ImpuestoRecurso(
 				movimiento.getNURCAT(),
@@ -143,12 +144,14 @@ public class CLImpuestos
 		
 		int iCodigo = 0;
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Comprobando estado...");
+		Utils.debugTrace(true, sClassName, sMethod, "Comprobando estado...");
 		
 		String sEstado = QMImpuestos.getEstado(movimiento.getNURCAT(),movimiento.getCOSBAC());
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
+		movimiento.pintaMovimientoImpuestoRecurso();
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
 		
 		if (movimiento.getCOACCI().equals(""))
 		{
@@ -170,17 +173,27 @@ public class CLImpuestos
 			//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 			iCodigo = -54;
 		}
-		else if (movimiento.getFEPRRE().equals(""))
+		else if (movimiento.getFEPRRE().equals("#") || movimiento.getFEPRRE().equals("0"))
 		{
 			//Error 055 - LA FECHA PRESENTACION DE RECURSO DEBE SER LOGICA Y OBLIGATORIA
 			iCodigo = -55;
+		}
+		else if (movimiento.getFERERE().equals("#"))
+		{
+			//Error fecha de resolucion invalida
+			iCodigo = -805;
+		}
+		else if (movimiento.getFEDEIN().equals("#"))
+		{
+			//Error fecha de devolucion invalida
+			iCodigo = -806;
 		}
 		else if (movimiento.getCOACCI().equals("A") && !CLReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
 		{
 			//Error 061 - NO SE PUEDE REALIZAR EL ALTA PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
 			iCodigo = -61;
 		}
-		else if (movimiento.getBISODE().equals(""))
+		else if (movimiento.getBISODE().equals("#"))
 		{
 			//Error 062 - INDICADOR SOLICITUD DEVOLUCION DEBE SER 'S' O 'N'
 			iCodigo = -62;
@@ -205,62 +218,62 @@ public class CLImpuestos
 			//Error 068 - NO SE PUEDE ELIMINAR PORQUE NO EXISTE REGISTRO EN GMAE57
 			iCodigo = -68;
 		}		
-		else if (!movimiento.getFEPRRE().equals("") && !movimiento.getBIRESO().equals("") && movimiento.getFERERE().equals(""))
+		else if (!movimiento.getFEPRRE().equals("0") && !movimiento.getBIRESO().equals("#") && movimiento.getFERERE().equals("0"))
 		{
 			//Error 101 - TIENE F.PRESENTACION, TIPO RESOLUCION Y NO F.RESOLUCION
 			iCodigo = -101;
 		}
-		else if (!movimiento.getFEPRRE().equals("") && !movimiento.getFERERE().equals("") && movimiento.getBIRESO().equals("") )
+		else if (!movimiento.getFEPRRE().equals("0") && !movimiento.getFERERE().equals("0") && movimiento.getBIRESO().equals("#") )
 		{
 			//Error 102 - TIENE F.PRESENTACION, F.RESOLUCION Y NO TIPO RESOLUCION
 			iCodigo = -102;
 		}
-		else if (movimiento.getFEPRRE().equals("") && !movimiento.getBIRESO().equals("") )
+		else if (movimiento.getFEPRRE().equals("0") && !movimiento.getBIRESO().equals("#") )
 		{
 			//Error 103 - NO TIENE F.PRESENTACION Y SI TIPO RESOLUCION
 			iCodigo = -103;
 		}
-		/*(REVISAR)*/else if (movimiento.getFEPRRE().equals("") && !movimiento.getBIRESO().equals("") && !movimiento.getFERERE().equals(""))
+		/*(REVISAR)*/else if (movimiento.getFEPRRE().equals("0") && !movimiento.getBIRESO().equals("#") && !movimiento.getFERERE().equals("0"))
 		{
 			//Error 104 - NO TIENE F.PRESENTACION, TIPO RESOLUCION Y SI F.RESOLUCION
 			iCodigo = -104;
 		}
-		else if (movimiento.getBISODE().equals("") && !movimiento.getFEDEIN().equals("") )
+		else if (movimiento.getBISODE().equals("#") && !movimiento.getFEDEIN().equals("0") )
 		{
 			//Error 105 - NO TIENE S.DEVOLUCION, Y SI F.DEVOLUCION
 			iCodigo = -105;
 		}		
-		else if (movimiento.getFEPRRE().equals("") && !movimiento.getFEDEIN().equals("") )
+		else if (movimiento.getFEPRRE().equals("0") && !movimiento.getFEDEIN().equals("0") )
 		{
 			//Error 106 - NO TIENE F.PRESENTACION, Y SI F.DEVOLUCION
 			iCodigo = -106;
 		}			
-		else if (movimiento.getBIRESO().equals("") && !movimiento.getFEDEIN().equals("") )
+		else if (movimiento.getBIRESO().equals("#") && !movimiento.getFEDEIN().equals("0") )
 		{
 			//Error 107 - NO TIENE TIPO RESOLUCION, Y SI F.DEVOLUCION
 			iCodigo = -107;
 		}		
-		else if (movimiento.getFEPRRE().equals("") && !movimiento.getBISODE().equals("") )
+		else if (movimiento.getFEPRRE().equals("0") && !movimiento.getBISODE().equals("#") )
 		{
 			//Error 108 - NO TIENE F.PRESENTACION, Y SI S.DEVOLUCION
 			iCodigo = -108;
 		}		
-		else if (movimiento.getBIRESO().equals("D") && !movimiento.getFEDEIN().equals("") )
+		else if (movimiento.getBIRESO().equals("D") && !movimiento.getFEDEIN().equals("0") )
 		{
 			//Error 109 - EL TIPO RESOLUCION ES DESFAVORABLE Y TIENE F.DEVOLUCION
 			iCodigo = -109;
 		}
-		else if (!movimiento.getFERERE().equals("") && !movimiento.getFEPRRE().equals("") && (Integer.parseInt(movimiento.getFERERE()) < Integer.parseInt(movimiento.getFEPRRE())))
+		else if (!movimiento.getFERERE().equals("0") && !movimiento.getFEPRRE().equals("0") && (Integer.parseInt(movimiento.getFERERE()) < Integer.parseInt(movimiento.getFEPRRE())))
 		{
 			//Error 110 - LA F.RESOLUCION ES MENOR A LA F.PRESENTACION
 			iCodigo = -110;
 		}
-		else if (!movimiento.getFEDEIN().equals("") && !movimiento.getFEPRRE().equals("") && (Integer.parseInt(movimiento.getFEDEIN()) < Integer.parseInt(movimiento.getFEPRRE())))
+		else if (!movimiento.getFEDEIN().equals("0") && !movimiento.getFEPRRE().equals("0") && (Integer.parseInt(movimiento.getFEDEIN()) < Integer.parseInt(movimiento.getFEPRRE())))
 		{
 			//Error 111 - LA F.DEVOLUCION ES MENOR A LA F.PRESENTACION
 			iCodigo = -111;
 		}
-		else if (!movimiento.getFEDEIN().equals("") && !movimiento.getFERERE().equals("") && (Integer.parseInt(movimiento.getFEDEIN()) < Integer.parseInt(movimiento.getFERERE())))
+		else if (!movimiento.getFEDEIN().equals("0") && !movimiento.getFERERE().equals("0") && (Integer.parseInt(movimiento.getFEDEIN()) < Integer.parseInt(movimiento.getFERERE())))
 		{
 			//Error 112 - LA F.DEVOLUCION ES MENOR A LA F.RESOLUCION
 			iCodigo = -112;
@@ -307,13 +320,13 @@ public class CLImpuestos
 						case A:
 							ImpuestoRecurso impuestodealta = convierteMovimientoenImpuesto(movimiento_revisado);
 
-							com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la referencia...");
+							Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la referencia...");
 							impuestodealta.pintaImpuestoRecurso();
 						
 							if (QMImpuestos.addImpuesto(impuestodealta))
 							{
 								//OK - impuesto creado
-								com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
+								Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
 								if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
 								{
 									//OK 
@@ -407,7 +420,7 @@ public class CLImpuestos
 		
 		MovimientoImpuestoRecurso movimiento_revisado = new MovimientoImpuestoRecurso("","0","0","","0","0","","0","0","0","","0","","0","","0","","#","","#","0","","","");
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Revisando Accion: |"+movimiento.getCOACCI()+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "Revisando Accion: |"+movimiento.getCOACCI()+"|");
 		
 		movimiento_revisado.setCODTRN(movimiento.getCODTRN());
 		movimiento_revisado.setCOTDOR(movimiento.getCOTDOR());
@@ -604,7 +617,7 @@ public class CLImpuestos
 
 		
 
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Revisado! Nuevo movimiento:");
+		Utils.debugTrace(true, sClassName, sMethod, "Revisado! Nuevo movimiento:");
 		movimiento_revisado.pintaMovimientoImpuestoRecurso();
 		
 		return movimiento_revisado;
