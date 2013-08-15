@@ -184,7 +184,7 @@ public class CLCuotas
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
-		else if (!QMActivos.existeActivo(movimiento.getCOACES()) && !movimiento.getCOACCI().equals("B"))
+		else if (!QMActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
@@ -193,6 +193,11 @@ public class CLCuotas
 		{
 			//Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO O NULO
 			iCodigo = -4;
+		}
+		else if (movimiento.getCOSBAC().equals(""))
+		{
+			//Error 032 - EL SUBTIPO DE ACCION NO EXISTE
+			iCodigo = -32;
 		}
 		else if (movimiento.getFIPAGO().equals("#") || movimiento.getFIPAGO().equals("0"))
 		{

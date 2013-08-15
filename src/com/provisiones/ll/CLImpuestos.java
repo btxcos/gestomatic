@@ -2,6 +2,7 @@ package com.provisiones.ll;
 
 import java.util.ArrayList;
 
+import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
@@ -130,6 +131,10 @@ public class CLImpuestos
 		return QMListaImpuestos.buscaImpuestosActivo(sCodCOACES);
 	}
 	
+	public static boolean existeRelacionImpuesto (String sCodCOACES,String sCodNURCAT,String sCodCOSBAC)
+	{
+		return QMListaImpuestos.existeRelacionImpuesto(sCodCOACES, sCodNURCAT, sCodCOSBAC);
+	}	
 	
 	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento)
 	{
@@ -145,43 +150,144 @@ public class CLImpuestos
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
 		
-		if (movimiento.getNURCAT().equals(""))
+		if (movimiento.getCOACCI().equals(""))
 		{
-			//error nurcat sin informar
+			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
-		if (movimiento.getCOSBAC().equals(""))
+		else if (!QMActivos.existeActivo(movimiento.getCOACES()))
 		{
-			//error nurcat sin informar
-			iCodigo = -2;
-		}
-		else if (movimiento.getCOACCI().equals(""))
-		{
-			//error accion vacia
+			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
 		}
+		else if (movimiento.getCOSBAC().equals(""))
+		{
+			//Error 032 - EL SUBTIPO DE ACCION NO EXISTE
+			iCodigo = -32;
+		}
+		else if (movimiento.getNURCAT().equals(""))
+		{
+			//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
+			iCodigo = -54;
+		}
+		else if (movimiento.getFEPRRE().equals(""))
+		{
+			//Error 055 - LA FECHA PRESENTACION DE RECURSO DEBE SER LOGICA Y OBLIGATORIA
+			iCodigo = -55;
+		}
+		else if (movimiento.getCOACCI().equals("A") && !CLReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
+		{
+			//Error 061 - NO SE PUEDE REALIZAR EL ALTA PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
+			iCodigo = -61;
+		}
+		else if (movimiento.getBISODE().equals(""))
+		{
+			//Error 062 - INDICADOR SOLICITUD DEVOLUCION DEBE SER 'S' O 'N'
+			iCodigo = -62;
+		}		
+		else if (movimiento.getCOACCI().equals("A") && existeRelacionImpuesto(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
+		{
+			//Error 064 - NO SE PUEDE REALIZAR EL ALTA PORQUE YA EXISTE EL REGISTRO EN GMAE57
+			iCodigo = -64;
+		}
+		else if (movimiento.getCOACCI().equals("M") && !existeRelacionImpuesto(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
+		{
+			//Error 066 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE EL REGISTRO EN GMAE57
+			iCodigo = -66;
+		}
+		else if (movimiento.getCOACCI().equals("M") && !CLReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
+		{
+			//Error 067 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
+			iCodigo = -67;
+		}
+		else if (movimiento.getCOACCI().equals("B") && !existeRelacionImpuesto(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
+		{
+			//Error 068 - NO SE PUEDE ELIMINAR PORQUE NO EXISTE REGISTRO EN GMAE57
+			iCodigo = -68;
+		}		
+		else if (!movimiento.getFEPRRE().equals("") && !movimiento.getBIRESO().equals("") && movimiento.getFERERE().equals(""))
+		{
+			//Error 101 - TIENE F.PRESENTACION, TIPO RESOLUCION Y NO F.RESOLUCION
+			iCodigo = -101;
+		}
+		else if (!movimiento.getFEPRRE().equals("") && !movimiento.getFERERE().equals("") && movimiento.getBIRESO().equals("") )
+		{
+			//Error 102 - TIENE F.PRESENTACION, F.RESOLUCION Y NO TIPO RESOLUCION
+			iCodigo = -102;
+		}
+		else if (movimiento.getFEPRRE().equals("") && !movimiento.getBIRESO().equals("") )
+		{
+			//Error 103 - NO TIENE F.PRESENTACION Y SI TIPO RESOLUCION
+			iCodigo = -103;
+		}
+		/*(REVISAR)*/else if (movimiento.getFEPRRE().equals("") && !movimiento.getBIRESO().equals("") && !movimiento.getFERERE().equals(""))
+		{
+			//Error 104 - NO TIENE F.PRESENTACION, TIPO RESOLUCION Y SI F.RESOLUCION
+			iCodigo = -104;
+		}
+		else if (movimiento.getBISODE().equals("") && !movimiento.getFEDEIN().equals("") )
+		{
+			//Error 105 - NO TIENE S.DEVOLUCION, Y SI F.DEVOLUCION
+			iCodigo = -105;
+		}		
+		else if (movimiento.getFEPRRE().equals("") && !movimiento.getFEDEIN().equals("") )
+		{
+			//Error 106 - NO TIENE F.PRESENTACION, Y SI F.DEVOLUCION
+			iCodigo = -106;
+		}			
+		else if (movimiento.getBIRESO().equals("") && !movimiento.getFEDEIN().equals("") )
+		{
+			//Error 107 - NO TIENE TIPO RESOLUCION, Y SI F.DEVOLUCION
+			iCodigo = -107;
+		}		
+		else if (movimiento.getFEPRRE().equals("") && !movimiento.getBISODE().equals("") )
+		{
+			//Error 108 - NO TIENE F.PRESENTACION, Y SI S.DEVOLUCION
+			iCodigo = -108;
+		}		
+		else if (movimiento.getBIRESO().equals("D") && !movimiento.getFEDEIN().equals("") )
+		{
+			//Error 109 - EL TIPO RESOLUCION ES DESFAVORABLE Y TIENE F.DEVOLUCION
+			iCodigo = -109;
+		}
+		else if (!movimiento.getFERERE().equals("") && !movimiento.getFEPRRE().equals("") && (Integer.parseInt(movimiento.getFERERE()) < Integer.parseInt(movimiento.getFEPRRE())))
+		{
+			//Error 110 - LA F.RESOLUCION ES MENOR A LA F.PRESENTACION
+			iCodigo = -110;
+		}
+		else if (!movimiento.getFEDEIN().equals("") && !movimiento.getFEPRRE().equals("") && (Integer.parseInt(movimiento.getFEDEIN()) < Integer.parseInt(movimiento.getFEPRRE())))
+		{
+			//Error 111 - LA F.DEVOLUCION ES MENOR A LA F.PRESENTACION
+			iCodigo = -111;
+		}
+		else if (!movimiento.getFEDEIN().equals("") && !movimiento.getFERERE().equals("") && (Integer.parseInt(movimiento.getFEDEIN()) < Integer.parseInt(movimiento.getFERERE())))
+		{
+			//Error 112 - LA F.DEVOLUCION ES MENOR A LA F.RESOLUCION
+			iCodigo = -112;
+		}		
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
 		{
 			//error alta de una referencia en alta
-			iCodigo = -4;
+			iCodigo = -801;
+		}
+		else if (sEstado.equals("B") && !movimiento.getCOACCI().equals("A"))
+		{
+			//error referencia de baja no recibe altas
+			iCodigo = -802;
 		}
 		else if (sEstado.equals("") && !movimiento.getCOACCI().equals("A"))
 		{
 			//error estado no disponible
-			iCodigo = -5;
+			iCodigo = -803;
 		}		
-		else if (sEstado.equals("B") && !movimiento.getCOACCI().equals("A"))
-		{
-			//error referencia de baja no recibe altas
-			iCodigo = -6;
-		}
+
 		else
 		{
 			MovimientoImpuestoRecurso movimiento_revisado = revisaMovimiento(movimiento);
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
 				//error modificacion sin cambios
-				iCodigo = -7;	
+				iCodigo = -804;	
 			}
 			else
 			{
@@ -190,7 +296,7 @@ public class CLImpuestos
 				if (indice == 0)
 				{
 					//error al crear un movimiento
-					iCodigo = -7;
+					iCodigo = -900;
 				}
 				else
 				{	
@@ -206,7 +312,7 @@ public class CLImpuestos
 						
 							if (QMImpuestos.addImpuesto(impuestodealta))
 							{
-								//OK - Cuota creada
+								//OK - impuesto creado
 								com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
 								if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
 								{
@@ -215,17 +321,17 @@ public class CLImpuestos
 								}
 								else
 								{
-									//error relacion cuota no creada - Rollback
+									//error relacion impuesto no creada - Rollback
 									QMImpuestos.delImpuestoRecurso(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC());
 									QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
-									iCodigo = -12;
+									iCodigo = -902;
 								}
 							}
 							else
 							{
-								//error cuota no creada - Rollback
+								//error impuesto no creada - Rollback
 								QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
-								iCodigo = -11;
+								iCodigo = -901;
 							}
 							break;
 						case B:
@@ -242,15 +348,15 @@ public class CLImpuestos
 									//error estado no establecido - Rollback
 									QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
 									QMListaImpuestos.delRelacionImpuestos(Integer.toString(indice));
-									iCodigo = -13;
+									iCodigo = -903;
 								}
 	
 							}
 							else
 							{
-								//error relacion cuota no creada - Rollback
+								//error relacion impuesto no creada - Rollback
 								QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
-								iCodigo = -12;
+								iCodigo = -902;
 							}
 							break;
 						case M:
@@ -264,17 +370,18 @@ public class CLImpuestos
 								}
 								else
 								{
+									//error modificacion impuesto - Rollback
 									QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
 									QMListaImpuestos.delRelacionImpuestos(Integer.toString(indice));
-									iCodigo = -12;						
+									iCodigo = -904;						
 								}
 
 							}
 							else
 							{
-								//error relacion cuota no creada - Rollback
+								//error relacion impuesto no creada - Rollback
 								QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
-								iCodigo = -12;
+								iCodigo = -902;
 							}
 							break;
 						default:

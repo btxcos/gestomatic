@@ -30,7 +30,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private String sNURCAT = "";
 	private String sTIRCAT = "";
 	private String sENEMIS = "";
-	private String sCOTEXA = "";
+	private String sCOTEXA = ValoresDefecto.DEF_COTEXA;
 	private String sOBTEXC = "";
 	
 	private String sOBDEER = "";
@@ -69,11 +69,11 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
 		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 
 		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		
@@ -81,7 +81,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 	}
 	
-	public void comprobarActivoMovimiento(ActionEvent actionEvent)
+	public void cargaReferencia(ActionEvent actionEvent)
 	{
 		String sMethod = "comprobarCOACES";
 		
@@ -89,25 +89,26 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 		FacesMessage msg;
 		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralListada(sCOACES);
+    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
     	
   	
     	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
     	{
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
+    		Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
     		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
     	}
     	else
 		{
+    		
     		ReferenciaCatastral referencia = CLReferencias.buscaReferencia(sNURCAT);
    
     		this.sTIRCAT = referencia.getTIRCAT();
     		this.sENEMIS = referencia.getENEMIS();
-    		this.sCOTEXA = referencia.getCOTEXA();
+    		//this.sCOTEXA = referencia.getCOTEXA();
     		this.sOBTEXC = referencia.getOBTEXC();
     		
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
 
 			msg = new FacesMessage("Encontrada referencia para el activo '"+sCOACES.toUpperCase()+"'.",null);
 		}
@@ -146,7 +147,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
         this.sNURCAT = "";
         this.sTIRCAT = "";
         this.sENEMIS = "";
-        this.sCOTEXA = "";
+        //this.sCOTEXA = "";
         this.sOBTEXC = "";
 	}
     
@@ -188,13 +189,13 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     		   
     		this.sTIRCAT = referencia.getTIRCAT();
     		this.sENEMIS = referencia.getENEMIS();
-    		this.sCOTEXA = referencia.getCOTEXA();
+    		//this.sCOTEXA = referencia.getCOTEXA();
     		this.sOBTEXC = referencia.getOBTEXC();
     	
     		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
     	
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
     	}
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -228,75 +229,131 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 		FacesMessage msg;
 		
+		String sMsg = "";
+		
 		int iSalida = CLReferencias.registraMovimiento(movimiento);
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
+		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
 		
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La referencia catastral se ha modificado correctamente.");
-			msg = new FacesMessage("La referencia catastral se ha modificado correctamente.");
-			break;
-		case -1: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El Numero de referencia catastral no ha sido informado. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El Numero de referencia catastral no ha sido informado. Por favor, revise los datos.",null);
-			break;
-		case -2: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear la referencia, se ha realizado una accion no permitida. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la referencia, se ha realizado una accion no permitida. Por favor, revise los datos.",null);
-			break;
-		case -3: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear la referencia, ya esta dada de alta. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la referencia, ya esta dada de alta. Por favor, revise los datos.",null);
-			break;
-			
-		case -4: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al consultar la referencia asociada, su estado es desconocido. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al consultar la referencia asociada, su estado es desconocido. Por favor, revise los datos.",null);
-			break;
- 		case -5: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error, la referencia asociada esta dada de baja. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, la referencia asociada esta dada de baja. Por favor, revise los datos.",null);
+			sMsg = "El movimiento se ha registrado correctamente.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg,null);
 			break;
 
-		case -6: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La modificacion solicitada no incluye cambios. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La modificacion solicitada no incluye cambios. Por favor, revise los datos.",null);
+		case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
+			sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -7: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear el momiviento de cuota. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear el momiviento de cuota. Por favor, revise los datos.",null);
+
+		case -3: //Error 003 - NO EXISTE EL ACTIVO
+			sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		/*case -7: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la cuota. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la cuota. Por favor, revise los datos.",null);
-			break;*/
-		case -8: //Error COACCI = "";
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear una relaccion de cuotas. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear una relaccion de cuotas. Por favor, revise los datos.",null);
-			break;//"Error al registrar el movimiento, no hay motivo del cambio. Por favor, revise los datos."
+
+		case -49: //Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
+			sMsg = "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -50: //Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
+			sMsg = "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;			
+
+		case -51: //Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
+			sMsg = "ERROR:051 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -52: //Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
+			sMsg = "ERROR:052 - El titular catastral es obligatorio. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 			
-		/*case -9: //Error COACCI = "";
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al registrar el movimiento, no se ha producido cambios en la comunidad. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al registrar el movimiento, no se ha producido cambios en la comunidad. Por favor, revise los datos.",null);
+		case -53: //Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
+			sMsg = "ERROR:053 - Existen recursos o impuestos pendientes de esta referencia. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -11: //Error con rollback
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al actualizar el estado de la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al actualizar el estado de la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
+			
+		case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
+			sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -12: //Error con rollback
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la relaccion de movimientos para '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la relaccion de movimientos para '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
-			break;*/
+			
+		case -801: //Error 801 - alta de una referencia en alta
+			sMsg = "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -802: //Error 802 - referencia catastral de baja no puede recibir mas movimientos
+			sMsg = "ERROR:802 - La referencia catastral esta baja y no puede recibir mas movimientos. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -803: //Error 803 - estado no disponible
+			sMsg = "ERROR:803 - El estado de la referencia catastral informada no esta disponible. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -804: //Error 804 - modificacion sin cambios
+			sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -900: //Error 900 - al crear un movimiento
+			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -901: //Error 901 - error y rollback - error al crear la cuota
+			sMsg = "ERROR:901 - Se ha producido un error al registrar la referencia catastral. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+			
+		case -902: //Error 902 - error y rollback - error al registrar la relaccion
+			sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -903: //Error 903 - error y rollback - error al cambiar el estado
+			sMsg = "ERROR:903 - Se ha producido un error al cambiar el estado de la referencia catastral. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -904: //Error 904 - error y rollback - error al modificar la cuota
+			sMsg = "ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
 		default: //error generico
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El cambio solicitado ha producido un error desconocido. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El cambio solicitado ha producido un error desconocido. Por favor, revise los datos.",null);
+			sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
 			break;
 		}
 		
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
+		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}

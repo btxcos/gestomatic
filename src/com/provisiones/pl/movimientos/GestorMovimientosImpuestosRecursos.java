@@ -36,7 +36,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	private String sFEDEIN = "";
 	private String sBISODE = "";
 	private String sBIRESO = "";
-	private String sCOTEXA = "0000000000";
+	private String sCOTEXA = ValoresDefecto.DEF_COTEXA;
 	private String sOBTEXC = "";
 	
 	private String sDesCOSBAC = "";
@@ -101,7 +101,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
         this.sFEDEIN = "";
         this.sBISODE = "";
         this.sBIRESO = "";
-        this.sCOTEXA = "";
+        //this.sCOTEXA = "";
         this.sOBTEXC = "";
 	}
     
@@ -214,6 +214,8 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		
 		FacesMessage msg;
 		
+		String sMsg = "";
+		
 		int iSalida = CLImpuestos.registraMovimiento(movimiento);
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
@@ -221,63 +223,201 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La cuota se ha creado correctamente.");
-			msg = new FacesMessage("La cuota se ha creado correctamente.");
-			break;
-		case -1: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El Numero de referencia catastral no ha sido informado. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El Numero de referencia catastral no ha sido informado. Por favor, revise los datos.",null);
-			break;
-		case -2: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear la referencia, se ha realizado una accion no permitida. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la referencia, se ha realizado una accion no permitida. Por favor, revise los datos.",null);
-			break;
-		case -3: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear la referencia, ya esta dada de alta. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear la referencia, ya esta dada de alta. Por favor, revise los datos.",null);
-			break;
-			
-		case -4: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al consultar la referencia asociada, su estado es desconocido. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al consultar la referencia asociada, su estado es desconocido. Por favor, revise los datos.",null);
-			break;
- 		case -5: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error, la referencia asociada esta dada de baja. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, la referencia asociada esta dada de baja. Por favor, revise los datos.",null);
+			sMsg = "El impuesto o recurso se ha creado correctamente.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg,null);
 			break;
 
-		case -6: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La modificacion solicitada no incluye cambios. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La modificacion solicitada no incluye cambios. Por favor, revise los datos.",null);
+		case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
+			sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -7: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear el momiviento de cuota. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear el momiviento de cuota. Por favor, revise los datos.",null);
+
+		case -3: //Error 003 - NO EXISTE EL ACTIVO
+			sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		/*case -7: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la cuota. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la cuota. Por favor, revise los datos.",null);
-			break;*/
-		case -8: //Error COACCI = "";
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al crear una relaccion de cuotas. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al crear una relaccion de cuotas. Por favor, revise los datos.",null);
-			break;//"Error al registrar el movimiento, no hay motivo del cambio. Por favor, revise los datos."
+
+		case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
+			sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -55: //Error 055 - LA FECHA PRESENTACION DE RECURSO DEBE SER LOGICA Y OBLIGATORIA
+			sMsg = "ERROR:055 - La fecha de presentacion de recurso es obligatoria.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;			
+
+		case -61: //Error 061 - NO SE PUEDE REALIZAR EL ALTA PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
+			sMsg = "ERROR:061 - La referencia catastral proporcionada no se encuentra registrada.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -62: //Error 062 - INDICADOR SOLICITUD DEVOLUCION DEBE SER 'S' O 'N'
+			sMsg = "ERROR:062 - El indicador de solicitud de devolucion es obligatorio.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 			
-		/*case -9: //Error COACCI = "";
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al registrar el movimiento, no se ha producido cambios en la comunidad. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al registrar el movimiento, no se ha producido cambios en la comunidad. Por favor, revise los datos.",null);
+		case -64: //Error 064 - NO SE PUEDE REALIZAR EL ALTA PORQUE YA EXISTE EL REGISTRO EN GMAE57
+			sMsg = "ERROR:064 - El recurso o impuesto ya se encuentra registrado. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -11: //Error con rollback
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al actualizar el estado de la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al actualizar el estado de la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
+			
+		case -66: //Error 066 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE EL REGISTRO EN GMAE57
+			sMsg = "ERROR:066 - El recurso o impuesto no se encuentra registrado. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -12: //Error con rollback
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la relaccion de movimientos para '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la relaccion de movimientos para '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
-			break;*/
+			
+		case -67: //Error 067 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
+			sMsg = "ERROR:067 - La referencia catrastral no se encuentra registrada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -68: //Error 068 - NO SE PUEDE ELIMINAR PORQUE NO EXISTE REGISTRO EN GMAE57
+			sMsg = "ERROR:068 - El recurso o impuesto no se encuentra registrado. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -101: //Error 101 - TIENE F.PRESENTACION, TIPO RESOLUCION Y NO F.RESOLUCION
+			sMsg = "ERROR:101 - El recurso o impuesto tiene informada la fecha de resolucion, el tipo de resolucion pero no la fecha de resolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -102: //Error 102 - TIENE F.PRESENTACION, F.RESOLUCION Y NO TIPO RESOLUCION
+			sMsg = "ERROR:102 - El recurso o impuesto tiene informada la fecha de presentacion, la fecha de resolucion pero no el tipo de resolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -103: //Error 103 - NO TIENE F.PRESENTACION Y SI TIPO RESOLUCION
+			sMsg = "ERROR:103 - El recurso o impuesto no tiene informada la fecha de presentacion pero si el tipo de resolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -104: //Error 104 - NO TIENE F.PRESENTACION, TIPO RESOLUCION Y SI F.RESOLUCION
+			sMsg = "ERROR:104 - El recurso o impuesto no tiene informada la fecha de presentacion pero si el tipo de resolucion y fecha de resolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -105: //Error 105 - NO TIENE S.DEVOLUCION, Y SI F.DEVOLUCION
+			sMsg = "ERROR:105 - El recurso o impuesto no tiene informado el indicador de devolucion pero si la fecha de devolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -106: //Error 106 - NO TIENE F.PRESENTACION, Y SI F.DEVOLUCION
+			sMsg = "ERROR:106 - El recurso o impuesto no tiene informada la fecha de presentacion pero si la fecha de devolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -107: //Error 107 - NO TIENE TIPO RESOLUCION, Y SI F.DEVOLUCION
+			sMsg = "ERROR:107 - El recurso o impuesto no tiene informado el tipo de resolucion pero si la fecha de devolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -108: //Error 108 - NO TIENE F.PRESENTACION, Y SI S.DEVOLUCION
+			sMsg = "ERROR:108 - El recurso o impuesto no tiene informada la fecha de presentacion pero si el indicador de devolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -109: //Error 109 - EL TIPO RESOLUCION ES DESFAVORABLE Y TIENE F.DEVOLUCION
+			sMsg = "ERROR:109 - El tipo de resolucion es 'DESFAVORABLE' y tiene informada la fecha de devolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -110: //Error 110 - LA F.RESOLUCION ES MENOR A LA F.PRESENTACION
+			sMsg = "ERROR:110 - La fecha de resolucion es anterior a la fecha de presentacion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -111: //Error 111 - LA F.DEVOLUCION ES MENOR A LA F.PRESENTACION
+			sMsg = "ERROR:111 - La fecha de devolucion es anterior a la fecha de presentacion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -112: //Error 112 - LA F.DEVOLUCION ES MENOR A LA F.RESOLUCION
+			sMsg = "ERROR:112 - La fecha de devolucion es anterior a la fecha de resolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -801: //Error 801 - alta de un impuesto/recurso en alta
+			sMsg = "ERROR:801 - El impuesto o recurso ya esta dada de alta. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -802: //Error 802 - impuesto/recurso de baja no puede recibir mas movimientos
+			sMsg = "ERROR:802 - El impuesto o recurso esta baja y no puede recibir mas movimientos. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -803: //Error 803 - estado no disponible
+			sMsg = "ERROR:803 - El estado del impuesto o recurso informado no esta disponible. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -804: //Error 804 - modificacion sin cambios
+			sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -900: //Error 900 - al crear un movimiento
+			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -901: //Error 901 - error y rollback - error al crear el impuesto/recurso
+			sMsg = "ERROR:901 - Se ha producido un error al registrar el impuesto o recurso. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+			
+		case -902: //Error 902 - error y rollback - error al registrar la relaccion
+			sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -903: //Error 903 - error y rollback - error al cambiar el estado
+			sMsg = "ERROR:903 - Se ha producido un error al cambiar el estado del impuesto o recurso. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -904: //Error 904 - error y rollback - error al modificar el impuesto/recurso
+			sMsg = "ERROR:904 - Se ha producido un error al modificar el impuesto o recurso. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
 		default: //error generico
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El cambio solicitado ha producido un error desconocido. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El cambio solicitado ha producido un error desconocido. Por favor, revise los datos.",null);
+			sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
 			break;
 		}
 		
