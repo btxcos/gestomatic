@@ -27,7 +27,7 @@
 									</p:panel>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Limpiar Plantilla" type="reset" />
+											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorComunidades.limpiarPlantilla}" />
 											<p:commandButton value="Alta" update="panel, popup, msgs" actionListener="#{GestorComunidades.realizaAlta}" />
 										</h:panelGrid>
 									</p:fieldset>
@@ -176,7 +176,7 @@
 
 						</h:panelGrid>
 					</p:panel>
-					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
+					<p:dialog header="Activos sin Comunidad:" widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
 								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorComunidades.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
@@ -218,7 +218,7 @@
 									
 							</p:dataTable> 
 					</p:dialog>
-					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
+					<p:dialog header="Buscar Activos sin Comunidad" widgetVar="dlgBuscar" resizable="false">  
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >

@@ -114,7 +114,7 @@ public class QMListaComunidades
 		return bSalida;
 	}
 
-	public static boolean existeRelacionComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodMovimiento)
+	public static boolean existeComunidad(String sCodCOCLDO, String sCodNUDCOM)
 	{//pendiente de coaces, de la tabla activos
 		
 		String sMethod = "existeRelacionComunidad";
@@ -144,9 +144,7 @@ public class QMListaComunidades
 					" WHERE " +
 					"(" 
 					+ sField1 + " = '" + sCodCOCLDO + "' AND "
-					+ sField2 + " = '" + sCodNUDCOM + "' AND "
-					+ sField3 + " = '" + sCodMovimiento	+ 
-					"')");
+					+ sField2 + " = '" + sCodNUDCOM + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -173,7 +171,6 @@ public class QMListaComunidades
 		{
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

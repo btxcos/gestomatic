@@ -62,10 +62,10 @@
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorTablaComunidadActivo.sCOACES}" size="9" maxlength="9">
+														<p:inputText id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel" actionListener="#{GestorTablaComunidadActivo.altaActivoComunidad}"/>	
+													<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel" actionListener="#{GestorMovimientosComunidades.buscarComunidad}"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
@@ -77,7 +77,7 @@
 											<p:panel>
 												<h:panelGrid columns="8" cellpadding="5">
 													<h:outputText for="COCLDO" value="Documento: " />
-													<p:selectOneMenu id="COCLDO" value="#{GestorMovimientosComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
+													<p:selectOneMenu id="COCLDO" value="#{GestorMovimientosComunidades.sCOCLDO}">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
 														<f:validateLength minimum="1" /> 
@@ -85,7 +85,7 @@
 													<p:message for="COCLDO" display="icon"/>
 											
 													<h:outputText for="NUDCOM" value="Numero: " />
-														<p:inputText id="NUDCOM" value="#{GestorMovimientosComunidades.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
+														<p:inputText id="NUDCOM" value="#{GestorMovimientosComunidades.sNUDCOM}" size="10" maxlength="10">
 														</p:inputText>
 													<p:message for="NUDCOM" display="icon"/>
 													<p:commandButton value="Cargar" update="panel, msgs, popup" actionListener="#{GestorMovimientosComunidades.cargarComunidad}" />
@@ -185,14 +185,14 @@
 
 						</h:panelGrid>
 					</p:panel>
-					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
+					<p:dialog header="Activos con Comunidad: " widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
-								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorTablaComunidadActivo.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosComunidades.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
 							</p:contextMenu>  
 									
-							<p:dataTable id="activos" var="activo" value="#{GestorTablaComunidadActivo.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorTablaComunidadActivo.activoseleccionadoalta}" selectionMode="single">  
+							<p:dataTable id="activos" var="activo" value="#{GestorMovimientosComunidades.tablaactivos}" rowKey="#{activo.COACES}"  
+									              selection="#{GestorMovimientosComunidades.activoseleccionado}" selectionMode="single">  
 									
 								<p:column headerText="Codigo Activo">  
 								    #{activo.COACES}  
@@ -224,43 +224,43 @@
 									
 							</p:dataTable> 
 					</p:dialog>
-					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
+					<p:dialog header="Buscar Activos con Comunidad" widgetVar="dlgBuscar" resizable="false">  
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
-														<p:inputText id="NOPRAC" value="#{GestorTablaComunidadActivo.sNOPRAC}" size="18" maxlength="18">
+														<p:inputText id="NOPRAC" value="#{GestorMovimientosComunidades.sNOPRAC}" size="18" maxlength="18">
 														</p:inputText>
 													<p:message for="NOPRAC" display="icon"/>
 
 													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
-														<p:inputText id="NOMUIN" value="#{GestorTablaComunidadActivo.sNOMUIN}" size="30" maxlength="30">
+														<p:inputText id="NOMUIN" value="#{GestorMovimientosComunidades.sNOMUIN}" size="30" maxlength="30">
 														</p:inputText>
 													<p:message for="NOMUIN" display="icon"/>
 
 													<h:outputText for="COPOIN" value="Codigo Postal: " />
-														<p:inputText id="COPOIN" value="#{GestorTablaComunidadActivo.sCOPOIN}" size="5" maxlength="5">
+														<p:inputText id="COPOIN" value="#{GestorMovimientosComunidades.sCOPOIN}" size="5" maxlength="5">
 														</p:inputText>
 													<p:message for="COPOIN" display="icon"/>
 
 													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
-														<p:inputText id="NOVIAS" value="#{GestorTablaComunidadActivo.sNOVIAS}" size="60" maxlength="60">
+														<p:inputText id="NOVIAS" value="#{GestorMovimientosComunidades.sNOVIAS}" size="60" maxlength="60">
 														</p:inputText>
 													<p:message for="NOVIAS" display="icon"/>
 
 													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
-														<p:inputText id="NUPOAC" value="#{GestorTablaComunidadActivo.sNUPOAC}" size="17" maxlength="17">
+														<p:inputText id="NUPOAC" value="#{GestorMovimientosComunidades.sNUPOAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPOAC" display="icon"/>
 
 													<h:outputText for="NUPIAC" value="Piso: " />
-														<p:inputText id="NUPIAC" value="#{GestorTablaComunidadActivo.sNUPIAC}" size="11" maxlength="11">
+														<p:inputText id="NUPIAC" value="#{GestorMovimientosComunidades.sNUPIAC}" size="11" maxlength="11">
 														</p:inputText>
 													<p:message for="NUPIAC" display="icon"/>
 
 													<h:outputText for="NUPUAC" value="Puerta: " />
-														<p:inputText id="NUPUAC" value="#{GestorTablaComunidadActivo.sNUPUAC}" size="17" maxlength="17">
+														<p:inputText id="NUPUAC" value="#{GestorMovimientosComunidades.sNUPUAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPUAC" display="icon"/>
 												</h:panelGrid>
@@ -268,8 +268,8 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorTablaComunidadActivo.buscaActivos}" oncomplete="dlgTabla.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorTablaComunidadActivo.limpiarPlantillaActivo}" />	
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosComunidades.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosComunidades.limpiarPlantillaActivo}" />	
 
 														<p:ajaxStatus  id="pensandoActivo">  
 															<f:facet name="start">  

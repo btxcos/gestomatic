@@ -160,7 +160,7 @@
 								</h:panelGrid>
 						</p:panel>
 
-					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
+					<p:dialog header="Activos sin Comunidad:" widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
 								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorTablaComunidadActivo.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
@@ -202,7 +202,7 @@
 									
 							</p:dataTable> 
 					</p:dialog>
-					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
+					<p:dialog header="Buscar Activos sin Comunidad" widgetVar="dlgBuscar" resizable="false">  
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >

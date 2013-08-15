@@ -1,6 +1,7 @@
 package com.provisiones.pl.movimientos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -9,6 +10,7 @@ import javax.faces.event.ActionEvent;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.MovimientoComunidad;
 
@@ -41,10 +43,39 @@ public class GestorMovimientosComunidades implements Serializable
 	private String sOBTEXC = "";
 	private String sOBDEER = "";
 	
+	private String sCOPOIN = "";
+	private String sNOMUIN = "";
+	private String sNOPRAC = "";
+	private String sNOVIAS = "";
+	private String sNUPIAC = "";
+	private String sNUPOAC = "";
+	private String sNUPUAC = "";
+	
+	private ActivoTabla activoseleccionado = null;
+	
+	private ArrayList<ActivoTabla> tablaactivos = null;
+	
 	public GestorMovimientosComunidades()
 	{
 		Utils.standardIO2File("");//Salida por fichero de texto
 	}
+
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+    	this.sCOACES = "";
+
+    	this.sCOPOIN = "";
+    	this.sNOMUIN = "";
+    	this.sNOPRAC = "";
+    	this.sNOVIAS = "";
+    	this.sNUPIAC = "";
+    	this.sNUPOAC = "";
+    	this.sNUPUAC = "";
+    	
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+   	
+    }
 
 	public void borrarCampos()
 	{
@@ -69,92 +100,179 @@ public class GestorMovimientosComunidades implements Serializable
 		borrarCampos();
 		this.sCOACES = "";
 	}
+	
+	public void seleccionarActivo(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarActivo";
 
-	public void comprobarCOACES(ActionEvent actionEvent)
-	{
-		String sMethod = "comprobarCOACES";
+    	FacesMessage msg;
+    	
+    	this.sCOACES  = activoseleccionado.getCOACES();
+    	
+    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+    	
+    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
 		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+	
+	public void buscaActivos (ActionEvent actionEvent)
+	{
+		
+		String sMethod = "buscaActivos";
 		
 		
 		FacesMessage msg;
+		
+		ActivoTabla buscaactivos = new ActivoTabla(
+				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		
+		this.setTablaactivos(CLComunidades.buscaActivosConComunidad(buscaactivos));
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+
+		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+	}
+	
+	public void comprobarActivo(ActionEvent actionEvent)
+	{
+		String sMethod = "comprobarCOACES";
+		
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
+		FacesMessage msg;
+		
+		String sMsg = "";
 		
 		int iSalida = CLComunidades.comprobarActivo(sCOACES.toUpperCase());
 
 		switch (iSalida) 
 		{
-		case 0: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
-			msg = new FacesMessage("El activo '"+sCOACES.toUpperCase()+"' esta disponible.",null);
-			break;
-		case -1: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El activo '"+sCOACES.toUpperCase()+"' ya se encuentra registrado en otra comunidad. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El activo '"+sCOACES.toUpperCase()+"' ya se encuentra registrado en otra comunidad. Por favor, revise los datos.",null);
-			break;
-		case -2: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado aun. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado aun. Por favor, revise los datos.",null);
-			break;
-		default: //error generico
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.",null);
-			break;
+			case 0: //Sin errores
+				sMsg = "El activo '"+sCOACES.toUpperCase()+"' esta disponible.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(sMsg,null);
+				break;
+
+			case -1: //error - ya vinculado
+				sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' ya esta vinculado a otra comunidada. Por favor, revise los datos."; 
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+				break;
+
+			case -2: //error - no existe
+				sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+				break;
+
+			default: //error generico
+				sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+				break;
 		}
-		
+
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);	
 		
 	}
 	
+	public void buscarComunidad(ActionEvent actionEvent)
+	{
+		String sMethod = "BuscarComunidad";
+		
+		FacesMessage msg;
+		
+		String sMsg = "";
+		
+		borrarCampos();
+
+		Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES.toUpperCase());
+		
+		this.sCOCLDO = comunidad.getCOCLDO();
+		this.sNUDCOM = comunidad.getNUDCOM();
+		this.sNOMCOC = comunidad.getNOMCOC();
+		this.sNODCCO = comunidad.getNODCCO();
+		this.sNOMPRC = comunidad.getNOMPRC();
+		this.sNUTPRC = comunidad.getNUTPRC();
+		this.sNOMADC = comunidad.getNOMADC();
+		this.sNUTADC = comunidad.getNUTADC();
+		this.sNODCAD = comunidad.getNODCAD();
+		this.sNUCCEN = comunidad.getNUCCEN();
+		this.sNUCCOF = comunidad.getNUCCOF();
+		this.sNUCCDI = comunidad.getNUCCDI();
+		this.sNUCCNT = comunidad.getNUCCNT();
+		this.sOBTEXC = comunidad.getOBTEXC();
+		
+		if (comunidad.getNUDCOM().equals(""))
+		{
+			sMsg = "Error: El Activo '"+sCOACES.toUpperCase()+"' no esta asociado a ninguna comunidad.";
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+		}
+		else
+		{
+			sMsg = "La comunidad se ha cargado correctamente.";
+			msg = new FacesMessage(sMsg,null);
+		
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);			
+		}
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+	}
 	
+
 	public void cargarComunidad(ActionEvent actionEvent)
 	{
 		String sMethod = "cargarComunidad";
 		
 		FacesMessage msg;
 		
-		/*if (CLComunidades.consultaEstadoComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()))
-		{*/
+		String sMsg = "";
 		
-			Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-		
-			this.sCOCLDO = comunidad.getCOCLDO();
-			this.sNUDCOM = comunidad.getNUDCOM();
-			this.sNOMCOC = comunidad.getNOMCOC();
-			this.sNODCCO = comunidad.getNODCCO();
-			this.sNOMPRC = comunidad.getNOMPRC();
-			this.sNUTPRC = comunidad.getNUTPRC();
-			this.sNOMADC = comunidad.getNOMADC();
-			this.sNUTADC = comunidad.getNUTADC();
-			this.sNODCAD = comunidad.getNODCAD();
-			this.sNUCCEN = comunidad.getNUCCEN();
-			this.sNUCCOF = comunidad.getNUCCOF();
-			this.sNUCCDI = comunidad.getNUCCDI();
-			this.sNUCCNT = comunidad.getNUCCNT();
-			this.sOBTEXC = comunidad.getOBTEXC();
 
+		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
-		
-		
-			if (comunidad.getNUDCOM().equals(""))
-			{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
-			
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
-			}
-			else
-			{
-				msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
-			
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
-			}
-		
-		/*}
+		this.sCOCLDO = comunidad.getCOCLDO();
+		this.sNUDCOM = comunidad.getNUDCOM();
+		this.sNOMCOC = comunidad.getNOMCOC();
+		this.sNODCCO = comunidad.getNODCCO();
+		this.sNOMPRC = comunidad.getNOMPRC();
+		this.sNUTPRC = comunidad.getNUTPRC();
+		this.sNOMADC = comunidad.getNOMADC();
+		this.sNUTADC = comunidad.getNUTADC();
+		this.sNODCAD = comunidad.getNODCAD();
+		this.sNUCCEN = comunidad.getNUCCEN();
+		this.sNUCCOF = comunidad.getNUCCOF();
+		this.sNUCCDI = comunidad.getNUCCDI();
+		this.sNUCCNT = comunidad.getNUCCNT();
+		this.sOBTEXC = comunidad.getOBTEXC();
+
+		if (comunidad.getNUDCOM().equals(""))
+		{
+			sMsg = "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.";
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+		}
 		else
 		{
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta dada de alta en el sistema.",null);
-			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta dada de alta en el sistema.");
-		}*/
+			sMsg = "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.";
+			msg = new FacesMessage(sMsg,null);
+		
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);			
+		}
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				
@@ -171,256 +289,426 @@ public class GestorMovimientosComunidades implements Serializable
 		
 		FacesMessage msg;
 		
+		String sMsg = "";
+		
 		int iSalida = CLComunidades.registraMovimiento(movimiento);
 		
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El movimiento en la comunidad '"+ movimiento.getNOMCOC() + "', con documento '"+movimiento.getNUDCOM()+"', se ha creado correctamente.");
-			msg = new FacesMessage("El movimiento en la comunidad '"+ movimiento.getNOMCOC() + "', con documento '"+movimiento.getNUDCOM()+"', se ha creado correctamente.");
+			sMsg = "La modificacion se ha realizado correctamente.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg,null);
 			break;
-		case -1: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la comunidad '"+ movimiento.getNOMCOC() + "', se ha realizado una accion no permitida. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la comunidad '"+ movimiento.getNOMCOC() + "', se ha realizado una accion no permitida. Por favor, revise los datos.",null);
+
+		case -1: //error 001 - CODIGO DE ACCION DEBE SER A,M,B,X 
+			sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -2: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al modificar la comunidad '"+ movimiento.getNOMCOC() + "', ya esta dada de alta. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar la comunidad '"+ movimiento.getNOMCOC() + "', ya esta dada de alta. Por favor, revise los datos.",null);
+
+		case -3: //error 003 - NO EXISTE EL ACTIVO
+			sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -3: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al modificar un activo de la comunidad '"+ movimiento.getNOMCOC() + "', el activo esta vacio. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar un activo de la comunidad '"+ movimiento.getNOMCOC() + "', el activo esta vacio. Por favor, revise los datos.",null);
+
+
+		case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO, NULO O CEROS
+			sMsg = "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -4: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+ movimiento.getNOMCOC() + "' fue dada de baja. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La comunidad '"+ movimiento.getNOMCOC() + "' fue dada de baja. Por favor, revise los datos.",null);
+
+
+		case -8: //Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
+			sMsg = "ERROR:008 - El activo ya esta asociado a otra comunidad. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -5: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "No existe la comunidad con identificador '"+ movimiento.getNUDCOM() + "'. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No existe la comunidad con identificador '"+ sNUDCOM + "'. Por favor, revise los datos.",null);
+
+
+		case -9: //error 009 - YA EXISTE ESTA COMUNIDAD
+			sMsg = "ERROR:009 - La comunidad ya se encuentra registrada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -6: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "No puede darse de baja la comunidad '"+ movimiento.getNOMCOC() + "' por que tiene cuotas asignadas. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No puede darse de baja la comunidad '"+ movimiento.getNOMCOC() + "' por que tiene cuotas asignadas. Por favor, revise los datos.",null);
+
+
+		case -10: //error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
+			sMsg = "ERROR:010 - El activo ya esta asociado a esta comunidad. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -7: //Error
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta un movimiento en la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta un movimiento en la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
+
+
+		case -11: //error 011 - LA COMUNIDAD NO EXISTE. ACTIVO NO SE PUEDE DAR DE ALTA
+			sMsg = "ERROR:011 - No se puede dar de alta el activo, la comunidad no existe. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -8: //Error COACCI = "";
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta un movimiento. No se ha elegido una accion valida. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta un movimiento. No se ha elegido una accion valida. Por favor, revise los datos.",null);
-			break;//"Error al registrar el movimiento, no hay motivo del cambio. Por favor, revise los datos."
-		case -9: //Error COACCI = "";
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al registrar el movimiento, no se ha producido cambios en la comunidad. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al registrar el movimiento, no se ha producido cambios en la comunidad. Por favor, revise los datos.",null);
+
+
+		case -12: //error 012 - LA COMUNIDAD NO EXISTE. NO SE PUEDE MODIFICAR
+			sMsg = "ERROR:012 - No se puede modificar la comunidad, no se encuentra registrada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -11: //Error con rollback
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al actualizar el estado de la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al actualizar el estado de la comunidad '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
+
+
+		case -26: //error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
+			sMsg = "ERROR:026 - No se puede dar de baja la comunidad, no se encuentra registrada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
-		case -12: //Error con rollback
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error al dar de alta la relaccion de movimientos para '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de alta la relaccion de movimientos para '"+ movimiento.getNOMCOC() + "'. Por favor, revise los datos.",null);
+
+		case -27: //error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
+			sMsg = "ERROR:027 - No se puede dar de baja la comunidad, aun tiene cuotas de alta. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+
+		case -30: //Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
+			sMsg = "ERROR:030 - No se ha elegido un tipo de documento. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -801: //Error 801 - alta de una comunidad en alta
+			sMsg = "ERROR:801 - La comunidad ya esta dada de alta. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -802: //Error 802 - comunidad de baja no puede recibir mas movimientos
+			sMsg = "ERROR:802 - La comunidad esta baja y no puede recibir mas movimientos. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -803: //Error 803 - estado no disponible
+			sMsg = "ERROR:803 - El estado de la comunidad informada no esta disponible. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -804: //Error 804 - modificacion sin cambios
+			sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -900: //Error 900 - al crear un movimiento
+			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -901: //Error 901 - error y rollback - error al crear la comuidad
+			sMsg = "ERROR:901 - Se ha producido un error al registrar la comunidad. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+			
+		case -902: //Error 902 - error y rollback - error al registrar la relaccion
+			sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -903: //Error 903 - error y rollback - error al registrar el activo durante el alta
+			sMsg = "ERROR:903 - Se ha producido un error al asociar el activo durante el alta. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -904: //Error 904 - error y rollback - error al cambiar el estado
+			sMsg = "ERROR:904 - Se ha producido un error al cambiar el estado de la comunidad. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -905: //Error 905 - error y rollback - error al modificar la comunidad
+			sMsg = "ERROR:905 - Se ha producido un error al modificar la comunidad. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -906: //Error 906 - error y rollback - el activo ya esta vinculado
+			sMsg = "ERROR:906 - El activo ya ha sido vinculado. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -907: //Error 907 - error y rollback - error al asociar el activo en la comunidad
+			sMsg = "ERROR:907 - Se ha producido un error al asociar el activo a la comunidad. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -908: //Error 908 - error y rollback - el activo no esta vinculado
+			sMsg = "ERROR:908 - El activo no ha sido vinculado. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+
+		case -909: //Error 909 - error y rollback - error al desasociar el activo en la comunidad
+			sMsg = "ERROR:909 - Se ha producido un error al desasociar el activo a la comunidad. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+			break;
+			
 		default: //error generico
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El cambio solicitado ha producido un error desconocido. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El cambio solicitado ha producido un error desconocido. Por favor, revise los datos.",null);
+			sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
 			break;
 		}
 		
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
+		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}
-	
-	
+
 	public String getsCODTRN() {
 		return sCODTRN;
 	}
+
 	public void setsCODTRN(String sCODTRN) {
 		this.sCODTRN = sCODTRN;
 	}
+
 	public String getsCOTDOR() {
 		return sCOTDOR;
 	}
+
 	public void setsCOTDOR(String sCOTDOR) {
 		this.sCOTDOR = sCOTDOR;
 	}
+
 	public String getsIDPROV() {
 		return sIDPROV;
 	}
+
 	public void setsIDPROV(String sIDPROV) {
 		this.sIDPROV = sIDPROV;
 	}
+
 	public String getsCOACCI() {
 		return sCOACCI;
 	}
+
 	public void setsCOACCI(String sCOACCI) {
 		this.sCOACCI = sCOACCI;
 	}
+
 	public String getsCOENGP() {
 		return sCOENGP;
 	}
+
 	public void setsCOENGP(String sCOENGP) {
 		this.sCOENGP = sCOENGP;
 	}
+
 	public String getsCOCLDO() {
 		return sCOCLDO;
 	}
+
 	public void setsCOCLDO(String sCOCLDO) {
 		this.sCOCLDO = sCOCLDO;
 	}
+
 	public String getsNUDCOM() {
 		return sNUDCOM;
 	}
+
 	public void setsNUDCOM(String sNUDCOM) {
 		this.sNUDCOM = sNUDCOM;
 	}
-	/*public String getsBITC10() {
-		return sBITC10;
-	}
-	public void setsBITC10(String sBITC10) {
-		this.sBITC10 = sBITC10;
-	}*/
+
 	public String getsCOACES() {
 		return sCOACES;
 	}
+
 	public void setsCOACES(String sCOACES) {
 		this.sCOACES = sCOACES;
 	}
-	/*public String getsBITC01() {
-		return sBITC01;
-	}
-	public void setsBITC01(String sBITC01) {
-		this.sBITC01 = sBITC01;
-	}*/
+
 	public String getsNOMCOC() {
 		return sNOMCOC;
 	}
+
 	public void setsNOMCOC(String sNOMCOC) {
 		this.sNOMCOC = sNOMCOC;
 	}
-	/*public String getsBITC02() {
-		return sBITC02;
-	}
-	public void setsBITC02(String sBITC02) {
-		this.sBITC02 = sBITC02;
-	}*/
+
 	public String getsNODCCO() {
 		return sNODCCO;
 	}
+
 	public void setsNODCCO(String sNODCCO) {
 		this.sNODCCO = sNODCCO;
 	}
-	/*public String getsBITC03() {
-		return sBITC03;
-	}
-	public void setsBITC03(String sBITC03) {
-		this.sBITC03 = sBITC03;
-	}*/
+
 	public String getsNOMPRC() {
 		return sNOMPRC;
 	}
+
 	public void setsNOMPRC(String sNOMPRC) {
 		this.sNOMPRC = sNOMPRC;
 	}
-	/*public String getsBITC04() {
-		return sBITC04;
-	}
-	public void setsBITC04(String sBITC04) {
-		this.sBITC04 = sBITC04;
-	}*/
+
 	public String getsNUTPRC() {
 		return sNUTPRC;
 	}
+
 	public void setsNUTPRC(String sNUTPRC) {
 		this.sNUTPRC = sNUTPRC;
 	}
-	/*public String getsBITC05() {
-		return sBITC05;
-	}
-	public void setsBITC05(String sBITC05) {
-		this.sBITC05 = sBITC05;
-	}*/
+
 	public String getsNOMADC() {
 		return sNOMADC;
 	}
+
 	public void setsNOMADC(String sNOMADC) {
 		this.sNOMADC = sNOMADC;
 	}
-	/*public String getsBITC06() {
-		return sBITC06;
-	}
-	public void setsBITC06(String sBITC06) {
-		this.sBITC06 = sBITC06;
-	}*/
+
 	public String getsNUTADC() {
 		return sNUTADC;
 	}
+
 	public void setsNUTADC(String sNUTADC) {
 		this.sNUTADC = sNUTADC;
 	}
-	/*public String getsBITC07() {
-		return sBITC07;
-	}
-	public void setsBITC07(String sBITC07) {
-		this.sBITC07 = sBITC07;
-	}*/
+
 	public String getsNODCAD() {
 		return sNODCAD;
 	}
+
 	public void setsNODCAD(String sNODCAD) {
 		this.sNODCAD = sNODCAD;
 	}
-	/*public String getsBITC08() {
-		return sBITC08;
-	}
-	public void setsBITC08(String sBITC08) {
-		this.sBITC08 = sBITC08;
-	}*/
+
 	public String getsNUCCEN() {
 		return sNUCCEN;
 	}
+
 	public void setsNUCCEN(String sNUCCEN) {
 		this.sNUCCEN = sNUCCEN;
 	}
+
 	public String getsNUCCOF() {
 		return sNUCCOF;
 	}
+
 	public void setsNUCCOF(String sNUCCOF) {
 		this.sNUCCOF = sNUCCOF;
 	}
+
 	public String getsNUCCDI() {
 		return sNUCCDI;
 	}
+
 	public void setsNUCCDI(String sNUCCDI) {
 		this.sNUCCDI = sNUCCDI;
 	}
+
 	public String getsNUCCNT() {
 		return sNUCCNT;
 	}
+
 	public void setsNUCCNT(String sNUCCNT) {
 		this.sNUCCNT = sNUCCNT;
 	}
-	/*public String getsBITC09() {
-		return sBITC09;
-	}
-	public void setsBITC09(String sBITC09) {
-		this.sBITC09 = sBITC09;
-	}*/
+
 	public String getsOBTEXC() {
 		return sOBTEXC;
 	}
+
 	public void setsOBTEXC(String sOBTEXC) {
 		this.sOBTEXC = sOBTEXC;
 	}
+
 	public String getsOBDEER() {
 		return sOBDEER;
 	}
+
 	public void setsOBDEER(String sOBDEER) {
 		this.sOBDEER = sOBDEER;
+	}
+
+	public String getsCOPOIN() {
+		return sCOPOIN;
+	}
+
+	public void setsCOPOIN(String sCOPOIN) {
+		this.sCOPOIN = sCOPOIN;
+	}
+
+	public String getsNOMUIN() {
+		return sNOMUIN;
+	}
+
+	public void setsNOMUIN(String sNOMUIN) {
+		this.sNOMUIN = sNOMUIN;
+	}
+
+	public String getsNOPRAC() {
+		return sNOPRAC;
+	}
+
+	public void setsNOPRAC(String sNOPRAC) {
+		this.sNOPRAC = sNOPRAC;
+	}
+
+	public String getsNOVIAS() {
+		return sNOVIAS;
+	}
+
+	public void setsNOVIAS(String sNOVIAS) {
+		this.sNOVIAS = sNOVIAS;
+	}
+
+	public String getsNUPIAC() {
+		return sNUPIAC;
+	}
+
+	public void setsNUPIAC(String sNUPIAC) {
+		this.sNUPIAC = sNUPIAC;
+	}
+
+	public String getsNUPOAC() {
+		return sNUPOAC;
+	}
+
+	public void setsNUPOAC(String sNUPOAC) {
+		this.sNUPOAC = sNUPOAC;
+	}
+
+	public String getsNUPUAC() {
+		return sNUPUAC;
+	}
+
+	public void setsNUPUAC(String sNUPUAC) {
+		this.sNUPUAC = sNUPUAC;
+	}
+
+	public ActivoTabla getActivoseleccionado() {
+		return activoseleccionado;
+	}
+
+	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
+		this.activoseleccionado = activoseleccionado;
+	}
+
+	public ArrayList<ActivoTabla> getTablaactivos() {
+		return tablaactivos;
+	}
+
+	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
+		this.tablaactivos = tablaactivos;
 	}
 
 }
