@@ -563,7 +563,7 @@ public class QMListaCuotas
 					sNUPOAC = rs.getString(QMActivos.sField7);
 					sNUPUAC = rs.getString(QMActivos.sField10);
 					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
 					result.add(activoencontrado);
 					
@@ -905,7 +905,7 @@ public class QMListaCuotas
 					sNUPOAC = rs.getString(QMActivos.sField7);
 					sNUPUAC = rs.getString(QMActivos.sField10);
 					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
 					result.add(activoencontrado);
 					

@@ -13,6 +13,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoImpuestoRecurso;
+import com.provisiones.types.ReferenciaTabla;
 
 public class GestorImpuestosRecursos implements Serializable 
 {
@@ -52,9 +53,11 @@ public class GestorImpuestosRecursos implements Serializable
 	private String sNUPUAC = "";
 	
 	private ArrayList<ActivoTabla> tablaactivos = null;
-	
 	private ActivoTabla activoseleccionado = null;
 
+	private ArrayList<ReferenciaTabla> tablareferencias = null;
+	private ReferenciaTabla referenciaseleccionada = null;	
+	
 	public GestorImpuestosRecursos()
 	{
 		Utils.standardIO2File("");//Salida por fichero de texto
@@ -368,6 +371,48 @@ public class GestorImpuestosRecursos implements Serializable
 
 	}
 	
+	public void seleccionarReferencia(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarReferencia";
+
+    	FacesMessage msg;
+    	
+    	this.sNURCAT = referenciaseleccionada.getNURCAT(); 
+ 	
+    	String sMsg = "Referencia '"+ sNURCAT +"' Seleccionada.";
+    	
+    	msg = new FacesMessage(sMsg, null);
+    	
+    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		//return "listacomunidadesactivos.xhtml";
+    }
+	
+	public void cargarReferencias (ActionEvent actionEvent)
+	{
+		
+		String sMethod = "cargarReferencias";
+		
+		FacesMessage msg;
+		
+		String sMsg = ""; 
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando cuotas...");
+		
+		this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
+		
+		sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
+		
+		Utils.debugTrace(true, sClassName, sMethod, sMsg);
+
+		msg = new FacesMessage(sMsg, null);
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);		
+	}
+	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
     	
@@ -377,22 +422,12 @@ public class GestorImpuestosRecursos implements Serializable
     	
 
     	this.sCOACES  = activoseleccionado.getCOACES();
-    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
-    	
-    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
-    	{
-    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"La referencia catastral seleccionada no esta de alta.",null);
-    		this.sNURCAT  = "";
-    	}
-    	else
-    	{	
-    	
-    		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
-    	
-    		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
-    	}
 
+    	String sMsg = "Activo '"+ sCOACES +"' cargado.";
+    	
+    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
+    	
+    	msg = new FacesMessage(sMsg, null);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
@@ -410,7 +445,7 @@ public class GestorImpuestosRecursos implements Serializable
 		ActivoTabla buscaactivos = new ActivoTabla(
 				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
+				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
@@ -650,6 +685,22 @@ public class GestorImpuestosRecursos implements Serializable
 
 	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
 		this.activoseleccionado = activoseleccionado;
+	}
+
+	public ArrayList<ReferenciaTabla> getTablareferencias() {
+		return tablareferencias;
+	}
+
+	public void setTablareferencias(ArrayList<ReferenciaTabla> tablareferencias) {
+		this.tablareferencias = tablareferencias;
+	}
+
+	public ReferenciaTabla getReferenciaseleccionada() {
+		return referenciaseleccionada;
+	}
+
+	public void setReferenciaseleccionada(ReferenciaTabla referenciaseleccionada) {
+		this.referenciaseleccionada = referenciaseleccionada;
 	}
 	
 	

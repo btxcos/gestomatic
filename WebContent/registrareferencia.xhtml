@@ -123,6 +123,9 @@
 																paginator="true" paginatorPosition="bottom" rows="10" 
 																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
 																rowsPerPageTemplate="5,10,15">  
+								<p:column headerText="Referencia Asociada">  
+								    #{activo.NURCAT}  
+								</p:column>  
 
 								<p:column headerText="Codigo Activo">  
 								    #{activo.COACES}  

@@ -595,6 +595,7 @@ public class QMListaComunidadesActivos
 		String sNUPIAC = "";
 		String sNUPOAC = "";
 		String sNUPUAC = "";
+		//String sNURCAT = "";
 		
 		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
 		
@@ -620,7 +621,8 @@ public class QMListaComunidadesActivos
 					   + QMActivos.sField6 + ","
 					   + QMActivos.sField9 + ","
 					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
+					   + QMActivos.sField10 +
+					   //+ QMActivos.sField81 + 
 					   "  FROM " + QMActivos.sTable + 
 					   " WHERE "+ QMActivos.sField1 +" IN (SELECT "
 					   +  sField3 + 
@@ -654,8 +656,9 @@ public class QMListaComunidadesActivos
 					sNUPIAC = rs.getString(QMActivos.sField9);
 					sNUPOAC = rs.getString(QMActivos.sField7);
 					sNUPUAC = rs.getString(QMActivos.sField10);
+					//sNURCAT = rs.getString(QMActivos.sField81);
 					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
 					result.add(activoencontrado);
 					
@@ -776,7 +779,7 @@ public class QMListaComunidadesActivos
 					sNUPOAC = rs.getString(QMActivos.sField7);
 					sNUPUAC = rs.getString(QMActivos.sField10);
 					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
 					result.add(activoencontrado);
 					
@@ -894,7 +897,7 @@ public class QMListaComunidadesActivos
 					sNUPOAC = rs.getString(QMActivos.sField7);
 					sNUPUAC = rs.getString(QMActivos.sField10);
 					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
 					result.add(activoencontrado);
 					

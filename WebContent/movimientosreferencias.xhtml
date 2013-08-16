@@ -65,7 +65,7 @@
 														<p:inputText id="COACES" value="#{GestorMovimientosReferenciasCatastrales.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Carga Referencia" update="msgs, popup, panel" actionListener="#{GestorMovimientosReferenciasCatastrales.cargaReferencia}"/>	
+													<p:commandButton value="Carga Referencias" update="msgs, popup, panel, referencias" actionListener="#{GestorMovimientosReferenciasCatastrales.cargarReferencias}"  oncomplete="dlgTablaReferencias.show()"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
@@ -76,7 +76,7 @@
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="NURCAT" value="NURCAT: " />
-											<p:inputText id="NURCAT" value="#{GestorMovimientosReferenciasCatastrales.sNURCAT}" size="20" maxlength="20">
+											<p:inputText id="NURCAT" value="#{GestorMovimientosReferenciasCatastrales.sNURCAT}" size="20" maxlength="20"  disabled="true">
 											</p:inputText>
 											<p:message for="NURCAT" display="icon"/>
 
@@ -116,14 +116,43 @@
 
 						</h:panelGrid>
 					</p:panel>
-					<p:dialog header="Activos con Referencias asociadas: " widgetVar="dlgTabla" resizable="false">  
+					<p:dialog header="Referencias asociadas al activo: " widgetVar="dlgTablaReferencias" resizable="false">  
+    				
+							<p:contextMenu for="referencias">  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NURCAT, form:TIRCAT, form:ENEMIS, form:OBTEXC" icon="ui-icon-check" actionListener="#{GestorMovimientosReferenciasCatastrales.seleccionarReferencia}" oncomplete="dlgTablaReferencias.hide();"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="referencias" var="referencia" value="#{GestorMovimientosReferenciasCatastrales.tablareferencias}" rowKey="#{referencia.NURCAT}"  
+												selection="#{GestorMovimientosReferenciasCatastrales.referenciaseleccionada}" selectionMode="single"
+												paginator="true" paginatorPosition="bottom" rows="10" 
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+												rowsPerPageTemplate="5,10,15">    
+									
+								<p:column headerText="Referencia Catastral">  
+								    #{referencia.NURCAT}  
+								</p:column>  
+								
+								<p:column headerText="Titular">  
+								    #{referencia.TIRCAT}  
+								</p:column>  
+
+								<p:column headerText="Entidad de emision">  
+								    #{referencia.ENEMIS}
+								</p:column>  
+
+							</p:dataTable> 
+					</p:dialog>
+					<p:dialog header="Activos con Referencias asociadas: " widgetVar="dlgTablaActivos" resizable="false">  
     				
 							<p:contextMenu for="activos">  
-								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosReferenciasCatastrales.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosReferenciasCatastrales.seleccionarActivo}" oncomplete="dlgTablaActivos.hide(); dlgBuscar.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="activos" var="activo" value="#{GestorMovimientosReferenciasCatastrales.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorMovimientosReferenciasCatastrales.activoseleccionado}" selectionMode="single">  
+									            selection="#{GestorMovimientosReferenciasCatastrales.activoseleccionado}" selectionMode="single"
+												paginator="true" paginatorPosition="bottom" rows="10" 
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+												rowsPerPageTemplate="5,10,15">    
 									
 								<p:column headerText="Codigo Activo">  
 								    #{activo.COACES}  
@@ -199,7 +228,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosReferenciasCatastrales.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosReferenciasCatastrales.buscaActivos}" oncomplete="dlgTablaActivos.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosReferenciasCatastrales.limpiarPlantillaActivo}" />	
 
 														<p:ajaxStatus  id="pensandoActivo">  

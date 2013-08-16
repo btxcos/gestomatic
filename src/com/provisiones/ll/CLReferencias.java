@@ -12,6 +12,7 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 import com.provisiones.types.ReferenciaCatastral;
+import com.provisiones.types.ReferenciaTabla;
 
 
 public class CLReferencias 
@@ -150,6 +151,12 @@ public class CLReferencias
 	{
 		return QMReferencias.getReferenciaCatastral(sCodNURCAT);
 	}
+	
+	public static ArrayList<ReferenciaTabla> buscarReferenciasActivo(String sCodCOACES)
+	{
+		return QMListaReferencias.buscaReferenciasActivo(sCodCOACES);
+	}
+	
 	
 	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento)
 	{

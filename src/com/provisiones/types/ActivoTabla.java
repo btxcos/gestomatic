@@ -11,10 +11,11 @@ public class ActivoTabla
 	private String NUPIAC = "";
 	private String NUPOAC = "";
 	private String NUPUAC = "";
+	private String NURCAT = "";
 
 	public ActivoTabla(String cOACES, String cOPOIN, String nOMUIN,
 			String nOPRAC, String nOVIAS, String nUPIAC, String nUPOAC,
-			String nUPUAC) {
+			String nUPUAC, String nURCAT) {
 		super();
 		COACES = cOACES;
 		COPOIN = cOPOIN;
@@ -24,6 +25,7 @@ public class ActivoTabla
 		NUPIAC = nUPIAC;
 		NUPOAC = nUPOAC;
 		NUPUAC = nUPUAC;
+		NURCAT = nURCAT;
 	}
 
 	public String getCOACES() {
@@ -89,7 +91,13 @@ public class ActivoTabla
 	public void setNUPUAC(String nUPUAC) {
 		NUPUAC = nUPUAC;
 	}
-	
-	
-	
+
+	public String getNURCAT() {
+		return NURCAT;
+	}
+
+	public void setNURCAT(String nURCAT) {
+		NURCAT = nURCAT;
+	}
+
 }

@@ -13,6 +13,7 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 import com.provisiones.types.ReferenciaCatastral;
+import com.provisiones.types.ReferenciaTabla;
 
 public class GestorMovimientosReferenciasCatastrales implements Serializable 
 {
@@ -47,8 +48,10 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private String sNUPUAC = "";
 	
 	private ArrayList<ActivoTabla> tablaactivos = null;
-	
 	private ActivoTabla activoseleccionado = null;
+	
+	private ArrayList<ReferenciaTabla> tablareferencias = null;
+	private ReferenciaTabla referenciaseleccionada = null;
 	
 	
 	public GestorMovimientosReferenciasCatastrales()
@@ -59,7 +62,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 		
-		String sMethod = "buscaActivosComunidad";
+		String sMethod = "buscaActivos";
 		
 		
 		FacesMessage msg;
@@ -67,7 +70,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		ActivoTabla buscaactivos = new ActivoTabla(
 				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
+				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(),"");
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
@@ -81,9 +84,31 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 	}
 	
+	public void cargarReferencias (ActionEvent actionEvent)
+	{
+		
+		String sMethod = "cargarReferencias";
+		
+		FacesMessage msg;
+		
+		String sMsg = ""; 
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando cuotas...");
+		
+		this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
+		
+		sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
+		
+		Utils.debugTrace(true, sClassName, sMethod, sMsg);
+
+		msg = new FacesMessage(sMsg, null);
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);		
+	}
+	
 	public void cargaReferencia(ActionEvent actionEvent)
 	{
-		String sMethod = "comprobarCOACES";
+		String sMethod = "cargaReferencia";
 		
 		
 		
@@ -161,6 +186,9 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.tablaactivos = null;
     	
     	borrarPlantillaReferencia();
+    	
+    	this.referenciaseleccionada = null;
+    	this.tablareferencias = null;
    	
     }
 	
@@ -203,6 +231,31 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
 	
+	public void seleccionarReferencia(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarReferencia";
+
+    	FacesMessage msg;
+    	
+    	this.sNURCAT = referenciaseleccionada.getNURCAT(); 
+    	this.sTIRCAT = referenciaseleccionada.getTIRCAT();
+    	this.sENEMIS = referenciaseleccionada.getENEMIS();
+    	this.sOBTEXC = referenciaseleccionada.getOBTEXC();
+
+ 	
+    	String sMsg = "Referencia '"+ sNURCAT +"' Seleccionada.";
+    	
+    	msg = new FacesMessage(sMsg, null);
+    	
+    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		//return "listacomunidadesactivos.xhtml";
+    }
+	
+	
 	public void registraDatos(ActionEvent actionEvent)
 	{
 		String sMethod = "registraDatos";
@@ -241,7 +294,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 			sMsg = "El movimiento se ha registrado correctamente.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(sMsg,null);
-			break;
+	    	break;
 
 		case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
@@ -525,6 +578,21 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
 		this.activoseleccionado = activoseleccionado;
 	}
-	
+
+	public ArrayList<ReferenciaTabla> getTablareferencias() {
+		return tablareferencias;
+	}
+
+	public void setTablareferencias(ArrayList<ReferenciaTabla> tablareferencias) {
+		this.tablareferencias = tablareferencias;
+	}
+
+	public ReferenciaTabla getReferenciaseleccionada() {
+		return referenciaseleccionada;
+	}
+
+	public void setReferenciaseleccionada(ReferenciaTabla referenciaseleccionada) {
+		this.referenciaseleccionada = referenciaseleccionada;
+	}
 	
 }

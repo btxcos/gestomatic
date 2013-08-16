@@ -61,10 +61,10 @@
 														<p:inputText id="COACES" value="#{GestorImpuestosRecursos.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Cargar Referencia" update="msgs, popup, panel" actionListener="#{GestorImpuestosRecursos.cargarReferencia}"/>	
+													<p:commandButton value="Cargar Referencias" update="msgs, popup, panel, referencias" actionListener="#{GestorImpuestosRecursos.cargarReferencias}" oncomplete="dlgTablaReferencias.show()"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar un activo" update="COACES, NURCAT, form:activos" oncomplete="dlgBuscar.show()"/>		
+										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 
@@ -174,11 +174,37 @@
 								</h:panelGrid>
 							</p:panel>
 
+					<p:dialog header="Referencias asociadas al activo: " widgetVar="dlgTablaReferencias" resizable="false">  
+    				
+							<p:contextMenu for="referencias">  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NURCAT" icon="ui-icon-check" actionListener="#{GestorImpuestosRecursos.seleccionarReferencia}" oncomplete="dlgTablaReferencias.hide();"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="referencias" var="referencia" value="#{GestorImpuestosRecursos.tablareferencias}" rowKey="#{referencia.NURCAT}"  
+												selection="#{GestorImpuestosRecursos.referenciaseleccionada}" selectionMode="single"
+												paginator="true" paginatorPosition="bottom" rows="10" 
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+												rowsPerPageTemplate="5,10,15">    
+									
+								<p:column headerText="Referencia Catastral">  
+								    #{referencia.NURCAT}  
+								</p:column>  
+								
+								<p:column headerText="Titular">  
+								    #{referencia.TIRCAT}  
+								</p:column>  
+
+								<p:column headerText="Entidad de emision">  
+								    #{referencia.ENEMIS}
+								</p:column>  
+
+							</p:dataTable> 
+					</p:dialog>
 
 					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
-								<p:menuitem value="Seleccionar" update="form:COACES, form:NURCAT, form:popup" icon="ui-icon-check" actionListener="#{GestorImpuestosRecursos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+								<p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorImpuestosRecursos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="activos" var="activo" value="#{GestorImpuestosRecursos.tablaactivos}" rowKey="#{activo.COACES}"  

@@ -126,7 +126,7 @@ public class QMActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		try 
 		{
@@ -319,7 +319,7 @@ public class QMActivos
 				       + NuevoActivo.getBIOBNU() + "','"  
 				       + NuevoActivo.getPOBRAR() + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
@@ -353,7 +353,7 @@ public class QMActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		try 
 		{
@@ -454,7 +454,7 @@ public class QMActivos
 					" WHERE "
 					+ sField1 + " = '"+ sCodCOACES +"'");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 					
 		} 
 		catch (SQLException ex) 
@@ -487,7 +487,7 @@ public class QMActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -495,7 +495,7 @@ public class QMActivos
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
@@ -625,7 +625,7 @@ public class QMActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -731,9 +731,9 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
+			Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
 
 			if (rs != null) 
 			{
@@ -835,13 +835,13 @@ public class QMActivos
 					sBIOBNU = rs.getString(sField91);
 					sPOBRAR = rs.getString(sField92);
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -892,7 +892,7 @@ public class QMActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -907,7 +907,7 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			
 
@@ -918,14 +918,14 @@ public class QMActivos
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + rs.getString(sField1));
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + rs.getString(sField1));
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -963,7 +963,7 @@ public class QMActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -978,7 +978,7 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			
 
@@ -991,14 +991,15 @@ public class QMActivos
 					
 					sReferencia = rs.getString(sField81);
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField81 + ": " + rs.getString(sField81));
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					
+					if (!sReferencia.equals(""))
+						Utils.debugTrace(bTrazas, sClassName, sMethod, sField81 + ":|"+ sReferencia+"|");
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -1046,7 +1047,7 @@ public class QMActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -1076,7 +1077,7 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 			
 
@@ -1096,18 +1097,18 @@ public class QMActivos
 					sNUPOAC = rs.getString(sField7);
 					sNUPUAC = rs.getString(sField10);
 					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCOACES);
+					Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 

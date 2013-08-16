@@ -60,7 +60,7 @@ public class GestorMovimientosComunidades implements Serializable
 		Utils.standardIO2File("");//Salida por fichero de texto
 	}
 
-    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    public void borrarPlantillaActivo() 
     {  
     	this.sCOACES = "";
 
@@ -74,6 +74,12 @@ public class GestorMovimientosComunidades implements Serializable
     	
     	this.activoseleccionado = null;
     	this.tablaactivos = null;
+   	
+    }
+	
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+    	borrarPlantillaActivo();
    	
     }
 
@@ -97,6 +103,7 @@ public class GestorMovimientosComunidades implements Serializable
 	
 	public void limpiarPlantilla(ActionEvent actionEvent)
 	{
+		borrarPlantillaActivo();
 		borrarCampos();
 		this.sCOACES = "";
 	}
@@ -128,7 +135,7 @@ public class GestorMovimientosComunidades implements Serializable
 		ActivoTabla buscaactivos = new ActivoTabla(
 				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
+				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		

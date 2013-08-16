@@ -322,7 +322,7 @@ public class QMListaReferencias
 		return sValidado;
 	}
 	
-	public static ArrayList<ReferenciaTabla> buscaReferenciaActivo(String sCodCOACES)
+	public static ArrayList<ReferenciaTabla> buscaReferenciasActivo(String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		
 		String sMethod = "buscaActivosComunidad";
@@ -330,9 +330,10 @@ public class QMListaReferencias
 		Statement stmt = null;
 		ResultSet rs = null;
 
-		String NURCAT = "";
-		String TIRCAT = "";
-		String ENEMIS = "";
+		String sNURCAT = "";
+		String sTIRCAT = "";
+		String sENEMIS = "";
+		String sOBTEXC = "";
 		
 		ArrayList<ReferenciaTabla> result = new ArrayList<ReferenciaTabla>();
 		
@@ -353,7 +354,8 @@ public class QMListaReferencias
 			pstmt = conn.prepareStatement("SELECT "
 					   + QMReferencias.sField1 + ","        
 					   + QMReferencias.sField2 + ","
-					   + QMReferencias.sField3 + 
+					   + QMReferencias.sField3 + ","
+					   + QMReferencias.sField5 + 
 					   
 					   "  FROM " + QMReferencias.sTable + 
 					   " WHERE " 
@@ -377,11 +379,12 @@ public class QMListaReferencias
 				{
 					found = true;
 					
-					NURCAT = rs.getString(QMReferencias.sField1);
-					TIRCAT = rs.getString(QMReferencias.sField2);
-					ENEMIS = rs.getString(QMReferencias.sField3);
+					sNURCAT = rs.getString(QMReferencias.sField1);
+					sTIRCAT = rs.getString(QMReferencias.sField2);
+					sENEMIS = rs.getString(QMReferencias.sField3);
+					sOBTEXC = rs.getString(QMReferencias.sField5);
 					
-					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(NURCAT, TIRCAT, ENEMIS);
+					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(sNURCAT, sTIRCAT, sENEMIS, sOBTEXC);
 					
 					result.add(referenciaencontrada);
 					
@@ -429,6 +432,7 @@ public class QMListaReferencias
 		String sNUPIAC = "";
 		String sNUPOAC = "";
 		String sNUPUAC = "";
+		String sNURCAT = "";
 		
 		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
 		
@@ -451,7 +455,8 @@ public class QMListaReferencias
 					   + QMActivos.sField6 + ","
 					   + QMActivos.sField9 + ","
 					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
+					   + QMActivos.sField10 + ","
+					   + QMActivos.sField81 + 
 
 					   " FROM " + QMActivos.sTable + 
 					   " WHERE ("
@@ -483,7 +488,8 @@ public class QMListaReferencias
 					   + QMActivos.sField6 + ","
 					   + QMActivos.sField9 + ","
 					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
+					   + QMActivos.sField10 + ","
+					   + QMActivos.sField81 + 
 
 					   " FROM " + QMActivos.sTable + 
 					   " WHERE ("
@@ -519,8 +525,9 @@ public class QMListaReferencias
 					sNUPIAC = rs.getString(QMActivos.sField9);
 					sNUPOAC = rs.getString(QMActivos.sField7);
 					sNUPUAC = rs.getString(QMActivos.sField10);
+					sNURCAT = rs.getString(QMActivos.sField81);
 					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
 					
 					result.add(activoencontrado);
 					
@@ -567,6 +574,7 @@ public class QMListaReferencias
 		String sNUPIAC = "";
 		String sNUPOAC = "";
 		String sNUPUAC = "";
+		String sNURCAT = "";
 		
 		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
 		
@@ -589,7 +597,8 @@ public class QMListaReferencias
 					   + QMActivos.sField6 + ","
 					   + QMActivos.sField9 + ","
 					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
+					   + QMActivos.sField10 + ","
+					   + QMActivos.sField81 + 
 
 					   " FROM " + QMActivos.sTable + 
 					   " WHERE ("
@@ -621,7 +630,8 @@ public class QMListaReferencias
 					   + QMActivos.sField6 + ","
 					   + QMActivos.sField9 + ","
 					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
+					   + QMActivos.sField10 + ","
+					   + QMActivos.sField81 + 
 
 					   " FROM " + QMActivos.sTable + 
 					   " WHERE ("
@@ -657,8 +667,9 @@ public class QMListaReferencias
 					sNUPIAC = rs.getString(QMActivos.sField9);
 					sNUPOAC = rs.getString(QMActivos.sField7);
 					sNUPUAC = rs.getString(QMActivos.sField10);
+					sNURCAT = rs.getString(QMActivos.sField81);
 					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC);
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
 					
 					result.add(activoencontrado);
 					

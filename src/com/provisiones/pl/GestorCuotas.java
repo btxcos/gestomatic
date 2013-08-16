@@ -207,7 +207,7 @@ public class GestorCuotas implements Serializable
 		ActivoTabla buscaactivos = new ActivoTabla(
 				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase());
+				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
