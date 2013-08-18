@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.servlet.http.HttpServletRequest;
 
 import com.provisiones.ll.CLActivos;
 
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.pl.detalles.GestorDetallesActivo;
 import com.provisiones.types.ActivoTabla;
 
 public class GestorActivos implements Serializable 

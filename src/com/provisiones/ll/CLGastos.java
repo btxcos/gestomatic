@@ -1,18 +1,11 @@
 package com.provisiones.ll;
 
-import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMGastos;
-import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
-import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.listas.QMListaGastos;
-import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.Cuota;
 import com.provisiones.types.Gasto;
-import com.provisiones.types.MovimientoCuota;
 
 public class CLGastos 
 {

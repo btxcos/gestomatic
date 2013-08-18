@@ -135,7 +135,7 @@
 											</p:selectOneMenu>
 										</h:panelGrid>
 									</p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText value="Fecha de estado estimado del importe: " />
 											<p:inputMask id="FEEESI" value="#{GestorGastos.sFEEESI}" mask="99/99/9999" size="10" maxlength="8" disabled="#{GestorGastos.bFEEESI}"/>
 											<p:commandButton id="hFEEESI" icon="ui-icon-clock" update="FEEESI" actionListener="#{GestorGastos.hoyFEEESI}" disabled="#{GestorGastos.bFEEESI}"/>

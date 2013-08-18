@@ -597,7 +597,7 @@ public class GestorGastos implements Serializable
 		
     }
 	
-    public void registraGastp(ActionEvent actionEvent) 
+    public void registraGasto(ActionEvent actionEvent) 
     {  
     	borrarPlantillaGasto();
     	borrarPlantillaActivo();
