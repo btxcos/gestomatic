@@ -1,11 +1,20 @@
 package com.provisiones.pl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.types.Activo;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
+import com.provisiones.ll.CLCuotas;
+import com.provisiones.ll.CLProvisiones;
+import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.ActivoTabla;
+import com.provisiones.types.CuotaTabla;
 
 public class GestorGastos implements Serializable 
 {
@@ -20,13 +29,19 @@ public class GestorGastos implements Serializable
 	private String sPTPAGO = "";
 	private String sFEDEVE = "";
 	private String sFFGTVP = "";
+	private boolean bFFGTVP = true;
 	private String sFEPAGA = "";
 	private String sFELIPG = "";
 	private String sCOSIGA = "";
 	private String sFEEESI = "";
+	private boolean bFEEESI = true;
 	private String sFEECOI = "";
+	private boolean bFEECOI = true;
 	private String sFEEAUI = "";
+	private boolean bFEEAUI = true;
 	private String sFEEPAI = "";
+	private boolean bFEEPAI = true;
+
 	private String sIMNGAS = "";
 	private String sYCOS02 = "";
 	private String sIMRGAS = "";
@@ -37,26 +52,51 @@ public class GestorGastos implements Serializable
 	private String sYCOS08 = "";
 	private String sIMOGAS = "";
 	private String sYCOS10 = "";
+	
 	private String sIMDTGA = "";
 	private String sCOUNMO = "";
 	private String sIMIMGA = "";
 	private String sCOIMPT = "";
+	
 	private String sCOTNEG = "";
-	private String sCOENCX = "";
-	private String sCOOFCX = "";
-	private String sNUCONE = "";
-	private String sNUPROF = "";
-	private String sFEAGTO = "";
-	private String sCOMONA = "";
-	private String sBIAUTO = "";
-	private String sFEAUFA = "";
-	private String sCOTERR = "";
-	private String sFMPAGN = "";
-	private String sFEPGPR = "";
+	
+	private String sCOENCX = ValoresDefecto.DEF_COENCX;
+	private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
+	private String sNUCONE = ValoresDefecto.DEF_NUCONE;
+	private String sNUPROF = CLProvisiones.ultimaProvisionAbierta();
+	private String sFEAGTO = ValoresDefecto.DEF_FEAGTO;
+	private String sCOMONA = ValoresDefecto.DEF_COMONA;
+	private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
+	private String sFEAUFA = ValoresDefecto.DEF_FEAUFA;
+	private String sCOTERR = ValoresDefecto.DEF_COTERR;
+	private String sFMPAGN = ValoresDefecto.DEF_FMPAGN;
+	private String sFEPGPR = ValoresDefecto.DEF_FEPGPR;
+	
 	private String sFEAPLI = "";
-	private String sCOAPII = "";
-	private String sCOSPII = "";
-	private String sNUCLII = "";
+	
+	private String sCOAPII = ValoresDefecto.DEF_COAPII;
+	private String sCOSPII = ValoresDefecto.DEF_COSPII;
+	private String sNUCLII = ValoresDefecto.DEF_NUCLII;
+
+	//recuperar cuotas
+	private String sCOSBAC = "";
+	private String sIMCUCO = "";
+	
+	//filtro de activos
+	private String sCOPOIN = "";
+	private String sNOMUIN = "";
+	private String sNOPRAC = "";
+	private String sNOVIAS = "";
+	private String sNUPIAC = "";
+	private String sNUPOAC = "";
+	private String sNUPUAC = "";
+	
+	
+	private ActivoTabla activoseleccionado = null;
+	private ArrayList<ActivoTabla> tablaactivos = null;
+
+	private CuotaTabla cuotaseleccionada = null;
+	private ArrayList<CuotaTabla> tablacuotas = null;
 	
 	private Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
@@ -76,6 +116,8 @@ public class GestorGastos implements Serializable
 
 	public GestorGastos()
 	{
+		Utils.standardIO2File("");//Salida por fichero de texto
+		
 		tiposcotpga_g1HM.put("Plusvalia", "1");
 		tiposcotpga_g1HM.put("Notaria",   "2");
 
@@ -171,7 +213,7 @@ public class GestorGastos implements Serializable
 			sCOSBGA = "";
 		}
 	}
-
+	
 	public void cambiaSubtipo()
 	{
 		String sMethod = "cambiaTipo";
@@ -206,9 +248,219 @@ public class GestorGastos implements Serializable
 					tiposcosbgaHM = new LinkedHashMap<String, String>();
 					break;
 			}
+			sCOSBGA = "";
+		}
+	}
+	
+	public void cambiaFechaPorSituacion()
+	{
+
+		if (sCOSIGA !=null && !sCOSIGA.equals(""))
+		{
+			switch (Integer.parseInt(sCOSIGA)) 
+			{
+				case 1:
+					this.bFEEESI = false;
+					this.bFEECOI = true;
+					this.bFEEAUI = true;
+					this.bFEEPAI = true;
+					//this.sFEEESI = "";
+					this.sFEECOI = "";
+					this.sFEEAUI = "";
+					this.sFEEPAI = "";
+					break;
+				case 2:
+					this.bFEEESI = true;
+					this.bFEECOI = false;
+					this.bFEEAUI = true;
+					this.bFEEPAI = true;
+					this.sFEEESI = "";
+					//this.sFEECOI = "";
+					this.sFEEAUI = "";
+					this.sFEEPAI = "";
+					break;
+				case 3:
+					this.bFEEESI = true;
+					this.bFEECOI = true;
+					this.bFEEAUI = false;
+					this.bFEEPAI = true;
+					this.sFEEESI = "";
+					this.sFEECOI = "";
+					//this.sFEEAUI = "";
+					this.sFEEPAI = "";
+					break;
+				case 4:
+					this.bFEEESI = true;
+					this.bFEECOI = true;
+					this.bFEEAUI = true;
+					this.bFEEPAI = false;
+					this.sFEEESI = "";
+					this.sFEECOI = "";
+					this.sFEEAUI = "";
+					//this.sFEEPAI = "";
+					break;
+				default:
+					this.bFEEESI = true;
+					this.bFEECOI = true;
+					this.bFEEAUI = true;
+					this.bFEEPAI = true;
+					this.sFEEESI = "";
+					this.sFEECOI = "";
+					this.sFEEAUI = "";
+					this.sFEEPAI = "";
+					break;
+			}
 
 		}
 	}
+	
+	public void cambiaFechaFinPeriodo()
+	{
+
+		if (sPTPAGO !=null && !sPTPAGO.equals(""))
+		{
+			switch (Integer.parseInt(sPTPAGO)) 
+			{
+				case 8:
+					this.bFFGTVP = false;
+					break;
+				default:
+					this.bFFGTVP = true;
+					this.sFFGTVP = "";
+					break;
+			}
+
+		}
+	}
+	
+	public void hoyFEDEVE (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEDEVE";
+		this.setsFEDEVE(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEDEVE:|"+sFEDEVE+"|");
+	}
+
+	public void hoyFFGTVP (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFFGTVP";
+		this.setsFFGTVP(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFFGTVP:|"+sFFGTVP+"|");
+	}
+
+	public void hoyFEPAGA (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEPAGA";
+		this.setsFEPAGA(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEPAGA:|"+sFEPAGA+"|");
+	}
+
+	public void hoyFELIPG (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFELIPG";
+		this.setsFELIPG(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFELIPG:|"+sFELIPG+"|");
+	}
+
+
+	
+	
+	public void buscaActivos (ActionEvent actionEvent)
+	{
+		
+		String sMethod = "buscaActivos";
+		
+		
+		FacesMessage msg;
+		
+		ActivoTabla buscaactivos = new ActivoTabla(
+				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		
+		this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+
+		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+	}
+	
+	public void seleccionarActivo(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarActivo";
+
+    	FacesMessage msg;
+    	
+    	
+    	
+    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
+    	
+    	this.sCOACES  = activoseleccionado.getCOACES();
+    	
+    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+    	
+    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		//return "listacomunidadesactivos.xhtml";
+    }
+	
+	public void cargarCuotas(ActionEvent actionEvent)
+	{
+		String sMethod = "cargarCuotas";
+		
+		FacesMessage msg;
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando cuotas...");
+		
+		this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Encontradas "+getTablacuotas().size()+" cuotas relacionadas.");
+
+		msg = new FacesMessage("Encontradas "+getTablacuotas().size()+" cuotas relacionadas.");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+	}
+	
+	public void seleccionarCuota(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarCuota";
+
+    	FacesMessage msg;
+    	
+    	String sMsg = "";
+
+    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E2;
+    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E2;
+    	this.sCOSBGA = cuotaseleccionada.getCOSBAC();
+    	this.sPTPAGO = cuotaseleccionada.getPTPAGO();
+    	
+    	this.sIMNGAS = cuotaseleccionada.getIMCUCO();
+
+    	
+    	tiposcotpgaHM = tiposcotpga_g2HM;
+    	tiposcosbgaHM = tiposcosbga_t22HM;
+    	
+
+    	//comprobar
+    	
+    	sMsg = "Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.";
+    	
+    	msg = new FacesMessage(sMsg);
+    	
+    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+    }
 
 	public String getsCOACES() {
 		return sCOACES;
@@ -610,6 +862,13 @@ public class GestorGastos implements Serializable
 		this.tiposcosbga_t11HM = tiposcosbga_t11HM;
 	}
 
+	public Map<String,String> getTiposcosbga_t12HM() {
+		return tiposcosbga_t12HM;
+	}
+	public void setTiposcosbga_t12HM(Map<String,String> tiposcosbga_t12HM) {
+		this.tiposcosbga_t12HM = tiposcosbga_t12HM;
+	}
+	
 	public Map<String, String> getTiposcosbga_t21HM() {
 		return tiposcosbga_t21HM;
 	}
@@ -641,12 +900,127 @@ public class GestorGastos implements Serializable
 	public void setTiposcosbga_t32HM(Map<String, String> tiposcosbga_t32HM) {
 		this.tiposcosbga_t32HM = tiposcosbga_t32HM;
 	}
-	public Map<String,String> getTiposcosbga_t12HM() {
-		return tiposcosbga_t12HM;
+	
+	public Map<String, String> getTiposcosbga_t33HM() {
+		return tiposcosbga_t33HM;
 	}
-	public void setTiposcosbga_t12HM(Map<String,String> tiposcosbga_t12HM) {
-		this.tiposcosbga_t12HM = tiposcosbga_t12HM;
+	public void setTiposcosbga_t33HM(Map<String, String> tiposcosbga_t33HM) {
+		this.tiposcosbga_t33HM = tiposcosbga_t33HM;
 	}
+	
+
+	public ActivoTabla getActivoseleccionado() {
+		return activoseleccionado;
+	}
+	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
+		this.activoseleccionado = activoseleccionado;
+	}
+	public ArrayList<ActivoTabla> getTablaactivos() {
+		return tablaactivos;
+	}
+	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
+		this.tablaactivos = tablaactivos;
+	}
+	public CuotaTabla getCuotaseleccionada() {
+		return cuotaseleccionada;
+	}
+	public void setCuotaseleccionada(CuotaTabla cuotaseleccionada) {
+		this.cuotaseleccionada = cuotaseleccionada;
+	}
+	public ArrayList<CuotaTabla> getTablacuotas() {
+		return tablacuotas;
+	}
+	public void setTablacuotas(ArrayList<CuotaTabla> tablacuotas) {
+		this.tablacuotas = tablacuotas;
+	}
+	public String getsCOSBAC() {
+		return sCOSBAC;
+	}
+	public void setsCOSBAC(String sCOSBAC) {
+		this.sCOSBAC = sCOSBAC;
+	}
+
+	public String getsIMCUCO() {
+		return sIMCUCO;
+	}
+	public void setsIMCUCO(String sIMCUCO) {
+		this.sIMCUCO = sIMCUCO;
+	}
+
+	public String getsCOPOIN() {
+		return sCOPOIN;
+	}
+	public void setsCOPOIN(String sCOPOIN) {
+		this.sCOPOIN = sCOPOIN;
+	}
+	public String getsNOMUIN() {
+		return sNOMUIN;
+	}
+	public void setsNOMUIN(String sNOMUIN) {
+		this.sNOMUIN = sNOMUIN;
+	}
+	public String getsNOPRAC() {
+		return sNOPRAC;
+	}
+	public void setsNOPRAC(String sNOPRAC) {
+		this.sNOPRAC = sNOPRAC;
+	}
+	public String getsNOVIAS() {
+		return sNOVIAS;
+	}
+	public void setsNOVIAS(String sNOVIAS) {
+		this.sNOVIAS = sNOVIAS;
+	}
+	public String getsNUPIAC() {
+		return sNUPIAC;
+	}
+	public void setsNUPIAC(String sNUPIAC) {
+		this.sNUPIAC = sNUPIAC;
+	}
+	public String getsNUPOAC() {
+		return sNUPOAC;
+	}
+	public void setsNUPOAC(String sNUPOAC) {
+		this.sNUPOAC = sNUPOAC;
+	}
+	public String getsNUPUAC() {
+		return sNUPUAC;
+	}
+	public void setsNUPUAC(String sNUPUAC) {
+		this.sNUPUAC = sNUPUAC;
+	}
+	public boolean isbFEEESI() {
+		return bFEEESI;
+	}
+	public void setbFEEESI(boolean bFEEESI) {
+		this.bFEEESI = bFEEESI;
+	}
+	public boolean isbFEECOI() {
+		return bFEECOI;
+	}
+	public void setbFEECOI(boolean bFEECOI) {
+		this.bFEECOI = bFEECOI;
+	}
+	public boolean isbFEEAUI() {
+		return bFEEAUI;
+	}
+	public void setbFEEAUI(boolean bFEEAUI) {
+		this.bFEEAUI = bFEEAUI;
+	}
+	public boolean isbFEEPAI() {
+		return bFEEPAI;
+	}
+	public void setbFEEPAI(boolean bFEEPAI) {
+		this.bFEEPAI = bFEEPAI;
+	}
+	public boolean isbFFGTVP() {
+		return bFFGTVP;
+	}
+	public void setbFFGTVP(boolean bFFGTVP) {
+		this.bFFGTVP = bFFGTVP;
+	}
+
+
 
 
 }

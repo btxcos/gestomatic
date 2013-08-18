@@ -12,7 +12,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+
+import com.provisiones.types.ImporteDevolucion;
 
 public class Utils 
 {
@@ -40,6 +43,50 @@ public class Utils
 				System.out.println("["+sClass+"."+sMethod+"] |"+result.get(j)+"|");
 			}
 		}
+	}
+	
+	@SuppressWarnings("all") 
+	//Problemas con los números de meses Calendar.MONTH [0-11]
+	//Si algun día cambian el rango de [0-11] por [1-12] no habrá problemas con las fechas. 
+	public static String fechaDeHoy (boolean bFormato)
+	{
+		Calendar fecha = Calendar.getInstance();
+		
+		String sHoy = "";
+		
+		String sDia = fecha.get(Calendar.DAY_OF_MONTH)+"";
+		
+		if (sDia.length() <2)
+			sDia = "0"+sDia;
+		
+		String sMes = "";
+		
+		if (Calendar.DECEMBER == 11)
+		{
+			sMes = (fecha.get(Calendar.MONTH)+1)+"";
+		}
+		else
+		{
+			sMes = fecha.get(Calendar.MONTH)+"";
+		}
+		
+		if (sMes.length() <2)
+			sMes = "0"+sMes;
+		
+		if (bFormato)
+		{
+ 
+			//sHoy = sDia+"/"+sMes+"/"+fecha.get(Calendar.YEAR);
+			sHoy = sDia+sMes+fecha.get(Calendar.YEAR)+"";
+		}
+		else
+		{
+			sHoy = fecha.get(Calendar.YEAR)+sMes+sDia;
+		}
+		
+		System.out.println("["+sClassName+".fechaDeHoy] |"+sHoy+"|");
+		
+		return sHoy;
 	}
 
 	public static boolean closeResultSet ( ResultSet rs, String sClassName, String sMethod)
@@ -152,27 +199,72 @@ public class Utils
 		return sCodigoRevisado;
 	}
 
-	public static String compruebaImporte(boolean bNegativo, String sImporte)
+	public static String compruebaImporte(String sImporte)
 	{
 		String sMethod = "compruebaImporte";
+		String sImporteReal = "#";
 		
-		String sImporteReal = sImporte.replaceFirst("-", "");
-		
-		if (sImporte.length()>3)
+		if (sImporte.matches("-[\\d]+([\\.|,][\\d]{2})?$"))
 		{
-			String sEuros = sImporteReal.substring(0, sImporte.length()-3);
-			String sCentimos = sImporteReal.substring(sImporte.length()-2,sImporte.length());
 		
-			debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
-			debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
+			if (sImporte.length()>3)
+			{
+				String sEuros = sImporteReal.substring(0, sImporte.length()-3);
+				String sCentimos = sImporteReal.substring(sImporte.length()-2,sImporte.length());
+		
+				debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
+				debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
 		
 			
-			sImporteReal = bNegativo ? "-"+ sEuros + sCentimos : sEuros + sCentimos;
-		}
-		else if (sImporte.equals(""))
-			sImporteReal= "0";
+				sImporteReal = sEuros + sCentimos;
+			}
+			else if (sImporte.equals(""))
+				sImporteReal= "0";
 		
-		debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
+			debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
+		}
+
+		
+		return sImporteReal;
+	}
+	
+	public static ImporteDevolucion separaImporteDevolucion(String sImporte)
+	{
+		String sMethod = "compruebaImporteDevolucion";
+		
+		debugTrace(bTraza, sClassName, sMethod, "sImporte:|"+sImporte+"|");
+	
+		return new ImporteDevolucion(sImporte.startsWith("-"),sImporte.replaceFirst("-", ""));
+	}
+	
+	public static String compruebaImporteDevolucion(boolean bNegativo, String sImporte)
+	{
+		String sMethod = "compruebaImporteDevolucion";
+		String sImporteReal = "#";
+		
+		if (sImporte.matches("-[\\d]+([\\.|,][\\d]{2})?$"))
+		{
+		
+			
+			sImporteReal = sImporte.replaceFirst("-", "");
+		
+			if (sImporte.length()>3)
+			{
+				String sEuros = sImporteReal.substring(0, sImporte.length()-3);
+				String sCentimos = sImporteReal.substring(sImporte.length()-2,sImporte.length());
+		
+				debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
+				debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
+		
+			
+				sImporteReal = bNegativo ? "-"+ sEuros + sCentimos : sEuros + sCentimos;
+			}
+			else if (sImporte.equals(""))
+				sImporteReal= "0";
+		
+			debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
+		}
+
 		
 		return sImporteReal;
 	}

@@ -214,6 +214,11 @@ public class CLCuotas
 			//Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
 			iCodigo = -35;
 		}
+		else if (movimiento.getIMCUCO().equals("#"))
+		{
+			//Error 805 - importe incorrecto
+			iCodigo = -805;
+		}		
 		else if (Double.parseDouble(movimiento.getIMCUCO()) <= 0)
 		{
 			//Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO

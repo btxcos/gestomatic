@@ -70,15 +70,18 @@ public class GestorComunidades implements Serializable
 
     	FacesMessage msg;
     	
+    	String sMsg = "";
+    	
     	
     	
     	//this.sCOACESBuscado = activoseleccionado.getCOACES();
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+    	sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
+    	msg = new FacesMessage(sMsg);
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		

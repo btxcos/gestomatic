@@ -332,7 +332,7 @@ public class GestorCuotas implements Serializable
 				"", 
 				Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
 				"", 
-				Utils.compruebaImporte(false,sIMCUCO.toUpperCase()), 
+				Utils.compruebaImporte(sIMCUCO.toUpperCase()),
 				"", 
 				Utils.compruebaFecha(sFAACTA.toUpperCase()), 
 				"", 
@@ -466,6 +466,12 @@ public class GestorCuotas implements Serializable
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
 
+		case -805: //Error 805 - error en importe
+			sMsg = "ERROR:805 - El campo importe no se ha informado correctamente. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
 		case -900: //Error 900 - al crear un movimiento
 			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
@@ -628,10 +634,12 @@ public class GestorCuotas implements Serializable
 		this.sFFPAGO = sFFPAGO;
 	}
 	public String getsIMCUCO() {
+		Utils.debugTrace(true, sClassName, "getsIMCUCO", "sIMCUCO: |"+sIMCUCO+"|");
 		return sIMCUCO;
 	}
 	public void setsIMCUCO(String sIMCUCO) {
 		this.sIMCUCO = sIMCUCO;
+		Utils.debugTrace(true, sClassName, "setsIMCUCO", "sIMCUCO: |"+sIMCUCO+"|");
 	}
 	public String getsFAACTA() {
 		return sFAACTA;

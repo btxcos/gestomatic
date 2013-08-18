@@ -27,6 +27,10 @@ public class GestorDatosGenerales implements Serializable
 	private Map<String,String> tiposcosbga_t23HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
 	
+	private Map<String,String> tiposcosigaHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcoimptHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotnegHM = new LinkedHashMap<String, String>();
+	
 	
 	private Map<String,String> tiposbiresoHM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposbinariaHM = new LinkedHashMap<String, String>();
@@ -65,8 +69,6 @@ public class GestorDatosGenerales implements Serializable
 		
 		tiposcotpga_g3HM.put("Honorarios","2");
 		tiposcotpga_g3HM.put("Licencias", "3");
-		
-		
 		
 		tiposcosbga_t11HM.put("Plusvalia", "0");
 		tiposcosbga_t11HM.put("Notaria",   "1");
@@ -115,9 +117,26 @@ public class GestorDatosGenerales implements Serializable
 		tiposcosbga_t32HM.put("Prescripcion",            "1");  
 		tiposcosbga_t32HM.put("Colaboracion",            "2");  
 		tiposcosbga_t32HM.put("Otros honorarios",        "3");  
-		tiposcosbga_t32HM.put("Servicios varios",        "4");  
-
+		tiposcosbga_t32HM.put("Servicios varios",        "4");
 		
+		tiposcosigaHM.put("ESTIMADO",            "1");
+		tiposcosigaHM.put("CONOCIDO",            "2");
+		tiposcosigaHM.put("AUTORIZADO",          "3");
+		tiposcosigaHM.put("PAGADO",              "4");
+		tiposcosigaHM.put("PAGADO PARCIALMENTE", "5");
+		tiposcosigaHM.put("ESPERA DE PAGO",		 "6");
+		tiposcosigaHM.put("PAGADO CONEXION",     "7");
+		
+		tiposcoimptHM.put("SIN IMPUESTO",	"0");  
+		tiposcoimptHM.put("IVA",            "1");  
+		tiposcoimptHM.put("IGIC",           "2");  
+		tiposcoimptHM.put("IPSI",           "3");  
+		tiposcoimptHM.put("IRPF",           "4");
+		
+		tiposcotnegHM.put("SIN IMPUESTO",	"0");  
+		tiposcotnegHM.put("IVA",            "1");  
+		tiposcotnegHM.put("IGIC",           "2");
+	
 	}
 
 	public Map<String, String> getTiposcocldoHM() {
@@ -222,6 +241,30 @@ public class GestorDatosGenerales implements Serializable
 
 	public void setTiposbinariaHM(Map<String, String> tiposbinariaHM) {
 		this.tiposbinariaHM = tiposbinariaHM;
+	}
+
+	public Map<String,String> getTiposcosigaHM() {
+		return tiposcosigaHM;
+	}
+
+	public void setTiposcosigaHM(Map<String,String> tiposcosigaHM) {
+		this.tiposcosigaHM = tiposcosigaHM;
+	}
+
+	public Map<String,String> getTiposcoimptHM() {
+		return tiposcoimptHM;
+	}
+
+	public void setTiposcoimptHM(Map<String,String> tiposcoimptHM) {
+		this.tiposcoimptHM = tiposcoimptHM;
+	}
+
+	public Map<String, String> getTiposcotnegHM() {
+		return tiposcotnegHM;
+	}
+
+	public void setTiposcotnegHM(Map<String, String> tiposcotnegHM) {
+		this.tiposcotnegHM = tiposcotnegHM;
 	}
 
 	

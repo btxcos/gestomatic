@@ -239,7 +239,7 @@ public class GestorMovimientosCuotas implements Serializable
 				"", 
 				Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
 				"", 
-				Utils.compruebaImporte(false,sIMCUCO.toUpperCase()), 
+				Utils.compruebaImporte(sIMCUCO.toUpperCase()), 
 				"", 
 				Utils.compruebaFecha(sFAACTA.toUpperCase()), 
 				"", 
@@ -369,6 +369,12 @@ public class GestorMovimientosCuotas implements Serializable
 
 		case -804: //Error 804 - modificacion sin cambios
 			sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -805: //Error 805 - error en importe
+			sMsg = "ERROR:805 - El campo importe no se ha informado correctamente. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;

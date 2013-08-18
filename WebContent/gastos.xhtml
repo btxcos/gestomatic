@@ -7,33 +7,36 @@
 	<h:head>
 	</h:head>
 	<h:body>
-		<h:form>
+		<h:form id="form">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="100" header="Gastos">
-					<h:outputText value="North unit content." />
-				</p:layoutUnit>
-
-				<p:layoutUnit position="west" size="20%" header="Menus">
-					<ui:include src="menu.xhtml"/>
-				</p:layoutUnit>
-
-				<p:layoutUnit position="center">
-					<p:panel>
-						<h:panelGrid columns="1" cellpadding="5">
-							<p:fieldset legend="Informacion">
-								<h:panelGrid columns="2" cellpadding="5">
+				<p:layoutUnit position="north" size="33%" header="Gastos">
+								<h:panelGrid columns="4" cellpadding="5">
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Identificador de activo especial: " />
-											<p:inputText id="COACES" value="#{GestorGastos.sCOACES}" disabled="true" size="9" maxlength="9"/>
-
 											<h:outputText value="Numero de provision de fondos: " />
 											<p:inputText id="NUPROF" value="#{GestorGastos.sNUPROF}" disabled="true" size="9" maxlength="9"/>
 										</h:panelGrid>
 									</p:panel>
+									<p:fieldset legend="Acciones">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+											<p:commandButton value="Registrar Datos" update="panel, popup, msgs" actionListener="#{GestorMovimientosImpuestosRecursos.registraDatos}"/>
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Info">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+												<p:messages id="msgs"/>
+											</p:notificationBar>  
+											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+											<p:growl id="popup" />
+										</h:panelGrid>
+									</p:fieldset>
 									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="1">
 											<h:outputText value="Fecha de entrada en la aplicacion: " />
 											<p:inputText id="FEAPLI" value="#{GestorGastos.sFEAPLI}" disabled="true" size="8" maxlength="8"/>
 
@@ -43,14 +46,35 @@
 											<h:outputText value="Codigo de subaplicacion INFOCAM: " />
 											<p:inputText id="COSPII" value="#{GestorGastos.sCOSPII}" disabled="true" size="2" maxlength="2"/>
 
-											<h:outputText
-												value="Numero de cliente para intercambio de ficheros: " />
+											<h:outputText value="Numero de cliente para intercambio de ficheros: " />
 											<p:inputText id="NUCLII" value="#{GestorGastos.sNUCLII}" disabled="true" size="13" maxlength="13"/>
 										</h:panelGrid>
 									</p:panel>
+								</h:panelGrid>
+				</p:layoutUnit>
 
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+							<p:fieldset legend="Activo">
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:panel >
+										<h:panelGrid columns="4" cellpadding="5">
+											<h:outputText for="COACES" value="Codigo de activo: " />
+												<p:inputText id="COACES" value="#{GestorMovimientosImpuestosRecursos.sCOACES}" size="9" maxlength="9">
+												</p:inputText>
+											<p:message for="COACES" display="icon"/>	
+											<p:commandButton value="Cargar Cuotas" update="msgs, popup, COACES, form:cuotas" actionListener="#{GestorMovimientosImpuestosRecursos.cargarImpuestos}" oncomplete="dlgTablaImpuestos.show()"/>	
+										</h:panelGrid>
+									</p:panel>
+								<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
 								</h:panelGrid>
 							</p:fieldset>
+
 							<p:fieldset legend="Rechazo">
 								<h:panelGrid columns="2" cellpadding="5">
 									<p:panel>
@@ -241,7 +265,144 @@
 							</p:fieldset>
 						</h:panelGrid>
 					</p:panel>
+					<p:dialog header="Cuotas disponibles: " widgetVar="dlgTablaCuotas" resizable="false">  
+    				
+							<p:contextMenu for="cuotas">  
+								<p:menuitem value="Seleccionar" update="panel, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosCuotas.seleccionarCuota}" oncomplete="dlgTablaCuotas.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="cuotas" var="cuota" value="#{GestorMovimientosCuotas.tablacuotas}" rowKey="#{cuota.DCOSBAC}"  
+									              selection="#{GestorMovimientosCuotas.cuotaseleccionada}" selectionMode="single">  
+									
+								<p:column headerText="Cuota">  
+								    #{cuota.DCOSBAC}  
+								</p:column>  
 
+								<p:column headerText="Importe">  
+								    #{cuota.IMCUCO}  
+								</p:column>  
+
+								<p:column headerText="Periodicidad">  
+								    #{cuota.DPTPAGO}  
+								</p:column>  
+								
+								<p:column headerText="Primer Pago">  
+								    #{cuota.FIPAGO}  
+								</p:column>  
+
+								<p:column headerText="Ultimo Pago">  
+								    #{cuota.FFPAGO}  
+								</p:column>  
+								
+								<p:column headerText="Fecha de Acta">  
+								    #{cuota.FAACTA}  
+								</p:column>  
+
+							</p:dataTable> 
+					</p:dialog>
+					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
+    				
+							<p:contextMenu for="activos">  
+								<p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosCuotas.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="activos" var="activo" value="#{GestorMovimientosCuotas.tablaactivos}" rowKey="#{activo.COACES}"  
+									              selection="#{GestorMovimientosCuotas.activoseleccionado}" selectionMode="single">  
+									
+								<p:column headerText="Codigo Activo">  
+								    #{activo.COACES}  
+								</p:column>  
+								
+								<p:column headerText="Comunidad Autonoma">  
+								    #{activo.NOPRAC}  
+								</p:column>  
+
+								<p:column headerText="Municipio">  
+								    #{activo.NOMUIN}  
+								</p:column>  
+								
+								<p:column headerText="Via">  
+								    #{activo.NOVIAS}  
+								</p:column>  
+								
+								<p:column headerText="Portal">  
+								    #{activo.NUPOAC}  
+								</p:column>  
+								
+								<p:column headerText="Piso">  
+								    #{activo.NUPIAC}  
+								</p:column>  
+								
+								<p:column headerText="Puerta">  
+								    #{activo.NUPUAC}  
+								</p:column>  
+									
+							</p:dataTable> 
+					</p:dialog>
+					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscar" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+														<p:inputText id="NOPRAC" value="#{GestorMovimientosCuotas.sNOPRAC}" size="18" maxlength="18">
+														</p:inputText>
+													<p:message for="NOPRAC" display="icon"/>
+
+													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+														<p:inputText id="NOMUIN" value="#{GestorMovimientosCuotas.sNOMUIN}" size="30" maxlength="30">
+														</p:inputText>
+													<p:message for="NOMUIN" display="icon"/>
+
+													<h:outputText for="COPOIN" value="Codigo Postal: " />
+														<p:inputText id="COPOIN" value="#{GestorMovimientosCuotas.sCOPOIN}" size="5" maxlength="5">
+														</p:inputText>
+													<p:message for="COPOIN" display="icon"/>
+
+													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+														<p:inputText id="NOVIAS" value="#{GestorMovimientosCuotas.sNOVIAS}" size="60" maxlength="60">
+														</p:inputText>
+													<p:message for="NOVIAS" display="icon"/>
+
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+														<p:inputText id="NUPOAC" value="#{GestorMovimientosCuotas.sNUPOAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPOAC" display="icon"/>
+
+													<h:outputText for="NUPIAC" value="Piso: " />
+														<p:inputText id="NUPIAC" value="#{GestorMovimientosCuotas.sNUPIAC}" size="11" maxlength="11">
+														</p:inputText>
+													<p:message for="NUPIAC" display="icon"/>
+
+													<h:outputText for="NUPUAC" value="Puerta: " />
+														<p:inputText id="NUPUAC" value="#{GestorMovimientosCuotas.sNUPUAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPUAC" display="icon"/>
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosCuotas.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosCuotas.limpiarPlantillaActivo}" />	
+
+														<p:ajaxStatus  id="pensandoActivo">  
+															<f:facet name="start">  
+																<h:graphicImage value="/recursos/loadingBar.gif" />  
+															</f:facet>  
+
+															<f:facet name="complete">  
+																<h:outputText value="" />  
+															</f:facet>  
+
+														</p:ajaxStatus> 
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>

@@ -12,8 +12,22 @@ public class TestCuotas {
 		// TODO Auto-generated method stub
 
 		//Cuota cuota1 
-		QMListaCuotas.buscaCuotasActivo("3109139");
+		//QMListaCuotas.buscaCuotasActivo("3109139");
 		
+		String sOK = "1,10";
+		String sError  = "-100.25";
+		
+		if (sOK.matches("[\\d]+([\\.|,][\\d]{2})?$"))
+			
+
+			System.out.println("Found good SSN: " + sOK);
+
+		
+		if (sError.matches("-[\\d]+([\\.|,][\\d]{2})?$"))
+			System.out.println("Found good SSN: " + sError);
+		
+		
+		//"[0-9]+([\\.|,][0-9]{2})?$"
 	}
 
 }

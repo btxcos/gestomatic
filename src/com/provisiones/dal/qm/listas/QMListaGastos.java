@@ -21,7 +21,7 @@ public class QMListaGastos
 
 	static String sField1 = "cod_coaces";
 	static String sField2 = "cod_nuprof";
-	static String sField3 = "cod_gasto";
+	static String sField3 = "cod_movimiento";
 	
 	static String sField4 = "cod_validado";
 

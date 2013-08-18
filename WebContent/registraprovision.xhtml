@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form id="form" onkeypress="return event.keyCode != 13">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="33%" header="Alta Provision">
+								<h:panelGrid columns="3" cellpadding="5">
+									<p:fieldset legend="Acciones" id="acciones">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Cargar Provision" update="msgs, popup, acciones, provision" actionListener="#{GestorProvisiones.cargarProvision}"/>
+											<p:commandButton value="Abrir Provision" update="msgs, popup, acciones" actionListener="#{GestorProvisiones.abrirProvision}" disabled="#{GestorProvisiones.bBloqueaAbrir}"/>
+											<p:commandButton type="button" value="Cerrar Provision" onclick="dlgConfirma.show()" disabled="#{GestorProvisiones.bBloqueaCerrar}"/>
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Info">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+												<p:messages id="msgs"/>
+											</p:notificationBar>  
+											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+											<p:growl id="popup" />
+										</h:panelGrid>
+									</p:fieldset>
+								</h:panelGrid>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+
+									<p:fieldset legend="Provision" id="provision">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="NUPROF" value="NUPROF: " />
+											<p:inputText id="NUPROF" value="#{GestorProvisiones.sNUPROF}" size="20" maxlength="20" disabled="true">
+											</p:inputText>
+
+											<h:outputText for="ValorTolal" value="ValorTolal: " />
+											<p:inputText id="ValorTolal" value="#{GestorProvisiones.sValorTolal}" size="20" maxlength="20" disabled="true">
+											</p:inputText>
+
+											<h:outputText for="NumGastos" value="NumGastos: " />
+											<p:inputText id="NumGastos" value="#{GestorProvisiones.sNumGastos}" size="20" maxlength="20" disabled="true">
+											</p:inputText>
+
+											<h:outputText for="FEPFON" value="FEPFON: " />
+											<p:inputText id="FEPFON" value="#{GestorProvisiones.sFEPFON}" size="20" maxlength="20" disabled="true">
+											</p:inputText>
+											
+											<h:outputText for="FechaValidacion" value="FechaValidacion: " />
+											<p:inputText id="FechaValidacion" value="#{GestorProvisiones.sFechaValidacion}" size="20" maxlength="20" disabled="true">
+											</p:inputText>
+
+											<h:outputText for="Validado" value="Validado: " />
+											<p:inputText id="Validado" value="#{GestorProvisiones.sValidado}" size="20" maxlength="20" disabled="true">
+											</p:inputText>
+
+
+										</h:panelGrid>
+									</p:fieldset>
+
+						</h:panelGrid>
+					</p:panel>
+					<p:dialog header="Confirmacion" widgetVar="dlgConfirma" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+							<h:outputText value="Esta seguro de cerrar la provision #{GestorProvisiones.sNUPROF}?" />
+							<h:outputText value="La operacion no puede deshacerser una vez concluida." />
+								</h:panelGrid>
+							<p:panel>
+								<h:panelGrid columns="2" cellpadding="5">
+								<p:commandButton value="Si" update="form:popup, form:msgs, form:acciones"  icon="ui-icon-check" actionListener="#{GestorProvisiones.cerrarProvision}" oncomplete="dlgConfirma.hide()"/>  
+								<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirma.hide()"/>
+								</h:panelGrid>
+							</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

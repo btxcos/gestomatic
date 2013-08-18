@@ -1,5 +1,4 @@
-
-package com.provisiones.dal.qm;
+package com.provisiones.dal.qm.movimientos;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
@@ -11,9 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class QMGastos
+public class QMMovimientosGastos
 {
-	static String sClassName = QMGastos.class.getName();
+	static String sClassName = QMMovimientosGastos.class.getName();
 	
 	static boolean bTrazas = true;
 

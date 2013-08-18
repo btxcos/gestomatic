@@ -90,5 +90,10 @@
 		<managed-bean-class>com.provisiones.pl.detalles.GestorDetallesProvision</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorProvisiones</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorProvisiones</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>
