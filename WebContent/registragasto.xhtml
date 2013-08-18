@@ -85,111 +85,130 @@
 
 											<h:outputText value="Periodicidad de pago: " />
 											<p:selectOneMenu id="PTPAGO" value="#{GestorGastos.sPTPAGO}">
-												<f:selectItem itemLabel="Periodicidad" itemValue="" />
+												<f:selectItem itemLabel="Periodicidad..." itemValue="" />
 												<f:selectItems value="#{GestorDatosGenerales.tiposptpagoHM}" />
 												<p:ajax update="PTPAGO, FFGTVP, hFFGTVP" listener="#{GestorGastos.cambiaFechaFinPeriodo}" />
 											</p:selectOneMenu>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Fechas del gasto">
-										<h:panelGrid columns="3" cellpadding="5">
-											<h:outputText value="Fecha del devengo: " />
-											<p:inputMask id="FEDEVE" value="#{GestorGastos.sFEDEVE}" mask="99/99/9999" size="10" maxlength="10"/>
-											<p:commandButton icon="ui-icon-clock" update="FEDEVE" actionListener="#{GestorGastos.hoyFEDEVE}" />
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText value="Fecha de anulacion del gasto: " />
+													<p:inputMask id="FEAGTO" value="#{GestorGastos.sFEAGTO}" mask="99/99/9999" size="10" maxlength="10"/>
+													<p:commandButton icon="ui-icon-clock" update="FEAGTO" actionListener="#{GestorGastos.hoyFEAGTO}" />
+												</h:panelGrid>
+											</p:panel>
+											<p:panel>
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText value="Fecha del devengo: " />
+													<p:inputMask id="FEDEVE" value="#{GestorGastos.sFEDEVE}" mask="99/99/9999" size="10" maxlength="10"/>
+													<p:commandButton icon="ui-icon-clock" update="FEDEVE" actionListener="#{GestorGastos.hoyFEDEVE}" />
 
-											<h:outputText value="Fecha de fin de periodo: " />
-											<p:inputMask id="FFGTVP" value="#{GestorGastos.sFFGTVP}" mask="99/99/9999" size="10" maxlength="10" disabled="#{GestorGastos.bFFGTVP}"/>
-											<p:commandButton id="hFFGTVP" icon="ui-icon-clock" update="FFGTVP" actionListener="#{GestorGastos.hoyFFGTVP}" disabled="#{GestorGastos.bFFGTVP}"/>
+													<h:outputText value="Fecha de fin de periodo: " />
+													<p:inputMask id="FFGTVP" value="#{GestorGastos.sFFGTVP}" mask="99/99/9999" size="10" maxlength="10" disabled="#{GestorGastos.bFFGTVP}"/>
+													<p:commandButton id="hFFGTVP" icon="ui-icon-clock" update="FFGTVP" actionListener="#{GestorGastos.hoyFFGTVP}" disabled="#{GestorGastos.bFFGTVP}"/>
 
-											<h:outputText value="Fecha del pago: " />
-											<p:inputMask id="FEPAGA" value="#{GestorGastos.sFEPAGA}" mask="99/99/9999" size="10" maxlength="10"/>
-											<p:commandButton icon="ui-icon-clock" update="FEPAGA" actionListener="#{GestorGastos.hoyFEPAGA}"/>
+													<h:outputText value="Fecha del pago: " />
+													<p:inputMask id="FEPAGA" value="#{GestorGastos.sFEPAGA}" mask="99/99/9999" size="10" maxlength="10"/>
+													<p:commandButton icon="ui-icon-clock" update="FEPAGA" actionListener="#{GestorGastos.hoyFEPAGA}"/>
 
-											<h:outputText value="Fecha limite del pago: " />
-											<p:inputMask id="FELIPG" value="#{GestorGastos.sFELIPG}" mask="99/99/9999" size="10" maxlength="10"/>
-											<p:commandButton icon="ui-icon-clock" update="FELIPG" actionListener="#{GestorGastos.hoyFELIPG}"/>
+													<h:outputText value="Fecha limite del pago: " />
+													<p:inputMask id="FELIPG" value="#{GestorGastos.sFELIPG}" mask="99/99/9999" size="10" maxlength="10"/>
+													<p:commandButton icon="ui-icon-clock" update="FELIPG" actionListener="#{GestorGastos.hoyFELIPG}"/>
+												</h:panelGrid>
+											</p:panel>
 										</h:panelGrid>
 									</p:fieldset>
 
 									<p:fieldset legend="Situacion del gasto">
+										<h:panelGrid columns="1" cellpadding="5">
+
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Situacion del gasto: " />
 											<p:selectOneMenu id="COSIGA" value="#{GestorGastos.sCOSIGA}">
-												<f:selectItem itemLabel="Situacion" itemValue="" />
+												<f:selectItem itemLabel="Situacion..." itemValue="" />
 												<f:selectItems value="#{GestorDatosGenerales.tiposcosigaHM}" />
-												<p:ajax update="COSIGA, FEEESI, FEECOI, FEEAUI, FEEPAI" listener="#{GestorGastos.cambiaFechaPorSituacion}" />
+												<p:ajax update="COSIGA, FEEESI, FEECOI, FEEAUI, FEEPAI, hFEEESI, hFEECOI, hFEEAUI, hFEEPAI" listener="#{GestorGastos.cambiaFechaPorSituacion}" />
 											</p:selectOneMenu>
 										</h:panelGrid>
 									</p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Fecha de estado estimado del importe: " />
 											<p:inputMask id="FEEESI" value="#{GestorGastos.sFEEESI}" mask="99/99/9999" size="10" maxlength="8" disabled="#{GestorGastos.bFEEESI}"/>
+											<p:commandButton id="hFEEESI" icon="ui-icon-clock" update="FEEESI" actionListener="#{GestorGastos.hoyFEEESI}" disabled="#{GestorGastos.bFEEESI}"/>
 
 											<h:outputText value="Fecha de estado conocido del importe: " />
 											<p:inputMask id="FEECOI" value="#{GestorGastos.sFEECOI}" mask="99/99/9999" size="10" maxlength="8" disabled="#{GestorGastos.bFEECOI}"/>
+											<p:commandButton id="hFEECOI" icon="ui-icon-clock" update="FEECOI" actionListener="#{GestorGastos.hoyFEECOI}" disabled="#{GestorGastos.bFEECOI}"/>
 
 											<h:outputText
 												value="Fecha de estado autoriazado del importe: " />
 											<p:inputMask id="FEEAUI" value="#{GestorGastos.sFEEAUI}" mask="99/99/9999" size="10" maxlength="8" disabled="#{GestorGastos.bFEEAUI}"/>
+											<p:commandButton id="hFEEAUI" icon="ui-icon-clock" update="FEEAUI" actionListener="#{GestorGastos.hoyFEEAUI}" disabled="#{GestorGastos.bFEEAUI}"/>
 
 											<h:outputText value="Fecha de estado pagado del importe: " />
 											<p:inputMask id="FEEPAI" value="#{GestorGastos.sFEEPAI}" mask="99/99/9999" size="10" maxlength="8" disabled="#{GestorGastos.bFEEPAI}"/>
+											<p:commandButton id="hFEEPAI" icon="ui-icon-clock" update="FEEPAI" actionListener="#{GestorGastos.hoyFEEPAI}" disabled="#{GestorGastos.bFEEPAI}"/>
 										</h:panelGrid>
+									 </h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Importes del gasto">
-										<h:panelGrid columns="1" cellpadding="5">
-										<p:panel>
-											<h:panelGrid columns="2" cellpadding="5">
+											<h:panelGrid columns="1" cellpadding="5">
 
-											<h:outputText value="Importe del gasto: " />
-											<p:inputText id="IMNGAS" value="#{GestorGastos.sIMNGAS}" size="16" maxlength="16">
-											</p:inputText>
+												<p:panel>
+													<h:panelGrid columns="2" cellpadding="5">
+														<h:outputText value="Importe del gasto: " />
+														<p:inputText id="IMNGAS" value="#{GestorGastos.sIMNGAS}" size="16" maxlength="16">
+														</p:inputText>
+													</h:panelGrid>
+												</p:panel>
 
+												<p:panel>
+													<h:panelGrid columns="2" cellpadding="5">
+														<h:outputText value="Recargo en el importe del gasto: " />
+														<p:inputText id="IMRGAS" value="#{GestorGastos.sIMRGAS}" size="16" maxlength="16">
+														</p:inputText>
 
-											<h:outputText value="Recargo en el importe del gasto: " />
-											<p:inputText id="IMRGAS" value="#{GestorGastos.sIMRGAS}" size="16" maxlength="16">
-											</p:inputText>
+														<h:outputText value="Importe de demora del gasto: " />
+														<p:inputText id="IMDGAS" value="#{GestorGastos.sIMDGAS}" size="16" maxlength="16">
+														</p:inputText>
 
+														<h:outputText value="Importe de costas: " />
+														<p:inputText id="IMCOST" value="#{GestorGastos.sIMCOST}" size="16" maxlength="16">
+														</p:inputText>
 
-											<h:outputText value="Importe de demora del gasto: " />
-											<p:inputText id="IMDGAS" value="#{GestorGastos.sIMDGAS}" size="16" maxlength="16">
-											</p:inputText>
+														<h:outputText value="Importe de otros incrementos: " />
+														<p:inputText id="IMOGAS" value="#{GestorGastos.sIMOGAS}" size="16" maxlength="16">
+														</p:inputText>
+													</h:panelGrid>
+												</p:panel>
 
-
-											<h:outputText value="Importe de costas: " />
-											<p:inputText id="IMCOST" value="#{GestorGastos.sIMCOST}" size="16" maxlength="16">
-											</p:inputText>
-
-
-											<h:outputText value="Importe de otros incrementos: " />
-											<p:inputText id="IMOGAS" value="#{GestorGastos.sIMOGAS}" size="16" maxlength="16">
-											</p:inputText>
-
-
-											<h:outputText value="Importe de descuento de gastos: " />
-											<p:inputText id="IMDTGA" value="#{GestorGastos.sIMDTGA}" size="16" maxlength="16">
-											</p:inputText>
-
-											</h:panelGrid>
-											</p:panel>
+												<p:panel>
+													<h:panelGrid columns="2" cellpadding="5">
+														<h:outputText value="Importe de descuento de gastos: " />
+														<p:inputText id="IMDTGA" value="#{GestorGastos.sIMDTGA}" size="16" maxlength="16">
+														</p:inputText>
+													</h:panelGrid>
+												</p:panel>
 											
 											<p:panel>
 												<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Importe de impuestos del gasto: " />
-											<p:inputText id="IMIMGA" value="#{GestorGastos.sIMIMGA}" size="16" maxlength="16">
+													<h:outputText value="Importe de impuestos del gasto: " />
+													<p:inputText id="IMIMGA" value="#{GestorGastos.sIMIMGA}" size="16" maxlength="16">
+													</p:inputText>
 
-											</p:inputText>
-
-
-											<h:outputText value="Tipo de impuesto: " />
-											<p:selectOneMenu id="COIMPT" value="#{GestorGastos.sCOIMPT}">
-												<f:selectItem itemLabel="Tipo" itemValue="" />
-												<f:selectItems value="#{GestorDatosGenerales.tiposcoimptHM}" />
-											</p:selectOneMenu>
+													<h:outputText value="Tipo de impuesto: " />
+													<p:selectOneMenu id="COIMPT" value="#{GestorGastos.sCOIMPT}">
+														<f:selectItem itemLabel="Tipo..." itemValue="" />
+														<f:selectItems value="#{GestorDatosGenerales.tiposcoimptHM}" />
+													</p:selectOneMenu>
 												</h:panelGrid>
-												
 											</p:panel>
+											
+
 										</h:panelGrid>
 									</p:fieldset>
 

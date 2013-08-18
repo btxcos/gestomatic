@@ -64,7 +64,7 @@ public class GestorGastos implements Serializable
 	private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
 	private String sNUCONE = ValoresDefecto.DEF_NUCONE;
 	private String sNUPROF = CLProvisiones.ultimaProvisionAbierta();
-	private String sFEAGTO = ValoresDefecto.DEF_FEAGTO;
+	private String sFEAGTO = "";
 	private String sCOMONA = ValoresDefecto.DEF_COMONA;
 	private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
 	private String sFEAUFA = ValoresDefecto.DEF_FEAUFA;
@@ -181,6 +181,107 @@ public class GestorGastos implements Serializable
 		
 		tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
 	}
+	public void borrarPlantillaGasto()
+	{
+		this.sCOGRUG = "";
+		this.sCOTPGA = "";
+		this.sCOSBGA = "";
+		this.sPTPAGO = "";
+
+		this.sFEDEVE = "";
+		this.sFFGTVP = "";
+		this.bFFGTVP = true;
+		this.sFEPAGA = "";
+		this.sFELIPG = "";
+
+		this.sCOSIGA = "";
+		this.sFEEESI = "";
+		this.bFEEESI = true;
+		this.sFEECOI = "";
+		this.bFEECOI = true;
+		this.sFEEAUI = "";
+		this.bFEEAUI = true;
+		this.sFEEPAI = "";
+		this.bFEEPAI = true;
+
+		this.sIMNGAS = "";
+		this.sYCOS02 = "";
+		this.sIMRGAS = "";
+		this.sYCOS04 = "";
+		this.sIMDGAS = "";
+		this.sYCOS06 = "";
+		this.sIMCOST = "";
+		this.sYCOS08 = "";
+		this.sIMOGAS = "";
+		this.sYCOS10 = "";
+		this.sIMDTGA = "";
+		this.sCOUNMO = "";
+		this.sIMIMGA = "";
+		this.sCOIMPT = "";
+
+		this.sCOTNEG = "";
+
+		this.sCOENCX = ValoresDefecto.DEF_COENCX;
+		this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+		this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+
+		this.sNUPROF = CLProvisiones.ultimaProvisionAbierta();
+
+		this.sFEAGTO = "";
+
+		this.sCOMONA = ValoresDefecto.DEF_COMONA;
+		this.sBIAUTO = ValoresDefecto.DEF_BIAUTO;
+		this.sFEAUFA = ValoresDefecto.DEF_FEAUFA;
+		this.sCOTERR = ValoresDefecto.DEF_COTERR;
+
+		this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
+		this.sFEPGPR = ValoresDefecto.DEF_FEPGPR;
+		
+		this.sFEAPLI = "";
+		
+		this.sCOAPII = ValoresDefecto.DEF_COAPII;
+		this.sCOSPII = ValoresDefecto.DEF_COSPII;
+		this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+		
+		this.sCOSBAC = "";
+		this.sIMCUCO = "";
+		
+	}
+	
+    public void limpiarPlantilla(ActionEvent actionEvent) 
+    {  
+    	borrarPlantillaGasto();
+    	borrarPlantillaActivo();
+    	
+		this.activoseleccionado = null;
+		this.tablaactivos = null;
+
+		this.cuotaseleccionada = null;
+		this.tablacuotas = null;
+    }
+	
+	public void borrarPlantillaActivo()
+	{
+    	this.sCOACES = "";
+
+    	this.sCOPOIN = "";
+    	this.sNOMUIN = "";
+    	this.sNOPRAC = "";
+    	this.sNOVIAS = "";
+    	this.sNUPIAC = "";
+    	this.sNUPOAC = "";
+    	this.sNUPUAC = "";
+	}
+	
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+    	borrarPlantillaActivo();
+    	
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+   	
+    }
+	
 	public void cambiaGrupo()
 	{
 		tiposcotpgaHM = new LinkedHashMap<String, String>();
@@ -333,6 +434,13 @@ public class GestorGastos implements Serializable
 		}
 	}
 	
+	public void hoyFEAGTO (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEAGTO";
+		this.setsFEAGTO(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEAGTO:|"+sFEAGTO+"|");
+	}
+	
 	public void hoyFEDEVE (ActionEvent actionEvent)
 	{
 		String sMethod = "hoyFEDEVE";
@@ -361,6 +469,33 @@ public class GestorGastos implements Serializable
 		Utils.debugTrace(true, sClassName, sMethod, "sFELIPG:|"+sFELIPG+"|");
 	}
 
+	public void hoyFEEESI (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEEESI";
+		this.setsFEEESI(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEEESI:|"+sFEEESI+"|");
+	}
+
+	public void hoyFEECOI (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEECOI";
+		this.setsFEECOI(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEECOI:|"+sFEECOI+"|");
+	}
+
+	public void hoyFEEAUI (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEEAUI";
+		this.setsFEEAUI(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEEAUI:|"+sFEEAUI+"|");
+	}
+
+	public void hoyFEEPAI (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEEPAI";
+		this.setsFEEPAI(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEEPAI:|"+sFEEPAI+"|");
+	}
 
 	
 	
@@ -460,6 +595,18 @@ public class GestorGastos implements Serializable
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
+    }
+	
+    public void registraGastp(ActionEvent actionEvent) 
+    {  
+    	borrarPlantillaGasto();
+    	borrarPlantillaActivo();
+    	
+		this.activoseleccionado = null;
+		this.tablaactivos = null;
+
+		this.cuotaseleccionada = null;
+		this.tablacuotas = null;
     }
 
 	public String getsCOACES() {

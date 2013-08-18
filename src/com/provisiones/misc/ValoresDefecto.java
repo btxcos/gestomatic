@@ -41,7 +41,8 @@ public class ValoresDefecto
 	public static final String DEF_NUCONE = "0000000000000";
 	public static final String DEF_FMPAGN = "00000000";
 	
-	public static final String DEF_FEAGTO = "00000000"; 
+	//public static final String DEF_FEAGTO = "00000000"; 
+	
 	public static final String DEF_COMONA = "00";
 	public static final String DEF_BIAUTO = "#";
 	public static final String DEF_FEAUFA = "00000000";

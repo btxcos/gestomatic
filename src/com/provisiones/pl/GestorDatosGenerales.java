@@ -133,9 +133,9 @@ public class GestorDatosGenerales implements Serializable
 		tiposcoimptHM.put("IPSI",           "3");  
 		tiposcoimptHM.put("IRPF",           "4");
 		
-		tiposcotnegHM.put("SIN IMPUESTO",	"0");  
-		tiposcotnegHM.put("IVA",            "1");  
-		tiposcotnegHM.put("IGIC",           "2");
+		tiposcotnegHM.put("SIN INFORMAR",	"0");  
+		tiposcotnegHM.put("CLIENTE",        "1");  
+		tiposcotnegHM.put("CAJA",           "2");
 	
 	}
 
