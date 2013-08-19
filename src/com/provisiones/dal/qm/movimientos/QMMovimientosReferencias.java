@@ -33,8 +33,15 @@ public class QMMovimientosReferencias
 	static String sField13 = "cotexa";      
 	static String sField14 = "cod_bitc09";  
 	static String sField15 = "obtexc";    
-	static String sField16 = "obdeer";   
+	static String sField16 = "obdeer";
 
+	//Ampliacion de valor catastral
+	static String sField17 = "cod_bitc23";  
+	static String sField18 = "imvsue";      
+	static String sField19 = "cod_bitc24";      
+	static String sField20 = "imcata";  
+	static String sField21 = "cod_bitc25";    
+	static String sField22 = "fereca";
 
 
 	public static int addMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
@@ -71,7 +78,16 @@ public class QMMovimientosReferencias
 				       + sField13 + ","
 				       + sField14 + ","
 				       + sField15 + ","
-				       + sField16 +  
+				       + sField16 +
+				       //Ampliacion de valor catastral
+				       ","
+				       + sField17 + ","              
+				       + sField18 + ","              
+				       + sField19 + ","
+				       + sField20 + ","
+				       + sField21 + ","
+				       + sField22 +
+				       
 				       ") VALUES ('" 
 				       + NuevoMovimientoReferenciaCatastral.getCODTRN() + "','" 
 				       + NuevoMovimientoReferenciaCatastral.getCOTDOR() + "','"
@@ -87,7 +103,18 @@ public class QMMovimientosReferencias
 				       + NuevoMovimientoReferenciaCatastral.getCOTEXA() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getBITC09() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getOBTEXC() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getOBDEER() + "' )", Statement.RETURN_GENERATED_KEYS);
+				       + NuevoMovimientoReferenciaCatastral.getOBDEER()
+
+				       //Ampliacion de valor catastral
+				       + "','"
+				       + NuevoMovimientoReferenciaCatastral.getBITC23() + "','"
+				       + NuevoMovimientoReferenciaCatastral.getIMVSUE() + "','"
+				       + NuevoMovimientoReferenciaCatastral.getBITC24() + "','"
+				       + NuevoMovimientoReferenciaCatastral.getIMCATA() + "','"
+				       + NuevoMovimientoReferenciaCatastral.getBITC25() + "','"
+				       + NuevoMovimientoReferenciaCatastral.getFERECA() + "' )"
+
+				       , Statement.RETURN_GENERATED_KEYS);
 			
 			resulset = stmt.getGeneratedKeys();
 			
@@ -154,6 +181,16 @@ public class QMMovimientosReferencias
 					+ sField14 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
 					+ sField15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
 					+ sField16 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBDEER() + 
+
+					//Ampliacion de valor catastral
+					"', "
+					+ sField17 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC23() + "', "
+					+ sField18 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMVSUE() + "', "
+					+ sField19 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC24() + "', "
+					+ sField20 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMCATA() + "', "
+					+ sField21 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC25() + "', "
+					+ sField22 + " = '"+ NuevoMovimientoReferenciaCatastral.getFERECA() + 
+					
 					"' "+
 					" WHERE "
 					+ sField1 + " = '"+ sMovimientoReferenciaCatastralID +"'");
@@ -221,7 +258,7 @@ public class QMMovimientosReferencias
 	}
 
 	public static MovimientoReferenciaCatastral getMovimientoReferenciaCatastral(String sMovimientoReferenciaCatastralID)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "getMovimientoReferenciaCatastral";
 
@@ -244,6 +281,14 @@ public class QMMovimientosReferencias
 		String sOBTEXC = "";
 		String sOBDEER = "";
 
+		//Ampliacion de valor catastral
+		String sBITC23 = "";
+		String sIMVSUE = "";
+		String sBITC24 = "";
+		String sIMCATA = "";
+		String sBITC25 = "";
+		String sFERECA = "";
+		
 
 		PreparedStatement pstmt = null;
 		boolean found = false;
@@ -274,7 +319,15 @@ public class QMMovimientosReferencias
 				       + sField14 + ","
 				       + sField15 + ","
 				       + sField16 +             
-         
+
+				       //Ampliacion de valor catastral
+				       ","
+				       + sField17 + ","              
+				       + sField18 + ","              
+				       + sField19 + ","
+				       + sField20 + ","
+				       + sField21 + ","
+				       + sField22 + 
        
 			"  FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sMovimientoReferenciaCatastralID	+ "')");
@@ -305,6 +358,13 @@ public class QMMovimientosReferencias
   					sBITC09 = rs.getString(sField14);
   					sOBTEXC = rs.getString(sField15);
   					sOBDEER = rs.getString(sField16);
+
+  					sBITC23 = rs.getString(sField17);
+  					sIMVSUE = rs.getString(sField18);
+  					sBITC24 = rs.getString(sField19);
+  					sIMCATA = rs.getString(sField20);
+  					sBITC25 = rs.getString(sField21);
+  					sFERECA = rs.getString(sField22);
   					
   					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
@@ -334,13 +394,17 @@ public class QMMovimientosReferencias
 		ConnectionManager.CloseDBConnection(conn);
 		return new MovimientoReferenciaCatastral(sCODTRN, sCOTDOR, sIDPROV, sCOACCI,
 				sCOENGP, sCOACES, sNURCAT, sBITC16, sTIRCAT, sBITC17, sENEMIS,
-				sCOTEXA, sBITC09, sOBTEXC, sOBDEER);
+				sCOTEXA, sBITC09, sOBTEXC, sOBDEER
+
+				//Ampliacion de valor catastral
+				,sBITC23, sIMVSUE, sBITC24, sIMCATA, sBITC25, sFERECA
+				);
 	}
 
 
-	public static boolean verificarMovimientoReferenciaCatastral(String sCodReferencia)
+	public static boolean existeMovimientoReferenciaCatastral(String sCodReferencia)
 	{
-		String sMethod = "verificarMovimientoReferenciaCatastral";
+		String sMethod = "existeMovimientoReferenciaCatastral";
 
 		Statement stmt = null;
 		ResultSet rs = null;

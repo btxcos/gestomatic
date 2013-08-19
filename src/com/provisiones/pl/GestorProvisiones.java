@@ -102,13 +102,17 @@ public class GestorProvisiones implements Serializable
 	
 	public void abrirProvision(ActionEvent actionEvent)
 	{
+		
+		//Cargar provision abierta
+		
+		//las provisiones se abren automaticamente 
 		String sMethod = "abrirProvision";
 		
 		FacesMessage msg;
     	
     	String sMsg = "";
 		
-		Provision provision = new Provision (sNUPROF, "0","0","0","0",ValoresDefecto.DEF_PENDIENTE);
+		Provision provision = new Provision (sNUPROF, "0", "0","0","0","0",ValoresDefecto.DEF_PENDIENTE);
 		if (CLProvisiones.ultimaProvisionAbierta().equals(sNUPROF))
 		{
 			sMsg = "ERROR: Esta provision ya esta abierta, cierrela antes de abrir una nueva.";

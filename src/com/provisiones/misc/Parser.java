@@ -624,11 +624,18 @@ public class Parser {
 		String sBITC09 = linea.substring(Posiciones.E3_BITC09_P, Posiciones.E3_BITC09_P+Longitudes.BITC09_L);
 		String sOBTEXC = linea.substring(Posiciones.E3_OBTEXC_P, Posiciones.E3_OBTEXC_P+Longitudes.OBTEXC_L);
 		String sOBDEER = linea.substring(Posiciones.E3_OBDEER_P, Posiciones.E3_OBDEER_P+Longitudes.OBDEER_L);
-		
+
+		//Ampliacion de valor catastral
+		String sBITC23 = linea.substring(Posiciones.E3_BITC23_P, Posiciones.E3_BITC23_P+Longitudes.BITC23_L);
+		String sIMVSUE = linea.substring(Posiciones.E3_IMVSUE_P, Posiciones.E3_IMVSUE_P+Longitudes.IMVSUE_L);
+		String sBITC24 = linea.substring(Posiciones.E3_BITC24_P, Posiciones.E3_BITC24_P+Longitudes.BITC24_L);
+		String sIMCATA = linea.substring(Posiciones.E3_IMCATA_P, Posiciones.E3_IMCATA_P+Longitudes.IMCATA_L);
+		String sBITC25 = linea.substring(Posiciones.E3_BITC25_P, Posiciones.E3_BITC25_P+Longitudes.BITC25_L);
+		String sFERECA = linea.substring(Posiciones.E3_FERECA_P, Posiciones.E3_FERECA_P+Longitudes.FERECA_L);
 		
 		return new MovimientoReferenciaCatastral(sCODTRN, sCOTDOR, sIDPROV, sCOACCI,
 				sCOENGP, sCOACES, sNURCAT, sBITC16, sTIRCAT, sBITC17, sENEMIS,
-				sCOTEXA, sBITC09, sOBTEXC, sOBDEER);
+				sCOTEXA, sBITC09, sOBTEXC, sOBDEER, sBITC23, sIMVSUE, sBITC24, sIMCATA, sBITC25, sFERECA);
 	}
 	
 	public static String escribirReferenciaCatastral (MovimientoReferenciaCatastral referenciacatrastral)
@@ -649,11 +656,22 @@ public class Parser {
         String sBITC09 = formateaCampoAlfanumerico(referenciacatrastral.getBITC09(),Longitudes.BITC09_L);
         String sOBTEXC = formateaCampoAlfanumerico(referenciacatrastral.getOBTEXC(),Longitudes.OBTEXC_L);
         String sOBDEER = formateaCampoAlfanumerico(referenciacatrastral.getOBDEER(),Longitudes.OBDEER_L);
+        
+		//Ampliacion de valor catastral
+		String sBITC23 = formateaCampoAlfanumerico(referenciacatrastral.getBITC23(),Longitudes.BITC23_L);
+		String sIMVSUE = formateaCampoNumerico(referenciacatrastral.getIMVSUE(),Longitudes.IMVSUE_L);
+		String sBITC24 = formateaCampoAlfanumerico(referenciacatrastral.getBITC24(),Longitudes.BITC24_L);
+		String sIMCATA = formateaCampoNumerico(referenciacatrastral.getIMCATA(),Longitudes.IMCATA_L);
+		String sBITC25 = formateaCampoAlfanumerico(referenciacatrastral.getBITC25(),Longitudes.BITC25_L);
+		String sFERECA = formateaCampoNumerico(referenciacatrastral.getFERECA(),Longitudes.FERECA_L);
 
 		
 		return sCODTRN + sCOTDOR + sIDPROV + sCOACCI + sCOENGP + sCOACES
 				+ sNURCAT + sBITC16 + sTIRCAT + sBITC17 + sENEMIS + sCOTEXA
 				+ sBITC09 + sOBTEXC + sOBDEER
+				//Ampliacion de valor catastral
+				+ sBITC23 + sIMVSUE + sBITC24 + sIMCATA + sBITC25 + sFERECA
+				
 				+ referenciacatrastral.getFILLER();
 	}
 

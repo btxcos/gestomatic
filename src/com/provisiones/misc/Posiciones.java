@@ -226,6 +226,16 @@ public class Posiciones
 	public static final int E3_OBTEXC_P  = 184;
 	public static final int E3_OBDEER_P  = 294;
 	
+	//Ampliacion de valor catastral
+	public static final int E3_BITC23_P  = 374;
+	public static final int E3_IMVSUE_P  = 375;
+	public static final int E3_BITC24_P  = 390;
+	public static final int E3_IMCATA_P  = 391;
+	public static final int E3_BITC25_P  = 406;
+	public static final int E3_FERECA_P  = 407;
+	
+	
+	
 	//Posiciones en archivo Impuestos y Recursos
 	
 	public static final int E4_CODTRN_P  = 0;

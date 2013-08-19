@@ -323,7 +323,7 @@ public class QMListaReferencias
 	}
 	
 	public static ArrayList<ReferenciaTabla> buscaReferenciasActivo(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "buscaActivosComunidad";
 
@@ -334,6 +334,10 @@ public class QMListaReferencias
 		String sTIRCAT = "";
 		String sENEMIS = "";
 		String sOBTEXC = "";
+		
+		String sIMVSUE = "";
+		String sIMCATA = "";
+		String sFERECA = "";
 		
 		ArrayList<ReferenciaTabla> result = new ArrayList<ReferenciaTabla>();
 		
@@ -356,6 +360,12 @@ public class QMListaReferencias
 					   + QMReferencias.sField2 + ","
 					   + QMReferencias.sField3 + ","
 					   + QMReferencias.sField5 + 
+
+					   //Ampliacion de valor catastral
+					   ","
+					   + QMReferencias.sField6 + ","
+					   + QMReferencias.sField7 + ","
+					   + QMReferencias.sField8 + 
 					   
 					   "  FROM " + QMReferencias.sTable + 
 					   " WHERE " 
@@ -383,8 +393,18 @@ public class QMListaReferencias
 					sTIRCAT = rs.getString(QMReferencias.sField2);
 					sENEMIS = rs.getString(QMReferencias.sField3);
 					sOBTEXC = rs.getString(QMReferencias.sField5);
+
+					//Ampliacion de valor catastral
+					sIMVSUE = rs.getString(QMReferencias.sField6);
+					sIMCATA = rs.getString(QMReferencias.sField7);
+					sFERECA = rs.getString(QMReferencias.sField8);
 					
-					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(sNURCAT, sTIRCAT, sENEMIS, sOBTEXC);
+					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(sNURCAT, sTIRCAT, sENEMIS, sOBTEXC
+
+							//Ampliacion de valor catastral
+							, sIMVSUE, sIMCATA, sFERECA
+							
+							);
 					
 					result.add(referenciaencontrada);
 					

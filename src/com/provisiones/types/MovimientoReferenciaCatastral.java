@@ -18,13 +18,26 @@ public class MovimientoReferenciaCatastral
 	private String BITC09 = "";
 	private String OBTEXC = "";
 	private String OBDEER = "";
+
+	//Ampliacion de valor catastral
+	private String BITC23 = "";
+	private String IMVSUE = "";
+	private String BITC24 = "";
+	private String IMCATA = "";
+	private String BITC25 = "";
+	private String FERECA = "";
+
+	
 	private String FILLER = "                                                                                                                            ";
 
 	//Constructor de clase
-	public MovimientoReferenciaCatastral(String cODTRN, String cOTDOR, String iDPROV,
-			String cOACCI, String cOENGP, String cOACES, String nURCAT,
-			String bITC16, String tIRCAT, String bITC17, String eNEMIS,
-			String cOTEXA, String bITC09, String oBTEXC, String oBDEER) {
+
+	public MovimientoReferenciaCatastral(String cODTRN, String cOTDOR,
+			String iDPROV, String cOACCI, String cOENGP, String cOACES,
+			String nURCAT, String bITC16, String tIRCAT, String bITC17,
+			String eNEMIS, String cOTEXA, String bITC09, String oBTEXC,
+			String oBDEER, String bITC23, String iMVSUE, String bITC24,
+			String iMCATA, String bITC25, String fERECA) {
 		super();
 		CODTRN = cODTRN;
 		COTDOR = cOTDOR;
@@ -41,14 +54,16 @@ public class MovimientoReferenciaCatastral
 		BITC09 = bITC09;
 		OBTEXC = oBTEXC;
 		OBDEER = oBDEER;
-	}
-
-
-	//Métodos de acceso
-	public String getFILLER() {
-		return FILLER;
+		BITC23 = bITC23;
+		IMVSUE = iMVSUE;
+		BITC24 = bITC24;
+		IMCATA = iMCATA;
+		BITC25 = bITC25;
+		FERECA = fERECA;
 	}	
 	
+	//Métodos de acceso
+
 	public String getCODTRN() {
 		return CODTRN;
 	}
@@ -169,6 +184,58 @@ public class MovimientoReferenciaCatastral
 		OBDEER = oBDEER;
 	}
 
+	public String getBITC23() {
+		return BITC23;
+	}
+
+	public void setBITC23(String bITC23) {
+		BITC23 = bITC23;
+	}
+
+	public String getIMVSUE() {
+		return IMVSUE;
+	}
+
+	public void setIMVSUE(String iMVSUE) {
+		IMVSUE = iMVSUE;
+	}
+
+	public String getBITC24() {
+		return BITC24;
+	}
+
+	public void setBITC24(String bITC24) {
+		BITC24 = bITC24;
+	}
+
+	public String getIMCATA() {
+		return IMCATA;
+	}
+
+	public void setIMCATA(String iMCATA) {
+		IMCATA = iMCATA;
+	}
+
+	public String getBITC25() {
+		return BITC25;
+	}
+
+	public void setBITC25(String bITC25) {
+		BITC25 = bITC25;
+	}
+
+	public String getFERECA() {
+		return FERECA;
+	}
+
+	public void setFERECA(String fERECA) {
+		FERECA = fERECA;
+	}
+
+	public String getFILLER() {
+		return FILLER;
+	}
+
 	public void pintaMovimientoReferenciaCatastral()
 	{
 		System.out.println("(MOVIMIENTO REFERENCIA CATASTRAL)");
@@ -187,5 +254,15 @@ public class MovimientoReferenciaCatastral
 		System.out.println("BITC09:|"+BITC09+"|");
 		System.out.println("OBTEXC:|"+OBTEXC+"|");
 		System.out.println("OBDEER:|"+OBDEER+"|");
+		
+		//Ampliacion de valor catastral
+		System.out.println("BITC23:|"+BITC23+"|");
+		System.out.println("IMVSUE:|"+IMVSUE+"|");
+		System.out.println("BITC24:|"+BITC24+"|");
+		System.out.println("IMCATA:|"+IMCATA+"|");
+		System.out.println("BITC25:|"+BITC25+"|");
+		System.out.println("FERECA:|"+FERECA+"|");
 	}
+
+
 }

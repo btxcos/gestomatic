@@ -118,6 +118,27 @@ public class GestorMovimientosCuotas implements Serializable
    	
     }
     
+	public void hoyFIPAGO (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFIPAGO";
+		this.setsFIPAGO(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFIPAGO:|"+sFIPAGO+"|");
+	}
+
+	public void hoyFFPAGO (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFFPAGO";
+		this.setsFFPAGO(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFFPAGO:|"+sFFPAGO+"|");
+	}
+	
+	public void hoyFAACTA (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFAACTA";
+		this.setsFAACTA(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFAACTA:|"+sFAACTA+"|");
+	}
+    
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 		

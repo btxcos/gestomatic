@@ -4,6 +4,7 @@ public class Provision
 {
 
 	private String sNUPROF = "";
+	private String sCOSPAT = "";
 	private String sValorTolal = "";
 	private String sNumGastos = "";	
 	private String sFEPFON = "";
@@ -13,10 +14,12 @@ public class Provision
 
 	//Constructor de clase
 	
-	public Provision(String sNUPROF, String sValorTolal, String sNumGastos,
-			String sFEPFON, String sFechaValidacion, String sValidado) {
+	public Provision(String sNUPROF, String sCOSPAT, String sValorTolal,
+			String sNumGastos, String sFEPFON, String sFechaValidacion,
+			String sValidado) {
 		super();
 		this.sNUPROF = sNUPROF;
+		this.sCOSPAT = sCOSPAT;
 		this.sValorTolal = sValorTolal;
 		this.sNumGastos = sNumGastos;
 		this.sFEPFON = sFEPFON;
@@ -26,12 +29,21 @@ public class Provision
 	
 	//Métodos de acceso
 
+
 	public String getsNUPROF() {
 		return sNUPROF;
 	}
 
 	public void setsNUPROF(String sNUPROF) {
 		this.sNUPROF = sNUPROF;
+	}
+
+	public String getsCOSPAT() {
+		return sCOSPAT;
+	}
+
+	public void setsCOSPAT(String sCOSPAT) {
+		this.sCOSPAT = sCOSPAT;
 	}
 
 	public String getsValorTolal() {
@@ -74,15 +86,17 @@ public class Provision
 		this.sValidado = sValidado;
 	}
 
+
 	public void pintaProvision()
 	{
 		System.out.println("(PROVISION)");
-		System.out.println("sNUPROF         :|"+sNUPROF         +"|");
-		System.out.println("sFEPFON         :|"+sFEPFON         +"|");
+		System.out.println("sNUPROF         :|"+sNUPROF+"|");
+		System.out.println("sCOSPAT         :|"+sCOSPAT+"|");
+		System.out.println("sFEPFON         :|"+sFEPFON+"|");
 		System.out.println("sFechaValidacion:|"+sFechaValidacion+"|");
-		System.out.println("sValidado       :|"+sValidado       +"|");
-		System.out.println("sValorTolal     :|"+sValorTolal     +"|");
-		System.out.println("sNumGastos      :|"+sNumGastos      +"|");
+		System.out.println("sValidado       :|"+sValidado+"|");
+		System.out.println("sValorTolal     :|"+sValorTolal+"|");
+		System.out.println("sNumGastos      :|"+sNumGastos+"|");
 	}
 
 }

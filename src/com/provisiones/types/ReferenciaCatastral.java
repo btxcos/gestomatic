@@ -8,18 +8,27 @@ public class ReferenciaCatastral
 	private String ENEMIS = "";
 	private String COTEXA = "";
 	private String OBTEXC = "";
+	
+	//Ampliacion de valor catastral
+	private String IMVSUE = "";
+	private String IMCATA = "";
+	private String FERECA = "";
 
 	//Constructor de clase
 
 	public ReferenciaCatastral(String nURCAT, String tIRCAT, String eNEMIS,
-			String cOTEXA, String oBTEXC) {
+			String cOTEXA, String oBTEXC, String iMVSUE, String iMCATA,
+			String fERECA) {
 		super();
 		NURCAT = nURCAT;
 		TIRCAT = tIRCAT;
 		ENEMIS = eNEMIS;
 		COTEXA = cOTEXA;
 		OBTEXC = oBTEXC;
-	}
+		IMVSUE = iMVSUE;
+		IMCATA = iMCATA;
+		FERECA = fERECA;
+	}	
 
 	//Métodos de acceso
 
@@ -63,6 +72,30 @@ public class ReferenciaCatastral
 		OBTEXC = oBTEXC;
 	}
 
+	public String getIMVSUE() {
+		return IMVSUE;
+	}
+
+	public void setIMVSUE(String iMVSUE) {
+		IMVSUE = iMVSUE;
+	}
+
+	public String getIMCATA() {
+		return IMCATA;
+	}
+
+	public void setIMCATA(String iMCATA) {
+		IMCATA = iMCATA;
+	}
+
+	public String getFERECA() {
+		return FERECA;
+	}
+
+	public void setFERECA(String fERECA) {
+		FERECA = fERECA;
+	}
+
 	public void pintaReferenciaCatastral()
 	{
 		System.out.println("(REFERENCIA CATASTRAL)");
@@ -71,5 +104,12 @@ public class ReferenciaCatastral
 		System.out.println("ENEMIS:|"+ENEMIS+"|");
 		System.out.println("COTEXA:|"+COTEXA+"|");
 		System.out.println("OBTEXC:|"+OBTEXC+"|");
+		
+		//Ampliacion de valor catastral
+		System.out.println("IMVSUE:|"+IMVSUE+"|");
+		System.out.println("IMCATA:|"+IMCATA+"|");
+		System.out.println("FERECA:|"+FERECA+"|");
 	}
+
+
 }

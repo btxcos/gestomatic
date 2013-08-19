@@ -37,6 +37,9 @@ public class Longitudes
 	public static final int BITC20_L = 1;
 	public static final int BITC21_L = 1;
 	public static final int BITC22_L = 1;
+	public static final int BITC23_L = 1;
+	public static final int BITC24_L = 1;
+	public static final int BITC25_L = 1;
 	public static final int CABANO_L = 4;
 	public static final int CADORM_L = 4;
 	public static final int CAGAPA_L = 5;
@@ -117,6 +120,7 @@ public class Longitudes
 	public static final int FEPRRE_L = 8;
 	public static final int FEREAC_L = 8;
 	public static final int FEREAP_L = 8;
+	public static final int FERECA_L = 8;
 	public static final int FEREDE_L = 8;
 	public static final int FERELA_L = 8;
 	public static final int FEREPO_L = 8;
@@ -136,6 +140,7 @@ public class Longitudes
 	public static final int IDAUTO_L = 10;
 	public static final int IDCOL3_L = 4;
 	public static final int IDPROV_L = 9;
+	public static final int IMCATA_L = 15;
 	public static final int IMCOST_L = 13;
 	public static final int IMCUCO_L = 15;
 	public static final int IMDGAS_L = 13;
@@ -146,6 +151,7 @@ public class Longitudes
 	public static final int IMPCOO_L = 15;
 	public static final int IMRGAS_L = 13;
 	public static final int IMVACT_L = 15;
+	public static final int IMVSUE_L = 15;
 	public static final int NODCAD_L = 60;
 	public static final int NODCCO_L = 60;
 	public static final int NOLOJZ_L = 30;

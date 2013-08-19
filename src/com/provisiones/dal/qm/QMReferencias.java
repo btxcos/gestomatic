@@ -24,8 +24,13 @@ public class QMReferencias
 	public static final String sField3 = "enemis";    
 	public static final String sField4 = "cotexa";    
 	public static final String sField5 = "obtexc";
+
+	//Ampliacion de valor catastral
+	public static final String sField6 = "imvsue";    
+	public static final String sField7 = "imcata";    
+	public static final String sField8 = "fereca";
 	
-	public static final String sField6 = "cod_estado";
+	public static final String sField9 = "cod_estado";
 
 	public static boolean addReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral)
 
@@ -49,13 +54,22 @@ public class QMReferencias
 				       + sField3  + ","              
 				       + sField4  + ","
 				       + sField5  + ","
-				       + sField6  +              
+				       + sField6  + ","              
+				       + sField7  + ","
+				       + sField8  + ","
+				       + sField9  +              
 				       ") VALUES ('" 
 				       + NuevaReferenciaCatastral.getNURCAT() + "','"
 				       + NuevaReferenciaCatastral.getTIRCAT() + "','"
 				       + NuevaReferenciaCatastral.getENEMIS() + "','"
 				       + NuevaReferenciaCatastral.getCOTEXA() + "','"
-				       + NuevaReferenciaCatastral.getOBTEXC() + "','" 
+				       + NuevaReferenciaCatastral.getOBTEXC() + "','"
+				       
+				       //Ampliacion de valor catastral
+				       + NuevaReferenciaCatastral.getIMVSUE() + "','"
+				       + NuevaReferenciaCatastral.getIMCATA() + "','"
+				       + NuevaReferenciaCatastral.getFERECA() + "','"
+
 				       + ValoresDefecto.DEF_ALTA + "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
@@ -100,7 +114,13 @@ public class QMReferencias
 					+ sField2  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "', "
 					+ sField3  + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "', "
 					+ sField4  + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "', "
-					+ sField5  + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "' "+
+					+ sField5  + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "', "
+					
+					//Ampliacion de valor catastral
+					+ sField6  + " = '"+ NuevaReferenciaCatastral.getIMVSUE() + "', "
+					+ sField7  + " = '"+ NuevaReferenciaCatastral.getIMCATA() + "', "
+					+ sField8  + " = '"+ NuevaReferenciaCatastral.getFERECA() +
+					"' "+
 					" WHERE "
 					+ sField1 + " = '"+ sCodNURCAT +"'");
 			
@@ -178,6 +198,11 @@ public class QMReferencias
 		String sENEMIS = "";
 		String sCOTEXA = "";
 		String sOBTEXC = "";
+		
+		//Ampliacion de valor catastral
+		String sIMVSUE = "";
+		String sIMCATA = "";
+		String sFERECA = "";
 
 		PreparedStatement pstmt = null;
 		boolean found = false;
@@ -197,8 +222,13 @@ public class QMReferencias
 				       + sField2  + ","              
 				       + sField3  + ","              
 				       + sField4  + ","              
-				       + sField5  +               
-         
+				       + sField5  +  
+
+				       //Ampliacion de valor catastral
+				       ","              
+				       + sField6  + ","              
+				       + sField7  + ","              
+				       + sField8  +
        
 			"  FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodNURCAT	+ "')");
@@ -220,6 +250,11 @@ public class QMReferencias
   					sCOTEXA = rs.getString(sField4);
   					sOBTEXC = rs.getString(sField5);
 
+  					//Ampliacion de valor catastral
+  					sIMVSUE = rs.getString(sField6);
+  					sIMCATA = rs.getString(sField7);
+  					sFERECA = rs.getString(sField8);
+  					
   					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
   					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField1 + ": " + sCodNURCAT);
@@ -245,7 +280,7 @@ public class QMReferencias
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return new ReferenciaCatastral(sNURCAT, sTIRCAT, sENEMIS, sCOTEXA, sOBTEXC);
+		return new ReferenciaCatastral(sNURCAT, sTIRCAT, sENEMIS, sCOTEXA, sOBTEXC, sIMVSUE, sIMCATA, sFERECA);
 	}
 	
 	public static boolean existeReferenciaCatastral(String sCodNURCAT)
@@ -329,7 +364,7 @@ public class QMReferencias
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField6 + " = '"+ sEstado + 
+					+ sField9 + " = '"+ sEstado + 
 					"' "+
 					" WHERE "+
 					"(" + sField1 + " = '" + sCodNURCAT + "')");
@@ -381,7 +416,7 @@ public class QMReferencias
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + sField9 + "  FROM " + sTable + 
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodNURCAT + "')");
 
@@ -397,11 +432,11 @@ public class QMReferencias
 				{
 					found = true;
 
-					sEstado = rs.getString(sField6);
+					sEstado = rs.getString(sField9);
 
 					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField6 + ": " + sEstado);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField9 + ": " + sEstado);
 
 
 				}

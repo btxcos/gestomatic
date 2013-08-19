@@ -93,7 +93,14 @@ public class CLReferencias
 				referencia.getCOTEXA(),
 				"",
 				referencia.getOBTEXC(),
-				"");
+				"",
+				//Ampliacion de valor catastral
+				"",
+				referencia.getIMVSUE(),
+				"",
+				referencia.getIMCATA(),
+				"",
+				referencia.getFERECA());
 		
 	}
 	public static ReferenciaCatastral convierteMovimientoenReferencia(MovimientoReferenciaCatastral movimiento)
@@ -107,7 +114,12 @@ public class CLReferencias
 				movimiento.getTIRCAT(),
 				movimiento.getENEMIS(),
 				movimiento.getCOTEXA(),
-				movimiento.getOBTEXC());
+				movimiento.getOBTEXC(),
+				
+				//Ampliacion de valor catastral
+				movimiento.getIMVSUE(),
+				movimiento.getIMCATA(),
+				movimiento.getFERECA());
 	}
 	
 	public static boolean existeReferenciaCatastral (String sCodNURCAT)
@@ -213,7 +225,24 @@ public class CLReferencias
 			//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 			iCodigo = -54;
 		}
+		
+		else if (Double.parseDouble(movimiento.getIMVSUE()) <= 0)
+		{
+			//Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
+			iCodigo = -82;
+		}	
 
+		else if (Double.parseDouble(movimiento.getIMCATA()) <= 0)
+		{
+			//Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
+			iCodigo = -83;
+		}
+		else if (movimiento.getFERECA().equals("#") || movimiento.getFERECA().equals("0"))
+		{
+			//Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
+			iCodigo = -85;
+		}
+		
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
 		{
 			//error alta de una referencia en alta
@@ -355,7 +384,7 @@ public class CLReferencias
 		
 		movimiento.pintaMovimientoReferenciaCatastral();
 		
-		MovimientoReferenciaCatastral movimiento_revisado = new MovimientoReferenciaCatastral("","0","0","","0","0","","","","","","0","","","");
+		MovimientoReferenciaCatastral movimiento_revisado = new MovimientoReferenciaCatastral("","0","0","","0","0","","","","","","0","","","","","0","","0","","0");
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Revisando Accion: |"+movimiento.getCOACCI()+"|");
 		
@@ -404,6 +433,37 @@ public class CLReferencias
 				{
 					movimiento_revisado.setBITC09("A");
 					movimiento_revisado.setOBTEXC(movimiento.getOBTEXC());
+				}
+				
+				//Ampliacion de valor catastral
+				if (movimiento.getIMVSUE().equals(""))
+				{
+					movimiento_revisado.setBITC23("#");
+				}
+				else
+				{
+					movimiento_revisado.setBITC23("S");
+					movimiento_revisado.setIMVSUE(movimiento.getIMVSUE());
+				}
+				
+				if (movimiento.getIMCATA().equals(""))
+				{
+					movimiento_revisado.setBITC24("#");
+				}
+				else
+				{
+					movimiento_revisado.setBITC24("S");
+					movimiento_revisado.setIMCATA(movimiento.getIMCATA());
+				}
+				
+				if (movimiento.getFERECA().equals(""))
+				{
+					movimiento_revisado.setBITC25("#");
+				}
+				else
+				{
+					movimiento_revisado.setBITC25("S");
+					movimiento_revisado.setFERECA(movimiento.getFERECA());
 				}
 				
 
@@ -459,15 +519,54 @@ public class CLReferencias
 					bCambio = true;
 				}
 				
+				//Ampliacion de valor catastral
+				if (movimiento.getIMVSUE().equals(referencia.getIMVSUE()))
+				{
+					movimiento_revisado.setBITC23("#");
+				}
+				else
+				{
+					movimiento_revisado.setBITC23("S");
+					movimiento_revisado.setIMVSUE(movimiento.getIMVSUE());
+					bCambio = true;
+				}
+				
+				if (movimiento.getIMCATA().equals(referencia.getIMCATA()))
+				{
+					movimiento_revisado.setBITC24("#");
+				}
+				else
+				{
+					movimiento_revisado.setBITC24("S");
+					movimiento_revisado.setIMCATA(movimiento.getIMCATA());
+					bCambio = true;
+				}
+				
+				if (movimiento.getFERECA().equals(referencia.getFERECA()))
+				{
+					movimiento_revisado.setBITC25("#");
+				}
+				else
+				{
+					movimiento_revisado.setBITC25("S");
+					movimiento_revisado.setFERECA(movimiento.getFERECA());
+					bCambio = true;
+				}
+				
 				if (!bCambio)
 					movimiento_revisado.setCOACCI("#");
-
+				
 			}
 			else if (movimiento.getCOACCI().equals("B"))
 			{
 				movimiento_revisado.setBITC16("#");
 				movimiento_revisado.setBITC17("#");
 				movimiento_revisado.setBITC09("#");
+				
+				//Ampliacion de valor catastral
+				movimiento_revisado.setBITC23("#");
+				movimiento_revisado.setBITC24("#");
+				movimiento_revisado.setBITC25("#");
 			}
 			else
 				movimiento_revisado.setCOACCI("");

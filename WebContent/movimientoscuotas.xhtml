@@ -117,19 +117,21 @@
 										  </p:panel>
 										  
 											<p:panel >
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="4" cellpadding="5">
 
 													<h:outputText for="FIPAGO" value="FIPAGO: " />
 													<p:inputMask id="FIPAGO" validatorMessage="La fecha del primer pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosCuotas.sFIPAGO}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:message for="FIPAGO" display="icon"/>
+													<p:commandButton id="hFIPAGO" icon="ui-icon-clock" update="FIPAGO" actionListener="#{GestorMovimientosCuotas.hoyFIPAGO}"/>
 
 													<h:outputText for="FFPAGO" value="FFPAGO: " />
 													<p:inputMask id="FFPAGO" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosCuotas.sFFPAGO}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:message for="FFPAGO" display="icon"/>
+													<p:commandButton id="hFFPAGO" icon="ui-icon-clock" update="FFPAGO" actionListener="#{GestorMovimientosCuotas.hoyFFPAGO}"/>
 
 
 
@@ -139,6 +141,7 @@
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:message for="FAACTA" display="icon"/>
+													<p:commandButton id="hFAACTA" icon="ui-icon-clock" update="FAACTA" actionListener="#{GestorMovimientosCuotas.hoyFAACTA}"/>
 
 													<h:outputText for="PTPAGO" value="Periodicidad: " />
 													<p:inputText id="DesPTPAGO" value="#{GestorMovimientosCuotas.sDesPTPAGO}" size="20" maxlength="20" disabled="true">

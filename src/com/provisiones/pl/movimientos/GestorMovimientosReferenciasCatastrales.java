@@ -36,6 +36,11 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	
 	private String sOBDEER = "";
 	
+	//Ampliacion de valor catastral
+	private String sIMVSUE = "";
+	private String sIMCATA = "";
+	private String sFERECA = "";
+	
 	//Buscar activos
 	private String sCOACES = "";
 
@@ -191,6 +196,13 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.tablareferencias = null;
    	
     }
+    
+	public void hoyFERECA (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFERECA";
+		this.setsFERECA(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFERECA:|"+sFERECA+"|");
+	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
@@ -219,6 +231,10 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     		this.sENEMIS = referencia.getENEMIS();
     		//this.sCOTEXA = referencia.getCOTEXA();
     		this.sOBTEXC = referencia.getOBTEXC();
+    		
+    		this.sIMVSUE = referencia.getOBTEXC();
+    		this.sIMCATA = referencia.getOBTEXC();
+    		this.sFERECA = referencia.getOBTEXC();
     	
     		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
     	
@@ -242,6 +258,10 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.sTIRCAT = referenciaseleccionada.getTIRCAT();
     	this.sENEMIS = referenciaseleccionada.getENEMIS();
     	this.sOBTEXC = referenciaseleccionada.getOBTEXC();
+    	
+    	this.sIMVSUE = referenciaseleccionada.getIMVSUE();
+    	this.sIMCATA = referenciaseleccionada.getIMCATA();
+    	this.sFERECA = referenciaseleccionada.getFERECA();
 
  	
     	String sMsg = "Referencia '"+ sNURCAT +"' Seleccionada.";
@@ -278,7 +298,13 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 				sCOTEXA.toUpperCase(),
 				"", 
 				sOBTEXC.toUpperCase(), 
-				sOBDEER.toUpperCase());
+				sOBDEER.toUpperCase(),
+				"", 
+				Utils.compruebaImporte(sIMVSUE.toUpperCase()),
+				"", 
+				Utils.compruebaImporte(sIMCATA.toUpperCase()),
+				"", 
+				Utils.compruebaFecha(sFERECA.toUpperCase()));
 		
 		FacesMessage msg;
 		
@@ -343,6 +369,26 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		//Ampliacion de valor catastral
+		case -82: //Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
+			sMsg = "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+				
+		case -83: //Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
+			sMsg = "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
+			sMsg = "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
 			
 		case -801: //Error 801 - alta de una referencia en alta
 			sMsg = "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.";
@@ -594,5 +640,30 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	public void setReferenciaseleccionada(ReferenciaTabla referenciaseleccionada) {
 		this.referenciaseleccionada = referenciaseleccionada;
 	}
+
+	public String getsIMVSUE() {
+		return sIMVSUE;
+	}
+
+	public void setsIMVSUE(String sIMVSUE) {
+		this.sIMVSUE = sIMVSUE;
+	}
+
+	public String getsIMCATA() {
+		return sIMCATA;
+	}
+
+	public void setsIMCATA(String sIMCATA) {
+		this.sIMCATA = sIMCATA;
+	}
+
+	public String getsFERECA() {
+		return sFERECA;
+	}
+
+	public void setsFERECA(String sFERECA) {
+		this.sFERECA = sFERECA;
+	}
+	
 	
 }

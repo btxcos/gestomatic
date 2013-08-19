@@ -75,8 +75,6 @@ public class Utils
 		
 		if (bFormato)
 		{
- 
-			//sHoy = sDia+"/"+sMes+"/"+fecha.get(Calendar.YEAR);
 			sHoy = sDia+sMes+fecha.get(Calendar.YEAR)+"";
 		}
 		else
@@ -204,25 +202,50 @@ public class Utils
 		String sMethod = "compruebaImporte";
 		String sImporteReal = "#";
 		
-		if (sImporte.matches("-[\\d]+([\\.|,][\\d]{2})?$"))
+
+		String sSeparador = "";
+		
+		Utils.debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporte+"|");
+		
+		if (sImporte.matches("-?[\\d]+([\\.|,][\\d][\\d]?)?$"))
 		{
-		
-			if (sImporte.length()>3)
+			//sImporteReal = sImporte.replace(".", "");
+			//sImporteReal = sImporteReal.replace(".", "");
+			
+			if (sImporte.contains("."))
 			{
-				String sEuros = sImporteReal.substring(0, sImporte.length()-3);
-				String sCentimos = sImporteReal.substring(sImporte.length()-2,sImporte.length());
-		
-				debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
-				debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
-		
+				sSeparador = "\\.";
+			}
+			else if (sImporte.contains(","))
+			{
+				sSeparador = ",";
+			}
+			
+			if (!sSeparador.equals(""))
+			{
+				String[] arrayimporte = sImporte.split(sSeparador);
+				String sEuros = arrayimporte[0];
+				String sCentimos = arrayimporte[1];
+				if (sCentimos.length()<2)
+				{
+					sCentimos = sCentimos +"0";
+				}
+				
+				Utils.debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
+				Utils.debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
 			
 				sImporteReal = sEuros + sCentimos;
 			}
-			else if (sImporte.equals(""))
-				sImporteReal= "0";
-		
-			debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
+			else
+			{
+				sImporteReal = sImporte;
+			}
 		}
+		else if (sImporte.equals(""))
+		{
+			sImporteReal= "0";
+		}
+		Utils.debugTrace(bTraza, sClassName, sMethod, "Importe Real:|"+sImporteReal+"|");
 
 		
 		return sImporteReal;
@@ -242,7 +265,7 @@ public class Utils
 		String sMethod = "compruebaImporteDevolucion";
 		String sImporteReal = "#";
 		
-		if (sImporte.matches("-[\\d]+([\\.|,][\\d]{2})?$"))
+		if (sImporte.matches("-?[\\d]+([\\.|,][\\d]{2})?$"))
 		{
 		
 			

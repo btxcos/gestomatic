@@ -35,6 +35,11 @@ public class GestorReferenciasCatastrales implements Serializable
 	
 	private String sOBDEER = "";
 	
+	//Ampliacion de valor catastral
+	private String sIMVSUE = "";
+	private String sIMCATA = "";
+	private String sFERECA = "";
+	
 	//Buscar activos
 	private String sCOACES = "";
 
@@ -159,7 +164,12 @@ public class GestorReferenciasCatastrales implements Serializable
    	
     }
     
-
+	public void hoyFERECA (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFERECA";
+		this.setsFERECA(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFERECA:|"+sFERECA+"|");
+	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
@@ -212,7 +222,13 @@ public class GestorReferenciasCatastrales implements Serializable
 				sCOTEXA.toUpperCase(),
 				"", 
 				sOBTEXC.toUpperCase(), 
-				sOBDEER.toUpperCase());
+				sOBDEER.toUpperCase(),
+				"", 
+				Utils.compruebaImporte(sIMVSUE.toUpperCase()),
+				"", 
+				Utils.compruebaImporte(sIMCATA.toUpperCase()),
+				"", 
+				Utils.compruebaFecha(sFERECA.toUpperCase()));
 		
 		FacesMessage msg;
 		
@@ -274,6 +290,25 @@ public class GestorReferenciasCatastrales implements Serializable
 			
 		case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 			sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		//Ampliacion de valor catastral
+		case -82: //Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
+			sMsg = "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -83: //Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
+			sMsg = "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+
+		case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
+			sMsg = "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
@@ -504,4 +539,27 @@ public class GestorReferenciasCatastrales implements Serializable
 		this.sOBDEER = sOBDEER;
 	}
 
+	public String getsIMVSUE() {
+		return sIMVSUE;
+	}
+
+	public void setsIMVSUE(String sIMVSUE) {
+		this.sIMVSUE = sIMVSUE;
+	}
+
+	public String getsIMCATA() {
+		return sIMCATA;
+	}
+
+	public void setsIMCATA(String sIMCATA) {
+		this.sIMCATA = sIMCATA;
+	}
+
+	public String getsFERECA() {
+		return sFERECA;
+	}
+
+	public void setsFERECA(String sFERECA) {
+		this.sFERECA = sFERECA;
+	}
 }
