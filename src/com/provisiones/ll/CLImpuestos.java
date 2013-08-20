@@ -132,6 +132,11 @@ public class CLImpuestos
 		return QMListaImpuestos.buscaImpuestosActivo(sCodCOACES);
 	}
 	
+	public static ArrayList<ImpuestoRecursoTabla> buscarDevolucionesDelActivo (String sCodCOACES)
+	{
+		return QMListaImpuestos.buscaDevolucionesActivo(sCodCOACES);
+	}
+	
 	public static boolean existeRelacionImpuesto (String sCodCOACES,String sCodNURCAT,String sCodCOSBAC)
 	{
 		return QMListaImpuestos.existeRelacionImpuesto(sCodCOACES, sCodNURCAT, sCodCOSBAC);

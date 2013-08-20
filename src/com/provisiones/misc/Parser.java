@@ -8,10 +8,10 @@ import java.io.IOException;
 
 import com.provisiones.types.Cierre;
 import com.provisiones.types.Activo;
-import com.provisiones.types.Gasto;
 
 import com.provisiones.types.MovimientoComunidad;
 import com.provisiones.types.MovimientoCuota;
+import com.provisiones.types.MovimientoGasto;
 import com.provisiones.types.MovimientoImpuestoRecurso;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 
@@ -323,7 +323,7 @@ public class Parser {
 	}
 
 	
-	public static Gasto leerGasto (String linea)
+	public static MovimientoGasto leerGasto (String linea)
 	{
 
 		String sCOACES = linea.substring(Posiciones.GA_COACES_P, Posiciones.GA_COACES_P+Longitudes.COACES_L);
@@ -372,7 +372,7 @@ public class Parser {
 		String sNUCLII = linea.substring(Posiciones.GA_NUCLII_P, Posiciones.GA_NUCLII_P+Longitudes.NUCLII_L);
 		
 		
-		return new Gasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
+		return new MovimientoGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
 				sFFGTVP, sFEPAGA, sFELIPG, sCOSIGA, sFEEESI, sFEECOI, sFEEAUI,
 				sFEEPAI, sIMNGAS, sYCOS02, sIMRGAS, sYCOS04, sIMDGAS, sYCOS06,
 				sIMCOST, sYCOS08, sIMOGAS, sYCOS10, sIMDTGA, sCOUNMO, sIMIMGA,
@@ -381,7 +381,7 @@ public class Parser {
 				sCOAPII, sCOSPII, sNUCLII);
 	}
 	
-	public static String escribirGasto (Gasto gasto)
+	public static String escribirGasto (MovimientoGasto gasto)
 	{
 
         String sCOACES = formateaCampoNumerico(gasto.getCOACES(),Longitudes.COACES_L);

@@ -22,6 +22,6 @@ public class TestCuotas {
 		
 
 		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "|"+CLProvisiones.ultimaProvisionAbierta("81")+"|");
+		Utils.debugTrace(bTraza, sClassName, sMethod, "|"+Double.parseDouble("0")+"|");
 	}
 }

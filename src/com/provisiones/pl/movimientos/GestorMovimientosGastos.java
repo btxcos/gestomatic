@@ -1,4 +1,4 @@
-package com.provisiones.pl;
+package com.provisiones.pl.movimientos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +11,6 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLCuotas;
-import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
@@ -19,13 +18,14 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.CuotaTabla;
 import com.provisiones.types.ImpuestoRecursoTabla;
-import com.provisiones.types.MovimientoGasto;
 
-public class GestorGastos implements Serializable 
+
+public class GestorMovimientosGastos implements Serializable 
 {
-	private static final long serialVersionUID = 476229907564908389L;
-	
-	static String sClassName = GestorGastos.class.getName();
+
+	private static final long serialVersionUID = 3669307013282571769L;
+
+	static String sClassName = GestorMovimientosGastos.class.getName();
 
 	private String sCOACES = "";
 	private String sCOGRUG = "";
@@ -42,8 +42,10 @@ public class GestorGastos implements Serializable
 	private boolean bFEEESI = true;
 	private String sFEECOI = "";
 	private boolean bFEECOI = true;
-	private String sFEEAUI = "00000000";
-	private String sFEEPAI = "00000000";
+	private String sFEEAUI = "";
+	private boolean bFEEAUI = true;
+	private String sFEEPAI = "";
+	private boolean bFEEPAI = true;
 
 	private String sIMNGAS = "";
 	private String sYCOS02 = "";
@@ -121,7 +123,7 @@ public class GestorGastos implements Serializable
 
 	private Map<String,String> tiposcosigaHM = new LinkedHashMap<String, String>();
 
-	public GestorGastos()
+	public GestorMovimientosGastos()
 	{
 		Utils.standardIO2File("");//Salida por fichero de texto
 		
@@ -188,8 +190,11 @@ public class GestorGastos implements Serializable
 		
 		tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
 		
-		tiposcosigaHM.put("ESTIMADO",            "1");
-		tiposcosigaHM.put("CONOCIDO",            "2");
+		tiposcosigaHM.put("AUTORIZADO",          "3");
+		tiposcosigaHM.put("PAGADO",              "4");
+		tiposcosigaHM.put("PAGADO PARCIALMENTE", "5");
+		tiposcosigaHM.put("ESPERA DE PAGO",		 "6");
+		tiposcosigaHM.put("PAGADO CONEXION",     "7");
 		
 	}
 	public void borrarPlantillaGasto()
@@ -210,8 +215,10 @@ public class GestorGastos implements Serializable
 		this.bFEEESI = true;
 		this.sFEECOI = "";
 		this.bFEECOI = true;
-		this.sFEEAUI = "00000000";
-		this.sFEEPAI = "00000000";
+		this.sFEEAUI = "";
+		this.bFEEAUI = true;
+		this.sFEEPAI = "";
+		this.bFEEPAI = true;
 
 		this.sIMNGAS = "";
 		this.sYCOS02 = "";
@@ -372,20 +379,52 @@ public class GestorGastos implements Serializable
 				case 1:
 					this.bFEEESI = false;
 					this.bFEECOI = true;
+					this.bFEEAUI = true;
+					this.bFEEPAI = true;
 					//this.sFEEESI = "";
 					this.sFEECOI = "";
+					this.sFEEAUI = "";
+					this.sFEEPAI = "";
 					break;
 				case 2:
 					this.bFEEESI = true;
 					this.bFEECOI = false;
+					this.bFEEAUI = true;
+					this.bFEEPAI = true;
 					this.sFEEESI = "";
 					//this.sFEECOI = "";
+					this.sFEEAUI = "";
+					this.sFEEPAI = "";
+					break;
+				case 3:
+					this.bFEEESI = true;
+					this.bFEECOI = true;
+					this.bFEEAUI = false;
+					this.bFEEPAI = true;
+					this.sFEEESI = "";
+					this.sFEECOI = "";
+					//this.sFEEAUI = "";
+					this.sFEEPAI = "";
+					break;
+				case 4:case 5:case 6:
+					this.bFEEESI = true;
+					this.bFEECOI = true;
+					this.bFEEAUI = true;
+					this.bFEEPAI = false;
+					this.sFEEESI = "";
+					this.sFEECOI = "";
+					this.sFEEAUI = "";
+					//this.sFEEPAI = "";
 					break;
 				default:
 					this.bFEEESI = true;
 					this.bFEECOI = true;
+					this.bFEEAUI = true;
+					this.bFEEPAI = true;
 					this.sFEEESI = "";
 					this.sFEECOI = "";
+					this.sFEEAUI = "";
+					this.sFEEPAI = "";
 					break;
 			}
 
@@ -411,6 +450,12 @@ public class GestorGastos implements Serializable
 		}
 	}
 	
+	public void hoyFEAGTO (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEAGTO";
+		this.setsFEAGTO(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEAGTO:|"+sFEAGTO+"|");
+	}
 	
 	public void hoyFEDEVE (ActionEvent actionEvent)
 	{
@@ -454,6 +499,21 @@ public class GestorGastos implements Serializable
 		Utils.debugTrace(true, sClassName, sMethod, "sFEECOI:|"+sFEECOI+"|");
 	}
 
+	public void hoyFEEAUI (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEEAUI";
+		this.setsFEEAUI(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEEAUI:|"+sFEEAUI+"|");
+	}
+
+	public void hoyFEEPAI (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEEPAI";
+		this.setsFEEPAI(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEEPAI:|"+sFEEPAI+"|");
+	}
+
+	
 	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
@@ -616,233 +676,6 @@ public class GestorGastos implements Serializable
 		this.tablacuotas = null;
     }
 
-	public void realizaAlta(ActionEvent actionEvent)
-	{
-		String sMethod = "registraMovimiento";
-		
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
-		MovimientoGasto movimiento = new MovimientoGasto (
-				sCOACES.toUpperCase(),
-				sCOGRUG.toUpperCase(),
-				sCOTPGA.toUpperCase(),
-				sCOSBGA.toUpperCase(),
-				sPTPAGO.toUpperCase(),
-				sFEDEVE.toUpperCase(),
-				sFFGTVP.toUpperCase(),
-				sFEPAGA.toUpperCase(),
-				sFELIPG.toUpperCase(),
-				sCOSIGA.toUpperCase(),
-				sFEEESI.toUpperCase(),
-				sFEECOI.toUpperCase(),
-				sFEEAUI.toUpperCase(),
-				sFEEPAI.toUpperCase(),
-				sIMNGAS.toUpperCase(),
-				sYCOS02.toUpperCase(),
-				sIMRGAS.toUpperCase(),
-				sYCOS04.toUpperCase(),
-				sIMDGAS.toUpperCase(),
-				sYCOS06.toUpperCase(),
-				sIMCOST.toUpperCase(),
-				sYCOS08.toUpperCase(),
-				sIMOGAS.toUpperCase(),
-				sYCOS10.toUpperCase(),
-				sIMDTGA.toUpperCase(),
-				sCOUNMO.toUpperCase(),
-				sIMIMGA.toUpperCase(),
-				sCOIMPT.toUpperCase(),
-				sCOTNEG.toUpperCase(),
-				sCOENCX.toUpperCase(),
-				sCOOFCX.toUpperCase(),
-				sNUCONE.toUpperCase(),
-				sNUPROF.toUpperCase(),
-				sFEAGTO.toUpperCase(),
-				sCOMONA.toUpperCase(),
-				sBIAUTO.toUpperCase(),
-				sFEAUFA.toUpperCase(),
-				sCOTERR.toUpperCase(),
-				sFMPAGN.toUpperCase(),
-				sFEPGPR.toUpperCase(),
-				sFEAPLI.toUpperCase(),
-				sCOAPII.toUpperCase(),
-				sCOSPII.toUpperCase(),
-				sNUCLII.toUpperCase());
-		
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
-		int iSalida = CLGastos.registraMovimiento(movimiento);
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
-		
-		switch (iSalida) 
-		{
-		case 0: //Sin errores
-			sMsg = "La cuota se ha creado correctamente.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg,null);
-			break;
-
-		case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
-			sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -3: //Error 003 - NO EXISTE EL ACTIVO
-			sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO O NULO
-			sMsg = "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -33: //Error 033 - LA FECHA DE PRIMER PAGO DEBE SER LOGICA Y OBLIGATORIA
-			sMsg = "ERROR:033 - La fecha del primer pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -34: //Error 034 - LA FECHA DE ULTIMO PAGO DEBE SER LOGICA Y OBLIGATORIA
-			sMsg = "ERROR:034 - La fecha del ultimo pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -35: //Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
-			sMsg = "ERROR:35 - La fecha del ultimo pago no puede ser menor que la del primero.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -36: //Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO
-			sMsg = "ERROR:036 - El importe de la cuota tiene ser mayor que cero. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -41: //Error 041 - LA COMUNIDAD NO EXISTE EN LA TABLA DE COMUNIDADES GMAE10
-			sMsg = "ERROR:041 - La comunidad propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -42: //Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
-			sMsg = "ERROR:042 - El activo proporcionado esta asociado a otra comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -43: //Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
-			sMsg = "ERROR:043 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -44: //Error 044 - NO EXISTE PERIOCIDAD DE PAGO
-			sMsg = "ERROR:044 - La periodicidad de pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -45: //Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
-			sMsg = "ERROR:045 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -46: //Error 046 - LA FECHA DEL ACTA DEBE SER LOGICA Y OBLIGATORIA 
-			sMsg = "ERROR:046 - La fecha de acta es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -801: //Error 801 - alta de una cuota en alta
-			sMsg = "ERROR:801 - La cuota ya esta dada de alta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -802: //Error 802 - cuota de baja no puede recibir mas movimientos
-			sMsg = "ERROR:802 - La cuota esta baja y no puede recibir mas movimientos. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -803: //Error 803 - estado no disponible
-			sMsg = "ERROR:803 - El estado de la cuota informada no esta disponible. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -804: //Error 804 - modificacion sin cambios
-			sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -805: //Error 805 - error en importe
-			sMsg = "ERROR:805 - El campo importe no se ha informado correctamente. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -900: //Error 900 - al crear un movimiento
-			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -901: //Error 901 - error y rollback - error al crear la cuota
-			sMsg = "ERROR:901 - Se ha producido un error al registrar la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-			
-		case -902: //Error 902 - error y rollback - error al registrar la relaccion
-			sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -903: //Error 903 - error y rollback - error al cambiar el estado
-			sMsg = "ERROR:903 - Se ha producido un error al cambiar el estado de la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -904: //Error 904 - error y rollback - error al modificar la cuota
-			sMsg = "ERROR:904 - Se ha producido un error al modificar la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		default: //error generico
-			sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-		}
-		
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-
-	}
-    
 	public String getsCOACES() {
 		return sCOACES;
 	}
@@ -1381,6 +1214,18 @@ public class GestorGastos implements Serializable
 	}
 	public void setbFEECOI(boolean bFEECOI) {
 		this.bFEECOI = bFEECOI;
+	}
+	public boolean isbFEEAUI() {
+		return bFEEAUI;
+	}
+	public void setbFEEAUI(boolean bFEEAUI) {
+		this.bFEEAUI = bFEEAUI;
+	}
+	public boolean isbFEEPAI() {
+		return bFEEPAI;
+	}
+	public void setbFEEPAI(boolean bFEEPAI) {
+		this.bFEEPAI = bFEEPAI;
 	}
 	public boolean isbFFGTVP() {
 		return bFFGTVP;

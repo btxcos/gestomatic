@@ -169,7 +169,6 @@ public class CLReferencias
 		return QMListaReferencias.buscaReferenciasActivo(sCodCOACES);
 	}
 	
-	
 	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento)
 	{
 		String sMethod = "registraMovimiento";

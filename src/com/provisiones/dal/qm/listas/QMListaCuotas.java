@@ -642,7 +642,8 @@ public class QMListaCuotas
 					   " FROM " + QMCuotas.sTable + 
 					   " WHERE ("
 
-					   + QMCuotas.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
+					   + QMCuotas.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
+					   + QMCuotas.sField5 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
 
 					   + QMCuotas.sField1 +" IN (SELECT "
 					   +  sField2 + 

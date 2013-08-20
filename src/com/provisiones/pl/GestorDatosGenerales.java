@@ -20,7 +20,7 @@ public class GestorDatosGenerales implements Serializable
 	private Map<String,String> tiposcotpga_g1HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcotpga_g2HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcotpga_g3HM = new LinkedHashMap<String, String>();
-	
+
 	private Map<String,String> tiposcosbga_t11HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbga_t21HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbga_t22HM = new LinkedHashMap<String, String>();

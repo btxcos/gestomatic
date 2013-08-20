@@ -436,6 +436,7 @@ public class QMListaReferencias
 		return result;
 	}
 	
+	
 	public static ArrayList<ActivoTabla> buscaActivosNoAsociados(ActivoTabla activo)
 	{//pendiente de coaces, de la tabla activos
 

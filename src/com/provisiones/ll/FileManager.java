@@ -136,7 +136,7 @@ public class FileManager
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
-    			if (CLGastos.actualizaGastoLeido(linea))
+    			//if (CLGastos.actualizaGastoLeido(linea))
     				registros++;
     		}
             

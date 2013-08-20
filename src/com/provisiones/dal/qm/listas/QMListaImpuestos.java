@@ -508,6 +508,185 @@ public class QMListaImpuestos
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
+	
+	public static ArrayList<ImpuestoRecursoTabla> buscaDevolucionesActivo(String sCodCOACES)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "buscaDevolucionesActivo";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOSBAC = "";
+		String sDesCOSBAC = "";
+		String sFEPRRE = "";
+		String sFERERE = "";
+		String sFEDEIN = "";
+		String sBISODE = "";
+		String sDesBISODE = "";
+		String sBIRESO = "";
+		String sDesBIRESO = "";
+		String sOBTEXC = "";
+		
+		ArrayList<ImpuestoRecursoTabla> result = new ArrayList<ImpuestoRecursoTabla>();
+		
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		String sQuery = "SELECT "
+					
+					   + QMImpuestos.sField1 + ","        
+					   + QMImpuestos.sField2 + ","
+					   + QMImpuestos.sField3 + ","
+					   + QMImpuestos.sField4 + ","
+					   + QMImpuestos.sField5 + ","
+					   + QMImpuestos.sField6 + ","
+					   + QMImpuestos.sField7 + ","
+					   + QMImpuestos.sField8 + ","
+					   + QMImpuestos.sField9 +
+					    
+
+					   " FROM " + QMImpuestos.sTable + 
+					   " WHERE ("
+
+					   + QMImpuestos.sField7 + " = 'F' AND " 
+					   + QMImpuestos.sField6 + " = 'S' AND "
+					   + QMImpuestos.sField4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+					   + QMImpuestos.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
+
+					   "AND "  
+
+					   + QMImpuestos.sField1 +" IN (SELECT "
+					   +  sField2 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
+
+					   + QMImpuestos.sField2 +" IN (SELECT "
+					   +  sField3 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )";				   
+					   
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			
+			pstmt = conn.prepareStatement("SELECT "
+					
+					   + QMImpuestos.sField1 + ","        
+					   + QMImpuestos.sField2 + ","
+					   + QMImpuestos.sField3 + ","
+					   + QMImpuestos.sField4 + ","
+					   + QMImpuestos.sField5 + ","
+					   + QMImpuestos.sField6 + ","
+					   + QMImpuestos.sField7 + ","
+					   + QMImpuestos.sField8 + ","
+					   + QMImpuestos.sField9 +
+					    
+
+					   " FROM " + QMImpuestos.sTable + 
+					   " WHERE ("
+
+					   + QMImpuestos.sField7 + " = 'F' AND " 
+					   + QMImpuestos.sField6 + " = 'S' AND "
+					   + QMImpuestos.sField4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+					   + QMImpuestos.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
+
+					   "AND "  
+
+					   + QMImpuestos.sField1 +" IN (SELECT "
+					   +  sField2 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
+
+					   + QMImpuestos.sField2 +" IN (SELECT "
+					   +  sField3 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )");
+
+			
+
+
+			
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+
+					
+					sCOSBAC     = rs.getString(QMImpuestos.sField2);
+					sDesCOSBAC  = QMCodigosControl.getDesCOSBGA_E4(sCOSBAC);
+					sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.sField3));
+					sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.sField4));
+					sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.sField5));
+					sBISODE     = rs.getString(QMImpuestos.sField6);
+					sDesBISODE  = QMCodigosControl.getDesBINARIA(sBISODE);
+					sBIRESO     = rs.getString(QMImpuestos.sField7);
+					sDesBIRESO  = QMCodigosControl.getDesBIRESO(sBIRESO);
+					sOBTEXC     = rs.getString(QMImpuestos.sField9);  
+
+					
+					ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
+							sCOSBAC,
+							sDesCOSBAC,
+							sFEPRRE,
+							sFERERE,
+							sFEDEIN,
+							sBISODE,
+							sDesBISODE,
+							sBIRESO,
+							sDesBIRESO,
+							sOBTEXC);
+					
+					result.add(impuestoencontrado);
+					
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCodCOACES);
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
 
 	public static boolean setValidado(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC, String sCodMovimiento, String sValidado)
 	{

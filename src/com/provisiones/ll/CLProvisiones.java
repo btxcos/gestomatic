@@ -96,6 +96,11 @@ public class CLProvisiones
 		return QMProvisiones.existeProvision(sCodNUPROF);
 	}
 	
+	public static boolean estaCerrada (String sCodNUPROF)
+	{
+		return QMProvisiones.provisionCerrada(sCodNUPROF);
+	}
+	
 	public static boolean nuevaProvision (Provision provision)
 	{
 		boolean bSalida = false;

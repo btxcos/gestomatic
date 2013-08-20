@@ -2,7 +2,7 @@ package com.provisiones.dal.qm.movimientos;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.Gasto;
+import com.provisiones.types.MovimientoGasto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,10 +65,10 @@ public class QMMovimientosGastos
 	public static final String sField44 = "cospii";    
 	public static final String sField45 = "nuclii";
 	
-	public static int addGasto (Gasto NuevoGasto) 
+	public static int addMovimientoGasto (MovimientoGasto NuevoGasto) 
 	 
 	{
-		String sMethod = "addGasto";
+		String sMethod = "addMovimientoGasto";
 		Statement stmt = null;
 		Connection conn = null;
 		ResultSet resulset = null;
@@ -210,9 +210,9 @@ public class QMMovimientosGastos
 		
 		return iCodigo;
 	}
-	public static boolean modGasto(Gasto NuevoGasto, String sGastoID)
+	public static boolean modMovimientoGasto(MovimientoGasto NuevoGasto, String sGastoID)
 	{
-		String sMethod = "modGasto";
+		String sMethod = "modMovimientoGasto";
 		Statement stmt = null;
 
 		boolean bSalida = true;
@@ -304,9 +304,9 @@ public class QMMovimientosGastos
 		return bSalida;
 	}
 
-	public static boolean delGasto(String sGastoID)
+	public static boolean delMovimientoGasto(String sGastoID)
 	{
-		String sMethod = "delGasto";
+		String sMethod = "delMovimientoGasto";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -343,7 +343,7 @@ public class QMMovimientosGastos
 		return bSalida;
 	}
 
-	public static Gasto getGasto(String sGastoID)
+	public static MovimientoGasto getMovimientoGasto(String sGastoID)
 	{//pendiente de coaces, de la tabla activos
 		
 		String sMethod = "getActivo";
@@ -541,7 +541,7 @@ public class QMMovimientosGastos
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return new Gasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
+		return new MovimientoGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
 				sFFGTVP, sFEPAGA, sFELIPG, sCOSIGA, sFEEESI, sFEECOI, sFEEAUI,
 				sFEEPAI, sIMNGAS, sYCOS02, sIMRGAS, sYCOS04, sIMDGAS, sYCOS06,
 				sIMCOST, sYCOS08, sIMOGAS, sYCOS10, sIMDTGA, sCOUNMO, sIMIMGA,
@@ -550,7 +550,7 @@ public class QMMovimientosGastos
 				sCOAPII, sCOSPII, sNUCLII);
 	}
 
-	public static String getGastoID(Gasto gasto)
+	public static String getMovimientoGastoID(MovimientoGasto gasto)
 	{//pendiente de coaces, de la tabla activos
 		
 		String sMethod = "getGastoID";
