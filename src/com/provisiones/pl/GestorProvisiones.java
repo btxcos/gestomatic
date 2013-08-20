@@ -1,7 +1,7 @@
 package com.provisiones.pl;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -9,8 +9,9 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
-import com.provisiones.misc.ValoresDefecto;
+
 import com.provisiones.types.Provision;
+import com.provisiones.types.ProvisionTabla;
 
 public class GestorProvisiones implements Serializable 
 {
@@ -20,15 +21,17 @@ public class GestorProvisiones implements Serializable
 	static String sClassName = GestorProvisiones.class.getName();
 	
 	private String sNUPROF = "";
+	private String sCOSPAT = "";
+	private String sDCOSPAT = "";
 	private String sValorTolal = "";
 	private String sNumGastos = "";
 	private String sFEPFON = "";
 	private String sFechaValidacion = "";
 	private String sValidado = "";
 
-	private boolean bBloqueaAbrir = true;
-	private boolean bBloqueaCerrar = true;
-
+	private ArrayList<ProvisionTabla> tablaprovisiones = null;
+	
+	private ProvisionTabla provisionseleccionada = null;
 	
 	public GestorProvisiones()
 	{
@@ -36,7 +39,7 @@ public class GestorProvisiones implements Serializable
 		//cargaProvisionAbierta();
 	}
 
-	public void cargaProvisionAbierta()
+	public void cargaProvisionesAbiertas()
 	{
 		String sMethod = "cargaProvisionAbierta";
 		
@@ -44,97 +47,43 @@ public class GestorProvisiones implements Serializable
     	
     	String sMsg = "";
 
-		String sProvisionAbierta = CLProvisiones.ultimaProvisionAbierta(); 
+		this.tablaprovisiones = CLProvisiones.buscarProvisionesAbiertas(); 
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Provision abierta:|"+sProvisionAbierta+"|");
 		
-		if (sProvisionAbierta.equals(""))
-		{
-			Calendar fecha = Calendar.getInstance();
-			String sSiguienteProvision = fecha.get(Calendar.YEAR)+ValoresDefecto.DEF_COREAE+fecha.get(Calendar.DAY_OF_YEAR); 
-			
-			if (CLProvisiones.existeProvision(sSiguienteProvision))
-			{
-				this.bBloqueaAbrir = true;
-				sMsg = "ERROR: La provision '"+sSiguienteProvision+"' ya fue cerrada.";
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
-			}
-			else
-			{
-				this.sNUPROF = sSiguienteProvision;
-				this.sValorTolal = "0";
-				this.sNumGastos = "0";
-				this.sFEPFON = "Sin cerrar";
-				this.sFechaValidacion = "Sin validar";
-				this.sValidado = "Pendiente";
-				this.bBloqueaAbrir = false;
-				
-				sMsg = "Cargando nueva provision.";
-				msg = new FacesMessage(sMsg);
-			}			
-			this.bBloqueaCerrar = true;
-		}
-		else
-		{
-			Provision provision = CLProvisiones.detallesProvision(sProvisionAbierta);
-			
-			this.sNUPROF = provision.getsNUPROF();
-			this.sValorTolal = provision.getsValorTolal();
-			this.sNumGastos = provision.getsNumGastos();
-			this.sFEPFON = provision.getsFEPFON();
-			this.sFechaValidacion = provision.getsFechaValidacion();
-			this.sValidado = provision.getsValidado();
-			this.bBloqueaAbrir = true;
-			this.bBloqueaCerrar = false;
-			
-			sMsg = "Cargando provision abierta '"+sProvisionAbierta+"'.";
-			msg = new FacesMessage(sMsg);
-		}
-    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		
+		sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.";
+		Utils.debugTrace(true, sClassName, sMethod, sMsg);
+		msg = new FacesMessage(sMsg);
+
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
+	
+	public void seleccionarProvision(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarProvision";
+
+    	FacesMessage msg;
+    	
+    	this.sNUPROF  = provisionseleccionada.getNUPROF();
+    	this.sCOSPAT  = provisionseleccionada.getCOSPAT();
+    	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
+    	this.sValorTolal  = provisionseleccionada.getVALOR();
+    	this.sNumGastos  = provisionseleccionada.getGASTOS();
+    	
+    	msg = new FacesMessage("Provision '"+ sNUPROF +"' Seleccionada.");
+    	
+    	Utils.debugTrace(true, sClassName, sMethod, "Provision seleccionada: |"+sNUPROF+"|");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+    }
 	
 	public void cargarProvision(ActionEvent actionEvent)
 	{
-		cargaProvisionAbierta();
+		CLProvisiones.detallesProvision(sNUPROF);
 	}
 	
-	public void abrirProvision(ActionEvent actionEvent)
-	{
-		
-		//Cargar provision abierta
-		
-		//las provisiones se abren automaticamente 
-		String sMethod = "abrirProvision";
-		
-		FacesMessage msg;
-    	
-    	String sMsg = "";
-		
-		Provision provision = new Provision (sNUPROF, "0", "0","0","0","0",ValoresDefecto.DEF_PENDIENTE);
-		if (CLProvisiones.ultimaProvisionAbierta().equals(sNUPROF))
-		{
-			sMsg = "ERROR: Esta provision ya esta abierta, cierrela antes de abrir una nueva.";
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
-		}
-		else if (CLProvisiones.nuevaProvision(provision))
-		{
-			sMsg = "Provision '"+ sNUPROF +"' abierta.";
-			msg = new FacesMessage(sMsg);
-		}
-		else
-		{
-			sMsg = "ERROR: La provision '"+CLProvisiones.ultimaProvisionAbierta()+"' esta abierta, cierrela antes de abrir una nueva.";
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
-		}
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		this.bBloqueaAbrir = true;
-		this.bBloqueaCerrar = false;
-	}
+
 	
 	public void cerrarProvision(ActionEvent actionEvent)
 	{
@@ -144,14 +93,12 @@ public class GestorProvisiones implements Serializable
     	
     	String sMsg = "";
 		
-		Provision provision = CLProvisiones.detallesProvision(CLProvisiones.ultimaProvisionAbierta());
+		Provision provision = CLProvisiones.detallesProvision(CLProvisiones.ultimaProvisionAbierta(sCOSPAT));
 		
 		provision.setsFEPFON(Utils.fechaDeHoy(false));
 		
-		provision.setsValidado("E");
+		provision.setsCodEstado("B");
 		
-		CLProvisiones.cerrarProvision(provision);
-
 		if (CLProvisiones.cerrarProvision(provision))
 		{
 			sMsg = "Provision '"+ sNUPROF +"' cerrada.";
@@ -168,8 +115,6 @@ public class GestorProvisiones implements Serializable
     	Utils.debugTrace(true, sClassName, sMethod, sMsg);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		this.bBloqueaAbrir = true;
-		this.bBloqueaCerrar = true;
 	}
 
 	public String getsNUPROF() {
@@ -220,23 +165,39 @@ public class GestorProvisiones implements Serializable
 		this.sValidado = sValidado;
 	}
 
-	public boolean isbBloqueaAbrir() {
-		return bBloqueaAbrir;
+
+	public String getsCOSPAT() {
+		return sCOSPAT;
 	}
 
-	public void setbBloqueaAbrir(boolean bBloqueaAbrir) {
-		this.bBloqueaAbrir = bBloqueaAbrir;
+	public void setsCOSPAT(String sCOSPAT) {
+		this.sCOSPAT = sCOSPAT;
 	}
 
-	public boolean isbBloqueaCerrar() {
-		return bBloqueaCerrar;
+	public ArrayList<ProvisionTabla> getTablaprovisiones() {
+		return tablaprovisiones;
 	}
 
-	public void setbBloqueaCerrar(boolean bBloqueaCerrar) {
-		this.bBloqueaCerrar = bBloqueaCerrar;
+	public void setTablaprovisiones(ArrayList<ProvisionTabla> tablaprovisiones) {
+		this.tablaprovisiones = tablaprovisiones;
+	}
+
+	public ProvisionTabla getProvisionseleccionada() {
+		return provisionseleccionada;
+	}
+
+	public void setProvisionseleccionada(ProvisionTabla provisionseleccionada) {
+		this.provisionseleccionada = provisionseleccionada;
+	}
+
+	public String getsDCOSPAT() {
+		return sDCOSPAT;
+	}
+
+	public void setsDCOSPAT(String sDCOSPAT) {
+		this.sDCOSPAT = sDCOSPAT;
 	}
 
 
-	
-	
+
 }

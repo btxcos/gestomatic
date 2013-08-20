@@ -5,11 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Provision;
+import com.provisiones.types.ProvisionTabla;
 
 public class QMProvisiones 
 {
@@ -25,8 +27,8 @@ public class QMProvisiones
 	public static final String sField3 = "valor_total";
 	public static final String sField4 = "numero_gastos";
 	public static final String sField5 = "fepfon";
-	public static final String sField6 = "fecha_validacion";
-	public static final String sField7 = "cod_validado";
+	public static final String sField6 = "fecha_validado";
+	public static final String sField7 = "cod_estado";
 	
 
 	
@@ -63,7 +65,7 @@ public class QMProvisiones
 					+ NuevaProvision.getsNumGastos() + "','"
 					+ NuevaProvision.getsFEPFON() + "','" 
 					+ NuevaProvision.getsFechaValidacion() + "','" 
-					+ NuevaProvision.getsValidado() + "')");
+					+ NuevaProvision.getsCodEstado() + "')");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
@@ -107,7 +109,7 @@ public class QMProvisiones
 					+ sField4 + " = '" + NuevaProvision.getsNumGastos() + "', "
 					+ sField5 + " = '" + NuevaProvision.getsFEPFON() + "', " 
 					+ sField6 + " = '" + NuevaProvision.getsFechaValidacion() + "', " 
-					+ sField7 + " = '" + NuevaProvision.getsValidado() + "' " 
+					+ sField7 + " = '" + NuevaProvision.getsCodEstado() + "' " 
 					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
@@ -323,7 +325,7 @@ public class QMProvisiones
 		return found;
 	}
 	
-	public static String getProvisionAbierta() 
+	public static String getProvisionAbierta(String sCodCOSPAT) 
 	{
 
 
@@ -351,7 +353,8 @@ public class QMProvisiones
 			pstmt = conn.prepareStatement("SELECT " + sField1 + 
 					" FROM " + sTable + 
 					" WHERE ( " + sField7 + " = '"
-					+ ValoresDefecto.DEF_PENDIENTE + "')");
+					+ ValoresDefecto.DEF_ALTA + "' AND " +
+							      sField2 +" = '"+ sCodCOSPAT +"')");
 
 			rs = pstmt.executeQuery();
 			
@@ -398,5 +401,248 @@ public class QMProvisiones
 		return sNUPROF;
 	}
 	
+	public static ArrayList<ProvisionTabla> buscaProvisionesAbiertas() 
+	{
 
+
+		String sMethod = "buscaProvisionesAbiertas";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		
+		String sNUPROF = "";
+		String sCOSPAT = "";
+		String sDCOSPAT = "";
+		String sVALOR = "";
+		String sGASTOS = "";
+
+		ArrayList<ProvisionTabla> result = new ArrayList<ProvisionTabla>();
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField1 + ","
+					+ sField2 + ","
+					+ sField3 + ","
+					+ sField4 + 
+					" FROM " + sTable + 
+					" WHERE ( " + sField7 + " = '"
+					+ ValoresDefecto.DEF_ALTA + "')");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					sNUPROF =  rs.getString(sField1);
+					sCOSPAT =  rs.getString(sField2);
+					sDCOSPAT =  QMCodigosControl.getDesSociedadesTitulizadas(sCOSPAT);
+					sVALOR =   rs.getString(sField3);
+					sGASTOS =  rs.getString(sField4);
+
+					ProvisionTabla provisionencontrada = new ProvisionTabla(sNUPROF,sCOSPAT,sDCOSPAT,sVALOR,sGASTOS);
+					
+					result.add(provisionencontrada);
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs, sClassName, sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
+	
+	public static String getUltimaProvisionCerrada(String sCodCOSPAT) 
+	{
+
+
+		String sMethod = "getUltimaProvisionCerrada";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sNUPROF = "";
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " + sField1 + 
+					" FROM " + sTable + 
+					" WHERE ( " + sField7 + " = '"
+					+ ValoresDefecto.DEF_BAJA + "' AND " +
+							      sField2 +" = '"+ sCodCOSPAT +"') "+
+					" order by " + sField1 + " desc limit 0,1 ");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					sNUPROF = rs.getString(sField1);
+
+
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: sCodCOSPAT: " + sCodCOSPAT);
+
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs, sClassName, sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sNUPROF;
+	}
+	public static String getUltimaProvision() 
+	{
+
+
+		String sMethod = "getUltimaProvision";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sNUPROF = "";
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " + sField1 + 
+					" FROM " + sTable + 
+					" order by " + sField1 + " desc limit 0,1 ");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					sNUPROF = rs.getString(sField1);
+
+
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs, sClassName, sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sNUPROF;
+	}
+
+	
 }

@@ -1019,6 +1019,80 @@ public class QMActivos
 		ConnectionManager.CloseDBConnection(conn);
 		return sReferencia;
 	}
+
+	public static String getSociedadPatrimonial(String sCodCOACES)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "getSociedadPatrimonial";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCodCOSPAT = "0";
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					   + sField88  +        
+					   "  FROM " + sTable + 
+					   " WHERE (" + sField1 + " = '" + sCodCOACES	+ "')");
+			
+			
+
+			rs = pstmt.executeQuery();
+			
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sCodCOSPAT = rs.getString(sField88);
+
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					
+					if (!sCodCOSPAT.equals(""))
+						Utils.debugTrace(bTrazas, sClassName, sMethod, sField88 + ":|"+ sCodCOSPAT+"|");
+				}
+			}
+			if (found == false) 
+			{
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sCodCOSPAT;
+	}
 	
 	public static ArrayList<ActivoTabla> buscaActivos(ActivoTabla activo)
 	{//pendiente de coaces, de la tabla activos

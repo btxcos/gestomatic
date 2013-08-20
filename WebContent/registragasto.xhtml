@@ -53,10 +53,10 @@
 												<p:inputText id="COACES" value="#{GestorGastos.sCOACES}" size="9" maxlength="9">
 												</p:inputText>
 											<p:message for="COACES" display="icon"/>	
-											<p:commandButton value="Cargar Cuotas" update="msgs, popup, COACES, NUPROF, form:cuotas" actionListener="#{GestorGastos.cargarCuotas}" oncomplete="dlgTablaCuotas.show()"/>	
+											<p:commandButton value="Cargar Cuotas" update="msgs, popup, COACES, form:cuotas" actionListener="#{GestorGastos.cargarCuotas}" oncomplete="dlgTablaCuotas.show()"/>	
 										</h:panelGrid>
 									</p:panel>
-								<p:commandButton value="Buscar un activo" update="COACES, NUPROF, form:activos" oncomplete="dlgBuscar.show()"/>		
+								<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
 								</h:panelGrid>
 							</p:fieldset>
 							<p:fieldset legend="Datos">
@@ -233,7 +233,7 @@
 					<p:dialog header="Cuotas disponibles: " widgetVar="dlgTablaCuotas" resizable="false">
     				
 							<p:contextMenu for="cuotas">  
-								<p:menuitem value="Seleccionar" update="panel, form:popup, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarCuota}" oncomplete="dlgTablaCuotas.hide()"/>  
+								<p:menuitem value="Seleccionar" update="panel, form:popup, form:msgs, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarCuota}" oncomplete="dlgTablaCuotas.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="cuotas" var="cuota" value="#{GestorGastos.tablacuotas}" rowKey="#{cuota.DCOSBAC}"  
@@ -268,7 +268,7 @@
 					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
-								<p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+								<p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NUPROF" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="activos" var="activo" value="#{GestorGastos.tablaactivos}" rowKey="#{activo.COACES}"  

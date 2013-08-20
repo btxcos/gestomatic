@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLCuotas;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
@@ -63,7 +64,7 @@ public class GestorGastos implements Serializable
 	private String sCOENCX = ValoresDefecto.DEF_COENCX;
 	private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
 	private String sNUCONE = ValoresDefecto.DEF_NUCONE;
-	private String sNUPROF = CLProvisiones.ultimaProvisionAbierta();
+	private String sNUPROF = "";
 	private String sFEAGTO = "";
 	private String sCOMONA = ValoresDefecto.DEF_COMONA;
 	private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
@@ -225,7 +226,7 @@ public class GestorGastos implements Serializable
 		this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 		this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 
-		this.sNUPROF = CLProvisiones.ultimaProvisionAbierta();
+		this.sNUPROF = "";
 
 		this.sFEAGTO = "";
 
@@ -536,6 +537,11 @@ public class GestorGastos implements Serializable
     	//this.sCOACESBuscado = activoseleccionado.getCOACES();
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
+    	
+    	String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCOACES); 
+    	
+    	this.sNUPROF = CLProvisiones.ultimaProvisionAbierta(sCOSPAT);
+    			 
     	
     	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
     	

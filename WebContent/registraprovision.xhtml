@@ -15,9 +15,7 @@
 								<h:panelGrid columns="3" cellpadding="5">
 									<p:fieldset legend="Acciones" id="acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Cargar Provision" update="msgs, popup, acciones, provision" actionListener="#{GestorProvisiones.cargarProvision}"/>
-											<p:commandButton value="Abrir Provision" update="msgs, popup, acciones" actionListener="#{GestorProvisiones.abrirProvision}" disabled="#{GestorProvisiones.bBloqueaAbrir}"/>
-											<p:commandButton type="button" value="Cerrar Provision" onclick="dlgConfirma.show()" disabled="#{GestorProvisiones.bBloqueaCerrar}"/>
+											<p:commandButton type="button" value="Cerrar Provision" onclick="dlgConfirma.show()"/>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -43,10 +41,22 @@
 						<h:panelGrid columns="1" cellpadding="5">
 
 									<p:fieldset legend="Provision" id="provision">
+										<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel >
+										<h:panelGrid columns="4" cellpadding="5">
+											<h:outputText for="NUPROF" value="NUPROF: " />
+												<p:inputText id="NUPROF" value="#{GestorProvisiones.sNUPROF}" size="9" maxlength="9">
+												</p:inputText>
+											<p:message for="NUPROF" display="icon"/>	
+											<p:commandButton value="Cargar Provisiones Abiertas" update="msgs, popup, NUPROF form:provisiones" actionListener="#{GestorProvisiones.cargaProvisionesAbiertas}" oncomplete="dlgTablaProvisiones.show()"/>	
+										</h:panelGrid>
+									</p:panel>
+									<p:panel >
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="NUPROF" value="NUPROF: " />
-											<p:inputText id="NUPROF" value="#{GestorProvisiones.sNUPROF}" size="20" maxlength="20" disabled="true">
+											<h:outputText for="DCOSPAT" value="DCOSPAT: " />
+											<p:inputText id="DCOSPAT" value="#{GestorProvisiones.sDCOSPAT}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
 
 											<h:outputText for="ValorTolal" value="ValorTolal: " />
@@ -57,24 +67,41 @@
 											<p:inputText id="NumGastos" value="#{GestorProvisiones.sNumGastos}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
 
-											<h:outputText for="FEPFON" value="FEPFON: " />
-											<p:inputText id="FEPFON" value="#{GestorProvisiones.sFEPFON}" size="20" maxlength="20" disabled="true">
-											</p:inputText>
-											
-											<h:outputText for="FechaValidacion" value="FechaValidacion: " />
-											<p:inputText id="FechaValidacion" value="#{GestorProvisiones.sFechaValidacion}" size="20" maxlength="20" disabled="true">
-											</p:inputText>
-
-											<h:outputText for="Validado" value="Validado: " />
-											<p:inputText id="Validado" value="#{GestorProvisiones.sValidado}" size="20" maxlength="20" disabled="true">
-											</p:inputText>
-
+										</h:panelGrid>
+									</p:panel>
 
 										</h:panelGrid>
 									</p:fieldset>
 
 						</h:panelGrid>
 					</p:panel>
+					<p:dialog header="Provisiones abiertas: " widgetVar="dlgTablaProvisiones" resizable="false">  
+    				
+							<p:contextMenu for="provisiones">  
+								<p:menuitem value="Seleccionar" update="form:NUPROF, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorProvisiones.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="provisiones" var="provision" value="#{GestorProvisiones.tablaprovisiones}" rowKey="#{provision.NUPROF}"  
+									              selection="#{GestorProvisiones.provisionseleccionada}" selectionMode="single">  
+									
+								<p:column headerText="Numero de Provision">  
+								    #{provision.NUPROF}  
+								</p:column>  
+								
+								<p:column headerText="Sociedad Patrimonial">  
+								    #{provision.DCOSPAT}  
+								</p:column>  
+
+								<p:column headerText="Valor de provision">  
+								    #{provision.VALOR}  
+								</p:column>  
+								
+								<p:column headerText="Gastos en provision">  
+								    #{provision.GASTOS}  
+								</p:column>  
+								
+							</p:dataTable> 
+					</p:dialog>
 					<p:dialog header="Confirmacion" widgetVar="dlgConfirma" resizable="false"> 
 						<h:panelGrid columns="1">
 							<p:panel>

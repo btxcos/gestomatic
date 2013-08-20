@@ -25,6 +25,12 @@ public class CLActivos
 		return QMActivos.existeActivo(sCodCOACES);
 	}
 	
+	public static String sociedadPatrimonialAsociada (String sCodCOACES)
+	{
+			
+		return QMActivos.getSociedadPatrimonial(sCodCOACES);
+	}
+	
 	public static boolean actualizaActivoLeido(String linea)
 	{
 		String sMethod = "actualizaActivoLeido";

@@ -9,14 +9,14 @@ public class Provision
 	private String sNumGastos = "";	
 	private String sFEPFON = "";
 	private String sFechaValidacion = "";
-	private String sValidado = "";
+	private String sCodEstado = "";
 
 
 	//Constructor de clase
 	
 	public Provision(String sNUPROF, String sCOSPAT, String sValorTolal,
 			String sNumGastos, String sFEPFON, String sFechaValidacion,
-			String sValidado) {
+			String sCodEstado) {
 		super();
 		this.sNUPROF = sNUPROF;
 		this.sCOSPAT = sCOSPAT;
@@ -24,68 +24,80 @@ public class Provision
 		this.sNumGastos = sNumGastos;
 		this.sFEPFON = sFEPFON;
 		this.sFechaValidacion = sFechaValidacion;
-		this.sValidado = sValidado;
+		this.sCodEstado = sCodEstado;
 	}
+
 	
 	//Métodos de acceso
-
 
 	public String getsNUPROF() {
 		return sNUPROF;
 	}
 
+
 	public void setsNUPROF(String sNUPROF) {
 		this.sNUPROF = sNUPROF;
 	}
+
 
 	public String getsCOSPAT() {
 		return sCOSPAT;
 	}
 
+
 	public void setsCOSPAT(String sCOSPAT) {
 		this.sCOSPAT = sCOSPAT;
 	}
+
 
 	public String getsValorTolal() {
 		return sValorTolal;
 	}
 
+
 	public void setsValorTolal(String sValorTolal) {
 		this.sValorTolal = sValorTolal;
 	}
+
 
 	public String getsNumGastos() {
 		return sNumGastos;
 	}
 
+
 	public void setsNumGastos(String sNumGastos) {
 		this.sNumGastos = sNumGastos;
 	}
+
 
 	public String getsFEPFON() {
 		return sFEPFON;
 	}
 
+
 	public void setsFEPFON(String sFEPFON) {
 		this.sFEPFON = sFEPFON;
 	}
+
 
 	public String getsFechaValidacion() {
 		return sFechaValidacion;
 	}
 
+
 	public void setsFechaValidacion(String sFechaValidacion) {
 		this.sFechaValidacion = sFechaValidacion;
 	}
 
-	public String getsValidado() {
-		return sValidado;
+
+	public String getsCodEstado() {
+		return sCodEstado;
 	}
 
-	public void setsValidado(String sValidado) {
-		this.sValidado = sValidado;
-	}
 
+	public void setsCodEstado(String sCodEstado) {
+		this.sCodEstado = sCodEstado;
+	}
 
 	public void pintaProvision()
 	{
@@ -94,7 +106,7 @@ public class Provision
 		System.out.println("sCOSPAT         :|"+sCOSPAT+"|");
 		System.out.println("sFEPFON         :|"+sFEPFON+"|");
 		System.out.println("sFechaValidacion:|"+sFechaValidacion+"|");
-		System.out.println("sValidado       :|"+sValidado+"|");
+		System.out.println("sCodEstado      :|"+sCodEstado+"|");
 		System.out.println("sValorTolal     :|"+sValorTolal+"|");
 		System.out.println("sNumGastos      :|"+sNumGastos+"|");
 	}
