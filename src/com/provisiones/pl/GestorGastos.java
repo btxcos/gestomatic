@@ -475,6 +475,13 @@ public class GestorGastos implements Serializable
 		this.setsFEECOI(Utils.fechaDeHoy(true));
 		Utils.debugTrace(true, sClassName, sMethod, "sFEECOI:|"+sFEECOI+"|");
 	}
+	
+	public void hoyFEPGPR (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEPGPR";
+		this.setsFEPGPR(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEPGPR:|"+sFEPGPR+"|");
+	}
 
 	
 	public void buscaActivos (ActionEvent actionEvent)
@@ -653,7 +660,7 @@ public class GestorGastos implements Serializable
 				sCOACES.toUpperCase(),
 				sCOGRUG.toUpperCase(),
 				sCOTPGA.toUpperCase(),
-				Utils.compruebaPago(bDevolucion, sCOSBGA.toUpperCase()),
+				Utils.compruebaCodigoPago(bDevolucion, sCOSBGA.toUpperCase()),
 				sPTPAGO.toUpperCase(),
 				Utils.compruebaFecha(sFEDEVE),
 				Utils.compruebaFecha(sFFGTVP),

@@ -169,7 +169,7 @@ public class Utils
  
     }
 	
-	public static String compruebaPago(boolean bCodDevolucion, String sTipoPago)
+	public static String compruebaCodigoPago(boolean bCodDevolucion, String sTipoPago)
 	{
 		String sMethod = "compruebaPago";
 			

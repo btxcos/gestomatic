@@ -254,7 +254,7 @@ public class GestorMovimientosCuotas implements Serializable
 				sCOACES.toUpperCase(), 
 				ValoresDefecto.DEF_COGRUG_E2, 
 				ValoresDefecto.DEF_COTACA_E2, 
-				Utils.compruebaPago(false,sCOSBAC.toUpperCase()), 
+				Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 
 				"", 
 				Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
 				"", 

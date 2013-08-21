@@ -62,5 +62,9 @@ public class ValoresDefecto
 	{
 		A, B, E, M, X
 	}
+	public enum TIPOSACCIONESGASTO 
+	{
+		G, M, N, D, A
+	}
 	
 }

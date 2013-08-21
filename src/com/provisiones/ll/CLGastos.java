@@ -5,6 +5,8 @@ import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Gasto;
 import com.provisiones.types.MovimientoGasto;
 
 public class CLGastos 
@@ -92,6 +94,103 @@ public class CLGastos
 		return sAccion;
 	}*/
 	
+	public static MovimientoGasto convierteGastoenMovimiento(Gasto gasto, String sNUPROF)
+	{
+		String sMethod = "convierteGastoenMovimiento";
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		
+		return new MovimientoGasto(
+				gasto.getCOACES(),
+				gasto.getCOGRUG(),
+				gasto.getCOTPGA(),
+				gasto.getCOSBGA(),
+				gasto.getPTPAGO(),
+				gasto.getFEDEVE(),
+				gasto.getFFGTVP(),
+				gasto.getFEPAGA(),
+				gasto.getFELIPG(),
+				gasto.getCOSIGA(),
+				gasto.getFEEESI(),
+				gasto.getFEECOI(),
+				gasto.getFEEAUI(),
+				gasto.getFEEPAI(),
+				gasto.getIMNGAS(),
+				gasto.getYCOS02(),
+				gasto.getIMRGAS(),
+				gasto.getYCOS04(),
+				gasto.getIMDGAS(),
+				gasto.getYCOS06(),
+				gasto.getIMCOST(),
+				gasto.getYCOS08(),
+				gasto.getIMOGAS(),
+				gasto.getYCOS10(),
+				gasto.getIMDTGA(),
+				ValoresDefecto.DEF_COUNMO,
+				gasto.getIMIMGA(),
+				gasto.getCOIMPT(),
+				gasto.getCOTNEG(),
+				ValoresDefecto.DEF_COENCX,
+				ValoresDefecto.DEF_COOFCX,
+				ValoresDefecto.DEF_NUCONE,
+				sNUPROF,
+				gasto.getFEAGTO(),
+				gasto.getCOMONA(),
+				gasto.getBIAUTO(),
+				gasto.getFEAUFA(),
+				ValoresDefecto.DEF_COTERR,
+				ValoresDefecto.DEF_FMPAGN,
+				gasto.getFEPGPR(),
+				ValoresDefecto.DEF_FEAPLI,
+				ValoresDefecto.DEF_COAPII,
+				ValoresDefecto.DEF_COSPII,
+				ValoresDefecto.DEF_NUCLII);
+		
+	}
+	
+	public static Gasto convierteMovimientoenGasto(MovimientoGasto movimiento)
+	{
+		String sMethod = "convierteMovimientoenGasto";
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		
+		return new Gasto(
+				movimiento.getCOACES(),
+				movimiento.getCOGRUG(),
+				movimiento.getCOTPGA(),
+				movimiento.getCOSBGA(),
+				movimiento.getPTPAGO(),
+				movimiento.getFEDEVE(),
+				movimiento.getFFGTVP(),
+				movimiento.getFEPAGA(),
+				movimiento.getFELIPG(),
+				movimiento.getCOSIGA(),
+				movimiento.getFEEESI(),
+				movimiento.getFEECOI(),
+				movimiento.getFEEAUI(),
+				movimiento.getFEEPAI(),
+				movimiento.getIMNGAS(),
+				movimiento.getYCOS02(),
+				movimiento.getIMRGAS(),
+				movimiento.getYCOS04(),
+				movimiento.getIMDGAS(),
+				movimiento.getYCOS06(),
+				movimiento.getIMCOST(),
+				movimiento.getYCOS08(),
+				movimiento.getIMOGAS(),
+				movimiento.getYCOS10(),
+				movimiento.getIMDTGA(),
+				movimiento.getIMIMGA(),
+				movimiento.getCOIMPT(),
+				movimiento.getCOTNEG(),
+				movimiento.getFEAGTO(),
+				movimiento.getCOMONA(),
+				movimiento.getBIAUTO(),
+				movimiento.getFEAUFA(),
+				movimiento.getFEPGPR());
+		
+	}
+	
 	
 	public static String decideAccion(MovimientoGasto movimiento, String sEstado)
 	{
@@ -109,18 +208,18 @@ public class CLGastos
 			{
 				sAccion = "N"; //Anular
 			}
-			else if (movimiento.getYCOS02().equals("-") && (sEstado.equals("3") || sEstado.equals("4")))
+			else if (movimiento.getIMNGAS().startsWith("-") && (sEstado.equals("3") || sEstado.equals("4")))
 			{
 				sAccion = "A"; //Abono
 			}
-			else if (movimiento.getYCOS02().equals("") && (sEstado.equals("1") || sEstado.equals("2")))
+			else if (!movimiento.getIMNGAS().startsWith("-") && (sEstado.equals("1") || sEstado.equals("2") || sEstado.equals("3")))
 			{
 				sAccion = "M"; //Modificacion
 			}
-			else if (movimiento.getYCOS02().equals("") && sEstado.equals("3"))
+			/*else if (!movimiento.getIMNGAS().equals("-") && sEstado.equals("3"))
 			{
 				sAccion = "P"; //Pago
-			}
+			}*/
 			else
 			{
 				sAccion = "#"; //Error
@@ -129,11 +228,11 @@ public class CLGastos
 		}
 		else
 		{
-			if (movimiento.getYCOS02().equals("-") && (Integer.parseInt(movimiento.getCOSBGA()) > 49))
+			if (movimiento.getIMNGAS().startsWith("-") && (Integer.parseInt(movimiento.getCOSBGA()) > 49))
 			{
 				sAccion = "D"; //Devolucion
 			}
-			else if (movimiento.getYCOS02().equals("") && (Integer.parseInt(movimiento.getCOSBGA()) < 10))
+			else if (!movimiento.getIMNGAS().startsWith("-") && (Integer.parseInt(movimiento.getCOSBGA()) < 10))
 			{
 				sAccion = "G"; //Gasto
 			}
@@ -162,13 +261,14 @@ public class CLGastos
 		//Gasto gasto = QMGastos.getGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 		String sEstado = QMGastos.getEstado(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 		
-		MovimientoGasto movimiento_revisado = CLGastos.revisaMovimiento(movimiento);
+		String sAccion = decideAccion(movimiento,sEstado);
 		
-		String sAccion = decideAccion(movimiento_revisado,sEstado);
+		MovimientoGasto movimiento_revisado = CLGastos.revisaMovimiento(movimiento,sAccion);
 		
 				
 		Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
-		Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOSIGA()+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "Nuevo Estado:|"+movimiento.getCOSIGA()+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+sAccion+"|");
 		
 		
 		
@@ -182,7 +282,7 @@ public class CLGastos
 			//Error 002 - Llega fecha de anulación y no existe gasto en la tabla  
 			iCodigo = -2;
 		}
-		else if ((sEstado.equals("0") || sEstado.equals("1")) && movimiento_revisado.getYCOS02().equals("-"))
+		else if ((sEstado.equals("1") || sEstado.equals("2")) && movimiento_revisado.getYCOS02().equals("-"))
 		{
 			//Error 003 - Llega un abono de un gasto que NO está pagado           
 			iCodigo = -3;
@@ -209,12 +309,12 @@ public class CLGastos
 			//Error 008 - No existe el activo en la base corporativa
 			iCodigo = -8;
 		}
-		else if (sEstado.equals("4") && movimiento_revisado.getYCOS02().equals("-"))
+		else if (sEstado.equals("5") && movimiento_revisado.getYCOS02().equals("-"))
 		{
 			//Error 012 - Llega un abono de un gasto que está anulado
 			iCodigo = -12;
 		}
-		else if (sEstado.equals("5") && movimiento_revisado.getYCOS02().equals("-"))
+		else if (sEstado.equals("6") && movimiento_revisado.getYCOS02().equals("-"))
 		{
 			//Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
 			iCodigo = -13;
@@ -224,12 +324,12 @@ public class CLGastos
 			//Error 019 - Periodicidad del gasto es cero o espacios.
 			iCodigo = -19;
 		}		
-		else if (!movimiento_revisado.getFEAGTO().equals("0") && sEstado.equals("3"))
+		else if (!movimiento_revisado.getFEAGTO().equals("0") && sEstado.equals("4"))
 		{
 			//Error 023 - Llega anulación de un gasto que YA está pagado
 			iCodigo = -23;
 		}		
-		/*else if (!movimiento_revisado.getFEAGTO().equals("") && sEstado.equals("3"))
+		/*else if (!movimiento_revisado.getFEAGTO().equals("") && sEstado.equals("4"))
 		{
 			//Error 024 - Llega modificación de un gasto que YA está pagado
 			iCodigo = -024;
@@ -244,53 +344,168 @@ public class CLGastos
 			//Error 062 - Llega una devolución con importe positivo.
 			iCodigo = -61;
 		}
-		else if (sAccion.equals("#"))
-		{
-			//Error 801 - Error, Accion no permitida  
-			iCodigo = -801;
-		}
 		else if (movimiento_revisado.getFEDEVE().equals("0"))
 		{
 			//Error no se ha elegido una situacion del gasto.
-			iCodigo = -803;
+			iCodigo = -801;
 		}
 		else if (movimiento_revisado.getCOSIGA().equals(""))
 		{
 			//Error no se ha elegido una situacion del gasto.
-			iCodigo = -804;
+			iCodigo = -802;
 		}
 		else if (movimiento_revisado.getIMNGAS().equals(""))
 		{
 			//error no se ha informado el campo importe
-			iCodigo = -805;
+			iCodigo = -803;
 		}
-		else if (sEstado.equals("") && !movimiento_revisado.getCOSIGA().equals("0") && !movimiento_revisado.getCOSIGA().equals("1"))
+		else if (sAccion.equals("#"))
+		{
+			//Error 801 - Error, Accion no permitida  
+			iCodigo = -804;
+		}
+		else if (sEstado.equals("") && !movimiento_revisado.getCOSIGA().equals("1") && !movimiento_revisado.getCOSIGA().equals("2"))
 		{
 			//error estado no disponible
 			iCodigo = -806;
 		}
 		else
 		{
-			
-			
-			/*if (movimiento_revisado.getCOACCI().equals("#"))
+			if (movimiento_revisado.getCOSIGA().equals("#"))
 			{	
 				//error modificacion sin cambios
 				iCodigo = -807;	
 			}
-			else*/
-			//{
+			else
+			{
 				int indice = QMMovimientosGastos.addMovimientoGasto(movimiento_revisado);
-		
-			//}
+				if (indice == 0)
+				{
+					//error al crear un movimiento
+					iCodigo = -900;
+				}
+				else
+				{	
+			
+					ValoresDefecto.TIPOSACCIONESGASTO ACCION = ValoresDefecto.TIPOSACCIONESGASTO.valueOf(sAccion);
+				
+					switch (ACCION)
+					{
+						case D:case G:
+							Gasto gastonuevo = convierteMovimientoenGasto(movimiento_revisado);
+
+							Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la cuota...");
+							gastonuevo.pintaMovimientoGasto();
+						
+							if (QMGastos.addGasto(gastonuevo,movimiento_revisado.getCOSIGA()))
+							{
+								//OK - gasto creado
+								Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
+								
+								if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
+								{
+									//OK 
+									iCodigo = 0;
+								}
+								else
+								{
+									//error relacion gasto no creada - Rollback
+									QMGastos.delGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE());
+									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+									iCodigo = -902;
+								}
+							}
+							else
+							{
+								//error gasto no creado - Rollback
+								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+								iCodigo = -901;
+							}
+							break;
+						case N:case A:
+							if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
+							{
+								String sNuevoEstado = "";
+								if (sAccion.equals("N"))
+								{
+									sNuevoEstado = "5"; //Anulado
+								}
+								else
+								{
+									sNuevoEstado = "6"; //Abonado
+								}
+								
+								if (QMGastos.setEstado(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), sNuevoEstado))
+								{
+									//OK 
+									iCodigo = 0; 
+								}
+								else
+								{
+									//error estado no establecido - Rollback
+									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+									QMListaGastos.delRelacionGasto(Integer.toString(indice));
+									iCodigo = -903;
+								}
+							}
+							else
+							{
+								//error relacion gasto no creada - Rollback
+								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+								iCodigo = -902;
+							}
+							break;
+						case M:
+							if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
+							{
+								//Gasto gastomodificado = QMGastos.getGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE());
+								if(QMGastos.modGasto(convierteMovimientoenGasto(movimiento_revisado)))
+								{
+									//OK 
+									if (QMGastos.setEstado(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getCOSIGA()))
+									{
+										//OK 
+										iCodigo = 0; 
+									}
+									else
+									{
+										//error estado no establecido - Rollback
+										QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+										QMListaGastos.delRelacionGasto(Integer.toString(indice));
+										iCodigo = -903;
+									}
+								}
+								else
+								{
+									//Error gasto no modificado
+									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+									QMListaGastos.delRelacionGasto(Integer.toString(indice));
+									iCodigo = -904;									
+								}
+
+							}
+							else
+							{
+								//error relacion gasto no creada - Rollback
+								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+								iCodigo = -902;
+							}
+							break;
+						default:
+							break;
+					}
+				}
+			}
 		}
 		Utils.debugTrace(true, sClassName, sMethod, "iCodigo:|"+iCodigo+"|");
 		return iCodigo;
 	}
 	
-	public static MovimientoGasto revisaMovimiento(MovimientoGasto movimiento)
+	public static MovimientoGasto revisaMovimiento(MovimientoGasto movimiento, String sAccion)
 	{
 		String sMethod = "revisaMovimiento";
+		
+		Gasto gasto = QMGastos.getGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 		
 		movimiento.pintaMovimientoGasto();
 	
@@ -304,90 +519,416 @@ public class CLGastos
 		movimiento_revisado.setCOTPGA(movimiento.getCOTPGA());
 		movimiento_revisado.setCOSBGA(movimiento.getCOSBGA());
 		movimiento_revisado.setPTPAGO(movimiento.getPTPAGO());
-		
 		movimiento_revisado.setFEDEVE(movimiento.getFEDEVE());
+
 		movimiento_revisado.setFFGTVP(movimiento.getFFGTVP());
 		movimiento_revisado.setFEPAGA(movimiento.getFEPAGA());
 		movimiento_revisado.setFELIPG(movimiento.getFELIPG());
 		
-		movimiento_revisado.setCOSIGA(movimiento.getCOSIGA());
-		movimiento_revisado.setFEEESI(movimiento.getFEEESI());
-		movimiento_revisado.setFEECOI(movimiento.getFEECOI());
-		movimiento_revisado.setFEEAUI(movimiento.getFEEAUI());
-		movimiento_revisado.setFEEPAI(movimiento.getFEEPAI());
+
 		
+		if (sAccion.equals("G") || sAccion.equals("D")) //Nuevo
+		{
+			if (movimiento.getIMNGAS().startsWith("-"))
+			{
+				movimiento_revisado.setYCOS02("-");
+				movimiento_revisado.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
+			}
+			else
+			{
+				movimiento_revisado.setIMNGAS(movimiento.getIMNGAS());
+			}
+			
+			if (movimiento.getIMRGAS().startsWith("-"))
+			{
+				movimiento_revisado.setYCOS04("-");
+				movimiento_revisado.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
+			}
+			else
+			{
+				movimiento_revisado.setIMRGAS(movimiento.getIMRGAS());
+			}
+
+			if (movimiento.getIMDGAS().startsWith("-"))
+			{
+				movimiento_revisado.setYCOS06("-");
+				movimiento_revisado.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
+			}
+			else
+			{
+				movimiento_revisado.setIMDGAS(movimiento.getIMDGAS());
+			}		
+
+
+			if (movimiento.getIMCOST().startsWith("-"))
+			{
+				movimiento_revisado.setYCOS08("-");
+				movimiento_revisado.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
+			}
+			else
+			{
+				movimiento_revisado.setIMCOST(movimiento.getIMCOST());
+			}
+			
+			if (movimiento.getIMOGAS().startsWith("-"))
+			{
+				movimiento_revisado.setYCOS10("-");
+				movimiento_revisado.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
+			}
+			else
+			{
+				movimiento_revisado.setIMOGAS(movimiento.getIMOGAS());
+			}
+			
+			movimiento_revisado.setCOSIGA(movimiento.getCOSIGA());
+			movimiento_revisado.setFEEESI(movimiento.getFEEESI());
+			movimiento_revisado.setFEECOI(movimiento.getFEECOI());
+			movimiento_revisado.setFEEAUI(movimiento.getFEEAUI());
+			movimiento_revisado.setFEEPAI(movimiento.getFEEPAI());
+			movimiento_revisado.setIMDTGA(movimiento.getIMDTGA());
+			movimiento_revisado.setIMIMGA(movimiento.getIMIMGA());
+			movimiento_revisado.setCOIMPT(movimiento.getCOIMPT());
+			movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
+			movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
+
+		}
+		
+		
+		else if (sAccion.equals("N")) //Anular 
+		{
+			movimiento_revisado.setCOSIGA(gasto.getCOSIGA());
+			movimiento_revisado.setFEEESI(gasto.getFEEESI());
+			movimiento_revisado.setFEECOI(gasto.getFEECOI());
+			movimiento_revisado.setFEEAUI(gasto.getFEEAUI());
+			movimiento_revisado.setFEEPAI(gasto.getFEEPAI());
+			movimiento_revisado.setIMDTGA(gasto.getIMDTGA());
+			
+			movimiento_revisado.setIMIMGA(gasto.getIMIMGA());
+			movimiento_revisado.setCOIMPT(gasto.getCOIMPT());
+			movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
+			movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
+		}
+		else if (sAccion.equals("A")) //Abono 
+		{
+			boolean bCambio = false;
+			
+			if (!movimiento.getIMNGAS().equals(gasto.getIMNGAS()) 
+					|| !movimiento.getYCOS02().equals(gasto.getYCOS02()))
+			{
+				bCambio = true;
+				if (movimiento.getIMNGAS().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS02("-");
+					movimiento_revisado.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMNGAS(movimiento.getIMNGAS());
+				}
 				
-		
+			}
+			if (!movimiento.getIMRGAS().equals(gasto.getIMRGAS()) 
+					|| !movimiento.getYCOS04().equals(gasto.getYCOS04()))
+			{
+				bCambio = true;	
+				if (movimiento.getIMRGAS().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS04("-");
+					movimiento_revisado.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMRGAS(movimiento.getIMRGAS());
+				}
+			}
 
+			if (!movimiento.getIMDGAS().equals(gasto.getIMDGAS()) 
+					|| !movimiento.getYCOS06().equals(gasto.getYCOS06()))
+			{
+				bCambio = true;	
+				if (movimiento.getIMDGAS().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS06("-");
+					movimiento_revisado.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMDGAS(movimiento.getIMDGAS());
+				}		
+			}
+
+			if (!movimiento.getIMCOST().equals(gasto.getIMCOST()) 
+					|| !movimiento.getYCOS08().equals(gasto.getYCOS08()))
+			{
+				bCambio = true;	
+				if (movimiento.getIMCOST().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS08("-");
+					movimiento_revisado.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMCOST(movimiento.getIMCOST());
+				}
+			}
+			if (!movimiento.getIMOGAS().equals(gasto.getIMOGAS()) 
+					|| !movimiento.getYCOS10().equals(gasto.getYCOS10()))
+			{
+				bCambio = true;	
+				if (movimiento.getIMOGAS().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS10("-");
+					movimiento_revisado.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMOGAS(movimiento.getIMOGAS());
+				}
+			}
+			
+			if (!movimiento.getIMDTGA().equals(gasto.getIMDTGA()))
+			{
+				bCambio = true;
+				movimiento_revisado.setIMDTGA(movimiento.getIMDTGA());
+			}
+			else
+			{
+				movimiento_revisado.setIMDTGA(gasto.getIMDTGA());
+			}
+			
+			if (!movimiento.getIMIMGA().equals(gasto.getIMIMGA()))
+			{
+				bCambio = true;
+				movimiento_revisado.setIMIMGA(movimiento.getIMIMGA());
+			}
+			else
+			{
+				movimiento_revisado.setIMIMGA(gasto.getIMDTGA());
+			}
+			
+			if (!movimiento.getCOIMPT().equals(gasto.getCOIMPT()))
+			{
+				bCambio = true;
+				movimiento_revisado.setCOIMPT(movimiento.getCOIMPT());
+			}
+			else
+			{
+				movimiento_revisado.setCOIMPT(gasto.getCOIMPT());
+			}
+			
+			movimiento_revisado.setCOSIGA(gasto.getCOSIGA());
+			movimiento_revisado.setFEEESI(gasto.getFEEESI());
+			movimiento_revisado.setFEECOI(gasto.getFEECOI());
+			movimiento_revisado.setFEEAUI(gasto.getFEEAUI());
+			movimiento_revisado.setFEEPAI(gasto.getFEEPAI());
+
+			movimiento_revisado.setFEAGTO(gasto.getFEAGTO());
+			movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
+			
+			if (!bCambio)
+				movimiento_revisado.setCOSIGA("#");
+		}
+		else if (sAccion.equals("M")) //Modificacion
+		{
+			boolean bCambio = false;
+			
+			if (!movimiento.getIMNGAS().equals(gasto.getIMNGAS()) 
+					|| !movimiento.getYCOS02().equals(gasto.getYCOS02()))
+			{
+				bCambio = true;
+				if (movimiento.getIMNGAS().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS02("-");
+					movimiento_revisado.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMNGAS(movimiento.getIMNGAS());
+				}
 				
-		if (movimiento.getIMNGAS().startsWith("-"))
-		{
-			movimiento_revisado.setYCOS02("-");
-			movimiento_revisado.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
-		}
-		else
-		{
-			movimiento_revisado.setIMNGAS(movimiento.getIMNGAS());
-		}
+			}
+			if (!movimiento.getIMRGAS().equals(gasto.getIMRGAS()) 
+					|| !movimiento.getYCOS04().equals(gasto.getYCOS04()))
+			{
+				bCambio = true;	
+				if (movimiento.getIMRGAS().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS04("-");
+					movimiento_revisado.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMRGAS(movimiento.getIMRGAS());
+				}
+			}
+
+			if (!movimiento.getIMDGAS().equals(gasto.getIMDGAS()) 
+					|| !movimiento.getYCOS06().equals(gasto.getYCOS06()))
+			{
+				bCambio = true;	
+				if (movimiento.getIMDGAS().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS06("-");
+					movimiento_revisado.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMDGAS(movimiento.getIMDGAS());
+				}		
+			}
+
+			if (!movimiento.getIMCOST().equals(gasto.getIMCOST()) 
+					|| !movimiento.getYCOS08().equals(gasto.getYCOS08()))
+			{
+				bCambio = true;	
+				if (movimiento.getIMCOST().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS08("-");
+					movimiento_revisado.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMCOST(movimiento.getIMCOST());
+				}
+			}
+			if (!movimiento.getIMOGAS().equals(gasto.getIMOGAS()) 
+					|| !movimiento.getYCOS10().equals(gasto.getYCOS10()))
+			{
+				bCambio = true;	
+				if (movimiento.getIMOGAS().startsWith("-"))
+				{
+					movimiento_revisado.setYCOS10("-");
+					movimiento_revisado.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
+				}
+				else
+				{
+					movimiento_revisado.setIMOGAS(movimiento.getIMOGAS());
+				}
+			}
+			
+			if (!movimiento.getIMDTGA().equals(gasto.getIMDTGA()))
+			{
+				bCambio = true;
+				movimiento_revisado.setIMDTGA(movimiento.getIMDTGA());
+			}
+			else
+			{
+				movimiento_revisado.setIMDTGA(gasto.getIMDTGA());
+			}
+			
+			if (!movimiento.getIMIMGA().equals(gasto.getIMIMGA()))
+			{
+				bCambio = true;
+				movimiento_revisado.setIMIMGA(movimiento.getIMIMGA());
+			}
+			else
+			{
+				movimiento_revisado.setIMIMGA(gasto.getIMDTGA());
+			}
+			
+			if (!movimiento.getCOIMPT().equals(gasto.getCOIMPT()))
+			{
+				bCambio = true;
+				movimiento_revisado.setCOIMPT(movimiento.getCOIMPT());
+			}
+			else
+			{
+				movimiento_revisado.setCOIMPT(gasto.getCOIMPT());
+			}
+			
+			if (!movimiento.getCOSIGA().equals(gasto.getCOSIGA()))
+			{
+				bCambio = true;
+				movimiento_revisado.setCOSIGA(movimiento.getCOSIGA());
+			}
+			else
+			{
+				movimiento_revisado.setCOSIGA(gasto.getCOSIGA());
+			}
+
+			if (!movimiento.getFEEESI().equals(gasto.getFEEESI()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFEEESI(movimiento.getFEEESI());
+			}
+			else
+			{
+				movimiento_revisado.setFEEESI(gasto.getFEEESI());
+			}
+
+			if (!movimiento.getFEECOI().equals(gasto.getFEECOI()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFEECOI(movimiento.getFEECOI());
+			}
+			else
+			{
+				movimiento_revisado.setFEECOI(gasto.getFEECOI());
+			}
+			
+			if (!movimiento.getFEEAUI().equals(gasto.getFEEAUI()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFEEAUI(movimiento.getFEEAUI());
+			}
+			else
+			{
+				movimiento_revisado.setFEEAUI(gasto.getFEEAUI());
+			}
+			
+			if (!movimiento.getFEEPAI().equals(gasto.getFEEPAI()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFEEPAI(movimiento.getFEEPAI());
+			}
+			else
+			{
+				movimiento_revisado.setFEEPAI(gasto.getFEEPAI());
+			}
+
+			if (!movimiento.getFEAGTO().equals(gasto.getFEAGTO()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
+			}
+			else
+			{
+				movimiento_revisado.setFEAGTO(gasto.getFEAGTO());
+			}
 		
-		if (movimiento.getIMRGAS().startsWith("-"))
-		{
-			movimiento_revisado.setYCOS04("-");
-			movimiento_revisado.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
+			if (!movimiento.getFEPGPR().equals(gasto.getFEPGPR()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
+			}
+			else
+			{
+				movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
+			}
+			
+			if (!bCambio)
+				movimiento_revisado.setCOSIGA("#");
 		}
-		else
-		{
-			movimiento_revisado.setIMRGAS(movimiento.getIMRGAS());
-		}
-
-		if (movimiento.getIMDGAS().startsWith("-"))
-		{
-			movimiento_revisado.setYCOS06("-");
-			movimiento_revisado.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
-		}
-		else
-		{
-			movimiento_revisado.setIMDGAS(movimiento.getIMDGAS());
-		}		
-
-
-		if (movimiento.getIMCOST().startsWith("-"))
-		{
-			movimiento_revisado.setYCOS08("-");
-			movimiento_revisado.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
-		}
-		else
-		{
-			movimiento_revisado.setIMCOST(movimiento.getIMCOST());
-		}
-		
-		if (movimiento.getIMOGAS().startsWith("-"))
-		{
-			movimiento_revisado.setYCOS10("-");
-			movimiento_revisado.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
-		}
-		else
-		{
-			movimiento_revisado.setIMOGAS(movimiento.getIMOGAS());
-		}
-
-		movimiento_revisado.setIMDTGA(movimiento.getIMDTGA());
+		//Moneda
 		movimiento_revisado.setCOUNMO(movimiento.getCOUNMO());
-		movimiento_revisado.setIMIMGA(movimiento.getIMIMGA());
-		movimiento_revisado.setCOIMPT(movimiento.getCOIMPT());
+
+		//Provision
+		movimiento_revisado.setNUPROF(movimiento.getNUPROF());
+		
+		//Autorizacion
+		movimiento_revisado.setCOMONA(movimiento.getCOMONA());
+		movimiento_revisado.setBIAUTO(movimiento.getBIAUTO());
 		movimiento_revisado.setCOTNEG(movimiento.getCOTNEG());
+		movimiento_revisado.setFEAUFA(movimiento.getFEAUFA());
+		movimiento_revisado.setCOTERR(movimiento.getCOTERR());
+				
+		//Conexion
 		movimiento_revisado.setCOENCX(movimiento.getCOENCX());
 		movimiento_revisado.setCOOFCX(movimiento.getCOOFCX());
 		movimiento_revisado.setNUCONE(movimiento.getNUCONE());
-		movimiento_revisado.setNUPROF(movimiento.getNUPROF());
-		movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
-
-		movimiento_revisado.setCOMONA(movimiento.getCOMONA());
-		movimiento_revisado.setBIAUTO(movimiento.getBIAUTO());
-		movimiento_revisado.setFEAUFA(movimiento.getFEAUFA());
-		movimiento_revisado.setCOTERR(movimiento.getCOTERR());
 		movimiento_revisado.setFMPAGN(movimiento.getFMPAGN());
-		movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
+		
+		//Aplicacion
 		movimiento_revisado.setFEAPLI(movimiento.getFEAPLI());
 		movimiento_revisado.setCOAPII(movimiento.getCOAPII());
 		movimiento_revisado.setCOSPII(movimiento.getCOSPII());

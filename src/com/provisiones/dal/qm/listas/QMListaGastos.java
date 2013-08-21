@@ -19,14 +19,19 @@ public class QMListaGastos
 
 	static String sTable = "lista_gastos_multi";
 
-	static String sField1 = "cod_coaces";
-	static String sField2 = "cod_nuprof";
-	static String sField3 = "cod_movimiento";
+	public static final String sField1  = "cod_coaces";
+	public static final String sField2  = "cod_cogrug";    
+	public static final String sField3  = "cotpga";    
+	public static final String sField4  = "cosbga";    
+	public static final String sField5  = "fedeve";
 	
-	static String sField4 = "cod_validado";
+	public static final String sField6 = "cod_nuprof";
+	public static final String sField7 = "cod_movimiento";
+
+	public static final String sField8 = "cod_validado";
 
 
-	public static boolean addRelacionGastos(String sCodCOACES, String sCodNUPROF, String sCodGasto) 
+	public static boolean addRelacionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodNUPROF, String sCodGasto) 
 	{
 		String sMethod = "addRelacionGastos";
 		Statement stmt = null;
@@ -42,15 +47,34 @@ public class QMListaGastos
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("INSERT INTO " + sTable + 
-					" (" + sField1 + "," + sField2 + "," + sField3 + "," + sField4 +") " +
-					"VALUES ('" + sCodCOACES + "','"+ sCodNUPROF + "','"+ sCodGasto + "','"+ ValoresDefecto.DEF_VALIDADO + "')");
+					" (" + sField1 + "," 
+						+ sField2 + "," 
+						+ sField3 + "," 
+						+ sField4 + ","
+						+ sField5 + "," 
+						+ sField6 + "," 
+						+ sField7 + "," 
+						+ sField8 +") " +
+					"VALUES ('" 
+						+ sCodCOACES + "','"
+						+ sCodCOGRUG + "','"
+						+ sCodCOTPGA + "','" 
+						+ sCodCOSBGA + "','"
+						+ sFEDEVE + "','"
+						+ sCodNUPROF + "','"
+						+ sCodGasto + "','"
+						+ ValoresDefecto.DEF_VALIDADO + "')");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPROF: " + sCodNUPROF);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
@@ -68,7 +92,7 @@ public class QMListaGastos
 		return bSalida;
 	}
 
-	public static boolean delRelacionGastos(String sCodCOACES, String sCodNUPROF, String sCodGasto) 
+	public static boolean delRelacionGasto(String sCodGasto) 
 	{
 		String sMethod = "delRelacionGastos";
 		Statement stmt = null;
@@ -84,16 +108,12 @@ public class QMListaGastos
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND  " + sField2 + " = '" + sCodNUPROF +"'"+
-							"AND  " + sField3 + " = '" + sCodGasto +"')");
+					" WHERE (" + sField7 + " = '" + sCodGasto +"')");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPROF: " + sCodNUPROF);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
@@ -136,8 +156,9 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
-					" WHERE (" + sField3 + " = '" + sCodGasto + "')");
+			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
+					" WHERE " +
+					"("	+ sField7  + " = '"+ sCodGasto +"' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -209,7 +230,7 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + sField7+ "  FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' )");
 
 			rs = pstmt.executeQuery();
@@ -226,7 +247,7 @@ public class QMListaGastos
 				{
 					found = true;
 
-					result.add(rs.getString(sField3));
+					result.add(rs.getString(sField7));
 										
 					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
 
@@ -285,8 +306,8 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
-					" WHERE (" + sField2 + " = '" + sCodNUPROF + "' )");
+			pstmt = conn.prepareStatement("SELECT " + sField7 + "  FROM " + sTable + 
+					" WHERE (" + sField6 + " = '" + sCodNUPROF + "' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -335,75 +356,7 @@ public class QMListaGastos
 		return result;
 	}
 
-/*	public static String  getGastoID(String sCodCOACES, String sCodNUPROF) 
-	{
-		String sMethod = "getGastoID";
 
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sResult = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
-							 " AND "  + sField2 + " = '" + sCodNUPROF + "')");
-
-			rs = pstmt.executeQuery();
-			
-			
-			System.out.println("===================================================");
-			System.out.println(sField1 + ": " + sCodCOACES);
-			System.out.println(sField2 + ": " + sCodNUPROF);
-
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sResult = rs.getString(sField3);
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				System.out.println("No Information Found");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sResult;
-	}*/
 	
 	public static boolean setValidado(String sCodGasto, String sValidado)
 	{
@@ -421,10 +374,10 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField4 + " = '"+ sValidado + 
+					+ sField8 + " = '"+ sValidado + 
 					"' "+
 					" WHERE "
-					+ sField3 + " = '"+ sCodGasto +"'");
+					+ sField7 + " = '"+ sCodGasto +"'");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
@@ -473,8 +426,8 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
-					" WHERE (" + sField3 + " = '" + sCodGasto + "')");
+			pstmt = conn.prepareStatement("SELECT " + sField8 + "  FROM " + sTable + 
+					" WHERE (" + sField7 + " = '" + sCodGasto + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -488,11 +441,11 @@ public class QMListaGastos
 				{
 					found = true;
 
-					sValidado = rs.getString(sField4);
+					sValidado = rs.getString(sField8);
 
 					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField3 + ": " + sCodGasto);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField4 + ": " + sValidado);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField7 + ": " + sCodGasto);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField8 + ": " + sValidado);
 
 
 				}
