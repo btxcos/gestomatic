@@ -22,17 +22,19 @@ public class CLProvisiones
 	{
 		return QMProvisiones.getUltimaProvisionCerrada(sCodCOSPAT);
 	}
-	public static String ultimaProvisionAbierta (String sCodCOSPAT)
+	public static String provisionAsignada (String sCodCOACES)
 	{
 		
-		String sCOSPAT = sCodCOSPAT;
+		String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCodCOACES);
 		
-		if (QMCodigosControl.getDesSociedadesTitulizadas(sCodCOSPAT).equals(""))
+		if (QMCodigosControl.getDesSociedadesTitulizadas(sCOSPAT).equals(""))
 		{
 			sCOSPAT = "0";
-		}	
+		}
 		
-		String sProvision = QMProvisiones.getProvisionAbierta(sCOSPAT);
+		String sTipo = CLActivos.compruebaTipoActivoSAREB(sCodCOACES);
+		
+		String sProvision = QMProvisiones.getProvisionAbierta(sCOSPAT,sTipo);
 		
 		if (sProvision.equals(""))
 		{
@@ -78,7 +80,7 @@ public class CLProvisiones
 				sProvision = iAño+ValoresDefecto.DEF_COREAE+sNumero;
 			}			
 			
-			Provision provision = new Provision (sProvision, sCOSPAT, "0","0","0","0",ValoresDefecto.DEF_ALTA);
+			Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0",ValoresDefecto.DEF_ALTA);
 			
 			QMProvisiones.addProvision(provision);
 		}
@@ -101,7 +103,7 @@ public class CLProvisiones
 		return QMProvisiones.provisionCerrada(sCodNUPROF);
 	}
 	
-	public static boolean nuevaProvision (Provision provision)
+	/*public static boolean nuevaProvision (Provision provision)
 	{
 		boolean bSalida = false;
 		
@@ -113,7 +115,7 @@ public class CLProvisiones
 		}
 		
 		return bSalida;
-	}
+	}*/
 	
 	public static boolean cerrarProvision (Provision provision)
 	{

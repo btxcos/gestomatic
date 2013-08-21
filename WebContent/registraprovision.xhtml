@@ -59,6 +59,10 @@
 											<p:inputText id="DCOSPAT" value="#{GestorProvisiones.sDCOSPAT}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
 
+											<h:outputText for="DTAS" value="DTAS: " />
+											<p:inputText id="DTAS" value="#{GestorProvisiones.sDTAS}" size="30" maxlength="30" disabled="true">
+											</p:inputText>
+
 											<h:outputText for="ValorTolal" value="ValorTolal: " />
 											<p:inputText id="ValorTolal" value="#{GestorProvisiones.sValorTolal}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
@@ -90,7 +94,11 @@
 								
 								<p:column headerText="Sociedad Patrimonial">  
 								    #{provision.DCOSPAT}  
-								</p:column>  
+								</p:column>
+
+								<p:column headerText="Tipo de Activo SAREB">  
+								    #{provision.DTAS}  
+								</p:column>
 
 								<p:column headerText="Valor de provision">  
 								    #{provision.VALOR}  

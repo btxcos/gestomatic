@@ -1019,7 +1019,153 @@ public class QMActivos
 		ConnectionManager.CloseDBConnection(conn);
 		return sReferencia;
 	}
+	
+	public static String getCOTSINActivo(String sCodCOACES)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "getCOTSINActivo";
 
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOTSIN = "";
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					   + sField27  +        
+					   "  FROM " + sTable + 
+					   " WHERE (" + sField1 + " = '" + sCodCOACES	+ "')");
+			
+			
+
+			rs = pstmt.executeQuery();
+			
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sCOTSIN = rs.getString(sField27);
+
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField27 + ":|"+ sCOTSIN+"|");
+				}
+			}
+			if (found == false) 
+			{
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sCOTSIN;
+	}
+
+	public static String getBIARREctivo(String sCodCOACES)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "getBIARREctivo";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sBIARRE = "";
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					   + sField45  +        
+					   "  FROM " + sTable + 
+					   " WHERE (" + sField1 + " = '" + sCodCOACES	+ "')");
+			
+			
+
+			rs = pstmt.executeQuery();
+			
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sBIARRE = rs.getString(sField45);
+
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField45 + ":|"+ sBIARRE+"|");
+				}
+			}
+			if (found == false) 
+			{
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sBIARRE;
+	}
+	
 	public static String getSociedadPatrimonial(String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		

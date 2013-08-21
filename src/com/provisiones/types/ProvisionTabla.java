@@ -5,23 +5,27 @@ public class ProvisionTabla
 	private String NUPROF = "";
 	private String COSPAT = "";
 	private String DCOSPAT = "";
+	private String TAS = "";
+	private String DTAS = "";	
 	private String VALOR = "";
 	private String GASTOS = "";
 
 	//Constructor de clase
 	
 	public ProvisionTabla(String nUPROF, String cOSPAT, String dCOSPAT,
-			String vALOR, String gASTOS) {
+			String tAS, String dTAS, String vALOR, String gASTOS) {
 		super();
 		NUPROF = nUPROF;
 		COSPAT = cOSPAT;
 		DCOSPAT = dCOSPAT;
+		TAS = tAS;
+		DTAS = dTAS;
 		VALOR = vALOR;
 		GASTOS = gASTOS;
 	}
 
 	//Métodos de acceso
-	
+
 	public String getNUPROF() {
 		return NUPROF;
 	}
@@ -46,6 +50,22 @@ public class ProvisionTabla
 		DCOSPAT = dCOSPAT;
 	}
 
+	public String getTAS() {
+		return TAS;
+	}
+
+	public void setTAS(String tAS) {
+		TAS = tAS;
+	}
+
+	public String getDTAS() {
+		return DTAS;
+	}
+
+	public void setDTAS(String dTAS) {
+		DTAS = dTAS;
+	}
+
 	public String getVALOR() {
 		return VALOR;
 	}
@@ -61,8 +81,4 @@ public class ProvisionTabla
 	public void setGASTOS(String gASTOS) {
 		GASTOS = gASTOS;
 	}
-	
-	
-	
-	
 }

@@ -32,7 +32,7 @@ public class QMGastos
 	
 	public static final String sField7  = "cod_estado";
 	
-	public static int addGasto (Gasto NuevoGasto) 
+	public static int addGasto (Gasto NuevoGasto, String sEstado) 
 	 
 	{
 		String sMethod = "addGasto";
@@ -69,7 +69,7 @@ public class QMGastos
 								       + NuevoGasto.getCOSBGA() + "','"  
 								       + NuevoGasto.getFEDEVE() + "','"
 								       + NuevoGasto.getIMPORTE() + "','"
-								       + ValoresDefecto.DEF_ESTADO_GASTO + "' )", Statement.RETURN_GENERATED_KEYS);
+								       + sEstado + "' )", Statement.RETURN_GENERATED_KEYS);
 
 			resulset = stmt.getGeneratedKeys();
 			
@@ -335,6 +335,83 @@ public class QMGastos
 					found = true;
 
 					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
+	}
+	
+	public static boolean gastoAnulado(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
+	{//pendiente de coaces, de la tabla activos
+		
+		String sMethod = "gastoAnulado";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					+ sField7 + 
+					"  FROM " + sTable + 
+						" WHERE " +
+						"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+						sField2  + " = '"+ sCodCOGRUG +"' AND " +
+						sField3  + " = '"+ sCodCOTPGA +"' AND " +
+						sField4  + " = '"+ sCodCOSBGA +"' AND " +
+						sField5  + " = '"+ sFEDEVE +"' AND " +
+					    sField7  + " = '"+ ValoresDefecto.DEF_GASTO_ANULADO + "' )");
+
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField7 + ": " + sEstado);
 
 				}
 			}

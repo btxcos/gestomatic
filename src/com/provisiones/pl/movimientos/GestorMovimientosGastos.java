@@ -553,9 +553,7 @@ public class GestorMovimientosGastos implements Serializable
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCOACES); 
-    	
-    	this.sNUPROF = CLProvisiones.ultimaProvisionAbierta(sCOSPAT);
+    	this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
     			 
     	
     	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");

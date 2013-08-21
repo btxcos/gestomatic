@@ -23,6 +23,8 @@ public class GestorProvisiones implements Serializable
 	private String sNUPROF = "";
 	private String sCOSPAT = "";
 	private String sDCOSPAT = "";
+	private String sTAS = "";
+	private String sDTAS = "";
 	private String sValorTolal = "";
 	private String sNumGastos = "";
 	private String sFEPFON = "";
@@ -67,6 +69,8 @@ public class GestorProvisiones implements Serializable
     	this.sNUPROF  = provisionseleccionada.getNUPROF();
     	this.sCOSPAT  = provisionseleccionada.getCOSPAT();
     	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
+    	this.sTAS  = provisionseleccionada.getCOSPAT();
+    	this.sDTAS  = provisionseleccionada.getDCOSPAT();
     	this.sValorTolal  = provisionseleccionada.getVALOR();
     	this.sNumGastos  = provisionseleccionada.getGASTOS();
     	
@@ -93,7 +97,7 @@ public class GestorProvisiones implements Serializable
     	
     	String sMsg = "";
 		
-		Provision provision = CLProvisiones.detallesProvision(CLProvisiones.ultimaProvisionAbierta(sCOSPAT));
+		Provision provision = CLProvisiones.detallesProvision(sNUPROF);
 		
 		provision.setsFEPFON(Utils.fechaDeHoy(false));
 		
@@ -196,6 +200,22 @@ public class GestorProvisiones implements Serializable
 
 	public void setsDCOSPAT(String sDCOSPAT) {
 		this.sDCOSPAT = sDCOSPAT;
+	}
+
+	public String getsTAS() {
+		return sTAS;
+	}
+
+	public void setsTAS(String sTAS) {
+		this.sTAS = sTAS;
+	}
+
+	public String getsDTAS() {
+		return sDTAS;
+	}
+
+	public void setsDTAS(String sDTAS) {
+		this.sDTAS = sDTAS;
 	}
 
 

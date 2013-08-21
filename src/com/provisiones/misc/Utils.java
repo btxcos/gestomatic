@@ -75,7 +75,7 @@ public class Utils
 		
 		if (bFormato)
 		{
-			sHoy = sDia+sMes+fecha.get(Calendar.YEAR)+"";
+			sHoy = sDia+"/"+sMes+"/"+fecha.get(Calendar.YEAR);
 		}
 		else
 		{
@@ -181,7 +181,7 @@ public class Utils
 		return sTipo;
 	}
 	
-	public static String compruebaCodigo(String sCodigo)
+	public static String compruebaCodigoAlfa(String sCodigo)
 	{
 		String sMethod = "compruebaCodigo";
 			
@@ -190,6 +190,21 @@ public class Utils
 		if (sCodigoRevisado.equals(""))
 		{
 			sCodigoRevisado = "#";
+		}
+		
+		debugTrace(bTraza, sClassName, sMethod, "Codigo:|"+sCodigoRevisado+"|");
+		
+		return sCodigoRevisado;
+	}
+	public static String compruebaCodigoNum(String sCodigo)
+	{
+		String sMethod = "compruebaCodigo";
+			
+		String sCodigoRevisado = sCodigo;
+		
+		if (sCodigoRevisado.equals(""))
+		{
+			sCodigoRevisado = "0";
 		}
 		
 		debugTrace(bTraza, sClassName, sMethod, "Codigo:|"+sCodigoRevisado+"|");
@@ -300,11 +315,16 @@ public class Utils
 		
 		String sFechaFormateada = "";
 		
-		if (!sFecha.equals(""))
+		if (sFecha.matches("[\\d]{2}[/][\\d]{2}[/][\\d]{4}$"))
 		{
-			String sDia = sFecha.substring(0, 2);
+			/*String sDia = sFecha.substring(0, 2);
 			String sMes = sFecha.substring(3, 5);
-			String sAño = sFecha.substring(6, 10);
+			String sAño = sFecha.substring(6, 10);*/
+			
+			String[] arrayfecha = sFecha.split("/");
+			String sDia = arrayfecha[0];
+			String sMes = arrayfecha[1];
+			String sAño = arrayfecha[2];
 		
 			debugTrace(bTraza, sClassName, sMethod, "sDia:|"+sDia+"|");
 			debugTrace(bTraza, sClassName, sMethod, "sMes:|"+sMes+"|");

@@ -24,11 +24,12 @@ public class QMProvisiones
 	public static final String sField1 = "nuprof_id";
 
 	public static final String sField2 = "cod_cospat";
-	public static final String sField3 = "valor_total";
-	public static final String sField4 = "numero_gastos";
-	public static final String sField5 = "fepfon";
-	public static final String sField6 = "fecha_validado";
-	public static final String sField7 = "cod_estado";
+	public static final String sField3 = "cod_tas";
+	public static final String sField4 = "valor_total";
+	public static final String sField5 = "numero_gastos";
+	public static final String sField6 = "fepfon";
+	public static final String sField7 = "fecha_validacion";
+	public static final String sField8 = "cod_estado";
 	
 
 	
@@ -56,11 +57,13 @@ public class QMProvisiones
 					+ sField3 + "," 
 					+ sField4 + ","
 					+ sField5 + ","
-					+ sField6 + "," 
-					+ sField7
+					+ sField6 + ","
+					+ sField7 + ","
+					+ sField8
 					+ ") VALUES ('" 
 					+ NuevaProvision.getsNUPROF() + "','"
 					+ NuevaProvision.getsCOSPAT() + "','"
+					+ NuevaProvision.getsTAS() + "','"
 					+ NuevaProvision.getsValorTolal() + "','"
 					+ NuevaProvision.getsNumGastos() + "','"
 					+ NuevaProvision.getsFEPFON() + "','" 
@@ -105,11 +108,12 @@ public class QMProvisiones
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + " SET " 
 					+ sField2 + " = '" + NuevaProvision.getsCOSPAT() + "', "
-					+ sField3 + " = '" + NuevaProvision.getsValorTolal() + "', " 
-					+ sField4 + " = '" + NuevaProvision.getsNumGastos() + "', "
-					+ sField5 + " = '" + NuevaProvision.getsFEPFON() + "', " 
-					+ sField6 + " = '" + NuevaProvision.getsFechaValidacion() + "', " 
-					+ sField7 + " = '" + NuevaProvision.getsCodEstado() + "' " 
+					+ sField3 + " = '" + NuevaProvision.getsTAS() + "', "
+					+ sField4 + " = '" + NuevaProvision.getsValorTolal() + "', " 
+					+ sField5 + " = '" + NuevaProvision.getsNumGastos() + "', "
+					+ sField6 + " = '" + NuevaProvision.getsFEPFON() + "', " 
+					+ sField7 + " = '" + NuevaProvision.getsFechaValidacion() + "', " 
+					+ sField8 + " = '" + NuevaProvision.getsCodEstado() + "' " 
 					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
@@ -183,6 +187,7 @@ public class QMProvisiones
 		ResultSet rs = null;
 
 		String sCOSPAT = "";
+		String sTAS = "";
 		String sValorTolal = "";
 		String sNumGastos = "";
 		String sFEPFON = "";
@@ -204,7 +209,7 @@ public class QMProvisiones
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " + sField2 + "," + sField3
-					+ "," + sField4 + "," + sField5 + "," + sField6 + "," + sField7 +
+					+ "," + sField4 + "," + sField5 + "," + sField6 + "," + sField7 + "," + sField8 +
 					" FROM " + sTable + " WHERE (" + sField1 + " = '"
 					+ sNUPROF + "')");
 
@@ -222,11 +227,12 @@ public class QMProvisiones
 					found = true;
 
 					sCOSPAT = rs.getString(sField2);
-					sValorTolal = rs.getString(sField3);
-					sNumGastos = rs.getString(sField4);
-					sFEPFON = rs.getString(sField5);
-					sFechaValidacion = rs.getString(sField6);
-					sValidado = rs.getString(sField7);
+					sTAS = rs.getString(sField3);
+					sValorTolal = rs.getString(sField4);
+					sNumGastos = rs.getString(sField5);
+					sFEPFON = rs.getString(sField6);
+					sFechaValidacion = rs.getString(sField7);
+					sValidado = rs.getString(sField8);
 
 					
 					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
@@ -255,7 +261,7 @@ public class QMProvisiones
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return new Provision(sNUPROF, sCOSPAT, sValorTolal, sNumGastos, sFEPFON, sFechaValidacion, sValidado);
+		return new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, sFEPFON, sFechaValidacion, sValidado);
 	}
 	
 	public static boolean existeProvision(String sNUPROF) 
@@ -351,7 +357,7 @@ public class QMProvisiones
 					" FROM " + sTable + 
 					" WHERE (" 
 					+ sField1 + " = '"+ sNUPROF + "' AND "
-					+ sField7 + " = '"+ ValoresDefecto.DEF_BAJA + "')");
+					+ sField8 + " = '"+ ValoresDefecto.DEF_BAJA + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -394,7 +400,7 @@ public class QMProvisiones
 		return found;
 	}
 	
-	public static String getProvisionAbierta(String sCodCOSPAT) 
+	public static String getProvisionAbierta(String sCodCOSPAT, String sCodTAS) 
 	{
 
 
@@ -421,9 +427,10 @@ public class QMProvisiones
 
 			pstmt = conn.prepareStatement("SELECT " + sField1 + 
 					" FROM " + sTable + 
-					" WHERE ( " + sField7 + " = '"
-					+ ValoresDefecto.DEF_ALTA + "' AND " +
-							      sField2 +" = '"+ sCodCOSPAT +"')");
+					" WHERE " +
+					"( " + sField8 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
+					+ sField2 +" = '"+ sCodCOSPAT +"' AND "
+					+ sField3 +" = '"+ sCodTAS +"')");
 
 			rs = pstmt.executeQuery();
 			
@@ -481,6 +488,8 @@ public class QMProvisiones
 		
 		
 		String sNUPROF = "";
+		String sTAS = "";
+		String sDTAS = "";
 		String sCOSPAT = "";
 		String sDCOSPAT = "";
 		String sVALOR = "";
@@ -506,9 +515,10 @@ public class QMProvisiones
 					+ sField1 + ","
 					+ sField2 + ","
 					+ sField3 + ","
-					+ sField4 + 
+					+ sField4 + ","
+					+ sField5 + 
 					" FROM " + sTable + 
-					" WHERE ( " + sField7 + " = '"
+					" WHERE ( " + sField8 + " = '"
 					+ ValoresDefecto.DEF_ALTA + "')");
 
 			rs = pstmt.executeQuery();
@@ -527,10 +537,12 @@ public class QMProvisiones
 					sNUPROF =  rs.getString(sField1);
 					sCOSPAT =  rs.getString(sField2);
 					sDCOSPAT =  QMCodigosControl.getDesSociedadesTitulizadas(sCOSPAT);
+					sTAS =  rs.getString(sField3);
+					sDTAS =  QMCodigosControl.getDesTipoActivo(sTAS);
 					sVALOR =   rs.getString(sField3);
 					sGASTOS =  rs.getString(sField4);
 
-					ProvisionTabla provisionencontrada = new ProvisionTabla(sNUPROF,sCOSPAT,sDCOSPAT,sVALOR,sGASTOS);
+					ProvisionTabla provisionencontrada = new ProvisionTabla(sNUPROF,sCOSPAT,sDCOSPAT,sTAS,sDTAS,sVALOR,sGASTOS);
 					
 					result.add(provisionencontrada);
 					
@@ -589,7 +601,7 @@ public class QMProvisiones
 
 			pstmt = conn.prepareStatement("SELECT " + sField1 + 
 					" FROM " + sTable + 
-					" WHERE ( " + sField7 + " = '"
+					" WHERE ( " + sField8 + " = '"
 					+ ValoresDefecto.DEF_BAJA + "' AND " +
 							      sField2 +" = '"+ sCodCOSPAT +"') "+
 					" order by " + sField1 + " desc limit 0,1 ");

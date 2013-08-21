@@ -552,7 +552,7 @@ public class MovimientoGasto
 	public void setNUCLII(String nUCLII) {
 		NUCLII = nUCLII;
 	}
-	public void pintaGasto()
+	public void pintaMovimientoGasto()
 	{
 		System.out.println("(MOVIMIENTO GASTO)");
 		System.out.println("COACES:|"+COACES+"|");

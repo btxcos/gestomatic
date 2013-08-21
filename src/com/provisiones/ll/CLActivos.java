@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Utils;
 import com.provisiones.types.Activo;
 import com.provisiones.types.ActivoTabla;
 
@@ -25,6 +26,30 @@ public class CLActivos
 		return QMActivos.existeActivo(sCodCOACES);
 	}
 	
+	public static String compruebaTipoActivoSAREB (String sCodCOACES)
+	{
+		String sMethod = "compruebaTipoActivoSAREB";
+		String sTipo = "#";
+			
+		if (QMActivos.getSociedadPatrimonial(sCodCOACES).equals("9999"))
+		{
+			if (QMActivos.getCOTSINActivo(sCodCOACES).startsWith("SU"))
+			{
+				sTipo = "S"; //SUELOS Y OBRA EN CURSO 
+			}
+			else if (QMActivos.getBIARREctivo(sCodCOACES).equals("S"))
+			{
+				sTipo = "A"; //ARRENDAMIENTOS
+			}
+			else
+			{
+				sTipo = "T"; //PRODUCTO TERMINADO
+			}
+		}
+		Utils.debugTrace(true, sClassName, sMethod, "sCodActivo|"+sTipo+"|");
+		return sTipo;
+	}
+	
 	public static String sociedadPatrimonialAsociada (String sCodCOACES)
 	{
 			
@@ -43,7 +68,7 @@ public class CLActivos
 				
 		bSalida = QMActivos.addActivo(activo);
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCodActivo|"+sCodActivo+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "sCodActivo|"+sCodActivo+"|");
 		
 		/*
 		QMActivos.getActivo(activo.getCOACES()).pintaActivo();
@@ -62,8 +87,8 @@ public class CLActivos
 		
 		if (!bSalida)
 		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro ya se encuentre en el sistema:");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
+			Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro ya se encuentre en el sistema:");
+			Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
 		}
 		
 		return bSalida;

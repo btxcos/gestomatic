@@ -5,6 +5,7 @@ public class Provision
 
 	private String sNUPROF = "";
 	private String sCOSPAT = "";
+	private String sTAS = "";
 	private String sValorTolal = "";
 	private String sNumGastos = "";	
 	private String sFEPFON = "";
@@ -14,12 +15,13 @@ public class Provision
 
 	//Constructor de clase
 	
-	public Provision(String sNUPROF, String sCOSPAT, String sValorTolal,
-			String sNumGastos, String sFEPFON, String sFechaValidacion,
-			String sCodEstado) {
+	public Provision(String sNUPROF, String sCOSPAT, String sTAS,
+			String sValorTolal, String sNumGastos, String sFEPFON,
+			String sFechaValidacion, String sCodEstado) {
 		super();
 		this.sNUPROF = sNUPROF;
 		this.sCOSPAT = sCOSPAT;
+		this.sTAS = sTAS;
 		this.sValorTolal = sValorTolal;
 		this.sNumGastos = sNumGastos;
 		this.sFEPFON = sFEPFON;
@@ -47,6 +49,16 @@ public class Provision
 
 	public void setsCOSPAT(String sCOSPAT) {
 		this.sCOSPAT = sCOSPAT;
+	}
+
+
+	public String getsTAS() {
+		return sTAS;
+	}
+
+
+	public void setsTAS(String sTAS) {
+		this.sTAS = sTAS;
 	}
 
 
@@ -104,11 +116,15 @@ public class Provision
 		System.out.println("(PROVISION)");
 		System.out.println("sNUPROF         :|"+sNUPROF+"|");
 		System.out.println("sCOSPAT         :|"+sCOSPAT+"|");
+		System.out.println("sTAS            :|"+sTAS+"|");
 		System.out.println("sFEPFON         :|"+sFEPFON+"|");
 		System.out.println("sFechaValidacion:|"+sFechaValidacion+"|");
 		System.out.println("sCodEstado      :|"+sCodEstado+"|");
 		System.out.println("sValorTolal     :|"+sValorTolal+"|");
 		System.out.println("sNumGastos      :|"+sNumGastos+"|");
 	}
+
+
+
 
 }

@@ -28,6 +28,7 @@ public class GestorGastos implements Serializable
 	static String sClassName = GestorGastos.class.getName();
 
 	private String sCOACES = "";
+	private boolean bDevolucion = false;
 	private String sCOGRUG = "";
 	private String sCOTPGA = "";
 	private String sCOSBGA = "";
@@ -42,8 +43,8 @@ public class GestorGastos implements Serializable
 	private boolean bFEEESI = true;
 	private String sFEECOI = "";
 	private boolean bFEECOI = true;
-	private String sFEEAUI = "00000000";
-	private String sFEEPAI = "00000000";
+	private String sFEEAUI = "";
+	private String sFEEPAI = "";
 
 	private String sIMNGAS = "";
 	private String sYCOS02 = "";
@@ -57,8 +58,9 @@ public class GestorGastos implements Serializable
 	private String sYCOS10 = "";
 	
 	private String sIMDTGA = "";
-	private String sCOUNMO = "";
+	private String sCOUNMO = ValoresDefecto.DEF_COUNMO;
 	private String sIMIMGA = "";
+	private boolean bIMIMGA = false;
 	private String sCOIMPT = "";
 	
 	private String sCOTNEG = ValoresDefecto.DEF_COTNEG;
@@ -67,13 +69,13 @@ public class GestorGastos implements Serializable
 	private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
 	private String sNUCONE = ValoresDefecto.DEF_NUCONE;
 	private String sNUPROF = "";
-	private String sFEAGTO = "";
+	private String sFEAGTO = ValoresDefecto.DEF_FEAGTO;
 	private String sCOMONA = ValoresDefecto.DEF_COMONA;
 	private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
 	private String sFEAUFA = ValoresDefecto.DEF_FEAUFA;
 	private String sCOTERR = ValoresDefecto.DEF_COTERR;
 	private String sFMPAGN = ValoresDefecto.DEF_FMPAGN;
-	private String sFEPGPR = ValoresDefecto.DEF_FEPGPR;
+	private String sFEPGPR = "";
 	
 	private String sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 	
@@ -195,6 +197,7 @@ public class GestorGastos implements Serializable
 	public void borrarPlantillaGasto()
 	{
 		this.sCOGRUG = "";
+		this.bDevolucion = false;
 		this.sCOTPGA = "";
 		this.sCOSBGA = "";
 		this.sPTPAGO = "";
@@ -210,8 +213,8 @@ public class GestorGastos implements Serializable
 		this.bFEEESI = true;
 		this.sFEECOI = "";
 		this.bFEECOI = true;
-		this.sFEEAUI = "00000000";
-		this.sFEEPAI = "00000000";
+		this.sFEEAUI = "";
+		this.sFEEPAI = "";
 
 		this.sIMNGAS = "";
 		this.sYCOS02 = "";
@@ -236,7 +239,7 @@ public class GestorGastos implements Serializable
 
 		this.sNUPROF = "";
 
-		this.sFEAGTO = "";
+		this.sFEAGTO = ValoresDefecto.DEF_FEAGTO;
 
 		this.sCOMONA = ValoresDefecto.DEF_COMONA;
 		this.sBIAUTO = ValoresDefecto.DEF_BIAUTO;
@@ -244,7 +247,7 @@ public class GestorGastos implements Serializable
 		this.sCOTERR = ValoresDefecto.DEF_COTERR;
 
 		this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
-		this.sFEPGPR = ValoresDefecto.DEF_FEPGPR;
+		this.sFEPGPR = "";
 		
 		this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 		
@@ -392,6 +395,25 @@ public class GestorGastos implements Serializable
 		}
 	}
 	
+	public void cambiaImporteImpuesto()
+	{
+
+		if (sCOIMPT !=null && !sCOIMPT.equals(""))
+		{
+			switch (Integer.parseInt(sCOIMPT)) 
+			{
+				case 0:
+					this.bIMIMGA = true;
+					this.sIMIMGA = "";
+					break;
+				default:
+					this.bIMIMGA = false;
+					break;
+			}
+
+		}
+	}
+	
 	public void cambiaFechaFinPeriodo()
 	{
 
@@ -489,13 +511,15 @@ public class GestorGastos implements Serializable
     	
     	
     	
-    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
+
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCOACES); 
+    	//this.bDevolucion = false;
+    	//inicializar plantilla?
     	
-    	this.sNUPROF = CLProvisiones.ultimaProvisionAbierta(sCOSPAT);
+    	
+    	this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
     			 
     	
     	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
@@ -553,6 +577,7 @@ public class GestorGastos implements Serializable
     	this.sPTPAGO = cuotaseleccionada.getPTPAGO();
     	
     	this.sIMNGAS = cuotaseleccionada.getIMCUCO();
+    	this.bDevolucion = false;
 
     	
     	tiposcotpgaHM = tiposcotpga_g2HM;
@@ -584,6 +609,7 @@ public class GestorGastos implements Serializable
     	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E4;
     	this.sCOSBGA = devolucionseleccionada.getCOSBAC();
     	this.sPTPAGO = "1";
+    	this.bDevolucion = true;
     	
     	//this.sIMNGAS = "";
 
@@ -604,7 +630,7 @@ public class GestorGastos implements Serializable
 		
     }
 	
-    public void registraGasto(ActionEvent actionEvent) 
+    /*public void registraGasto(ActionEvent actionEvent) 
     {  
     	borrarPlantillaGasto();
     	borrarPlantillaActivo();
@@ -614,9 +640,9 @@ public class GestorGastos implements Serializable
 
 		this.cuotaseleccionada = null;
 		this.tablacuotas = null;
-    }
+    }*/
 
-	public void realizaAlta(ActionEvent actionEvent)
+	public void registraGasto(ActionEvent actionEvent)
 	{
 		String sMethod = "registraMovimiento";
 		
@@ -627,47 +653,49 @@ public class GestorGastos implements Serializable
 				sCOACES.toUpperCase(),
 				sCOGRUG.toUpperCase(),
 				sCOTPGA.toUpperCase(),
-				sCOSBGA.toUpperCase(),
+				Utils.compruebaPago(bDevolucion, sCOSBGA.toUpperCase()),
 				sPTPAGO.toUpperCase(),
-				sFEDEVE.toUpperCase(),
-				sFFGTVP.toUpperCase(),
-				sFEPAGA.toUpperCase(),
-				sFELIPG.toUpperCase(),
+				Utils.compruebaFecha(sFEDEVE),
+				Utils.compruebaFecha(sFFGTVP),
+				"0",
+				Utils.compruebaFecha(sFELIPG),
 				sCOSIGA.toUpperCase(),
-				sFEEESI.toUpperCase(),
-				sFEECOI.toUpperCase(),
-				sFEEAUI.toUpperCase(),
-				sFEEPAI.toUpperCase(),
-				sIMNGAS.toUpperCase(),
+				Utils.compruebaFecha(sFEEESI),
+				Utils.compruebaFecha(sFEECOI),
+				"0",
+				"0",
+				Utils.compruebaImporte(sIMNGAS.toUpperCase()),
 				sYCOS02.toUpperCase(),
-				sIMRGAS.toUpperCase(),
+				Utils.compruebaImporte(sIMRGAS.toUpperCase()),
 				sYCOS04.toUpperCase(),
-				sIMDGAS.toUpperCase(),
+				Utils.compruebaImporte(sIMDGAS.toUpperCase()),
 				sYCOS06.toUpperCase(),
-				sIMCOST.toUpperCase(),
+				Utils.compruebaImporte(sIMCOST.toUpperCase()),
 				sYCOS08.toUpperCase(),
-				sIMOGAS.toUpperCase(),
+				Utils.compruebaImporte(sIMOGAS.toUpperCase()),
 				sYCOS10.toUpperCase(),
-				sIMDTGA.toUpperCase(),
-				sCOUNMO.toUpperCase(),
-				sIMIMGA.toUpperCase(),
-				sCOIMPT.toUpperCase(),
-				sCOTNEG.toUpperCase(),
-				sCOENCX.toUpperCase(),
-				sCOOFCX.toUpperCase(),
-				sNUCONE.toUpperCase(),
+				Utils.compruebaImporte(sIMDTGA.toUpperCase()),
+				ValoresDefecto.DEF_COUNMO,
+				Utils.compruebaImporte(sIMIMGA.toUpperCase()),
+				Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
+				ValoresDefecto.DEF_COTNEG,
+				ValoresDefecto.DEF_COENCX,
+				ValoresDefecto.DEF_COOFCX,
+				ValoresDefecto.DEF_NUCONE,
 				sNUPROF.toUpperCase(),
-				sFEAGTO.toUpperCase(),
-				sCOMONA.toUpperCase(),
-				sBIAUTO.toUpperCase(),
-				sFEAUFA.toUpperCase(),
-				sCOTERR.toUpperCase(),
-				sFMPAGN.toUpperCase(),
-				sFEPGPR.toUpperCase(),
-				sFEAPLI.toUpperCase(),
-				sCOAPII.toUpperCase(),
-				sCOSPII.toUpperCase(),
-				sNUCLII.toUpperCase());
+				ValoresDefecto.DEF_FEAGTO,
+				ValoresDefecto.DEF_COMONA,
+				ValoresDefecto.DEF_BIAUTO,
+				ValoresDefecto.DEF_FEAUFA,
+				ValoresDefecto.DEF_COTERR,
+				ValoresDefecto.DEF_FMPAGN,
+				Utils.compruebaFecha(sFEPGPR),
+				ValoresDefecto.DEF_FEAPLI,
+				ValoresDefecto.DEF_COAPII,
+				ValoresDefecto.DEF_COSPII,
+				ValoresDefecto.DEF_NUCLII);
+
+		//movimiento.pintaMovimientoGasto();
 		
 		FacesMessage msg;
 		
@@ -1405,6 +1433,18 @@ public class GestorGastos implements Serializable
 	}
 	public void setTiposcosigaHM(Map<String, String> tiposcosigaHM) {
 		this.tiposcosigaHM = tiposcosigaHM;
+	}
+	public boolean isbIMIMGA() {
+		return bIMIMGA;
+	}
+	public void setbIMIMGA(boolean bIMIMGA) {
+		this.bIMIMGA = bIMIMGA;
+	}
+	public boolean isbDevolucion() {
+		return bDevolucion;
+	}
+	public void setbDevolucion(boolean bDevolucion) {
+		this.bDevolucion = bDevolucion;
 	}
 
 

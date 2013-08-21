@@ -64,6 +64,9 @@
 								<p:panel>
 									<p:fieldset legend="Tipo de Gasto">
 										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Devolucion: " />
+											<p:selectBooleanCheckbox id="DEVOLUCION" value="#{GestorCuotas.bDevolucion}" />  
+
 											<h:outputText value="Grupo de gasto: " />
 											<p:selectOneMenu id="COGRUG" value="#{GestorGastos.sCOGRUG}">
 												<f:selectItem itemLabel="Grupo..." itemValue="" />
@@ -182,13 +185,14 @@
 											<p:panel>
 												<h:panelGrid columns="2" cellpadding="5">
 													<h:outputText value="Importe de impuestos del gasto: " />
-													<p:inputText id="IMIMGA" value="#{GestorGastos.sIMIMGA}" size="16" maxlength="16">
+													<p:inputText id="IMIMGA" value="#{GestorGastos.sIMIMGA}" size="16" maxlength="16" disabled="#{GestorGastos.bIMIMGA}">
 													</p:inputText>
 
 													<h:outputText value="Tipo de impuesto: " />
 													<p:selectOneMenu id="COIMPT" value="#{GestorGastos.sCOIMPT}">
 														<f:selectItem itemLabel="Tipo..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposcoimptHM}" />
+															<p:ajax update="IMIMGA" listener="#{GestorGastos.cambiaImporteImpuesto}" />
 													</p:selectOneMenu>
 												</h:panelGrid>
 											</p:panel>
@@ -205,7 +209,7 @@
 					<p:dialog header="Gastos pendientes: " widgetVar="dlgTablaPendientes" resizable="false">
     				
 							<p:contextMenu for="cuotas">  
-								<p:menuitem value="Seleccionar" update="panel, form:popup, form:msgs, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarCuota}" oncomplete="dlgTablaPendientes.hide()"/>  
+								<p:menuitem value="Seleccionar" update="panel, form:popup, form:msgs, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO, form:DEVOLUCION" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarCuota}" oncomplete="dlgTablaPendientes.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="cuotas" var="cuota" value="#{GestorGastos.tablacuotas}" rowKey="#{cuota.DCOSBAC}"  
@@ -242,7 +246,7 @@
 							</p:dataTable>
 
 							<p:contextMenu for="devoluciones">  
-								<p:menuitem value="Seleccionar" update="panel, form:popup, form:msgs, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarDevolucion}" oncomplete="dlgTablaPendientes.hide()"/>  
+								<p:menuitem value="Seleccionar" update="panel, form:popup, form:msgs, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO, form:DEVOLUCION" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarDevolucion}" oncomplete="dlgTablaPendientes.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="devoluciones" var="devolucion" value="#{GestorGastos.tabladevoluciones}" rowKey="#{devolucion.DCOSBAC}"  

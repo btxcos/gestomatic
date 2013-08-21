@@ -20,8 +20,6 @@ public class TestCuotas {
 		boolean bTraza = true;
 		String sMethod = "compruebaImporte";
 		
-
-		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "|"+Double.parseDouble("0")+"|");
+		Utils.debugTrace(bTraza, sClassName, sMethod, "|"+CLProvisiones.provisionAsignada("3109139")+"|");
 	}
 }
