@@ -53,7 +53,7 @@
 												<p:inputText id="COACES" value="#{GestorGastos.sCOACES}" size="9" maxlength="9">
 												</p:inputText>
 											<p:message for="COACES" display="icon"/>	
-											<p:commandButton value="Cargar Gastos" update="msgs, popup, COACES, form:cuotas, form:devoluciones" actionListener="#{GestorGastos.cargarOperaciones}" oncomplete="dlgTablaPendientes.show()"/>	
+											<p:commandButton value="Cargar Datos" update="msgs, popup, COACES, NUPROF, form:cuotas, form:devoluciones" actionListener="#{GestorGastos.cargarDatos}" oncomplete="dlgTablaPendientes.show()"/>	
 										</h:panelGrid>
 									</p:panel>
 								<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		

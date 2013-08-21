@@ -524,9 +524,6 @@ public class GestorGastos implements Serializable
     	
     	//this.bDevolucion = false;
     	//inicializar plantilla?
-    	
-    	
-    	this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
     			 
     	
     	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
@@ -538,7 +535,7 @@ public class GestorGastos implements Serializable
 		//return "listacomunidadesactivos.xhtml";
     }
 	
-	public void cargarOperaciones(ActionEvent actionEvent)
+	public void cargarDatos(ActionEvent actionEvent)
 	{
 		String sMethod = "cargarCuotas";
 		
@@ -548,24 +545,42 @@ public class GestorGastos implements Serializable
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Buscando cuotas...");
 		
-		this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
+		if (CLActivos.compruebaActivo(sCOACES))
+		{
+			this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
 		
-		sMsg = "Encontradas '"+getTablacuotas().size()+"' cuotas pendientes.";
-		Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		msg = new FacesMessage(sMsg);
+			sMsg = "Encontradas '"+getTablacuotas().size()+"' cuotas pendientes.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg);
 		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 
-		Utils.debugTrace(true, sClassName, sMethod, "Buscando devoluciones...");
+			Utils.debugTrace(true, sClassName, sMethod, "Buscando devoluciones...");
 		
-		this.tabladevoluciones = CLImpuestos.buscarDevolucionesDelActivo(sCOACES.toUpperCase());
+			this.tabladevoluciones = CLImpuestos.buscarDevolucionesDelActivo(sCOACES.toUpperCase());
 		
-		sMsg = "Encontradas '"+getTabladevoluciones().size()+"' devoluciones pendientes.";
-		Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		msg = new FacesMessage(sMsg);
+			sMsg = "Encontradas '"+getTabladevoluciones().size()+"' devoluciones pendientes.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg);
 		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+			this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
+		
+			sMsg = "Provision '"+sNUPROF+"' asignada.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg);
+		
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		else
+		{
+			sMsg = "No exite el activo '"+sCOACES+"'. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg);
+		
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
+		}
 		
 	}
 	
@@ -653,228 +668,252 @@ public class GestorGastos implements Serializable
 	{
 		String sMethod = "registraMovimiento";
 		
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
-		MovimientoGasto movimiento = new MovimientoGasto (
-				sCOACES.toUpperCase(),
-				sCOGRUG.toUpperCase(),
-				sCOTPGA.toUpperCase(),
-				Utils.compruebaCodigoPago(bDevolucion, sCOSBGA.toUpperCase()),
-				sPTPAGO.toUpperCase(),
-				Utils.compruebaFecha(sFEDEVE),
-				Utils.compruebaFecha(sFFGTVP),
-				"0",
-				Utils.compruebaFecha(sFELIPG),
-				sCOSIGA.toUpperCase(),
-				Utils.compruebaFecha(sFEEESI),
-				Utils.compruebaFecha(sFEECOI),
-				"0",
-				"0",
-				Utils.compruebaImporte(sIMNGAS.toUpperCase()),
-				sYCOS02.toUpperCase(),
-				Utils.compruebaImporte(sIMRGAS.toUpperCase()),
-				sYCOS04.toUpperCase(),
-				Utils.compruebaImporte(sIMDGAS.toUpperCase()),
-				sYCOS06.toUpperCase(),
-				Utils.compruebaImporte(sIMCOST.toUpperCase()),
-				sYCOS08.toUpperCase(),
-				Utils.compruebaImporte(sIMOGAS.toUpperCase()),
-				sYCOS10.toUpperCase(),
-				Utils.compruebaImporte(sIMDTGA.toUpperCase()),
-				ValoresDefecto.DEF_COUNMO,
-				Utils.compruebaImporte(sIMIMGA.toUpperCase()),
-				Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
-				ValoresDefecto.DEF_COTNEG,
-				ValoresDefecto.DEF_COENCX,
-				ValoresDefecto.DEF_COOFCX,
-				ValoresDefecto.DEF_NUCONE,
-				sNUPROF.toUpperCase(),
-				ValoresDefecto.DEF_FEAGTO,
-				ValoresDefecto.DEF_COMONA,
-				ValoresDefecto.DEF_BIAUTO,
-				ValoresDefecto.DEF_FEAUFA,
-				ValoresDefecto.DEF_COTERR,
-				ValoresDefecto.DEF_FMPAGN,
-				Utils.compruebaFecha(sFEPGPR),
-				ValoresDefecto.DEF_FEAPLI,
-				ValoresDefecto.DEF_COAPII,
-				ValoresDefecto.DEF_COSPII,
-				ValoresDefecto.DEF_NUCLII);
-
-		//movimiento.pintaMovimientoGasto();
-		
 		FacesMessage msg;
 		
 		String sMsg = "";
 		
-		int iSalida = CLGastos.registraMovimiento(movimiento);
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
-		
-		switch (iSalida) 
+		if (CLGastos.compruebaSiExisteGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sFEDEVE))
 		{
-		case 0: //Sin errores
-			sMsg = "La cuota se ha creado correctamente.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg,null);
-			break;
+	    	sMsg = "El gasto informado no se puede dar de alta, ya existe en el sistema.";
+	    	
+	    	msg = new FacesMessage(sMsg);
+	    	
+	    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
+		}
+		else
+		{
+			MovimientoGasto movimiento = new MovimientoGasto (
+					sCOACES.toUpperCase(),
+					sCOGRUG.toUpperCase(),
+					sCOTPGA.toUpperCase(),
+					Utils.compruebaCodigoPago(bDevolucion, sCOSBGA.toUpperCase()),
+					sPTPAGO.toUpperCase(),
+					Utils.compruebaFecha(sFEDEVE),
+					Utils.compruebaFecha(sFFGTVP),
+					"0",
+					Utils.compruebaFecha(sFELIPG),
+					sCOSIGA.toUpperCase(),
+					Utils.compruebaFecha(sFEEESI),
+					Utils.compruebaFecha(sFEECOI),
+					"0",
+					"0",
+					Utils.compruebaImporte(sIMNGAS.toUpperCase()),
+					sYCOS02.toUpperCase(),
+					Utils.compruebaImporte(sIMRGAS.toUpperCase()),
+					sYCOS04.toUpperCase(),
+					Utils.compruebaImporte(sIMDGAS.toUpperCase()),
+					sYCOS06.toUpperCase(),
+					Utils.compruebaImporte(sIMCOST.toUpperCase()),
+					sYCOS08.toUpperCase(),
+					Utils.compruebaImporte(sIMOGAS.toUpperCase()),
+					sYCOS10.toUpperCase(),
+					Utils.compruebaImporte(sIMDTGA.toUpperCase()),
+					ValoresDefecto.DEF_COUNMO,
+					Utils.compruebaImporte(sIMIMGA.toUpperCase()),
+					Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
+					ValoresDefecto.DEF_COTNEG,
+					ValoresDefecto.DEF_COENCX,
+					ValoresDefecto.DEF_COOFCX,
+					ValoresDefecto.DEF_NUCONE,
+					sNUPROF.toUpperCase(),
+					ValoresDefecto.DEF_FEAGTO,
+					ValoresDefecto.DEF_COMONA,
+					ValoresDefecto.DEF_BIAUTO,
+					ValoresDefecto.DEF_FEAUFA,
+					ValoresDefecto.DEF_COTERR,
+					ValoresDefecto.DEF_FMPAGN,
+					Utils.compruebaFecha(sFEPGPR),
+					ValoresDefecto.DEF_FEAPLI,
+					ValoresDefecto.DEF_COAPII,
+					ValoresDefecto.DEF_COSPII,
+					ValoresDefecto.DEF_NUCLII);
 
-		case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
-			sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -3: //Error 003 - NO EXISTE EL ACTIVO
-			sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO O NULO
-			sMsg = "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -33: //Error 033 - LA FECHA DE PRIMER PAGO DEBE SER LOGICA Y OBLIGATORIA
-			sMsg = "ERROR:033 - La fecha del primer pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -34: //Error 034 - LA FECHA DE ULTIMO PAGO DEBE SER LOGICA Y OBLIGATORIA
-			sMsg = "ERROR:034 - La fecha del ultimo pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -35: //Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
-			sMsg = "ERROR:35 - La fecha del ultimo pago no puede ser menor que la del primero.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -36: //Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO
-			sMsg = "ERROR:036 - El importe de la cuota tiene ser mayor que cero. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -41: //Error 041 - LA COMUNIDAD NO EXISTE EN LA TABLA DE COMUNIDADES GMAE10
-			sMsg = "ERROR:041 - La comunidad propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -42: //Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
-			sMsg = "ERROR:042 - El activo proporcionado esta asociado a otra comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -43: //Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
-			sMsg = "ERROR:043 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -44: //Error 044 - NO EXISTE PERIOCIDAD DE PAGO
-			sMsg = "ERROR:044 - La periodicidad de pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -45: //Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
-			sMsg = "ERROR:045 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
+			//movimiento.pintaMovimientoGasto();
 			
-		case -46: //Error 046 - LA FECHA DEL ACTA DEBE SER LOGICA Y OBLIGATORIA 
-			sMsg = "ERROR:046 - La fecha de acta es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
+			int iSalida = CLGastos.registraMovimiento(movimiento);
 			
-		case -801: //Error 801 - alta de una cuota en alta
-			sMsg = "ERROR:801 - La cuota ya esta dada de alta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -802: //Error 802 - cuota de baja no puede recibir mas movimientos
-			sMsg = "ERROR:802 - La cuota esta baja y no puede recibir mas movimientos. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
+			Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
 			
-		case -803: //Error 803 - estado no disponible
-			sMsg = "ERROR:803 - El estado de la cuota informada no esta disponible. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
+			switch (iSalida) 
+			{
+			case 0: //Sin errores
+				sMsg = "El gasto se ha creado correctamente.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(sMsg,null);
+				break;
 
-		case -804: //Error 804 - modificacion sin cambios
-			sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
+			case -2: //Error 002 - Llega fecha de anulación y no existe gasto en la tabla
+				sMsg = "ERROR:002 - El gasto que se anula no existe. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
 
-		case -805: //Error 805 - error en importe
-			sMsg = "ERROR:805 - El campo importe no se ha informado correctamente. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
+			case -3: //Error 003 - Llega un abono de un gasto que NO está pagado
+				sMsg = "ERROR:003 - El gasto a abonar no esta pagado. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+
+			case -4: //Error 004 - Descuento mayor que importe nominal del gasto
+				sMsg = "ERROR:004 - El descuento informado es superior al gasto. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+
+			case -6: //Error 006 - La provisión ya está cerrada
+				sMsg = "ERROR:006 - La provisión ya esta cerrada. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+
+			case -7: //Error 007 - Error en grupo / tipo / subtipo de acción
+				sMsg = "ERROR:007 - El grupo, tipo y subtipo de gasto deben informarse. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+
+			case -8: //Error 008 - No existe el activo en la base corporativa
+				sMsg = "ERROR:008 - El activo informado no se encuentra resistrado en el sistema. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+
+			case -12: //Error 012 - Llega un abono de un gasto que está anulado
+				sMsg = "ERROR:012 - El gasto a abonar esta anulado. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+
+			case -13: //Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
+				sMsg = "ERROR:013 - El gasto a abonar ya esta abonado. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+
+			case -19: //Error 019 - Periodicidad del gasto es cero o espacios.
+				sMsg = "ERROR:019 - El campo periodicidad del pago es obligatorio. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+			case -23: //Error 023 - Llega anulación de un gasto que YA está pagado
+				sMsg = "ERROR:023 - El gasto a anular ya esta pagado. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+			case -24: //Error 024 - Llega modificación de un gasto que YA está pagado
+				sMsg = "ERROR:024 - El gasto a modificar ya esta pagado. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+			case -61: //Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
+				sMsg = "ERROR:061 - La provision esta cerrada, no se puede actualizar la fecha de pago a proveedor. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+				
+			case -62: //Error 062 - Llega una devolución con importe positivo. 
+				sMsg = "ERROR:062 - La devolucion debe incluir un importe del gasto con valor negativo. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
 			
-		case -900: //Error 900 - al crear un movimiento
-			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
+			case -800: //Error 800 - Gasto sin provision  
+				sMsg = "ERROR:801 - No se ha cargado una provision de gastos. Por favor, cargue los datos del activo.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
 
-		case -901: //Error 901 - error y rollback - error al crear la cuota
-			sMsg = "ERROR:901 - Se ha producido un error al registrar la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
+			case -801: //Error 801 - No se ha informado la fecha de devengo
+				sMsg = "ERROR:801 - No se ha informado la fecha de devengo. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+			case -802: //Error 802 - No se ha elegido una situacion del gasto
+				sMsg = "ERROR:802 - No se ha elegido una situacion del gasto. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+				
+			case -803: //Error 803 - No se ha informado el campo importe de gasto
+				sMsg = "ERROR:803 - No se ha informado el campo importe de gasto. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+			case -804: //Error 804 - Accion no permitida
+				sMsg = "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+			case -805: //Error 805 - estado no disponible
+				sMsg = "ERROR:805 - El estado del gasto no esta disponible. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+
+			case -806: //Error 806 - modificacion sin cambios
+				sMsg = "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				break;
+				
+			case -900: //Error 900 - al crear un movimiento
+				sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				break;
+
+			case -901: //Error 901 - error y rollback - error al crear el gasto
+				sMsg = "ERROR:901 - Se ha producido un error al registrar el nuevo gasto. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				break;
+				
+			case -902: //Error 902 - error y rollback - error al registrar la relaccion
+				sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				break;
+
+			case -903: //Error 903 - error y rollback - error al cambiar el estado
+				sMsg = "ERROR:903 - Se ha producido un error al cambiar el estado del gasto. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				break;
+
+			case -904: //Error 904 - error y rollback - error al modificar el gasto
+				sMsg = "ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				break;
+
+			default: //error generico
+				sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				break;
+			}
 			
-		case -902: //Error 902 - error y rollback - error al registrar la relaccion
-			sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
+			
 
-		case -903: //Error 903 - error y rollback - error al cambiar el estado
-			sMsg = "ERROR:903 - Se ha producido un error al cambiar el estado de la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -904: //Error 904 - error y rollback - error al modificar la cuota
-			sMsg = "ERROR:904 - Se ha producido un error al modificar la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		default: //error generico
-			sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
 		}
 		
-		
 		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		FacesContext.getCurrentInstance().addMessage(null, msg);		
+
 
 	}
     

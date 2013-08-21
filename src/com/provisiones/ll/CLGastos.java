@@ -93,6 +93,10 @@ public class CLGastos
 		
 		return sAccion;
 	}*/
+	public static boolean compruebaSiExisteGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
+	{
+		return QMGastos.existeGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE);
+	}
 	
 	public static MovimientoGasto convierteGastoenMovimiento(Gasto gasto, String sNUPROF)
 	{
@@ -201,7 +205,7 @@ public class CLGastos
 		{
 			sAccion = "#"; //Error
 		}
-		else if (QMGastos.existeGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()))
+		else if (compruebaSiExisteGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()))
 		{
 			
 			if (!movimiento.getFEAGTO().equals("0") && (sEstado.equals("1") || sEstado.equals("2")))
@@ -329,11 +333,11 @@ public class CLGastos
 			//Error 023 - Llega anulación de un gasto que YA está pagado
 			iCodigo = -23;
 		}		
-		/*else if (!movimiento_revisado.getFEAGTO().equals("") && sEstado.equals("4"))
+		else if (sAccion.equals("M") && sEstado.equals("4"))
 		{
 			//Error 024 - Llega modificación de un gasto que YA está pagado
 			iCodigo = -024;
-		}*/		
+		}		
 		else if (!movimiento_revisado.getFEPGPR().equals("") && CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF()))
 		{
 			//Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
@@ -342,11 +346,11 @@ public class CLGastos
 		else if ((Integer.parseInt(movimiento_revisado.getCOSBGA()) > 49) && !movimiento_revisado.getYCOS02().equals("-"))
 		{
 			//Error 062 - Llega una devolución con importe positivo.
-			iCodigo = -61;
+			iCodigo = -62;
 		}
 		else if (movimiento_revisado.getFEDEVE().equals("0"))
 		{
-			//Error no se ha elegido una situacion del gasto.
+			//Error no se ha informado la fecha de devengo.
 			iCodigo = -801;
 		}
 		else if (movimiento_revisado.getCOSIGA().equals(""))
@@ -356,25 +360,25 @@ public class CLGastos
 		}
 		else if (movimiento_revisado.getIMNGAS().equals(""))
 		{
-			//error no se ha informado el campo importe
+			//Error no se ha informado el campo importe
 			iCodigo = -803;
 		}
 		else if (sAccion.equals("#"))
 		{
-			//Error 801 - Error, Accion no permitida  
+			//Error, Accion no permitida  
 			iCodigo = -804;
 		}
 		else if (sEstado.equals("") && !movimiento_revisado.getCOSIGA().equals("1") && !movimiento_revisado.getCOSIGA().equals("2"))
 		{
 			//error estado no disponible
-			iCodigo = -806;
+			iCodigo = -805;
 		}
 		else
 		{
 			if (movimiento_revisado.getCOSIGA().equals("#"))
 			{	
 				//error modificacion sin cambios
-				iCodigo = -807;	
+				iCodigo = -806;	
 			}
 			else
 			{
