@@ -673,7 +673,7 @@ public class GestorGastos implements Serializable
 		String sMsg = "";
 		
 		
-		if (CLGastos.compruebaSiExisteGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sFEDEVE))
+		if (CLGastos.compruebaSiExisteGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 		{
 	    	sMsg = "El gasto informado no se puede dar de alta, ya existe en el sistema.";
 	    	

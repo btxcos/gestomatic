@@ -502,7 +502,19 @@ public class QMGastos
 		conn = ConnectionManager.OpenDBConnection();
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+			       + sField1  +       
+		"  FROM " + sTable + 
+		" WHERE "+
+		"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+		sField2  + " = '"+ sCodCOGRUG +"' AND " +
+		sField3  + " = '"+ sCodCOTPGA +"' AND " +
+		sField4  + " = '"+ sCodCOSBGA +"' AND " +
+	    sField6  + " = '"+ sFEDEVE + "' )";
 
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sQuery: "+sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
