@@ -27,7 +27,7 @@ public class MovimientoImpuestoRecurso
 	private String BITC09 = "";
 	private String OBTEXC = "";
 	private String OBDEER = "";
-	private String FILLER = "                                                                                                             ";
+	private String FILLER = "                                                                                                               ";
 
 	//Constructor de clase
 	public MovimientoImpuestoRecurso(String cODTRN, String cOTDOR, String iDPROV,

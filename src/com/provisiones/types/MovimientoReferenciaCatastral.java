@@ -28,7 +28,7 @@ public class MovimientoReferenciaCatastral
 	private String FERECA = "";
 
 	
-	private String FILLER = "                                                                                                                            ";
+	private String FILLER = "                                                                                     ";
 
 	//Constructor de clase
 

@@ -497,28 +497,28 @@ public class Parser {
         String sCOENGP = formateaCampoNumerico(comunidad.getCOENGP(),Longitudes.COENGP_L);
         String sCOCLDO = formateaCampoAlfanumerico(comunidad.getCOCLDO(),Longitudes.COCLDO_L);
         String sNUDCOM = formateaCampoAlfanumerico(comunidad.getNUDCOM(),Longitudes.NUDCOM_L);
-        String sBITC10 = formateaCampoAlfanumerico(comunidad.getBITC10(),Longitudes.BITC10_L);
+        String sBITC10 = formateaCampoAlfanumericoCodigo(comunidad.getBITC10(),Longitudes.BITC10_L,"#");
         String sCOACES = formateaCampoNumerico(comunidad.getCOACES(),Longitudes.COACES_L);
-        String sBITC01 = formateaCampoAlfanumerico(comunidad.getBITC01(),Longitudes.BITC01_L);
+        String sBITC01 = formateaCampoAlfanumericoCodigo(comunidad.getBITC01(),Longitudes.BITC01_L,"#");
         String sNOMCOC = formateaCampoAlfanumerico(comunidad.getNOMCOC(),Longitudes.NOMCOC_L);
-        String sBITC02 = formateaCampoAlfanumerico(comunidad.getBITC02(),Longitudes.BITC02_L);
+        String sBITC02 = formateaCampoAlfanumericoCodigo(comunidad.getBITC02(),Longitudes.BITC02_L,"#");
         String sNODCCO = formateaCampoAlfanumerico(comunidad.getNODCCO(),Longitudes.NODCCO_L);
-        String sBITC03 = formateaCampoAlfanumerico(comunidad.getBITC03(),Longitudes.BITC03_L);
+        String sBITC03 = formateaCampoAlfanumericoCodigo(comunidad.getBITC03(),Longitudes.BITC03_L,"#");
         String sNOMPRC = formateaCampoAlfanumerico(comunidad.getNOMPRC(),Longitudes.NOMPRC_L);
-        String sBITC04 = formateaCampoAlfanumerico(comunidad.getBITC04(),Longitudes.BITC04_L);
+        String sBITC04 = formateaCampoAlfanumericoCodigo(comunidad.getBITC04(),Longitudes.BITC04_L,"#");
         String sNUTPRC = formateaCampoAlfanumerico(comunidad.getNUTPRC(),Longitudes.NUTPRC_L);
-        String sBITC05 = formateaCampoAlfanumerico(comunidad.getBITC05(),Longitudes.BITC05_L);
+        String sBITC05 = formateaCampoAlfanumericoCodigo(comunidad.getBITC05(),Longitudes.BITC05_L,"#");
         String sNOMADC = formateaCampoAlfanumerico(comunidad.getNOMADC(),Longitudes.NOMADC_L);
-        String sBITC06 = formateaCampoAlfanumerico(comunidad.getBITC06(),Longitudes.BITC06_L);
+        String sBITC06 = formateaCampoAlfanumericoCodigo(comunidad.getBITC06(),Longitudes.BITC06_L,"#");
         String sNUTADC = formateaCampoAlfanumerico(comunidad.getNUTADC(),Longitudes.NUTADC_L);
-        String sBITC07 = formateaCampoAlfanumerico(comunidad.getBITC07(),Longitudes.BITC07_L);
+        String sBITC07 = formateaCampoAlfanumericoCodigo(comunidad.getBITC07(),Longitudes.BITC07_L,"#");
         String sNODCAD = formateaCampoAlfanumerico(comunidad.getNODCAD(),Longitudes.NODCAD_L);
-        String sBITC08 = formateaCampoAlfanumerico(comunidad.getBITC08(),Longitudes.BITC08_L);
+        String sBITC08 = formateaCampoAlfanumericoCodigo(comunidad.getBITC08(),Longitudes.BITC08_L,"#");
         String sNUCCEN = formateaCampoNumerico(comunidad.getNUCCEN(),Longitudes.NUCCEN_L);
         String sNUCCOF = formateaCampoNumerico(comunidad.getNUCCOF(),Longitudes.NUCCOF_L);
         String sNUCCDI = formateaCampoNumerico(comunidad.getNUCCDI(),Longitudes.NUCCDI_L);
         String sNUCCNT = formateaCampoNumerico(comunidad.getNUCCNT(),Longitudes.NUCCNT_L);
-        String sBITC09 = formateaCampoAlfanumerico(comunidad.getBITC09(),Longitudes.BITC09_L);
+        String sBITC09 = formateaCampoAlfanumericoCodigo(comunidad.getBITC09(),Longitudes.BITC09_L,"#");
         String sOBTEXC = formateaCampoAlfanumerico(comunidad.getOBTEXC(),Longitudes.OBTEXC_L);
         String sOBDEER = formateaCampoAlfanumerico(comunidad.getOBDEER(),Longitudes.OBDEER_L);
 
@@ -582,17 +582,17 @@ public class Parser {
         String sCOGRUG = formateaCampoNumerico(cuota.getCOGRUG(),Longitudes.COGRUG_L);
         String sCOTACA = formateaCampoNumerico(cuota.getCOTACA(),Longitudes.COTACA_L);
         String sCOSBAC = formateaCampoNumerico(cuota.getCOSBAC(),Longitudes.COSBAC_L);
-        String sBITC11 = formateaCampoAlfanumerico(cuota.getBITC11(),Longitudes.BITC11_L);
+        String sBITC11 = formateaCampoAlfanumericoCodigo(cuota.getBITC11(),Longitudes.BITC11_L,"#");
         String sFIPAGO = formateaCampoNumerico(cuota.getFIPAGO(),Longitudes.FIPAGO_L);
-        String sBITC12 = formateaCampoAlfanumerico(cuota.getBITC12(),Longitudes.BITC12_L);
+        String sBITC12 = formateaCampoAlfanumericoCodigo(cuota.getBITC12(),Longitudes.BITC12_L,"#");
         String sFFPAGO = formateaCampoNumerico(cuota.getFFPAGO(),Longitudes.FFPAGO_L);
-        String sBITC13 = formateaCampoAlfanumerico(cuota.getBITC13(),Longitudes.BITC13_L);
+        String sBITC13 = formateaCampoAlfanumericoCodigo(cuota.getBITC13(),Longitudes.BITC13_L,"#");
         String sIMCUCO = formateaCampoNumerico(cuota.getIMCUCO(),Longitudes.IMCUCO_L);
-        String sBITC14 = formateaCampoAlfanumerico(cuota.getBITC14(),Longitudes.BITC14_L);
+        String sBITC14 = formateaCampoAlfanumericoCodigo(cuota.getBITC14(),Longitudes.BITC14_L,"#");
         String sFAACTA = formateaCampoNumerico(cuota.getFAACTA(),Longitudes.FAACTA_L);
-        String sBITC15 = formateaCampoAlfanumerico(cuota.getBITC15(),Longitudes.BITC15_L);
+        String sBITC15 = formateaCampoAlfanumericoCodigo(cuota.getBITC15(),Longitudes.BITC15_L,"#");
         String sPTPAGO = formateaCampoAlfanumerico(cuota.getPTPAGO(),Longitudes.PTPAGO_L);
-        String sBITC09 = formateaCampoAlfanumerico(cuota.getBITC09(),Longitudes.BITC09_L);
+        String sBITC09 = formateaCampoAlfanumericoCodigo(cuota.getBITC09(),Longitudes.BITC09_L,"#");
         String sOBTEXC = formateaCampoAlfanumerico(cuota.getOBTEXC(),Longitudes.OBTEXC_L);
         String sOBDEER = formateaCampoAlfanumerico(cuota.getOBDEER(),Longitudes.OBDEER_L);
 
@@ -648,21 +648,21 @@ public class Parser {
         String sCOENGP = formateaCampoNumerico(referenciacatrastral.getCOENGP(),Longitudes.COENGP_L);
         String sCOACES = formateaCampoNumerico(referenciacatrastral.getCOACES(),Longitudes.COACES_L);
         String sNURCAT = formateaCampoAlfanumerico(referenciacatrastral.getNURCAT(),Longitudes.NURCAT_L);
-        String sBITC16 = formateaCampoAlfanumerico(referenciacatrastral.getBITC16(),Longitudes.BITC16_L);
+        String sBITC16 = formateaCampoAlfanumericoCodigo(referenciacatrastral.getBITC16(),Longitudes.BITC16_L,"#");
         String sTIRCAT = formateaCampoAlfanumerico(referenciacatrastral.getTIRCAT(),Longitudes.TIRCAT_L);
-        String sBITC17 = formateaCampoAlfanumerico(referenciacatrastral.getBITC17(),Longitudes.BITC17_L);
+        String sBITC17 = formateaCampoAlfanumericoCodigo(referenciacatrastral.getBITC17(),Longitudes.BITC17_L,"#");
         String sENEMIS = formateaCampoAlfanumerico(referenciacatrastral.getENEMIS(),Longitudes.ENEMIS_L);
         String sCOTEXA = formateaCampoNumerico(referenciacatrastral.getCOTEXA(),Longitudes.COTEXA_L);
-        String sBITC09 = formateaCampoAlfanumerico(referenciacatrastral.getBITC09(),Longitudes.BITC09_L);
+        String sBITC09 = formateaCampoAlfanumericoCodigo(referenciacatrastral.getBITC09(),Longitudes.BITC09_L,"#");
         String sOBTEXC = formateaCampoAlfanumerico(referenciacatrastral.getOBTEXC(),Longitudes.OBTEXC_L);
         String sOBDEER = formateaCampoAlfanumerico(referenciacatrastral.getOBDEER(),Longitudes.OBDEER_L);
         
 		//Ampliacion de valor catastral
-		String sBITC23 = formateaCampoAlfanumerico(referenciacatrastral.getBITC23(),Longitudes.BITC23_L);
+		String sBITC23 = formateaCampoAlfanumericoCodigo(referenciacatrastral.getBITC23(),Longitudes.BITC23_L,"#");
 		String sIMVSUE = formateaCampoNumerico(referenciacatrastral.getIMVSUE(),Longitudes.IMVSUE_L);
-		String sBITC24 = formateaCampoAlfanumerico(referenciacatrastral.getBITC24(),Longitudes.BITC24_L);
+		String sBITC24 = formateaCampoAlfanumericoCodigo(referenciacatrastral.getBITC24(),Longitudes.BITC24_L,"#");
 		String sIMCATA = formateaCampoNumerico(referenciacatrastral.getIMCATA(),Longitudes.IMCATA_L);
-		String sBITC25 = formateaCampoAlfanumerico(referenciacatrastral.getBITC25(),Longitudes.BITC25_L);
+		String sBITC25 = formateaCampoAlfanumericoCodigo(referenciacatrastral.getBITC25(),Longitudes.BITC25_L,"#");
 		String sFERECA = formateaCampoNumerico(referenciacatrastral.getFERECA(),Longitudes.FERECA_L);
 
 		
@@ -722,18 +722,18 @@ public class Parser {
         String sCOGRUC = formateaCampoNumerico(impuestorecurso.getCOGRUC(),Longitudes.COGRUC_L);
         String sCOTACA = formateaCampoNumerico(impuestorecurso.getCOTACA(),Longitudes.COTACA_L);
         String sCOSBAC = formateaCampoNumerico(impuestorecurso.getCOSBAC(),Longitudes.COSBAC_L);
-        String sBITC18 = formateaCampoAlfanumerico(impuestorecurso.getBITC18(),Longitudes.BITC18_L);
+        String sBITC18 = formateaCampoAlfanumericoCodigo(impuestorecurso.getBITC18(),Longitudes.BITC18_L,"#");
         String sFEPRRE = formateaCampoNumerico(impuestorecurso.getFEPRRE(),Longitudes.FEPRRE_L);
-        String sBITC19 = formateaCampoAlfanumerico(impuestorecurso.getBITC19(),Longitudes.BITC19_L);
+        String sBITC19 = formateaCampoAlfanumericoCodigo(impuestorecurso.getBITC19(),Longitudes.BITC19_L,"#");
         String sFERERE = formateaCampoNumerico(impuestorecurso.getFERERE(),Longitudes.FERERE_L);
-        String sBITC20 = formateaCampoAlfanumerico(impuestorecurso.getBITC20(),Longitudes.BITC20_L);
+        String sBITC20 = formateaCampoAlfanumericoCodigo(impuestorecurso.getBITC20(),Longitudes.BITC20_L,"#");
         String sFEDEIN = formateaCampoNumerico(impuestorecurso.getFEDEIN(),Longitudes.FEDEIN_L);
-        String sBITC21 = formateaCampoAlfanumerico(impuestorecurso.getBITC21(),Longitudes.BITC21_L);
-        String sBISODE = formateaCampoNumerico(impuestorecurso.getBISODE(),Longitudes.BISODE_L);
-        String sBITC22 = formateaCampoAlfanumerico(impuestorecurso.getBITC22(),Longitudes.BITC22_L);
-        String sBIRESO = formateaCampoAlfanumerico(impuestorecurso.getBIRESO(),Longitudes.BIRESO_L);
+        String sBITC21 = formateaCampoAlfanumericoCodigo(impuestorecurso.getBITC21(),Longitudes.BITC21_L,"#");
+        String sBISODE = formateaCampoAlfanumericoCodigo(impuestorecurso.getBISODE(),Longitudes.BISODE_L,"#");
+        String sBITC22 = formateaCampoAlfanumericoCodigo(impuestorecurso.getBITC22(),Longitudes.BITC22_L,"#");
+        String sBIRESO = formateaCampoAlfanumericoCodigo(impuestorecurso.getBIRESO(),Longitudes.BIRESO_L,"#");
         String sCOTEXA = formateaCampoNumerico(impuestorecurso.getCOTEXA(),Longitudes.COTEXA_L);
-        String sBITC09 = formateaCampoAlfanumerico(impuestorecurso.getBITC09(),Longitudes.BITC09_L);
+        String sBITC09 = formateaCampoAlfanumericoCodigo(impuestorecurso.getBITC09(),Longitudes.BITC09_L,"#");
         String sOBTEXC = formateaCampoAlfanumerico(impuestorecurso.getOBTEXC(),Longitudes.OBTEXC_L);
         String sOBDEER = formateaCampoAlfanumerico(impuestorecurso.getOBDEER(),Longitudes.OBDEER_L);
 

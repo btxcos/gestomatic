@@ -80,7 +80,7 @@ public class GestorGastos implements Serializable
 	private String sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 	
 	private String sCOAPII = ValoresDefecto.DEF_COAPII;
-	private String sCOSPII = ValoresDefecto.DEF_COSPII;
+	private String sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 	private String sNUCLII = ValoresDefecto.DEF_NUCLII;
 
 	//recuperar cuotas
@@ -252,7 +252,7 @@ public class GestorGastos implements Serializable
 		this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 		
 		this.sCOAPII = ValoresDefecto.DEF_COAPII;
-		this.sCOSPII = ValoresDefecto.DEF_COSPII;
+		this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 		this.sNUCLII = ValoresDefecto.DEF_NUCLII;
 		
 		this.sCOSBAC = "";
@@ -726,7 +726,7 @@ public class GestorGastos implements Serializable
 					Utils.compruebaFecha(sFEPGPR),
 					ValoresDefecto.DEF_FEAPLI,
 					ValoresDefecto.DEF_COAPII,
-					ValoresDefecto.DEF_COSPII,
+					ValoresDefecto.DEF_COSPII_GA,
 					ValoresDefecto.DEF_NUCLII);
 
 			//movimiento.pintaMovimientoGasto();

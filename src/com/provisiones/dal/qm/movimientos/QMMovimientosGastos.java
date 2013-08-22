@@ -18,7 +18,7 @@ public class QMMovimientosGastos
 
 	public static final String sTable = "ga_movimientos_tbl";
 
-	public static final String sField1  = "ga_movimientos_id";
+	public static final String sField1  = "ga_movimiento_id";
 	
 	public static final String sField2  = "cod_coaces";
 	public static final String sField3  = "cod_cogrug";    

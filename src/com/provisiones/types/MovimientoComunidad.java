@@ -33,7 +33,7 @@ public class MovimientoComunidad
 	private String BITC09 = "";
 	private String OBTEXC = "";
 	private String OBDEER = "";
-	private String FILLER = "                                                                                                                      ";
+	private String FILLER = "                                                                                                                        ";
 
 	//Constructor de clase
 	public MovimientoComunidad(String cODTRN, String cOTDOR, String iDPROV,

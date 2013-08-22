@@ -123,6 +123,82 @@ public class QMListaCuotas
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
+	
+	public static ArrayList<String>  getCuotasPorEstado(String sEstado) 
+	{
+		String sMethod = "getCuotasPorEstado";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+		
+		ArrayList<String> result = new ArrayList<String>(); 
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField5+ "  FROM " + sTable + 
+					" WHERE (" + sField6 + " = '" + sEstado + "' )");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
+		
+			int i = 0;
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					result.add(rs.getString(sField5));
+										
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField6 + ": " + sEstado);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
+					
+					i++;
+				}
+			}
+			if (found == false) 
+			{
+				result = new ArrayList<String>(); 
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Validado: " + sEstado);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
 
 	public static ArrayList<String>  getCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC) 
 	{

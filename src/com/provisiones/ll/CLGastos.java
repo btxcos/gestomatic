@@ -147,7 +147,7 @@ public class CLGastos
 				gasto.getFEPGPR(),
 				ValoresDefecto.DEF_FEAPLI,
 				ValoresDefecto.DEF_COAPII,
-				ValoresDefecto.DEF_COSPII,
+				ValoresDefecto.DEF_COSPII_GA,
 				ValoresDefecto.DEF_NUCLII);
 		
 	}

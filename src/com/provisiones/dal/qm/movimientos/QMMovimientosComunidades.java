@@ -451,7 +451,7 @@ public class QMMovimientosComunidades
 				sBITC06, sNUTADC, sBITC07, sNODCAD, sBITC08, sNUCCEN, sNUCCOF,
 				sNUCCDI, sNUCCNT, sBITC09, sOBTEXC, sOBDEER);
 	}
-
+	
 	public static String getMovimientoComunidadID(MovimientoComunidad comunidad)
 	{//pendiente de coaces, de la tabla activos
 		

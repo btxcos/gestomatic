@@ -3,7 +3,16 @@ package com.provisiones.misc;
 public class ValoresDefecto 
 {
 	public static final String DEF_COAPII = "168";
-	public static final String DEF_COSPII = "GA";
+	
+	public static final String DEF_COSPII_GA = "GA";
+	public static final String DEF_COSPII_E1 = "E1";
+	public static final String DEF_COSPII_E2 = "E2";
+	public static final String DEF_COSPII_E3 = "E3";
+	public static final String DEF_COSPII_E4 = "E4";
+	public static final String DEF_COSPII_PA = "PA";
+	public static final String DEF_COSPII_RG = "RG";
+	public static final String DEF_COSPII_AC = "AC";
+	
 	public static final String DEF_NUCLII = "2306894218400";
 	
 	public static final String DEF_E1_CODTRN = "EE41";
