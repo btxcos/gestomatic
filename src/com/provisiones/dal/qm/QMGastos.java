@@ -67,9 +67,6 @@ public class QMGastos
 		String sMethod = "addGasto";
 		Statement stmt = null;
 		Connection conn = null;
-		ResultSet resulset = null;
-		
-		int iCodigo = 0;
 		
 		boolean bSalida = true;
 		
@@ -154,13 +151,6 @@ public class QMGastos
 				       + NuevoGasto.getFEPGPR() + "','"
 				       + sEstado + "' )");
 
-			resulset = stmt.getGeneratedKeys();
-			
-			if (resulset.next()) 
-			{
-				iCodigo= resulset.getInt(1);
-			} 
-			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
@@ -180,9 +170,7 @@ public class QMGastos
 		} 
 		finally 
 		{
-
 			Utils.closeStatement(stmt, sClassName, sMethod);
-			Utils.closeResultSet(resulset,sClassName,sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		
@@ -649,6 +637,8 @@ public class QMGastos
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
+	
+	
 
 	public static boolean setEstado(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sEstado)
 	{

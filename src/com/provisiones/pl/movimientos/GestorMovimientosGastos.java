@@ -9,16 +9,14 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.ll.CLActivos;
-import com.provisiones.ll.CLCuotas;
 import com.provisiones.ll.CLGastos;
-import com.provisiones.ll.CLImpuestos;
-import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.CuotaTabla;
-import com.provisiones.types.ImpuestoRecursoTabla;
+import com.provisiones.types.Gasto;
+import com.provisiones.types.GastoTabla;
 import com.provisiones.types.MovimientoGasto;
 
 
@@ -34,6 +32,7 @@ public class GestorMovimientosGastos implements Serializable
 	private String sCOGRUG = "";
 	private String sCOTPGA = "";
 	private String sCOSBGA = "";
+	private String sDCOSBGA = "";
 	private String sPTPAGO = "";
 	private String sFEDEVE = "";
 	private String sFFGTVP = "";
@@ -102,11 +101,8 @@ public class GestorMovimientosGastos implements Serializable
 	private ActivoTabla activoseleccionado = null;
 	private ArrayList<ActivoTabla> tablaactivos = null;
 
-	private CuotaTabla cuotaseleccionada = null;
-	private ArrayList<CuotaTabla> tablacuotas = null;
-	
-	private ImpuestoRecursoTabla devolucionseleccionada = null;
-	private ArrayList<ImpuestoRecursoTabla> tabladevoluciones = null;
+	private GastoTabla gastoseleccionado = null;
+	private ArrayList<GastoTabla> tablagastos = null;
 	
 	private Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
@@ -270,8 +266,8 @@ public class GestorMovimientosGastos implements Serializable
 		this.activoseleccionado = null;
 		this.tablaactivos = null;
 
-		this.cuotaseleccionada = null;
-		this.tablacuotas = null;
+		this.gastoseleccionado = null;
+		this.tablagastos = null;
     }
 	
 	public void borrarPlantillaActivo()
@@ -300,6 +296,7 @@ public class GestorMovimientosGastos implements Serializable
 	{
 		tiposcotpgaHM = new LinkedHashMap<String, String>();
 		tiposcosbgaHM = new LinkedHashMap<String, String>();
+		
 	}
 	
 	public void cambiaTipo()
@@ -378,19 +375,13 @@ public class GestorMovimientosGastos implements Serializable
 					this.bFEEESI = false;
 					this.bFEECOI = true;
 					//this.sFEEESI = "";
-					this.sFEECOI = "";
+					//this.sFEECOI = "";
 					break;
 				case 2:
 					this.bFEEESI = true;
 					this.bFEECOI = false;
-					this.sFEEESI = "";
+					//this.sFEEESI = "";
 					//this.sFEECOI = "";
-					break;
-				default:
-					this.bFEEESI = true;
-					this.bFEECOI = true;
-					this.sFEEESI = "";
-					this.sFEECOI = "";
 					break;
 			}
 
@@ -507,7 +498,7 @@ public class GestorMovimientosGastos implements Serializable
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
-		this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
+		this.setTablaactivos(CLGastos.buscarActivosConGastos(buscaactivos));
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 
@@ -545,7 +536,7 @@ public class GestorMovimientosGastos implements Serializable
 	
 	public void cargarDatos(ActionEvent actionEvent)
 	{
-		String sMethod = "cargarCuotas";
+		String sMethod = "cargarDatos";
 		
 		FacesMessage msg;
 		
@@ -555,31 +546,16 @@ public class GestorMovimientosGastos implements Serializable
 		
 		if (CLActivos.compruebaActivo(sCOACES))
 		{
-			this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
+			this.tablagastos = CLGastos.buscarGastosActivo(sCOACES);
 		
-			sMsg = "Encontradas '"+getTablacuotas().size()+"' cuotas pendientes.";
+			sMsg = "Encontrados "+getTablagastos().size()+" gastos en curso.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(sMsg);
 		
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 
-			Utils.debugTrace(true, sClassName, sMethod, "Buscando devoluciones...");
-		
-			this.tabladevoluciones = CLImpuestos.buscarDevolucionesDelActivo(sCOACES.toUpperCase());
-		
-			sMsg = "Encontradas '"+getTabladevoluciones().size()+"' devoluciones pendientes.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg);
-		
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-			this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
-		
-			sMsg = "Provision '"+sNUPROF+"' asignada.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg);
-		
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+			Utils.debugTrace(true, sClassName, sMethod, "Buscando numero de provision...");
+			
 		}
 		else
 		{
@@ -592,31 +568,88 @@ public class GestorMovimientosGastos implements Serializable
 		
 	}
 	
-	public void seleccionarCuota(ActionEvent actionEvent) 
+	public void seleccionarGasto(ActionEvent actionEvent) 
     {  
     	
-    	String sMethod = "seleccionarCuota";
+    	String sMethod = "seleccionarGasto";
 
     	FacesMessage msg;
     	
     	String sMsg = "";
 
-    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E2;
-    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E2;
-    	this.sCOSBGA = cuotaseleccionada.getCOSBAC();
-    	this.sPTPAGO = cuotaseleccionada.getPTPAGO();
+    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
+    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
+    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
+    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
+    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
     	
-    	this.sIMNGAS = cuotaseleccionada.getIMCUCO();
-    	this.bDevolucion = false;
+    	Utils.debugTrace(true, sClassName, sMethod, "sCOACES:|"+sCOACES+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sCOGRUG:|"+sCOGRUG+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sCOTPGA:|"+sCOTPGA+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sCOSBGA:|"+sCOSBGA+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sFEDEVE:|"+sFEDEVE+"|");
+    	
+    	
+	  	Gasto gasto = QMGastos.getGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+    	
+    	gasto.pintaGasto();
+ 
+    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
 
-    	
-    	tiposcotpgaHM = tiposcotpga_g2HM;
-    	tiposcosbgaHM = tiposcosbga_t22HM;
-    	
 
-    	//comprobar
+
+		this.sPTPAGO = gasto.getPTPAGO();
+
+		this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
+		this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+		this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
+		this.sCOSIGA = gasto.getCOSIGA();
+		this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
+		this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
+		this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
+		this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+		this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
+		this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
+		this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
+		this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
+		this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
+		this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
+		this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
+		this.sCOIMPT = gasto.getCOIMPT();
+		
+    	Utils.debugTrace(true, sClassName, sMethod, "sIMRGAS:|"+sIMRGAS+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sIMDGAS:|"+sIMDGAS+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sIMCOST:|"+sIMCOST+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sIMOGAS:|"+sIMOGAS+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sIMDTGA:|"+sIMDTGA+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sIMIMGA:|"+sIMIMGA+"|");
     	
-    	sMsg = "Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.";
+		this.sCOTNEG = gasto.getCOTNEG();
+		this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
+		this.sCOMONA = gasto.getCOMONA();
+		this.sBIAUTO = gasto.getBIAUTO();
+		this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
+		this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+		
+		this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
+		
+		this.sCOENCX = ValoresDefecto.DEF_COENCX;
+		this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+		this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+		
+		this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+
+		this.sCOTERR = ValoresDefecto.DEF_COTERR;
+		this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
+	
+		this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+		this.sCOAPII = ValoresDefecto.DEF_COAPII;
+		this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+		this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+		
+		String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
+		
+	   	sMsg =  sTipo+" de '"+sDCOSBGA+"' se ha cargado.";
     	
     	msg = new FacesMessage(sMsg);
     	
@@ -626,39 +659,7 @@ public class GestorMovimientosGastos implements Serializable
 		
     }
 	
-	public void seleccionarDevolucion(ActionEvent actionEvent) 
-    {  
-    	
-    	String sMethod = "seleccionarDevolucion";
 
-    	FacesMessage msg;
-    	
-    	String sMsg = "";
-
-    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E4;
-    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E4;
-    	this.sCOSBGA = devolucionseleccionada.getCOSBAC();
-    	this.sPTPAGO = "1";
-    	this.bDevolucion = true;
-    	
-    	//this.sIMNGAS = "";
-
-    	
-    	tiposcotpgaHM = tiposcotpga_g2HM;
-    	tiposcosbgaHM = tiposcosbga_t21HM;
-    	
-
-    	//comprobar
-    	
-    	sMsg = "Devolucion de '"+ devolucionseleccionada.getDCOSBAC() +"' Seleccionada.";
-    	
-    	msg = new FacesMessage(sMsg);
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-    }
 	
     /*public void registraGasto(ActionEvent actionEvent) 
     {  
@@ -695,7 +696,7 @@ public class GestorMovimientosGastos implements Serializable
 					sCOACES.toUpperCase(),
 					sCOGRUG.toUpperCase(),
 					sCOTPGA.toUpperCase(),
-					Utils.compruebaCodigoPago(bDevolucion, sCOSBGA.toUpperCase()),
+					Utils.compruebaCodigoPago(false, sCOSBGA.toUpperCase()),
 					sPTPAGO.toUpperCase(),
 					Utils.compruebaFecha(sFEDEVE),
 					Utils.compruebaFecha(sFFGTVP),
@@ -725,7 +726,7 @@ public class GestorMovimientosGastos implements Serializable
 					ValoresDefecto.DEF_COOFCX,
 					ValoresDefecto.DEF_NUCONE,
 					sNUPROF.toUpperCase(),
-					ValoresDefecto.DEF_FEAGTO,
+					Utils.compruebaFecha(sFEAGTO),
 					ValoresDefecto.DEF_COMONA,
 					ValoresDefecto.DEF_BIAUTO,
 					ValoresDefecto.DEF_FEAUFA,
@@ -746,7 +747,7 @@ public class GestorMovimientosGastos implements Serializable
 			switch (iSalida) 
 			{
 			case 0: //Sin errores
-				sMsg = "El gasto se ha creado correctamente.";
+				sMsg = "El movimiento se ha registrado correctamente.";
 				Utils.debugTrace(true, sClassName, sMethod, sMsg);
 				msg = new FacesMessage(sMsg,null);
 				break;
@@ -861,7 +862,7 @@ public class GestorMovimientosGastos implements Serializable
 				break;
 
 			case -804: //Error 804 - Accion no permitida
-				sMsg = "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.";
+				sMsg = "ERROR:804 - No se puede registrar esta solicitud. Por favor, revise los datos.";
 				Utils.debugTrace(true, sClassName, sMethod, sMsg);
 				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 				break;
@@ -1384,18 +1385,6 @@ public class GestorMovimientosGastos implements Serializable
 	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
 		this.tablaactivos = tablaactivos;
 	}
-	public CuotaTabla getCuotaseleccionada() {
-		return cuotaseleccionada;
-	}
-	public void setCuotaseleccionada(CuotaTabla cuotaseleccionada) {
-		this.cuotaseleccionada = cuotaseleccionada;
-	}
-	public ArrayList<CuotaTabla> getTablacuotas() {
-		return tablacuotas;
-	}
-	public void setTablacuotas(ArrayList<CuotaTabla> tablacuotas) {
-		this.tablacuotas = tablacuotas;
-	}
 	public String getsCOSBAC() {
 		return sCOSBAC;
 	}
@@ -1470,18 +1459,6 @@ public class GestorMovimientosGastos implements Serializable
 	public void setbFFGTVP(boolean bFFGTVP) {
 		this.bFFGTVP = bFFGTVP;
 	}
-	public ImpuestoRecursoTabla getDevolucionseleccionada() {
-		return devolucionseleccionada;
-	}
-	public void setDevolucionseleccionada(ImpuestoRecursoTabla devolucionseleccionada) {
-		this.devolucionseleccionada = devolucionseleccionada;
-	}
-	public ArrayList<ImpuestoRecursoTabla> getTabladevoluciones() {
-		return tabladevoluciones;
-	}
-	public void setTabladevoluciones(ArrayList<ImpuestoRecursoTabla> tabladevoluciones) {
-		this.tabladevoluciones = tabladevoluciones;
-	}
 	public Map<String, String> getTiposcosigaHM() {
 		return tiposcosigaHM;
 	}
@@ -1500,7 +1477,25 @@ public class GestorMovimientosGastos implements Serializable
 	public void setbDevolucion(boolean bDevolucion) {
 		this.bDevolucion = bDevolucion;
 	}
+	public GastoTabla getGastoseleccionado() {
+		return gastoseleccionado;
+	}
+	public void setGastoseleccionado(GastoTabla gastoseleccionado) {
+		this.gastoseleccionado = gastoseleccionado;
+	}
+	public ArrayList<GastoTabla> getTablagastos() {
+		return tablagastos;
+	}
+	public void setTablagastos(ArrayList<GastoTabla> tablagastos) {
+		this.tablagastos = tablagastos;
+	}
+	public String getsDCOSBGA() {
+		return sDCOSBGA;
+	}
+	public void setsDCOSBGA(String sDCOSBGA) {
+		this.sDCOSBGA = sDCOSBGA;
+	}
 
 
-
+	
 }

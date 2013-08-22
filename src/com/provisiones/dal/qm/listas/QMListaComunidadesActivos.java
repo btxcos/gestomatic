@@ -58,7 +58,7 @@ public class QMListaComunidadesActivos
 				       + sCodNUDCOM + "','" 
 				       + sCodCOACES + "','"
 				       + sCodMovimiento + "','"
-				       + ValoresDefecto.DEF_VALIDADO + "' )");
+				       + ValoresDefecto.DEF_PENDIENTE + "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 

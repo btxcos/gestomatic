@@ -82,7 +82,7 @@
 					<p:dialog header="Provisiones abiertas: " widgetVar="dlgTablaProvisiones" resizable="false">  
     				
 							<p:contextMenu for="provisiones">  
-								<p:menuitem value="Seleccionar" update="form:NUPROF, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorProvisiones.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide()"/>  
+								<p:menuitem value="Seleccionar" update="form:NUPROF, form:DCOSPAT, form:DTAS, form:ValorTolal, form:NumGastos, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorProvisiones.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="provisiones" var="provision" value="#{GestorProvisiones.tablaprovisiones}" rowKey="#{provision.NUPROF}"  

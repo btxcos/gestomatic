@@ -1,12 +1,16 @@
 package com.provisiones.ll;
 
+import java.util.ArrayList;
+
+import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
-import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Gasto;
+import com.provisiones.types.GastoTabla;
 import com.provisiones.types.MovimientoGasto;
 
 public class CLGastos 
@@ -93,6 +97,30 @@ public class CLGastos
 		
 		return sAccion;
 	}*/
+	
+	public static ArrayList<ActivoTabla> buscarActivosConGastos(ActivoTabla activo)
+	{
+		return QMListaGastos.buscaActivosConGastos(activo);
+	}
+	
+	public static ArrayList<GastoTabla> buscarGastosActivo(String sCodCOACES)
+	{
+		return QMListaGastos.buscaGastosActivo(sCodCOACES);
+	}
+	
+	public static String buscarDescripcionGasto(String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA)
+	{
+		return QMCodigosControl.getDesCOSBGA(sCodCOGRUG, sCodCOTPGA, sCodCOSBGA);
+	}
+	
+	public static String buscarProvisionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
+	{
+		return QMListaGastos.getProvisionDeGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE);
+	}
+	
+	
+	
+	
 	public static boolean compruebaSiExisteGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		return QMGastos.existeGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE);
@@ -286,7 +314,7 @@ public class CLGastos
 			//Error 002 - Llega fecha de anulación y no existe gasto en la tabla  
 			iCodigo = -2;
 		}
-		else if ((sEstado.equals("1") || sEstado.equals("2")) && movimiento_revisado.getYCOS02().equals("-"))
+		else if ((sEstado.equals("3") || sEstado.equals("4")) && movimiento_revisado.getYCOS02().equals("-"))
 		{
 			//Error 003 - Llega un abono de un gasto que NO está pagado           
 			iCodigo = -3;
@@ -363,10 +391,11 @@ public class CLGastos
 			//Error no se ha informado el campo importe
 			iCodigo = -803;
 		}
-		else if (sAccion.equals("#"))
+		else if (movimiento_revisado.getCOSIGA().equals("#"))
 		{
-			//Error, Accion no permitida  
-			iCodigo = -804;
+			//error modificacion sin cambios
+			iCodigo = -806;	
+
 		}
 		else if (sEstado.equals("") && !movimiento_revisado.getCOSIGA().equals("1") && !movimiento_revisado.getCOSIGA().equals("2"))
 		{
@@ -375,10 +404,10 @@ public class CLGastos
 		}
 		else
 		{
-			if (movimiento_revisado.getCOSIGA().equals("#"))
+			if (sAccion.equals("#"))
 			{	
-				//error modificacion sin cambios
-				iCodigo = -806;	
+				//Error, Accion no permitida  
+				iCodigo = -804;
 			}
 			else
 			{
@@ -399,7 +428,7 @@ public class CLGastos
 							Gasto gastonuevo = convierteMovimientoenGasto(movimiento_revisado);
 
 							Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la cuota...");
-							gastonuevo.pintaMovimientoGasto();
+							gastonuevo.pintaGasto();
 						
 							if (QMGastos.addGasto(gastonuevo,movimiento_revisado.getCOSIGA()))
 							{
@@ -522,67 +551,66 @@ public class CLGastos
 		movimiento_revisado.setCOGRUG(movimiento.getCOGRUG());
 		movimiento_revisado.setCOTPGA(movimiento.getCOTPGA());
 		movimiento_revisado.setCOSBGA(movimiento.getCOSBGA());
-		movimiento_revisado.setPTPAGO(movimiento.getPTPAGO());
 		movimiento_revisado.setFEDEVE(movimiento.getFEDEVE());
 
-		movimiento_revisado.setFFGTVP(movimiento.getFFGTVP());
-		movimiento_revisado.setFEPAGA(movimiento.getFEPAGA());
-		movimiento_revisado.setFELIPG(movimiento.getFELIPG());
+		if (movimiento.getIMNGAS().startsWith("-"))
+		{
+			movimiento_revisado.setYCOS02("-");
+			movimiento_revisado.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
+		}
+		else
+		{
+			movimiento_revisado.setIMNGAS(movimiento.getIMNGAS());
+		}
 		
+		if (movimiento.getIMRGAS().startsWith("-"))
+		{
+			movimiento_revisado.setYCOS04("-");
+			movimiento_revisado.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
+		}
+		else
+		{
+			movimiento_revisado.setIMRGAS(movimiento.getIMRGAS());
+		}
 
+		if (movimiento.getIMDGAS().startsWith("-"))
+		{
+			movimiento_revisado.setYCOS06("-");
+			movimiento_revisado.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
+		}
+		else
+		{
+			movimiento_revisado.setIMDGAS(movimiento.getIMDGAS());
+		}		
+
+
+		if (movimiento.getIMCOST().startsWith("-"))
+		{
+			movimiento_revisado.setYCOS08("-");
+			movimiento_revisado.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
+		}
+		else
+		{
+			movimiento_revisado.setIMCOST(movimiento.getIMCOST());
+		}
+		
+		if (movimiento.getIMOGAS().startsWith("-"))
+		{
+			movimiento_revisado.setYCOS10("-");
+			movimiento_revisado.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
+		}
+		else
+		{
+			movimiento_revisado.setIMOGAS(movimiento.getIMOGAS());
+		}
 		
 		if (sAccion.equals("G") || sAccion.equals("D")) //Nuevo
 		{
-			if (movimiento.getIMNGAS().startsWith("-"))
-			{
-				movimiento_revisado.setYCOS02("-");
-				movimiento_revisado.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
-			}
-			else
-			{
-				movimiento_revisado.setIMNGAS(movimiento.getIMNGAS());
-			}
-			
-			if (movimiento.getIMRGAS().startsWith("-"))
-			{
-				movimiento_revisado.setYCOS04("-");
-				movimiento_revisado.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
-			}
-			else
-			{
-				movimiento_revisado.setIMRGAS(movimiento.getIMRGAS());
-			}
+			movimiento_revisado.setPTPAGO(movimiento.getPTPAGO());
 
-			if (movimiento.getIMDGAS().startsWith("-"))
-			{
-				movimiento_revisado.setYCOS06("-");
-				movimiento_revisado.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
-			}
-			else
-			{
-				movimiento_revisado.setIMDGAS(movimiento.getIMDGAS());
-			}		
-
-
-			if (movimiento.getIMCOST().startsWith("-"))
-			{
-				movimiento_revisado.setYCOS08("-");
-				movimiento_revisado.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
-			}
-			else
-			{
-				movimiento_revisado.setIMCOST(movimiento.getIMCOST());
-			}
-			
-			if (movimiento.getIMOGAS().startsWith("-"))
-			{
-				movimiento_revisado.setYCOS10("-");
-				movimiento_revisado.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
-			}
-			else
-			{
-				movimiento_revisado.setIMOGAS(movimiento.getIMOGAS());
-			}
+			movimiento_revisado.setFFGTVP(movimiento.getFFGTVP());
+			movimiento_revisado.setFEPAGA(movimiento.getFEPAGA());
+			movimiento_revisado.setFELIPG(movimiento.getFELIPG());
 			
 			movimiento_revisado.setCOSIGA(movimiento.getCOSIGA());
 			movimiento_revisado.setFEEESI(movimiento.getFEEESI());
@@ -590,16 +618,25 @@ public class CLGastos
 			movimiento_revisado.setFEEAUI(movimiento.getFEEAUI());
 			movimiento_revisado.setFEEPAI(movimiento.getFEEPAI());
 			movimiento_revisado.setIMDTGA(movimiento.getIMDTGA());
+			
 			movimiento_revisado.setIMIMGA(movimiento.getIMIMGA());
 			movimiento_revisado.setCOIMPT(movimiento.getCOIMPT());
 			movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
 			movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
+			
+
 
 		}
 		
 		
 		else if (sAccion.equals("N")) //Anular 
 		{
+			movimiento_revisado.setPTPAGO(gasto.getPTPAGO());
+			
+			movimiento_revisado.setFFGTVP(gasto.getFFGTVP());
+			movimiento_revisado.setFEPAGA(gasto.getFEPAGA());
+			movimiento_revisado.setFELIPG(gasto.getFELIPG());
+
 			movimiento_revisado.setCOSIGA(gasto.getCOSIGA());
 			movimiento_revisado.setFEEESI(gasto.getFEEESI());
 			movimiento_revisado.setFEECOI(gasto.getFEECOI());
@@ -611,83 +648,39 @@ public class CLGastos
 			movimiento_revisado.setCOIMPT(gasto.getCOIMPT());
 			movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
 			movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
+			
+
 		}
 		else if (sAccion.equals("A")) //Abono 
 		{
 			boolean bCambio = false;
 			
-			if (!movimiento.getIMNGAS().equals(gasto.getIMNGAS()) 
-					|| !movimiento.getYCOS02().equals(gasto.getYCOS02()))
+			if (!movimiento_revisado.getIMNGAS().equals(gasto.getIMNGAS()) 
+					|| !movimiento_revisado.getYCOS02().equals(gasto.getYCOS02()))
 			{
 				bCambio = true;
-				if (movimiento.getIMNGAS().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS02("-");
-					movimiento_revisado.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMNGAS(movimiento.getIMNGAS());
-				}
-				
 			}
-			if (!movimiento.getIMRGAS().equals(gasto.getIMRGAS()) 
-					|| !movimiento.getYCOS04().equals(gasto.getYCOS04()))
+			if (!movimiento_revisado.getIMRGAS().equals(gasto.getIMRGAS()) 
+					|| !movimiento_revisado.getYCOS04().equals(gasto.getYCOS04()))
 			{
 				bCambio = true;	
-				if (movimiento.getIMRGAS().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS04("-");
-					movimiento_revisado.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMRGAS(movimiento.getIMRGAS());
-				}
 			}
 
-			if (!movimiento.getIMDGAS().equals(gasto.getIMDGAS()) 
-					|| !movimiento.getYCOS06().equals(gasto.getYCOS06()))
+			if (!movimiento_revisado.getIMDGAS().equals(gasto.getIMDGAS()) 
+					|| !movimiento_revisado.getYCOS06().equals(gasto.getYCOS06()))
 			{
 				bCambio = true;	
-				if (movimiento.getIMDGAS().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS06("-");
-					movimiento_revisado.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMDGAS(movimiento.getIMDGAS());
-				}		
 			}
 
-			if (!movimiento.getIMCOST().equals(gasto.getIMCOST()) 
-					|| !movimiento.getYCOS08().equals(gasto.getYCOS08()))
+			if (!movimiento_revisado.getIMCOST().equals(gasto.getIMCOST()) 
+					|| !movimiento_revisado.getYCOS08().equals(gasto.getYCOS08()))
 			{
 				bCambio = true;	
-				if (movimiento.getIMCOST().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS08("-");
-					movimiento_revisado.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMCOST(movimiento.getIMCOST());
-				}
 			}
-			if (!movimiento.getIMOGAS().equals(gasto.getIMOGAS()) 
-					|| !movimiento.getYCOS10().equals(gasto.getYCOS10()))
+			if (!movimiento_revisado.getIMOGAS().equals(gasto.getIMOGAS()) 
+					|| !movimiento_revisado.getYCOS10().equals(gasto.getYCOS10()))
 			{
 				bCambio = true;	
-				if (movimiento.getIMOGAS().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS10("-");
-					movimiento_revisado.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMOGAS(movimiento.getIMOGAS());
-				}
 			}
 			
 			if (!movimiento.getIMDTGA().equals(gasto.getIMDTGA()))
@@ -719,6 +712,11 @@ public class CLGastos
 			{
 				movimiento_revisado.setCOIMPT(gasto.getCOIMPT());
 			}
+			movimiento_revisado.setPTPAGO(gasto.getPTPAGO());
+
+			movimiento_revisado.setFFGTVP(gasto.getFFGTVP());
+			movimiento_revisado.setFEPAGA(gasto.getFEPAGA());
+			movimiento_revisado.setFELIPG(gasto.getFELIPG());
 			
 			movimiento_revisado.setCOSIGA(gasto.getCOSIGA());
 			movimiento_revisado.setFEEESI(gasto.getFEEESI());
@@ -732,82 +730,38 @@ public class CLGastos
 			if (!bCambio)
 				movimiento_revisado.setCOSIGA("#");
 		}
-		else if (sAccion.equals("M")) //Modificacion
+		else if (sAccion.equals("M") || sAccion.equals("#")) //Modificacion
 		{
 			boolean bCambio = false;
 			
-			if (!movimiento.getIMNGAS().equals(gasto.getIMNGAS()) 
-					|| !movimiento.getYCOS02().equals(gasto.getYCOS02()))
+			if (!movimiento_revisado.getIMNGAS().equals(gasto.getIMNGAS()) 
+					|| !movimiento_revisado.getYCOS02().equals(gasto.getYCOS02()))
 			{
 				bCambio = true;
-				if (movimiento.getIMNGAS().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS02("-");
-					movimiento_revisado.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMNGAS(movimiento.getIMNGAS());
-				}
 				
 			}
-			if (!movimiento.getIMRGAS().equals(gasto.getIMRGAS()) 
-					|| !movimiento.getYCOS04().equals(gasto.getYCOS04()))
+			if (!movimiento_revisado.getIMRGAS().equals(gasto.getIMRGAS()) 
+					|| !movimiento_revisado.getYCOS04().equals(gasto.getYCOS04()))
 			{
 				bCambio = true;	
-				if (movimiento.getIMRGAS().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS04("-");
-					movimiento_revisado.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMRGAS(movimiento.getIMRGAS());
-				}
+
 			}
 
-			if (!movimiento.getIMDGAS().equals(gasto.getIMDGAS()) 
-					|| !movimiento.getYCOS06().equals(gasto.getYCOS06()))
+			if (!movimiento_revisado.getIMDGAS().equals(gasto.getIMDGAS()) 
+					|| !movimiento_revisado.getYCOS06().equals(gasto.getYCOS06()))
 			{
 				bCambio = true;	
-				if (movimiento.getIMDGAS().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS06("-");
-					movimiento_revisado.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMDGAS(movimiento.getIMDGAS());
-				}		
 			}
 
-			if (!movimiento.getIMCOST().equals(gasto.getIMCOST()) 
-					|| !movimiento.getYCOS08().equals(gasto.getYCOS08()))
+			if (!movimiento_revisado.getIMCOST().equals(gasto.getIMCOST()) 
+					|| !movimiento_revisado.getYCOS08().equals(gasto.getYCOS08()))
 			{
 				bCambio = true;	
-				if (movimiento.getIMCOST().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS08("-");
-					movimiento_revisado.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMCOST(movimiento.getIMCOST());
-				}
 			}
-			if (!movimiento.getIMOGAS().equals(gasto.getIMOGAS()) 
-					|| !movimiento.getYCOS10().equals(gasto.getYCOS10()))
+			if (!movimiento_revisado.getIMOGAS().equals(gasto.getIMOGAS()) 
+					|| !movimiento_revisado.getYCOS10().equals(gasto.getYCOS10()))
 			{
 				bCambio = true;	
-				if (movimiento.getIMOGAS().startsWith("-"))
-				{
-					movimiento_revisado.setYCOS10("-");
-					movimiento_revisado.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
-				}
-				else
-				{
-					movimiento_revisado.setIMOGAS(movimiento.getIMOGAS());
-				}
 			}
 			
 			if (!movimiento.getIMDTGA().equals(gasto.getIMDTGA()))
@@ -839,6 +793,46 @@ public class CLGastos
 			{
 				movimiento_revisado.setCOIMPT(gasto.getCOIMPT());
 			}
+
+			if (!movimiento.getPTPAGO().equals(gasto.getPTPAGO()))
+			{
+				bCambio = true;
+				movimiento_revisado.setPTPAGO(movimiento.getPTPAGO());
+			}
+			else
+			{
+				movimiento_revisado.setPTPAGO(gasto.getPTPAGO());
+			}
+
+			if (!movimiento.getFFGTVP().equals(gasto.getFFGTVP()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFFGTVP(movimiento.getFFGTVP());
+			}
+			else
+			{
+				movimiento_revisado.setFFGTVP(gasto.getFFGTVP());
+			}
+			
+			if (!movimiento.getFEPAGA().equals(gasto.getFEPAGA()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFEPAGA(movimiento.getFEPAGA());
+			}
+			else
+			{
+				movimiento_revisado.setFEPAGA(gasto.getFEPAGA());
+			}
+
+			if (!movimiento.getFELIPG().equals(gasto.getFELIPG()))
+			{
+				bCambio = true;
+				movimiento_revisado.setFELIPG(movimiento.getFELIPG());
+			}
+			else
+			{
+				movimiento_revisado.setFELIPG(gasto.getFELIPG());
+			}			
 			
 			if (!movimiento.getCOSIGA().equals(gasto.getCOSIGA()))
 			{

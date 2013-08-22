@@ -70,7 +70,7 @@ public class GestorProvisiones implements Serializable
     	this.sCOSPAT  = provisionseleccionada.getCOSPAT();
     	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
     	this.sTAS  = provisionseleccionada.getCOSPAT();
-    	this.sDTAS  = provisionseleccionada.getDCOSPAT();
+    	this.sDTAS  = provisionseleccionada.getDTAS();
     	this.sValorTolal  = provisionseleccionada.getVALOR();
     	this.sNumGastos  = provisionseleccionada.getGASTOS();
     	

@@ -350,7 +350,7 @@ public class Gasto
 		FEPGPR = fEPGPR;
 	}
 	
-	public void pintaMovimientoGasto()
+	public void pintaGasto()
 	{
 		System.out.println("(GASTO)");
 		System.out.println("COACES:|"+COACES+"|");

@@ -253,7 +253,7 @@ public class Utils
 			}
 			else
 			{
-				sImporteReal = sImporte;
+				sImporteReal = sImporte+"00";
 			}
 		}
 		else if (sImporte.equals(""))
@@ -360,9 +360,9 @@ public class Utils
 	{
 		String sMethod = "recuperaImporte";
 		
-		String sImporteReal = "";
+		String sImporteReal = "0";
 		
-		if (sImporte.length()>3)
+		if (sImporte.length()>2)
 		{
 			String sEuros = sImporte.substring(0, sImporte.length()-2);
 			String sCentimos = sImporte.substring(sImporte.length()-2,sImporte.length());

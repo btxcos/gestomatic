@@ -14,9 +14,10 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
-import com.provisiones.ll.CLProvisiones;
+
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
+
 import com.provisiones.misc.ValoresDefecto;
 
 public class TestCuotas {
@@ -39,7 +40,7 @@ public class TestCuotas {
 		//Parser.escribirActivo(activo);
 		
 		
-		//Utils.debugTrace(bTraza, sClassName, sMethod, "|"+CLProvisiones.provisionAsignada("3109139")+"|");
+		Utils.debugTrace(bTraza, sClassName, sMethod, "Generando ficheros...");
 		
 		int n = 26; //Caracter ->
 		String aChar = new Character((char)n).toString();
@@ -124,5 +125,6 @@ public class TestCuotas {
               e2.printStackTrace();
            }
         }
+        Utils.debugTrace(bTraza, sClassName, sMethod, "Generados!");
 	}
 }

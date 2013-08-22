@@ -539,8 +539,8 @@ public class QMProvisiones
 					sDCOSPAT =  QMCodigosControl.getDesSociedadesTitulizadas(sCOSPAT);
 					sTAS =  rs.getString(sField3);
 					sDTAS =  QMCodigosControl.getDesTipoActivo(sTAS);
-					sVALOR =   rs.getString(sField3);
-					sGASTOS =  rs.getString(sField4);
+					sVALOR =   rs.getString(sField4);
+					sGASTOS =  rs.getString(sField5);
 
 					ProvisionTabla provisionencontrada = new ProvisionTabla(sNUPROF,sCOSPAT,sDCOSPAT,sTAS,sDTAS,sVALOR,sGASTOS);
 					

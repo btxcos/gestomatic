@@ -35,9 +35,12 @@ public class ValoresDefecto
 	public static final String DEF_ALTA = "A";
 	public static final String DEF_BAJA = "B";
 	public static final String DEF_PENDIENTE = "P";
-	public static final String DEF_VALIDADO = "P";
-	public static final String DEF_ESTADO_GASTO = "0";
+	
 	public static final String DEF_GASTO_ANULADO = "4";
+	
+	public static final String DEF_GASTO_ESTIMADO = "1";
+	public static final String DEF_GASTO_CONOCIDO = "2";
+	
 	
 	
 	public static final String DEF_COTERR = "0";
