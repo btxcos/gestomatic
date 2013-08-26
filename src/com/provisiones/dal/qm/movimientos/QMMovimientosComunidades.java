@@ -480,7 +480,6 @@ public class QMMovimientosComunidades
 					"  FROM " + sTable + 
 						" WHERE ("
 					       + sField2  +" = '" + comunidad.getCODTRN() + "' AND "
-					       + sField3  +" = '" + comunidad.getCOTDOR() + "' AND "
 					       + sField4  +" = '" + comunidad.getIDPROV() + "' AND "
 					       + sField5  +" = '" + comunidad.getCOACCI() + "' AND "
 					       + sField6  +" = '" + comunidad.getCOENGP() + "' AND "
@@ -508,8 +507,7 @@ public class QMMovimientosComunidades
 					       + sField28 +" = '" + comunidad.getNUCCDI() + "' AND "
 					       + sField29 +" = '" + comunidad.getNUCCNT() + "' AND "
 					       + sField30 +" = '" + comunidad.getBITC09() + "' AND "
-					       + sField31 +" = '" + comunidad.getOBTEXC() + "' AND "
-					       + sField32 +" = '" + comunidad.getOBDEER() + "' )"); 
+					       + sField31 +" = '" + comunidad.getOBTEXC() + "' )"); 
 
 
 			rs = pstmt.executeQuery();

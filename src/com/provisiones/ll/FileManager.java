@@ -2,17 +2,33 @@ package com.provisiones.ll;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
+import com.provisiones.dal.qm.listas.QMListaComunidades;
+import com.provisiones.dal.qm.listas.QMListaCuotas;
+import com.provisiones.dal.qm.listas.QMListaGastos;
+import com.provisiones.dal.qm.listas.QMListaImpuestos;
+import com.provisiones.dal.qm.listas.QMListaReferencias;
+import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
+import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
+import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
+import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
+import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Longitudes;
+import com.provisiones.misc.Parser;
+import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
 public class FileManager 
@@ -21,31 +37,247 @@ public class FileManager
 	static String sClassName = FileManager.class.getName();
 	static boolean bEnable = true;
 	
-	public static boolean guardarFichero(FileUploadEvent event) throws IOException 
+	public static String guardarFichero(FileUploadEvent event)
 	{
 		String sMethod = "guardarFichero";
-
-		boolean bSalida = false;
 		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"ID:|"+event.getPhaseId().getOrdinal()+"|");
+	
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Guardando archivo...");
         UploadedFile file = event.getFile();
-        String fileName = file.getFileName();
+        
+        
+        
+        String sFichero = Utils.timeStamp()+"_"+file.getFileName();
+
         //long fileSize = file.getSize();
-        InputStream is = file.getInputstream();
-        OutputStream out = new FileOutputStream("C:\\"+fileName);
-        byte buf[] = new byte[1024];
-        int len;
-        while ((len = is.read(buf)) > 0)
-            out.write(buf, 0, len);
-        is.close();
-        out.close();
-        bSalida = true;
+        InputStream is;
+		try 
+		{
+			is = file.getInputstream();
+	        OutputStream out = new FileOutputStream(ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sFichero);
+	        
+	        byte buf[] = new byte[1024];
+	        int len;
+	        
+	        while ((len = is.read(buf)) > 0)
+	        {
+	            out.write(buf, 0, len);
+	        }
+	        
+	        is.close();
+	        out.close();
+
+		} 
+		catch (IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Completado con exito.");
-        return bSalida;
+        return sFichero;
+	}
+
+	public static void escribirComunidades() 
+	{
+		String sMethod = "escribirComunidades";
+		
+		ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado("P");
+		
+		FileWriter ficheroE1 = null;
+		
+        PrintWriter pw = null;
+        try
+        {
+        	ficheroE1 = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E1+".txt");
+            pw = new PrintWriter(ficheroE1);
+
+            for (int i = 0; i < resultcomunidades.size() ; i++)
+            {
+                pw.println(Parser.escribirComunidad(QMMovimientosComunidades.getMovimientoComunidad(resultcomunidades.get(i))));
+            }
+            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+        	   if (null != ficheroE1)
+        		   ficheroE1.close();
+           } 
+           catch (Exception e2) 
+           {
+              e2.printStackTrace();
+           }
+        }
+        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
 	}
 	
+	public static void escribirCuotas() 
+	{
+		String sMethod = "escribirCuotas";
+		
+		ArrayList<String> resultcuotas =      QMListaCuotas.getCuotasPorEstado("P");
+		
+		FileWriter ficheroE2 = null;
+		
+        PrintWriter pw = null;
+        try
+        {
+            ficheroE2 = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E2+".txt");
+            pw = new PrintWriter(ficheroE2);
+            
+            for (int i = 0; i < resultcuotas.size() ; i++)
+            {
+                pw.println(Parser.escribirCuota(QMMovimientosCuotas.getMovimientoCuota(resultcuotas.get(i))));
+            }
+            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+               if (null != ficheroE2)
+            	   ficheroE2.close();
+           } 
+           catch (Exception e2) 
+           {
+              e2.printStackTrace();
+           }
+        }
+        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+	}
 	
-	public static boolean leerActivos(String sNombre) throws IOException 
+	public static void escribirReferencias() 
+	{
+		String sMethod = "escribirReferencias";
+		
+		ArrayList<String> resultreferencias = QMListaReferencias.getReferenciasPorEstado("P");
+		
+		FileWriter ficheroE3 = null;
+		
+        PrintWriter pw = null;
+        try
+        {
+            ficheroE3 = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E3+".txt");
+            pw = new PrintWriter(ficheroE3);
+            
+            for (int i = 0; i < resultreferencias.size() ; i++)
+            {
+                pw.println(Parser.escribirReferenciaCatastral(QMMovimientosReferencias.getMovimientoReferenciaCatastral(resultreferencias.get(i))));
+            }
+            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+               if (null != ficheroE3)
+            	   ficheroE3.close();
+           } 
+           catch (Exception e2) 
+           {
+              e2.printStackTrace();
+           }
+        }
+        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+	}
+	
+	public static void escribirImpuestos() 
+	{
+		String sMethod = "escribirImpuestos";
+		
+		ArrayList<String> resultimpuestos =   QMListaImpuestos.getImpuestosPorEstado("P");
+		
+		FileWriter ficheroE4 = null;
+		
+        PrintWriter pw = null;
+        try
+        {
+            ficheroE4 = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E4+".txt");
+            pw = new PrintWriter(ficheroE4);
+            
+            for (int i = 0; i < resultimpuestos.size() ; i++)
+            {
+                pw.println(Parser.escribirImpuestoRecurso(QMMovimientosImpuestos.getMovimientoImpuestoRecurso(resultimpuestos.get(i))));
+            }
+            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        } 
+        finally 
+        {
+           try 
+           {
+               if (null != ficheroE4)
+            	   ficheroE4.close();
+           } 
+           catch (Exception e2) 
+           {
+              e2.printStackTrace();
+           }
+        }
+        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+	}
+	
+	public static void escribirGastos() 
+	{
+		String sMethod = "escribirGastos";
+		
+		ArrayList<String> resultgastos =      QMListaGastos.getGastosPorEstado("P");
+        
+        FileWriter ficheroGA = null;
+        
+        PrintWriter pw = null;
+        try
+        {
+
+            ficheroGA = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_GA+".txt");
+            pw = new PrintWriter(ficheroGA);
+            
+            for (int i = 0; i < resultgastos.size(); i++)
+            {
+                pw.println(Parser.escribirGasto(QMMovimientosGastos.getMovimientoGasto(resultgastos.get(i))));
+            }
+            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+ 
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+
+        finally 
+        {
+           try 
+           {
+
+           if (null != ficheroGA)
+              ficheroGA.close();
+           } 
+           catch (Exception e2) 
+           {
+              e2.printStackTrace();
+           }
+        }
+        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+
+	}
+	
+	public static boolean leerActivos(String sNombre)
 	{
 
 		String sMethod = "leerActivos";
@@ -54,101 +286,127 @@ public class FileManager
 
 		
 
-		File archivo = new File ("C:\\"+sNombre);
-		FileReader fr = new FileReader (archivo);
-		BufferedReader br = new BufferedReader(fr);
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		String linea = "";
+		FileReader fr;
+		
+		try 
+		{
+			fr = new FileReader (archivo);
+			BufferedReader br = new BufferedReader(fr);
 
-		int i = 26; //Caracter ->
-		String aChar = new Character((char)i).toString();
+			String linea = "";
 
-		
-		
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
 
-		java.util.Date date= new java.util.Date();
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Inicio: " + new Timestamp(date.getTime()));
+			
+			
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
-		int contador=0;
-		int registros = 0;
+			java.util.Date date= new java.util.Date();
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Inicio: " + new Timestamp(date.getTime()));
 
-		while((linea=br.readLine())!=null)
-        {
-			contador++;
-    		if (linea.equals(aChar))
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
-    		else if (linea.length()< (Longitudes.ACTIVOS_L-Longitudes.FILLER_ACTIVOS_L) )
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
-    		else
-    		{
-    			if (CLActivos.actualizaActivoLeido(linea))
-    				registros++;
-    		}
-            
-        }
+			int contador=0;
+			int registros = 0;
+
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+	    		if (linea.equals(sFinFichero))
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    		else if (linea.length()< (Longitudes.ACTIVOS_L-Longitudes.FILLER_ACTIVOS_L) )
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    		else
+	    		{
+	    			if (CLActivos.actualizaActivoLeido(linea))
+	    				registros++;
+	    		}
+	            
+	        }
+			
+			
+			br.close();
+
+			
+			bSalida = ((contador-registros-1) == 0);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
 		
 		
-		br.close();
-		
-		bSalida = ((contador-registros-1) == 0);
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
-		
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
         return bSalida;
 	}
 	
-	public static boolean leerGastosRevisados(String sNombre) throws IOException 
+	public static boolean leerGastosRevisados(String sNombre) 
 	{
 		String sMethod = "leerGastosRevisados";
 
 		boolean bSalida = false;
 		
-		File archivo = new File ("C:\\"+sNombre);
-		FileReader fr = new FileReader (archivo);
-		BufferedReader br = new BufferedReader(fr);
-		
-		String linea = "";
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		FileReader fr;
+		try 
+		{
+			fr = new FileReader (archivo);
 
-		int i = 26; //Caracter ->
-		String aChar = new Character((char)i).toString();
-
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
-
-		java.util.Date date= new java.util.Date();
-		System.out.println("Inicio: " + new Timestamp(date.getTime()));
-
-		int contador=0;
-		int registros = 0;
-		
-		//ArrayList<String> lista_rechazados = new ArrayList<String>(); 
-		
-		while((linea=br.readLine())!=null)
-        {
-			contador++;
-    		if (linea.equals(aChar))
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
-    		else if (linea.length()< (Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L) )
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
-    		else
-    		{
-    			//if (CLGastos.actualizaGastoLeido(linea))
-    				registros++;
-    		}
-            
-        }
-		
-		br.close();
-		
-		bSalida = ((contador-registros-1) == 0);
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			BufferedReader br = new BufferedReader(fr);
 			
+			String linea = "";
+
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
+
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+
+			java.util.Date date= new java.util.Date();
+			System.out.println("Inicio: " + new Timestamp(date.getTime()));
+
+			int contador=0;
+			int registros = 0;
+			
+			//ArrayList<String> lista_rechazados = new ArrayList<String>(); 
+			
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+	    		if (linea.equals(sFinFichero))
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    		else if (linea.length()< (Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L) )
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    		else
+	    		{
+	    			//if (CLGastos.actualizaGastoLeido(linea))
+	    				registros++;
+	    		}
+	            
+	        }
+			
+			br.close();
+			
+			bSalida = ((contador-registros-1) == 0);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
         return bSalida;
 	}
 
@@ -159,14 +417,14 @@ public class FileManager
 		
 		boolean bSalida = false;
 		
-		File archivo = new File ("C:\\"+sNombre);
+		File archivo = new File (ValoresDefecto.DEF_PATH+sNombre);
 		FileReader fr = new FileReader (archivo);
 		BufferedReader br = new BufferedReader(fr);
 		
 		String linea = "";
 
-		int i = 26; //Caracter ->
-		String aChar = new Character((char)i).toString();
+		String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+
 
 		Utils.standardIO2File("");//Salida por fichero de texto
 		
@@ -182,7 +440,7 @@ public class FileManager
 		while((linea=br.readLine())!=null)
         {
 			contador++;
-    		if (linea.equals(aChar))
+    		if (linea.equals(sFinFichero))
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
     		else if (linea.length()< (Longitudes.CIERRE_L-Longitudes.FILLER_CIERRE_L) )
     			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
@@ -202,328 +460,399 @@ public class FileManager
         return bSalida;
 	}*/
 	
-	public static boolean leerComunidades(String sNombre) throws IOException 
+	public static boolean leerComunidadesRevisadas(String sNombre)
 	{
-		String sMethod = "leerComunidades";
+		String sMethod = "leerComunidadesRevisadas";
 
 		boolean bSalida = false;
 		
-		File archivo = new File ("C:\\"+sNombre);
-		FileReader fr = new FileReader (archivo);
-		BufferedReader br = new BufferedReader(fr);
-		
-		String linea = "";
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
-		int i = 26; //Caracter ->
-		String aChar = new Character((char)i).toString();
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
-
-		java.util.Date date= new java.util.Date();
-		System.out.println("Inicio: " + new Timestamp(date.getTime()));
-
-		int contador= 0 ;
-		int registros = 0;
-		bSalida = true;
-		
-		//String sNUDCOM = "";
-		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
-		
+		FileReader fr;
+		try 
+		{
+			fr = new FileReader (archivo);
 			
-		while((linea=br.readLine())!=null)
-        {
-			contador++;
+			BufferedReader br = new BufferedReader(fr);
+			
+			String linea = "";
 
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, 
-					"TAMS (linea|"+linea.length()+
-					"|Comunidades:|"+Longitudes.COMUNIDADES_L+
-					"|Filler:|"+Longitudes.FILLER_COMUNIDADES_L+
-					"| Resta:|"+(Longitudes.COMUNIDADES_L-Longitudes.FILLER_COMUNIDADES_L)+"|");
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
-    		if (linea.equals(aChar))
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
-    		else if (linea.length()< (Longitudes.COMUNIDADES_L-Longitudes.FILLER_COMUNIDADES_L) )
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
-    		else
-    		{
-    			if (CLComunidades.actualizaComunidadLeida(linea))
-    				registros++;
-    		}
-        }
-	
-		br.close();
-	
-		bSalida = ((contador-registros-1) == 0);
+			java.util.Date date= new java.util.Date();
+			System.out.println("Inicio: " + new Timestamp(date.getTime()));
+
+			int contador= 0 ;
+			int registros = 0;
+			bSalida = true;
+			
+			//String sNUDCOM = "";
+			//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
+			
+			int iLongitudValida = Longitudes.COMUNIDADES_L-Longitudes.FILLER_COMUNIDADES_L-Longitudes.OBDEER_L;
+				
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, 
+						"TAMS (Posiciones leidas|"+linea.length()+
+						"|Comunidades:|"+Longitudes.COMUNIDADES_L+
+						"|Filler:|"+Longitudes.FILLER_COMUNIDADES_L+
+						"| Resta:|"+(iLongitudValida)+"|");
+
+	    		if (linea.equals(sFinFichero))
+	    		{
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    		}
+	    		else if (linea.length()< iLongitudValida )
+	    		{
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    		}
+	    		else
+	    		{
+	    			if (CLComunidades.actualizaComunidadLeida(linea))
+	    				registros++;
+	    		}
+	        }
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			br.close();
 		
+			bSalida = ((contador-registros-1) == 0);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return bSalida;
 	}
 	
-	public static boolean leerCuotas(String sNombre) throws IOException 
+	public static boolean leerCuotasRevisadas(String sNombre) 
 	{
-		String sMethod = "leerCuotas";
+		String sMethod = "leerCuotasRevisadas";
 
 		boolean bSalida = false;
 		
-		File archivo = new File ("C:\\"+sNombre);
-		FileReader fr = new FileReader (archivo);
-		BufferedReader br = new BufferedReader(fr);
-		
-		String linea = "";
-
-		int i = 26; //Caracter ->
-		String aChar = new Character((char)i).toString();
-
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
-
-		java.util.Date date= new java.util.Date();
-		System.out.println("Inicio: " + new Timestamp(date.getTime()));
-
-		int contador= 0 ;
-		int registros = 0;
-		
-		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
-		
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		FileReader fr;
+		try 
+		{
+			fr = new FileReader (archivo);
 			
-		while((linea=br.readLine())!=null)
-        {
-			contador++;
-    		if (linea.equals(aChar))
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
-    		else if (linea.length()< (Longitudes.CUOTAS_L-Longitudes.FILLER_CUOTAS_L) )
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
-    		else
-    		{
-    			if (CLCuotas.actualizaCuotaLeida(linea))
-    				registros++;
-    		}
-        }
+			BufferedReader br = new BufferedReader(fr);
+			
+			String linea = "";
+
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
+
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+
+			java.util.Date date= new java.util.Date();
+			System.out.println("Inicio: " + new Timestamp(date.getTime()));
+
+			int contador= 0 ;
+			int registros = 0;
+			
+			//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
+			
+				
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+	    		if (linea.equals(sFinFichero))
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    		else if (linea.length()< (Longitudes.CUOTAS_L-Longitudes.FILLER_CUOTAS_L) )
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    		else
+	    		{
+	    			if (CLCuotas.actualizaCuotaLeida(linea))
+	    				registros++;
+	    		}
+	        }
+			
+			br.close();
+			
+			bSalida = ((contador-registros-1) == 0);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+
 		
-		br.close();
-		
-		bSalida = ((contador-registros-1) == 0);
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
-		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return bSalida;
 	}
 	
-	public static boolean leerReferencias(String sNombre) throws IOException 
+	public static boolean leerReferenciasRevisadas(String sNombre) 
 	{
-		String sMethod = "leerReferencias";
+		String sMethod = "leerReferenciasRevisadas";
 
 		boolean bSalida = false;
 		
-		File archivo = new File ("C:\\"+sNombre);
-		FileReader fr = new FileReader (archivo);
-		BufferedReader br = new BufferedReader(fr);
-		
-		String linea = "";
-
-		int i = 26; //Caracter ->
-		String aChar = new Character((char)i).toString();
-
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
-
-		java.util.Date date= new java.util.Date();
-		System.out.println("Inicio: " + new Timestamp(date.getTime()));
-
-		int contador= 0 ;
-		int registros = 0;
-		
-		//String sNUDCOM = "";
-		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
-		
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		FileReader fr;
+		try 
+		{
+			fr = new FileReader (archivo);
 			
-		while((linea=br.readLine())!=null)
-        {
-			contador++;
-    		if (linea.equals(aChar))
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
-    		else if (linea.length()< (Longitudes.REFERENCIAS_L-Longitudes.FILLER_REFERENCIAS_L) )
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
-    		else
-    		{
-    			if (CLReferencias.actualizaReferenciaLeida(linea))
-    				registros++;
-    		}
-        }
-	
-		br.close();
-	
-		bSalida = ((contador-registros-1) == 0);
+			BufferedReader br = new BufferedReader(fr);
+			
+			String linea = "";
+
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+
+			java.util.Date date= new java.util.Date();
+			System.out.println("Inicio: " + new Timestamp(date.getTime()));
+
+			int contador= 0 ;
+			int registros = 0;
+			
+			//String sNUDCOM = "";
+			//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
+			
+				
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+	    		if (linea.equals(sFinFichero))
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    		else if (linea.length()< (Longitudes.REFERENCIAS_L-Longitudes.FILLER_REFERENCIAS_L) )
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    		else
+	    		{
+	    			if (CLReferencias.actualizaReferenciaLeida(linea))
+	    				registros++;
+	    		}
+	        }
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
-		 
+			br.close();
+		
+			bSalida = ((contador-registros-1) == 0);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		 
         return bSalida;
 	}
 
-	public static boolean leerImpuestos(String sNombre) throws IOException 
+	public static boolean leerImpuestosRevisadas(String sNombre) 
 	{
-		String sMethod = "leerImpuestos";
+		String sMethod = "leerImpuestosRevisadas";
 
 		boolean bSalida = false;
 		
-		File archivo = new File ("C:\\"+sNombre);
-		FileReader fr = new FileReader (archivo);
-		BufferedReader br = new BufferedReader(fr);
-		
-		String linea = "";
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		FileReader fr;
+		try 
+		{
+			fr = new FileReader (archivo);
 
-		int i = 26; //Caracter ->
-		String aChar = new Character((char)i).toString();
-
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
-
-		java.util.Date date= new java.util.Date();
-		System.out.println("Inicio: " + new Timestamp(date.getTime()));
-
-		int contador= 0 ;
-		int registros = 0;
-		
-		//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
-		
+			BufferedReader br = new BufferedReader(fr);
 			
-		while((linea=br.readLine())!=null)
-        {
-			contador++;
-    		if (linea.equals(aChar))
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
-    		else if (linea.length()< (Longitudes.IMPUESTOS_L-Longitudes.FILLER_IMPUESTOS_L) )
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
-    		else
-    		{
-    			if (CLImpuestos.actualizaImpuestoLeido(linea))
-    				registros++;
-    		}
-        }
-		
-		br.close();
+			String linea = "";
 
-		bSalida = ((contador-registros-1) == 0);
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
-		
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
 
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+
+			java.util.Date date= new java.util.Date();
+			System.out.println("Inicio: " + new Timestamp(date.getTime()));
+
+			int contador= 0 ;
+			int registros = 0;
+			
+			//ArrayList<Comunidad> lista_comunidades = new ArrayList<Comunidad>();
+			
+				
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+	    		if (linea.equals(sFinFichero))
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    		else if (linea.length()< (Longitudes.IMPUESTOS_L-Longitudes.FILLER_IMPUESTOS_L) )
+	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    		else
+	    		{
+	    			if (CLImpuestos.actualizaImpuestoLeido(linea))
+	    				registros++;
+	    		}
+	        }
+			
+			br.close();
+
+			bSalida = ((contador-registros-1) == 0);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
         return bSalida;
 	}
 	
-	public static boolean splitter(String sNombre) throws IOException {
+	public static boolean splitter(String sNombre) throws IOException 
+	{
 
 		String sMethod = "splitter";
 
 		boolean bSalida = false;
 		
 		//ArrayList<String> lista;
-		
+
 
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
 				"|"+sNombre+"|"+sNombre.substring(0, 3)+"|");
 		
-		if (sNombre.substring(0, 3).equals(ValoresDefecto.DEF_COAPII)) 
-		{
-			String sTipo = sNombre.substring(3, 5).toUpperCase();
-
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-					"Redirigiendo lectura...");
-
-			System.out.println("Tipo:|" + sTipo + "|");
-
-			ValoresDefecto.TIPOSFICHERO COSPII = ValoresDefecto.TIPOSFICHERO.valueOf(sTipo);
-
-			switch (COSPII) {
-			case AC:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Activos");
-				bSalida = leerActivos(sNombre);
-				//lista = new ArrayList<String>();
-				break;
-			case RG:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Rechazados");
-				
-				bSalida = leerGastosRevisados(sNombre);
-				//lista = new ArrayList<String>(leerGastosValidados(sNombre));
-				break;
-			case PA:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Autorizados");
-				bSalida = leerGastosRevisados(sNombre);
-				//lista = new ArrayList<String>(leerGastosValidados(sNombre));
-				break;
-			case GA:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Gastos");
-				
-				com.provisiones.misc.Utils
-				.debugTrace(true, sClassName, sMethod,
-						"El archivo de gastos debe de ser primero supervisado por la entidad.");
-				bSalida = leerGastosRevisados(sNombre);
-				//lista = new ArrayList<String>(leerGastosValidados(sNombre));
-				break;
-			case PP:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Cierres");
-				com.provisiones.misc.Utils
-				.debugTrace(true, sClassName, sMethod,
-						"El archivo de cierres debe comprobado por la entidad.");
-				//bSalida = leerCierres(sNombre);
-				//lista = new ArrayList<String>(leerCierres(sNombre));
-				break;
-			case E1:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Comunidades");
-				bSalida = leerComunidades(sNombre);
-				//lista = new ArrayList<String>();
-				break;
-			case E2:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Cuotas");
-				bSalida = leerCuotas(sNombre);
-				//lista = new ArrayList<String>();
-				break;
-			case E3:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Referencias Catastrales");
-				bSalida = leerReferencias(sNombre);
-				//lista = new ArrayList<String>();
-				break;
-			case E4:
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-						"Impuestos");
-				bSalida = leerImpuestos(sNombre);
-				//lista = new ArrayList<String>();
-				break;
-			default:
-				com.provisiones.misc.Utils
-						.debugTrace(true, sClassName, sMethod,
-								"El archivo suministrado no coincide con el nombrado establecido:");
-				com.provisiones.misc.Utils
-						.debugTrace(true, sClassName, sMethod,
-								"168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
-				//lista = new ArrayList<String>();
-				break;
-			}
-
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
-					"Operativa completa.");
-
-		} 
-		else
+		
+		
+		if (sNombre.length() < 9)
 		{
 			com.provisiones.misc.Utils
+			.debugTrace(true, sClassName, sMethod,
+					"El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
+		}
+		else 
+		{
+			String sNombreOriginal = sNombre.substring(sNombre.length()-9);
+			
+			if (sNombreOriginal.toUpperCase().matches("("+ValoresDefecto.DEF_COAPII+")(AC|RG|PA|GA|PP|E1|E2|E3|E4)(\\.TXT)$"))
+			{
+				
+				
+				String sTipo = sNombreOriginal.substring(3, 5).toUpperCase();
+
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+						"Redirigiendo lectura...");
+
+				System.out.println("Tipo:|" + sTipo + "|");
+
+				ValoresDefecto.TIPOSFICHERO COSPII = ValoresDefecto.TIPOSFICHERO.valueOf(sTipo);
+
+				switch (COSPII) {
+				case AC:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Activos");
+					bSalida = leerActivos(sNombre);
+					//lista = new ArrayList<String>();
+					break;
+				case RG:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Rechazados");
+					
+					bSalida = leerGastosRevisados(sNombre);
+					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
+					break;
+				case PA:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Autorizados");
+					bSalida = leerGastosRevisados(sNombre);
+					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
+					break;
+				case GA:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Gastos");
+					
+					com.provisiones.misc.Utils
 					.debugTrace(true, sClassName, sMethod,
-							"El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
-			//lista = new ArrayList<String>();
+							"El archivo de gastos debe de ser primero supervisado por la entidad.");
+					bSalida = leerGastosRevisados(sNombre);
+					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
+					break;
+				case PP:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Cierres");
+					com.provisiones.misc.Utils
+					.debugTrace(true, sClassName, sMethod,
+							"El archivo de cierres debe comprobado por la entidad.");
+					//bSalida = leerCierres(sNombre);
+					//lista = new ArrayList<String>(leerCierres(sNombre));
+					break;
+				case E1:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Comunidades");
+					bSalida = leerComunidadesRevisadas(sNombre);
+					//lista = new ArrayList<String>();
+					break;
+				case E2:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Cuotas");
+					bSalida = leerCuotasRevisadas(sNombre);
+					//lista = new ArrayList<String>();
+					break;
+				case E3:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Referencias Catastrales");
+					bSalida = leerReferenciasRevisadas(sNombre);
+					//lista = new ArrayList<String>();
+					break;
+				case E4:
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+							"Impuestos");
+					bSalida = leerImpuestosRevisadas(sNombre);
+					//lista = new ArrayList<String>();
+					break;
+				default:
+					com.provisiones.misc.Utils
+							.debugTrace(true, sClassName, sMethod,
+									"El archivo suministrado no coincide con el nombrado establecido:");
+					com.provisiones.misc.Utils
+							.debugTrace(true, sClassName, sMethod,
+									"168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
+					//lista = new ArrayList<String>();
+					break;
+				}
+
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+						"Operativa completa.");
+
+			} 
+			else
+			{
+				com.provisiones.misc.Utils
+						.debugTrace(true, sClassName, sMethod,
+								"El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
+				//lista = new ArrayList<String>();
+			}
+			
+
 		}
 		return bSalida;
 	}

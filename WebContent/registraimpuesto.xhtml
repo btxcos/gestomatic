@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -5,6 +6,8 @@
 	xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html">
 	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
 	</h:head>
 	<h:body>
 		<h:form id="form" onkeypress="return event.keyCode != 13">
@@ -100,51 +103,10 @@
 												<h:panelGrid columns="3" cellpadding="5">
 
 													<h:outputText for="FEPRRE" value="FEPRRE: " />
-													<p:inputMask id="FEPRRE" validatorMessage="La fecha del primer pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FEPRRE" validatorMessage="La fecha de presentacion de recurso debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:message for="FEPRRE" display="icon"/>
-
-												</h:panelGrid>
-										  </p:panel>
-
-
-										</h:panelGrid>
-									</p:fieldset>
-									
-									<p:fieldset legend="Resolucion">
-										<h:panelGrid columns="3" cellpadding="5">
-
-											<h:outputText for="FERERE" value="FERERE: " />
-											<p:inputMask id="FERERE" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFERERE}" mask="99/99/9999" size="10" >
-												<f:validateLength minimum="10"/>
-											</p:inputMask>
-											<p:message for="FERERE" display="icon"/>
-
-											<h:outputText for="BIRESO" value="BIRESO: " />
-											<p:selectOneMenu id="BIRESO" value="#{GestorImpuestosRecursos.sBIRESO}">
-												<f:selectItem itemLabel="Elija..." itemValue="" />
-												<f:selectItems value="#{GestorDatosGenerales.tiposbiresoHM}" />
-												<f:validateLength minimum="1" /> 
-											</p:selectOneMenu>
-											<p:message for="BIRESO" display="icon"/>
-
-											<h:outputText for="COTEXA" value="COTEXA: " />
-											<p:inputText id="COTEXA" value="#{GestorImpuestosRecursos.sCOTEXA}" size="10" maxlength="10" disabled="true">
-											</p:inputText>
-
-										</h:panelGrid>
-									</p:fieldset>
-
-
-									<p:fieldset legend="Devolucion">
-										<h:panelGrid columns="3" cellpadding="5">
-
-													<h:outputText for="FEDEIN" value="FEDEIN: " />
-													<p:inputMask id="FEDEIN" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFEDEIN}" mask="99/99/9999" size="10" >
-														<f:validateLength minimum="10"/>
-													</p:inputMask>
-													<p:message for="FEDEIN" display="icon"/>
 
 													<h:outputText for="BISODE" value="BISODE: " />
 													<p:selectOneMenu id="BISODE" value="#{GestorImpuestosRecursos.sBISODE}">
@@ -153,11 +115,11 @@
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
 													<p:message for="BISODE" display="icon"/>
-
+														
+												</h:panelGrid>
+										  </p:panel>
 										</h:panelGrid>
 									</p:fieldset>
-
-
 
 									<p:fieldset legend="Observaciones">
 										<h:panelGrid columns="2" cellpadding="5">

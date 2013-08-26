@@ -224,7 +224,7 @@ public class Longitudes
 	public static final int FILLER_AUTORIZADAS_L = 118;
 	public static final int FILLER_GASTOS_L = 118;
 	public static final int FILLER_CIERRE_L = 18;
-	public static final int FILLER_COMUNIDADES_L = 112;//118
+	public static final int FILLER_COMUNIDADES_L = 118;//118
 	public static final int FILLER_CUOTAS_L = 116;//114
 	public static final int FILLER_REFERENCIAS_L = 126;//124
 	public static final int FILLER_IMPUESTOS_L = 111;//109

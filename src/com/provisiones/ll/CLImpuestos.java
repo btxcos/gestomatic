@@ -448,7 +448,7 @@ public class CLImpuestos
 			if (movimiento.getCOACCI().equals("A"))
 			{
 				
-				if (movimiento.getFEPRRE().equals(""))
+				if (movimiento.getFEPRRE().equals("0"))
 				{
 					movimiento_revisado.setBITC18("#");
 				}
@@ -457,37 +457,14 @@ public class CLImpuestos
 					movimiento_revisado.setBITC18("S");
 					movimiento_revisado.setFEPRRE(movimiento.getFEPRRE());
 				}
-
-				if (movimiento.getFERERE().equals("0"))
-				{
-					movimiento_revisado.setBITC19("#");
-				}
-				else
-				{
-					movimiento_revisado.setBITC19("S");
-					movimiento_revisado.setFERERE(movimiento.getFERERE());
-				}
-
-
-				if (movimiento.getFEDEIN().equals("0"))
-				{
-					movimiento_revisado.setBITC20("#");
-				}
-				else
-				{
-					movimiento_revisado.setBITC20("S");
-					movimiento_revisado.setFEDEIN(movimiento.getFEDEIN());
-				}
 				
-				if (movimiento.getFEDEIN().equals("0"))
-				{
-					movimiento_revisado.setBITC20("#");
-				}
-				else
-				{
-					movimiento_revisado.setBITC20("S");
-					movimiento_revisado.setFEDEIN(movimiento.getFEDEIN());
-				}				
+				movimiento_revisado.setBITC19("#");
+				movimiento_revisado.setFERERE(movimiento.getFERERE());
+				
+				
+				movimiento_revisado.setBITC20("#");
+				movimiento_revisado.setFEDEIN(movimiento.getFEDEIN());
+				
 
 				if (movimiento.getBISODE().equals(""))
 				{
@@ -498,16 +475,9 @@ public class CLImpuestos
 					movimiento_revisado.setBITC21("S");
 					movimiento_revisado.setBISODE(movimiento.getBISODE());
 				}
-
-				if (movimiento.getBIRESO().equals(""))
-				{
-					movimiento_revisado.setBITC22("#");
-				}
-				else
-				{
-					movimiento_revisado.setBITC22("S");
-					movimiento_revisado.setBIRESO(movimiento.getBIRESO());
-				}
+				
+				movimiento_revisado.setBITC22("#");
+				movimiento_revisado.setBIRESO(movimiento.getBIRESO());
 				
 				if (movimiento.getOBTEXC().equals(""))
 				{

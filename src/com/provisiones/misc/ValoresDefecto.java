@@ -1,8 +1,18 @@
 package com.provisiones.misc;
 
+import java.io.File;
+
 public class ValoresDefecto 
 {
+	
+	public static final int iNumChar = 26;
+	public static final String DEF_PATH = "provisiones"+File.separator;
 	public static final String DEF_COAPII = "168";
+	public static final String DEF_NUCLII = "2306894218400";
+	public static final String DEF_IDPROV = "68942184";
+	public static final String DEF_COREAE = "04";
+	public static final String DEF_COUNMO = "281";
+	
 	
 	public static final String DEF_COSPII_GA = "GA";
 	public static final String DEF_COSPII_E1 = "E1";
@@ -13,16 +23,16 @@ public class ValoresDefecto
 	public static final String DEF_COSPII_RG = "RG";
 	public static final String DEF_COSPII_AC = "AC";
 	
-	public static final String DEF_NUCLII = "2306894218400";
-	
+		
 	public static final String DEF_E1_CODTRN = "EE41";
 	public static final String DEF_E2_CODTRN = "EE42";
 	public static final String DEF_E3_CODTRN = "EE43";
 	public static final String DEF_E4_CODTRN = "EE44";
 	
-	public static final String DEF_IDPROV = "68942184";
-	public static final String DEF_COREAE = "04";
-	
+	public static final String DEF_FECHA = "0";
+	public static final String DEF_CODIGO_ALFA = "#";
+	public static final String DEF_CODIGO_NUM = "0";
+		
 	public static final String DEF_COENGP = "0";
 	public static final String DEF_COTEXA = "0";
 
@@ -41,14 +51,10 @@ public class ValoresDefecto
 	public static final String DEF_GASTO_ESTIMADO = "1";
 	public static final String DEF_GASTO_CONOCIDO = "2";
 	
-	
-	
 	public static final String DEF_COTERR = "0";
 	public static final String DEF_COTDOR = "0";
 	public static final String DEF_OBDEER = "                                                                                ";
 
-	public static final String DEF_COUNMO = "281";
-	
 	public static final String DEF_COENCX = "0";
 	public static final String DEF_COOFCX = "0";
 	public static final String DEF_NUCONE = "0";
@@ -78,5 +84,13 @@ public class ValoresDefecto
 	{
 		G, M, N, D, A
 	}
+	
+
+	public static final String DEF_FIN_FICHERO = new Character((char) iNumChar).toString();
+
+	public static final String DEF_PATH_BACKUP_RECIBIDOS = DEF_PATH+"recibidos"+File.separator;
+	public static final String DEF_PATH_BACKUP_GENERADOS = DEF_PATH+"generados"+File.separator;
+	public static final String DEF_PATH_LOGS = DEF_PATH+"logs"+File.separator;
+	
 	
 }

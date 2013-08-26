@@ -7,6 +7,7 @@ import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.listas.QMListaComunidades;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
+import com.provisiones.dal.qm.listas.errores.QMListaErroresComunidades;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
@@ -28,97 +29,75 @@ public class CLComunidades
 		
 		MovimientoComunidad comunidad = Parser.leerComunidad(linea);
 		
-		String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
-		String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
-				
+			
 		String sValidado = "";
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "comunidad.getCOTDOR()|"+comunidad.getCOTDOR()+"|");
 		
 		if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
 		{
 			sValidado = "V";
-			sBKOBDEER = comunidad.getOBDEER();
+
 		}
 		else
 		{
 			sValidado = "X";
-			sBKCOTDOR = comunidad.getCOTDOR();
-			sBKOBDEER = comunidad.getOBDEER();
-			comunidad.setCOTDOR(ValoresDefecto.DEF_COTDOR);
-
-		}
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sValidado|"+sValidado+"|");
-		
-		//comunidad.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
-		
-		String sCodMovimiento = QMMovimientosComunidades.getMovimientoComunidadID(comunidad);
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCodMovimiento|"+sCodMovimiento+"|");
-		
-		bSalida = !(sCodMovimiento.equals(""));
-		
-		if (bSalida)
-		{
-			//String sAccion = comunidad.getCOACCI();
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sValidado|"+sValidado+"|");
 			
-			//Accion	Estado	Validado
-			/*
+			//comunidad.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
 			
-			if (sAccion.equals("A") && sValidado.equals("X"))
+			String sCodMovimiento = QMMovimientosComunidades.getMovimientoComunidadID(comunidad);
+			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCodMovimiento|"+sCodMovimiento+"|");
+			
+			bSalida = !(sCodMovimiento.equals(""));
+			
+			if (bSalida)
 			{
+
+				if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
+				{
+									
+					comunidad.pintaMovimientoComunidad();
+									
+					
+					bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
+					
+					if (QMListaComunidadesActivos.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento))
+					{
+						QMListaComunidadesActivos.setValidado(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento, sValidado);
+						if (QMListaComunidades.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), sCodMovimiento))
+						{
+							QMListaComunidades.setValidado(comunidad.getCOCLDO(),comunidad.getNUDCOM(), sCodMovimiento, sValidado);
+						}
+						else
+							System.out.println("No Existe relacion.");
+						
+					}
+					else
+						System.out.println("No Existe relacion.");
+
+				}
+				else
+				{
+					String sMsg = "Ocurrio un error al administrar el error en la comunidad";
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, sMsg);
+					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
+					System.out.println("No Information Found");				
+				}
 				
 			}
-			if (sAccion.equals("A") && sValidado.equals("V"))
+			else 
 			{
-				
-			}
-			if (sAccion.equals("A") && sValidado.equals("X"))
-			{
-				
-			}*/
-			
-			comunidad.setCOTDOR(sBKCOTDOR);
-			comunidad.setOBDEER(sBKOBDEER);
-			
-			comunidad.setBITC01("S");
-			
-			comunidad.pintaMovimientoComunidad();
-			
-			
-			
-			bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
-			
-			if (QMListaComunidadesActivos.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento))
-				QMListaComunidadesActivos.setValidado(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento, sValidado);
-			else
-				System.out.println("No Existe relacion.");
-		}
-		else 
-		{
 
-			
-			
-			/*Comunidad NuevaComunidad = new Comunidad(comunidad.getCOCLDO(),
-					comunidad.getNUDCOM(), comunidad.getNOMCOC(),
-					comunidad.getNODCCO(), comunidad.getNOMPRC(),
-					comunidad.getNUTPRC(), comunidad.getNOMADC(),
-					comunidad.getNUTADC(), comunidad.getNODCAD(),
-					comunidad.getNUCCEN(), comunidad.getNUCCOF(),
-					comunidad.getNUCCDI(), comunidad.getNUCCNT(),
-					comunidad.getOBTEXC());
-			
-			QMComunidades.addComunidad(NuevaComunidad);*/
-			
-			//comunidad.pintaMovimientoComunidad();
-			
-			//comunidad.setBITC01("#");
-			
-			//QMMovimientosComunidades.addMovimientoComunidad(comunidad);
-			
-			//QMListaComunidades.
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
-			System.out.println("No Information Found");
+
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
+				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
+				System.out.println("No Information Found");
+			}
 		}
+		
+
 		
 		return bSalida;
 	}
@@ -398,7 +377,7 @@ public class CLComunidades
 					movimiento_revisado.setCOACES(movimiento.getCOACES());
 				}
 			}
-			if (movimiento.getCOACCI().equals("M"))
+			else if (movimiento.getCOACCI().equals("M"))
 			{
 				boolean bCambio = false;
 				

@@ -19,19 +19,6 @@ public class GestorCargas implements Serializable
 	static String sClassName = GestorCargas.class.getName();
 	static boolean bEnable = true;
 
-	String sCampo = "un dato";
-	
-	
-	  
-    public String getsCampo() {
-		return sCampo;
-	}
-
-
-	public void setsCampo(String sCampo) {
-		this.sCampo = sCampo;
-	}
-
 
 	public void handleFileUpload(FileUploadEvent event)throws IOException 
     {
@@ -41,11 +28,8 @@ public class GestorCargas implements Serializable
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"handleFileUpload >>>");
 		
-		FileManager.guardarFichero(event);
-		FileManager.splitter(event.getFile().getFileName());
+		FileManager.splitter(FileManager.guardarFichero(event));
 
-		setsCampo("El archivo " + event.getFile().getFileName() + " ha subido correctamente.");
-		
 		FacesMessage msg = new FacesMessage("Correcto!", event.getFile().getFileName() + " ha subido correctamente.");
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);

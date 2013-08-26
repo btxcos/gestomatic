@@ -45,46 +45,44 @@ public class Utils
 		}
 	}
 	
-	@SuppressWarnings("all") 
-	//Problemas con los números de meses Calendar.MONTH [0-11]
-	//Si algun día cambian el rango de [0-11] por [1-12] no habrá problemas con las fechas. 
 	public static String fechaDeHoy (boolean bFormato)
 	{
-		Calendar fecha = Calendar.getInstance();
-		
+
+
+		Date fechaHoy = new Date();
+	
 		String sHoy = "";
-		
-		String sDia = fecha.get(Calendar.DAY_OF_MONTH)+"";
-		
-		if (sDia.length() <2)
-			sDia = "0"+sDia;
-		
-		String sMes = "";
-		
-		if (Calendar.DECEMBER == 11)
-		{
-			sMes = (fecha.get(Calendar.MONTH)+1)+"";
-		}
-		else
-		{
-			sMes = fecha.get(Calendar.MONTH)+"";
-		}
-		
-		if (sMes.length() <2)
-			sMes = "0"+sMes;
 		
 		if (bFormato)
 		{
-			sHoy = sDia+"/"+sMes+"/"+fecha.get(Calendar.YEAR);
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			sHoy = format.format(fechaHoy);
+			
 		}
 		else
 		{
-			sHoy = fecha.get(Calendar.YEAR)+sMes+sDia;
+			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+			sHoy = format.format(fechaHoy);
 		}
+		
 		
 		System.out.println("["+sClassName+".fechaDeHoy] |"+sHoy+"|");
 		
 		return sHoy;
+	}
+	
+	public static String timeStamp()
+	{
+		Date fechaHoy = new Date();
+	
+		String sAhora = "";
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		sAhora = format.format(fechaHoy);
+		
+		System.out.println("["+sClassName+".fechaDeHoy] |"+sAhora+"|");
+		
+		return sAhora;
 	}
 
 	public static boolean closeResultSet ( ResultSet rs, String sClassName, String sMethod)
@@ -355,6 +353,225 @@ public class Utils
 		
 		return sFechaFormateada;
 	}
+	
+    public static boolean compruebaCC(String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT) {
+
+    	String sDC = "";
+        int iTotal = 0;
+        int iProducto = 0;
+        String sCifra1 = "";
+        String sCifra2 = "";
+        
+        /*Primer dígito.*/
+        for (int i = 0; i < 4; i++) 
+        {
+            if (i==0)
+            {
+                iProducto = Integer.parseInt(sNUCCEN.substring(i, i + 1))*4;
+            }
+            else if (i==1)
+            {
+                iProducto = Integer.parseInt(sNUCCEN.substring(i, i + 1))*8;
+            }
+            else if (i==2)
+            {
+                iProducto = Integer.parseInt(sNUCCEN.substring(i, i + 1))*5;
+            }
+            else 
+            {
+                iProducto = Integer.parseInt(sNUCCEN.substring(i, i + 1))*10;
+            }
+            iTotal = iTotal + iProducto;
+        }
+        for (int j = 0; j < 4; j++) 
+        {
+            if (j==0)
+            {
+                iProducto = Integer.parseInt(sNUCCOF.substring(j, j + 1))*9;
+            }
+            else if (j==1)
+            {
+                iProducto = Integer.parseInt(sNUCCOF.substring(j, j + 1))*7;
+            }
+            else if (j==2)
+            {
+                iProducto = Integer.parseInt(sNUCCOF.substring(j, j + 1))*3;
+            }
+            else 
+            {
+                iProducto = Integer.parseInt(sNUCCOF.substring(j, j + 1))*6;
+            }
+            iTotal = iTotal + iProducto;
+        }
+ 
+        iProducto = 11 - iTotal % 11;
+        
+        if (iProducto == 10) 
+        {
+            sCifra1 = "1";
+        } 
+        else if (iProducto == 11) 
+        {
+            sCifra1 = "0";
+        } 
+        else 
+        {
+            sCifra1 = String.valueOf(iProducto);
+        }
+        
+        iTotal=0;
+ 
+        /*Segundo dígito.*/
+        for (int k=0; k<10; k++)
+        {
+            if (k==0)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*1;
+            }
+            else if (k==1)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*2;
+            }
+            else if (k==2)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*4;
+            }
+            else if (k==3)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*8;
+            }
+            else if (k==4)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*5;
+            }
+            else if (k==5)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*10;
+            }
+            else if (k==6)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*9;
+            }
+            else if (k==7)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*7;
+            }
+            else if (k==8)
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*3;
+            }
+            else 
+            {
+                iProducto = Integer.parseInt(sNUCCNT.substring(k, k + 1))*6;
+            }
+            iTotal = iTotal + iProducto;
+        }
+        
+        iProducto = 11 - iTotal % 11;
+        
+        if (iProducto == 10) 
+        {
+            sCifra2 = "1";
+        } 
+        else if (iProducto == 11) 
+        {
+            sCifra2 = "0";
+        } 
+        else 
+        {
+            sCifra2 = String.valueOf(iProducto);
+        }
+
+        sDC=sCifra1+sCifra2;
+        
+        return sDC.equals(sNUCCDI);
+    }
+    
+    public static boolean compruebaCIF(String sNUDCOM) 
+    {
+
+        boolean bResultado = false;
+
+        try 
+        {
+            String sCIF = sNUDCOM.trim();
+
+            int iSuma = 0;
+
+            int iCodigoControl = 0;
+ 
+            String sLetrasCIF = "ABCDEFGHJKLMNPQRSUVW";
+            
+            String sPrimeraLetra = sCIF.substring(0, 1);
+            
+            
+            
+            if (!(sCIF.length() == 10))
+            {
+            	bResultado =  false;
+            }
+            if (!sCIF.matches("[A-Z][0-9]{9}$"))
+            {
+            	bResultado =  false;
+            }
+            if (sLetrasCIF.indexOf(sPrimeraLetra) < 0)
+            {
+            	bResultado =  false;
+            }
+            else
+            {
+                iSuma = iSuma + Integer.parseInt(sCIF.substring(2, 3)) + Integer.parseInt(sCIF.substring(4, 5))
+                        + Integer.parseInt(sCIF.substring(6, 7));
+
+                for (int i = 1; i < 8; i = i + 2) 
+                {
+
+                    int iValor = (Integer.parseInt(sCIF.substring(i, i + 1)) * 2);
+
+                    if (iValor < 10)
+                        iSuma = iSuma + iValor;
+                    else 
+                    {
+                        iSuma = iSuma + (Integer.parseInt(String.valueOf(iValor).substring(0, 1)))
+                                + (Integer.parseInt(String.valueOf(iValor).substring(1, 2)));
+                    }
+                }
+
+                iCodigoControl = ((10 - (iSuma % 10)) % 10);
+
+                String sLetraSociedad = "KLMNPQRSW";
+                
+                String sUltimaLetra = sCIF.substring(8, 9);
+                
+                if (sLetraSociedad.indexOf(sPrimeraLetra) >= 0) 
+                {
+                    byte[] ascii = new byte[1];
+
+                    if (iCodigoControl == 0)
+                        iCodigoControl = 10;
+                    iCodigoControl = iCodigoControl + 64;
+                    ascii[0] = (Integer.valueOf(iCodigoControl)).byteValue();
+
+
+                    
+                    bResultado = (sUltimaLetra.equals(new String(ascii)));
+                } 
+                else 
+                {
+                	String sNumsCIF = "0123456789";
+                    bResultado = (iCodigoControl == sNumsCIF.indexOf(sUltimaLetra));
+                }
+            }
+
+
+        } 
+        catch (Exception e) 
+        {
+            bResultado = false;
+        }
+        return bResultado;
+    }
+
 	
 	public static String recuperaImporte(boolean bNegativo, String sImporte)
 	{
