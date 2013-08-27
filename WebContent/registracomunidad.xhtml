@@ -10,7 +10,7 @@
 		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
 	</h:head>
 	<h:body>
-		<h:form id="form">
+		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="33%" header="Registrar Comunidad">
@@ -30,16 +30,20 @@
 									</p:panel>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorComunidades.limpiarPlantilla}" />
+											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorComunidades.limpiarPlantilla}"/>
+
 											<p:commandButton value="Alta" update="panel, popup, msgs" actionListener="#{GestorComunidades.realizaAlta}" />
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
-											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
-											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+											
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
+											<h:panelGrid columns="2" cellpadding="5">
 												<p:messages id="msgs"/>
+												<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											</h:panelGrid>
 											</p:notificationBar>  
 											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
 											<p:growl id="popup" />
@@ -59,92 +63,80 @@
 						<h:panelGrid columns="1" cellpadding="5">
 
 									<p:fieldset legend="Comunidad de proprietarios">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 											
 											<h:outputText for="COCLDO" value="Documento: " />
-											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}" required="true" requiredMessage="Falta el tipo de documento identificativo de la comunidad.">
+											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}">
 												<f:selectItem itemLabel="Elija..." itemValue="" />
 												<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
-												<f:validateLength minimum="1" /> 
 											</p:selectOneMenu>
-											<p:message for="COCLDO" display="icon"/>
-											
+
 											<h:outputText for="NUDCOM" value="Numero: " />
-											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" size="10" maxlength="10" required="true" requiredMessage="Falta el numero identificativo de la comunidad.">
+											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" size="10" maxlength="10">
 											</p:inputText>
-											<p:message for="NUDCOM" display="icon"/>
+
 
 											<h:outputText for="NOMCOC" value="Nombre comunidad: " />
-											<p:inputText id="NOMCOC" value="#{GestorComunidades.sNOMCOC}" size="60" maxlength="60" required="true" requiredMessage="Falta el nombre de la comunidad.">
+											<p:inputText id="NOMCOC" value="#{GestorComunidades.sNOMCOC}" size="60" maxlength="60">
 											</p:inputText>
-											<p:message for="NOMCOC" display="icon"/>
+
 
 											<h:outputText for="NODCCO"  value="Correo electronico: " />
-											<p:inputText id="NODCCO" value="#{GestorComunidades.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta.">
-												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+											<p:inputText id="NODCCO" value="#{GestorComunidades.sNODCCO}" size="60"  maxlength="60">
 											</p:inputText>
-											<p:message for="NODCCO" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Presidente">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="NOMPRC" value="NOMPRC: " />
 											<p:inputText id="NOMPRC" value="#{GestorComunidades.sNOMPRC}" size="55" maxlength="55">
 											</p:inputText>
-											<p:message for="NOMPRC" display="icon"/>
 
 											<h:outputText for="NUTPRC" value="NUTPRC: " />
 											<p:inputText id="NUTPRC" value="#{GestorComunidades.sNUTPRC}" size="14" maxlength="14">
 											</p:inputText>
-											<p:message for="NUTPRC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Administrador">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="NOMADC" value="NOMADC: " />
 											<p:inputText id="NOMADC" value="#{GestorComunidades.sNOMADC}" size="55" maxlength="55">
 											</p:inputText>
-											<p:message for="NOMADC" display="icon"/>
 
 											<h:outputText for="NUTADC" value="NUTADC: " />
 											<p:inputText id="NUTADC" value="#{GestorComunidades.sNUTADC}" size="14" maxlength="14">
 											</p:inputText>
-											<p:message for="NUTADC" display="icon"/>
 
 											<h:outputText for="NODCAD" value="NODCAD: " />
-											<p:inputText id="NODCAD" value="#{GestorComunidades.sNODCAD}" size="60" maxlength="60" validatorMessage="La direccion de correo del administrador es incorrecta." >
-												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+											<p:inputText id="NODCAD" value="#{GestorComunidades.sNODCAD}" size="60" maxlength="60">
 											</p:inputText>
-											<p:message for="NODCAD" display="icon"/>
-
 
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Cuenta corriente de la Comunidad">
-										<h:panelGrid columns="6" cellpadding="5">
+										<h:panelGrid columns="5" cellpadding="5">
 
 											<h:outputText for="NUCCNT" value="NUCC: " />
 
-											<p:inputMask id="NUCCEN" validatorMessage="El digito de entidad debe tener 4 digitos" value="#{GestorComunidades.sNUCCEN}" mask="9999" size="4" required="true" requiredMessage="Falta el codigo de entidad de la cuenta de la comunidad.">
+											<p:inputMask id="NUCCEN" value="#{GestorComunidades.sNUCCEN}" mask="9999" size="4">
 												<f:validateLength minimum="4"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCOF" validatorMessage="El numero de oficina debe tener 4 digitos" value="#{GestorComunidades.sNUCCOF}" mask="9999" size="4" required="true" requiredMessage="Falta el codigo de oficina de la cuenta de la comunidad.">
+											<p:inputMask id="NUCCOF" value="#{GestorComunidades.sNUCCOF}" mask="9999" size="4">
 												<f:validateLength minimum="4"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCDI" validatorMessage="El digito de control debe tener 2 digitos" value="#{GestorComunidades.sNUCCDI}" mask="99" size="2" required="true" requiredMessage="Falta el digito de control de la cuenta de la comunidad.">
+											<p:inputMask id="NUCCDI" value="#{GestorComunidades.sNUCCDI}" mask="99" size="2">
 												<f:validateLength minimum="2"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCNT" validatorMessage="El numero de cuenta debe tener 10 digitos" value="#{GestorComunidades.sNUCCNT}" mask="9999999999" size="10" required="true" requiredMessage="Falta el numero de cuenta de la comunidad.">
+											<p:inputMask id="NUCCNT" value="#{GestorComunidades.sNUCCNT}" mask="9999999999" size="10">
 												<f:validateLength minimum="10"/>
 											</p:inputMask>
-											<p:message for="NUCCNT" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -156,7 +148,6 @@
 
 											<p:inputText id="OBTEXC" value="#{GestorComunidades.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
-											<p:message for="OBTEXC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -168,7 +159,6 @@
 													<h:outputText for="COACES" value="Codigo de activo: " />
 														<p:inputText id="COACES" value="#{GestorComunidades.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
-													<p:message for="COACES" display="icon"/>
 													<p:commandButton value="Comprobar" update="msgs, popup, COACES, activos" actionListener="#{GestorComunidades.comprobarActivo}"/>	
 												</h:panelGrid>
 											</p:panel>
@@ -180,9 +170,8 @@
 						</h:panelGrid>
 					</p:panel>
 					<p:dialog header="Activos sin Comunidad:" widgetVar="dlgTabla" resizable="false">  
-    				
 							<p:contextMenu for="activos">  
-								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorComunidades.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorComunidades.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 							</p:contextMenu>  
 									
 							<p:dataTable id="activos" var="activo" value="#{GestorComunidades.tablaactivos}" rowKey="#{activo.COACES}"  
@@ -266,18 +255,8 @@
 												<h:panelGrid columns="3" cellpadding="5">
 													
 													<p:commandButton value="Buscar" update="popup, form:activos, form:popup, form:msgs" actionListener="#{GestorComunidades.buscaActivos}" oncomplete="dlgTabla.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorComunidades.limpiarPlantillaActivo}" />	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorComunidades.limpiarPlantillaActivo}"/>	
 
-														<p:ajaxStatus  id="pensandoActivo">  
-															<f:facet name="start">  
-																<h:graphicImage value="/recursos/loadingBar.gif" />  
-															</f:facet>  
-
-															<f:facet name="complete">  
-																<h:outputText value="" />  
-															</f:facet>  
-
-														</p:ajaxStatus> 
 												</h:panelGrid>
 											</p:panel>
 

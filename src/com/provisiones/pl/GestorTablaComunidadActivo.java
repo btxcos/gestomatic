@@ -80,43 +80,39 @@ public class GestorTablaComunidadActivo implements Serializable
 		
 		FacesMessage msg;
 		
-		/*if (CLComunidades.consultaEstadoComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()))
-		{*/
+		String sMsg = "";
 		
-			Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
-			this.sCOCLDO = comunidad.getCOCLDO();
-			this.sNUDCOM = comunidad.getNUDCOM();
-			this.sNOMCOC = comunidad.getNOMCOC();
-			this.sNODCCO = comunidad.getNODCCO();
-		
-		
-		
-			if (comunidad.getNUDCOM().equals(""))
-			{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.",null);
-			
-				Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
-			}
-			else
-			{
-			
-				this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
-			
-				Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
-			
-				msg = new FacesMessage("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.",null);
-			
-				Utils.debugTrace(true, sClassName, sMethod, "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");			
-			}
-		/*}
+		this.sCOCLDO = comunidad.getCOCLDO();
+		this.sNUDCOM = comunidad.getNUDCOM();
+		this.sNOMCOC = comunidad.getNOMCOC();
+		this.sNODCCO = comunidad.getNODCCO();
+	
+	
+	
+		if (comunidad.getNUDCOM().equals(""))
+		{
+			sMsg = "ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos."; 
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+		}
 		else
 		{
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, La comunidad '"+sNUDCOM.toUpperCase()+"' fue dada de baja en el sistema.",null);
-			
-			Utils.debugTrace(true, sClassName, sMethod, "Error: La comunidad '"+sNUDCOM.toUpperCase()+"' fue dada de baja en el sistema.");
-		}*/	
 		
+			this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
+		
+			sMsg = "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg,null);
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			sMsg = "Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(sMsg,null);
+		}
+
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				
 	}
@@ -210,7 +206,18 @@ public class GestorTablaComunidadActivo implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		case -5: //Error 005 - NO TIENE NOMBRE LA COMUNIDAD
+			sMsg = "ERROR:005 - El nombre de la comunidad es obligatorio. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
+		case -6: //Error 006 - FALTAN DATOS DE LA CUENTA BANCARIA
+			sMsg = "ERROR:006 - No se han informado los datos de la cuenta corriente. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
 		case -8: //Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
 			sMsg = "ERROR:008 - El activo ya esta asociado a otra comunidad. Por favor, revise los datos.";
@@ -261,6 +268,33 @@ public class GestorTablaComunidadActivo implements Serializable
 
 		case -30: //Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
 			sMsg = "ERROR:030 - No se ha elegido un tipo de documento. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -31: //Error 031 - NUMERO DE DOCUMENTO CIF ERRONEO
+			sMsg = "ERROR:031 - El numero de documento es incorrecto. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+
+		case -701: //Error 701 - datos de cuenta incorrectos
+			sMsg = "ERROR:701 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+
+		case -702: //Error 702 - direccion de correo de comunidad incorrecta
+			sMsg = "ERROR:702 - La direccion de correo de la comunidad es incorrecto. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+
+		case -703: //Error 703 - direccion de correo del administrador incorrecta
+			sMsg = "ERROR:703 - La direccion de correo del adminsitrador es incorrecto. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
@@ -371,21 +405,41 @@ public class GestorTablaComunidadActivo implements Serializable
 
     	//this.sCOACESBuscado = activoseleccionado.getCOACES();
     	
-    	this.sCOACES  = activoseleccionadoalta.getCOACES();
     	
-    	//buscar activo y darlo de alta en la comunidad
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    	
-    	
+    	//comprobar el activo
+    	String sMsg = "";
+		
+		int iSalida = CLComunidades.comprobarActivo(sCOACES.toUpperCase());
 
-    	msg = nuevoMovimiento("X");
+		switch (iSalida) 
+		{
+			case 0: //Sin errores
+				msg = nuevoMovimiento("X");
+				Utils.debugTrace(true, sClassName, sMethod, "Activo dado de alta:|"+sCOACES+"|");
+		    	this.sCOACES  = "";
+				break;
 
-    	
-    	this.sCOACES  = "";
-    	
+			case -1: //error - ya vinculado
+				sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' ya esta vinculado a otra comunidada. Por favor, revise los datos."; 
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+				break;
+
+			case -2: //error - no existe
+				sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+				break;
+
+			default: //error generico
+				sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.";
+				Utils.debugTrace(true, sClassName, sMethod, sMsg);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+				break;
+		}
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+
 		
 		//return "listacomunidadesactivos.xhtml";
     }
@@ -399,24 +453,22 @@ public class GestorTablaComunidadActivo implements Serializable
 
     	if (activoseleccionadobaja == null)
     	{
-    		Utils.debugTrace(true, sClassName, sMethod, "Esto esta vacio hermano!!!");
+    		String sMsg = "ERROR: Error al dar de baja el activo, la seleccion ya no esta disponible.";
+    		
+    		Utils.debugTrace(true, sClassName, sMethod, sMsg);
+    		
+    		msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
     	}
+    	else
+    	{
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+activoseleccionadobaja.getCOACES()+"|");
-    	
-    	this.sCOACES  = activoseleccionadobaja.getCOACES();
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    	
-    	//buscar activo y borrarlo
-    	
-    	
-    	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-   	
-    	msg = nuevoMovimiento("E");
+        	this.sCOACES  = activoseleccionadobaja.getCOACES();
+        	
+        	msg = nuevoMovimiento("E");
+        	
+        	Utils.debugTrace(true, sClassName, sMethod, "Activo de baja: |"+activoseleccionadobaja.getCOACES()+"|");
+        	
+    	}
     	
     	
     	this.sCOACES  = "";

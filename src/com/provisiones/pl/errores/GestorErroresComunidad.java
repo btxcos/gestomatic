@@ -1,4 +1,4 @@
-package com.provisiones.pl.movimientos;
+package com.provisiones.pl.errores;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,15 +10,17 @@ import javax.faces.event.ActionEvent;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.pl.movimientos.GestorMovimientosComunidades;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
+import com.provisiones.types.ErrorComunidadTabla;
 import com.provisiones.types.MovimientoComunidad;
 
-public class GestorMovimientosComunidades implements Serializable 
+public class GestorErroresComunidad implements Serializable 
 {
 	static String sClassName = GestorMovimientosComunidades.class.getName();
 
-	private static final long serialVersionUID = -9157997142376942992L;
+	private static final long serialVersionUID = 8107483385802371051L;
 
 	private String sCODTRN = ValoresDefecto.DEF_E1_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
@@ -26,22 +28,37 @@ public class GestorMovimientosComunidades implements Serializable
 	private String sCOACCI = "";
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 	private String sCOCLDO = "";
+	private boolean bRCOCLDO = true;
 	private String sNUDCOM = "";
+	private boolean bRNUDCOM = true;
 	private String sCOACES = "";
+	private boolean bRCOACES = true;
 	private String sNOMCOC = "";
+	private boolean bRNOMCOC = true;
 	private String sNODCCO = "";
+	private boolean bRNODCCO = true;
 	private String sNOMPRC = "";
+	private boolean bRNOMPRC = true;
 	private String sNUTPRC = "";
+	private boolean bRNUTPRC = true;
 	private String sNOMADC = "";
+	private boolean bRNOMADC = true;
 	private String sNUTADC = "";
+	private boolean bRNUTADC = true;
 	private String sNODCAD = "";
+	private boolean bRNODCAD = true;
 	private String sNUCCEN = "";
+	private boolean bRNUCCEN = true;
 	private String sNUCCOF = "";
+	private boolean bRNUCCOF = true;
 	private String sNUCCDI = "";
+	private boolean bRNUCCDI = true;
 	private String sNUCCNT = "";
-
+	private boolean bRNUCCNT = true;
 	private String sOBTEXC = "";
+	private boolean bROBTEXC = true;
 	private String sOBDEER = "";
+	
 	
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";
@@ -55,7 +72,11 @@ public class GestorMovimientosComunidades implements Serializable
 	
 	private ArrayList<ActivoTabla> tablaactivos = null;
 	
-	public GestorMovimientosComunidades()
+	private ErrorComunidadTabla errorseleccionado = null;
+	
+	private ArrayList<ErrorComunidadTabla> tablaerrores = null;
+	
+	public GestorErroresComunidad()
 	{
 		Utils.standardIO2File("");//Salida por fichero de texto
 	}
@@ -327,17 +348,6 @@ public class GestorMovimientosComunidades implements Serializable
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
 
-		case -5: //Error 005 - NO TIENE NOMBRE LA COMUNIDAD
-			sMsg = "ERROR:005 - El nombre de la comunidad es obligatorio. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -6: //Error 006 - FALTAN DATOS DE LA CUENTA BANCARIA
-			sMsg = "ERROR:006 - No se han informado los datos de la cuenta corriente. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
 
 		case -8: //Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
 			sMsg = "ERROR:008 - El activo ya esta asociado a otra comunidad. Por favor, revise los datos.";
@@ -388,32 +398,6 @@ public class GestorMovimientosComunidades implements Serializable
 
 		case -30: //Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
 			sMsg = "ERROR:030 - No se ha elegido un tipo de documento. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -31: //Error 031 - NUMERO DE DOCUMENTO CIF ERRONEO
-			sMsg = "ERROR:031 - El numero de documento es incorrecto. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -701: //Error 701 - datos de cuenta incorrectos
-			sMsg = "ERROR:701 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-
-		case -702: //Error 702 - direccion de correo de comunidad incorrecta
-			sMsg = "ERROR:702 - La direccion de correo de la comunidad es incorrecta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-
-		case -703: //Error 703 - direccion de correo del administrador incorrecta
-			sMsg = "ERROR:703 - La direccion de correo del adminsitrador es incorrecta. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
@@ -755,4 +739,140 @@ public class GestorMovimientosComunidades implements Serializable
 		this.tablaactivos = tablaactivos;
 	}
 
+	public boolean isbRCOCLDO() {
+		return bRCOCLDO;
+	}
+
+	public void setbRCOCLDO(boolean bRCOCLDO) {
+		this.bRCOCLDO = bRCOCLDO;
+	}
+
+	public boolean isbRNUDCOM() {
+		return bRNUDCOM;
+	}
+
+	public void setbRNUDCOM(boolean bRNUDCOM) {
+		this.bRNUDCOM = bRNUDCOM;
+	}
+
+	public boolean isbRCOACES() {
+		return bRCOACES;
+	}
+
+	public void setbRCOACES(boolean bRCOACES) {
+		this.bRCOACES = bRCOACES;
+	}
+
+	public boolean isbRNOMCOC() {
+		return bRNOMCOC;
+	}
+
+	public void setbRNOMCOC(boolean bRNOMCOC) {
+		this.bRNOMCOC = bRNOMCOC;
+	}
+
+	public boolean isbRNODCCO() {
+		return bRNODCCO;
+	}
+
+	public void setbRNODCCO(boolean bRNODCCO) {
+		this.bRNODCCO = bRNODCCO;
+	}
+
+	public boolean isbRNOMPRC() {
+		return bRNOMPRC;
+	}
+
+	public void setbRNOMPRC(boolean bRNOMPRC) {
+		this.bRNOMPRC = bRNOMPRC;
+	}
+
+	public boolean isbRNUTPRC() {
+		return bRNUTPRC;
+	}
+
+	public void setbRNUTPRC(boolean bRNUTPRC) {
+		this.bRNUTPRC = bRNUTPRC;
+	}
+
+	public boolean isbRNOMADC() {
+		return bRNOMADC;
+	}
+
+	public void setbRNOMADC(boolean bRNOMADC) {
+		this.bRNOMADC = bRNOMADC;
+	}
+
+	public boolean isbRNUTADC() {
+		return bRNUTADC;
+	}
+
+	public void setbRNUTADC(boolean bRNUTADC) {
+		this.bRNUTADC = bRNUTADC;
+	}
+
+	public boolean isbRNODCAD() {
+		return bRNODCAD;
+	}
+
+	public void setbRNODCAD(boolean bRNODCAD) {
+		this.bRNODCAD = bRNODCAD;
+	}
+
+	public boolean isbRNUCCEN() {
+		return bRNUCCEN;
+	}
+
+	public void setbRNUCCEN(boolean bRNUCCEN) {
+		this.bRNUCCEN = bRNUCCEN;
+	}
+
+	public boolean isbRNUCCOF() {
+		return bRNUCCOF;
+	}
+
+	public void setbRNUCCOF(boolean bRNUCCOF) {
+		this.bRNUCCOF = bRNUCCOF;
+	}
+
+	public boolean isbRNUCCDI() {
+		return bRNUCCDI;
+	}
+
+	public void setbRNUCCDI(boolean bRNUCCDI) {
+		this.bRNUCCDI = bRNUCCDI;
+	}
+
+	public boolean isbRNUCCNT() {
+		return bRNUCCNT;
+	}
+
+	public void setbRNUCCNT(boolean bRNUCCNT) {
+		this.bRNUCCNT = bRNUCCNT;
+	}
+
+	public boolean isbROBTEXC() {
+		return bROBTEXC;
+	}
+
+	public void setbROBTEXC(boolean bROBTEXC) {
+		this.bROBTEXC = bROBTEXC;
+	}
+
+	public ErrorComunidadTabla getErrorseleccionado() {
+		return errorseleccionado;
+	}
+
+	public void setErrorseleccionado(ErrorComunidadTabla errorseleccionado) {
+		this.errorseleccionado = errorseleccionado;
+	}
+
+	public ArrayList<ErrorComunidadTabla> getTablaerrores() {
+		return tablaerrores;
+	}
+
+	public void setTablaerrores(ArrayList<ErrorComunidadTabla> tablaerrores) {
+		this.tablaerrores = tablaerrores;
+	}
+		
 }

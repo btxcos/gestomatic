@@ -2,7 +2,6 @@ package com.provisiones.test;
 
 import java.io.IOException;
 
-import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
 
 public class TestComunidades 
@@ -16,11 +15,10 @@ public class TestComunidades
 		
 		//FileManager.splitter("168E1.txt");
 		
-		if(Utils.compruebaCC("1111", "1111", "30", "1111111111"))
-		{
-			Utils.debugTrace(bTraza, sClassName, sMethod, "|"+Utils.compruebaCC("2038", "2409", "64", "3000866897")+"|");
-
-			//Utils.debugTrace(bTraza, sClassName, sMethod, "Valido!");
-		}
+		Utils.debugTrace(bTraza, sClassName, sMethod, "CC|"+Utils.compruebaCC("1111", "1111", "30", "1111111111")+"|");
+		
+		Utils.debugTrace(bTraza, sClassName, sMethod, "CIF|"+Utils.compruebaCIF("0")+"|");
+		
+		Utils.debugTrace(bTraza, sClassName, sMethod, "Correo|"+Utils.compruebaCorreo("a@b.com")+"|");
 	}
 }

@@ -53,7 +53,7 @@ public class GestorComunidades implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
-	private ActivoTabla activoseleccionado = null;
+	private ActivoTabla activoseleccionado = null; //transient
 	
 	private ArrayList<ActivoTabla> tablaactivos = null;
 		
@@ -229,7 +229,18 @@ public class GestorComunidades implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		case -5: //Error 005 - NO TIENE NOMBRE LA COMUNIDAD
+			sMsg = "ERROR:005 - El nombre de la comunidad es obligatorio. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
+		case -6: //Error 006 - FALTAN DATOS DE LA CUENTA BANCARIA
+			sMsg = "ERROR:006 - No se han informado los datos de la cuenta corriente. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
 		case -8: //Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
 			sMsg = "ERROR:008 - El activo ya esta asociado a otra comunidad. Por favor, revise los datos.";
@@ -280,6 +291,33 @@ public class GestorComunidades implements Serializable
 
 		case -30: //Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
 			sMsg = "ERROR:030 - No se ha elegido un tipo de documento. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -31: //Error 031 - NUMERO DE DOCUMENTO CIF ERRONEO
+			sMsg = "ERROR:031 - El numero de documento es incorrecto. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+
+		case -701: //Error 701 - datos de cuenta incorrectos
+			sMsg = "ERROR:701 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+
+		case -702: //Error 702 - direccion de correo de comunidad incorrecta
+			sMsg = "ERROR:702 - La direccion de correo de la comunidad es incorrecto. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+
+		case -703: //Error 703 - direccion de correo del administrador incorrecta
+			sMsg = "ERROR:703 - La direccion de correo del adminsitrador es incorrecto. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
@@ -404,6 +442,7 @@ public class GestorComunidades implements Serializable
     {  
 
     	borrarCampos();
+    	//RequestContext.getCurrentInstance().reset("form:panel"); 
     	
     }
 	
@@ -421,6 +460,8 @@ public class GestorComunidades implements Serializable
     	
     	this.activoseleccionado = null;
     	this.tablaactivos = null;
+    	
+    	//RequestContext.getCurrentInstance().reset("form:activos"); 
    	
     }
 	

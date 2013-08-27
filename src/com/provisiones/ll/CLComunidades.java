@@ -10,6 +10,7 @@ import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresComunidades;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
@@ -540,11 +541,6 @@ public class CLComunidades
 		
 		int iCodigo = 0;
 		
-		//Comunidad comunidad = QMComunidades.getComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM());
-		
-		
-		//msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error, no se ha realizado ninguna operativa con la comunidad '"+ comunidad.getNOMCOC() + "'. Se ha realizado una accion no permitida. Por favor, revise los datos.",null);
-		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Comprobando estado...");
 		String sEstado = QMComunidades.getEstado(movimiento.getCOCLDO(), movimiento.getNUDCOM());
 		
@@ -556,20 +552,57 @@ public class CLComunidades
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M,B,X o E
 			iCodigo = -1;
 		}
-		else if ((sEstado.equals("A") && movimiento.getCOACCI().equals("X") && movimiento.getCOACES().equals(""))
-				|| (sEstado.equals("A") && movimiento.getCOACCI().equals("E") && movimiento.getCOACES().equals(""))
-				|| (movimiento.getCOACCI().equals("A") && !movimiento.getCOACES().equals("") && !QMActivos.existeActivo(movimiento.getCOACES())))
+		else if (movimiento.getCOCLDO().equals(""))
 		{
-			//Error 003 - NO EXISTE EL ACTIVO
-			iCodigo = -3;
+			//Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
+			iCodigo = -30;
 		}
 		else if (movimiento.getNUDCOM().equals(""))
 		{
 			//Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO, NULO O CEROS
 			iCodigo = -4;
 		}
-		else if ((movimiento.getCOACCI().equals("A") && !movimiento.getCOACES().equals("") && QMListaComunidadesActivos.activoVinculadoComunidad(movimiento.getCOACES()))
-			|| (movimiento.getCOACCI().equals("X") && !movimiento.getCOACES().equals("") && QMListaComunidadesActivos.activoVinculadoComunidad(movimiento.getCOACES())))
+		else if (!Utils.compruebaCIF(movimiento.getNUDCOM()))
+		{
+			//Error 031 - NUMERO DE DOCUMENTO CIF ERRONEO
+			iCodigo = -31;
+		}
+		else if (movimiento.getCOACCI().equals("A") && movimiento.getNOMCOC().equals(""))
+		{
+			//Error 005 - NO TIENE NOMBRE LA COMUNIDAD
+			iCodigo = -5;
+		}
+		else if (!movimiento.getNODCCO().equals("") && !Utils.compruebaCorreo(movimiento.getNODCCO()))
+		{
+			//Error direccion de correo de comunidad incorrecta
+			iCodigo = -702;
+		}
+		else if (!movimiento.getNODCAD().equals("") && !Utils.compruebaCorreo(movimiento.getNODCAD()))
+		{
+			//Error direccion de correo del administrador incorrecta
+			iCodigo = -703;
+		}
+		else if (movimiento.getCOACCI().equals("A") && (movimiento.getNUCCEN().equals("")
+				|| movimiento.getNUCCOF().equals("")
+				|| movimiento.getNUCCDI().equals("")
+				|| movimiento.getNUCCNT().equals("")))
+		{
+			//Error 006 - FALTAN DATOS DE LA CUENTA BANCARIA
+			iCodigo = -6;
+		}
+		else if ((movimiento.getCOACCI().equals("A")||movimiento.getCOACCI().equals("M")) && !Utils.compruebaCC(movimiento.getNUCCEN(),movimiento.getNUCCOF(),movimiento.getNUCCDI(),movimiento.getNUCCNT()))
+		{
+			//Error datos de cuenta incorrectos
+			iCodigo = -701;
+		}
+		
+		
+		else if (!(movimiento.getCOACCI().equals("A") && movimiento.getCOACES().equals("")) && !QMActivos.existeActivo(movimiento.getCOACES()))
+		{
+			//Error 003 - NO EXISTE EL ACTIVO
+			iCodigo = -3;
+		}
+		else if ((movimiento.getCOACCI().equals("A") || movimiento.getCOACCI().equals("X")) && QMListaComunidadesActivos.activoVinculadoComunidad(movimiento.getCOACES()))
 		{
 			//Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
 			iCodigo = -8;
@@ -604,12 +637,7 @@ public class CLComunidades
 			//Error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
 			iCodigo = -27;			
 		}
-		else if (movimiento.getCOCLDO().equals(""))
-		{
-			//Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
-			iCodigo = -30;
-		}
-
+	
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
 		{
 			//Error alta de una comunidad en alta

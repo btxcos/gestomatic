@@ -1,6 +1,6 @@
 package com.provisiones.types;
 
-public class ActivoTabla 
+public class ActivoTabla  
 {
 
 	private String COACES = "";

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+	</h:head>
+	<h:body>
+		<h:form id="form">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="33%" header="Modificar Comunidades">
+
+ 
+								<h:panelGrid columns="4" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText value="CODTRN: " />                                                          
+											<p:inputText id="CODTRN" value="#{GestorErroresComunidad.sCODTRN}" disabled="true" />
+
+											<h:outputText value="IDPROV: " />
+											<p:inputText id="IDPROV" value="#{GestorErroresComunidad.sIDPROV}" disabled="true" />
+
+										</h:panelGrid>
+									</p:panel>
+									<p:fieldset legend="Acciones">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Restablecer Movimiento" update="panel" actionListener="#{GestorErroresComunidad.cargarComunidad}" />
+											<p:commandButton value="Modificar Movimiento" update="panel, msgs, popup" actionListener="#{GestorErroresComunidad.registraDatos}" />
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Info">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+												<p:messages id="msgs"/>
+											</p:notificationBar>  
+											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+											<p:growl id="popup" />
+										</h:panelGrid>
+									</p:fieldset>
+								</h:panelGrid>
+
+				</p:layoutUnit>
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<p:contextMenu for="activos">
+														<p:menuitem value="Cargar Errores" update="form:popup, form:msgs" icon="ui-icon-folder-open" action="#{GestorErroresComunidad.cargarDetalles}"/>
+													</p:contextMenu>  
+															
+													<p:dataTable id="errores" var="error" value="#{GestorErroresComunidad.tablaerrores}" rowKey="#{error.MOVIMIENTO}"  
+															selection="#{GestorErroresComunidad.errorseleccionado}" selectionMode="single"
+																paginator="true" paginatorPosition="bottom" rows="10" 
+																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+																rowsPerPageTemplate="5,10,15">  
+														<f:facet name="header">  
+															Errores recibidos
+														</f:facet>
+															
+														<p:column sortBy="#{error.COCLDO}" headerText="Documento">  
+														    #{error.COCLDO}  
+														</p:column>  
+														
+														<p:column sortBy="#{error.NUDCOM}" headerText="Numero">  
+														    #{error.NUDCOM}  
+														</p:column>  
+            							
+														<p:column sortBy="#{error.NOMCOC}" headerText="Comunidad">
+														    #{error.NOMCOC}  
+														</p:column>  
+														
+														<p:column sortBy="#{error.ERRORES}" headerText="Errores">
+														    #{error.ERRORES}  
+														</p:column>  
+
+															
+													</p:dataTable>
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+
+								<p:fieldset legend="Activo relacionado">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="COACES" value="Codigo de activo: " />
+														<p:inputText id="COACES" value="#{GestorErroresComunidad.sCOACES}" size="9" maxlength="9" disabled="#{GestorErroresComunidad.bRCOACES}">
+														</p:inputText>
+													<p:message for="COACES" display="icon"/>
+													<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel" actionListener="#{GestorErroresComunidad.buscarComunidad}"/>	
+												</h:panelGrid>
+											</p:panel>
+										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Comunidad de proprietarios">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="8" cellpadding="5">
+													<h:outputText for="COCLDO" value="Documento: " />
+													<p:selectOneMenu id="COCLDO" value="#{GestorErroresComunidad.sCOCLDO}" disabled="#{GestorErroresComunidad.bRCOACES}">
+														<f:selectItem itemLabel="Elija..." itemValue="" />
+														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
+														<f:validateLength minimum="1" /> 
+													</p:selectOneMenu>
+													<p:message for="COCLDO" display="icon"/>
+											
+													<h:outputText for="NUDCOM" value="Numero: " />
+														<p:inputText id="NUDCOM" value="#{GestorErroresComunidad.sNUDCOM}" size="10" maxlength="10" disabled="#{GestorErroresComunidad.bRCOACES}">
+														</p:inputText>
+													<p:message for="NUDCOM" display="icon"/>
+													<p:commandButton value="Cargar" update="panel, msgs, popup" actionListener="#{GestorErroresComunidad.cargarComunidad}" />
+
+												</h:panelGrid>
+										  </p:panel>
+											<p:panel>                                  
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="NOMCOC" value="Nombre comunidad: " />
+														<p:inputText id="NOMCOC" value="#{GestorErroresComunidad.sNOMCOC}" size="60" maxlength="60" disabled="#{GestorErroresComunidad.bRCOACES}">
+														</p:inputText>
+													<p:message for="NOMCOC" display="icon"/>
+
+													<h:outputText for="NODCCO"  value="Correo electronico: " />
+														<p:inputText id="NODCCO" value="#{GestorErroresComunidad.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta."  disabled="#{GestorErroresComunidad.bRCOACES}">
+															<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+														</p:inputText>
+													<p:message for="NODCCO" display="icon"/>
+												</h:panelGrid>
+										  </p:panel>
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Presidente">
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText for="NOMPRC" value="NOMPRC: " />
+											<p:inputText id="NOMPRC" value="#{GestorErroresComunidad.sNOMPRC}" size="55" maxlength="55" disabled="#{GestorErroresComunidad.bRCOACES}">
+											</p:inputText>
+											<p:message for="NOMPRC" display="icon"/>
+
+											<h:outputText for="NUTPRC" value="NUTPRC: " />
+											<p:inputText id="NUTPRC" value="#{GestorErroresComunidad.sNUTPRC}" size="14" maxlength="14" disabled="#{GestorErroresComunidad.bRCOACES}">
+											</p:inputText>
+											<p:message for="NUTPRC" display="icon"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Administrador">
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText for="NOMADC" value="NOMADC: " />
+											<p:inputText id="NOMADC" value="#{GestorErroresComunidad.sNOMADC}" size="55" maxlength="55" disabled="#{GestorErroresComunidad.bRCOACES}">
+											</p:inputText>
+											<p:message for="NOMADC" display="icon"/>
+
+											<h:outputText for="NUTADC" value="NUTADC: " />
+											<p:inputText id="NUTADC" value="#{GestorErroresComunidad.sNUTADC}" size="14" maxlength="14" disabled="#{GestorErroresComunidad.bRCOACES}">
+											</p:inputText>
+											<p:message for="NUTADC" display="icon"/>
+
+											<h:outputText for="NODCAD" value="NODCAD: " />
+											<p:inputText id="NODCAD" value="#{GestorErroresComunidad.sNODCAD}" size="60" maxlength="60" validatorMessage="La direccion de correo del administrador es incorrecta." disabled="#{GestorErroresComunidad.bRCOACES}">
+												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+											</p:inputText>
+											<p:message for="NODCAD" display="icon"/>
+
+
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Cuenta corriente de la Comunidad">
+										<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText for="NUCCNT" value="NUCC: " />
+
+											<p:inputMask id="NUCCEN" validatorMessage="El digito de entidad debe tener 4 digitos" value="#{GestorErroresComunidad.sNUCCEN}" mask="9999" size="4" disabled="#{GestorErroresComunidad.bRCOACES}">
+												<f:validateLength minimum="4"/>
+											</p:inputMask>
+											
+											<p:inputMask id="NUCCOF" validatorMessage="El numero de oficina debe tener 4 digitos" value="#{GestorErroresComunidad.sNUCCOF}" mask="9999" size="4" disabled="#{GestorErroresComunidad.bRCOACES}">
+												<f:validateLength minimum="4"/>
+											</p:inputMask>
+											
+											<p:inputMask id="NUCCDI" validatorMessage="El digito de control debe tener 2 digitos" value="#{GestorErroresComunidad.sNUCCDI}" mask="99" size="2" disabled="#{GestorErroresComunidad.bRCOACES}">
+												<f:validateLength minimum="2"/>
+											</p:inputMask>
+											
+											<p:inputMask id="NUCCNT" validatorMessage="El numero de cuenta debe tener 10 digitos" value="#{GestorErroresComunidad.sNUCCNT}" mask="9999999999" size="10" disabled="#{GestorErroresComunidad.bRCOACES}">
+												<f:validateLength minimum="10"/>
+											</p:inputMask>
+											<p:message for="NUCCNT" display="icon"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Observaciones">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="OBTEXC" value="OBTEXC: " />
+
+											<p:inputText id="OBTEXC" value="#{GestorErroresComunidad.sOBTEXC}" size="110" maxlength="110" disabled="#{GestorErroresComunidad.bRCOACES}">
+											</p:inputText>
+											<p:message for="OBTEXC" display="icon"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+						</h:panelGrid>
+					</p:panel>
+					<p:dialog header="Activos con Comunidad: " widgetVar="dlgTabla" resizable="false">  
+    				
+							<p:contextMenu for="activos">  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorErroresComunidad.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="activos" var="activo" value="#{GestorErroresComunidad.tablaactivos}" rowKey="#{activo.COACES}"  
+									              selection="#{GestorErroresComunidad.activoseleccionado}" selectionMode="single">  
+									
+								<p:column headerText="Codigo Activo">  
+								    #{activo.COACES}  
+								</p:column>  
+								
+								<p:column headerText="Comunidad Autonoma">  
+								    #{activo.NOPRAC}  
+								</p:column>  
+
+								<p:column headerText="Municipio">  
+								    #{activo.NOMUIN}  
+								</p:column>  
+								
+								<p:column headerText="Via">  
+								    #{activo.NOVIAS}  
+								</p:column>  
+								
+								<p:column headerText="Portal">  
+								    #{activo.NUPOAC}  
+								</p:column>  
+								
+								<p:column headerText="Piso">  
+								    #{activo.NUPIAC}  
+								</p:column>  
+								
+								<p:column headerText="Puerta">  
+								    #{activo.NUPUAC}  
+								</p:column>  
+									
+							</p:dataTable> 
+					</p:dialog>
+					<p:dialog header="Buscar Activos con Comunidad" widgetVar="dlgBuscar" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscar" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+														<p:inputText id="NOPRAC" value="#{GestorErroresComunidad.sNOPRAC}" size="18" maxlength="18">
+														</p:inputText>
+													<p:message for="NOPRAC" display="icon"/>
+
+													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+														<p:inputText id="NOMUIN" value="#{GestorErroresComunidad.sNOMUIN}" size="30" maxlength="30">
+														</p:inputText>
+													<p:message for="NOMUIN" display="icon"/>
+
+													<h:outputText for="COPOIN" value="Codigo Postal: " />
+														<p:inputText id="COPOIN" value="#{GestorErroresComunidad.sCOPOIN}" size="5" maxlength="5">
+														</p:inputText>
+													<p:message for="COPOIN" display="icon"/>
+
+													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+														<p:inputText id="NOVIAS" value="#{GestorErroresComunidad.sNOVIAS}" size="60" maxlength="60">
+														</p:inputText>
+													<p:message for="NOVIAS" display="icon"/>
+
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+														<p:inputText id="NUPOAC" value="#{GestorErroresComunidad.sNUPOAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPOAC" display="icon"/>
+
+													<h:outputText for="NUPIAC" value="Piso: " />
+														<p:inputText id="NUPIAC" value="#{GestorErroresComunidad.sNUPIAC}" size="11" maxlength="11">
+														</p:inputText>
+													<p:message for="NUPIAC" display="icon"/>
+
+													<h:outputText for="NUPUAC" value="Puerta: " />
+														<p:inputText id="NUPUAC" value="#{GestorErroresComunidad.sNUPUAC}" size="17" maxlength="17">
+														</p:inputText>
+													<p:message for="NUPUAC" display="icon"/>
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorErroresComunidad.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorErroresComunidad.limpiarPlantillaActivo}" />	
+
+														<p:ajaxStatus  id="pensandoActivo">  
+															<f:facet name="start">  
+																<h:graphicImage value="/recursos/loadingBar.gif" />  
+															</f:facet>  
+
+															<f:facet name="complete">  
+																<h:outputText value="" />  
+															</f:facet>  
+
+														</p:ajaxStatus> 
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

@@ -100,5 +100,10 @@
 		<managed-bean-class>com.provisiones.pl.movimientos.GestorMovimientosGastos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorErroresComunidad</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.errores.GestorErroresComunidad</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

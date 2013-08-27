@@ -41,10 +41,12 @@
 									<p:fieldset legend="Info">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
-											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
-											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
+											<h:panelGrid columns="2" cellpadding="5">
 												<p:messages id="msgs"/>
-											</p:notificationBar>  
+												<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											</h:panelGrid>
+											</p:notificationBar> 
 											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
 											<p:growl id="popup" />
 										</h:panelGrid>
@@ -63,11 +65,10 @@
 								<p:fieldset legend="Activo relacionado">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" size="9" maxlength="9">
-														</p:inputText>
-													<p:message for="COACES" display="icon"/>
+													<p:inputText id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" size="9" maxlength="9">
+													</p:inputText>
 													<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel" actionListener="#{GestorMovimientosComunidades.buscarComunidad}"/>	
 												</h:panelGrid>
 											</p:panel>
@@ -78,98 +79,87 @@
 									<p:fieldset legend="Comunidad de proprietarios">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel>
-												<h:panelGrid columns="8" cellpadding="5">
+												<h:panelGrid columns="6" cellpadding="5">
 													<h:outputText for="COCLDO" value="Documento: " />
 													<p:selectOneMenu id="COCLDO" value="#{GestorMovimientosComunidades.sCOCLDO}">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
-														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
-													<p:message for="COCLDO" display="icon"/>
-											
+
 													<h:outputText for="NUDCOM" value="Numero: " />
-														<p:inputText id="NUDCOM" value="#{GestorMovimientosComunidades.sNUDCOM}" size="10" maxlength="10">
-														</p:inputText>
-													<p:message for="NUDCOM" display="icon"/>
+													<p:inputText id="NUDCOM" value="#{GestorMovimientosComunidades.sNUDCOM}" size="10" maxlength="10">
+													</p:inputText>
 													<p:commandButton value="Cargar" update="panel, msgs, popup" actionListener="#{GestorMovimientosComunidades.cargarComunidad}" />
 
 												</h:panelGrid>
 										  </p:panel>
 											<p:panel>                                  
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="2" cellpadding="5">
 													<h:outputText for="NOMCOC" value="Nombre comunidad: " />
-														<p:inputText id="NOMCOC" value="#{GestorMovimientosComunidades.sNOMCOC}" size="60" maxlength="60">
-														</p:inputText>
-													<p:message for="NOMCOC" display="icon"/>
+													<p:inputText id="NOMCOC" value="#{GestorMovimientosComunidades.sNOMCOC}" size="60" maxlength="60">
+													</p:inputText>
+
 
 													<h:outputText for="NODCCO"  value="Correo electronico: " />
-														<p:inputText id="NODCCO" value="#{GestorMovimientosComunidades.sNODCCO}" size="60"  maxlength="60" validatorMessage="La direccion de correo de la comunidad es incorrecta.">
-															<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-														</p:inputText>
-													<p:message for="NODCCO" display="icon"/>
+													<p:inputText id="NODCCO" value="#{GestorMovimientosComunidades.sNODCCO}" size="60"  maxlength="60">
+													</p:inputText>
 												</h:panelGrid>
 										  </p:panel>
 										</h:panelGrid>
 									</p:fieldset>
 
 									<p:fieldset legend="Presidente">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="NOMPRC" value="NOMPRC: " />
 											<p:inputText id="NOMPRC" value="#{GestorMovimientosComunidades.sNOMPRC}" size="55" maxlength="55">
 											</p:inputText>
-											<p:message for="NOMPRC" display="icon"/>
 
 											<h:outputText for="NUTPRC" value="NUTPRC: " />
 											<p:inputText id="NUTPRC" value="#{GestorMovimientosComunidades.sNUTPRC}" size="14" maxlength="14">
 											</p:inputText>
-											<p:message for="NUTPRC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
+
 									<p:fieldset legend="Administrador">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="NOMADC" value="NOMADC: " />
 											<p:inputText id="NOMADC" value="#{GestorMovimientosComunidades.sNOMADC}" size="55" maxlength="55">
 											</p:inputText>
-											<p:message for="NOMADC" display="icon"/>
 
 											<h:outputText for="NUTADC" value="NUTADC: " />
 											<p:inputText id="NUTADC" value="#{GestorMovimientosComunidades.sNUTADC}" size="14" maxlength="14">
 											</p:inputText>
-											<p:message for="NUTADC" display="icon"/>
 
 											<h:outputText for="NODCAD" value="NODCAD: " />
-											<p:inputText id="NODCAD" value="#{GestorMovimientosComunidades.sNODCAD}" size="60" maxlength="60" validatorMessage="La direccion de correo del administrador es incorrecta." >
-												<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+											<p:inputText id="NODCAD" value="#{GestorMovimientosComunidades.sNODCAD}" size="60" maxlength="60">
 											</p:inputText>
-											<p:message for="NODCAD" display="icon"/>
-
 
 										</h:panelGrid>
 									</p:fieldset>
+
 									<p:fieldset legend="Cuenta corriente de la Comunidad">
 										<h:panelGrid columns="6" cellpadding="5">
 
 											<h:outputText for="NUCCNT" value="NUCC: " />
 
-											<p:inputMask id="NUCCEN" validatorMessage="El digito de entidad debe tener 4 digitos" value="#{GestorMovimientosComunidades.sNUCCEN}" mask="9999" size="4" >
+											<p:inputMask id="NUCCEN" value="#{GestorMovimientosComunidades.sNUCCEN}" mask="9999" size="4" >
 												<f:validateLength minimum="4"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCOF" validatorMessage="El numero de oficina debe tener 4 digitos" value="#{GestorMovimientosComunidades.sNUCCOF}" mask="9999" size="4" >
+											<p:inputMask id="NUCCOF" value="#{GestorMovimientosComunidades.sNUCCOF}" mask="9999" size="4" >
 												<f:validateLength minimum="4"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCDI" validatorMessage="El digito de control debe tener 2 digitos" value="#{GestorMovimientosComunidades.sNUCCDI}" mask="99" size="2" >
+											<p:inputMask id="NUCCDI" value="#{GestorMovimientosComunidades.sNUCCDI}" mask="99" size="2" >
 												<f:validateLength minimum="2"/>
 											</p:inputMask>
 											
-											<p:inputMask id="NUCCNT" validatorMessage="El numero de cuenta debe tener 10 digitos" value="#{GestorMovimientosComunidades.sNUCCNT}" mask="9999999999" size="10" >
+											<p:inputMask id="NUCCNT" value="#{GestorMovimientosComunidades.sNUCCNT}" mask="9999999999" size="10" >
 												<f:validateLength minimum="10"/>
 											</p:inputMask>
-											<p:message for="NUCCNT" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -181,7 +171,6 @@
 
 											<p:inputText id="OBTEXC" value="#{GestorMovimientosComunidades.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
-											<p:message for="OBTEXC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -274,16 +263,6 @@
 													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosComunidades.buscaActivos}" oncomplete="dlgTabla.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosComunidades.limpiarPlantillaActivo}" />	
 
-														<p:ajaxStatus  id="pensandoActivo">  
-															<f:facet name="start">  
-																<h:graphicImage value="/recursos/loadingBar.gif" />  
-															</f:facet>  
-
-															<f:facet name="complete">  
-																<h:outputText value="" />  
-															</f:facet>  
-
-														</p:ajaxStatus> 
 												</h:panelGrid>
 											</p:panel>
 
