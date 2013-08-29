@@ -10,6 +10,7 @@ import javax.faces.event.ActionEvent;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.misc.mensajes.MensajesActivos;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoComunidad;
 
@@ -78,7 +79,8 @@ public class GestorComunidades implements Serializable
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
+    	sMsg = String.format(MensajesActivos.MACSELECCIONADO,sCOACES);
+
     	msg = new FacesMessage(sMsg);
     	
     	Utils.debugTrace(true, sClassName, sMethod, sMsg);
