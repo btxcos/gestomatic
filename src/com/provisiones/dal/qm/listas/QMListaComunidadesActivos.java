@@ -205,10 +205,10 @@ public class QMListaComunidadesActivos
 		return (found && bSalida);
 	}
 
-	public static boolean activoPerteneceComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
+	public static boolean compruebaRelacionComunidadActivo(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		
-		String sMethod = "activoPerteneceComunidad";
+		String sMethod = "compruebaRelacionComunidadActivo";
 
 		Statement stmt = null;
 		ResultSet rs = null;

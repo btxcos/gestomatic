@@ -240,6 +240,12 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		case -32: //Error 032 - EL SUBTIPO DE ACCION NO EXISTE
+			sMsg = "ERROR:032 - No se a informado el concepto. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
 		case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 			sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
@@ -360,6 +366,12 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		case -700: //Error 700 - no existe relacion con el activo
+			sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
 		case -801: //Error 801 - alta de un impuesto/recurso en alta
 			sMsg = "ERROR:801 - El impuesto o recurso ya esta dada de alta. Por favor, revise los datos.";
@@ -438,6 +450,27 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
+	}
+	
+	public void hoyFEPRRE (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEPRRE";
+		this.setsFEPRRE(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEPRRE:|"+sFEPRRE+"|");
+	}
+	
+	public void hoyFERERE (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFERERE";
+		this.setsFERERE(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFERERE:|"+sFERERE+"|");
+	}
+	
+	public void hoyFEDEIN (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEDEIN";
+		this.setsFEDEIN(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEDEIN:|"+sFEDEIN+"|");
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 

@@ -144,9 +144,7 @@ public class QMListaReferencias
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField1  + ","              
-				       + sField2  + ","
-				       + sField3  + "," +               
+				       + sField4  +               
        
 			"  FROM " + sTable + 
 					" WHERE " +
@@ -181,6 +179,79 @@ public class QMListaReferencias
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return (found && bSalida);
+	}
+	
+	public static boolean compruebaRelacionReferenciaActivo(String sCodNURCAT, String sCodCOACES)
+	{
+		
+		String sMethod = "compruebaRelacionReferenciaActivo";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+
+		boolean bSalida = true; 
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+				       + sField4  +               
+       
+			"  FROM " + sTable + 
+					" WHERE " +
+					"(" + sField1 + " = '" + sCodNURCAT + "' AND " 
+					+ sField2 + " = '" + sCodCOACES + "')");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -471,9 +542,9 @@ public class QMListaReferencias
 					sOBTEXC = rs.getString(QMReferencias.sField5);
 
 					//Ampliacion de valor catastral
-					sIMVSUE = rs.getString(QMReferencias.sField6);
-					sIMCATA = rs.getString(QMReferencias.sField7);
-					sFERECA = rs.getString(QMReferencias.sField8);
+					sIMVSUE = Utils.recuperaImporte(false,rs.getString(QMReferencias.sField6));
+					sIMCATA = Utils.recuperaImporte(false,rs.getString(QMReferencias.sField7));
+					sFERECA = Utils.recuperaFecha(rs.getString(QMReferencias.sField8));
 					
 					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(sNURCAT, sTIRCAT, sENEMIS, sOBTEXC
 

@@ -133,6 +133,12 @@ public class CLComunidades
 		return QMListaComunidadesActivos.buscaActivosConComunidad(activofiltro);
 	}
 	
+	public static boolean comprobarRelacion (String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
+	{
+
+		return QMListaComunidadesActivos.compruebaRelacionComunidadActivo(sCodCOCLDO, sCodNUDCOM, sCodCOACES);
+	}
+	
 	public static int comprobarActivo (String sCOACES)
 	{
 		String sMethod = "comprobarActivo";
@@ -244,9 +250,9 @@ public class CLComunidades
 
 	
 	
-	public static MovimientoComunidad revisaMovimiento(MovimientoComunidad movimiento)
+	public static MovimientoComunidad revisaCodigosControl(MovimientoComunidad movimiento)
 	{
-		String sMethod = "revisaMovimiento";
+		String sMethod = "revisaCodigosControl";
 		
 		Comunidad comunidad = QMComunidades.getComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM());
 		
@@ -612,7 +618,7 @@ public class CLComunidades
 			//Error 009 - YA EXISTE ESTA COMUNIDAD
 			iCodigo = -9;
 		}		
-		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("X") && QMListaComunidadesActivos.activoPerteneceComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOACES()))
+		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("X") && comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOACES()))
 		{
 			//Error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
 			iCodigo = -10;
@@ -660,7 +666,7 @@ public class CLComunidades
 			
 			//Comunidad comunidad_modificada = convierteMovimientoenComunidad(movimiento);
 			
-			MovimientoComunidad movimiento_revisado = CLComunidades.revisaMovimiento(movimiento);
+			MovimientoComunidad movimiento_revisado = CLComunidades.revisaCodigosControl(movimiento);
 			
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	

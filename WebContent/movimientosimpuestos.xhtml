@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -63,11 +63,11 @@
 									<p:fieldset legend="Activo">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorMovimientosImpuestosRecursos.sCOACES}" size="9" maxlength="9">
-														</p:inputText>
-													<p:message for="COACES" display="icon"/>	
+													<p:inputText id="COACES" value="#{GestorMovimientosImpuestosRecursos.sCOACES}" size="9" maxlength="9">
+													</p:inputText>
+
 													<p:commandButton value="Cargar Impuestos" update="msgs, popup, COACES, form:impuestos" actionListener="#{GestorMovimientosImpuestosRecursos.cargarImpuestos}" oncomplete="dlgTablaImpuestos.show()"/>	
 												</h:panelGrid>
 											</p:panel>
@@ -76,12 +76,12 @@
 									</p:fieldset>
 
 									<p:fieldset legend="Referencia Catastral">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="NURCAT" value="NURCAT: " />
 											<p:inputText id="NURCAT" value="#{GestorMovimientosImpuestosRecursos.sNURCAT}" size="24" maxlength="20" disabled="true">
 											</p:inputText>
-											<p:message for="NURCAT" display="icon"/>
+
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -90,7 +90,7 @@
 										<h:panelGrid columns="1" cellpadding="5">
 
 											<p:panel >
-												<h:panelGrid columns="5" cellpadding="5">
+												<h:panelGrid columns="2" cellpadding="5">
 
 													<h:outputText for="COSBAC" value="Concepto: " />
 													<p:inputText id="COSBAC" value="#{GestorMovimientosImpuestosRecursos.sDesCOSBAC}" disabled="true" />
@@ -105,7 +105,7 @@
 													<p:inputMask id="FEPRRE" validatorMessage="La fecha del primer pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
-													<p:message for="FEPRRE" display="icon"/>
+													<p:commandButton id="hFEPRRE" icon="ui-icon-clock" update="FEPRRE" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFEPRRE}"/>
 
 												</h:panelGrid>
 										  </p:panel>
@@ -121,7 +121,7 @@
 											<p:inputMask id="FERERE" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosImpuestosRecursos.sFERERE}" mask="99/99/9999" size="10" >
 												<f:validateLength minimum="10"/>
 											</p:inputMask>
-											<p:message for="FERERE" display="icon"/>
+											<p:commandButton id="hFERERE" icon="ui-icon-clock" update="FERERE" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFERERE}"/>
 
 											<h:outputText for="BIRESO" value="BIRESO: " />
 											<p:selectOneMenu id="BIRESO" value="#{GestorMovimientosImpuestosRecursos.sBIRESO}">
@@ -129,11 +129,7 @@
 												<f:selectItems value="#{GestorDatosGenerales.tiposbiresoHM}" />
 												<f:validateLength minimum="1" /> 
 											</p:selectOneMenu>
-											<p:message for="BIRESO" display="icon"/>
 
-											<h:outputText for="COTEXA" value="COTEXA: " />
-											<p:inputText id="COTEXA" value="#{GestorMovimientosImpuestosRecursos.sCOTEXA}" size="10" maxlength="10" disabled="true">
-											</p:inputText>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -146,7 +142,7 @@
 													<p:inputMask id="FEDEIN" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosImpuestosRecursos.sFEDEIN}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
-													<p:message for="FEDEIN" display="icon"/>
+													<p:commandButton id="hFEDEIN" icon="ui-icon-clock" update="FEDEIN" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFEDEIN}"/>
 
 													<h:outputText for="BISODE" value="BISODE: " />
 													<p:selectOneMenu id="BISODE" value="#{GestorMovimientosImpuestosRecursos.sBISODE}">
@@ -154,7 +150,7 @@
 														<f:selectItems value="#{GestorDatosGenerales.tiposbinariaHM}" />
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
-													<p:message for="BISODE" display="icon"/>
+
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -168,7 +164,6 @@
 
 											<p:inputText id="OBTEXC" value="#{GestorMovimientosImpuestosRecursos.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
-											<p:message for="OBTEXC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -183,7 +178,10 @@
 							</p:contextMenu>  
 									
 							<p:dataTable id="impuestos" var="impuesto" value="#{GestorMovimientosImpuestosRecursos.tablaimpuestos}" rowKey="#{impuesto.DCOSBAC}"  
-									              selection="#{GestorMovimientosImpuestosRecursos.impuestoseleccionado}" selectionMode="single">  
+												selection="#{GestorMovimientosImpuestosRecursos.impuestoseleccionado}" selectionMode="single"
+												paginator="true" paginatorPosition="bottom" rows="10" 
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+												rowsPerPageTemplate="5,10,15">
 									
 								<p:column headerText="Impuesto">  
 								    #{impuesto.DCOSBAC}  
@@ -220,7 +218,10 @@
 							</p:contextMenu>  
 									
 							<p:dataTable id="activos" var="activo" value="#{GestorMovimientosImpuestosRecursos.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorMovimientosImpuestosRecursos.activoseleccionado}" selectionMode="single">  
+												selection="#{GestorMovimientosImpuestosRecursos.activoseleccionado}" selectionMode="single"
+												paginator="true" paginatorPosition="bottom" rows="10" 
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+												rowsPerPageTemplate="5,10,15">
 									
 								<p:column headerText="Codigo Activo">  
 								    #{activo.COACES}  

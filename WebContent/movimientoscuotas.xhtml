@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -63,11 +64,10 @@
 									<p:fieldset legend="Activo">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorMovimientosCuotas.sCOACES}" size="9" maxlength="9">
-														</p:inputText>
-													<p:message for="COACES" display="icon"/>
+													<p:inputText id="COACES" value="#{GestorMovimientosCuotas.sCOACES}" size="9" maxlength="9">
+													</p:inputText>
 													<p:commandButton value="Cargar Cuotas" update="msgs, popup, COACES, form:cuotas" actionListener="#{GestorMovimientosCuotas.cargarCuotas}" oncomplete="dlgTablaCuotas.show()"/>	
 												</h:panelGrid>
 											</p:panel>
@@ -81,12 +81,12 @@
 												<h:panelGrid columns="5" cellpadding="5">
 
 													<h:outputText for="COCLDO" value="Documento: " />
-														<p:inputText id="DesCOCLDO" value="#{GestorMovimientosCuotas.sDesCOCLDO}" size="30" maxlength="30" disabled="true">
-														</p:inputText>
+													<p:inputText id="DesCOCLDO" value="#{GestorMovimientosCuotas.sDesCOCLDO}" size="30" maxlength="30" disabled="true">
+													</p:inputText>
 
 													<h:outputText for="NUDCOM" value="Numero: " />
-														<p:inputText id="NUDCOM" value="#{GestorMovimientosCuotas.sNUDCOM}" size="10" maxlength="10" disabled="true">
-														</p:inputText>
+													<p:inputText id="NUDCOM" value="#{GestorMovimientosCuotas.sNUDCOM}" size="10" maxlength="10" disabled="true">
+													</p:inputText>
 
 
 												</h:panelGrid>
@@ -102,52 +102,47 @@
 
 													<h:outputText for="COSBAC" value="Concepto: " />
 													<p:inputText id="DesCOSBAC" value="#{GestorMovimientosCuotas.sDesCOSBAC}" size="30" maxlength="30" disabled="true">
-														</p:inputText>
+													</p:inputText>
 
 												</h:panelGrid>
 
 										  </p:panel>
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="IMCUCO" value="IMCUCO: " />
-													<p:inputText id="IMCUCO" value="#{GestorMovimientosCuotas.sIMCUCO}" size="16" maxlength="16" validatorMessage="El importe de la cuota introducido es incorrecto." >
-														<f:validateRegex pattern="[0-9]+([\.|,][0-9]{2})?$" />
+													<p:inputText id="IMCUCO" value="#{GestorMovimientosCuotas.sIMCUCO}" size="16" maxlength="16">
 													</p:inputText>
-													<h:outputText for="IMCUCO" value="â¬" />
-													<p:message for="IMCUCO" display="icon"/>
+													<h:outputText for="IMCUCO" value="€" />
 												</h:panelGrid>
 										  </p:panel>
 										  
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 
 													<h:outputText for="FIPAGO" value="FIPAGO: " />
-													<p:inputMask id="FIPAGO" validatorMessage="La fecha del primer pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosCuotas.sFIPAGO}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FIPAGO" value="#{GestorMovimientosCuotas.sFIPAGO}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
-													<p:message for="FIPAGO" display="icon"/>
 													<p:commandButton id="hFIPAGO" icon="ui-icon-clock" update="FIPAGO" actionListener="#{GestorMovimientosCuotas.hoyFIPAGO}"/>
 
 													<h:outputText for="FFPAGO" value="FFPAGO: " />
-													<p:inputMask id="FFPAGO" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosCuotas.sFFPAGO}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FFPAGO" value="#{GestorMovimientosCuotas.sFFPAGO}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
-													<p:message for="FFPAGO" display="icon"/>
 													<p:commandButton id="hFFPAGO" icon="ui-icon-clock" update="FFPAGO" actionListener="#{GestorMovimientosCuotas.hoyFFPAGO}"/>
 
 
 
 
 													<h:outputText for="FAACTA" value="FAACTA: " />
-													<p:inputMask id="FAACTA" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorMovimientosCuotas.sFAACTA}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FAACTA" value="#{GestorMovimientosCuotas.sFAACTA}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
-													<p:message for="FAACTA" display="icon"/>
 													<p:commandButton id="hFAACTA" icon="ui-icon-clock" update="FAACTA" actionListener="#{GestorMovimientosCuotas.hoyFAACTA}"/>
 
 													<h:outputText for="PTPAGO" value="Periodicidad: " />
 													<p:inputText id="DesPTPAGO" value="#{GestorMovimientosCuotas.sDesPTPAGO}" size="20" maxlength="20" disabled="true">
-														</p:inputText>
+													</p:inputText>
 
 												</h:panelGrid>
 										  </p:panel>
@@ -163,7 +158,6 @@
 
 											<p:inputText id="OBTEXC" value="#{GestorMovimientosCuotas.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
-											<p:message for="OBTEXC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>

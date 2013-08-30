@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -10,7 +10,7 @@
 		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
 	</h:head>
 	<h:body>
-		<h:form id="form">
+		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="33%" header="Modificar Referencias Catastrales">
@@ -63,11 +63,11 @@
 								<p:fieldset legend="Activo relacionado">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorMovimientosReferenciasCatastrales.sCOACES}" size="9" maxlength="9">
-														</p:inputText>
-													<p:message for="COACES" display="icon"/>
+													<p:inputText id="COACES" value="#{GestorMovimientosReferenciasCatastrales.sCOACES}" size="9" maxlength="9">
+													</p:inputText>
+
 													<p:commandButton value="Carga Referencias" update="msgs, popup, panel, referencias" actionListener="#{GestorMovimientosReferenciasCatastrales.cargarReferencias}"  oncomplete="dlgTablaReferencias.show()"/>	
 												</h:panelGrid>
 											</p:panel>
@@ -76,12 +76,11 @@
 									</p:fieldset>
 
 									<p:fieldset legend="Referencia Catastral">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="NURCAT" value="NURCAT: " />
 											<p:inputText id="NURCAT" value="#{GestorMovimientosReferenciasCatastrales.sNURCAT}" size="20" maxlength="20"  disabled="true">
 											</p:inputText>
-											<p:message for="NURCAT" display="icon"/>
 
 											<h:outputText for="TIRCAT" value="TIRCAT: " />
 											<p:inputText id="TIRCAT" value="#{GestorMovimientosReferenciasCatastrales.sTIRCAT}" size="60" maxlength="60">
@@ -92,19 +91,26 @@
 									
 									<p:fieldset legend="Valor Catastral">
 										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="IMVSUE"  value="IMVSUE: " />
+													<p:inputText id="IMVSUE" value="#{GestorMovimientosReferenciasCatastrales.sIMVSUE}" size="16"  maxlength="16">
+													</p:inputText>
+													<h:outputText value="¤" />
 
-											<h:outputText for="IMVSUE"  value="IMVSUE: " />
-											<p:inputText id="IMVSUE" value="#{GestorReferenciasCatastrales.sIMVSUE}" size="16"  maxlength="16">
-											</p:inputText>
-
-											<h:outputText for="IMCATA" value="IMCATA: " />
-											<p:inputText id="IMCATA" value="#{GestorReferenciasCatastrales.sIMCATA}" size="16" maxlength="16">
-											</p:inputText>
-
-											<h:outputText for="FERECA" value="FERECA: " />
-											<p:inputMask id="FERECA" value="#{GestorReferenciasCatastrales.sFERECA}" mask="99/99/9999" size="10" maxlength="8"/>
-											<p:commandButton id="hFERECA" icon="ui-icon-clock" update="FERECA" actionListener="#{GestorReferenciasCatastrales.hoyFERECA}"/>
-
+													<h:outputText for="IMCATA" value="IMCATA: " />
+													<p:inputText id="IMCATA" value="#{GestorMovimientosReferenciasCatastrales.sIMCATA}" size="16" maxlength="16">
+													</p:inputText>
+													<h:outputText value="¤" />
+												</h:panelGrid>
+											</p:panel>
+											<p:panel>
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="FERECA" value="FERECA: " />
+													<p:inputMask id="FERECA" value="#{GestorMovimientosReferenciasCatastrales.sFERECA}" mask="99/99/9999" size="10" maxlength="8"/>
+													<p:commandButton id="hFERECA" icon="ui-icon-clock" update="FERECA" actionListener="#{GestorMovimientosReferenciasCatastrales.hoyFERECA}"/>
+												</h:panelGrid>
+											</p:panel>
 										</h:panelGrid>
 									</p:fieldset>
 
@@ -114,11 +120,6 @@
 											<h:outputText for="ENEMIS"  value="ENEMIS: " />
 											<p:inputText id="ENEMIS" value="#{GestorMovimientosReferenciasCatastrales.sENEMIS}" size="60"  maxlength="60">
 											</p:inputText>
-
-											<h:outputText for="COTEXA" value="COTEXA: " />
-											<p:inputText id="COTEXA" value="#{GestorMovimientosReferenciasCatastrales.sCOTEXA}" size="10" maxlength="14" disabled="true">
-											</p:inputText>
-
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -130,7 +131,6 @@
 
 											<p:inputText id="OBTEXC" value="#{GestorMovimientosReferenciasCatastrales.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
-											<p:message for="OBTEXC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -140,7 +140,8 @@
 					<p:dialog header="Referencias asociadas al activo: " widgetVar="dlgTablaReferencias" resizable="false">  
     				
 							<p:contextMenu for="referencias">  
-								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NURCAT, form:TIRCAT, form:ENEMIS, form:OBTEXC" icon="ui-icon-check" actionListener="#{GestorMovimientosReferenciasCatastrales.seleccionarReferencia}" oncomplete="dlgTablaReferencias.hide();"/>  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NURCAT, form:TIRCAT, form:IMVSUE, form:IMCATA, form:FERECA, form:ENEMIS, form:OBTEXC" 
+								 	icon="ui-icon-check" actionListener="#{GestorMovimientosReferenciasCatastrales.seleccionarReferencia}" oncomplete="dlgTablaReferencias.hide();"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="referencias" var="referencia" value="#{GestorMovimientosReferenciasCatastrales.tablareferencias}" rowKey="#{referencia.NURCAT}"  
@@ -156,6 +157,18 @@
 								<p:column headerText="Titular">  
 								    #{referencia.TIRCAT}  
 								</p:column>  
+
+								<p:column headerText="Valor del suelo">  
+								    #{referencia.IMVSUE}  
+								</p:column>
+
+								<p:column headerText="Valor Catastral">  
+								    #{referencia.IMCATA}  
+								</p:column>
+
+								<p:column headerText="Fecha de Revision">  
+								    #{referencia.FERECA}  
+								</p:column>
 
 								<p:column headerText="Entidad de emision">  
 								    #{referencia.ENEMIS}
@@ -209,63 +222,46 @@
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="2" cellpadding="5">
 													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
-														<p:inputText id="NOPRAC" value="#{GestorMovimientosReferenciasCatastrales.sNOPRAC}" size="18" maxlength="18">
-														</p:inputText>
-													<p:message for="NOPRAC" display="icon"/>
+													<p:inputText id="NOPRAC" value="#{GestorMovimientosReferenciasCatastrales.sNOPRAC}" size="18" maxlength="18">
+													</p:inputText>
 
 													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
-														<p:inputText id="NOMUIN" value="#{GestorMovimientosReferenciasCatastrales.sNOMUIN}" size="30" maxlength="30">
-														</p:inputText>
-													<p:message for="NOMUIN" display="icon"/>
+													<p:inputText id="NOMUIN" value="#{GestorMovimientosReferenciasCatastrales.sNOMUIN}" size="30" maxlength="30">
+													</p:inputText>
 
 													<h:outputText for="COPOIN" value="Codigo Postal: " />
-														<p:inputText id="COPOIN" value="#{GestorMovimientosReferenciasCatastrales.sCOPOIN}" size="5" maxlength="5">
-														</p:inputText>
-													<p:message for="COPOIN" display="icon"/>
+													<p:inputText id="COPOIN" value="#{GestorMovimientosReferenciasCatastrales.sCOPOIN}" size="5" maxlength="5">
+													</p:inputText>
 
 													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
-														<p:inputText id="NOVIAS" value="#{GestorMovimientosReferenciasCatastrales.sNOVIAS}" size="60" maxlength="60">
-														</p:inputText>
-													<p:message for="NOVIAS" display="icon"/>
+													<p:inputText id="NOVIAS" value="#{GestorMovimientosReferenciasCatastrales.sNOVIAS}" size="60" maxlength="60">
+													</p:inputText>
 
 													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
-														<p:inputText id="NUPOAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPOAC}" size="17" maxlength="17">
-														</p:inputText>
-													<p:message for="NUPOAC" display="icon"/>
+													<p:inputText id="NUPOAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPOAC}" size="17" maxlength="17">
+													</p:inputText>
 
 													<h:outputText for="NUPIAC" value="Piso: " />
-														<p:inputText id="NUPIAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPIAC}" size="11" maxlength="11">
-														</p:inputText>
-													<p:message for="NUPIAC" display="icon"/>
+													<p:inputText id="NUPIAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPIAC}" size="11" maxlength="11">
+													</p:inputText>
 
 													<h:outputText for="NUPUAC" value="Puerta: " />
-														<p:inputText id="NUPUAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPUAC}" size="17" maxlength="17">
-														</p:inputText>
-													<p:message for="NUPUAC" display="icon"/>
+													<p:inputText id="NUPUAC" value="#{GestorMovimientosReferenciasCatastrales.sNUPUAC}" size="17" maxlength="17">
+													</p:inputText>
+
 												</h:panelGrid>
 											</p:panel>
 											<p:panel >
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="2" cellpadding="5">
 													
 													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosReferenciasCatastrales.buscaActivos}" oncomplete="dlgTablaActivos.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosReferenciasCatastrales.limpiarPlantillaActivo}" />	
 
-														<p:ajaxStatus  id="pensandoActivo">  
-															<f:facet name="start">  
-																<h:graphicImage value="/recursos/loadingBar.gif" />  
-															</f:facet>  
-
-															<f:facet name="complete">  
-																<h:outputText value="" />  
-															</f:facet>  
-
-														</p:ajaxStatus> 
 												</h:panelGrid>
 											</p:panel>
 
-													
 										</h:panelGrid>
 									</p:fieldset>
 					</p:dialog>

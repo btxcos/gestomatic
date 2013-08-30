@@ -12,7 +12,6 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoReferenciaCatastral;
-import com.provisiones.types.ReferenciaCatastral;
 import com.provisiones.types.ReferenciaTabla;
 
 public class GestorMovimientosReferenciasCatastrales implements Serializable 
@@ -111,43 +110,6 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		FacesContext.getCurrentInstance().addMessage(null, msg);		
 	}
 	
-	public void cargaReferencia(ActionEvent actionEvent)
-	{
-		String sMethod = "cargaReferencia";
-		
-		
-		
-		FacesMessage msg;
-		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
-    	
-  	
-    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
-    	{
-    		Utils.debugTrace(true, sClassName, sMethod, "ERROR: No existe referencia catastral de alta para el activo consultado.");
-    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"No existe referencia catastral de alta para el activo consultado.",null);
-    	}
-    	else
-		{
-    		
-    		ReferenciaCatastral referencia = CLReferencias.buscaReferencia(sNURCAT);
-   
-    		this.sTIRCAT = referencia.getTIRCAT();
-    		this.sENEMIS = referencia.getENEMIS();
-    		//this.sCOTEXA = referencia.getCOTEXA();
-    		this.sOBTEXC = referencia.getOBTEXC();
-    		
-    		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
-
-			msg = new FacesMessage("Encontrada referencia para el activo '"+sCOACES.toUpperCase()+"'.",null);
-		}
-		
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);	
-		
-	}
-	
 	public void borrarPlantillaActivo()
 	{
     	this.sCOPOIN = "";
@@ -176,8 +138,13 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		this.sCOACES = "";
         this.sNURCAT = "";
         this.sTIRCAT = "";
+        
+    	//Ampliacion de valor catastral
+    	this.sIMVSUE = "";
+    	this.sIMCATA = "";
+    	this.sFERECA = "";
+        
         this.sENEMIS = "";
-        //this.sCOTEXA = "";
         this.sOBTEXC = "";
 	}
     
@@ -211,40 +178,14 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 
     	FacesMessage msg;
     	
-    	
-    	
-    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
-    	
     	this.sCOACES  = activoseleccionado.getCOACES();
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
     	
-    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
-    	{
-    		msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"La referencia catastral seleccionada no esta de alta.",null);
-    		
-    	}
-    	else
-    	{	
-    		ReferenciaCatastral referencia = CLReferencias.buscaReferencia(sNURCAT);
-    		   
-    		this.sTIRCAT = referencia.getTIRCAT();
-    		this.sENEMIS = referencia.getENEMIS();
-    		//this.sCOTEXA = referencia.getCOTEXA();
-    		this.sOBTEXC = referencia.getOBTEXC();
-    		
-    		this.sIMVSUE = referencia.getOBTEXC();
-    		this.sIMCATA = referencia.getOBTEXC();
-    		this.sFERECA = referencia.getOBTEXC();
+   		msg = new FacesMessage("Activo "+ sCOACES +" cargado.");
     	
-    		msg = new FacesMessage("Referencia "+ sNURCAT +" cargada.");
-    	
-    		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-    		Utils.debugTrace(true, sClassName, sMethod, "Referencia cargada: |"+sNURCAT+"|");
-    	}
+   		Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
-		//return "listacomunidadesactivos.xhtml";
     }
 	
 	public void seleccionarReferencia(ActionEvent actionEvent) 
@@ -259,10 +200,14 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.sENEMIS = referenciaseleccionada.getENEMIS();
     	this.sOBTEXC = referenciaseleccionada.getOBTEXC();
     	
+    	//Ampliacion de valor catastral
     	this.sIMVSUE = referenciaseleccionada.getIMVSUE();
     	this.sIMCATA = referenciaseleccionada.getIMCATA();
     	this.sFERECA = referenciaseleccionada.getFERECA();
 
+    	Utils.debugTrace(true, sClassName, sMethod, "sIMVSUE:|"+sIMVSUE+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sIMCATA:|"+sIMCATA+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sFERECA:|"+sFERECA+"|");
  	
     	String sMsg = "Referencia '"+ sNURCAT +"' Seleccionada.";
     	
@@ -295,7 +240,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 				sTIRCAT.toUpperCase(),
 				"", 
 				sENEMIS.toUpperCase(),
-				sCOTEXA.toUpperCase(),
+				ValoresDefecto.DEF_COTEXA,
 				"", 
 				sOBTEXC.toUpperCase(), 
 				sOBDEER.toUpperCase(),
@@ -389,6 +334,23 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
 
+		case -700: //Error 700 - No existe realcion con ese activo
+			sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -701: //Error 701 - Valor del suelo incorrecto
+			sMsg = "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -702: //Error 702 - Valor catastral incorrecto
+			sMsg = "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 			
 		case -801: //Error 801 - alta de una referencia en alta
 			sMsg = "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.";

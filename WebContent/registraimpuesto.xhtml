@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -59,11 +59,11 @@
 									<p:fieldset legend="Activo">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorImpuestosRecursos.sCOACES}" size="9" maxlength="9">
-														</p:inputText>
-													<p:message for="COACES" display="icon"/>
+													<p:inputText id="COACES" value="#{GestorImpuestosRecursos.sCOACES}" size="9" maxlength="9">
+													</p:inputText>
+
 													<p:commandButton value="Cargar Referencias" update="msgs, popup, panel, referencias" actionListener="#{GestorImpuestosRecursos.cargarReferencias}" oncomplete="dlgTablaReferencias.show()"/>	
 												</h:panelGrid>
 											</p:panel>
@@ -72,12 +72,11 @@
 									</p:fieldset>
 
 									<p:fieldset legend="Referencia Catastral">
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="NURCAT" value="NURCAT: " />
 											<p:inputText id="NURCAT" value="#{GestorImpuestosRecursos.sNURCAT}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
-											<p:message for="NURCAT" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -86,7 +85,7 @@
 										<h:panelGrid columns="1" cellpadding="5">
 
 											<p:panel >
-												<h:panelGrid columns="5" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 
 													<h:outputText for="COSBAC" value="Concepto: " />
 													<p:selectOneMenu id="COSBAC" value="#{GestorImpuestosRecursos.sCOSBAC}" >
@@ -94,7 +93,7 @@
 														<f:selectItems value="#{GestorDatosGenerales.tiposcosbga_t21HM}" />
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
-													<p:message for="COSBAC" display="icon"/>
+
 
 												</h:panelGrid>
 										  </p:panel>
@@ -106,7 +105,7 @@
 													<p:inputMask id="FEPRRE" validatorMessage="La fecha de presentacion de recurso debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
-													<p:message for="FEPRRE" display="icon"/>
+													<p:commandButton id="hFEPRRE" icon="ui-icon-clock" update="FEPRRE" actionListener="#{GestorImpuestosRecursos.hoyFEPRRE}"/>
 
 													<h:outputText for="BISODE" value="BISODE: " />
 													<p:selectOneMenu id="BISODE" value="#{GestorImpuestosRecursos.sBISODE}">
@@ -114,8 +113,7 @@
 														<f:selectItems value="#{GestorDatosGenerales.tiposbinariaHM}" />
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
-													<p:message for="BISODE" display="icon"/>
-														
+
 												</h:panelGrid>
 										  </p:panel>
 										</h:panelGrid>
@@ -128,7 +126,6 @@
 
 											<p:inputText id="OBTEXC" value="#{GestorImpuestosRecursos.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
-											<p:message for="OBTEXC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>

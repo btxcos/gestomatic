@@ -101,7 +101,7 @@ public class CLCuotas
 		
 		if (QMActivos.existeActivo(sCOACES))
 		{
-			if (QMListaComunidadesActivos.activoPerteneceComunidad(sCOCLDO, sNUDCOM, sCOACES))
+			if (CLComunidades.comprobarRelacion(sCOCLDO, sNUDCOM, sCOACES))
 				iCodigo = 0;
 			else
 				iCodigo = -1;
@@ -112,6 +112,11 @@ public class CLCuotas
 		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:|"+iCodigo+"|");
 		
 		return iCodigo;
+	}
+	
+	public static boolean comprobarRelacion(String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodCOACES)
+	{
+		return QMListaCuotas.compruebaRelacionCuotaActivo(sCodCOCLDO, sCodNUDCOM, sCodCOSBAC, sCodCOACES);
 	}
 	
 	public static MovimientoCuota convierteCuotaenMovimiento(Cuota cuota, String sCodCOACES, String sCodCOACCI)
@@ -184,7 +189,7 @@ public class CLCuotas
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
-		else if (!QMActivos.existeActivo(movimiento.getCOACES()))
+		else if (movimiento.getCOACES().equals("") || !QMActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
@@ -194,10 +199,25 @@ public class CLCuotas
 			//Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO O NULO
 			iCodigo = -4;
 		}
+		else if (!CLComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+		{
+			//Error 041 - LA COMUNIDAD NO EXISTE EN LA TABLA DE COMUNIDADES GMAE10
+			iCodigo = -41;
+		}
 		else if (movimiento.getCOSBAC().equals(""))
 		{
 			//Error 032 - EL SUBTIPO DE ACCION NO EXISTE
 			iCodigo = -32;
+		}
+		else if (movimiento.getIMCUCO().equals("#"))
+		{
+			//Error 701 - importe incorrecto
+			iCodigo = -701;
+		}		
+		else if (Double.parseDouble(movimiento.getIMCUCO()) <= 0)
+		{
+			//Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO
+			iCodigo = -36;
 		}
 		else if (movimiento.getFIPAGO().equals("#") || movimiento.getFIPAGO().equals("0"))
 		{
@@ -209,58 +229,44 @@ public class CLCuotas
 			//Error 034 - LA FECHA DE ULTIMO PAGO DEBE SER LOGICA Y OBLIGATORIA
 			iCodigo = -34;
 		}
-		else if (Integer.parseInt(movimiento.getFFPAGO()) <  Integer.parseInt(movimiento.getFIPAGO()))
-		{
-			//Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
-			iCodigo = -35;
-		}
-		else if (movimiento.getIMCUCO().equals("#"))
-		{
-			//Error 805 - importe incorrecto
-			iCodigo = -805;
-		}		
-		else if (Double.parseDouble(movimiento.getIMCUCO()) <= 0)
-		{
-			//Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO
-			iCodigo = -36;
-		}		
-		else if (!CLComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
-		{
-			//Error 041 - LA COMUNIDAD NO EXISTE EN LA TABLA DE COMUNIDADES GMAE10
-			iCodigo = -41;
-		}		
-
-		else if (movimiento.getCOACCI().equals("A") && 
-				QMListaComunidadesActivos.activoVinculadoComunidad(movimiento.getCOACES()) && 
-				!QMListaComunidadesActivos.activoPerteneceComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
-		{
-			//Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
-			iCodigo = -42;
-		}
-		else if (movimiento.getCOACCI().equals("M") &&  
-				!QMListaComunidadesActivos.activoPerteneceComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
-		{
-			//Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
-			iCodigo = -43;
-		}
-		
-		else if (movimiento.getPTPAGO().equals(""))
-		{
-			//Error 044 - NO EXISTE PERIOCIDAD DE PAGO
-			iCodigo = -44;
-		}
-		else if (movimiento.getCOACCI().equals("M") &&  
-				!QMListaComunidadesActivos.activoPerteneceComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
-		{
-			//Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
-			iCodigo = -45;
-		}		
-		
 		else if (movimiento.getFAACTA().equals("#") || movimiento.getFAACTA().equals("0"))
 		{
 			//Error 046 - LA FECHA DEL ACTA DEBE SER LOGICA Y OBLIGATORIA 
 			iCodigo = -46;
 		}
+		else if (Integer.parseInt(movimiento.getFFPAGO()) <  Integer.parseInt(movimiento.getFIPAGO()))
+		{
+			//Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
+			iCodigo = -35;
+		}
+		else if (movimiento.getPTPAGO().equals(""))
+		{
+			//Error 044 - NO EXISTE PERIOCIDAD DE PAGO
+			iCodigo = -44;
+		}
+		
+
+		else if (movimiento.getCOACCI().equals("A") && 
+				QMListaComunidadesActivos.activoVinculadoComunidad(movimiento.getCOACES()) && 
+				!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+		{
+			//Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
+			iCodigo = -42;
+		}
+		else if (movimiento.getCOACCI().equals("M") &&  
+				!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+		{
+			//Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
+			iCodigo = -43;
+		}
+		else if (movimiento.getCOACCI().equals("B") &&  
+				!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+		{
+			//Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
+			iCodigo = -45;
+		}		
+		
+
 
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
 		{
@@ -279,7 +285,7 @@ public class CLCuotas
 		}
 		else
 		{
-			MovimientoCuota movimiento_revisado = CLCuotas.revisaMovimiento(movimiento);
+			MovimientoCuota movimiento_revisado = CLCuotas.revisaCodigosControl(movimiento);
 			
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
@@ -390,7 +396,7 @@ public class CLCuotas
 	}
 	
 	
-	public static MovimientoCuota revisaMovimiento(MovimientoCuota movimiento)
+	public static MovimientoCuota revisaCodigosControl(MovimientoCuota movimiento)
 	{
 		String sMethod = "revisaMovimiento";
 		

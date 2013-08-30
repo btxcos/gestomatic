@@ -137,9 +137,9 @@ public class CLImpuestos
 		return QMListaImpuestos.buscaDevolucionesActivo(sCodCOACES);
 	}
 	
-	public static boolean existeRelacionImpuesto (String sCodCOACES,String sCodNURCAT,String sCodCOSBAC)
+	public static boolean comprobarRelacion (String sCodNURCAT,String sCodCOSBAC, String sCodCOACES)
 	{
-		return QMListaImpuestos.existeRelacionImpuesto(sCodCOACES, sCodNURCAT, sCodCOSBAC);
+		return QMListaImpuestos.compruebaRelacionImpuestoActivo(sCodNURCAT, sCodCOSBAC, sCodCOACES);
 	}	
 	
 	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento)
@@ -163,21 +163,29 @@ public class CLImpuestos
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
-		else if (!QMActivos.existeActivo(movimiento.getCOACES()))
+		else if (movimiento.getCOACES().equals("") || !QMActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
-		}
-		else if (movimiento.getCOSBAC().equals(""))
-		{
-			//Error 032 - EL SUBTIPO DE ACCION NO EXISTE
-			iCodigo = -32;
 		}
 		else if (movimiento.getNURCAT().equals(""))
 		{
 			//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 			iCodigo = -54;
 		}
+		else if (CLReferencias.comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOACES()))
+		{
+		
+			//error no existe relacion con el activo.
+			iCodigo = -700;
+		
+		}
+		else if (movimiento.getCOSBAC().equals(""))
+		{
+			//Error 032 - EL SUBTIPO DE ACCION NO EXISTE
+			iCodigo = -32;
+		}
+
 		else if (movimiento.getFEPRRE().equals("#") || movimiento.getFEPRRE().equals("0"))
 		{
 			//Error 055 - LA FECHA PRESENTACION DE RECURSO DEBE SER LOGICA Y OBLIGATORIA
@@ -203,12 +211,12 @@ public class CLImpuestos
 			//Error 062 - INDICADOR SOLICITUD DEVOLUCION DEBE SER 'S' O 'N'
 			iCodigo = -62;
 		}		
-		else if (movimiento.getCOACCI().equals("A") && existeRelacionImpuesto(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
+		else if (movimiento.getCOACCI().equals("A") && comprobarRelacion(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
 		{
 			//Error 064 - NO SE PUEDE REALIZAR EL ALTA PORQUE YA EXISTE EL REGISTRO EN GMAE57
 			iCodigo = -64;
 		}
-		else if (movimiento.getCOACCI().equals("M") && !existeRelacionImpuesto(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
+		else if (movimiento.getCOACCI().equals("M") && !comprobarRelacion(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
 		{
 			//Error 066 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE EL REGISTRO EN GMAE57
 			iCodigo = -66;
@@ -218,7 +226,7 @@ public class CLImpuestos
 			//Error 067 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
 			iCodigo = -67;
 		}
-		else if (movimiento.getCOACCI().equals("B") && !existeRelacionImpuesto(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
+		else if (movimiento.getCOACCI().equals("B") && !comprobarRelacion(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
 		{
 			//Error 068 - NO SE PUEDE ELIMINAR PORQUE NO EXISTE REGISTRO EN GMAE57
 			iCodigo = -68;
@@ -301,7 +309,7 @@ public class CLImpuestos
 
 		else
 		{
-			MovimientoImpuestoRecurso movimiento_revisado = revisaMovimiento(movimiento);
+			MovimientoImpuestoRecurso movimiento_revisado = revisaCodigosControl(movimiento);
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
 				//error modificacion sin cambios
@@ -412,9 +420,9 @@ public class CLImpuestos
 		return iCodigo;
 	}
 	
-	public static MovimientoImpuestoRecurso revisaMovimiento(MovimientoImpuestoRecurso movimiento)
+	public static MovimientoImpuestoRecurso revisaCodigosControl(MovimientoImpuestoRecurso movimiento)
 	{
-		String sMethod = "revisaMovimiento";
+		String sMethod = "revisaCodigosControl";
 		
 		ImpuestoRecurso impuesto = QMImpuestos.getImpuestoRecurso(movimiento.getNURCAT(),movimiento.getCOSBAC());
 		

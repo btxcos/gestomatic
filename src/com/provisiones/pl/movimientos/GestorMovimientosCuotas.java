@@ -370,6 +370,12 @@ public class GestorMovimientosCuotas implements Serializable
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
 			
+		case -701: //Error 701 - error en importe
+			sMsg = "ERROR:701 - El campo importe no se ha informado correctamente. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
 		case -801: //Error 801 - alta de una cuota en alta
 			sMsg = "ERROR:801 - La cuota ya esta dada de alta. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
@@ -394,12 +400,6 @@ public class GestorMovimientosCuotas implements Serializable
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
 			
-		case -805: //Error 805 - error en importe
-			sMsg = "ERROR:805 - El campo importe no se ha informado correctamente. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
 		case -900: //Error 900 - al crear un movimiento
 			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);

@@ -295,7 +295,7 @@ public class CLGastos
 		
 		String sAccion = decideAccion(movimiento,sEstado);
 		
-		MovimientoGasto movimiento_revisado = CLGastos.revisaMovimiento(movimiento,sAccion);
+		MovimientoGasto movimiento_revisado = CLGastos.revisaSignos(movimiento,sAccion);
 		
 				
 		Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
@@ -534,9 +534,9 @@ public class CLGastos
 		return iCodigo;
 	}
 	
-	public static MovimientoGasto revisaMovimiento(MovimientoGasto movimiento, String sAccion)
+	public static MovimientoGasto revisaSignos(MovimientoGasto movimiento, String sAccion)
 	{
-		String sMethod = "revisaMovimiento";
+		String sMethod = "revisaSignos";
 		
 		Gasto gasto = QMGastos.getGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 		

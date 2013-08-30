@@ -128,6 +128,11 @@ public class CLReferencias
 		return QMReferencias.existeReferenciaCatastral(sCodNURCAT);
 	}
 	
+	public static boolean comprobarRelacion(String sCodNURCAT, String sCodCOACES)
+	{
+		return QMListaReferencias.compruebaRelacionReferenciaActivo(sCodNURCAT, sCodCOACES);
+	}
+	
 	
 	public static String referenciaCatastralActivo(String sCodCOACES)
 	{
@@ -188,12 +193,55 @@ public class CLReferencias
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
-		else if (!QMActivos.existeActivo(movimiento.getCOACES()))
+		else if (movimiento.getCOACES().equals("") || !QMActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
 		}
+		else if (movimiento.getNURCAT().equals(""))
+		{
+			//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
+			iCodigo = -54;
+		}
+		else if (movimiento.getCOACCI().equals("A") && movimiento.getTIRCAT().equals(""))
+		{
+			//Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
+			iCodigo = -52;
+		}
 		
+		else if (Double.parseDouble(movimiento.getIMVSUE()) <= 0)
+		{
+			//Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
+			iCodigo = -82;
+		}
+		else if (movimiento.getIMVSUE().equals("#"))
+		{
+			//Error 701 - valor del suelo incorrecto
+			iCodigo = -701;
+		}
+
+		else if (Double.parseDouble(movimiento.getIMCATA()) <= 0)
+		{
+			//Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
+			iCodigo = -83;
+		}
+		else if (movimiento.getIMCATA().equals("#"))
+		{
+			//Error 702 - valor catastral incorrecto
+			iCodigo = -702;
+		}
+		
+		else if (movimiento.getFERECA().equals("#") || movimiento.getFERECA().equals("0"))
+		{
+			//Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
+			iCodigo = -85;
+		}
+		
+		else if (!movimiento.getCOACCI().equals("A") &&  !comprobarRelacion(movimiento.getNURCAT(),movimiento.getCOACES()))
+		{
+			//error no existe relaccion con ese activo
+			iCodigo = -700;
+		}
 		else if (movimiento.getCOACCI().equals("A") && QMReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
 		{
 			//Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
@@ -209,37 +257,10 @@ public class CLReferencias
 			//Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
 			iCodigo = -51;
 		}
-		else if (movimiento.getCOACCI().equals("A") && movimiento.getTIRCAT().equals(""))
-		{
-			//Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
-			iCodigo = -52;
-		}		
 		else if (movimiento.getCOACCI().equals("B") && QMImpuestos.tieneImpuestoRecurso(movimiento.getNURCAT()))
 		{
 			//Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
 			iCodigo = -53;
-		}		
-		else if (movimiento.getNURCAT().equals(""))
-		{
-			//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
-			iCodigo = -54;
-		}
-		
-		else if (Double.parseDouble(movimiento.getIMVSUE()) <= 0)
-		{
-			//Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
-			iCodigo = -82;
-		}	
-
-		else if (Double.parseDouble(movimiento.getIMCATA()) <= 0)
-		{
-			//Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
-			iCodigo = -83;
-		}
-		else if (movimiento.getFERECA().equals("#") || movimiento.getFERECA().equals("0"))
-		{
-			//Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
-			iCodigo = -85;
 		}
 		
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
@@ -260,7 +281,7 @@ public class CLReferencias
 
 		else
 		{
-			MovimientoReferenciaCatastral movimiento_revisado = revisaMovimiento(movimiento);
+			MovimientoReferenciaCatastral movimiento_revisado = revisaCodigosControl(movimiento);
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
 				//error modificacion sin cambios
@@ -372,9 +393,9 @@ public class CLReferencias
 		return iCodigo;
 	}
 	
-	public static MovimientoReferenciaCatastral revisaMovimiento(MovimientoReferenciaCatastral movimiento)
+	public static MovimientoReferenciaCatastral revisaCodigosControl(MovimientoReferenciaCatastral movimiento)
 	{
-		String sMethod = "revisaMovimiento";
+		String sMethod = "revisaCodigosControl";
 		
 		ReferenciaCatastral referencia = QMReferencias.getReferenciaCatastral(movimiento.getNURCAT());
 		

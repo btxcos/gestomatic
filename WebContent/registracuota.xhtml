@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -61,9 +61,8 @@
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorCuotas.sCOACES}" size="9" maxlength="9">
-														</p:inputText>
-													<p:message for="COACES" display="icon"/>
+													<p:inputText id="COACES" value="#{GestorCuotas.sCOACES}" size="9" maxlength="9">
+													</p:inputText>
 													<p:commandButton value="Buscar Comunidad" update="msgs, popup, COACES, panelComunidad" actionListener="#{GestorCuotas.buscarComunidad}"/>	
 												</h:panelGrid>
 											</p:panel>
@@ -74,44 +73,31 @@
 									<p:fieldset legend="Comunidad de proprietarios" id="panelComunidad">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="8" cellpadding="5">
+												<h:panelGrid columns="6" cellpadding="5">
 													<h:outputText for="COCLDO" value="Documento: " />
 													<p:selectOneMenu id="COCLDO" value="#{GestorCuotas.sCOCLDO}">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
-													<p:message for="COCLDO" display="icon"/>
-											
+
 													<h:outputText for="NUDCOM" value="Numero: " />
-														<p:inputText id="NUDCOM" value="#{GestorCuotas.sNUDCOM}" size="10" maxlength="10">
-														</p:inputText>
-													<p:message for="NUDCOM" display="icon"/>
+													<p:inputText id="NUDCOM" value="#{GestorCuotas.sNUDCOM}" size="10" maxlength="10">
+													</p:inputText>
+
 													<p:commandButton value="Cargar" update="panelComunidad, msgs, popup" actionListener="#{GestorCuotas.cargarComunidad}" />
-
-													<p:ajaxStatus  id="pensandoComunidad">
-														<f:facet name="start">
-															<h:graphicImage value="/recursos/loadingBar.gif" />  
-														</f:facet>  
-
-														<f:facet name="complete">  
-															<h:outputText value="" />  
-														</f:facet>
-													</p:ajaxStatus>
 
 												</h:panelGrid>
 										  </p:panel>
 											<p:panel>                                  
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="2" cellpadding="5">
 													<h:outputText for="NOMCOC" value="Nombre comunidad: " />
-														<p:inputText id="NOMCOC" value="#{GestorCuotas.sNOMCOC}" size="60" maxlength="60" disabled="true">
-														</p:inputText>
-													<p:message for="NOMCOC" display="icon"/>
+													<p:inputText id="NOMCOC" value="#{GestorCuotas.sNOMCOC}" size="60" maxlength="60" disabled="true">
+													</p:inputText>
 
 													<h:outputText for="NODCCO"  value="Correo electronico: " />
-														<p:inputText id="NODCCO" value="#{GestorCuotas.sNODCCO}" size="60"  maxlength="60" disabled="true">
-														</p:inputText>
-													<p:message for="NODCCO" display="icon"/>
+													<p:inputText id="NODCCO" value="#{GestorCuotas.sNODCCO}" size="60"  maxlength="60" disabled="true">
+													</p:inputText>
 												</h:panelGrid>
 										  </p:panel>
 										</h:panelGrid>
@@ -130,7 +116,7 @@
 														<f:selectItems value="#{GestorDatosGenerales.tiposcosbga_t22HM}" />
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
-													<p:message for="COSBAC" display="icon"/>
+
 														
 													<h:outputText value="Devolucion: " />
 													<p:selectBooleanCheckbox value="#{GestorCuotas.bDevolucion}" />  
@@ -140,54 +126,44 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="IMCUCO" value="IMCUCO: " />
-													<p:inputText id="IMCUCO" value="#{GestorCuotas.sIMCUCO}" size="16" maxlength="16" validatorMessage="El importe de la cuota introducido es incorrecto." >
-														<f:validateRegex pattern="[0-9]+([\.|,][0-9]{2})?$" />
+													<p:inputText id="IMCUCO" value="#{GestorCuotas.sIMCUCO}" size="16" maxlength="16">
 													</p:inputText>
-													<p:message for="IMCUCO" display="icon"/>
+													<h:outputText for="IMCUCO" value="¤" />
 												</h:panelGrid>
 										  </p:panel>
 
 											<p:panel >
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="2" cellpadding="5">
 													<h:outputText for="PTPAGO" value="Periodicidad: " />
 													<p:selectOneMenu id="PTPAGO" value="#{GestorCuotas.sPTPAGO}">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposptpagoHM}" />
 														<f:validateLength minimum="1" /> 
 													</p:selectOneMenu>
-													<p:message for="PTPAGO" display="icon"/>
 												</h:panelGrid>
 										  </p:panel>
 										  </h:panelGrid>
 										  </p:panel>
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 
 													<h:outputText for="FIPAGO" value="FIPAGO: " />
-													<p:inputMask id="FIPAGO" validatorMessage="La fecha del primer pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorCuotas.sFIPAGO}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FIPAGO" value="#{GestorCuotas.sFIPAGO}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:commandButton id="hFIPAGO" icon="ui-icon-clock" update="FIPAGO" actionListener="#{GestorCuotas.hoyFIPAGO}"/>
-													<p:message for="FIPAGO" display="icon"/>
 
 													<h:outputText for="FFPAGO" value="FFPAGO: " />
-													<p:inputMask id="FFPAGO" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorCuotas.sFFPAGO}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FFPAGO" value="#{GestorCuotas.sFFPAGO}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:commandButton id="hFFPAGO" icon="ui-icon-clock" update="FFPAGO" actionListener="#{GestorCuotas.hoyFFPAGO}"/>
-													<p:message for="FFPAGO" display="icon"/>
-
-
-
 
 													<h:outputText for="FAACTA" value="FAACTA: " />
-													<p:inputMask id="FAACTA" validatorMessage="La fecha del ultimo pago debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorCuotas.sFAACTA}" mask="99/99/9999" size="10" >
+													<p:inputMask id="FAACTA" value="#{GestorCuotas.sFAACTA}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:commandButton id="hFAACTA" icon="ui-icon-clock" update="FAACTA" actionListener="#{GestorCuotas.hoyFAACTA}"/>
-													<p:message for="FAACTA" display="icon"/>
-
-
 
 												</h:panelGrid>
 										  </p:panel>
@@ -203,7 +179,6 @@
 
 											<p:inputText id="OBTEXC" value="#{GestorCuotas.sOBTEXC}" size="110" maxlength="110" >
 											</p:inputText>
-											<p:message for="OBTEXC" display="icon"/>
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -255,59 +230,44 @@
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="2" cellpadding="5">
 													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
-														<p:inputText id="NOPRAC" value="#{GestorCuotas.sNOPRAC}" size="18" maxlength="18">
-														</p:inputText>
-													<p:message for="NOPRAC" display="icon"/>
+													<p:inputText id="NOPRAC" value="#{GestorCuotas.sNOPRAC}" size="18" maxlength="18">
+													</p:inputText>
 
 													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
-														<p:inputText id="NOMUIN" value="#{GestorCuotas.sNOMUIN}" size="30" maxlength="30">
-														</p:inputText>
-													<p:message for="NOMUIN" display="icon"/>
+													<p:inputText id="NOMUIN" value="#{GestorCuotas.sNOMUIN}" size="30" maxlength="30">
+													</p:inputText>
+
 
 													<h:outputText for="COPOIN" value="Codigo Postal: " />
-														<p:inputText id="COPOIN" value="#{GestorCuotas.sCOPOIN}" size="5" maxlength="5">
-														</p:inputText>
-													<p:message for="COPOIN" display="icon"/>
+													<p:inputText id="COPOIN" value="#{GestorCuotas.sCOPOIN}" size="5" maxlength="5">
+													</p:inputText>
 
 													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
-														<p:inputText id="NOVIAS" value="#{GestorCuotas.sNOVIAS}" size="60" maxlength="60">
-														</p:inputText>
-													<p:message for="NOVIAS" display="icon"/>
+													<p:inputText id="NOVIAS" value="#{GestorCuotas.sNOVIAS}" size="60" maxlength="60">
+													</p:inputText>
 
 													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
-														<p:inputText id="NUPOAC" value="#{GestorCuotas.sNUPOAC}" size="17" maxlength="17">
-														</p:inputText>
-													<p:message for="NUPOAC" display="icon"/>
+													<p:inputText id="NUPOAC" value="#{GestorCuotas.sNUPOAC}" size="17" maxlength="17">
+													</p:inputText>
 
 													<h:outputText for="NUPIAC" value="Piso: " />
-														<p:inputText id="NUPIAC" value="#{GestorCuotas.sNUPIAC}" size="11" maxlength="11">
-														</p:inputText>
-													<p:message for="NUPIAC" display="icon"/>
+													<p:inputText id="NUPIAC" value="#{GestorCuotas.sNUPIAC}" size="11" maxlength="11">
+													</p:inputText>
 
 													<h:outputText for="NUPUAC" value="Puerta: " />
-														<p:inputText id="NUPUAC" value="#{GestorCuotas.sNUPUAC}" size="17" maxlength="17">
-														</p:inputText>
-													<p:message for="NUPUAC" display="icon"/>
+													<p:inputText id="NUPUAC" value="#{GestorCuotas.sNUPUAC}" size="17" maxlength="17">
+													</p:inputText>
+
 												</h:panelGrid>
 											</p:panel>
 											<p:panel >
-												<h:panelGrid columns="3" cellpadding="5">
+												<h:panelGrid columns="2" cellpadding="5">
 													
 													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorCuotas.buscaActivosConComunidad}" oncomplete="dlgTabla.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorCuotas.limpiarPlantillaActivo}" />	
 
-														<p:ajaxStatus  id="pensandoActivo">  
-															<f:facet name="start">  
-																<h:graphicImage value="/recursos/loadingBar.gif" />  
-															</f:facet>  
-
-															<f:facet name="complete">  
-																<h:outputText value="" />  
-															</f:facet>  
-
-														</p:ajaxStatus> 
 												</h:panelGrid>
 											</p:panel>
 

@@ -120,9 +120,9 @@ public class QMListaImpuestos
 		return bSalida;
 	}
 
-	public static boolean existeRelacionImpuesto(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC)
+	public static boolean compruebaRelacionImpuestoActivo(String sCodNURCAT, String sCodCOSBAC, String sCodCOACES)
 	{
-		String sMethod = "existeRelacionImpuesto";
+		String sMethod = "compruebaRelacionImpuestoActivo";
 
 		Statement stmt = null;
 		ResultSet rs = null;

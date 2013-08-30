@@ -189,7 +189,6 @@ public class GestorReferenciasCatastrales implements Serializable
     	{
     		msg = new FacesMessage(FacesMessage.SEVERITY_WARN,"No existe un numero de referencia catastral asociado.",null);
     		FacesContext.getCurrentInstance().addMessage(null, msg);
-    		
     	}
     		
     	
@@ -309,6 +308,24 @@ public class GestorReferenciasCatastrales implements Serializable
 
 		case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
 			sMsg = "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -700: //Error 700 - No existe realcion con ese activo
+			sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -701: //Error 701 - Valor del suelo incorrecto
+			sMsg = "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -702: //Error 702 - Valor catastral incorrecto
+			sMsg = "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;

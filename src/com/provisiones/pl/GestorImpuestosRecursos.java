@@ -171,6 +171,12 @@ public class GestorImpuestosRecursos implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		case -32: //Error 032 - EL SUBTIPO DE ACCION NO EXISTE
+			sMsg = "ERROR:032 - No se a informado el concepto. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
 		case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 			sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
@@ -288,6 +294,12 @@ public class GestorImpuestosRecursos implements Serializable
 
 		case -112: //Error 112 - LA F.DEVOLUCION ES MENOR A LA F.RESOLUCION
 			sMsg = "ERROR:112 - La fecha de devolucion es anterior a la fecha de resolucion. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -700: //Error 700 - no existe relacion con el activo
+			sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
@@ -411,6 +423,13 @@ public class GestorImpuestosRecursos implements Serializable
 		msg = new FacesMessage(sMsg, null);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);		
+	}
+	
+	public void hoyFEPRRE (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFEPRRE";
+		this.setsFEPRRE(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFEPRRE:|"+sFEPRRE+"|");
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
