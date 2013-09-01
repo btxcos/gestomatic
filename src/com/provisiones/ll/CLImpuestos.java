@@ -173,7 +173,7 @@ public class CLImpuestos
 			//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 			iCodigo = -54;
 		}
-		else if (CLReferencias.comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOACES()))
+		else if (!CLReferencias.comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOACES()))
 		{
 		
 			//error no existe relacion con el activo.
@@ -186,10 +186,20 @@ public class CLImpuestos
 			iCodigo = -32;
 		}
 
-		else if (movimiento.getFEPRRE().equals("#") || movimiento.getFEPRRE().equals("0"))
+		else if (movimiento.getFEPRRE().equals("0"))
 		{
 			//Error 055 - LA FECHA PRESENTACION DE RECURSO DEBE SER LOGICA Y OBLIGATORIA
 			iCodigo = -55;
+		}
+		else if (movimiento.getFEPRRE().equals("#"))
+		{
+			//Error fecha de presentacion invalida
+			iCodigo = -807;
+		}
+		else if (movimiento.getBISODE().equals("#"))
+		{
+			//Error 062 - INDICADOR SOLICITUD DEVOLUCION DEBE SER 'S' O 'N'
+			iCodigo = -62;
 		}
 		else if (movimiento.getFERERE().equals("#"))
 		{
@@ -201,36 +211,6 @@ public class CLImpuestos
 			//Error fecha de devolucion invalida
 			iCodigo = -806;
 		}
-		else if (movimiento.getCOACCI().equals("A") && !CLReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
-		{
-			//Error 061 - NO SE PUEDE REALIZAR EL ALTA PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
-			iCodigo = -61;
-		}
-		else if (movimiento.getBISODE().equals("#"))
-		{
-			//Error 062 - INDICADOR SOLICITUD DEVOLUCION DEBE SER 'S' O 'N'
-			iCodigo = -62;
-		}		
-		else if (movimiento.getCOACCI().equals("A") && comprobarRelacion(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
-		{
-			//Error 064 - NO SE PUEDE REALIZAR EL ALTA PORQUE YA EXISTE EL REGISTRO EN GMAE57
-			iCodigo = -64;
-		}
-		else if (movimiento.getCOACCI().equals("M") && !comprobarRelacion(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
-		{
-			//Error 066 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE EL REGISTRO EN GMAE57
-			iCodigo = -66;
-		}
-		else if (movimiento.getCOACCI().equals("M") && !CLReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
-		{
-			//Error 067 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
-			iCodigo = -67;
-		}
-		else if (movimiento.getCOACCI().equals("B") && !comprobarRelacion(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC()))
-		{
-			//Error 068 - NO SE PUEDE ELIMINAR PORQUE NO EXISTE REGISTRO EN GMAE57
-			iCodigo = -68;
-		}		
 		else if (!movimiento.getFEPRRE().equals("0") && !movimiento.getBIRESO().equals("#") && movimiento.getFERERE().equals("0"))
 		{
 			//Error 101 - TIENE F.PRESENTACION, TIPO RESOLUCION Y NO F.RESOLUCION
@@ -246,7 +226,7 @@ public class CLImpuestos
 			//Error 103 - NO TIENE F.PRESENTACION Y SI TIPO RESOLUCION
 			iCodigo = -103;
 		}
-		/*(REVISAR)*/else if (movimiento.getFEPRRE().equals("0") && !movimiento.getBIRESO().equals("#") && !movimiento.getFERERE().equals("0"))
+		else if (movimiento.getFEPRRE().equals("0") && movimiento.getBIRESO().equals("#") && !movimiento.getFERERE().equals("0"))
 		{
 			//Error 104 - NO TIENE F.PRESENTACION, TIPO RESOLUCION Y SI F.RESOLUCION
 			iCodigo = -104;
@@ -290,7 +270,35 @@ public class CLImpuestos
 		{
 			//Error 112 - LA F.DEVOLUCION ES MENOR A LA F.RESOLUCION
 			iCodigo = -112;
+		}
+		
+		else if (movimiento.getCOACCI().equals("A") && !CLReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
+		{
+			//Error 061 - NO SE PUEDE REALIZAR EL ALTA PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
+			iCodigo = -61;
+		}
+		
+		else if (movimiento.getCOACCI().equals("A") && comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),movimiento.getCOACES()))
+		{
+			//Error 064 - NO SE PUEDE REALIZAR EL ALTA PORQUE YA EXISTE EL REGISTRO EN GMAE57
+			iCodigo = -64;
+		}
+		else if (movimiento.getCOACCI().equals("M") && !comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),movimiento.getCOACES()))
+		{
+			//Error 066 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE EL REGISTRO EN GMAE57
+			iCodigo = -66;
+		}
+		else if (movimiento.getCOACCI().equals("M") && !CLReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
+		{
+			//Error 067 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
+			iCodigo = -67;
+		}
+		else if (movimiento.getCOACCI().equals("B") && !comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),movimiento.getCOACES()))
+		{
+			//Error 068 - NO SE PUEDE ELIMINAR PORQUE NO EXISTE REGISTRO EN GMAE57
+			iCodigo = -68;
 		}		
+		
 		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
 		{
 			//error alta de una referencia en alta

@@ -136,6 +136,14 @@ public class QMListaImpuestos
 		conn = ConnectionManager.OpenDBConnection();
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
+		String sQuery = "SELECT " + sField4 + "  FROM " + sTable + 
+				" WHERE " +
+				"(" + sField1 + " = '" + sCodCOACES + "' " +
+				" AND " + sField2 + " = '" + sCodNURCAT + "' " +
+				" AND " + sField3 + " = '" + sCodCOSBAC +"' )";
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 
 		try 
 		{

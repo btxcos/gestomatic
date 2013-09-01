@@ -103,6 +103,10 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
         this.sBIRESO = "";
         //this.sCOTEXA = "";
         this.sOBTEXC = "";
+        
+        this.sDesCOSBAC = "";
+        this.sDesBISODE = "";
+        this.sDesBIRESO = "";
 	}
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
@@ -115,6 +119,9 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
     	this.tablaactivos = null;
     	
     	borrarPlantillaImpuestos();
+    	
+    	this.impuestoseleccionado = null;
+    	this.tablaimpuestos = null;
    	
     }
     
@@ -296,7 +303,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 			break;
 
 		case -101: //Error 101 - TIENE F.PRESENTACION, TIPO RESOLUCION Y NO F.RESOLUCION
-			sMsg = "ERROR:101 - El recurso o impuesto tiene informada la fecha de resolucion, el tipo de resolucion pero no la fecha de resolucion. Por favor, revise los datos.";
+			sMsg = "ERROR:101 - El recurso o impuesto tiene informada la fecha de presentacion, el tipo de resolucion pero no la fecha de resolucion. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
@@ -405,6 +412,12 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
 		case -806: //Error 806 - fecha de devolucion es invalida
 			sMsg = "ERROR:806 -  La fecha de devolucion es invalida. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
+			
+		case -807: //Error 807 - fecha de devolucion es invalida
+			sMsg = "ERROR:807 -  La fecha de presentacion es invalida. Por favor, revise los datos.";
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;

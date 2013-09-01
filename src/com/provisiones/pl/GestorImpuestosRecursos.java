@@ -339,6 +339,12 @@ public class GestorImpuestosRecursos implements Serializable
 			Utils.debugTrace(true, sClassName, sMethod, sMsg);
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 			break;
+			
+		case -807: //Error 807 - fecha de devolucion es invalida
+			sMsg = "ERROR:807 -  La fecha de presentacion es invalida. Por favor, revise los datos.";
+			Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+			break;
 
 		case -900: //Error 900 - al crear un movimiento
 			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
