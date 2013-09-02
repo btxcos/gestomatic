@@ -784,7 +784,8 @@ public class QMListaCuotas
 					   + QMCuotas.sField6 + ","
 					   + QMCuotas.sField7 + ","
 					   + QMCuotas.sField8 + ","
-					   + QMCuotas.sField9 +
+					   + QMCuotas.sField9 + ","
+					   + QMCuotas.sField10 +
 					    
 
 					   " FROM " + QMCuotas.sTable + 
@@ -793,19 +794,19 @@ public class QMListaCuotas
 					   + QMCuotas.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
 					   + QMCuotas.sField5 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
 
-					   + QMCuotas.sField1 +" IN (SELECT "
+					   + QMCuotas.sField2 +" IN (SELECT "
 					   +  sField2 + 
 					   " FROM " + sTable + 
 					   " WHERE (" 
 					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
 
-					   + QMCuotas.sField2 +" IN (SELECT "
+					   + QMCuotas.sField3 +" IN (SELECT "
 					   +  sField3 + 
 					   " FROM " + sTable + 
 					   " WHERE (" 
 					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
 
-					   + QMCuotas.sField3 +" IN (SELECT "
+					   + QMCuotas.sField4 +" IN (SELECT "
 					   +  sField4 + 
 					   " FROM " + sTable + 
 					   " WHERE (" 
@@ -828,27 +829,28 @@ public class QMListaCuotas
 					   + QMCuotas.sField6 + ","
 					   + QMCuotas.sField7 + ","
 					   + QMCuotas.sField8 + ","
-					   + QMCuotas.sField9 +
+					   + QMCuotas.sField9 + ","
+					   + QMCuotas.sField10 +
 					    
 
 					   " FROM " + QMCuotas.sTable + 
 					   " WHERE ("
 
-					   + QMCuotas.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
+					   + QMCuotas.sField11 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
 
-					   + QMCuotas.sField1 +" IN (SELECT "
+					   + QMCuotas.sField2 +" IN (SELECT "
 					   +  sField2 + 
 					   " FROM " + sTable + 
 					   " WHERE (" 
 					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
 
-					   + QMCuotas.sField2 +" IN (SELECT "
+					   + QMCuotas.sField3 +" IN (SELECT "
 					   +  sField3 + 
 					   " FROM " + sTable + 
 					   " WHERE (" 
 					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
 
-					   + QMCuotas.sField3 +" IN (SELECT "
+					   + QMCuotas.sField4 +" IN (SELECT "
 					   +  sField4 + 
 					   " FROM " + sTable + 
 					   " WHERE (" 
@@ -872,18 +874,18 @@ public class QMListaCuotas
 				{
 					found = true;
 					
-					sCOCLDO     = rs.getString(QMCuotas.sField1);
+					sCOCLDO     = rs.getString(QMCuotas.sField2);
 					sDesCOCLDO  = QMCodigosControl.getDesCOCLDO(sCOCLDO);
-					sNUDCOM     = rs.getString(QMCuotas.sField2);
-					sCOSBAC     = rs.getString(QMCuotas.sField3);
+					sNUDCOM     = rs.getString(QMCuotas.sField3);
+					sCOSBAC     = rs.getString(QMCuotas.sField4);
 					sDesCOSBAC  = QMCodigosControl.getDesCOSBGA_E2(sCOSBAC);
-					sFIPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField4));
-					sFFPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField5));
-					sIMCUCO     = Utils.recuperaImporte(false,rs.getString(QMCuotas.sField6));
-					sFAACTA     = Utils.recuperaFecha(rs.getString(QMCuotas.sField7));
-					sPTPAGO     = rs.getString(QMCuotas.sField8);
+					sFIPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField5));
+					sFFPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField6));
+					sIMCUCO     = Utils.recuperaImporte(false,rs.getString(QMCuotas.sField7));
+					sFAACTA     = Utils.recuperaFecha(rs.getString(QMCuotas.sField8));
+					sPTPAGO     = rs.getString(QMCuotas.sField9);
 					sDesPTPAGO  = QMCodigosControl.getDesPTPAGO(sPTPAGO);
-					sOBTEXC     = rs.getString(QMCuotas.sField9);  
+					sOBTEXC     = rs.getString(QMCuotas.sField10);  
 
 					
 					CuotaTabla cuotaencontrada = new CuotaTabla(
@@ -982,14 +984,17 @@ public class QMListaCuotas
 					   + QMActivos.sField1 +" IN (SELECT "
 					   +  sField1 + 
 					   " FROM " + sTable +
-					   " WHERE " + sField2 + " IN (SELECT "
-   					   + QMCuotas.sField1 + 
-   					   " FROM " + QMCuotas.sTable +
-   					   " WHERE " + QMCuotas.sField10 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
-   					   + sField3 + " IN (SELECT "
+					   " WHERE " 
+					   
+					   + sField2 + " IN (SELECT "
    					   + QMCuotas.sField2 + 
    					   " FROM " + QMCuotas.sTable +
-   					   " WHERE " + QMCuotas.sField10 + " = '"+ ValoresDefecto.DEF_ALTA + "')))";
+   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
+
+   					   + sField3 + " IN (SELECT "
+   					   + QMCuotas.sField3 + 
+   					   " FROM " + QMCuotas.sTable +
+   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "')))";
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 		
@@ -1022,17 +1027,17 @@ public class QMListaCuotas
 					   + QMActivos.sField1 +" IN (SELECT "
 					   +  sField1 + 
 					   " FROM " + sTable +
-					   " WHERE " + 
+					   " WHERE " 
 					   
-					   sField2 + " IN (SELECT "
-					   + QMCuotas.sField1 + 
-   					   " FROM " + QMCuotas.sTable +
-   					   " WHERE " + QMCuotas.sField10 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
-
-   					   + sField3 + " IN (SELECT "
+					   + sField2 + " IN (SELECT "
    					   + QMCuotas.sField2 + 
    					   " FROM " + QMCuotas.sTable +
-   					   " WHERE " + QMCuotas.sField10 + " = '"+ ValoresDefecto.DEF_ALTA + "')))");
+   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
+
+   					   + sField3 + " IN (SELECT "
+   					   + QMCuotas.sField3 + 
+   					   " FROM " + QMCuotas.sTable +
+   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "')))");
 
 			rs = pstmt.executeQuery();
 			

@@ -97,14 +97,14 @@ public class GestorGastos implements Serializable
 	private String sNUPUAC = "";
 	
 	
-	private ActivoTabla activoseleccionado = null;
-	private ArrayList<ActivoTabla> tablaactivos = null;
+	private transient ActivoTabla activoseleccionado = null;
+	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
-	private CuotaTabla cuotaseleccionada = null;
-	private ArrayList<CuotaTabla> tablacuotas = null;
+	private transient CuotaTabla cuotaseleccionada = null;
+	private transient ArrayList<CuotaTabla> tablacuotas = null;
 	
-	private ImpuestoRecursoTabla devolucionseleccionada = null;
-	private ArrayList<ImpuestoRecursoTabla> tabladevoluciones = null;
+	private transient ImpuestoRecursoTabla devolucionseleccionada = null;
+	private transient ArrayList<ImpuestoRecursoTabla> tabladevoluciones = null;
 	
 	private Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
@@ -137,12 +137,8 @@ public class GestorGastos implements Serializable
 		tiposcotpga_g3HM.put("Honorarios","2");
 		tiposcotpga_g3HM.put("Licencias", "3");
 		
-		
-		
 		tiposcosbga_t11HM.put("Plusvalia", "0");
-		//tiposcosbga_t11HM.put("Devolucion Plusvalia", "50");
 		tiposcosbga_t12HM.put("Notaria",   "1");
-		//tiposcosbga_t12HM.put("Devolucion Notaria",     "51");
 
 		tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
 		tiposcosbga_t21HM.put("IBIS",                                 "1");
@@ -151,13 +147,6 @@ public class GestorGastos implements Serializable
 		tiposcosbga_t21HM.put("Tasas agua",                           "4");
 		tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
 		tiposcosbga_t21HM.put("Otras tasas",                          "6");
-		/*tiposcosbga_t21HM.put("Devolución Impuestos e IBIS",         "50");
-		tiposcosbga_t21HM.put("Devolución IBIS",                     "51");
-		tiposcosbga_t21HM.put("Devolución Tasas basura",             "52");
-		tiposcosbga_t21HM.put("Devolución Tasas alcantarillado",     "53");
-		tiposcosbga_t21HM.put("Devolución Tasas agua",               "54");
-		tiposcosbga_t21HM.put("Devolución Contribuciones especiales","55");
-		tiposcosbga_t21HM.put("Devolución Otras tasas",              "56");*/
 		
 		tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
 		tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
@@ -165,22 +154,11 @@ public class GestorGastos implements Serializable
 		tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
 		tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
 		tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
-		/*tiposcosbga_t22HM.put("Devolucion Comunidades",       "50"); 
-		tiposcosbga_t22HM.put("Devolucion Ordinaria",          	"51"); 
-		tiposcosbga_t22HM.put("Devolucion Extras Comunidad",   	"52"); 
-		tiposcosbga_t22HM.put("Devolucion Mancomunidad",       	"53"); 
-		tiposcosbga_t22HM.put("Devolucion Extras Mancomunidad",	"54"); 
-		tiposcosbga_t22HM.put("Devolucion Obras comunidad",   	"55");*/
-		
 		
 		tiposcosbga_t23HM.put("Suministros",               "0");
 		tiposcosbga_t23HM.put("Suministro luz",            "1");
 		tiposcosbga_t23HM.put("Suministro agua",           "2");
 		tiposcosbga_t23HM.put("Suministro gas",            "3");
-		/*tiposcosbga_t23HM.put("Devolucion Suministros",  "50");
-		tiposcosbga_t23HM.put("Devolucion Suministro luz", "51");
-		tiposcosbga_t23HM.put("Devolucion Suministro agua","52");
-		tiposcosbga_t23HM.put("Devolución Suministro gas", "53");*/
 		
 		tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
 		tiposcosbga_t32HM.put("Prescripcion",            "1");  
@@ -192,8 +170,36 @@ public class GestorGastos implements Serializable
 		
 		tiposcosigaHM.put("ESTIMADO",            "1");
 		tiposcosigaHM.put("CONOCIDO",            "2");
-		
 	}
+	
+	public void borrarPlantillaActivo()
+	{
+    	this.sCOPOIN = "";
+    	this.sNOMUIN = "";
+    	this.sNOPRAC = "";
+    	this.sNOVIAS = "";
+    	this.sNUPIAC = "";
+    	this.sNUPOAC = "";
+    	this.sNUPUAC = "";
+	}
+	
+	public void borrarResultadosActivo()
+	{
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+	}
+	
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+
+    	this.sCOACES = "";
+    	
+    	borrarPlantillaActivo();
+    	
+    	borrarResultadosActivo();
+   	
+    }
+    
 	public void borrarPlantillaGasto()
 	{
 		this.sCOGRUG = "";
@@ -260,38 +266,147 @@ public class GestorGastos implements Serializable
 		
 	}
 	
-    public void limpiarPlantilla(ActionEvent actionEvent) 
-    {  
-    	borrarPlantillaGasto();
-    	borrarPlantillaActivo();
-    	
-		this.activoseleccionado = null;
-		this.tablaactivos = null;
-
-		this.cuotaseleccionada = null;
-		this.tablacuotas = null;
-    }
-	
-	public void borrarPlantillaActivo()
+	public void borrarResultadosCuota()
 	{
-    	this.sCOACES = "";
-
-    	this.sCOPOIN = "";
-    	this.sNOMUIN = "";
-    	this.sNOPRAC = "";
-    	this.sNOVIAS = "";
-    	this.sNUPIAC = "";
-    	this.sNUPOAC = "";
-    	this.sNUPUAC = "";
+    	this.cuotaseleccionada = null;
+    	this.tablacuotas = null;
 	}
 	
-    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+	public void borrarResultadosDevolucion()
+	{
+    	this.devolucionseleccionada = null;
+    	this.tabladevoluciones = null;
+	}
+	
+    public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
-    	borrarPlantillaActivo();
+    	this.sCOACES = "";
+
+    	borrarPlantillaGasto();
+
+    	borrarResultadosActivo();
+    	borrarResultadosCuota();
+    	borrarResultadosDevolucion();
+    }
+	
+	public void buscaActivos (ActionEvent actionEvent)
+	{
+		
+		String sMethod = "buscaActivos";
+		
+		
+		FacesMessage msg;
+		
+		ActivoTabla buscaactivos = new ActivoTabla(
+				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+		
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
+		
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+	}
+	
+	public void seleccionarActivo(ActionEvent actionEvent) 
+    {  
     	
-    	this.activoseleccionado = null;
-    	this.tablaactivos = null;
-   	
+    	String sMethod = "seleccionarActivo";
+
+    	FacesMessage msg;
+    	
+     	this.sCOACES  = activoseleccionado.getCOACES();
+ 
+     	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Activo "+ sCOACES +" Seleccionado.");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+	
+	public void cargarDatos(ActionEvent actionEvent)
+	{
+		String sMethod = "cargarCuotas";
+		
+		FacesMessage msg;
+		
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando cuotas...");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		if (CLActivos.compruebaActivo(sCOACES))
+		{
+			this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
+		
+			msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontradas '"+getTablacuotas().size()+"' cuotas pendientes.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+
+			Utils.debugTrace(true, sClassName, sMethod, "Buscando devoluciones...");
+		
+			this.tabladevoluciones = CLImpuestos.buscarDevolucionesDelActivo(sCOACES.toUpperCase());
+		
+			msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontradas '"+getTabladevoluciones().size()+"' devoluciones pendientes.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+			this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
+		
+			msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Provision '"+sNUPROF+"' asignada.");
+			
+		}
+		else
+		{
+			msg = Utils.pfmsgTrace(true, sClassName, sMethod, "No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
+			
+		}
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+	}
+	
+	public void seleccionarCuota(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarCuota";
+
+    	FacesMessage msg;
+    	
+    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E2;
+    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E2;
+    	this.sCOSBGA = cuotaseleccionada.getCOSBAC();
+    	this.sPTPAGO = cuotaseleccionada.getPTPAGO();
+    	
+    	this.sIMNGAS = cuotaseleccionada.getIMCUCO();
+    	this.bDevolucion = false;
+
+    	
+    	tiposcotpgaHM = tiposcotpga_g2HM;
+    	tiposcosbgaHM = tiposcosbga_t22HM;
+    	
+
+    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.");
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+    }
+	
+	public void seleccionarDevolucion(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarDevolucion";
+
+    	FacesMessage msg;
+    	
+    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E4;
+    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E4;
+    	this.sCOSBGA = devolucionseleccionada.getCOSBAC();
+    	this.sPTPAGO = "1";
+    	this.bDevolucion = true;
+    	
+    	tiposcotpgaHM = tiposcotpga_g2HM;
+    	tiposcosbgaHM = tiposcosbga_t21HM;
+    	
+
+    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Devolucion de '"+ devolucionseleccionada.getDCOSBAC() +"' Seleccionada.");
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		
     }
 	
 	public void cambiaGrupo()
@@ -483,203 +598,15 @@ public class GestorGastos implements Serializable
 		Utils.debugTrace(true, sClassName, sMethod, "sFEPGPR:|"+sFEPGPR+"|");
 	}
 
-	
-	public void buscaActivos (ActionEvent actionEvent)
-	{
-		
-		String sMethod = "buscaActivos";
-		
-		
-		FacesMessage msg;
-		
-		ActivoTabla buscaactivos = new ActivoTabla(
-				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
-		
-		this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
-
-		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-	}
-	
-	public void seleccionarActivo(ActionEvent actionEvent) 
-    {  
-    	
-    	String sMethod = "seleccionarActivo";
-
-    	FacesMessage msg;
-    	
-    	
-    	
-
-    	
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	
-    	//this.bDevolucion = false;
-    	//inicializar plantilla?
-    			 
-    	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		//return "listacomunidadesactivos.xhtml";
-    }
-	
-	public void cargarDatos(ActionEvent actionEvent)
-	{
-		String sMethod = "cargarCuotas";
-		
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Buscando cuotas...");
-		
-		if (CLActivos.compruebaActivo(sCOACES))
-		{
-			this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
-		
-			sMsg = "Encontradas '"+getTablacuotas().size()+"' cuotas pendientes.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg);
-		
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-
-			Utils.debugTrace(true, sClassName, sMethod, "Buscando devoluciones...");
-		
-			this.tabladevoluciones = CLImpuestos.buscarDevolucionesDelActivo(sCOACES.toUpperCase());
-		
-			sMsg = "Encontradas '"+getTabladevoluciones().size()+"' devoluciones pendientes.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg);
-		
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-			this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
-		
-			sMsg = "Provision '"+sNUPROF+"' asignada.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg);
-		
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}
-		else
-		{
-			sMsg = "No exite el activo '"+sCOACES+"'. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg);
-		
-			FacesContext.getCurrentInstance().addMessage(null, msg);			
-		}
-		
-	}
-	
-	public void seleccionarCuota(ActionEvent actionEvent) 
-    {  
-    	
-    	String sMethod = "seleccionarCuota";
-
-    	FacesMessage msg;
-    	
-    	String sMsg = "";
-
-    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E2;
-    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E2;
-    	this.sCOSBGA = cuotaseleccionada.getCOSBAC();
-    	this.sPTPAGO = cuotaseleccionada.getPTPAGO();
-    	
-    	this.sIMNGAS = cuotaseleccionada.getIMCUCO();
-    	this.bDevolucion = false;
-
-    	
-    	tiposcotpgaHM = tiposcotpga_g2HM;
-    	tiposcosbgaHM = tiposcosbga_t22HM;
-    	
-
-    	//comprobar
-    	
-    	sMsg = "Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.";
-    	
-    	msg = new FacesMessage(sMsg);
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-    }
-	
-	public void seleccionarDevolucion(ActionEvent actionEvent) 
-    {  
-    	
-    	String sMethod = "seleccionarDevolucion";
-
-    	FacesMessage msg;
-    	
-    	String sMsg = "";
-
-    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E4;
-    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E4;
-    	this.sCOSBGA = devolucionseleccionada.getCOSBAC();
-    	this.sPTPAGO = "1";
-    	this.bDevolucion = true;
-    	
-    	//this.sIMNGAS = "";
-
-    	
-    	tiposcotpgaHM = tiposcotpga_g2HM;
-    	tiposcosbgaHM = tiposcosbga_t21HM;
-    	
-
-    	//comprobar
-    	
-    	sMsg = "Devolucion de '"+ devolucionseleccionada.getDCOSBAC() +"' Seleccionada.";
-    	
-    	msg = new FacesMessage(sMsg);
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-    }
-	
-    /*public void registraGasto(ActionEvent actionEvent) 
-    {  
-    	borrarPlantillaGasto();
-    	borrarPlantillaActivo();
-    	
-		this.activoseleccionado = null;
-		this.tablaactivos = null;
-
-		this.cuotaseleccionada = null;
-		this.tablacuotas = null;
-    }*/
-
 	public void registraGasto(ActionEvent actionEvent)
 	{
 		String sMethod = "registraMovimiento";
 		
 		FacesMessage msg;
 		
-		String sMsg = "";
-		
-		
-		if (CLGastos.compruebaSiExisteGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
+		if (CLGastos.existeGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 		{
-	    	sMsg = "El gasto informado no se puede dar de alta, ya existe en el sistema.";
-	    	
-	    	msg = new FacesMessage(sMsg);
-	    	
-	    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
+			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR: El gasto informado no se puede dar de alta, ya existe en el sistema.");
 		}
 		else
 		{
@@ -729,181 +656,116 @@ public class GestorGastos implements Serializable
 					ValoresDefecto.DEF_COSPII_GA,
 					ValoresDefecto.DEF_NUCLII);
 
-			//movimiento.pintaMovimientoGasto();
-			
 			int iSalida = CLGastos.registraMovimiento(movimiento);
-			
-			Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
 			
 			switch (iSalida) 
 			{
 			case 0: //Sin errores
-				sMsg = "El gasto se ha creado correctamente.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(sMsg,null);
+				msg = Utils.pfmsgTrace(true, sClassName, sMethod, "El gasto se ha creado correctamente.");
 				break;
 
 			case -2: //Error 002 - Llega fecha de anulación y no existe gasto en la tabla
-				sMsg = "ERROR:002 - El gasto que se anula no existe. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:002 - El gasto que se anula no existe. Por favor, revise los datos.");
 				break;
 
 			case -3: //Error 003 - Llega un abono de un gasto que NO está pagado
-				sMsg = "ERROR:003 - El gasto a abonar no esta pagado. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:003 - El gasto a abonar no esta pagado. Por favor, revise los datos.");
 				break;
-
 
 			case -4: //Error 004 - Descuento mayor que importe nominal del gasto
-				sMsg = "ERROR:004 - El descuento informado es superior al gasto. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:004 - El descuento informado es superior al gasto. Por favor, revise los datos.");
 				break;
-
 
 			case -6: //Error 006 - La provisión ya está cerrada
-				sMsg = "ERROR:006 - La provisión ya esta cerrada. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:006 - La provisión ya esta cerrada. Por favor, revise los datos.");
 				break;
-
 
 			case -7: //Error 007 - Error en grupo / tipo / subtipo de acción
-				sMsg = "ERROR:007 - El grupo, tipo y subtipo de gasto deben informarse. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:007 - El grupo, tipo y subtipo de gasto deben informarse. Por favor, revise los datos.");
 				break;
-
 
 			case -8: //Error 008 - No existe el activo en la base corporativa
-				sMsg = "ERROR:008 - El activo informado no se encuentra resistrado en el sistema. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:008 - El activo informado no se encuentra resistrado en el sistema. Por favor, revise los datos.");
 				break;
-
 
 			case -12: //Error 012 - Llega un abono de un gasto que está anulado
-				sMsg = "ERROR:012 - El gasto a abonar esta anulado. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:012 - El gasto a abonar esta anulado. Por favor, revise los datos.");
 				break;
-
 
 			case -13: //Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
-				sMsg = "ERROR:013 - El gasto a abonar ya esta abonado. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:013 - El gasto a abonar ya esta abonado. Por favor, revise los datos.");
 				break;
 
-
 			case -19: //Error 019 - Periodicidad del gasto es cero o espacios.
-				sMsg = "ERROR:019 - El campo periodicidad del pago es obligatorio. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:019 - El campo periodicidad del pago es obligatorio. Por favor, revise los datos.");
 				break;
 
 			case -23: //Error 023 - Llega anulación de un gasto que YA está pagado
-				sMsg = "ERROR:023 - El gasto a anular ya esta pagado. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:023 - El gasto a anular ya esta pagado. Por favor, revise los datos.");
 				break;
 
 			case -24: //Error 024 - Llega modificación de un gasto que YA está pagado
-				sMsg = "ERROR:024 - El gasto a modificar ya esta pagado. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:024 - El gasto a modificar ya esta pagado. Por favor, revise los datos.");
 				break;
 
 			case -61: //Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
-				sMsg = "ERROR:061 - La provision esta cerrada, no se puede actualizar la fecha de pago a proveedor. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:061 - La provision esta cerrada, no se puede actualizar la fecha de pago a proveedor. Por favor, revise los datos.");
 				break;
 				
 			case -62: //Error 062 - Llega una devolución con importe positivo. 
-				sMsg = "ERROR:062 - La devolucion debe incluir un importe del gasto con valor negativo. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:062 - La devolucion debe incluir un importe del gasto con valor negativo. Por favor, revise los datos.");
 				break;
 			
 			case -800: //Error 800 - Gasto sin provision  
-				sMsg = "ERROR:801 - No se ha cargado una provision de gastos. Por favor, cargue los datos del activo.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - No se ha cargado una provision de gastos. Por favor, cargue los datos del activo.");
 				break;
 
 			case -801: //Error 801 - No se ha informado la fecha de devengo
-				sMsg = "ERROR:801 - No se ha informado la fecha de devengo. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - No se ha informado la fecha de devengo. Por favor, revise los datos.");
 				break;
 
 			case -802: //Error 802 - No se ha elegido una situacion del gasto
-				sMsg = "ERROR:802 - No se ha elegido una situacion del gasto. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - No se ha elegido una situacion del gasto. Por favor, revise los datos.");
 				break;
 				
 			case -803: //Error 803 - No se ha informado el campo importe de gasto
-				sMsg = "ERROR:803 - No se ha informado el campo importe de gasto. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:803 - No se ha informado el campo importe de gasto. Por favor, revise los datos.");
 				break;
 
 			case -804: //Error 804 - Accion no permitida
-				sMsg = "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.");
 				break;
 
 			case -805: //Error 805 - estado no disponible
-				sMsg = "ERROR:805 - El estado del gasto no esta disponible. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:805 - El estado del gasto no esta disponible. Por favor, revise los datos.");
 				break;
 
 			case -806: //Error 806 - modificacion sin cambios
-				sMsg = "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.");
 				break;
 				
 			case -900: //Error 900 - al crear un movimiento
-				sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.");
 				break;
 
 			case -901: //Error 901 - error y rollback - error al crear el gasto
-				sMsg = "ERROR:901 - Se ha producido un error al registrar el nuevo gasto. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:901 - Se ha producido un error al registrar el nuevo gasto. Por favor, revise los datos.");
 				break;
 				
 			case -902: //Error 902 - error y rollback - error al registrar la relaccion
-				sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.");
 				break;
 
 			case -903: //Error 903 - error y rollback - error al cambiar el estado
-				sMsg = "ERROR:903 - Se ha producido un error al cambiar el estado del gasto. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:903 - Se ha producido un error al cambiar el estado del gasto. Por favor, revise los datos.");
 				break;
 
 			case -904: //Error 904 - error y rollback - error al modificar el gasto
-				sMsg = "ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos.";
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos.");
 				break;
 
 			default: //error generico
-				sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
-				Utils.debugTrace(true, sClassName, sMethod, sMsg);
-				msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos.");
 				break;
 			}
 			

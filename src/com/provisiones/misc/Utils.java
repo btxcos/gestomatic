@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.faces.application.FacesMessage;
+
 import com.provisiones.types.ImporteDevolucion;
 
 public class Utils 
@@ -44,6 +46,30 @@ public class Utils
 		}
 	}
 	
+	public static FacesMessage pfmsgTrace(boolean bEnable, String sExtClass, String sMethod, String sMsg)
+	{
+		debugTrace(true, sExtClass, sMethod, sMsg);
+		return new FacesMessage(sMsg);
+	}
+	
+	public static FacesMessage pfmsgWarning(boolean bEnable, String sExtClass, String sMethod, String sMsg)
+	{
+		debugTrace(true, sExtClass, sMethod, sMsg);
+		return new FacesMessage(FacesMessage.SEVERITY_WARN, sMsg,null);
+	}
+	
+	public static FacesMessage pfmsgError(boolean bEnable, String sExtClass, String sMethod, String sMsg)
+	{
+		debugTrace(true, sExtClass, sMethod, sMsg);
+		return new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
+	}
+	
+	public static FacesMessage pfmsgFatal(boolean bEnable, String sExtClass, String sMethod, String sMsg)
+	{
+		debugTrace(true, sExtClass, sMethod, sMsg);
+		return new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
+	}
+
 	public static String fechaDeHoy (boolean bFormato)
 	{
 
@@ -336,10 +362,8 @@ public class Utils
 			try 
 			{
 				DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-				Date myDate = formatter.parse(sFechaFormateada);
-				debugTrace(bTraza, sClassName, sMethod,"|"+myDate+"|");
 				formatter.setLenient(false);
-				myDate = formatter.parse(sFechaFormateada);
+				Date myDate = formatter.parse(sFechaFormateada);
 				debugTrace(bTraza, sClassName, sMethod,"|"+myDate+"|");
 			} 
 			catch (ParseException e) 

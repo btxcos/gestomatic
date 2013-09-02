@@ -1,19 +1,12 @@
 package com.provisiones.dal.qm.listas.errores;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.misc.Utils;
-import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.ErrorComunidadTabla;
+
 
 public class QMListaErroresComunidades 
 {

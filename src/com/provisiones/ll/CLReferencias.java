@@ -231,7 +231,7 @@ public class CLReferencias
 			iCodigo = -702;
 		}
 		
-		else if (movimiento.getFERECA().equals("#") || movimiento.getFERECA().equals("0"))
+		else if (movimiento.getFERECA().equals("#"))// || movimiento.getFERECA().equals("0"))
 		{
 			//Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
 			iCodigo = -85;

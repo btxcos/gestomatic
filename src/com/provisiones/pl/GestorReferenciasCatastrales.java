@@ -51,9 +51,9 @@ public class GestorReferenciasCatastrales implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
-	private ArrayList<ActivoTabla> tablaactivos = null;
+	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	
-	private ActivoTabla activoseleccionado = null;
+	private transient ActivoTabla activoseleccionado = null;
 	
 	
 	public GestorReferenciasCatastrales()
@@ -61,6 +61,52 @@ public class GestorReferenciasCatastrales implements Serializable
 		Utils.standardIO2File("");//Salida por fichero de texto
 	}
 
+	public void borrarPlantillaActivo()
+	{
+    	this.sCOPOIN = "";
+    	this.sNOMUIN = "";
+    	this.sNOPRAC = "";
+    	this.sNOVIAS = "";
+    	this.sNUPIAC = "";
+    	this.sNUPOAC = "";
+    	this.sNUPUAC = "";
+	}
+	
+	public void borrarResultadosActivo()
+	{
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+	}
+	
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+    	this.sCOACES = "";
+
+    	borrarPlantillaActivo();
+    	
+    	borrarResultadosActivo();
+   	
+    }
+    
+	public void borrarPlantillaReferencia()
+	{
+		this.sNURCAT = "";
+        this.sTIRCAT = "";
+        this.sENEMIS = "";
+        this.sOBTEXC = "";
+	}
+    
+    public void limpiarPlantillaReferencia(ActionEvent actionEvent) 
+    {  
+    	this.sCOACES = "";
+
+    	borrarResultadosActivo();
+    	
+    	borrarPlantillaReferencia();
+
+   	
+    }
+	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 		
@@ -74,17 +120,36 @@ public class GestorReferenciasCatastrales implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		this.setTablaactivos(CLReferencias.buscarActivosSinReferencias(buscaactivos));
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
-
-		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
 	}
+	
+	public void seleccionarActivo(ActionEvent actionEvent) 
+    {  
+    	
+    	String sMethod = "seleccionarActivo";
+
+    	FacesMessage msg;
+
+    	
+    	this.sCOACES  = activoseleccionado.getCOACES();
+    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+    	
+    	if (sNURCAT.equals(""))
+    	{
+    		msg = Utils.pfmsgWarning(true, sClassName, sMethod, "No existe un numero de referencia catastral asociado.");
+    		FacesContext.getCurrentInstance().addMessage(null, msg);
+    	}
+    		
+    	
+    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Activo '"+ sCOACES +"' Seleccionado.");
+ 		FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
 	
 	public void comprobarActivo(ActionEvent actionEvent)
 	{
@@ -97,20 +162,18 @@ public class GestorReferenciasCatastrales implements Serializable
     	
     	if (sNURCAT.equals(""))
     	{
-    		msg = new FacesMessage(FacesMessage.SEVERITY_WARN,"No existe un numero de referencia catastral asociado.",null);
+    		msg = Utils.pfmsgWarning(true, sClassName, sMethod, "No existe un numero de referencia catastral asociado.");
     		FacesContext.getCurrentInstance().addMessage(null, msg);
     		
     	}
 
 		if (CLActivos.compruebaActivo(sCOACES))
 		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
-			msg = new FacesMessage("El activo '"+sCOACES.toUpperCase()+"' esta disponible.",null);
+			msg = Utils.pfmsgTrace(true, sClassName, sMethod, "El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
 		}
 		else
 		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "ERROR: El activo '"+sCOACES.toUpperCase()+"' no esta registrado en el sistema. Por favor, revise los datos.");
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "El activo '"+sCOACES.toUpperCase()+"' no esta registrado en el sistema. Por favor, revise los datos.",null);
+			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR: El activo '"+sCOACES.toUpperCase()+"' no esta registrado en el sistema. Por favor, revise los datos.");
 		}
 		
 		
@@ -118,51 +181,7 @@ public class GestorReferenciasCatastrales implements Serializable
 		
 	}
 	
-	public void borrarPlantillaActivo()
-	{
-    	this.sCOPOIN = "";
-    	this.sNOMUIN = "";
-    	this.sNOPRAC = "";
-    	this.sNOVIAS = "";
-    	this.sNUPIAC = "";
-    	this.sNUPOAC = "";
-    	this.sNUPUAC = "";
-	}
-	
-	
-    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
-    {  
-    	this.sCOACES = "";
 
-    	borrarPlantillaActivo();
-    	
-    	this.activoseleccionado = null;
-    	this.tablaactivos = null;
-   	
-    }
-    
-	public void borrarPlantillaReferencia()
-	{
-		this.sCOACES = "";
-        this.sNURCAT = "";
-        this.sTIRCAT = "";
-        this.sENEMIS = "";
-        //this.sCOTEXA = "";
-        this.sOBTEXC = "";
-	}
-    
-    public void limpiarPlantilla(ActionEvent actionEvent) 
-    {  
-    	
-
-    	borrarPlantillaActivo();
-    	
-    	this.activoseleccionado = null;
-    	this.tablaactivos = null;
-    	
-    	borrarPlantillaReferencia();
-   	
-    }
     
 	public void hoyFERECA (ActionEvent actionEvent)
 	{
@@ -170,226 +189,150 @@ public class GestorReferenciasCatastrales implements Serializable
 		this.setsFERECA(Utils.fechaDeHoy(true));
 		Utils.debugTrace(true, sClassName, sMethod, "sFERECA:|"+sFERECA+"|");
 	}
-	
-	public void seleccionarActivo(ActionEvent actionEvent) 
-    {  
-    	
-    	String sMethod = "seleccionarActivo";
-
-    	FacesMessage msg;
-    	
-    	
-    	
-    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
-    	
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
-    	
-    	if (sNURCAT.equals(""))
-    	{
-    		msg = new FacesMessage(FacesMessage.SEVERITY_WARN,"No existe un numero de referencia catastral asociado.",null);
-    		FacesContext.getCurrentInstance().addMessage(null, msg);
-    	}
-    		
-    	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
-    	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
 		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		//return "listacomunidadesactivos.xhtml";
-    }
-	
 	public void realizaAlta(ActionEvent actionEvent)
 	{
 		String sMethod = "realizaAlta";
 		
-		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
-		MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
-				sCODTRN.toUpperCase(), 
-				sCOTDOR.toUpperCase(), 
-				sIDPROV.toUpperCase(), 
-				"A",//sCOACCI.toUpperCase(), 
-				sCOENGP.toUpperCase(), 
-				sCOACES.toUpperCase(), 
-				sNURCAT.toUpperCase(),
-				"", 
-				sTIRCAT.toUpperCase(),
-				"", 
-				sENEMIS.toUpperCase(),
-				sCOTEXA.toUpperCase(),
-				"", 
-				sOBTEXC.toUpperCase(), 
-				sOBDEER.toUpperCase(),
-				"", 
-				Utils.compruebaImporte(sIMVSUE.toUpperCase()),
-				"", 
-				Utils.compruebaImporte(sIMCATA.toUpperCase()),
-				"", 
-				Utils.compruebaFecha(sFERECA.toUpperCase()));
-		
 		FacesMessage msg;
 		
-		String sMsg = "";
-		
-		int iSalida = CLReferencias.registraMovimiento(movimiento);
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
-		
-		switch (iSalida) 
+		if (CLReferencias.existeReferenciaCatastral(sNURCAT.toUpperCase()))
 		{
-		case 0: //Sin errores
-			sMsg = "La referencia catastral se ha creado correctamente.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg,null);
-			break;
-
-		case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
-			sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -3: //Error 003 - NO EXISTE EL ACTIVO
-			sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -49: //Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
-			sMsg = "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -50: //Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
-			sMsg = "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;			
-
-		case -51: //Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
-			sMsg = "ERROR:051 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -52: //Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
-			sMsg = "ERROR:052 - El titular catastral es obligatorio. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -53: //Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
-			sMsg = "ERROR:053 - Existen recursos o impuestos pendientes de esta referencia. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
-			sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		//Ampliacion de valor catastral
-		case -82: //Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
-			sMsg = "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -83: //Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
-			sMsg = "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
-			sMsg = "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -700: //Error 700 - No existe realcion con ese activo
-			sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -701: //Error 701 - Valor del suelo incorrecto
-			sMsg = "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -702: //Error 702 - Valor catastral incorrecto
-			sMsg = "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -801: //Error 801 - alta de una referencia en alta
-			sMsg = "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -802: //Error 802 - referencia catastral de baja no puede recibir mas movimientos
-			sMsg = "ERROR:802 - La referencia catastral esta baja y no puede recibir mas movimientos. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -803: //Error 803 - estado no disponible
-			sMsg = "ERROR:803 - El estado de la referencia catastral informada no esta disponible. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -804: //Error 804 - modificacion sin cambios
-			sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -900: //Error 900 - al crear un movimiento
-			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -901: //Error 901 - error y rollback - error al crear la cuota
-			sMsg = "ERROR:901 - Se ha producido un error al registrar la referencia catastral. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-			
-		case -902: //Error 902 - error y rollback - error al registrar la relaccion
-			sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -903: //Error 903 - error y rollback - error al cambiar el estado
-			sMsg = "ERROR:903 - Se ha producido un error al cambiar el estado de la referencia catastral. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -904: //Error 904 - error y rollback - error al modificar la cuota
-			sMsg = "ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		default: //error generico
-			sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
+			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.");
 		}
+		else
+		{
+			MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
+					sCODTRN.toUpperCase(), 
+					sCOTDOR.toUpperCase(), 
+					sIDPROV.toUpperCase(), 
+					"A",
+					sCOENGP.toUpperCase(), 
+					sCOACES.toUpperCase(), 
+					sNURCAT.toUpperCase(),
+					"", 
+					sTIRCAT.toUpperCase(),
+					"", 
+					sENEMIS.toUpperCase(),
+					sCOTEXA.toUpperCase(),
+					"", 
+					sOBTEXC.toUpperCase(), 
+					sOBDEER.toUpperCase(),
+					"", 
+					Utils.compruebaImporte(sIMVSUE.toUpperCase()),
+					"", 
+					Utils.compruebaImporte(sIMCATA.toUpperCase()),
+					"", 
+					Utils.compruebaFecha(sFERECA.toUpperCase()));
+			
+			int iSalida = CLReferencias.registraMovimiento(movimiento);
+			
+			switch (iSalida) 
+			{
+			case 0: //Sin errores
+				msg = Utils.pfmsgTrace(true, sClassName, sMethod, "La referencia catastral se ha creado correctamente.");
+				break;
+
+			case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.");
+				break;
+
+			case -3: //Error 003 - NO EXISTE EL ACTIVO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.");
+				break;
+
+			/*case -49: //Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.");
+				break;*/
+
+			case -50: //Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.");
+				break;			
+
+			case -51: //Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:051 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.");
+				break;
+
+			case -52: //Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:052 - El titular catastral es obligatorio. Por favor, revise los datos.");
+				break;
+				
+			case -53: //Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:053 - Existen recursos o impuestos pendientes de esta referencia. Por favor, revise los datos.");
+				break;
+				
+			case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.");
+				break;
+				
+			//Ampliacion de valor catastral
+			case -82: //Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.");
+				break;
+				
+			case -83: //Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.");
+				break;
+
+			case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.");
+				break;
+				
+			case -700: //Error 700 - No existe realcion con ese activo
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.");
+				break;
+				
+			case -701: //Error 701 - Valor del suelo incorrecto
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.");
+				break;
+				
+			case -702: //Error 702 - Valor catastral incorrecto
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.");
+				break;
+				
+			case -801: //Error 801 - alta de una referencia en alta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.");
+				break;
+
+			case -802: //Error 802 - referencia catastral de baja no puede recibir mas movimientos
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La referencia catastral esta baja y no puede recibir mas movimientos. Por favor, revise los datos.");
+				break;
+				
+			case -803: //Error 803 - estado no disponible
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:803 - El estado de la referencia catastral informada no esta disponible. Por favor, revise los datos.");
+				break;
+
+			case -804: //Error 804 - modificacion sin cambios
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.");
+				break;
+
+			case -900: //Error 900 - al crear un movimiento
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.");
+				break;
+
+			case -901: //Error 901 - error y rollback - error al crear la cuota
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:901 - Se ha producido un error al registrar la referencia catastral. Por favor, revise los datos.");
+				break;
+				
+			case -902: //Error 902 - error y rollback - error al registrar la relaccion
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.");
+				break;
+
+			case -903: //Error 903 - error y rollback - error al cambiar el estado
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:903 - Se ha producido un error al cambiar el estado de la referencia catastral. Por favor, revise los datos.");
+				break;
+
+			case -904: //Error 904 - error y rollback - error al modificar la cuota
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos.");
+				break;
+
+			default: //error generico
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos.");
+				break;
+			}
+		}
+		
+
 		
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");

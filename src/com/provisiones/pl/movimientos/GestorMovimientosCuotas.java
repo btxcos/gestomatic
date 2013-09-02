@@ -58,11 +58,11 @@ public class GestorMovimientosCuotas implements Serializable
 	private String sNUPUAC = "";
 	
 	
-	private ActivoTabla activoseleccionado = null;
-	private ArrayList<ActivoTabla> tablaactivos = null;
+	private transient ActivoTabla activoseleccionado = null;
+	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
-	private CuotaTabla cuotaseleccionada = null;
-	private ArrayList<CuotaTabla> tablacuotas = null;
+	private transient CuotaTabla cuotaseleccionada = null;
+	private transient ArrayList<CuotaTabla> tablacuotas = null;
 
 	
 	public GestorMovimientosCuotas()
@@ -70,6 +70,31 @@ public class GestorMovimientosCuotas implements Serializable
 		Utils.standardIO2File("");//Salida por fichero de texto
 	}
 	
+	public void borrarCamposActivo()
+	{
+    	this.sCOPOIN = "";
+    	this.sNOMUIN = "";
+    	this.sNOPRAC = "";
+    	this.sNOVIAS = "";
+    	this.sNUPIAC = "";
+    	this.sNUPOAC = "";
+    	this.sNUPUAC = "";
+	}
+	
+	public void borrarResultadosActivo()
+	{
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
+	}
+	
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+    	this.sCOACES = "";
+
+    	borrarCamposActivo();
+    	borrarResultadosActivo();
+    }
+
 	public void borrarCamposCuota()
 	{
 		this.sCOCLDO = "";
@@ -84,62 +109,25 @@ public class GestorMovimientosCuotas implements Serializable
 		this.sPTPAGO = "";
 		this.sDesPTPAGO = "";
 		this.sOBTEXC = "";
-		
-    	this.setCuotaseleccionada(null);
-    	this.setTablacuotas(null);
-		
 	}
 	
-	public void borrarCamposActivo()
+	public void borrarResultadosCuota()
 	{
-    	this.sCOPOIN = "";
-    	this.sNOMUIN = "";
-    	this.sNOPRAC = "";
-    	this.sNOVIAS = "";
-    	this.sNUPIAC = "";
-    	this.sNUPOAC = "";
-    	this.sNUPUAC = "";
-    	
-    	this.setActivoseleccionado(null);
-    	this.setTablaactivos(null);
+    	this.cuotaseleccionada = null;
+    	this.tablacuotas = null;
 	}
 	
 	public void limpiarPlantillaCuotas(ActionEvent actionEvent) 
     {  
     	this.sCOACES = "";
+
     	borrarCamposCuota();
-    	borrarCamposActivo();	
-    } 
-
-    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
-    {  
-
-    	borrarCamposActivo();
-   	
+    	borrarResultadosCuota();
     }
     
-	public void hoyFIPAGO (ActionEvent actionEvent)
-	{
-		String sMethod = "hoyFIPAGO";
-		this.setsFIPAGO(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFIPAGO:|"+sFIPAGO+"|");
-	}
 
-	public void hoyFFPAGO (ActionEvent actionEvent)
-	{
-		String sMethod = "hoyFFPAGO";
-		this.setsFFPAGO(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFFPAGO:|"+sFFPAGO+"|");
-	}
-	
-	public void hoyFAACTA (ActionEvent actionEvent)
-	{
-		String sMethod = "hoyFAACTA";
-		this.setsFAACTA(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFAACTA:|"+sFAACTA+"|");
-	}
     
-	public void buscaActivos (ActionEvent actionEvent)
+	public void buscaActivosConCuotas (ActionEvent actionEvent)
 	{
 		
 		String sMethod = "buscaActivos";
@@ -152,14 +140,12 @@ public class GestorMovimientosCuotas implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
-
-		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 	}
@@ -172,18 +158,11 @@ public class GestorMovimientosCuotas implements Serializable
     	FacesMessage msg;
     	
     	
-    	
-    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
-    	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Activo '"+ sCOACES +"' Seleccionado.");
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
-		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		//return "listacomunidadesactivos.xhtml";
     }
 	
 	public void cargarCuotas(ActionEvent actionEvent)
@@ -192,14 +171,12 @@ public class GestorMovimientosCuotas implements Serializable
 		
 		FacesMessage msg;
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Buscando cuotas...");
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando cuotas...");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Encontradas "+getTablacuotas().size()+" cuotas relacionadas.");
-
-		msg = new FacesMessage("Encontradas "+getTablacuotas().size()+" cuotas relacionadas.");
-		
+		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontradas "+getTablacuotas().size()+" cuotas relacionadas.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				
 	}
@@ -224,218 +201,198 @@ public class GestorMovimientosCuotas implements Serializable
     	this.sDesPTPAGO = cuotaseleccionada.getDPTPAGO();
     	this.sOBTEXC = cuotaseleccionada.getOBTEXC();
     	
-
-    	//comprobar
-    	
-    	msg = new FacesMessage("'"+ sDesCOSBAC +"' Seleccionado.");
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, "Cuota seleccionada: |"+sCOACES+"|");
-		
+    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Cuota de '"+ sDesCOSBAC +"' Seleccionada.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		//return "listacomunidadesactivos.xhtml";
     }
+	
+	public void hoyFIPAGO (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFIPAGO";
+		this.setsFIPAGO(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFIPAGO:|"+sFIPAGO+"|");
+	}
+
+	public void hoyFFPAGO (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFFPAGO";
+		this.setsFFPAGO(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFFPAGO:|"+sFFPAGO+"|");
+	}
+	
+	public void hoyFAACTA (ActionEvent actionEvent)
+	{
+		String sMethod = "hoyFAACTA";
+		this.setsFAACTA(Utils.fechaDeHoy(true));
+		Utils.debugTrace(true, sClassName, sMethod, "sFAACTA:|"+sFAACTA+"|");
+	}
 	
 	public void registraDatos(ActionEvent actionEvent)
 	{
 		String sMethod = "registraDatos";
 		
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
-		//MovimientoComunidad movimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), sBITC10.toUpperCase(), sCOACES.toUpperCase(), sBITC01.toUpperCase(), sNOMCOC.toUpperCase(), sBITC02.toUpperCase(), sNODCCO.toUpperCase(), sBITC03.toUpperCase(), sNOMPRC.toUpperCase(), sBITC04.toUpperCase(), sNUTPRC.toUpperCase(), sBITC05.toUpperCase(), sNOMADC.toUpperCase(), sBITC06.toUpperCase(), sNUTADC.toUpperCase(), sBITC07.toUpperCase(), sNODCAD.toUpperCase(), sBITC08.toUpperCase(), sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), sBITC09.toUpperCase(), sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
-		MovimientoCuota movimiento = new MovimientoCuota (
-				sCODTRN.toUpperCase(), 
-				sCOTDOR.toUpperCase(), 
-				sIDPROV.toUpperCase(), 
-				sCOACCI.toUpperCase(), 
-				sCOCLDO.toUpperCase(), 
-				sNUDCOM.toUpperCase(), 
-				sCOENGP.toUpperCase(), 
-				sCOACES.toUpperCase(), 
-				ValoresDefecto.DEF_COGRUG_E2, 
-				ValoresDefecto.DEF_COTACA_E2, 
-				Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 
-				"", 
-				Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
-				"", 
-				Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
-				"", 
-				Utils.compruebaImporte(sIMCUCO.toUpperCase()), 
-				"", 
-				Utils.compruebaFecha(sFAACTA.toUpperCase()), 
-				"", 
-				sPTPAGO.toUpperCase(),
-				"", 
-				sOBTEXC.toUpperCase(), 
-				sOBDEER.toUpperCase());
-		
 		FacesMessage msg;
 		
-		String sMsg = "";
-		
-		int iSalida = CLCuotas.registraMovimiento(movimiento);
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
-		
-		switch (iSalida) 
+		if (!CLCuotas.existeCuota(sCOACES, sCOCLDO, sNUDCOM.toUpperCase(), sCOSBAC))
 		{
-		case 0: //Sin errores
-			sMsg = "El movimiento se ha registrado correctamente.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(sMsg,null);
-			break;
-
-		case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
-			sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -3: //Error 003 - NO EXISTE EL ACTIVO
-			sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO O NULO
-			sMsg = "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -33: //Error 033 - LA FECHA DE PRIMER PAGO DEBE SER LOGICA Y OBLIGATORIA
-			sMsg = "ERROR:033 - La fecha del primer pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -34: //Error 034 - LA FECHA DE ULTIMO PAGO DEBE SER LOGICA Y OBLIGATORIA
-			sMsg = "ERROR:034 - La fecha del ultimo pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -35: //Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
-			sMsg = "ERROR:35 - La fecha del ultimo pago no puede ser menor que la del primero.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -36: //Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO
-			sMsg = "ERROR:036 - El importe de la cuota tiene ser mayor que cero. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -41: //Error 041 - LA COMUNIDAD NO EXISTE EN LA TABLA DE COMUNIDADES GMAE10
-			sMsg = "ERROR:041 - La comunidad propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-
-		case -42: //Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
-			sMsg = "ERROR:042 - El activo proporcionado esta asociado a otra comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -43: //Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
-			sMsg = "ERROR:043 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -44: //Error 044 - NO EXISTE PERIOCIDAD DE PAGO
-			sMsg = "ERROR:044 - La periodicidad de pago es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -45: //Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
-			sMsg = "ERROR:045 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -46: //Error 046 - LA FECHA DEL ACTA DEBE SER LOGICA Y OBLIGATORIA 
-			sMsg = "ERROR:046 - La fecha de acta es obligatoria. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -701: //Error 701 - error en importe
-			sMsg = "ERROR:701 - El campo importe no se ha informado correctamente. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -801: //Error 801 - alta de una cuota en alta
-			sMsg = "ERROR:801 - La cuota ya esta dada de alta. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -802: //Error 802 - cuota de baja no puede recibir mas movimientos
-			sMsg = "ERROR:802 - La cuota esta baja y no puede recibir mas movimientos. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -803: //Error 803 - estado no disponible
-			sMsg = "ERROR:803 - El estado de la cuota informada no esta disponible. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-
-		case -804: //Error 804 - modificacion sin cambios
-			sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
-			break;
-			
-		case -900: //Error 900 - al crear un movimiento
-			sMsg = "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -901: //Error 901 - error y rollback - error al crear la cuota
-			sMsg = "ERROR:901 - Se ha producido un error al registrar la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-			
-		case -902: //Error 902 - error y rollback - error al registrar la relaccion
-			sMsg = "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -903: //Error 903 - error y rollback - error al cambiar el estado
-			sMsg = "ERROR:903 - Se ha producido un error al cambiar el estado de la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		case -904: //Error 904 - error y rollback - error al modificar la cuota
-			sMsg = "ERROR:904 - Se ha producido un error al modificar la cuota. Por favor, revise los datos.";
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
-
-		default: //error generico
-			sMsg = "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos."; 
-			Utils.debugTrace(true, sClassName, sMethod, sMsg);
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
-			break;
+			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR: La cuota no esta dada de alta. Por favor, revise los datos.");
 		}
+		else
+		{
+			MovimientoCuota movimiento = new MovimientoCuota (
+					sCODTRN.toUpperCase(), 
+					sCOTDOR.toUpperCase(), 
+					sIDPROV.toUpperCase(), 
+					sCOACCI.toUpperCase(), 
+					sCOCLDO.toUpperCase(), 
+					sNUDCOM.toUpperCase(), 
+					sCOENGP.toUpperCase(), 
+					sCOACES.toUpperCase(), 
+					ValoresDefecto.DEF_COGRUG_E2, 
+					ValoresDefecto.DEF_COTACA_E2, 
+					Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 
+					"", 
+					Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
+					"", 
+					Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
+					"", 
+					Utils.compruebaImporte(sIMCUCO.toUpperCase()), 
+					"", 
+					Utils.compruebaFecha(sFAACTA.toUpperCase()), 
+					"", 
+					sPTPAGO.toUpperCase(),
+					"", 
+					sOBTEXC.toUpperCase(), 
+					sOBDEER.toUpperCase());
+			
+			
+			
+			int iSalida = CLCuotas.registraMovimiento(movimiento);
+			
+			switch (iSalida) 
+			{
+			case 0: //Sin errores
+				msg = Utils.pfmsgTrace(true, sClassName, sMethod, "El movimiento se ha registrado correctamente.");
+				break;
+
+			case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.");
+				break;
+
+			case -3: //Error 003 - NO EXISTE EL ACTIVO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.");
+				break;
+
+
+			case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO O NULO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.");
+				break;
+
+			case -32: //Error 032 - EL SUBTIPO DE ACCION NO EXISTE
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:032 - El concepto de pago es obligatorio. Por favor, revise los datos.");
+				break;
+
+			case -33: //Error 033 - LA FECHA DE PRIMER PAGO DEBE SER LOGICA Y OBLIGATORIA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:033 - La fecha del primer pago es obligatoria. Por favor, revise los datos.");
+				break;
+
+
+			case -34: //Error 034 - LA FECHA DE ULTIMO PAGO DEBE SER LOGICA Y OBLIGATORIA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:034 - La fecha del ultimo pago es obligatoria. Por favor, revise los datos.");
+				break;
+
+
+			case -35: //Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:35 - La fecha del ultimo pago no puede ser menor que la del primero.");
+				break;
+
+
+			case -36: //Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:036 - El importe de la cuota tiene ser mayor que cero. Por favor, revise los datos.");
+				break;
+
+			case -41: //Error 041 - LA COMUNIDAD NO EXISTE EN LA TABLA DE COMUNIDADES GMAE10
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:041 - La comunidad propocionada no esta registrada en el sistema. Por favor, revise los datos.");
+				break;
+
+			case -42: //Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:042 - El activo proporcionado esta asociado a otra comunidad. Por favor, revise los datos.");
+				break;
+
+			case -43: //Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:043 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.");
+				break;
+
+			case -44: //Error 044 - NO EXISTE PERIOCIDAD DE PAGO
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:044 - La periodicidad de pago es obligatoria. Por favor, revise los datos.");
+				break;
+
+			case -45: //Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:045 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.");
+				break;
+				
+			case -46: //Error 046 - LA FECHA DEL ACTA DEBE SER LOGICA Y OBLIGATORIA 
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:046 - La fecha de acta es obligatoria. Por favor, revise los datos.");
+				break;
+				
+			case -701: //Error 701 - error en importe
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:701 - El campo importe no se ha informado correctamente. Por favor, revise los datos.");
+				break;
+
+			case -702: //Error 702 - fecha de primer pago incorrecta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:702 - La fecha del primer pago no se ha informado correctamente. Por favor, revise los datos.");
+				break;
+				
+			case -703: //Error 703 - fecha de ultimo pago incorrecta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:703 - La fecha del ultimo pago no se ha informado correctamente. Por favor, revise los datos.");
+				break;
+				
+			case -704: //Error 704 - fecha de acta incorrecta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:704 - La fecha de acta no se ha informado correctamente. Por favor, revise los datos.");
+				break;
+				
+			case -801: //Error 801 - alta de una cuota en alta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - La cuota ya esta dada de alta. Por favor, revise los datos.");
+				break;
+
+			case -802: //Error 802 - cuota de baja no puede recibir mas movimientos
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La cuota esta baja y no puede recibir mas movimientos. Por favor, revise los datos.");
+				break;
+				
+			case -803: //Error 803 - estado no disponible
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:803 - El estado de la cuota informada no esta disponible. Por favor, revise los datos.");
+				break;
+
+			case -804: //Error 804 - modificacion sin cambios
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.");
+				break;
+
+			case -900: //Error 900 - al crear un movimiento
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.");
+				break;
+
+			case -901: //Error 901 - error y rollback - error al crear la cuota
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:901 - Se ha producido un error al registrar la cuota. Por favor, revise los datos.");
+				break;
+				
+			case -902: //Error 902 - error y rollback - error al registrar la relaccion
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.");
+				break;
+
+			case -903: //Error 903 - error y rollback - error al cambiar el estado
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:903 - Se ha producido un error al cambiar el estado de la cuota. Por favor, revise los datos.");
+				break;
+
+			case -904: //Error 904 - error y rollback - error al modificar la cuota
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:904 - Se ha producido un error al modificar la cuota. Por favor, revise los datos.");
+				break;
+
+			default: //error generico
+				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos.");
+				break;
+			}
+		}
+		
+
 		
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");

@@ -7,7 +7,7 @@
 <f:view contentType="text/html">
 	<h:head>
 		<title>Portal Provisiones</title>
-		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+		<link rel="shortcut icon" href="recursos/favicon.ico"/>
 	</h:head>
 	<h:body>
 		<h:form id="form" onkeypress="return event.keyCode != 13">
@@ -15,7 +15,7 @@
 
 				<p:layoutUnit position="north" size="33%" header="Alta Cuota">
 
- 
+
 								<h:panelGrid columns="3" cellpadding="5">
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
@@ -38,9 +38,9 @@
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
 											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
-											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">
 												<p:messages id="msgs"/>
-											</p:notificationBar>  
+											</p:notificationBar>
 											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
 											<p:growl id="popup" />
 										</h:panelGrid>
@@ -78,7 +78,7 @@
 													<p:selectOneMenu id="COCLDO" value="#{GestorCuotas.sCOCLDO}">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
-														<f:validateLength minimum="1" /> 
+														<f:validateLength minimum="1" />
 													</p:selectOneMenu>
 
 													<h:outputText for="NUDCOM" value="Numero: " />
@@ -89,7 +89,7 @@
 
 												</h:panelGrid>
 										  </p:panel>
-											<p:panel>                                  
+											<p:panel>
 												<h:panelGrid columns="2" cellpadding="5">
 													<h:outputText for="NOMCOC" value="Nombre comunidad: " />
 													<p:inputText id="NOMCOC" value="#{GestorCuotas.sNOMCOC}" size="60" maxlength="60" disabled="true">
@@ -108,18 +108,14 @@
 											<p:panel >
 												<h:panelGrid columns="1" cellpadding="1">
 											<p:panel >
-												<h:panelGrid columns="5" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 
 													<h:outputText for="COSBAC" value="Concepto: " />
 													<p:selectOneMenu id="COSBAC" value="#{GestorCuotas.sCOSBAC}" >
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposcosbga_t22HM}" />
-														<f:validateLength minimum="1" /> 
+														<f:validateLength minimum="1" />
 													</p:selectOneMenu>
-
-														
-													<h:outputText value="Devolucion: " />
-													<p:selectBooleanCheckbox value="#{GestorCuotas.bDevolucion}" />  
 												</h:panelGrid>
 										  </p:panel>
 
@@ -138,7 +134,7 @@
 													<p:selectOneMenu id="PTPAGO" value="#{GestorCuotas.sPTPAGO}">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposptpagoHM}" />
-														<f:validateLength minimum="1" /> 
+														<f:validateLength minimum="1" />
 													</p:selectOneMenu>
 												</h:panelGrid>
 										  </p:panel>
@@ -187,46 +183,49 @@
 							</p:panel>
 
 
-					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
+					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">
     				
-							<p:contextMenu for="activos">  
-								<p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorCuotas.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
-							</p:contextMenu>  
+							<p:contextMenu for="activos">
+								<p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorCuotas.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+							</p:contextMenu>
 									
-							<p:dataTable id="activos" var="activo" value="#{GestorCuotas.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorCuotas.activoseleccionado}" selectionMode="single">  
-									
-								<p:column headerText="Codigo Activo">  
-								    #{activo.COACES}  
-								</p:column>  
-								
-								<p:column headerText="Comunidad Autonoma">  
-								    #{activo.NOPRAC}  
-								</p:column>  
+							<p:dataTable id="activos" var="activo" value="#{GestorCuotas.tablaactivos}" rowKey="#{activo.COACES}"
+												selection="#{GestorCuotas.activoseleccionado}" selectionMode="single"
+												paginator="true" paginatorPosition="bottom" rows="10"
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">
 
-								<p:column headerText="Municipio">  
-								    #{activo.NOMUIN}  
-								</p:column>  
+								<p:column headerText="Codigo Activo">
+								    #{activo.COACES}
+								</p:column>
 								
-								<p:column headerText="Via">  
-								    #{activo.NOVIAS}  
-								</p:column>  
+								<p:column headerText="Comunidad Autonoma">
+								    #{activo.NOPRAC}
+								</p:column>
+
+								<p:column headerText="Municipio">
+								    #{activo.NOMUIN}
+								</p:column>
 								
-								<p:column headerText="Portal">  
-								    #{activo.NUPOAC}  
-								</p:column>  
+								<p:column headerText="Via">
+								    #{activo.NOVIAS}
+								</p:column>
 								
-								<p:column headerText="Piso">  
-								    #{activo.NUPIAC}  
-								</p:column>  
+								<p:column headerText="Portal">
+								    #{activo.NUPOAC}
+								</p:column>
 								
-								<p:column headerText="Puerta">  
-								    #{activo.NUPUAC}  
-								</p:column>  
+								<p:column headerText="Piso">
+								    #{activo.NUPIAC}
+								</p:column>
+								
+								<p:column headerText="Puerta">
+								    #{activo.NUPUAC}
+								</p:column>
 									
-							</p:dataTable> 
+							</p:dataTable>
 					</p:dialog>
-					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
+					<p:dialog header="Buscar Activos disponibles" widgetVar="dlgBuscar" resizable="false">
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >
@@ -275,9 +274,9 @@
 										</h:panelGrid>
 									</p:fieldset>
 					</p:dialog>
-					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
 						<p:graphicImage value="recursos/loadingBar.gif" />
-					</p:dialog> 
+					</p:dialog>
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>

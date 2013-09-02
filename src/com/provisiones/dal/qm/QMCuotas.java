@@ -19,17 +19,18 @@ public class QMCuotas
 
 	public static final String sTable = "e2_cuotas_tbl";
 
-	public static final String sField1  = "cod_cocldo";
-	public static final String sField2  = "cod_nudcom";
-	public static final String sField3  = "cod_cosbac";
-	public static final String sField4  = "fipago";    
-	public static final String sField5  = "ffpago";    
-	public static final String sField6  = "imcuco";    
-	public static final String sField7  = "faacta";    
-	public static final String sField8  = "cod_ptpago";
-	public static final String sField9  = "obtexc";
+	public static final String sField1  = "cod_coaces";
+	public static final String sField2  = "cod_cocldo";
+	public static final String sField3  = "cod_nudcom";
+	public static final String sField4  = "cod_cosbac";
+	public static final String sField5  = "fipago";    
+	public static final String sField6  = "ffpago";    
+	public static final String sField7  = "imcuco";    
+	public static final String sField8  = "faacta";    
+	public static final String sField9  = "cod_ptpago";
+	public static final String sField10  = "obtexc";
 
-	public static final String sField10 = "cod_estado";
+	public static final String sField11 = "cod_estado";
 
 	public static boolean addCuota(Cuota NuevaCuota)
 
@@ -56,9 +57,11 @@ public class QMCuotas
 				       + sField6  + ","              
 				       + sField7  + ","              
 				       + sField8  + ","
-				       + sField9  + ","  
-				       + sField10  + 
-				       ") VALUES ('" 
+				       + sField9  + ","
+				       + sField10  + ","
+				       + sField11  + 
+				       ") VALUES ('"
+				       + NuevaCuota.getCOACES() + "','"
 				       + NuevaCuota.getCOCLDO() + "','"
 				       + NuevaCuota.getNUDCOM() + "','"
 				       + NuevaCuota.getCOSBAC() + "','"
@@ -74,6 +77,7 @@ public class QMCuotas
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevaCuota.getCOACES());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevaCuota.getCOCLDO());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevaCuota.getNUDCOM());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevaCuota.getCOSBAC());
@@ -92,7 +96,7 @@ public class QMCuotas
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
-	public static boolean modCuota(Cuota NuevaCuota, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static boolean modCuota(Cuota NuevaCuota, String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
 		String sMethod = "modCuota";
 		Statement stmt = null;
@@ -108,26 +112,25 @@ public class QMCuotas
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField1  + " = '"+ NuevaCuota.getCOCLDO() + "', "
-					+ sField2  + " = '"+ NuevaCuota.getNUDCOM() + "', "
-					+ sField3  + " = '"+ NuevaCuota.getCOSBAC() + "', "
-					+ sField4  + " = '"+ NuevaCuota.getFIPAGO() + "', "
-					+ sField5  + " = '"+ NuevaCuota.getFFPAGO() + "', "
-					+ sField6  + " = '"+ NuevaCuota.getIMCUCO() + "', "
-					+ sField7  + " = '"+ NuevaCuota.getFAACTA() + "', "
-					+ sField8  + " = '"+ NuevaCuota.getPTPAGO() + "', "
-					+ sField9 + " = '"+ NuevaCuota.getOBTEXC() + 
+					+ sField5  + " = '"+ NuevaCuota.getFIPAGO() + "', "
+					+ sField6  + " = '"+ NuevaCuota.getFFPAGO() + "', "
+					+ sField7  + " = '"+ NuevaCuota.getIMCUCO() + "', "
+					+ sField8  + " = '"+ NuevaCuota.getFAACTA() + "', "
+					+ sField9  + " = '"+ NuevaCuota.getPTPAGO() + "', "
+					+ sField10 + " = '"+ NuevaCuota.getOBTEXC() + 
 					"' "+
 					" WHERE " +
-					"("	+ sField1  + " = '"+ sCodCOCLDO +"' AND " +
-						sField2  + " = '"+ sCodNUDCOM +"' AND " +
-					    sField3  + " = '"+ sCodCOSBAC + "' )");
+					"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+						sField2  + " = '"+ sCodCOCLDO +"' AND " +
+						sField3  + " = '"+ sCodNUDCOM +"' AND " +
+					    sField4  + " = '"+ sCodCOSBAC + "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevaCuota.getCOACES());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevaCuota.getCOCLDO());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevaCuota.getNUDCOM());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevaCuota.getCOSBAC());
@@ -147,7 +150,7 @@ public class QMCuotas
 		return bSalida;
 	}
 
-	public static boolean delCuota(String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static boolean delCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
 		String sMethod = "delCuota";
 		Statement stmt = null;
@@ -164,15 +167,17 @@ public class QMCuotas
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE " +
-					"("	+ sField1  + " = '"+ sCodCOCLDO +"' AND " +
-						sField2  + " = '"+ sCodNUDCOM +"' AND " +
-				      sField3  + " = '"+ sCodCOSBAC + "' )");
+					"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+					sField2  + " = '"+ sCodCOCLDO +"' AND " +
+					sField3  + " = '"+ sCodNUDCOM +"' AND " +
+				    sField4  + " = '"+ sCodCOSBAC + "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
@@ -191,15 +196,88 @@ public class QMCuotas
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
+	
+	public static boolean existeCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	{
+		String sMethod = "existeCuota";
 
-	public static Cuota getCuota(String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
-	{//pendiente de coaces, de la tabla activos
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField11 + "  FROM " + sTable + 
+					" WHERE " +
+					"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+					sField2  + " = '"+ sCodCOCLDO +"' AND " +
+					sField3  + " = '"+ sCodNUDCOM +"' AND " +
+				    sField4  + " = '"+ sCodCOSBAC + "' )");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+				}
+			}
+			if (found == false) 
+			{
+ 
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
+	}
+
+	public static Cuota getCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	{
 		
 		String sMethod = "getCuota";
 
 		Statement stmt = null;
 		ResultSet rs = null;
 
+		String sCOACES = "";
 		String sCOCLDO = "";
 		String sNUDCOM = "";
 		String sCOSBAC = "";
@@ -231,21 +309,19 @@ public class QMCuotas
 				       + sField5  + ","              
 				       + sField6  + ","              
 				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  +       
+				       + sField8  + ","
+				       + sField9  + ","
+				       + sField10  +       
 				       "  FROM " + sTable + 
 					" WHERE " +
-					"("	+ sField1  + " = '"+ sCodCOCLDO +"' AND " +
-						sField2  + " = '"+ sCodNUDCOM +"' AND " +
-				      sField3  + " = '"+ sCodCOSBAC + "' )");
+					"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+					sField2  + " = '"+ sCodCOCLDO +"' AND " +
+					sField3  + " = '"+ sCodNUDCOM +"' AND " +
+				    sField4  + " = '"+ sCodCOSBAC + "' )");
 
 			rs = pstmt.executeQuery();
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOCLDO);
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCodNUDCOM);
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField3 + ": " + sCodCOSBAC);
 
 			if (rs != null) 
 			{
@@ -254,15 +330,16 @@ public class QMCuotas
 				{
 					found = true;
 
-					sCOCLDO = rs.getString(sField1);
-					sNUDCOM = rs.getString(sField2);
-					sCOSBAC = rs.getString(sField3);
-					sFIPAGO = rs.getString(sField4);
-					sFFPAGO = rs.getString(sField5);
-					sIMCUCO = rs.getString(sField6);
-					sFAACTA = rs.getString(sField7);
-					sPTPAGO = rs.getString(sField8); 
-					sOBTEXC = rs.getString(sField9);
+					sCOACES = rs.getString(sField1);
+					sCOCLDO = rs.getString(sField2);
+					sNUDCOM = rs.getString(sField3);
+					sCOSBAC = rs.getString(sField4);
+					sFIPAGO = rs.getString(sField5);
+					sFFPAGO = rs.getString(sField6);
+					sIMCUCO = rs.getString(sField7);
+					sFAACTA = rs.getString(sField8);
+					sPTPAGO = rs.getString(sField9);
+					sOBTEXC = rs.getString(sField10);
 					
 					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 					
@@ -276,6 +353,7 @@ public class QMCuotas
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCOSBAC);
@@ -290,11 +368,11 @@ public class QMCuotas
 			Utils.closeStatement(stmt, sClassName, sMethod);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return new Cuota(sCOCLDO, sNUDCOM, sCOSBAC, sFIPAGO, sFFPAGO, sIMCUCO, sFAACTA, sPTPAGO, sOBTEXC);
+		return new Cuota(sCOACES, sCOCLDO, sNUDCOM, sCOSBAC, sFIPAGO, sFFPAGO, sIMCUCO, sFAACTA, sPTPAGO, sOBTEXC);
 	}
 	
-	public static boolean tieneCuotas(String sCodCOCLDO, String sCodNUDCOM)
-	{//pendiente de coaces, de la tabla activos
+	public static boolean tieneCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM)
+	{
 		
 		String sMethod = "getCuota";
 
@@ -314,9 +392,10 @@ public class QMCuotas
 			       + sField3  +       
 			       "  FROM " + sTable + 
 				" WHERE " +
-				"("	+ sField1  + " = '"+ sCodCOCLDO +"' AND " +
-					sField2  + " = '"+ sCodNUDCOM +"' AND " +
-			      sField10  + " <> 'B' )";
+				"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+					sField2  + " = '"+ sCodCOCLDO +"' AND " +
+					sField3  + " = '"+ sCodNUDCOM +"' AND " +
+			      sField11  + " <> 'B' )";
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 
@@ -328,16 +407,15 @@ public class QMCuotas
 				       + sField3  +       
 				       "  FROM " + sTable + 
 					" WHERE " +
-					"("	+ sField1  + " = '"+ sCodCOCLDO +"' AND " +
-						sField2  + " = '"+ sCodNUDCOM +"' AND " +
-				      sField10  + " <> 'B' )");
+					"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+					sField2  + " = '"+ sCodCOCLDO +"' AND " +
+					sField3  + " = '"+ sCodNUDCOM +"' AND " +
+				      sField11  + " <> 'B' )");
 
 			rs = pstmt.executeQuery();
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOCLDO);
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCodNUDCOM);
 
 			if (rs != null) 
 			{
@@ -359,6 +437,7 @@ public class QMCuotas
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 
@@ -375,90 +454,7 @@ public class QMCuotas
 		return found;
 	}
 	
-/*	public static String getCuotaID(Cuota cuota)
-	{
-		
-		String sMethod = "getCuotaID";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		String sCuotaID = "";
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement("SELECT "
-					+ sField1 + 
-					"  FROM " + sTable + 
-						" WHERE " +
-						"("
-					       + sField1  +" = '" + cuota.getCOCLDO() + "' AND "
-					       + sField2  +" = '" + cuota.getNUDCOM() + "' AND "
-					       + sField3  +" = '" + cuota.getCOSBAC() + "' AND "
-					       + sField4  +" = '" + cuota.getFIPAGO() + "' AND "
-					       + sField5  +" = '" + cuota.getFFPAGO() + "' AND "
-					       + sField6  +" = '" + cuota.getIMCUCO() + "' AND "
-					       + sField7  +" = '" + cuota.getFAACTA() + "' AND "
-					       + sField8  +" = '" + cuota.getPTPAGO() + "' AND "
-					       + sField9  +" = '" + cuota.getOBTEXC() + 
-					       "' )");
-
-			rs = pstmt.executeQuery();
-
-			//System.out.println("===================================================");
-			//System.out.println(sField1 + ": " + sCuotaID);
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					found = true;
-
-					sCuotaID = rs.getString(sField1);
-					System.out.println(sField1 + ": " + sCuotaID);
-
-
-
-					//System.out.println(sField2 + ": " + sApplication);
-					//System.out.println(sField3 + ": " + sContactCode);
-					//System.out.println(sField4 + ": " + sProjectCode);
-					//System.out.println("===================================================");
-
-				}
-			}
-			if (found == false) 
-			{
-				System.out.println("No Information Found");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-		ConnectionManager.CloseDBConnection(conn);
-		return sCuotaID;
-	}*/
-
-	public static boolean setEstado(String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sEstado)
+	public static boolean setEstado(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sEstado)
 	{
 		String sMethod = "setEstado";
 		Statement stmt = null;
@@ -474,18 +470,20 @@ public class QMCuotas
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField10 + " = '"+ sEstado + 
+					+ sField11 + " = '"+ sEstado + 
 					"' "+
 					" WHERE "+
-					"(" + sField1 + " = '" + sCodCOCLDO + "' AND " +
-						sField2 + " = '" + sCodNUDCOM + "' AND " +
-						sField3 + " = '" + sCodCOSBAC + "' )");
+					"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+					sField2  + " = '"+ sCodCOCLDO +"' AND " +
+					sField3  + " = '"+ sCodNUDCOM +"' AND " +
+				    sField4  + " = '"+ sCodCOSBAC + "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
@@ -505,7 +503,7 @@ public class QMCuotas
 		return bSalida;
 	}
 	
-	public static String getEstado(String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static String getEstado(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
 		String sMethod = "getEstado";
 
@@ -530,11 +528,12 @@ public class QMCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField10 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + sField11 + "  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOCLDO + "' AND " +
-						sField2 + " = '" + sCodNUDCOM + "' AND " +
-					sField3 + " = '" + sCodCOSBAC + "' )");
+					"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+					sField2  + " = '"+ sCodCOCLDO +"' AND " +
+					sField3  + " = '"+ sCodNUDCOM +"' AND " +
+				    sField4  + " = '"+ sCodCOSBAC + "' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -548,11 +547,11 @@ public class QMCuotas
 				{
 					found = true;
 
-					sEstado = rs.getString(sField10);
+					sEstado = rs.getString(sField11);
 					
 					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField10 + ": " + sEstado);
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField11 + ": " + sEstado);
 
 
 				}
@@ -566,6 +565,7 @@ public class QMCuotas
 		} 
 		catch (SQLException ex) 
 		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);

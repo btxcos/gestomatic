@@ -638,7 +638,7 @@ public class CLComunidades
 			//Error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
 			iCodigo = -26;
 		}
-		else if (movimiento.getCOACCI().equals("B") && QMCuotas.tieneCuotas(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+		else if (movimiento.getCOACCI().equals("B") && QMCuotas.tieneCuotas(movimiento.getCOACES(),movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 		{
 			//Error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
 			iCodigo = -27;			

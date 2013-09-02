@@ -142,6 +142,11 @@ public class CLImpuestos
 		return QMListaImpuestos.compruebaRelacionImpuestoActivo(sCodNURCAT, sCodCOSBAC, sCodCOACES);
 	}	
 	
+	public static boolean existeImpuestoRecurso (String sCodNURCAT,String sCodCOSBAC)
+	{
+		return QMImpuestos.existeImpuestoRecurso(sCodNURCAT, sCodCOSBAC);
+	}	
+	
 	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento)
 	{
 		String sMethod = "registraMovimiento";
