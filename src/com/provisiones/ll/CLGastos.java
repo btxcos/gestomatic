@@ -376,6 +376,98 @@ public class CLGastos
 			//Error 062 - Llega una devolución con importe positivo.
 			iCodigo = -62;
 		}
+		else if (movimiento_revisado.getFEDEVE().equals("#"))
+		{
+			//Error 701 - Fecha de devengo incorrecta
+			iCodigo = -701;
+		}
+		else if (movimiento_revisado.getFFGTVP().equals("#"))
+		{
+			//Error 702 - Fecha de fin de periodo incorrecta
+			iCodigo = -702;
+		}
+		else if (movimiento_revisado.getFEPAGA().equals("#"))
+		{
+			//Error 703 - Fecha de pago incorrecta
+			iCodigo = -703;
+		}
+		else if (movimiento_revisado.getFELIPG().equals("#"))
+		{
+			//Error 704 - Fecha de limite de pago incorrecta
+			iCodigo = -704;
+		}
+		else if (movimiento_revisado.getFEEESI().equals("#"))
+		{
+			//Error 705 - Fecha de estado estimado incorrecta
+			iCodigo = -705;
+		}
+		else if (movimiento_revisado.getFEECOI().equals("#"))
+		{
+			//Error 706 - Fecha de estado conocido incorrecta
+			iCodigo = -706;
+		}
+		else if (movimiento_revisado.getFEAGTO().equals("#"))
+		{
+			//Error 707 - Fecha de anulacion del gasto incorrecta
+			iCodigo = -707;
+		}
+		else if (movimiento_revisado.getFEPGPR().equals("#"))
+		{
+			//Error 708 - Fecha de pago al proveedor incorrecta
+			iCodigo = -708;
+		}
+		else if (movimiento_revisado.getIMNGAS().equals("#"))
+		{
+			//Error 709 - Importe del gasto incorrecto
+			iCodigo = -709;
+		}
+		else if (movimiento_revisado.getIMRGAS().equals("#"))
+		{
+			//Error 710 - Recargo en el importe del gasto incorrecto
+			iCodigo = -710;
+		}
+		else if (movimiento_revisado.getIMDGAS().equals("#"))
+		{
+			//Error 711 - Importe de demora del gasto incorrecto
+			iCodigo = -711;
+		}
+		else if (movimiento_revisado.getIMCOST().equals("#"))
+		{
+			//Error 712 - Importe de costas incorrecto
+			iCodigo = -712;
+		}
+		else if (movimiento_revisado.getIMOGAS().equals("#"))
+		{
+			//Error 713 - Importe de otros incrementos incorrecto
+			iCodigo = -713;
+		}
+		else if (movimiento_revisado.getIMDTGA().equals("#"))
+		{
+			//Error 714 - Importe de descuento incorrecto
+			iCodigo = -714;
+		}
+		else if (movimiento_revisado.getIMIMGA().equals("#"))
+		{
+			//Error 715 - Importe de impuestos incorrecto
+			iCodigo = -715;
+		}
+		
+		else if (movimiento_revisado.getFEEESI().equals("") && movimiento_revisado.getFEECOI().equals(""))
+		{
+			//Error 807 - Fecha de estado sin informar
+			iCodigo = -807;
+		}
+		else if (Double.parseDouble(movimiento_revisado.getIMDTGA()) < 0)
+		{
+			//Error 808 - Importe de descuento negativo
+			iCodigo = -808;
+		}
+		else if (Double.parseDouble(movimiento_revisado.getIMIMGA()) < 0)
+		{
+			//Error 809 - Importe de impuestos negativo
+			iCodigo = -809;
+		}	
+		
 		else if (movimiento_revisado.getFEDEVE().equals("0"))
 		{
 			//Error no se ha informado la fecha de devengo.

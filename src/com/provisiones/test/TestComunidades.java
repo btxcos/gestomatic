@@ -2,6 +2,7 @@ package com.provisiones.test;
 
 import java.io.IOException;
 
+import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 
 public class TestComunidades 
@@ -15,10 +16,10 @@ public class TestComunidades
 		
 		//FileManager.splitter("168E1.txt");
 		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "CC|"+Utils.compruebaCC("1111", "1111", "30", "1111111111")+"|");
+
+		Utils.debugTrace(bTraza, sClassName, sMethod, "Correo|"+CLProvisiones.provisionAsignada("3100058")+"|");
 		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "CIF|"+Utils.compruebaCIF("0")+"|");
 		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "Correo|"+Utils.compruebaCorreo("a@b.com")+"|");
+		
 	}
 }

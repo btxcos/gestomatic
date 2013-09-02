@@ -420,7 +420,16 @@ public class QMProvisiones
 		conn = ConnectionManager.OpenDBConnection();
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
+		String sQuery = "SELECT " + sField1 + 
+				" FROM " + sTable + 
+				" WHERE " +
+				"( " + sField8 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
+				+ sField2 +" = '"+ sCodCOSPAT +"' AND "
+				+ sField3 +" = '"+ sCodTAS +"')";
 
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();

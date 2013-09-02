@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMProvisiones;
+import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Provision;
 import com.provisiones.types.ProvisionTabla;
@@ -25,6 +26,8 @@ public class CLProvisiones
 	public static String provisionAsignada (String sCodCOACES)
 	{
 		
+		String sMethod = "provisionAsignada";
+		
 		String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCodCOACES);
 		
 		if (QMCodigosControl.getDesSociedadesTitulizadas(sCOSPAT).equals(""))
@@ -40,6 +43,7 @@ public class CLProvisiones
 		{
 			sProvision = QMProvisiones.getUltimaProvision();
 			
+			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sProvision:|"+sProvision+"|");
 			
 			Calendar fecha = Calendar.getInstance();
 			
@@ -50,10 +54,8 @@ public class CLProvisiones
 			else
 			{
 				
-
-				String[] arrayprovision = sProvision.split(ValoresDefecto.DEF_COREAE);
-				int iAño = Integer.parseInt(arrayprovision[0]);
-				int iNumero = Integer.parseInt(arrayprovision[1]);
+				int iAño = Integer.parseInt(sProvision.substring(0, 4));
+				int iNumero = Integer.parseInt(sProvision.substring(6));
 			
 				if (iAño < fecha.get(Calendar.YEAR))
 				{

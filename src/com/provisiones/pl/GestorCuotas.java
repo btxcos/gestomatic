@@ -119,7 +119,7 @@ public class GestorCuotas implements Serializable
   	
     }
     
-	public void buscaActivosConComunidad (ActionEvent actionEvent)
+	public void buscaActivos (ActionEvent actionEvent)
 	{
 		
 		String sMethod = "buscaActivosComunidad";
@@ -131,9 +131,6 @@ public class GestorCuotas implements Serializable
 				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		if (!sCOCLDO.equals("") && !sNUDCOM.equals(""))
 		{

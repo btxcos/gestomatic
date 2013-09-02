@@ -145,9 +145,6 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
 		this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(buscaactivos));
 		
 		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
@@ -192,10 +189,6 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
     	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
 		{
-    		
-
-    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando impuestos...");
-    		FacesContext.getCurrentInstance().addMessage(null, msg);
     		
     		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(sCOACES.toUpperCase());
     		

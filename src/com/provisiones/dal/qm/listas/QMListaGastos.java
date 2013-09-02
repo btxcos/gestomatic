@@ -726,7 +726,7 @@ public class QMListaGastos
    					   + sField5 + " IN (SELECT "
    					   + QMGastos.sField6 + 
    					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_ALTA + "' " +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
    					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' )" +
    					   "))";
 		
@@ -784,7 +784,7 @@ public class QMListaGastos
    					   + sField5 + " IN (SELECT "
    					   + QMGastos.sField6 + 
    					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_ALTA + "' " +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
    					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' )" +
    					   "))");
 

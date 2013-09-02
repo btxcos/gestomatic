@@ -135,9 +135,6 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(),"");
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
 		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 		
 		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
@@ -165,9 +162,6 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		String sMethod = "cargarReferencias";
 		
 		FacesMessage msg;
-		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando cuotas...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
 		

@@ -293,9 +293,6 @@ public class GestorMovimientosGastos implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
 		this.setTablaactivos(CLGastos.buscarActivosConGastos(buscaactivos));
 		
 		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
@@ -322,8 +319,6 @@ public class GestorMovimientosGastos implements Serializable
 		String sMethod = "cargarDatos";
 		
 		FacesMessage msg;
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Buscando cuotas...");
 		
 		if (CLActivos.compruebaActivo(sCOACES))
 		{
@@ -724,7 +719,67 @@ public class GestorMovimientosGastos implements Serializable
 			case -62: //Error 062 - Llega una devolución con importe positivo. 
 				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:062 - La devolucion debe incluir un importe del gasto con valor negativo. Por favor, revise los datos.");
 				break;
-			
+				
+			case -701: //Error 701 - Fecha de devengo incorrecta  
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:701 - La fecha de devengo esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+
+			case -702: //Error 702 - Fecha de fin de periodo incorrecta  
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:702 - La fecha de fin de periodo esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -703: //Error 703 - Fecha de pago incorrecta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:703 - La fecha de pago esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -704: //Error 704 - Fecha de limite de pago incorrecta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:704 - La fecha de limite de pago esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -705: //Error 705 - Fecha de estado estimado incorrecta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:705 - La fecha de estado estimado esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -706: //Error 706 - Fecha de estado conocido incorrecta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:706 - La fecha de estado conocido esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -707: //Error 707 - Fecha de anulacion del gasto incorrecta  
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:707 - La fecha de anulacion de gasto esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -708: //Error 708 - Fecha de pago al proveedor incorrecta
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:708 - La fecha de pago al proveedor esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;				
+				
+			case -709: //Error 709 - Importe del gasto incorrecto
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:709 - El importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -710: //Error 710 - Recargo en el importe del gasto incorrecto
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:710 - El recargo en el importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -711: //Error 711 - Importe de demora del gasto incorrecto
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:711 - El importe de demora del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -712: //Error 712 - Importe de costas incorrecto
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:712 - El importe de costas esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;				
+				
+			case -713: //Error 713 - Importe de otros incrementos incorrecto   
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:713 - El importe de otros incrementos esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -714: //Error 714 - Importe de descuento incorrecto
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:714 - El importe de descuento esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
+			case -715: //Error 715 - Importe de impuestos incorrecto
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:715 - El importe de impuestos esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				break;
+				
 			case -800: //Error 800 - Gasto sin provision  
 				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - No se ha cargado una provision de gastos. Por favor, cargue los datos del activo.");
 				break;
@@ -753,6 +808,18 @@ public class GestorMovimientosGastos implements Serializable
 				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.");
 				break;
 				
+			case -807: //Error 807 - Fecha de estado sin informar
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:807 - No se ha informado ninguna fecha de estado del gasto. Por favor, revise los datos.");
+				break;
+				
+			case -808: //Error 808 - Importe de descuento negativo
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:808 - El importe del descuento no puede ser negativo. Por favor, revise los datos.");
+				break;
+				
+			case -809: //Error 809 - Importe de impuestos negativo
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:809 - El importe de impuestos no puede ser negativo. Por favor, revise los datos.");
+				break;
+
 			case -900: //Error 900 - al crear un movimiento
 				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.");
 				break;

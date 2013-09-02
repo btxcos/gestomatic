@@ -120,9 +120,6 @@ public class GestorReferenciasCatastrales implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
 		this.setTablaactivos(CLReferencias.buscarActivosSinReferencias(buscaactivos));
 		
 		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");

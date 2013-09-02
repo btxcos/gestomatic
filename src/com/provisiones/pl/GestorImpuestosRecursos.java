@@ -133,10 +133,7 @@ public class GestorImpuestosRecursos implements Serializable
 				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando Activos...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
+	
 		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 		
 		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
@@ -166,9 +163,6 @@ public class GestorImpuestosRecursos implements Serializable
 		
 		FacesMessage msg;
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando cuotas...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
 		this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
 		
 		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontradas "+getTablareferencias().size()+" referencias relacionadas.");
@@ -181,9 +175,6 @@ public class GestorImpuestosRecursos implements Serializable
 		
 		
 		FacesMessage msg;
-		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Buscando referencia...");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
     	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
     	
