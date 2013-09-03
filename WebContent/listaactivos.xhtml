@@ -105,9 +105,8 @@
 														<p:menuitem value="Referencia Catastral" update="form:popup" icon="ui-icon-script" action="#{GestorActivos.cargarReferencia}"/>
 														<p:menuitem value="Impuestos y Recursos" update="form:popup" icon="ui-icon-note" action="#{GestorActivos.cargarImpuestos}"/>
 														<p:menuitem value="Gastos" update="form:popup" icon="ui-icon-cart" action="#{GestorActivos.cargarGastos}"/>
-														
-													</p:contextMenu>  
-															
+													</p:contextMenu>															
+
 													<p:dataTable id="activos" var="activo" value="#{GestorActivos.tablaactivos}" rowKey="#{activo.COACES}"  
 															selection="#{GestorActivos.activoseleccionado}" selectionMode="single"
 																paginator="true" paginatorPosition="bottom" rows="10" 
