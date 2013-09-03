@@ -1093,10 +1093,10 @@ public class QMActivos
 		return sCOTSIN;
 	}
 
-	public static String getBIARREctivo(String sCodCOACES)
+	public static String getBIARREActivo(String sCodCOACES)
 	{//pendiente de coaces, de la tabla activos
 		
-		String sMethod = "getBIARREctivo";
+		String sMethod = "getBIARREActivo";
 
 		Statement stmt = null;
 		ResultSet rs = null;

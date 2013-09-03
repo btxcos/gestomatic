@@ -10,6 +10,7 @@ import org.primefaces.event.FileUploadEvent;
 
 import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
 public class GestorCargas implements Serializable
 {
@@ -23,16 +24,27 @@ public class GestorCargas implements Serializable
 	public void handleFileUpload(FileUploadEvent event)throws IOException 
     {
 		String sMethod = "handleFileUpload";
+		
+		FacesMessage msg;
 
 		Utils.standardIO2File("");//Salida por fichero de texto
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"handleFileUpload >>>");
 		
-		FileManager.splitter(FileManager.guardarFichero(event));
+		if (FileManager.splitter(FileManager.guardarFichero(event)))
+		{
+			msg = new FacesMessage("'"+event.getFile().getFileName() +"' ha subido correctamente.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		else
+		{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre de archivo reconocible: '"+ValoresDefecto.DEF_COAPII+"AC|RG|PA|GA|PP|E1|E2|E3|E4.TXT'. Por favor, reviselo.",null);
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 
-		FacesMessage msg = new FacesMessage("Correcto!", event.getFile().getFileName() + " ha subido correctamente.");
+		 
 		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"<<< handleFileUpload");
 	}  

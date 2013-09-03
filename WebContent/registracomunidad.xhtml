@@ -54,7 +54,7 @@
 								</h:panelGrid>
 				</p:layoutUnit>
 
-				<p:layoutUnit position="west" size="20%" header="Menus">
+				<p:layoutUnit position="west" size="20%" header="Operativas">
 					<ui:include src="menu.xhtml"/>
 				</p:layoutUnit>
 
@@ -63,38 +63,42 @@
 						<h:panelGrid columns="1" cellpadding="5">
 
 									<p:fieldset legend="Comunidad de proprietarios">
-										<h:panelGrid columns="2" cellpadding="5">
-											
-											<h:outputText for="COCLDO" value="Documento: " />
-											<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}">
-												<f:selectItem itemLabel="Elija..." itemValue="" />
-												<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
-											</p:selectOneMenu>
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="COCLDO" value="Documento: " />
+													<p:selectOneMenu id="COCLDO" value="#{GestorComunidades.sCOCLDO}">
+														<f:selectItem itemLabel="Elija..." itemValue="" />
+														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}" />
+													</p:selectOneMenu>
 
-											<h:outputText for="NUDCOM" value="Numero: " />
-											<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" size="10" maxlength="10">
-											</p:inputText>
-
-
+													<h:outputText for="NUDCOM" value="Número: " />
+													<p:inputText id="NUDCOM" value="#{GestorComunidades.sNUDCOM}" size="10" maxlength="10">
+													</p:inputText>
+												</h:panelGrid>
+											</p:panel>
+											<p:panel>
+												<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText for="NOMCOC" value="Nombre comunidad: " />
 											<p:inputText id="NOMCOC" value="#{GestorComunidades.sNOMCOC}" size="60" maxlength="60">
 											</p:inputText>
 
 
-											<h:outputText for="NODCCO"  value="Correo electronico: " />
+											<h:outputText for="NODCCO"  value="Correo electrónico: " />
 											<p:inputText id="NODCCO" value="#{GestorComunidades.sNODCCO}" size="60"  maxlength="60">
 											</p:inputText>
-
+												</h:panelGrid>
+											</p:panel>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Presidente">
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="NOMPRC" value="NOMPRC: " />
+											<h:outputText for="NOMPRC" value="Presidente: " />
 											<p:inputText id="NOMPRC" value="#{GestorComunidades.sNOMPRC}" size="55" maxlength="55">
 											</p:inputText>
 
-											<h:outputText for="NUTPRC" value="NUTPRC: " />
+											<h:outputText for="NUTPRC" value="Número de contacto: " />
 											<p:inputText id="NUTPRC" value="#{GestorComunidades.sNUTPRC}" size="14" maxlength="14">
 											</p:inputText>
 
@@ -103,15 +107,15 @@
 									<p:fieldset legend="Administrador">
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="NOMADC" value="NOMADC: " />
+											<h:outputText for="NOMADC" value="Administrador: " />
 											<p:inputText id="NOMADC" value="#{GestorComunidades.sNOMADC}" size="55" maxlength="55">
 											</p:inputText>
 
-											<h:outputText for="NUTADC" value="NUTADC: " />
+											<h:outputText for="NUTADC" value="Número de contacto: " />
 											<p:inputText id="NUTADC" value="#{GestorComunidades.sNUTADC}" size="14" maxlength="14">
 											</p:inputText>
 
-											<h:outputText for="NODCAD" value="NODCAD: " />
+											<h:outputText for="NODCAD" value="Correo electrónico: " />
 											<p:inputText id="NODCAD" value="#{GestorComunidades.sNODCAD}" size="60" maxlength="60">
 											</p:inputText>
 
@@ -120,7 +124,7 @@
 									<p:fieldset legend="Cuenta corriente de la Comunidad">
 										<h:panelGrid columns="5" cellpadding="5">
 
-											<h:outputText for="NUCCNT" value="NUCC: " />
+											<h:outputText for="NUCCNT" value="Número de Cuenta: " />
 
 											<p:inputMask id="NUCCEN" value="#{GestorComunidades.sNUCCEN}" mask="9999" size="4">
 												<f:validateLength minimum="4"/>
@@ -141,31 +145,29 @@
 										</h:panelGrid>
 									</p:fieldset>
 
-									<p:fieldset legend="Observaciones">
-										<h:panelGrid columns="2" cellpadding="5">
-
-											<h:outputText for="OBTEXC" value="OBTEXC: " />
-
-											<p:inputText id="OBTEXC" value="#{GestorComunidades.sOBTEXC}" size="110" maxlength="110" >
-											</p:inputText>
-
-										</h:panelGrid>
-									</p:fieldset>
-									
-								<p:fieldset legend="Asociar Activo">
+									<p:fieldset legend="Asociar un Activo">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
-													<h:outputText for="COACES" value="Codigo de activo: " />
+													<h:outputText for="COACES" value="Código de activo: " />
 														<p:inputText id="COACES" value="#{GestorComunidades.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:commandButton value="Comprobar" update="msgs, popup, COACES, activos" actionListener="#{GestorComunidades.comprobarActivo}"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 
+									<p:fieldset legend="Observaciones">
+										<h:panelGrid columns="1" cellpadding="5">
+
+											<p:inputTextarea id="OBTEXC" value="#{GestorComunidades.sOBTEXC}" rows="2" cols="100" counter="counter" maxlength="110"
+												counterTemplate="{0} carácteres restantes." autoResize="false"/>  
+											<h:outputText id="counter"/>
+
+										</h:panelGrid>
+									</p:fieldset>
 
 						</h:panelGrid>
 					</p:panel>
@@ -180,11 +182,11 @@
 																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
 																rowsPerPageTemplate="5,10,15">
 									
-								<p:column headerText="Codigo Activo">  
+								<p:column headerText="Código Activo">  
 								    #{activo.COACES}  
 								</p:column>  
 								
-								<p:column headerText="Comunidad Autonoma">  
+								<p:column headerText="Provincia">  
 								    #{activo.NOPRAC}  
 								</p:column>  
 
@@ -192,7 +194,7 @@
 								    #{activo.NOMUIN}  
 								</p:column>  
 								
-								<p:column headerText="Via">  
+								<p:column headerText="Vía">  
 								    #{activo.NOVIAS}  
 								</p:column>  
 								
@@ -211,31 +213,31 @@
 							</p:dataTable> 
 					</p:dialog>
 					<p:dialog header="Buscar Activos sin Comunidad" widgetVar="dlgBuscar" resizable="false">  
-									<p:fieldset legend="Criterios de Busqueda">
+									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >
 												<h:panelGrid columns="3" cellpadding="5">
-													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+													<h:outputText for="NOPRAC" value="Provincia: " />
 														<p:inputText id="NOPRAC" value="#{GestorComunidades.sNOPRAC}" size="18" maxlength="18">
 														</p:inputText>
 													<p:message for="NOPRAC" display="icon"/>
 
-													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+													<h:outputText for="NOMUIN" value="Municipio: " />
 														<p:inputText id="NOMUIN" value="#{GestorComunidades.sNOMUIN}" size="30" maxlength="30">
 														</p:inputText>
 													<p:message for="NOMUIN" display="icon"/>
 
-													<h:outputText for="COPOIN" value="Codigo Postal: " />
+													<h:outputText for="COPOIN" value="Código Postal: " />
 														<p:inputText id="COPOIN" value="#{GestorComunidades.sCOPOIN}" size="5" maxlength="5">
 														</p:inputText>
 													<p:message for="COPOIN" display="icon"/>
 
-													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+													<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
 														<p:inputText id="NOVIAS" value="#{GestorComunidades.sNOVIAS}" size="60" maxlength="60">
 														</p:inputText>
 													<p:message for="NOVIAS" display="icon"/>
 
-													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: " />
 														<p:inputText id="NUPOAC" value="#{GestorComunidades.sNUPOAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPOAC" display="icon"/>

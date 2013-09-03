@@ -13,7 +13,7 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Alta Impuestos y Recursos">
+				<p:layoutUnit position="north" size="auto" header="Alta Impuestos y Recursos">
 
  
 								<h:panelGrid columns="3" cellpadding="5">
@@ -37,17 +37,20 @@
 									<p:fieldset legend="Info">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
-											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
-											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
+											<h:panelGrid columns="2" cellpadding="5">
 												<p:messages id="msgs"/>
-											</p:notificationBar>  
+												<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											</h:panelGrid>
+											</p:notificationBar>
 											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
 											<p:growl id="popup" />
 										</h:panelGrid>
 									</p:fieldset>
 								</h:panelGrid>
 				</p:layoutUnit>
-				<p:layoutUnit position="west" size="20%" header="Menus">
+				<p:layoutUnit position="west" size="20%" header="Operativas">
 					<ui:include src="menu.xhtml"/>
 				</p:layoutUnit>
 
@@ -60,21 +63,21 @@
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
-													<h:outputText for="COACES" value="Codigo de activo: " />
+													<h:outputText for="COACES" value="Código de activo: " />
 													<p:inputText id="COACES" value="#{GestorImpuestosRecursos.sCOACES}" size="9" maxlength="9">
 													</p:inputText>
 
 													<p:commandButton value="Cargar Referencias" update="msgs, popup, panel, referencias" actionListener="#{GestorImpuestosRecursos.cargarReferencias}" oncomplete="dlgTablaReferencias.show()"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 
 									<p:fieldset legend="Referencia Catastral">
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="NURCAT" value="NURCAT: " />
+											<h:outputText for="NURCAT" value="Número: " />
 											<p:inputText id="NURCAT" value="#{GestorImpuestosRecursos.sNURCAT}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
 
@@ -82,7 +85,7 @@
 									</p:fieldset>
 
 									<p:fieldset legend="Solicitud" id="panelPago">
-										<h:panelGrid columns="1" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
@@ -101,13 +104,17 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 
-													<h:outputText for="FEPRRE" value="FEPRRE: " />
-													<p:inputMask id="FEPRRE" validatorMessage="La fecha de presentacion de recurso debe tener completarse segun el patron DD/MM/AAAA" value="#{GestorImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10" >
+													<h:outputText for="FEPRRE" value="Fecha de solicitud: " />
+													<p:inputMask id="FEPRRE" value="#{GestorImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10" >
 														<f:validateLength minimum="10"/>
 													</p:inputMask>
 													<p:commandButton id="hFEPRRE" icon="ui-icon-clock" update="FEPRRE" actionListener="#{GestorImpuestosRecursos.hoyFEPRRE}"/>
+												</h:panelGrid>
+										  </p:panel>
 
-													<h:outputText for="BISODE" value="BISODE: " />
+											<p:panel >
+												<h:panelGrid columns="2" cellpadding="5">
+													<h:outputText for="BISODE" value="Solicita devolución: " />
 													<p:selectOneMenu id="BISODE" value="#{GestorImpuestosRecursos.sBISODE}">
 														<f:selectItem itemLabel="Elija..." itemValue="" />
 														<f:selectItems value="#{GestorDatosGenerales.tiposbinariaHM}" />
@@ -120,12 +127,11 @@
 									</p:fieldset>
 
 									<p:fieldset legend="Observaciones">
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="1" cellpadding="5">
 
-											<h:outputText for="OBTEXC" value="OBTEXC: " />
-
-											<p:inputText id="OBTEXC" value="#{GestorImpuestosRecursos.sOBTEXC}" size="110" maxlength="110" >
-											</p:inputText>
+											<p:inputTextarea id="OBTEXC" value="#{GestorImpuestosRecursos.sOBTEXC}" rows="2" cols="80" counter="counter" maxlength="110"       
+												counterTemplate="{0} carácteres restantes." autoResize="false"/>  
+											<h:outputText id="counter" />
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -133,7 +139,7 @@
 								</h:panelGrid>
 							</p:panel>
 
-					<p:dialog header="Referencias asociadas al activo: " widgetVar="dlgTablaReferencias" resizable="false">  
+					<p:dialog header="Referencias asociadas al Activo: " widgetVar="dlgTablaReferencias" resizable="false">  
     				
 							<p:contextMenu for="referencias">  
 								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NURCAT" icon="ui-icon-check" actionListener="#{GestorImpuestosRecursos.seleccionarReferencia}" oncomplete="dlgTablaReferencias.hide();"/>  
@@ -153,7 +159,7 @@
 								    #{referencia.TIRCAT}  
 								</p:column>  
 
-								<p:column headerText="Entidad de emision">  
+								<p:column headerText="Entidad de emisión">  
 								    #{referencia.ENEMIS}
 								</p:column>  
 
@@ -169,11 +175,11 @@
 							<p:dataTable id="activos" var="activo" value="#{GestorImpuestosRecursos.tablaactivos}" rowKey="#{activo.COACES}"  
 									              selection="#{GestorImpuestosRecursos.activoseleccionado}" selectionMode="single">  
 									
-								<p:column headerText="Codigo Activo">  
+								<p:column headerText="Código Activo">  
 								    #{activo.COACES}  
 								</p:column>  
 								
-								<p:column headerText="Comunidad Autonoma">  
+								<p:column headerText="Provincia">  
 								    #{activo.NOPRAC}  
 								</p:column>  
 
@@ -181,7 +187,7 @@
 								    #{activo.NOMUIN}  
 								</p:column>  
 								
-								<p:column headerText="Via">  
+								<p:column headerText="Vía">  
 								    #{activo.NOVIAS}  
 								</p:column>  
 								
@@ -200,31 +206,31 @@
 							</p:dataTable> 
 					</p:dialog>
 					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
-									<p:fieldset legend="Criterios de Busqueda">
+									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >
 												<h:panelGrid columns="3" cellpadding="5">
-													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+													<h:outputText for="NOPRAC" value="Provincia: " />
 														<p:inputText id="NOPRAC" value="#{GestorImpuestosRecursos.sNOPRAC}" size="18" maxlength="18">
 														</p:inputText>
 													<p:message for="NOPRAC" display="icon"/>
 
-													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+													<h:outputText for="NOMUIN" value="Municipio: " />
 														<p:inputText id="NOMUIN" value="#{GestorImpuestosRecursos.sNOMUIN}" size="30" maxlength="30">
 														</p:inputText>
 													<p:message for="NOMUIN" display="icon"/>
 
-													<h:outputText for="COPOIN" value="Codigo Postal: " />
+													<h:outputText for="COPOIN" value="Código Postal: " />
 														<p:inputText id="COPOIN" value="#{GestorImpuestosRecursos.sCOPOIN}" size="5" maxlength="5">
 														</p:inputText>
 													<p:message for="COPOIN" display="icon"/>
 
-													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+													<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
 														<p:inputText id="NOVIAS" value="#{GestorImpuestosRecursos.sNOVIAS}" size="60" maxlength="60">
 														</p:inputText>
 													<p:message for="NOVIAS" display="icon"/>
 
-													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: " />
 														<p:inputText id="NUPOAC" value="#{GestorImpuestosRecursos.sNUPOAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPOAC" display="icon"/>
@@ -246,16 +252,6 @@
 													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorImpuestosRecursos.buscaActivos}" oncomplete="dlgTabla.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorImpuestosRecursos.limpiarPlantillaActivo}" />	
 
-														<p:ajaxStatus  id="pensandoActivo">  
-															<f:facet name="start">  
-																<h:graphicImage value="/recursos/loadingBar.gif" />  
-															</f:facet>  
-
-															<f:facet name="complete">  
-																<h:outputText value="" />  
-															</f:facet>  
-
-														</p:ajaxStatus> 
 												</h:panelGrid>
 											</p:panel>
 

@@ -4,27 +4,26 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 					<p:slideMenu style="width:95%" backLabel="Retroceder">
+
 						<p:submenu label="Activos">
 							<p:menuitem value="Cargar"
 								url="cargador.xhtml" icon="ui-icon-arrowthick-1-n" />
 							<p:menuitem value="Lista de Activos" 
 								url="listaactivos.xhtml" icon="ui-icon-search" />
 						</p:submenu>
+
 						<p:submenu label="Gastos" async="true">
 							<p:menuitem value="Cargar Gastos" 
 								url="cargador.xhtml" icon="ui-icon-arrowthick-1-n" />
-							<p:menuitem value="Lista de Gastos" 
-								url="listagastos.xhtml" icon="ui-icon-search" />
 							<p:menuitem value="Registrar" 
 								url="registragasto.xhtml" icon="ui-icon-arrowthick-1-e" />
-								<p:menuitem value="Movimientos"
-									url="movimientosgastos.xhtml" icon="ui-icon-document" />
+							<p:menuitem value="Movimientos"
+								url="movimientosgastos.xhtml" icon="ui-icon-document" />
 						</p:submenu>
+
 						<p:submenu label="Provisiones">
-							<p:menuitem value="Lista de Provisiones"
-								url="listaprovisiones.xhtml" icon="ui-icon-search" />
-							<p:menuitem value="Registrar" 
-								url="registraprovision.xhtml" icon="ui-icon-arrowthick-1-e" />
+							<p:menuitem value="Cerrar" 
+								url="registraprovision.xhtml" icon="ui-icon-check" />
 						</p:submenu>
 
 						<p:submenu label="Comunidades">

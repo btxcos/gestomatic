@@ -16,7 +16,7 @@ import com.provisiones.types.ProvisionTabla;
 public class GestorProvisiones implements Serializable 
 {
 
-	private static final long serialVersionUID = 6099738101025444086L;
+	private static final long serialVersionUID = 6140067108661410063L;
 
 	static String sClassName = GestorProvisiones.class.getName();
 	
@@ -31,14 +31,13 @@ public class GestorProvisiones implements Serializable
 	private String sFechaValidacion = "";
 	private String sValidado = "";
 
-	private ArrayList<ProvisionTabla> tablaprovisiones = null;
+	private transient ArrayList<ProvisionTabla> tablaprovisiones = null;
 	
-	private ProvisionTabla provisionseleccionada = null;
+	private transient ProvisionTabla provisionseleccionada = null;
 	
 	public GestorProvisiones()
 	{
 		Utils.standardIO2File("");//Salida por fichero de texto
-		//cargaProvisionAbierta();
 	}
 
 	public void cargaProvisionesAbiertas()

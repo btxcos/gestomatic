@@ -38,8 +38,9 @@ public class ConnectionManager
 
 		try 
 		{
-
+			Utils.debugTrace(true, sClassName, sMethod, "tiempo:|"+Utils.timeStamp()+"|");
 			conn = DriverManager.getConnection(sConnectionData);
+			Utils.debugTrace(true, sClassName, sMethod, "tiempo:|"+Utils.timeStamp()+"|");
 
 		} 
 		catch (SQLException ex) 

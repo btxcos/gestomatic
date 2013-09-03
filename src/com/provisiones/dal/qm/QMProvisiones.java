@@ -45,7 +45,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -70,7 +70,7 @@ public class QMProvisiones
 					+ NuevaProvision.getsFechaValidacion() + "','" 
 					+ NuevaProvision.getsCodEstado() + "')");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
@@ -101,7 +101,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -116,7 +116,7 @@ public class QMProvisiones
 					+ sField8 + " = '" + NuevaProvision.getsCodEstado() + "' " 
 					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
@@ -148,7 +148,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -156,7 +156,7 @@ public class QMProvisiones
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sNUPROF + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
@@ -202,7 +202,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -215,7 +215,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 
 
@@ -235,15 +235,15 @@ public class QMProvisiones
 					sValidado = rs.getString(sField8);
 
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -280,7 +280,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -292,7 +292,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 
 
@@ -303,14 +303,14 @@ public class QMProvisiones
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -347,7 +347,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -361,7 +361,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 
 
@@ -372,14 +372,14 @@ public class QMProvisiones
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -419,7 +419,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 		
 		String sQuery = "SELECT " + sField1 + 
 				" FROM " + sTable + 
@@ -428,7 +428,7 @@ public class QMProvisiones
 				+ sField2 +" = '"+ sCodCOSPAT +"' AND "
 				+ sField3 +" = '"+ sCodTAS +"')";
 
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 		
 		try 
 		{
@@ -443,7 +443,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 
 
@@ -458,15 +458,15 @@ public class QMProvisiones
 
 
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -514,7 +514,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -532,7 +532,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 
 
@@ -555,15 +555,15 @@ public class QMProvisiones
 					
 					result.add(provisionencontrada);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -602,7 +602,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -617,7 +617,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 
 
@@ -632,15 +632,15 @@ public class QMProvisiones
 
 
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 
@@ -679,7 +679,7 @@ public class QMProvisiones
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
 		try 
 		{
@@ -691,7 +691,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
 
 
@@ -706,15 +706,15 @@ public class QMProvisiones
 
 
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
 			}
 
 		} 

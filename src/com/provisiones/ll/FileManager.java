@@ -41,9 +41,9 @@ public class FileManager
 	{
 		String sMethod = "guardarFichero";
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"ID:|"+event.getPhaseId().getOrdinal()+"|");
+		Utils.debugTrace(true, sClassName, sMethod,"ID:|"+event.getPhaseId().getOrdinal()+"|");
 	
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Guardando archivo...");
+		Utils.debugTrace(true, sClassName, sMethod,"Guardando archivo...");
         UploadedFile file = event.getFile();
         
         
@@ -74,7 +74,7 @@ public class FileManager
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Completado con exito.");
+        Utils.debugTrace(true, sClassName, sMethod,"Completado con exito.");
         return sFichero;
 	}
 
@@ -303,10 +303,10 @@ public class FileManager
 			
 			
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+			Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Inicio: " + new Timestamp(date.getTime()));
+			Utils.debugTrace(true, sClassName, sMethod, "Inicio: " + new Timestamp(date.getTime()));
 
 			int contador=0;
 			int registros = 0;
@@ -315,9 +315,9 @@ public class FileManager
 	        {
 				contador++;
 	    		if (linea.equals(sFinFichero))
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    			Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
 	    		else if (linea.length()< (Longitudes.ACTIVOS_L-Longitudes.FILLER_ACTIVOS_L) )
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    			Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
 	    		else
 	    		{
 	    			if (CLActivos.actualizaActivoLeido(linea))
@@ -332,9 +332,9 @@ public class FileManager
 			
 			bSalida = ((contador-registros-1) == 0);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
 		
 		
 
@@ -367,7 +367,7 @@ public class FileManager
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
 
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+			Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
 			System.out.println("Inicio: " + new Timestamp(date.getTime()));
@@ -381,9 +381,9 @@ public class FileManager
 	        {
 				contador++;
 	    		if (linea.equals(sFinFichero))
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    			Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
 	    		else if (linea.length()< (Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L) )
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    			Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
 	    		else
 	    		{
 	    			//if (CLGastos.actualizaGastoLeido(linea))
@@ -396,9 +396,9 @@ public class FileManager
 			
 			bSalida = ((contador-registros-1) == 0);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
 		
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -429,10 +429,10 @@ public class FileManager
 		Utils.standardIO2File("");//Salida por fichero de texto
 		
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+		Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 		java.util.Date date= new java.util.Date();
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Inicio: " + new Timestamp(date.getTime()));
+		Utils.debugTrace(true, sClassName, sMethod, "Inicio: " + new Timestamp(date.getTime()));
 
 		//ArrayList<String> lista_provisiones_cerradas = new ArrayList<String>();
 		
@@ -441,9 +441,9 @@ public class FileManager
         {
 			contador++;
     		if (linea.equals(sFinFichero))
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+    			Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
     		else if (linea.length()< (Longitudes.CIERRE_L-Longitudes.FILLER_CIERRE_L) )
-    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+    			Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
     		else
     		{
     			Cierre cierre = Parser.LeerCierre(linea);
@@ -455,7 +455,7 @@ public class FileManager
 		
 		br.close();
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+		Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
 		
         return bSalida;
 	}*/
@@ -466,7 +466,7 @@ public class FileManager
 
 		boolean bSalida = false;
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
@@ -482,7 +482,7 @@ public class FileManager
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+			Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
 			System.out.println("Inicio: " + new Timestamp(date.getTime()));
@@ -500,7 +500,7 @@ public class FileManager
 	        {
 				contador++;
 
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, 
+				Utils.debugTrace(true, sClassName, sMethod, 
 						"TAMS (Posiciones leidas|"+linea.length()+
 						"|Comunidades:|"+Longitudes.COMUNIDADES_L+
 						"|Filler:|"+Longitudes.FILLER_COMUNIDADES_L+
@@ -508,11 +508,11 @@ public class FileManager
 
 	    		if (linea.equals(sFinFichero))
 	    		{
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    			Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    			Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
 	    		}
 	    		else
 	    		{
@@ -525,9 +525,9 @@ public class FileManager
 		
 			bSalida = ((contador-registros-1) == 0);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
 
 		
 		} catch (FileNotFoundException e) {
@@ -559,7 +559,7 @@ public class FileManager
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
 
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+			Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
 			System.out.println("Inicio: " + new Timestamp(date.getTime()));
@@ -574,9 +574,9 @@ public class FileManager
 	        {
 				contador++;
 	    		if (linea.equals(sFinFichero))
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    			Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
 	    		else if (linea.length()< (Longitudes.CUOTAS_L-Longitudes.FILLER_CUOTAS_L) )
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    			Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
 	    		else
 	    		{
 	    			if (CLCuotas.actualizaCuotaLeida(linea))
@@ -588,9 +588,9 @@ public class FileManager
 			
 			bSalida = ((contador-registros-1) == 0);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
 
 		
 		} catch (FileNotFoundException e) {
@@ -621,7 +621,7 @@ public class FileManager
 
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+			Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
 			System.out.println("Inicio: " + new Timestamp(date.getTime()));
@@ -637,9 +637,9 @@ public class FileManager
 	        {
 				contador++;
 	    		if (linea.equals(sFinFichero))
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    			Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
 	    		else if (linea.length()< (Longitudes.REFERENCIAS_L-Longitudes.FILLER_REFERENCIAS_L) )
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    			Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
 	    		else
 	    		{
 	    			if (CLReferencias.actualizaReferenciaLeida(linea))
@@ -651,9 +651,9 @@ public class FileManager
 		
 			bSalida = ((contador-registros-1) == 0);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
 
 		
 		} catch (FileNotFoundException e) {
@@ -685,7 +685,7 @@ public class FileManager
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
 
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
+			Utils.debugTrace(true, sClassName, sMethod, "Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
 			System.out.println("Inicio: " + new Timestamp(date.getTime()));
@@ -700,9 +700,9 @@ public class FileManager
 	        {
 				contador++;
 	    		if (linea.equals(sFinFichero))
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
+	    			Utils.debugTrace(true, sClassName, sMethod, "Lectura finalizada!");
 	    		else if (linea.length()< (Longitudes.IMPUESTOS_L-Longitudes.FILLER_IMPUESTOS_L) )
-	    			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
+	    			Utils.debugTrace(true, sClassName, sMethod, "Error en linea "+contador);
 	    		else
 	    		{
 	    			if (CLImpuestos.actualizaImpuestoLeido(linea))
@@ -714,9 +714,9 @@ public class FileManager
 
 			bSalida = ((contador-registros-1) == 0);
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
+			Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
+			Utils.debugTrace(true, sClassName, sMethod, "Actualizados "+registros+" registros.");
+			Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+(contador-registros-1)+" registros erroneos.");
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -738,14 +738,14 @@ public class FileManager
 		//ArrayList<String> lista;
 
 
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+		Utils.debugTrace(true, sClassName, sMethod,
 				"|"+sNombre+"|"+sNombre.substring(0, 3)+"|");
 		
 		
 		
 		if (sNombre.length() < 9)
 		{
-			com.provisiones.misc.Utils
+			Utils
 			.debugTrace(true, sClassName, sMethod,
 					"El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
 		}
@@ -759,7 +759,7 @@ public class FileManager
 				
 				String sTipo = sNombreOriginal.substring(3, 5).toUpperCase();
 
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+				Utils.debugTrace(true, sClassName, sMethod,
 						"Redirigiendo lectura...");
 
 				System.out.println("Tipo:|" + sTipo + "|");
@@ -768,86 +768,82 @@ public class FileManager
 
 				switch (COSPII) {
 				case AC:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Activos");
 					bSalida = leerActivos(sNombre);
 					//lista = new ArrayList<String>();
 					break;
 				case RG:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Rechazados");
 					
 					bSalida = leerGastosRevisados(sNombre);
 					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
 					break;
 				case PA:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Autorizados");
 					bSalida = leerGastosRevisados(sNombre);
 					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
 					break;
 				case GA:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Gastos");
 					
-					com.provisiones.misc.Utils
-					.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"El archivo de gastos debe de ser primero supervisado por la entidad.");
 					bSalida = leerGastosRevisados(sNombre);
 					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
 					break;
 				case PP:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Cierres");
-					com.provisiones.misc.Utils
+					Utils
 					.debugTrace(true, sClassName, sMethod,
 							"El archivo de cierres debe comprobado por la entidad.");
 					//bSalida = leerCierres(sNombre);
 					//lista = new ArrayList<String>(leerCierres(sNombre));
 					break;
 				case E1:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Comunidades");
 					bSalida = leerComunidadesRevisadas(sNombre);
 					//lista = new ArrayList<String>();
 					break;
 				case E2:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Cuotas");
 					bSalida = leerCuotasRevisadas(sNombre);
 					//lista = new ArrayList<String>();
 					break;
 				case E3:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Referencias Catastrales");
 					bSalida = leerReferenciasRevisadas(sNombre);
 					//lista = new ArrayList<String>();
 					break;
 				case E4:
-					com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 							"Impuestos");
 					bSalida = leerImpuestosRevisadas(sNombre);
 					//lista = new ArrayList<String>();
 					break;
 				default:
-					com.provisiones.misc.Utils
-							.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 									"El archivo suministrado no coincide con el nombrado establecido:");
-					com.provisiones.misc.Utils
-							.debugTrace(true, sClassName, sMethod,
+					Utils.debugTrace(true, sClassName, sMethod,
 									"168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
 					//lista = new ArrayList<String>();
 					break;
 				}
 
-				com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,
+				Utils.debugTrace(true, sClassName, sMethod,
 						"Operativa completa.");
 
 			} 
 			else
 			{
-				com.provisiones.misc.Utils
-						.debugTrace(true, sClassName, sMethod,
+				Utils.debugTrace(true, sClassName, sMethod,
 								"El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
 				//lista = new ArrayList<String>();
 			}
@@ -862,7 +858,7 @@ public class FileManager
 		
 		String sPrueba = "168AC3.txt";
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"Probando el archivo "+ sPrueba);
+		Utils.debugTrace(true, sClassName, sMethod,"Probando el archivo "+ sPrueba);
 		splitter(sPrueba);
 	}
 }

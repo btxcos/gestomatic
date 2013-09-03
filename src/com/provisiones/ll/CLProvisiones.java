@@ -34,16 +34,16 @@ public class CLProvisiones
 		{
 			sCOSPAT = "0";
 		}
-		
+		Utils.debugTrace(true, sClassName, sMethod, "tiempo:|"+Utils.timeStamp()+"|");
 		String sTipo = CLActivos.compruebaTipoActivoSAREB(sCodCOACES);
-		
+		Utils.debugTrace(true, sClassName, sMethod, "tiempo:|"+Utils.timeStamp()+"|");
 		String sProvision = QMProvisiones.getProvisionAbierta(sCOSPAT,sTipo);
-		
+		Utils.debugTrace(true, sClassName, sMethod, "tiempo:|"+Utils.timeStamp()+"|");
 		if (sProvision.equals(""))
 		{
 			sProvision = QMProvisiones.getUltimaProvision();
 			
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sProvision:|"+sProvision+"|");
+			Utils.debugTrace(true, sClassName, sMethod, "sProvision:|"+sProvision+"|");
 			
 			Calendar fecha = Calendar.getInstance();
 			

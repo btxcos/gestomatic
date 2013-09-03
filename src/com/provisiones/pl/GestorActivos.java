@@ -158,11 +158,11 @@ public class GestorActivos implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
 		
 		this.setTablaactivos(CLActivos.buscarActivos(buscaactivos));
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 	}
 	
 	public void buscaActivos (ActionEvent actionEvent)
@@ -193,7 +193,7 @@ public class GestorActivos implements Serializable
     	
     	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
@@ -207,7 +207,7 @@ public class GestorActivos implements Serializable
     	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
     	return "movimientoscomunidades.xhtml";
     }
@@ -219,7 +219,7 @@ public class GestorActivos implements Serializable
     	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
     	return "movimientoscuotas.xhtml";
     }
@@ -231,7 +231,7 @@ public class GestorActivos implements Serializable
     	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
     	return "movimientosreferencias.xhtml";
     }
@@ -243,7 +243,7 @@ public class GestorActivos implements Serializable
     	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
     	return "movimientosimpuestos.xhtml";
     }
@@ -254,7 +254,7 @@ public class GestorActivos implements Serializable
     	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
     	return "gastos.xhtml";
     }
@@ -266,9 +266,9 @@ public class GestorActivos implements Serializable
     	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCOACES:|"+sCOACES+"|");
+    	Utils.debugTrace(true, sClassName, sMethod, "sCOACES:|"+sCOACES+"|");
     	
-    	com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
     	
     	
     	return "detallesactivo.xhtml";

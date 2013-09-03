@@ -793,9 +793,9 @@ public class QMCodigosControl
 		boolean found = false;
 	
 
-		String sTable = "ptpago_tbl";
+		String sTable = "binaria_tbl";
 
-		String sField1  = "ptpago_id";    
+		String sField1  = "binaria_id";    
 		String sField2  = "descripcion";
 		
 		String sDescripcion = "";
@@ -861,7 +861,7 @@ public class QMCodigosControl
 		return sDescripcion;
 	}
 	
-	public static String getDesCampo(String sTable, String sField1, String sCodBINARIA)
+	public static String getDesCampo(String sTable, String sField1, String sValor)
 	{
 		String sMethod = "getDesBINARIA";
 
@@ -893,7 +893,7 @@ public class QMCodigosControl
 
 			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodBINARIA + "')");
+					"(" + sField1 + " = '" + sValor + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -925,7 +925,7 @@ public class QMCodigosControl
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: PTPAGO: " + sCodBINARIA);
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VALOR: " + sValor);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

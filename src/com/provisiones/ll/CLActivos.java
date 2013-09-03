@@ -30,14 +30,14 @@ public class CLActivos
 	{
 		String sMethod = "compruebaTipoActivoSAREB";
 		String sTipo = "#";
-			
+		Utils.debugTrace(true, sClassName, sMethod, "sCodCOACES|"+sCodCOACES+"|");
 		if (QMActivos.getSociedadPatrimonial(sCodCOACES).equals("9999"))
 		{
 			if (QMActivos.getCOTSINActivo(sCodCOACES).startsWith("SU"))
 			{
 				sTipo = "S"; //SUELOS Y OBRA EN CURSO 
 			}
-			else if (QMActivos.getBIARREctivo(sCodCOACES).equals("S"))
+			else if (QMActivos.getBIARREActivo(sCodCOACES).equals("S"))
 			{
 				sTipo = "A"; //ARRENDAMIENTOS
 			}
@@ -46,7 +46,7 @@ public class CLActivos
 				sTipo = "T"; //PRODUCTO TERMINADO
 			}
 		}
-		Utils.debugTrace(true, sClassName, sMethod, "sCodActivo|"+sTipo+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "sTipo|"+sTipo+"|");
 		return sTipo;
 	}
 	

@@ -1,21 +1,8 @@
 package com.provisiones.test;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
-import com.provisiones.dal.qm.listas.QMListaComunidades;
-import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
-import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
-import com.provisiones.misc.ValoresDefecto;
+
 
 
 

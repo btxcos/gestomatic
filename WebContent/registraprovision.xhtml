@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -13,7 +13,7 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Alta Provision">
+				<p:layoutUnit position="north" size="auto" header="Cerrar Provisión">
 								<h:panelGrid columns="3" cellpadding="5">
 									<p:fieldset legend="Acciones" id="acciones">
 										<h:panelGrid columns="3" cellpadding="5">
@@ -23,10 +23,14 @@
 									<p:fieldset legend="Info">
 										<h:panelGrid columns="3" cellpadding="5">
 											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
-											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
-											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
+
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
+											<h:panelGrid columns="2" cellpadding="5">
 												<p:messages id="msgs"/>
-											</p:notificationBar>  
+												<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											</h:panelGrid>
+											</p:notificationBar>
+
 											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
 											<p:growl id="popup" />
 										</h:panelGrid>
@@ -34,7 +38,7 @@
 								</h:panelGrid>
 				</p:layoutUnit>
 
-				<p:layoutUnit position="west" size="20%" header="Menus">
+				<p:layoutUnit position="west" size="20%" header="Operativas">
 					<ui:include src="menu.xhtml"/>
 				</p:layoutUnit>
 
@@ -42,12 +46,12 @@
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
 
-									<p:fieldset legend="Provision" id="provision">
+									<p:fieldset legend="Provisión" id="provision">
 										<h:panelGrid columns="1" cellpadding="5">
 
 									<p:panel >
 										<h:panelGrid columns="4" cellpadding="5">
-											<h:outputText for="NUPROF" value="NUPROF: " />
+											<h:outputText for="NUPROF" value="Provisión de fondos: " />
 												<p:inputText id="NUPROF" value="#{GestorProvisiones.sNUPROF}" size="9" maxlength="9">
 												</p:inputText>
 											<p:message for="NUPROF" display="icon"/>	
@@ -57,19 +61,19 @@
 									<p:panel >
 										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="DCOSPAT" value="DCOSPAT: " />
+											<h:outputText for="DCOSPAT" value="Sociedad patrimonial: " />
 											<p:inputText id="DCOSPAT" value="#{GestorProvisiones.sDCOSPAT}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
 
-											<h:outputText for="DTAS" value="DTAS: " />
+											<h:outputText for="DTAS" value="Tipo de activos SAREB: " />
 											<p:inputText id="DTAS" value="#{GestorProvisiones.sDTAS}" size="30" maxlength="30" disabled="true">
 											</p:inputText>
 
-											<h:outputText for="ValorTolal" value="ValorTolal: " />
+											<h:outputText for="ValorTolal" value="Valor de provisión: " />
 											<p:inputText id="ValorTolal" value="#{GestorProvisiones.sValorTolal}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
 
-											<h:outputText for="NumGastos" value="NumGastos: " />
+											<h:outputText for="NumGastos" value="Gastos en provisión: " />
 											<p:inputText id="NumGastos" value="#{GestorProvisiones.sNumGastos}" size="20" maxlength="20" disabled="true">
 											</p:inputText>
 
@@ -90,7 +94,7 @@
 							<p:dataTable id="provisiones" var="provision" value="#{GestorProvisiones.tablaprovisiones}" rowKey="#{provision.NUPROF}"  
 									              selection="#{GestorProvisiones.provisionseleccionada}" selectionMode="single">  
 									
-								<p:column headerText="Numero de Provision">  
+								<p:column headerText="Número de Provisión">  
 								    #{provision.NUPROF}  
 								</p:column>  
 								
@@ -98,15 +102,15 @@
 								    #{provision.DCOSPAT}  
 								</p:column>
 
-								<p:column headerText="Tipo de Activo SAREB">  
+								<p:column headerText="Tipo de Activos SAREB">  
 								    #{provision.DTAS}  
 								</p:column>
 
-								<p:column headerText="Valor de provision">  
+								<p:column headerText="Valor de provisión">  
 								    #{provision.VALOR}  
 								</p:column>  
 								
-								<p:column headerText="Gastos en provision">  
+								<p:column headerText="Gastos en provisión">  
 								    #{provision.GASTOS}  
 								</p:column>  
 								
@@ -116,8 +120,8 @@
 						<h:panelGrid columns="1">
 							<p:panel>
 								<h:panelGrid columns="1">
-							<h:outputText value="Esta seguro de cerrar la provision #{GestorProvisiones.sNUPROF}?" />
-							<h:outputText value="La operacion no puede deshacerser una vez concluida." />
+							<h:outputText value="¿Está seguro de cerrar la provisión #{GestorProvisiones.sNUPROF}?" />
+							<h:outputText value=" La operación no puede deshacerse una vez concluida." />
 								</h:panelGrid>
 							<p:panel>
 								<h:panelGrid columns="2" cellpadding="5">

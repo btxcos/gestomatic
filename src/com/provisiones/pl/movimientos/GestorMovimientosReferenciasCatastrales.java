@@ -111,7 +111,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.tablareferencias = null;
 	}
     
-    public void limpiarPlantillaReferencia(ActionEvent actionEvent) 
+    public void limpiarPlantilla (ActionEvent actionEvent) 
     {  
     	this.sCOACES = "";
     	
