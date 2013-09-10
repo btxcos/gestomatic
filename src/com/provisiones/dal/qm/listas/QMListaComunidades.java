@@ -349,7 +349,7 @@ public class QMListaComunidades
 		return result;
 	}
 	
-	public static boolean setValidado(String sCodCOCLDO, String sCodNUDCOM, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(String sCodMovimiento, String sValidado)
 	{
 		String sMethod = "setValidado";
 		Statement stmt = null;
@@ -369,8 +369,6 @@ public class QMListaComunidades
 					"' "+
 					" WHERE "+
 					"(" 
-					+ sField1 + " = '" + sCodCOCLDO + "' AND " 
-					+ sField2 + " = '" + sCodNUDCOM + "' AND "
 					+ sField3 + " = '" + sCodMovimiento	+ 
 					"')");
 			
@@ -379,8 +377,6 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
@@ -398,7 +394,7 @@ public class QMListaComunidades
 		return bSalida;
 	}
 	
-	public static String getValidado(String sCodCOCLDO, String sCodNUDCOM, String sCodMovimiento)
+	public static String getValidado(String sCodMovimiento)
 	{
 		String sMethod = "getValidado";
 
@@ -425,9 +421,9 @@ public class QMListaComunidades
 
 			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOCLDO + "' AND "
-					+ sField2 + " = '" + sCodNUDCOM + "' AND "
-					+ sField3 + " = '" + sCodMovimiento	+ "')");
+					"(" 
+					+ sField3 + " = '" + sCodMovimiento	+ "'" +
+					")");
 
 			rs = pstmt.executeQuery();
 			
@@ -458,8 +454,6 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());

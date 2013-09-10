@@ -458,7 +458,7 @@ public class QMListaComunidadesActivos
 		return sID;
 	}
 	
-	public static boolean setValidado(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(String sCodMovimiento, String sValidado)
 	{
 		String sMethod = "setValidado";
 		Statement stmt = null;
@@ -478,9 +478,6 @@ public class QMListaComunidadesActivos
 					"' "+
 					" WHERE "+
 					"(" 
-					+ sField1 + " = '" + sCodCOCLDO + "' AND " 
-					+ sField2 + " = '" + sCodNUDCOM + "' AND "
-					+ sField3 + " = '" + sCodCOACES + "' AND " 
 					+ sField4 + " = '" + sCodMovimiento	+ 
 					"')");
 			
@@ -489,9 +486,6 @@ public class QMListaComunidadesActivos
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
@@ -509,7 +503,7 @@ public class QMListaComunidadesActivos
 		return bSalida;
 	}
 	
-	public static String getValidado(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
+	public static String getValidado(String sCodMovimiento)
 	{
 		String sMethod = "getValidado";
 
@@ -536,10 +530,9 @@ public class QMListaComunidadesActivos
 
 			pstmt = conn.prepareStatement("SELECT " + sField5 + "  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOCLDO + "' AND "
-					+ sField2 + " = '" + sCodNUDCOM + "' AND "
-					+ sField3 + " = '" + sCodCOACES + "' AND " 
-					+ sField4 + " = '" + sCodMovimiento	+ "')");
+					"(" 
+					+ sField4 + " = '" + sCodMovimiento	+ "'" +
+					")");
 
 			rs = pstmt.executeQuery();
 			
@@ -570,9 +563,6 @@ public class QMListaComunidadesActivos
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
@@ -1010,7 +1000,82 @@ public class QMListaComunidadesActivos
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
+	
+	public static ArrayList<String>  getComunidadesActivoPorEstado(String sEstado) 
+	{
+		String sMethod = "getComunidadesActivoPorEstado";
 
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+		
+		ArrayList<String> result = new ArrayList<String>(); 
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField4+ "  FROM " + sTable + 
+					" WHERE (" + sField5 + " = '" + sEstado + "' )");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
+		
+			int i = 0;
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					result.add(rs.getString(sField4));
+										
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField5 + ": " + sEstado);
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
+					
+					i++;
+				}
+			}
+			if (found == false) 
+			{
+				result = new ArrayList<String>(); 
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Validado: " + sEstado);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
 
 	
 	public static ArrayList<ComunidadTabla> buscaComunidadActivo(String sCodCOACES)

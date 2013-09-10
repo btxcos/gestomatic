@@ -66,10 +66,10 @@ public class CLComunidades
 					
 					if (QMListaComunidadesActivos.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento))
 					{
-						QMListaComunidadesActivos.setValidado(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento, sValidado);
+						QMListaComunidadesActivos.setValidado(sCodMovimiento, sValidado);
 						if (QMListaComunidades.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), sCodMovimiento))
 						{
-							QMListaComunidades.setValidado(comunidad.getCOCLDO(),comunidad.getNUDCOM(), sCodMovimiento, sValidado);
+							QMListaComunidades.setValidado(sCodMovimiento, sValidado);
 						}
 						else
 							System.out.println("No Existe relacion.");

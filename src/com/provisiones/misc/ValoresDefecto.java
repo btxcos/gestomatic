@@ -48,6 +48,7 @@ public class ValoresDefecto
 	public static final String DEF_ALTA = "A";
 	public static final String DEF_BAJA = "B";
 	public static final String DEF_PENDIENTE = "P";
+	public static final String DEF_ENVIADO = "E";
 	
 	public static final String DEF_GASTO_ANULADO = "4";
 	

@@ -17,6 +17,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import com.provisiones.dal.qm.listas.QMListaComunidades;
+import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
@@ -83,6 +84,10 @@ public class FileManager
 		String sMethod = "escribirComunidades";
 		
 		ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado("P");
+		ArrayList<String> resultcomunidadesactivos = QMListaComunidadesActivos.getComunidadesActivoPorEstado("P");
+		
+		ArrayList<String> resultactivos = new ArrayList<String>(resultcomunidadesactivos);
+		resultactivos.removeAll(resultcomunidades);
 		
 		FileWriter ficheroE1 = null;
 		
@@ -96,7 +101,23 @@ public class FileManager
             {
                 pw.println(Parser.escribirComunidad(QMMovimientosComunidades.getMovimientoComunidad(resultcomunidades.get(i))));
             }
+            
+            for (int i = 0; i < resultactivos.size() ; i++)
+            {
+                pw.println(Parser.escribirComunidad(QMMovimientosComunidades.getMovimientoComunidad(resultactivos.get(i))));
+            }
+
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+
+            for (int i = 0; i < resultcomunidades.size() ; i++)
+            {
+               QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_ENVIADO);
+            }
+            
+            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+            {
+         	   QMListaComunidadesActivos.setValidado(resultcomunidadesactivos.get(i),ValoresDefecto.DEF_ENVIADO);
+            }
         } 
         catch (IOException e) 
         {
@@ -107,14 +128,28 @@ public class FileManager
            try 
            {
         	   if (null != ficheroE1)
+        	   {
         		   ficheroE1.close();
+        		   Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+        	   }
+        		   
            } 
            catch (Exception e2) 
            {
               e2.printStackTrace();
+
+              for (int i = 0; i < resultcomunidades.size() ; i++)
+              {
+                 QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_PENDIENTE);
+              }
+              
+              for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+              {
+           	   QMListaComunidadesActivos.setValidado(resultcomunidadesactivos.get(i),ValoresDefecto.DEF_PENDIENTE);
+              }
            }
         }
-        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+        
 	}
 	
 	public static void escribirCuotas() 
