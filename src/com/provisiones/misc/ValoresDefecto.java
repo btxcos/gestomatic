@@ -13,6 +13,9 @@ public class ValoresDefecto
 	public static final String DEF_COREAE = "04";
 	public static final String DEF_COUNMO = "281";
 	
+	//Eliminar tras soporte a usuarios
+	public static final String DEF_USUARIO = "GLSLUSUP"; 
+	
 	
 	public static final String DEF_COSPII_GA = "GA";
 	public static final String DEF_COSPII_E1 = "E1";

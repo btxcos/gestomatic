@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
+import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;
@@ -118,7 +119,10 @@ public class CLGastos
 		return QMListaGastos.getProvisionDeGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE);
 	}
 	
-	
+	public static long buscarNumeroMovimientosGastosPendientes()
+	{
+		return (QMListaGastos.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
+	}
 	
 	
 	public static boolean existeGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)

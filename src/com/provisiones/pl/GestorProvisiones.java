@@ -15,11 +15,10 @@ import com.provisiones.types.ProvisionTabla;
 
 public class GestorProvisiones implements Serializable 
 {
-
-	private static final long serialVersionUID = 6140067108661410063L;
-
 	static String sClassName = GestorProvisiones.class.getName();
 	
+	private static final long serialVersionUID = 6140067108661410063L;
+
 	private String sNUPROF = "";
 	private String sCOSPAT = "";
 	private String sDCOSPAT = "";
@@ -40,7 +39,7 @@ public class GestorProvisiones implements Serializable
 		Utils.standardIO2File("");//Salida por fichero de texto
 	}
 
-	public void cargaProvisionesAbiertas()
+	public void cargaProvisionesAbiertas(ActionEvent actionEvent)
 	{
 		String sMethod = "cargaProvisionAbierta";
 		

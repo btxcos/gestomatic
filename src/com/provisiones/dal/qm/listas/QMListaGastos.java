@@ -24,16 +24,19 @@ public class QMListaGastos
 
 	static String sTable = "lista_gastos_multi";
 
-	public static final String sField1  = "cod_coaces";
-	public static final String sField2  = "cod_cogrug";    
-	public static final String sField3  = "cotpga";    
-	public static final String sField4  = "cosbga";    
-	public static final String sField5  = "fedeve";
+	static String sField1 = "cod_coaces";
+	static String sField2 = "cod_cogrug";    
+	static String sField3 = "cotpga";    
+	static String sField4 = "cosbga";    
+	static String sField5 = "fedeve";
 	
-	public static final String sField6 = "cod_nuprof";
-	public static final String sField7 = "cod_movimiento";
+	static String sField6 = "cod_nuprof";
+	static String sField7 = "cod_movimiento";
 
-	public static final String sField8 = "cod_validado";
+	static String sField8 = "cod_validado";
+	
+	static String sField9 = "usuario_movimiento";    
+	static String sField10 = "fecha_movimiento";
 
 
 	public static boolean addRelacionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodNUPROF, String sCodGasto) 
@@ -43,6 +46,8 @@ public class QMListaGastos
 		Connection conn = null;
 		
 		boolean bSalida = true;
+
+		String sUsuario = ValoresDefecto.DEF_USUARIO;
 
 		conn = ConnectionManager.OpenDBConnection();
 		
@@ -59,7 +64,10 @@ public class QMListaGastos
 						+ sField5 + "," 
 						+ sField6 + "," 
 						+ sField7 + "," 
-						+ sField8 +") " +
+						+ sField8 + ","
+						+ sField9 + "," 
+						+ sField10 +						
+						") " +
 					"VALUES ('" 
 						+ sCodCOACES + "','"
 						+ sCodCOGRUG + "','"
@@ -68,7 +76,10 @@ public class QMListaGastos
 						+ sFEDEVE + "','"
 						+ sCodNUPROF + "','"
 						+ sCodGasto + "','"
-						+ ValoresDefecto.DEF_PENDIENTE + "')");
+						+ ValoresDefecto.DEF_PENDIENTE + "','"
+					    + sUsuario + "','"
+					    + Utils.timeStamp() +
+						"')");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
@@ -647,6 +658,80 @@ public class QMListaGastos
 
 		ConnectionManager.CloseDBConnection(conn);
 		return sValidado;
+	}
+	
+	public static long buscaCantidadValidado(String sCodValidado)
+	{
+		String sMethod = "buscaCantidadValidado";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+
+		long liNumero = 0;
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
+					" WHERE " +
+					"(" + sField8 + " = '" + sCodValidado + "')");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					liNumero = rs.getLong("COUNT(*)");
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,  "Numero de registros: " + liNumero);
+
+
+				}
+			}
+			if (found == false) 
+			{
+ 
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: CodValidado: " + sCodValidado);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return liNumero;
 	}
 	
 	public static ArrayList<ActivoTabla> buscaActivosConGastos(ActivoTabla activo)

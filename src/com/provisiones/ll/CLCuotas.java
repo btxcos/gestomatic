@@ -93,6 +93,11 @@ public class CLCuotas
 		return QMListaCuotas.buscaCuotasActivo(sCOACES);
 	}
 	
+	public static long buscarNumeroMovimientosCuotasPendientes()
+	{
+		return (QMListaCuotas.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
+	}
+	
 	public static int comprobarActivo (String sCOCLDO, String sNUDCOM, String sCOACES)
 	{
 		String sMethod = "comprobarActivo";

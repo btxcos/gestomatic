@@ -115,6 +115,12 @@ public class CLComunidades
 		return QMListaComunidadesActivos.buscaComunidadPorActivo(sCodCOACES);
 	}
 	
+	public static long buscarNumeroMovimientosComunidadesPendientes()
+	{
+		return (QMListaComunidadesActivos.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE) 
+				+ QMListaComunidades.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
+	}
+	
 	public static boolean existeComunidad (String sCodCOCLDO, String sCodNUDCOM)
 	{
 

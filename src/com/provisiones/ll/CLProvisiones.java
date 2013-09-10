@@ -19,6 +19,11 @@ public class CLProvisiones
 		return QMProvisiones.buscaProvisionesAbiertas();
 	}
 	
+	public static long buscarNumeroProvisionesCerradas()
+	{
+		return (QMProvisiones.buscaCantidadProvisionesCerradasPendientes());
+	}
+	
 	public static String ultimaProvisionCerrada (String sCodCOSPAT)
 	{
 		return QMProvisiones.getUltimaProvisionCerrada(sCodCOSPAT);

@@ -29,6 +29,9 @@ public class QMListaComunidadesActivos
 	static String sField3  = "cod_coaces";    
 	static String sField4  = "cod_movimiento";    
 	static String sField5  = "cod_validado";
+	
+	static String sField6  = "usuario_movimiento";    
+	static String sField7  = "fecha_movimiento";
 
 	public static boolean addRelacionComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
 
@@ -38,6 +41,8 @@ public class QMListaComunidadesActivos
 		Connection conn = null;
 		
 		boolean bSalida = true;
+		
+		String sUsuario = ValoresDefecto.DEF_USUARIO;
 
 		conn = ConnectionManager.OpenDBConnection();
 		
@@ -52,13 +57,18 @@ public class QMListaComunidadesActivos
 				       + sField2  + ","              
 				       + sField3  + ","
 				       + sField4  + ","
-				       + sField5  +               
+				       + sField5  + ","
+				       + sField6  + ","
+				       + sField7  +    
 				       ") VALUES ('"
 				       + sCodCOCLDO + "','" 
 				       + sCodNUDCOM + "','" 
 				       + sCodCOACES + "','"
 				       + sCodMovimiento + "','"
-				       + ValoresDefecto.DEF_PENDIENTE + "' )");
+				       + ValoresDefecto.DEF_PENDIENTE + "','"
+				       + sUsuario  + "','"
+				       + Utils.timeStamp() + 
+				       "' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 		} 
@@ -579,6 +589,80 @@ public class QMListaComunidadesActivos
 		return sValidado;
 	}
 	
+	public static long buscaCantidadValidado(String sCodValidado)
+	{
+		String sMethod = "buscaCantidadValidado";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+
+		long liNumero = 0;
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
+					" WHERE " +
+					"(" + sField5 + " = '" + sCodValidado + "')");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					liNumero = rs.getLong("COUNT(*)");
+					
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,  "Numero de registros: " + liNumero);
+
+
+				}
+			}
+			if (found == false) 
+			{
+ 
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: CodValidado: " + sCodValidado);
+
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return liNumero;
+	}
+	
 	public static ArrayList<ActivoTabla> buscaActivosComunidad(String sCodCOCLDO, String sCodNUDCOM)
 	{//pendiente de coaces, de la tabla activos
 		
@@ -926,6 +1010,8 @@ public class QMListaComunidadesActivos
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
+
+
 	
 	public static ArrayList<ComunidadTabla> buscaComunidadActivo(String sCodCOACES)
 	{

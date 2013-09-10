@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.QMReferencias;
+import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.listas.QMListaReferencias;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Parser;
@@ -152,6 +153,11 @@ public class CLReferencias
 	public static ArrayList<ActivoTabla> buscarActivosConReferencias (ActivoTabla activo)
 	{
 		return QMListaReferencias.buscaActivosAsociados(activo);
+	}
+	
+	public static long buscarNumeroMovimientosReferenciasPendientes()
+	{
+		return (QMListaReferencias.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
 	}
 
 	public static boolean estaAsociado(String sCodCOACES)

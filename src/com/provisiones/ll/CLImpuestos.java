@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
+import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.misc.Parser;
@@ -136,6 +137,11 @@ public class CLImpuestos
 	{
 		return QMListaImpuestos.buscaDevolucionesActivo(sCodCOACES);
 	}
+	
+	public static long buscarNumeroMovimientosImpuestosPendientes()
+	{
+		return (QMListaImpuestos.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
+	}	
 	
 	public static boolean comprobarRelacion (String sCodNURCAT,String sCodCOSBAC, String sCodCOACES)
 	{
