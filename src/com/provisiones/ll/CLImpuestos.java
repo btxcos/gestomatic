@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
-import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.misc.Parser;
@@ -60,7 +59,7 @@ public class CLImpuestos
 			impuesto.setOBDEER(sBKOBDEER);
 			
 			QMMovimientosImpuestos.modMovimientoImpuestoRecurso(impuesto, sCodMovimientoImpuesto);
-			QMListaImpuestos.setValidado( impuesto.getCOACES(), impuesto.getNURCAT(), impuesto.getCOSBAC(),sCodMovimientoImpuesto, sValidado);
+			QMListaImpuestos.setValidado( sCodMovimientoImpuesto, sValidado);
 		}
 		else 
 		{

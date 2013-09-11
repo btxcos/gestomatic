@@ -275,6 +275,46 @@ public class QMProvisiones
 		return new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, sFEPFON, sFechaValidacion, sValidado);
 	}
 	
+	public static boolean setFechaEnvio(String sNUPROF, String sFechaEnvio) 
+	{
+		String sMethod = "setFechaEnvio";
+		Statement stmt = null;
+		boolean bSalida = true;
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+			stmt.executeUpdate("UPDATE " + sTable + " SET " 
+					+ sField7 + " = '" + sFechaEnvio + "' " 
+					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
+
+			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
+
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			
+			bSalida = false;
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return bSalida;
+	}
+	
 	public static long buscaCantidadProvisionesCerradasPendientes()
 	{
 		String sMethod = "buscaCantidadProvisionesCerradasPendientes";
@@ -570,6 +610,83 @@ public class QMProvisiones
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sNUPROF;
+	}
+	
+	public static ArrayList<String>  getProvisionesCerradasPendientes() 
+	{
+		String sMethod = "getProvisionesCerradasPendientes";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+		
+		ArrayList<String> result = new ArrayList<String>(); 
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField1+ "  FROM " + sTable + 
+					" WHERE " +
+					"(" 
+					+ sField8 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
+					+ sField7 + " = '0'"+
+					")");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			
+		
+			int i = 0;
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					result.add(rs.getString(sField1));
+										
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
+					
+					i++;
+				}
+			}
+			if (found == false) 
+			{
+				result = new ArrayList<String>(); 
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
 	}
 	
 	public static ArrayList<ProvisionTabla> buscaProvisionesAbiertas() 

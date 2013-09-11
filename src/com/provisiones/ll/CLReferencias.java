@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.QMReferencias;
-import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.listas.QMListaReferencias;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Parser;
@@ -49,7 +48,7 @@ public class CLReferencias
 		
 		referencia.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
 		
-			   				
+		//Revisar V
 		String sCodMovimientoReferencia = referencia.getNURCAT();
 		
 		bSalida = !(sCodMovimientoReferencia.equals(""));
@@ -61,7 +60,7 @@ public class CLReferencias
 			referencia.setOBDEER(sBKOBDEER);
 			
 			bSalida = QMMovimientosReferencias.modMovimientoReferenciaCatastral(referencia, sCodMovimientoReferencia);
-			QMListaReferencias.setValidado(referencia.getNURCAT(), referencia.getCOACES(), sCodMovimientoReferencia, sValidado);
+			QMListaReferencias.setValidado(sCodMovimientoReferencia, sValidado);
 		}
 		else 
 		{

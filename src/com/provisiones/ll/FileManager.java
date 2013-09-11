@@ -12,10 +12,12 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
+import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.listas.QMListaComunidades;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
@@ -31,6 +33,7 @@ import com.provisiones.misc.Longitudes;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Provision;
 
 public class FileManager 
 {
@@ -79,32 +82,38 @@ public class FileManager
         return sFichero;
 	}
 
-	public static void escribirComunidades() 
+	public static String escribirComunidades() 
 	{
 		String sMethod = "escribirComunidades";
 		
-		ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado("P");
-		ArrayList<String> resultcomunidadesactivos = QMListaComunidadesActivos.getComunidadesActivoPorEstado("P");
 		
-		ArrayList<String> resultactivos = new ArrayList<String>(resultcomunidadesactivos);
-		resultactivos.removeAll(resultcomunidades);
+		//Los movimientos de las comunidades estan repartidos entre las comunidades y los activos incluidos
+		
+		ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado("P");
+		ArrayList<String> resultactivos = QMListaComunidadesActivos.getComunidadesActivoPorEstado("P");
+
+		ArrayList<String> resultcomunidadesactivos = new ArrayList<String>(resultactivos);
+
+		resultcomunidadesactivos.removeAll(resultcomunidades);
+		resultcomunidadesactivos.addAll(resultcomunidades);
+		
+		
+		Collections.sort(resultcomunidadesactivos);
+
+		String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E1+".txt";
 		
 		FileWriter ficheroE1 = null;
 		
         PrintWriter pw = null;
         try
         {
-        	ficheroE1 = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E1+".txt");
+        	ficheroE1 = new FileWriter(sNombreFichero);
+        	
             pw = new PrintWriter(ficheroE1);
 
-            for (int i = 0; i < resultcomunidades.size() ; i++)
+            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
             {
-                pw.println(Parser.escribirComunidad(QMMovimientosComunidades.getMovimientoComunidad(resultcomunidades.get(i))));
-            }
-            
-            for (int i = 0; i < resultactivos.size() ; i++)
-            {
-                pw.println(Parser.escribirComunidad(QMMovimientosComunidades.getMovimientoComunidad(resultactivos.get(i))));
+                pw.println(Parser.escribirComunidad(QMMovimientosComunidades.getMovimientoComunidad(resultcomunidadesactivos.get(i))));
             }
 
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
@@ -114,14 +123,27 @@ public class FileManager
                QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_ENVIADO);
             }
             
-            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+            for (int i = 0; i < resultactivos.size() ; i++)
             {
-         	   QMListaComunidadesActivos.setValidado(resultcomunidadesactivos.get(i),ValoresDefecto.DEF_ENVIADO);
+         	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_ENVIADO);
             }
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
+            
+            sNombreFichero = "";
+            
+            for (int i = 0; i < resultcomunidades.size() ; i++)
+            {
+               QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_PENDIENTE);
+            }
+            
+            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+            {
+         	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_PENDIENTE);
+            }
+            
         } 
         finally 
         {
@@ -137,6 +159,8 @@ public class FileManager
            catch (Exception e2) 
            {
               e2.printStackTrace();
+              
+              sNombreFichero = "";
 
               for (int i = 0; i < resultcomunidades.size() ; i++)
               {
@@ -145,53 +169,80 @@ public class FileManager
               
               for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
               {
-           	   QMListaComunidadesActivos.setValidado(resultcomunidadesactivos.get(i),ValoresDefecto.DEF_PENDIENTE);
+           	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_PENDIENTE);
               }
            }
         }
-        
+        return sNombreFichero;
 	}
 	
-	public static void escribirCuotas() 
+	public static String escribirCuotas() 
 	{
 		String sMethod = "escribirCuotas";
 		
-		ArrayList<String> resultcuotas =      QMListaCuotas.getCuotasPorEstado("P");
+		ArrayList<String> resultcuotas =  QMListaCuotas.getCuotasPorEstado("P");
 		
 		FileWriter ficheroE2 = null;
 		
         PrintWriter pw = null;
+        
+        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E2+".txt";
+        
         try
         {
-            ficheroE2 = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E2+".txt");
+            ficheroE2 = new FileWriter(sNombreFichero);
             pw = new PrintWriter(ficheroE2);
             
             for (int i = 0; i < resultcuotas.size() ; i++)
             {
                 pw.println(Parser.escribirCuota(QMMovimientosCuotas.getMovimientoCuota(resultcuotas.get(i))));
+                QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_ENVIADO);
             }
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+            
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
+            
+            //En caso de error se devuelven los registros a su estado anterior
+            sNombreFichero = "";
+            
+            for (int i = 0; i < resultcuotas.size() ; i++)
+            {
+            	QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_PENDIENTE);
+            }
         } 
         finally 
         {
            try 
            {
-               if (null != ficheroE2)
-            	   ficheroE2.close();
+        	   if (null != ficheroE2)
+        	   {
+        		   ficheroE2.close();
+        		   Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+        	   }
+            	   
            } 
            catch (Exception e2) 
            {
               e2.printStackTrace();
+              
+              //En caso de error se devuelven los registros a su estado anterior
+              sNombreFichero = "";
+              
+              for (int i = 0; i < resultcuotas.size() ; i++)
+              {
+            	  QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_PENDIENTE);
+              }
+              
            }
         }
-        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+ 
+        return sNombreFichero;
 	}
 	
-	public static void escribirReferencias() 
+	public static String escribirReferencias() 
 	{
 		String sMethod = "escribirReferencias";
 		
@@ -200,99 +251,162 @@ public class FileManager
 		FileWriter ficheroE3 = null;
 		
         PrintWriter pw = null;
+        
+        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E3+".txt";
         try
         {
-            ficheroE3 = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E3+".txt");
+            ficheroE3 = new FileWriter(sNombreFichero);
             pw = new PrintWriter(ficheroE3);
             
             for (int i = 0; i < resultreferencias.size() ; i++)
             {
                 pw.println(Parser.escribirReferenciaCatastral(QMMovimientosReferencias.getMovimientoReferenciaCatastral(resultreferencias.get(i))));
+                QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_ENVIADO);
             }
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+            
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
+            
+            //En caso de error se devuelven los registros a su estado anterior
+            sNombreFichero = "";
+            
+            for (int i = 0; i < resultreferencias.size() ; i++)
+            {
+            	QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_PENDIENTE);
+            }
         } 
         finally 
         {
            try 
            {
                if (null != ficheroE3)
+               {
             	   ficheroE3.close();
+            	   Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+               }
            } 
            catch (Exception e2) 
            {
               e2.printStackTrace();
+
+              //En caso de error se devuelven los registros a su estado anterior
+              sNombreFichero = "";
+              
+              for (int i = 0; i < resultreferencias.size() ; i++)
+              {
+              	QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_PENDIENTE);
+              }
            }
         }
-        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+        
+        return sNombreFichero;
 	}
 	
-	public static void escribirImpuestos() 
+	public static String escribirImpuestos() 
 	{
 		String sMethod = "escribirImpuestos";
 		
-		ArrayList<String> resultimpuestos =   QMListaImpuestos.getImpuestosPorEstado("P");
+		ArrayList<String> resultimpuestos = QMListaImpuestos.getImpuestosPorEstado("P");
 		
 		FileWriter ficheroE4 = null;
 		
         PrintWriter pw = null;
+        
+        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E4+".txt";
+        
         try
         {
-            ficheroE4 = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E4+".txt");
+            ficheroE4 = new FileWriter(sNombreFichero);
             pw = new PrintWriter(ficheroE4);
             
             for (int i = 0; i < resultimpuestos.size() ; i++)
             {
                 pw.println(Parser.escribirImpuestoRecurso(QMMovimientosImpuestos.getMovimientoImpuestoRecurso(resultimpuestos.get(i))));
+                QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_ENVIADO);
             }
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
+            
+            //En caso de error se devuelven los registros a su estado anterior
+            sNombreFichero = "";
+            
+            for (int i = 0; i < resultimpuestos.size() ; i++)
+            {
+            	QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_PENDIENTE);
+            }
         } 
         finally 
         {
            try 
            {
                if (null != ficheroE4)
+               {
             	   ficheroE4.close();
+            	   Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+               }
            } 
            catch (Exception e2) 
            {
               e2.printStackTrace();
+              
+              //En caso de error se devuelven los registros a su estado anterior
+              sNombreFichero = "";
+              
+              for (int i = 0; i < resultimpuestos.size() ; i++)
+              {
+              	QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_PENDIENTE);
+              }
+              
            }
         }
-        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+        
+        return sNombreFichero;
 	}
 	
-	public static void escribirGastos() 
+	public static String escribirGastos() 
 	{
 		String sMethod = "escribirGastos";
 		
-		ArrayList<String> resultgastos =      QMListaGastos.getGastosPorEstado("P");
+		ArrayList<String> resultgastos = QMListaGastos.getGastosPorEstado("P");
         
         FileWriter ficheroGA = null;
         
         PrintWriter pw = null;
+        
+        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_GA+".txt";
+        
         try
         {
 
-            ficheroGA = new FileWriter(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_GA+".txt");
+            ficheroGA = new FileWriter(sNombreFichero);
             pw = new PrintWriter(ficheroGA);
             
             for (int i = 0; i < resultgastos.size(); i++)
             {
                 pw.println(Parser.escribirGasto(QMMovimientosGastos.getMovimientoGasto(resultgastos.get(i))));
+                QMListaGastos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_ENVIADO);
             }
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
  
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+            //En caso de error se devuelven los registros a su estado anterior
+            sNombreFichero = "";
+            
+            for (int i = 0; i < resultgastos.size() ; i++)
+            {
+            	QMListaImpuestos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_PENDIENTE);
+            }
 		} 
 
         finally 
@@ -300,17 +414,98 @@ public class FileManager
            try 
            {
 
-           if (null != ficheroGA)
-              ficheroGA.close();
+        	   if (null != ficheroGA)
+        	   {
+        		   ficheroGA.close();
+        		   Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+        	   }
+              
            } 
            catch (Exception e2) 
            {
               e2.printStackTrace();
+              //En caso de error se devuelven los registros a su estado anterior
+              sNombreFichero = "";
+              
+              for (int i = 0; i < resultgastos.size() ; i++)
+              {
+              	QMListaImpuestos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_PENDIENTE);
+              }
            }
         }
-        Utils.debugTrace(true, sClassName, sMethod, "Generados!");
-
+        
+        return sNombreFichero;
 	}
+
+	public static String escribirCierres() 
+	{
+		String sMethod = "escribirCierres";
+		
+		ArrayList<String> resultcierres = QMProvisiones.getProvisionesCerradasPendientes();
+        
+        FileWriter ficheroPP = null;
+        
+        PrintWriter pw = null;
+        
+        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_PP+".txt";
+        
+        try
+        {
+
+        	ficheroPP = new FileWriter(sNombreFichero);
+            pw = new PrintWriter(ficheroPP);
+            
+            for (int i = 0; i < resultcierres.size(); i++)
+            {
+            	Provision provision = QMProvisiones.getProvision(resultcierres.get(i));
+                pw.println(Parser.escribirCierre(provision.getsNUPROF(),provision.getsFEPFON()));
+                QMProvisiones.setFechaEnvio(resultcierres.get(i),Utils.fechaDeHoy(false));
+            }
+            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+ 
+        } 
+        catch (IOException e) 
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+            //En caso de error se devuelven los registros a su estado anterior
+            sNombreFichero = "";
+            
+            for (int i = 0; i < resultcierres.size() ; i++)
+            {
+            	QMProvisiones.setFechaEnvio(resultcierres.get(i),"0");
+            }
+		} 
+
+        finally 
+        {
+           try 
+           {
+
+        	   if (null != ficheroPP)
+        	   {
+        		   ficheroPP.close();
+        		   Utils.debugTrace(true, sClassName, sMethod, "Generados!");
+        	   }
+              
+           } 
+           catch (Exception e2) 
+           {
+              e2.printStackTrace();
+              //En caso de error se devuelven los registros a su estado anterior
+              sNombreFichero = "";
+              
+              for (int i = 0; i < resultcierres.size() ; i++)
+              {
+            	  QMProvisiones.setFechaEnvio(resultcierres.get(i),"0");
+              }
+           }
+        }
+        
+        return sNombreFichero;
+	}
+	
 	
 	public static boolean leerActivos(String sNombre)
 	{

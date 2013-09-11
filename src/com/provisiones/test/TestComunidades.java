@@ -2,14 +2,15 @@ package com.provisiones.test;
 
 import java.io.IOException;
 
-import com.provisiones.ll.CLProvisiones;
 import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
+
 
 public class TestComunidades 
 {
 	static String sClassName = TestComunidades.class.getName();
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException 
 	{
 		boolean bTraza = true;
@@ -20,7 +21,17 @@ public class TestComunidades
 
 		//Utils.debugTrace(bTraza, sClassName, sMethod, "Correo|"+CLProvisiones.provisionAsignada("3100058")+"|");
 		
-		FileManager.escribirComunidades();
+		Utils.inicializarDirectorios();
+		
+		FileManager.escribirCierres();
+		
+		/*try{
+		      String executionPath = System.getProperty("user.dir");
+		      System.out.print("Executing at =>"+executionPath);
+		    }catch (Exception e){
+		      System.out.println("Exception caught ="+e.getMessage());
+		    }*/
+
 		
 	}
 }

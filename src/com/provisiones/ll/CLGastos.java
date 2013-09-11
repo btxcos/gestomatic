@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
-import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;

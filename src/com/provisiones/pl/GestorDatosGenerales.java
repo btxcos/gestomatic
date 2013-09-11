@@ -72,8 +72,6 @@ public class GestorDatosGenerales implements Serializable
 		
 		tiposcosbga_t11HM.put("Plusvalia", "0");
 		tiposcosbga_t11HM.put("Notaria",   "1");
-		/*tiposcosbga_t11HM.put("Devolucion Plusvalia", "50");
-		tiposcosbga_t11HM.put("Devolucion Notaria",     "51");*/
 
 		tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
 		tiposcosbga_t21HM.put("IBIS",                                 "1");
@@ -82,13 +80,6 @@ public class GestorDatosGenerales implements Serializable
 		tiposcosbga_t21HM.put("Tasas agua",                           "4");
 		tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
 		tiposcosbga_t21HM.put("Otras tasas",                          "6");
-		/*tiposcosbga_t21HM.put("Devolución Impuestos e IBIS",         "50");
-		tiposcosbga_t21HM.put("Devolución IBIS",                     "51");
-		tiposcosbga_t21HM.put("Devolución Tasas basura",             "52");
-		tiposcosbga_t21HM.put("Devolución Tasas alcantarillado",     "53");
-		tiposcosbga_t21HM.put("Devolución Tasas agua",               "54");
-		tiposcosbga_t21HM.put("Devolución Contribuciones especiales","55");
-		tiposcosbga_t21HM.put("Devolución Otras tasas",              "56");*/
 		
 		tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
 		tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
@@ -96,22 +87,11 @@ public class GestorDatosGenerales implements Serializable
 		tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
 		tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
 		tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
-		/*tiposcosbga_t22HM.put("Devolucion Comunidades",       "50"); 
-		tiposcosbga_t22HM.put("Devolucion Ordinaria",          	"51"); 
-		tiposcosbga_t22HM.put("Devolucion Extras Comunidad",   	"52"); 
-		tiposcosbga_t22HM.put("Devolucion Mancomunidad",       	"53"); 
-		tiposcosbga_t22HM.put("Devolucion Extras Mancomunidad",	"54"); 
-		tiposcosbga_t22HM.put("Devolucion Obras comunidad",   	"55");*/
-		
-		
+	
 		tiposcosbga_t23HM.put("Suministros",               "0");
 		tiposcosbga_t23HM.put("Suministro luz",            "1");
 		tiposcosbga_t23HM.put("Suministro agua",           "2");
 		tiposcosbga_t23HM.put("Suministro gas",            "3");
-		/*tiposcosbga_t23HM.put("Devolucion Suministros",  "50");
-		tiposcosbga_t23HM.put("Devolucion Suministro luz", "51");
-		tiposcosbga_t23HM.put("Devolucion Suministro agua","52");
-		tiposcosbga_t23HM.put("Devolución Suministro gas", "53");*/
 		
 		tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
 		tiposcosbga_t32HM.put("Prescripcion",            "1");  

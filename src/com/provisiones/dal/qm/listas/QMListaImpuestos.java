@@ -783,7 +783,7 @@ public class QMListaImpuestos
 		return result;
 	}
 
-	public static boolean setValidado(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(String sCodMovimiento, String sValidado)
 	{
 		String sMethod = "setValidado";
 		Statement stmt = null;
@@ -799,23 +799,17 @@ public class QMListaImpuestos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField4 + " = '"+ sValidado + 
+					+ sField5 + " = '"+ sValidado + 
 					"' "+
 					" WHERE "+
-					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					" AND " + sField2 + " = '" + sCodNURCAT + "' " +
-					" AND " + sField3 + " = '" + sCodCOSBAC + "' " +
-					" AND " + sField4 + " = '" + sCodMovimiento +"' )");
+					"(" + sField4 + " = '" + sCodMovimiento +"' )");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
-
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
@@ -832,7 +826,7 @@ public class QMListaImpuestos
 		return bSalida;
 	}
 	
-	public static String getValidado(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC)
+	public static String getValidado(String sCodMovimiento)
 	{
 		String sMethod = "getValidado";
 
@@ -857,11 +851,9 @@ public class QMListaImpuestos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + sField5 + "  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					" AND " + sField2 + " = '" + sCodNURCAT + "' " +
-					" AND " + sField3 + " = '" + sCodCOSBAC + "' )");
+					"(" + sField4 + " = '" + sCodMovimiento +"' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -877,10 +869,8 @@ public class QMListaImpuestos
 					sValidado = rs.getString(sField4);
 
 					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sCodNURCAT);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField3 + ": " + sCodCOSBAC);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField4 + ": " + sValidado);
+
+					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField5 + ": " + sValidado);
 
 
 				}
@@ -894,10 +884,7 @@ public class QMListaImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
-
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());

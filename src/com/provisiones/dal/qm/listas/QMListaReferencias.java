@@ -354,7 +354,7 @@ public class QMListaReferencias
 		return result;
 	}
 
-	public static boolean setValidado(String sCodNURCAT, String sCodCOACES, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(String sCodMovimiento, String sValidado)
 	{
 		String sMethod = "setValidado";
 		Statement stmt = null;
@@ -373,17 +373,13 @@ public class QMListaReferencias
 					+ sField4 + " = '"+ sValidado + 
 					"' "+
 					" WHERE "+
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " 
-					+ sField2 + " = '" + sCodCOACES + "' AND " 
-					+ sField3 + " = '" + sCodMovimiento	+ "')");
+					"(" + sField3 + " = '" + sCodMovimiento	+ "')");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
@@ -401,7 +397,7 @@ public class QMListaReferencias
 		return bSalida;
 	}
 	
-	public static String getValidado(String sCodNURCAT, String sCodCOACES, String sCodMovimiento)
+	public static String getValidado(String sCodMovimiento)
 	{
 		String sMethod = "getValidado";
 
@@ -428,9 +424,7 @@ public class QMListaReferencias
 
 			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " 
-					+ sField2 + " = '" + sCodCOACES + "' AND " 
-					+ sField3 + " = '" + sCodMovimiento	+ "')");
+					"(" + sField3 + " = '" + sCodMovimiento	+ "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -461,8 +455,6 @@ public class QMListaReferencias
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + sCodNURCAT);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
 
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());

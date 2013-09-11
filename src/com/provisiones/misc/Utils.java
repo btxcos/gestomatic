@@ -160,11 +160,41 @@ public class Utils
 		
 		return sResultPath;
 	}
+	public static void inicializarDirectorios ()
+	{
+		String sMethod = "inicializarDirectorios";
+		
+		debugTrace(true, sClassName, sMethod, "DEF_PATH_LOGS:|"+ValoresDefecto.DEF_PATH_LOGS+"|");
+		debugTrace(true, sClassName, sMethod, "DEF_PATH_BACKUP_RECIBIDOS:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+"|");
+		debugTrace(true, sClassName, sMethod, "DEF_PATH_BACKUP_GENERADOS:|"+ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+"|");
+		
+		File dirLogs = new File(ValoresDefecto.DEF_PATH_LOGS);
+		
+		if(!dirLogs.exists())
+		{
+			dirLogs.mkdir(); 
+		}
+		
+		File dirRecibidos = new File(ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS);
+
+		if(!dirRecibidos.exists())
+		{
+			dirRecibidos.mkdir(); 
+		}
+		
+		File dirGenerados = new File(ValoresDefecto.DEF_PATH_BACKUP_GENERADOS);
+
+		if(!dirGenerados.exists())
+		{
+			dirGenerados.mkdir(); 
+		}
+	}
+	
 	public static void standardIO2File(String fileName){
 		 
         if(fileName.equals("")){//Si viene vacío usamos este por defecto
  
-            fileName="C:\\javalog.txt";
+            fileName=ValoresDefecto.DEF_EXEC_PATH+"javalog.txt";
  
         }
  

@@ -6,7 +6,6 @@ public class ValoresDefecto
 {
 	
 	public static final int iNumChar = 26;
-	public static final String DEF_PATH = "provisiones"+File.separator;
 	public static final String DEF_COAPII = "168";
 	public static final String DEF_NUCLII = "2306894218400";
 	public static final String DEF_IDPROV = "68942184";
@@ -25,6 +24,7 @@ public class ValoresDefecto
 	public static final String DEF_COSPII_PA = "PA";
 	public static final String DEF_COSPII_RG = "RG";
 	public static final String DEF_COSPII_AC = "AC";
+	public static final String DEF_COSPII_PP = "PP";
 	
 		
 	public static final String DEF_E1_CODTRN = "EE41";
@@ -92,9 +92,11 @@ public class ValoresDefecto
 
 	public static final String DEF_FIN_FICHERO = new Character((char) iNumChar).toString();
 
-	public static final String DEF_PATH_BACKUP_RECIBIDOS = DEF_PATH+"recibidos"+File.separator;
-	public static final String DEF_PATH_BACKUP_GENERADOS = DEF_PATH+"generados"+File.separator;
-	public static final String DEF_PATH_LOGS = DEF_PATH+"logs"+File.separator;
+	public static final String DEF_PATH = "provisiones"+File.separator;
+	public static final String DEF_EXEC_PATH = System.getProperty("user.dir")+File.separator;
+	public static final String DEF_PATH_BACKUP_RECIBIDOS = DEF_EXEC_PATH+"recibidos"+File.separator;
+	public static final String DEF_PATH_BACKUP_GENERADOS = DEF_EXEC_PATH+"generados"+File.separator;
+	public static final String DEF_PATH_LOGS = DEF_EXEC_PATH+"logs"+File.separator;
 	
 	
 }
