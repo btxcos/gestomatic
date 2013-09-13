@@ -314,10 +314,12 @@ public class QMImpuestos
 
 			pstmt = conn.prepareStatement("SELECT "
 				       + sField2  +       
-			"  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
-					 sField2 + " = '" + sCodCOSBAC + "' )");
+				       "  FROM " + sTable + 
+				       " WHERE " +
+				       "(" + 
+				       sField1 + " = '" + sCodNURCAT + "' AND " +
+				       sField2 + " = '" + sCodCOSBAC + "' " +
+						")");
 
 			rs = pstmt.executeQuery();
 			
@@ -363,7 +365,7 @@ public class QMImpuestos
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
-
+	
 	
 	public static boolean tieneImpuestoRecurso(String sCodNURCAT)
 	{//pendiente de coaces, de la tabla activos

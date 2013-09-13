@@ -1,11 +1,18 @@
 package com.provisiones.dal.qm.listas.errores;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.misc.Utils;
+import com.provisiones.types.ActivoTabla;
+import com.provisiones.types.ErrorComunidadTabla;
 
 
 public class QMListaErroresComunidades 
@@ -105,6 +112,96 @@ public class QMListaErroresComunidades
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
+	}
+	
+	public static ArrayList<ErrorComunidadTabla> buscaErrores()
+	{
+		
+		String sMethod = "buscaErrores";
+
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String COCLDO = "";
+		String NUDCOM = "";
+		String NOMCOC = "";
+		String MOVIMIENTO = "";
+		String ERRORES = "";
+		
+		ArrayList<ErrorComunidadTabla> result = new ArrayList<ErrorComunidadTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					   + QMMovimientosComunidades.sField7 + ","        
+					   + QMMovimientosComunidades.sField8 + ","
+					   + QMMovimientosComunidades.sField12 + 
+
+					   "  FROM " + QMMovimientosComunidades.sTable + 
+					   " WHERE "+ QMMovimientosComunidades.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   "  FROM " + sTable + "))");
+			
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					COCLDO = rs.getString(QMMovimientosComunidades.sField7);
+					NUDCOM = rs.getString(QMMovimientosComunidades.sField8);
+					NOMCOC = rs.getString(QMMovimientosComunidades.sField12);
+					MOVIMIENTO = rs.getString(QMMovimientosComunidades.sField1);
+					ERRORES = "";
+					
+					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
+					
+					result.add(errorencontrado);
+					
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + MOVIMIENTO);
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
 	}
 
 /*	public static ArrayList<String> buscaErroresMovimientoComunidad(String sCodMovimiento)

@@ -16,21 +16,21 @@ public class QMMovimientosComunidades
 	
 	static boolean bTrazas = true;
 
-	static String sTable = "e1_movimientos_tbl";
+	public static String sTable = "e1_movimientos_tbl";
 
-	static String sField1 = "e1_movimiento_id";
+	public static String sField1 = "e1_movimiento_id";
 	
 	static String sField2 = "cod_codtrn";
 	static String sField3 = "cod_cotdor";
 	static String sField4 = "idprov";
 	static String sField5 = "cod_coacci";
 	static String sField6 = "coengp";
-	static String sField7 = "cod_cocldo";
-	static String sField8 = "cod_nudcom";
+	public static String sField7 = "cod_cocldo";
+	public static String sField8 = "cod_nudcom";
 	static String sField9 = "cod_bitc10";
 	static String sField10 = "cod_coaces";
 	static String sField11 = "cod_bitc01";
-	static String sField12 = "nomcoc";
+	public static String sField12 = "nomcoc";
 	static String sField13 = "cod_bitc02";
 	static String sField14 = "nodcco";
 	static String sField15 = "cod_bitc03";

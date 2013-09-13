@@ -5,315 +5,315 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html">
+
 	<h:head>
 		<title>Portal Provisiones</title>
-		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+		<link rel="shortcut icon" href="recursos/favicon.ico"/>
 	</h:head>
+
 	<h:body>
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="auto" header="Modificar Impuestos y Recursos">
+					<h:panelGrid columns="3" cellpadding="5">
 
- 
-								<h:panelGrid columns="3" cellpadding="5">
-									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText value="CODTRN: " />
-											<p:inputText id="CODTRN" value="#{GestorMovimientosImpuestosRecursos.sCODTRN}" disabled="true" />
+								<h:outputText value="CODTRN: "/>
+								<p:inputText id="CODTRN" value="#{GestorMovimientosImpuestosRecursos.sCODTRN}" disabled="true"/>
 
-											<h:outputText value="IDPROV: " />
-											<p:inputText id="IDPROV" value="#{GestorMovimientosImpuestosRecursos.sIDPROV}" disabled="true" />
+								<h:outputText value="IDPROV: "/>
+								<p:inputText id="IDPROV" value="#{GestorMovimientosImpuestosRecursos.sIDPROV}" disabled="true"/>
 
-										</h:panelGrid>
-									</p:panel>
-									<p:fieldset legend="Acciones">
-										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-											<p:commandButton value="Registrar Datos" update="panel, popup, msgs" actionListener="#{GestorMovimientosImpuestosRecursos.registraDatos}"/>
-											<p:selectOneRadio id="options" value="#{GestorMovimientosImpuestosRecursos.sCOACCI}">
-												<f:selectItem itemLabel="Baja" itemValue="B" />  
-												<f:selectItem itemLabel="Modificación" itemValue="M" />
-											</p:selectOneRadio>
-										</h:panelGrid>
-									</p:fieldset>
-									<p:fieldset legend="Info">
-										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+							</h:panelGrid>
+						</p:panel>
 
-											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
-											<h:panelGrid columns="2" cellpadding="5">
-												<p:messages id="msgs"/>
-												<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
-											</h:panelGrid>
-											</p:notificationBar>
-											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-											<p:growl id="popup" />
-										</h:panelGrid>
-									</p:fieldset>
-								</h:panelGrid>
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Registrar Datos" update="panel, popup, msgs" actionListener="#{GestorMovimientosImpuestosRecursos.registraDatos}"/>
+
+								<p:selectOneRadio id="options" value="#{GestorMovimientosImpuestosRecursos.sCOACCI}">
+									<f:selectItem itemLabel="Baja" itemValue="B"/>
+									<f:selectItem itemLabel="Modificación" itemValue="M"/>
+								</p:selectOneRadio>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
+
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
 				</p:layoutUnit>
+
 				<p:layoutUnit position="west" size="20%" header="Operativas">
 					<ui:include src="menu.xhtml"/>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
+					<h:panelGrid columns="1" cellpadding="5">
 
-					<p:panel id="panel">
-						<h:panelGrid columns="1" cellpadding="5">
+						<p:panel id="panel">
+							<h:panelGrid columns="1" cellpadding="5">
 
-									<p:fieldset legend="Activo">
-										<h:panelGrid columns="2" cellpadding="5">
-											<p:panel >
-												<h:panelGrid columns="3" cellpadding="5">
-													<h:outputText for="COACES" value="Código de activo: " />
-													<p:inputText id="COACES" value="#{GestorMovimientosImpuestosRecursos.sCOACES}" size="9" maxlength="9">
-													</p:inputText>
+								<p:fieldset legend="Activo">
+									<h:panelGrid columns="2" cellpadding="5">
 
-													<p:commandButton value="Cargar Impuestos" update="msgs, popup, COACES, form:impuestos" actionListener="#{GestorMovimientosImpuestosRecursos.cargarImpuestos}" oncomplete="dlgTablaImpuestos.show()"/>	
-												</h:panelGrid>
-											</p:panel>
-										<p:commandButton value="Buscar un Activo" update="COACES, NURCAT, form:activos" oncomplete="dlgBuscar.show()"/>		
-										</h:panelGrid>
-									</p:fieldset>
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
 
-									<p:fieldset legend="Referencia Catastral">
-										<h:panelGrid columns="2" cellpadding="5">
+												<h:outputText for="COACES" value="Código de activo: "/>
+												<p:inputText id="COACES" value="#{GestorMovimientosImpuestosRecursos.sCOACES}" size="9" maxlength="9"/>
 
-											<h:outputText for="NURCAT" value="Número: " />
-											<p:inputText id="NURCAT" value="#{GestorMovimientosImpuestosRecursos.sNURCAT}" size="24" maxlength="20" disabled="true">
-											</p:inputText>
+												<p:commandButton value="Cargar Impuestos" update="msgs, popup, COACES, form:impuestos" actionListener="#{GestorMovimientosImpuestosRecursos.cargarImpuestos}" oncomplete="dlgTablaImpuestos.show()"/>
 
+											</h:panelGrid>
+										</p:panel>
 
-										</h:panelGrid>
-									</p:fieldset>
+										<p:commandButton value="Buscar un Activo" update="COACES, NURCAT, form:activos" oncomplete="dlgBuscar.show()"/>
 
-									<p:fieldset legend="Solicitud" id="panelPago">
-										<h:panelGrid columns="2" cellpadding="5">
+									</h:panelGrid>
+								</p:fieldset>
 
-											<p:panel >
-												<h:panelGrid columns="2" cellpadding="5">
+								<p:fieldset legend="Referencia Catastral">
+									<h:panelGrid columns="2" cellpadding="5">
 
-													<h:outputText for="COSBAC" value="Concepto: " />
-													<p:inputText id="COSBAC" value="#{GestorMovimientosImpuestosRecursos.sDesCOSBAC}" disabled="true" />
+										<h:outputText for="NURCAT" value="Número: "/>
+										<p:inputText id="NURCAT" value="#{GestorMovimientosImpuestosRecursos.sNURCAT}" size="24" maxlength="20" disabled="true"/>
 
-												</h:panelGrid>
-										  </p:panel>
+									</h:panelGrid>
+								</p:fieldset>
 
-											<p:panel >
-												<h:panelGrid columns="3" cellpadding="5">
+								<p:fieldset legend="Solicitud" id="panelPago">
+									<h:panelGrid columns="2" cellpadding="5">
 
-													<h:outputText for="FEPRRE" value="Fecha de solicitud: " />
-													<p:inputMask id="FEPRRE" value="#{GestorMovimientosImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10" >
-														<f:validateLength minimum="10"/>
-													</p:inputMask>
-													<p:commandButton id="hFEPRRE" icon="ui-icon-clock" update="FEPRRE" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFEPRRE}"/>
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
 
-												</h:panelGrid>
-										  </p:panel>
+												<h:outputText for="COSBAC" value="Concepto: "/>
+												<p:inputText id="COSBAC" value="#{GestorMovimientosImpuestosRecursos.sDesCOSBAC}" disabled="true"/>
 
+											</h:panelGrid>
+										</p:panel>
 
-										</h:panelGrid>
-									</p:fieldset>
-									
-									<p:fieldset legend="Resolución">
-										<h:panelGrid columns="6" cellpadding="5">
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
 
-											<h:outputText for="BIRESO" value="Resolución: " />
-											<p:selectOneMenu id="BIRESO" value="#{GestorMovimientosImpuestosRecursos.sBIRESO}">
-												<f:selectItem itemLabel="Elija..." itemValue="" />
-												<f:selectItems value="#{GestorDatosGenerales.tiposbiresoHM}" />
-												<f:validateLength minimum="1" /> 
-											</p:selectOneMenu>
+												<h:outputText for="FEPRRE" value="Fecha de solicitud: "/>
+												<p:inputMask id="FEPRRE" value="#{GestorMovimientosImpuestosRecursos.sFEPRRE}" mask="99/99/9999" size="10">
+													<f:validateLength minimum="10"/>
+												</p:inputMask>
+												<p:commandButton id="hFEPRRE" icon="ui-icon-clock" update="FEPRRE" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFEPRRE}"/>
 
-											<h:outputText for="FERERE" value="Fecha de resolución: " />
-											<p:inputMask id="FERERE" value="#{GestorMovimientosImpuestosRecursos.sFERERE}" mask="99/99/9999" size="10" >
-												<f:validateLength minimum="10"/>
-											</p:inputMask>
-											<p:commandButton id="hFERERE" icon="ui-icon-clock" update="FERERE" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFERERE}"/>
+											</h:panelGrid>
+										</p:panel>
 
+									</h:panelGrid>
+								</p:fieldset>
 
-										</h:panelGrid>
-									</p:fieldset>
+								<p:fieldset legend="Resolución">
+									<h:panelGrid columns="6" cellpadding="5">
 
+										<h:outputText for="BIRESO" value="Resolución: "/>
+										<p:selectOneMenu id="BIRESO" value="#{GestorMovimientosImpuestosRecursos.sBIRESO}">
+											<f:selectItem itemLabel="Elija..." itemValue=""/>
+											<f:selectItems value="#{GestorDatosGenerales.tiposbiresoHM}"/>
+											<f:validateLength minimum="1"/>
+										</p:selectOneMenu>
 
-									<p:fieldset legend="Devolución">
-										<h:panelGrid columns="6" cellpadding="5">
+										<h:outputText for="FERERE" value="Fecha de resolución: "/>
+										<p:inputMask id="FERERE" value="#{GestorMovimientosImpuestosRecursos.sFERERE}" mask="99/99/9999" size="10">
+											<f:validateLength minimum="10"/>
+										</p:inputMask>
+										<p:commandButton id="hFERERE" icon="ui-icon-clock" update="FERERE" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFERERE}"/>
 
-													<h:outputText for="BISODE" value="Solicita devolución: " />
-													<p:selectOneMenu id="BISODE" value="#{GestorMovimientosImpuestosRecursos.sBISODE}">
-														<f:selectItem itemLabel="Elija..." itemValue="" />
-														<f:selectItems value="#{GestorDatosGenerales.tiposbinariaHM}" />
-														<f:validateLength minimum="1" /> 
-													</p:selectOneMenu>
+									</h:panelGrid>
+								</p:fieldset>
 
-													<h:outputText for="FEDEIN" value="Fecha de devolución: " />
-													<p:inputMask id="FEDEIN" value="#{GestorMovimientosImpuestosRecursos.sFEDEIN}" mask="99/99/9999" size="10" >
-														<f:validateLength minimum="10"/>
-													</p:inputMask>
-													<p:commandButton id="hFEDEIN" icon="ui-icon-clock" update="FEDEIN" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFEDEIN}"/>
+								<p:fieldset legend="Devolución">
+									<h:panelGrid columns="6" cellpadding="5">
 
-										</h:panelGrid>
-									</p:fieldset>
+												<h:outputText for="BISODE" value="Solicita devolución: "/>
+												<p:selectOneMenu id="BISODE" value="#{GestorMovimientosImpuestosRecursos.sBISODE}">
+													<f:selectItem itemLabel="Elija..." itemValue=""/>
+													<f:selectItems value="#{GestorDatosGenerales.tiposbinariaHM}"/>
+													<f:validateLength minimum="1"/>
+												</p:selectOneMenu>
 
+												<h:outputText for="FEDEIN" value="Fecha de devolución: "/>
+												<p:inputMask id="FEDEIN" value="#{GestorMovimientosImpuestosRecursos.sFEDEIN}" mask="99/99/9999" size="10">
+													<f:validateLength minimum="10"/>
+												</p:inputMask>
+												<p:commandButton id="hFEDEIN" icon="ui-icon-clock" update="FEDEIN" actionListener="#{GestorMovimientosImpuestosRecursos.hoyFEDEIN}"/>
 
+									</h:panelGrid>
+								</p:fieldset>
 
-									<p:fieldset legend="Observaciones">
-										<h:panelGrid columns="1" cellpadding="5">
+								<p:fieldset legend="Observaciones">
+									<h:panelGrid columns="1" cellpadding="5">
 
-											<p:inputTextarea id="OBTEXC" value="#{GestorMovimientosImpuestosRecursos.sOBTEXC}" rows="2" cols="80" counter="counter" maxlength="110"       
-												counterTemplate="{0} carácteres restantes." autoResize="false"/>  
-											<h:outputText id="counter" />
+										<p:inputTextarea id="OBTEXC" value="#{GestorMovimientosImpuestosRecursos.sOBTEXC}" rows="2" cols="80" counter="counter" maxlength="110"
+											counterTemplate="{0} carácteres restantes." autoResize="false"/>
+										<h:outputText id="counter"/>
 
-										</h:panelGrid>
-									</p:fieldset>
+									</h:panelGrid>
+								</p:fieldset>
 
-								</h:panelGrid>
-							</p:panel>
+							</h:panelGrid>
+						</p:panel>
+					</h:panelGrid>
 
-					<p:dialog header="Impuestos disponibles: " widgetVar="dlgTablaImpuestos" resizable="false">  
-    				
-							<p:contextMenu for="impuestos">  
-								<p:menuitem value="Seleccionar" update="panel, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosImpuestosRecursos.seleccionarImpuesto}" oncomplete="dlgTablaImpuestos.hide()"/>  
-							</p:contextMenu>  
-									
-							<p:dataTable id="impuestos" var="impuesto" value="#{GestorMovimientosImpuestosRecursos.tablaimpuestos}" rowKey="#{impuesto.DCOSBAC}"  
-												selection="#{GestorMovimientosImpuestosRecursos.impuestoseleccionado}" selectionMode="single"
-												paginator="true" paginatorPosition="bottom" rows="10" 
-												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-												rowsPerPageTemplate="5,10,15">
-									
-								<p:column headerText="Impuesto">  
-								    #{impuesto.DCOSBAC}  
-								</p:column>  
+					<p:dialog header="Impuestos disponibles: " widgetVar="dlgTablaImpuestos" resizable="false">
+						<p:contextMenu for="impuestos">
+							<p:menuitem value="Seleccionar" update="panel, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosImpuestosRecursos.seleccionarImpuesto}" oncomplete="dlgTablaImpuestos.hide()"/>
+						</p:contextMenu>
 
-								
-								<p:column headerText="Fecha Solicitud">  
-								    #{impuesto.FEPRRE}  
-								</p:column>  
+						<p:dataTable id="impuestos" var="impuesto" value="#{GestorMovimientosImpuestosRecursos.tablaimpuestos}" rowKey="#{impuesto.DCOSBAC}"
+											selection="#{GestorMovimientosImpuestosRecursos.impuestoseleccionado}" selectionMode="single"
+											paginator="true" paginatorPosition="bottom" rows="10"
+											paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											rowsPerPageTemplate="5,10,15">
 
-								<p:column headerText="Resolución">  
-								    #{impuesto.DBIRESO}  
-								</p:column>
+							<p:column headerText="Impuesto">
+								#{impuesto.DCOSBAC}
+							</p:column>
 
-								<p:column headerText="Fecha Resolución">  
-								    #{impuesto.FERERE}  
-								</p:column>
-								<p:column headerText="Solicita Devolución">  
-								    #{impuesto.DBISODE}  
-								</p:column>
+							<p:column headerText="Fecha Solicitud">
+								#{impuesto.FEPRRE}
+							</p:column>
 
-								<p:column headerText="Fecha Devolución">  
-								    #{impuesto.FEDEIN}  
-								</p:column>
+							<p:column headerText="Resolución">
+								#{impuesto.DBIRESO}
+							</p:column>
 
+							<p:column headerText="Fecha Resolución">
+								#{impuesto.FERERE}
+							</p:column>
 
+							<p:column headerText="Solicita Devolución">
+								#{impuesto.DBISODE}
+							</p:column>
 
-							</p:dataTable> 
+							<p:column headerText="Fecha Devolución">
+								#{impuesto.FEDEIN}
+							</p:column>
+
+						</p:dataTable>
 					</p:dialog>
 
-					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
-    				
-							<p:contextMenu for="activos">  
-								<p:menuitem value="Seleccionar" update="form:COACES, form:NURCAT, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosImpuestosRecursos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
-							</p:contextMenu>  
-									
-							<p:dataTable id="activos" var="activo" value="#{GestorMovimientosImpuestosRecursos.tablaactivos}" rowKey="#{activo.COACES}"  
-												selection="#{GestorMovimientosImpuestosRecursos.activoseleccionado}" selectionMode="single"
-												paginator="true" paginatorPosition="bottom" rows="10" 
-												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-												rowsPerPageTemplate="5,10,15">
-									
-								<p:column headerText="Código Activo">  
-								    #{activo.COACES}  
-								</p:column>  
-								
-								<p:column headerText="Provincia">  
-								    #{activo.NOPRAC}  
-								</p:column>  
+					<p:dialog header="Activos con Impuestos: " widgetVar="dlgTabla" resizable="false">
+						<p:contextMenu for="activos">
+							<p:menuitem value="Seleccionar" update="form:COACES, form:NURCAT, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosImpuestosRecursos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+						</p:contextMenu>
 
-								<p:column headerText="Municipio">  
-								    #{activo.NOMUIN}  
-								</p:column>  
-								
-								<p:column headerText="Vía">  
-								    #{activo.NOVIAS}  
-								</p:column>  
-								
-								<p:column headerText="Portal">  
-								    #{activo.NUPOAC}  
-								</p:column>  
-								
-								<p:column headerText="Piso">  
-								    #{activo.NUPIAC}  
-								</p:column>  
-								
-								<p:column headerText="Puerta">  
-								    #{activo.NUPUAC}  
-								</p:column>  
-									
-							</p:dataTable> 
+						<p:dataTable id="activos" var="activo" value="#{GestorMovimientosImpuestosRecursos.tablaactivos}" rowKey="#{activo.COACES}"
+											selection="#{GestorMovimientosImpuestosRecursos.activoseleccionado}" selectionMode="single"
+											paginator="true" paginatorPosition="bottom" rows="10"
+											paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											rowsPerPageTemplate="5,10,15">
+
+							<p:column headerText="Código Activo">
+								#{activo.COACES}
+							</p:column>
+
+							<p:column headerText="Provincia">
+								#{activo.NOPRAC}
+							</p:column>
+
+							<p:column headerText="Municipio">
+								#{activo.NOMUIN}
+							</p:column>
+
+							<p:column headerText="Vía">
+								#{activo.NOVIAS}
+							</p:column>
+
+							<p:column headerText="Portal">
+								#{activo.NUPOAC}
+							</p:column>
+
+							<p:column headerText="Piso">
+								#{activo.NUPIAC}
+							</p:column>
+
+							<p:column headerText="Puerta">
+								#{activo.NUPUAC}
+							</p:column>
+
+						</p:dataTable>
 					</p:dialog>
-					<p:dialog header="Activos disponibles: " widgetVar="dlgBuscar" resizable="false">  
-									<p:fieldset legend="Criterios de Búsqueda">
-										<h:panelGrid columns="1" cellpadding="5">
-											<p:panel id="panelBuscar" >
-												<h:panelGrid columns="3" cellpadding="5">
-													<h:outputText for="NOPRAC" value="Provincia: " />
-														<p:inputText id="NOPRAC" value="#{GestorMovimientosImpuestosRecursos.sNOPRAC}" size="18" maxlength="18">
-														</p:inputText>
-													<p:message for="NOPRAC" display="icon"/>
+					<p:dialog header="Buscar Activos con Impuestos" widgetVar="dlgBuscar" resizable="false">
+						<p:fieldset legend="Criterios de Búsqueda">
 
-													<h:outputText for="NOMUIN" value="Municipio: " />
-														<p:inputText id="NOMUIN" value="#{GestorMovimientosImpuestosRecursos.sNOMUIN}" size="30" maxlength="30">
-														</p:inputText>
-													<p:message for="NOMUIN" display="icon"/>
+							<h:panelGrid columns="1" cellpadding="5">
+								<p:panel id="panelBuscar">
 
-													<h:outputText for="COPOIN" value="Código Postal: " />
-														<p:inputText id="COPOIN" value="#{GestorMovimientosImpuestosRecursos.sCOPOIN}" size="5" maxlength="5">
-														</p:inputText>
-													<p:message for="COPOIN" display="icon"/>
+									<h:panelGrid columns="2" cellpadding="5">
 
-													<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
-														<p:inputText id="NOVIAS" value="#{GestorMovimientosImpuestosRecursos.sNOVIAS}" size="60" maxlength="60">
-														</p:inputText>
-													<p:message for="NOVIAS" display="icon"/>
+										<h:outputText for="NOPRAC" value="Provincia: "/>
+										<p:inputText id="NOPRAC" value="#{GestorMovimientosImpuestosRecursos.sNOPRAC}" size="18" maxlength="18"/>
 
-													<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: " />
-														<p:inputText id="NUPOAC" value="#{GestorMovimientosImpuestosRecursos.sNUPOAC}" size="17" maxlength="17">
-														</p:inputText>
-													<p:message for="NUPOAC" display="icon"/>
+										<h:outputText for="NOMUIN" value="Municipio: "/>
+										<p:inputText id="NOMUIN" value="#{GestorMovimientosImpuestosRecursos.sNOMUIN}" size="30" maxlength="30"/>
 
-													<h:outputText for="NUPIAC" value="Piso: " />
-														<p:inputText id="NUPIAC" value="#{GestorMovimientosImpuestosRecursos.sNUPIAC}" size="11" maxlength="11">
-														</p:inputText>
-													<p:message for="NUPIAC" display="icon"/>
+										<h:outputText for="COPOIN" value="Código Postal: "/>
+										<p:inputText id="COPOIN" value="#{GestorMovimientosImpuestosRecursos.sCOPOIN}" size="5" maxlength="5"/>
 
-													<h:outputText for="NUPUAC" value="Puerta: " />
-														<p:inputText id="NUPUAC" value="#{GestorMovimientosImpuestosRecursos.sNUPUAC}" size="17" maxlength="17">
-														</p:inputText>
-													<p:message for="NUPUAC" display="icon"/>
-												</h:panelGrid>
-											</p:panel>
-											<p:panel >
-												<h:panelGrid columns="3" cellpadding="5">
-													
-													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosImpuestosRecursos.buscaActivos}" oncomplete="dlgTabla.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantillaActivo}" />	
+										<h:outputText for="NOVIAS" value="Nombre de la Vía: "/>
+										<p:inputText id="NOVIAS" value="#{GestorMovimientosImpuestosRecursos.sNOVIAS}" size="60" maxlength="60"/>
 
-												</h:panelGrid>
-											</p:panel>
+										<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: "/>
+										<p:inputText id="NUPOAC" value="#{GestorMovimientosImpuestosRecursos.sNUPOAC}" size="17" maxlength="17"/>
 
-										</h:panelGrid>
-									</p:fieldset>
+										<h:outputText for="NUPIAC" value="Piso: "/>
+										<p:inputText id="NUPIAC" value="#{GestorMovimientosImpuestosRecursos.sNUPIAC}" size="11" maxlength="11"/>
+
+										<h:outputText for="NUPUAC" value="Puerta: "/>
+										<p:inputText id="NUPUAC" value="#{GestorMovimientosImpuestosRecursos.sNUPUAC}" size="17" maxlength="17"/>
+
+									</h:panelGrid>
+								</p:panel>
+
+								<p:panel>
+									<h:panelGrid columns="3" cellpadding="5">
+
+										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosImpuestosRecursos.buscaActivos}" oncomplete="dlgTabla.show()"/>
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantillaActivo}"/>
+
+									</h:panelGrid>
+								</p:panel>
+
+							</h:panelGrid>
+						</p:fieldset>
 					</p:dialog>
-					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
-						<p:graphicImage value="recursos/loadingBar.gif" />
-					</p:dialog> 
+
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
+						<p:graphicImage value="recursos/loadingBar.gif"/>
+					</p:dialog>
+
 				</p:layoutUnit>
+
 			</p:layout>
 		</h:form>
 	</h:body>
+
 </f:view>
 </html>

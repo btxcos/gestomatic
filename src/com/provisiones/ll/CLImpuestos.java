@@ -126,6 +126,11 @@ public class CLImpuestos
 	{
 		return QMListaImpuestos.buscaActivosAsociados(activo);
 	}
+	
+	public static ArrayList<ActivoTabla> buscarActivosConImpuestosResueltos (ActivoTabla activo)
+	{
+		return QMListaImpuestos.buscaActivosAsociadosResueltos(activo);
+	}
 
 	public static ArrayList<ImpuestoRecursoTabla> buscarImpuestosActivos (String sCodCOACES)
 	{
@@ -150,6 +155,11 @@ public class CLImpuestos
 	public static boolean existeImpuestoRecurso (String sCodNURCAT,String sCodCOSBAC)
 	{
 		return QMImpuestos.existeImpuestoRecurso(sCodNURCAT, sCodCOSBAC);
+	}
+	
+	public static boolean estaDeBaja (String sCodNURCAT,String sCodCOSBAC)
+	{
+		return QMImpuestos.getEstado(sCodNURCAT, sCodCOSBAC).equals(ValoresDefecto.DEF_BAJA);
 	}	
 	
 	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento)
@@ -288,7 +298,7 @@ public class CLImpuestos
 			iCodigo = -61;
 		}
 		
-		else if (movimiento.getCOACCI().equals("A") && comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),movimiento.getCOACES()))
+		else if (movimiento.getCOACCI().equals("A") && comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),movimiento.getCOACES()) && !estaDeBaja(movimiento.getNURCAT(), movimiento.getCOSBAC()))
 		{
 			//Error 064 - NO SE PUEDE REALIZAR EL ALTA PORQUE YA EXISTE EL REGISTRO EN GMAE57
 			iCodigo = -64;
@@ -314,11 +324,11 @@ public class CLImpuestos
 			//error alta de una referencia en alta
 			iCodigo = -801;
 		}
-		else if (sEstado.equals("B") && !movimiento.getCOACCI().equals("A"))
+		/*else if (sEstado.equals("B") && !movimiento.getCOACCI().equals("A"))
 		{
 			//error referencia de baja no recibe altas
 			iCodigo = -802;
-		}
+		}*/
 		else if (sEstado.equals("") && !movimiento.getCOACCI().equals("A"))
 		{
 			//error estado no disponible
@@ -353,30 +363,48 @@ public class CLImpuestos
 
 							Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la referencia...");
 							impuestodealta.pintaImpuestoRecurso();
-						
-							if (QMImpuestos.addImpuesto(impuestodealta))
+							if (sEstado.equals(ValoresDefecto.DEF_BAJA)) //Alta de baja
 							{
-								//OK - impuesto creado
-								Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
-								if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
+								if (QMImpuestos.setEstado(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(),"A"))
 								{
 									//OK 
-									iCodigo = 0;
+									iCodigo = 0; 
 								}
 								else
 								{
-									//error relacion impuesto no creada - Rollback
-									QMImpuestos.delImpuestoRecurso(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC());
+									//error estado no establecido - Rollback
 									QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
-									iCodigo = -902;
+									iCodigo = -903;
 								}
 							}
-							else
+							else //Alta nueva
 							{
-								//error impuesto no creada - Rollback
-								QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
-								iCodigo = -901;
+								if (QMImpuestos.addImpuesto(impuestodealta))
+								{
+									//OK - impuesto creado
+									Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
+									if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
+									{
+										//OK 
+										iCodigo = 0;
+									}
+									else
+									{
+										//error relacion impuesto no creada - Rollback
+										QMImpuestos.delImpuestoRecurso(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC());
+										QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
+										iCodigo = -902;
+									}
+								}
+								else
+								{
+									//error impuesto no creada - Rollback
+									QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
+									iCodigo = -901;
+								}
+
 							}
+						
 							break;
 						case B:
 							if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))

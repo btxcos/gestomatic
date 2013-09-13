@@ -3,6 +3,7 @@ package com.provisiones.dal.qm.listas;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
+import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
@@ -249,12 +250,29 @@ public class QMListaComunidadesActivos
 
 			pstmt = conn.prepareStatement("SELECT "
 				       + sField4  +               
-       
-			"  FROM " + sTable + 
-					" WHERE ("
-			+ sField1 + " = '" + sCodCOCLDO + "' AND " 
-			+ sField2 + " = '" + sCodNUDCOM + "' AND "
-			+ sField3 + " = '" + sCodCOACES + "')");
+				       "  FROM " + sTable + " WHERE " +
+				       "("
+				       + sField3 + " = '" + sCodCOACES + 
+				       
+				       "' AND "
+
+		      		   + sField1 + "IN (SELECT " 
+   					   + QMComunidades.sField1 + 
+   					   " FROM " + QMComunidades.sTable +
+   					   " WHERE (" 
+   					   + QMComunidades.sField1 + " = '" + sCodCOCLDO + "' AND " 
+				       + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "'))" +
+
+				       "' AND "
+
+		      		   + sField2 + "IN (SELECT " 
+   					   + QMComunidades.sField2 + 
+   					   " FROM " + QMComunidades.sTable +
+   					   " WHERE (" 
+   					   + QMComunidades.sField2 + " = '" + sCodNUDCOM + "' AND " 
+				       + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "'))" +
+
+				       ")");
 
 			rs = pstmt.executeQuery();
 			
@@ -319,7 +337,24 @@ public class QMListaComunidadesActivos
 			       
 		"  FROM " + sTable + 
 				" WHERE " +
-				"(" + sField3 + " = '" + sCodCOACES + "')";
+	       "("
+	       + sField3 + " = '" + sCodCOACES + 
+	       
+	       "' AND "
+
+	   + sField1 + "IN (SELECT " 
+		   + QMComunidades.sField1 + 
+		   " FROM " + QMComunidades.sTable +
+		   " WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "')" +
+
+	       "' AND "
+
+	   + sField2 + "IN (SELECT " 
+		   + QMComunidades.sField2 + 
+		   " FROM " + QMComunidades.sTable +
+		   " WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "')" +
+
+				")";
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 		
@@ -332,7 +367,24 @@ public class QMListaComunidadesActivos
        
 			"  FROM " + sTable + 
 					" WHERE " +
-					"(" + sField3 + " = '" + sCodCOACES + "')");
+		       "("
+		       + sField3 + " = '" + sCodCOACES + 
+		       
+		       "' AND "
+
+   		   + sField1 + "IN (SELECT " 
+			   + QMComunidades.sField1 + 
+			   " FROM " + QMComunidades.sTable +
+			   " WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "')" +
+
+		       "' AND "
+
+   		   + sField2 + "IN (SELECT " 
+			   + QMComunidades.sField2 + 
+			   " FROM " + QMComunidades.sTable +
+			   " WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "')" +
+
+					")");
 
 			rs = pstmt.executeQuery();
 			
@@ -824,7 +876,21 @@ public class QMListaComunidadesActivos
 
 					   +  sField3 + 
 					   "  FROM " + sTable + 
-					   " ))");
+					   " WHERE "
+					   
+						+ sField1 + " IN (SELECT "
+						+ QMComunidades.sField1 +
+						"  FROM " + QMComunidades.sTable + 
+						" WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "' ) " +
+
+						" AND "
+
+						+ sField2 + " IN (SELECT "
+						+ QMComunidades.sField2 +
+						"  FROM " + QMComunidades.sTable + 
+						" WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "' )" + 						
+			   
+					   	" ))");
 
 			
 
@@ -942,7 +1008,21 @@ public class QMListaComunidadesActivos
 
 					   +  sField3 + 
 					   "  FROM " + sTable + 
-					   " ))");
+					   " WHERE "
+					   
+						+ sField1 + " IN (SELECT "
+						+ QMComunidades.sField1 +
+						"  FROM " + QMComunidades.sTable + 
+						" WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "' ) " +
+
+						" AND "
+
+						+ sField2 + " IN (SELECT "
+						+ QMComunidades.sField2 +
+						"  FROM " + QMComunidades.sTable + 
+						" WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "' )" + 						
+			   
+					   	" ))");
 
 			
 

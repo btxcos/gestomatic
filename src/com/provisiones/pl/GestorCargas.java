@@ -26,23 +26,34 @@ public class GestorCargas implements Serializable
 		String sMethod = "handleFileUpload";
 		
 		FacesMessage msg;
-
+		
 		Utils.standardIO2File("");//Salida por fichero de texto
 		
 		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"handleFileUpload >>>");
 		
-		if (FileManager.splitter(FileManager.guardarFichero(event)))
+		int iCodigoError = FileManager.splitter(FileManager.guardarFichero(event));
+		
+		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod,"iCodigoError:|"+iCodigoError+"|");
+		
+		if (iCodigoError == 0)
 		{
-			msg = new FacesMessage("'"+event.getFile().getFileName() +"' ha subido correctamente.");
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+
+			msg = Utils.pfmsgTrace(true, sClassName, sMethod, "'"+event.getFile().getFileName() +"' ha subido correctamente.");
+
+		}
+		else if (iCodigoError < 0)
+		{
+		
+			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre de archivo reconocible: '"+ValoresDefecto.DEF_COAPII+"AC|RG|PA|GA|PP|E1|E2|E3|E4.TXT'. Por favor, reviselo.");
+
 		}
 		else
 		{
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre de archivo reconocible: '"+ValoresDefecto.DEF_COAPII+"AC|RG|PA|GA|PP|E1|E2|E3|E4.TXT'. Por favor, reviselo.",null);
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+
+			msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR: Se encontraron porblemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.");
 		}
 
-		 
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 		
 		

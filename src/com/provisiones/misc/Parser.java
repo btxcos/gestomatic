@@ -452,7 +452,7 @@ public class Parser {
 		String sCOACCI = linea.substring(Posiciones.E1_COACCI_P, Posiciones.E1_COACCI_P+Longitudes.COACCI_L);
 		String sCOENGP = linea.substring(Posiciones.E1_COENGP_P, Posiciones.E1_COENGP_P+Longitudes.COENGP_L);
 		String sCOCLDO = linea.substring(Posiciones.E1_COCLDO_P, Posiciones.E1_COCLDO_P+Longitudes.COCLDO_L);
-		String sNUDCOM = linea.substring(Posiciones.E1_NUDCOM_P, Posiciones.E1_NUDCOM_P+Longitudes.NUDCOM_L);
+		String sNUDCOM = linea.substring(Posiciones.E1_NUDCOM_P, Posiciones.E1_NUDCOM_P+Longitudes.NUDCOM_L).trim();
 		String sBITC10 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC10_P, Posiciones.E1_BITC10_P+Longitudes.BITC10_L),"#");
 		String sCOACES = linea.substring(Posiciones.E1_COACES_P, Posiciones.E1_COACES_P+Longitudes.COACES_L);
 		String sBITC01 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC01_P, Posiciones.E1_BITC01_P+Longitudes.BITC01_L),"#");
@@ -462,11 +462,11 @@ public class Parser {
 		String sBITC03 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC03_P, Posiciones.E1_BITC03_P+Longitudes.BITC03_L),"#");
 		String sNOMPRC = linea.substring(Posiciones.E1_NOMPRC_P, Posiciones.E1_NOMPRC_P+Longitudes.NOMPRC_L).trim();
 		String sBITC04 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC04_P, Posiciones.E1_BITC04_P+Longitudes.BITC04_L),"#");
-		String sNUTPRC = linea.substring(Posiciones.E1_NUTPRC_P, Posiciones.E1_NUTPRC_P+Longitudes.NUTPRC_L);
+		String sNUTPRC = linea.substring(Posiciones.E1_NUTPRC_P, Posiciones.E1_NUTPRC_P+Longitudes.NUTPRC_L).trim();
 		String sBITC05 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC05_P, Posiciones.E1_BITC05_P+Longitudes.BITC05_L),"#");
 		String sNOMADC = linea.substring(Posiciones.E1_NOMADC_P, Posiciones.E1_NOMADC_P+Longitudes.NOMADC_L).trim();
 		String sBITC06 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC06_P, Posiciones.E1_BITC06_P+Longitudes.BITC06_L),"#");
-		String sNUTADC = linea.substring(Posiciones.E1_NUTADC_P, Posiciones.E1_NUTADC_P+Longitudes.NUTADC_L);
+		String sNUTADC = linea.substring(Posiciones.E1_NUTADC_P, Posiciones.E1_NUTADC_P+Longitudes.NUTADC_L).trim();
 		String sBITC07 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC07_P, Posiciones.E1_BITC07_P+Longitudes.BITC07_L),"#");
 		String sNODCAD = linea.substring(Posiciones.E1_NODCAD_P, Posiciones.E1_NODCAD_P+Longitudes.NODCAD_L).trim();
 		String sBITC08 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC08_P, Posiciones.E1_BITC08_P+Longitudes.BITC08_L),"#");

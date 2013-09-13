@@ -14,6 +14,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
+import com.provisiones.types.ErrorComunidadTabla;
 import com.provisiones.types.MovimientoComunidad;
 
 
@@ -47,6 +48,8 @@ public class CLComunidades
 			
 			//comunidad.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
 			
+			comunidad.pintaMovimientoComunidad();
+			
 			String sCodMovimiento = QMMovimientosComunidades.getMovimientoComunidadID(comunidad);
 			
 			Utils.debugTrace(true, sClassName, sMethod, "sCodMovimiento|"+sCodMovimiento+"|");
@@ -59,7 +62,7 @@ public class CLComunidades
 				if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
 				{
 									
-					comunidad.pintaMovimientoComunidad();
+					
 									
 					
 					bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
@@ -137,6 +140,11 @@ public class CLComunidades
 	{
 			
 		return QMListaComunidadesActivos.buscaActivosConComunidad(activofiltro);
+	}
+	
+	public static ArrayList<ErrorComunidadTabla> buscarErroresComunidades()
+	{
+		return QMListaErroresComunidades.buscaErrores();
 	}
 	
 	public static boolean comprobarRelacion (String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
@@ -547,9 +555,9 @@ public class CLComunidades
 
 	}
 	
-	public static int registraMovimiento(MovimientoComunidad movimiento)
+	public static int revisaMovimiento(MovimientoComunidad movimiento)
 	{
-		String sMethod = "registraMovimiento";
+		String sMethod = "revisaMovimiento";
 		
 		int iCodigo = 0;
 		
@@ -558,7 +566,7 @@ public class CLComunidades
 		
 		Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
 		Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
-
+	
 		if (movimiento.getCOACCI().equals(""))
 		{
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M,B,X o E
@@ -608,8 +616,12 @@ public class CLComunidades
 			iCodigo = -701;
 		}
 		
-		
-		else if (!(movimiento.getCOACCI().equals("A") && movimiento.getCOACES().equals("")) && !QMActivos.existeActivo(movimiento.getCOACES()))
+		else if (movimiento.getCOACCI().equals("A") && movimiento.getCOACES().equals(""))
+		{
+			//Error 022 - NO SE PUEDE DAR ALTA SI CONTROL DE ACTIVO NO ES S
+			iCodigo = -22;
+		}		
+		else if ( !movimiento.getCOACES().equals("") && !QMActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
@@ -665,8 +677,17 @@ public class CLComunidades
 			//Error estado no disponible
 			iCodigo = -803;
 		}
+		
+		return iCodigo;
 
-		else
+	}
+	public static int registraMovimiento(MovimientoComunidad movimiento)
+	{
+		String sMethod = "registraMovimiento";
+		
+		int iCodigo = revisaMovimiento(movimiento);
+
+		if (iCodigo == 0)
 		{
 			//OK correcto estado y accion
 			

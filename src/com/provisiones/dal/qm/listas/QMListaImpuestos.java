@@ -432,6 +432,206 @@ public class QMListaImpuestos
 
 	}
 	
+	public static ArrayList<ActivoTabla> buscaActivosAsociadosResueltos(ActivoTabla activo)
+	{//pendiente de coaces, de la tabla activos
+
+		String sMethod = "buscaActivosAsociadosResueltos";
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOACES = "";
+		String sCOPOIN = "";
+		String sNOMUIN = "";
+		String sNOPRAC = "";
+		String sNOVIAS = "";
+		String sNUPIAC = "";
+		String sNUPOAC = "";
+		String sNUPUAC = "";
+		String sNURCAT = "";
+		
+		
+		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		String sQuery = "SELECT "
+					
+					   + QMActivos.sField1 + ","        
+					   + QMActivos.sField14 + ","
+					   + QMActivos.sField11 + ","
+					   + QMActivos.sField13 + ","
+					   + QMActivos.sField6 + ","
+					   + QMActivos.sField9 + ","
+					   + QMActivos.sField7 + ","
+					   + QMActivos.sField10 + ","
+					   + QMActivos.sField81 + 
+
+					   " FROM " + QMActivos.sTable + 
+					   " WHERE ("
+
+					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+
+					   + QMActivos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable + 
+					   " WHERE ("+
+					   
+					   sField2 +" IN (SELECT "
+					   + QMImpuestos.sField1 +
+					   " FROM " + QMImpuestos.sTable +
+					   " WHERE " +
+					   "("
+		   			   + QMImpuestos.sField7 + " = 'F' AND " 
+		   			   + QMImpuestos.sField6 + " = 'S' AND "
+		   			   + QMImpuestos.sField4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+		   			   + QMImpuestos.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
+		   			   "))"+
+
+		   			   "AND "  
+
+		   			   +sField3 +" IN (SELECT "
+					   + QMImpuestos.sField2 +
+					   " FROM " + QMImpuestos.sTable +
+ 					   " WHERE " +
+					   "("
+		   			   + QMImpuestos.sField7 + " = 'F' AND " 
+		   			   + QMImpuestos.sField6 + " = 'S' AND "
+		   			   + QMImpuestos.sField4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+		   			   + QMImpuestos.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
+		   			   "))"
+		   			   
+		   			   + ")))";
+		
+		
+	
+		
+		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			
+			pstmt = conn.prepareStatement("SELECT "
+					
+					   + QMActivos.sField1 + ","        
+					   + QMActivos.sField14 + ","
+					   + QMActivos.sField11 + ","
+					   + QMActivos.sField13 + ","
+					   + QMActivos.sField6 + ","
+					   + QMActivos.sField9 + ","
+					   + QMActivos.sField7 + ","
+					   + QMActivos.sField10 + ","
+					   + QMActivos.sField81 + 
+
+					   " FROM " + QMActivos.sTable + 
+					   " WHERE ("
+
+					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+
+					   + QMActivos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable + 
+					   " WHERE ("+
+					   
+					   sField2 +" IN (SELECT "
+					   + QMImpuestos.sField1 + 
+					   " FROM " + QMImpuestos.sTable +
+					   " WHERE " +
+					   "("
+		   			   + QMImpuestos.sField7 + " = 'F' AND " 
+		   			   + QMImpuestos.sField6 + " = 'S' AND "
+		   			   + QMImpuestos.sField4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+		   			   + QMImpuestos.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
+		   			   "))"+
+
+		   			   "AND "  
+
+		   			   +sField3 +" IN (SELECT "
+					   + QMImpuestos.sField2 + 
+					   " FROM " + QMImpuestos.sTable +
+					   " WHERE " +
+					   "("
+		   			   + QMImpuestos.sField7 + " = 'F' AND " 
+		   			   + QMImpuestos.sField6 + " = 'S' AND "
+		   			   + QMImpuestos.sField4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+		   			   + QMImpuestos.sField10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
+		   			   "))"
+		   			   
+		   			   + ")))");
+
+			rs = pstmt.executeQuery();
+			
+			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sCOACES = rs.getString(QMActivos.sField1);
+					sCOPOIN = rs.getString(QMActivos.sField14);
+					sNOMUIN = rs.getString(QMActivos.sField11);
+					sNOPRAC = rs.getString(QMActivos.sField13);
+					sNOVIAS = rs.getString(QMActivos.sField6);
+					sNUPIAC = rs.getString(QMActivos.sField9);
+					sNUPOAC = rs.getString(QMActivos.sField7);
+					sNUPUAC = rs.getString(QMActivos.sField10);
+					sNURCAT = rs.getString(QMActivos.sField81);
+					
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+					
+					result.add(activoencontrado);
+					
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+
+					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+				}
+			}
+			if (found == false) 
+			{
+				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs,sClassName,sMethod);
+			Utils.closeStatement(stmt, sClassName, sMethod);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+
+	}
+	
 
 
 	public static ArrayList<ImpuestoRecursoTabla> buscaImpuestosActivo(String sCodCOACES)

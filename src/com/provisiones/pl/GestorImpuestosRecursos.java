@@ -218,7 +218,7 @@ public class GestorImpuestosRecursos implements Serializable
 		
 		FacesMessage msg;
 		
-		if (CLImpuestos.existeImpuestoRecurso(sNURCAT.toUpperCase(), sCOSBAC))
+		if (CLImpuestos.existeImpuestoRecurso(sNURCAT.toUpperCase(), sCOSBAC) && !CLImpuestos.estaDeBaja(sNURCAT.toUpperCase(), sCOSBAC))
 		{
 			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:064 - El recurso o impuesto ya se encuentra registrado. Por favor, revise los datos.");
 		}

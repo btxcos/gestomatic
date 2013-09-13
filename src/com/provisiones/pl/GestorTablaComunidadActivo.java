@@ -306,7 +306,7 @@ public class GestorTablaComunidadActivo implements Serializable
 				break;
 
 			case -802: //Error 802 - comunidad de baja no puede recibir mas movimientos
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La comunidad esta baja y no puede recibir mas movimientos. Por favor, revise los datos.");
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La comunidad esta de baja y no puede recibir mas movimientos. Por favor, revise los datos.");
 				break;
 				
 			case -803: //Error 803 - estado no disponible

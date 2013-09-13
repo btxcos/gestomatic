@@ -2,6 +2,7 @@ package com.provisiones.dal.qm.listas;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -592,6 +593,7 @@ public class QMListaReferencias
 					   
 					   "  FROM " + QMReferencias.sTable + 
 					   " WHERE " 
+					   + QMReferencias.sField9 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
 					   + QMReferencias.sField1 + " IN " +
 					   "(SELECT " + sField1 + 
 					   " FROM " + sTable +
@@ -857,7 +859,15 @@ public class QMListaReferencias
 
 					   + QMActivos.sField1 +" IN (SELECT "
 					   +  sField2 + 
-					   " FROM " + sTable + "))";
+					   " FROM " + sTable +
+					   " WHERE " 
+					   
+					   + sField1 + " IN (SELECT "
+   					   + QMReferencias.sField1 + 
+   					   " FROM " + QMReferencias.sTable +
+   					   " WHERE " + QMReferencias.sField9 + " = '"+ ValoresDefecto.DEF_ALTA + "') " +
+   					   					   
+					   "))";
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 		
@@ -890,7 +900,14 @@ public class QMListaReferencias
 
 					   + QMActivos.sField1 +" IN (SELECT "
 					   +  sField2 + 
-					   " FROM " + sTable + "))");
+					   " FROM " + sTable +
+					   " WHERE " 
+					   
+					   + sField1 + " IN (SELECT "
+   					   + QMReferencias.sField1 + 
+   					   " FROM " + QMReferencias.sTable +
+   					   " WHERE " + QMReferencias.sField9 + " = '"+ ValoresDefecto.DEF_ALTA + "') " +
+					   "))");
 
 			rs = pstmt.executeQuery();
 			

@@ -94,6 +94,7 @@ public class FileManager
 
 		ArrayList<String> resultcomunidadesactivos = new ArrayList<String>(resultactivos);
 
+		//Eliminamos duplicados
 		resultcomunidadesactivos.removeAll(resultcomunidades);
 		resultcomunidadesactivos.addAll(resultcomunidades);
 		
@@ -753,6 +754,8 @@ public class FileManager
 		
 			br.close();
 		
+			Utils.debugTrace(true, sClassName, sMethod,"Contador:|"+contador+"|\n Registros:|"+registros+"|");
+			
 			bSalida = ((contador-registros-1) == 0);
 			
 			Utils.debugTrace(true, sClassName, sMethod, "Lectura de "+sNombre+" finalizada.");
@@ -958,14 +961,16 @@ public class FileManager
         return bSalida;
 	}
 	
-	public static boolean splitter(String sNombre) throws IOException 
+	public static int splitter(String sNombre) throws IOException 
 	{
 
 		String sMethod = "splitter";
 
-		boolean bSalida = false;
+		//boolean bSalida = false;
 		
 		//ArrayList<String> lista;
+		
+		int iCodigo = 0;
 
 
 		Utils.debugTrace(true, sClassName, sMethod,
@@ -975,6 +980,7 @@ public class FileManager
 		
 		if (sNombre.length() < 9)
 		{
+			iCodigo = -1;
 			Utils
 			.debugTrace(true, sClassName, sMethod,
 					"El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
@@ -998,72 +1004,85 @@ public class FileManager
 
 				switch (COSPII) {
 				case AC:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Activos");
-					bSalida = leerActivos(sNombre);
-					//lista = new ArrayList<String>();
+					Utils.debugTrace(true, sClassName, sMethod,"Activos");
+
+					if (!leerActivos(sNombre))
+					{
+						iCodigo = 1;
+					}
 					break;
 				case RG:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Rechazados");
+					Utils.debugTrace(true, sClassName, sMethod,"Rechazados");
 					
-					bSalida = leerGastosRevisados(sNombre);
-					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
+					if (!leerGastosRevisados(sNombre))
+					{
+						iCodigo = 2;
+					}
 					break;
 				case PA:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Autorizados");
-					bSalida = leerGastosRevisados(sNombre);
-					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
+					Utils.debugTrace(true, sClassName, sMethod,"Autorizados");
+
+					if (!leerGastosRevisados(sNombre))
+					{
+						iCodigo = 3;
+					}
 					break;
 				case GA:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Gastos");
+					Utils.debugTrace(true, sClassName, sMethod,"Gastos");
 					
-					Utils.debugTrace(true, sClassName, sMethod,
-							"El archivo de gastos debe de ser primero supervisado por la entidad.");
-					bSalida = leerGastosRevisados(sNombre);
-					//lista = new ArrayList<String>(leerGastosValidados(sNombre));
+					Utils.debugTrace(true, sClassName, sMethod,"El archivo de gastos debe de ser primero supervisado por la entidad.");
+
+					/*if (!leerGastosRevisados(sNombre))
+					{
+						iCodigo = 4;
+					}*/
 					break;
 				case PP:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Cierres");
+					Utils.debugTrace(true, sClassName, sMethod,"Cierres");
 					Utils
-					.debugTrace(true, sClassName, sMethod,
-							"El archivo de cierres debe comprobado por la entidad.");
-					//bSalida = leerCierres(sNombre);
-					//lista = new ArrayList<String>(leerCierres(sNombre));
+					.debugTrace(true, sClassName, sMethod,"El archivo de cierres debe comprobado por la entidad.");
+
+					/*if (!leerCierres(sNombre)) //No implementable
+					{
+						iCodigo = 5;
+					}*/
 					break;
 				case E1:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Comunidades");
-					bSalida = leerComunidadesRevisadas(sNombre);
-					//lista = new ArrayList<String>();
+					Utils.debugTrace(true, sClassName, sMethod,"Comunidades");
+
+					if (!leerComunidadesRevisadas(sNombre))
+					{
+						iCodigo = 6;
+					}
 					break;
 				case E2:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Cuotas");
-					bSalida = leerCuotasRevisadas(sNombre);
-					//lista = new ArrayList<String>();
+					Utils.debugTrace(true, sClassName, sMethod,"Cuotas");
+
+					if (!leerCuotasRevisadas(sNombre))
+					{
+						iCodigo = 7;
+					}
 					break;
 				case E3:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Referencias Catastrales");
-					bSalida = leerReferenciasRevisadas(sNombre);
-					//lista = new ArrayList<String>();
+					Utils.debugTrace(true, sClassName, sMethod,"Referencias Catastrales");
+
+					if (!leerReferenciasRevisadas(sNombre))
+					{
+						iCodigo = 8;
+					}
 					break;
 				case E4:
-					Utils.debugTrace(true, sClassName, sMethod,
-							"Impuestos");
-					bSalida = leerImpuestosRevisadas(sNombre);
-					//lista = new ArrayList<String>();
+					Utils.debugTrace(true, sClassName, sMethod,"Impuestos");
+
+					if (!leerImpuestosRevisadas(sNombre))
+					{
+						iCodigo = 9;
+					}
 					break;
 				default:
-					Utils.debugTrace(true, sClassName, sMethod,
-									"El archivo suministrado no coincide con el nombrado establecido:");
-					Utils.debugTrace(true, sClassName, sMethod,
-									"168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
-					//lista = new ArrayList<String>();
+					Utils.debugTrace(true, sClassName, sMethod,"El archivo suministrado no coincide con el nombrado establecido:");
+					Utils.debugTrace(true, sClassName, sMethod,"168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
+					iCodigo = -3;
 					break;
 				}
 
@@ -1073,6 +1092,7 @@ public class FileManager
 			} 
 			else
 			{
+				iCodigo = -2;
 				Utils.debugTrace(true, sClassName, sMethod,
 								"El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
 				//lista = new ArrayList<String>();
@@ -1080,7 +1100,7 @@ public class FileManager
 			
 
 		}
-		return bSalida;
+		return iCodigo;
 	}
 	public static void main(String[] args) throws IOException 
 	{

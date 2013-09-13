@@ -110,22 +110,9 @@ public class CLProvisiones
 		return QMProvisiones.provisionCerrada(sCodNUPROF);
 	}
 	
-	/*public static boolean nuevaProvision (Provision provision)
-	{
-		boolean bSalida = false;
-		
-		String sUltimaProvision = ultimaProvisionAbierta(provision.getsCOSPAT());
-		
-		if (sUltimaProvision.equals("") && !existeProvision(provision.getsNUPROF()))
-		{
-			bSalida = QMProvisiones.addProvision(provision);
-		}
-		
-		return bSalida;
-	}*/
-	
 	public static boolean cerrarProvision (Provision provision)
 	{
+		//Anular todos los gastos pendientes con fecha actual
 		return QMProvisiones.modProvision(provision, provision.getsNUPROF());
 	}
 

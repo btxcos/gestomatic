@@ -2,6 +2,7 @@ package com.provisiones.pl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -302,7 +303,27 @@ public class GestorGastos implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
+		
+		ArrayList<ActivoTabla> resultcuotas = CLCuotas.buscarActivosConCuotas(buscaactivos);  
+		ArrayList<ActivoTabla> resultimpuestos = CLImpuestos.buscarActivosConImpuestosResueltos(buscaactivos);
+		
+		ArrayList<ActivoTabla> resultcuotasimpuestos = new ArrayList<ActivoTabla>(resultimpuestos);
+
+		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-C:|"+resultcuotas.size()+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-I:|"+resultimpuestos.size()+"|");
+		
+		//Eliminamos duplicados
+		resultcuotasimpuestos.removeAll(resultcuotas);
+
+		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-CI:|"+resultcuotasimpuestos.size()+"|");
+		
+		resultcuotasimpuestos.addAll(resultcuotas);
+		
+		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-CI:|"+resultcuotasimpuestos.size()+"|");
+				
+				
+		this.setTablaactivos(resultcuotasimpuestos);
+
 		
 		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");		
 		FacesContext.getCurrentInstance().addMessage(null, msg);

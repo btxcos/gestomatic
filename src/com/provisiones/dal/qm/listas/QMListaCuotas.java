@@ -1061,12 +1061,16 @@ public class QMListaCuotas
 					   + sField2 + " IN (SELECT "
    					   + QMCuotas.sField2 + 
    					   " FROM " + QMCuotas.sTable +
-   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
+   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "') " +
+   					   
+   					   " AND " 
 
    					   + sField3 + " IN (SELECT "
    					   + QMCuotas.sField3 + 
    					   " FROM " + QMCuotas.sTable +
-   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "')))";
+   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "') " +
+   					   
+   					   "))";
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 		

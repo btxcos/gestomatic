@@ -281,7 +281,10 @@ public class GestorComunidades implements Serializable
 				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:012 - No se puede modificar la comunidad, no se encuentra registrada. Por favor, revise los datos.");
 				break;
 
-
+			case -22: //error 022 - NO SE PUEDE DAR ALTA SI CONTROL DE ACTIVO NO ES S
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:022 - Para dar de alta la comunidad es necesario incluir un activo. Por favor, revise los datos.");
+				break;
+				
 			case -26: //error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
 				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:026 - No se puede dar de baja la comunidad, no se encuentra registrada. Por favor, revise los datos.");
 				break;
@@ -317,7 +320,7 @@ public class GestorComunidades implements Serializable
 				break;
 
 			case -802: //Error 802 - comunidad de baja no puede recibir mas movimientos
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La comunidad esta baja y no puede recibir mas movimientos. Por favor, revise los datos.");
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La comunidad esta de baja y no puede recibir mas movimientos. Por favor, revise los datos.");
 				break;
 				
 			case -803: //Error 803 - estado no disponible

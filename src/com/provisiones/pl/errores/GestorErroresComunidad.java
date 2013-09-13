@@ -7,6 +7,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -127,6 +128,19 @@ public class GestorErroresComunidad implements Serializable
 		borrarPlantillaActivo();
 		borrarCampos();
 		this.sCOACES = "";
+	}
+	
+	public void encuentraErroresComunidad()
+	{
+		String sMethod = "encuentraErroresComunidad";
+		
+
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		
+		this.setTablaerrores(CLComunidades.buscarErroresComunidades());
+		
+		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaerrores().size()+" errores relacionados.");
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
