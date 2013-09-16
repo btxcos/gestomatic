@@ -79,7 +79,7 @@ public class CLCuotas
 		
 		if (CLComunidades.consultaEstadoComunidad(sCodCOCLDO, sCodNUDCOM))
 			result = QMListaCuotas.buscaActivosComunidadDisponibles(activo, sCodCOCLDO, sCodNUDCOM); 
-			
+
 		return result;
 	}
 	

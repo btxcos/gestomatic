@@ -13,7 +13,7 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Lista de Activos Disponibles">
+				<p:layoutUnit position="north" size="auto" header="Lista de Activos Disponibles">
 
  
 								<h:panelGrid columns="3" cellpadding="5">
@@ -100,11 +100,11 @@
 									</p:fieldset>
 													<p:contextMenu for="activos">
 														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" action="#{GestorActivos.cargarDetalles}"/>
-														<p:menuitem value="Comunidad" update="form:popup" icon="ui-icon-home" action="#{GestorActivos.cargarComunidad}"/>
+														<!--p:menuitem value="Comunidad" update="form:popup" icon="ui-icon-home" action="#{GestorActivos.cargarComunidad}"/>
 														<p:menuitem value="Cuotas" update="form:popup" icon="ui-icon-calculator" action="#{GestorActivos.cargarCuota}"/>
 														<p:menuitem value="Referencia Catastral" update="form:popup" icon="ui-icon-script" action="#{GestorActivos.cargarReferencia}"/>
 														<p:menuitem value="Impuestos y Recursos" update="form:popup" icon="ui-icon-note" action="#{GestorActivos.cargarImpuestos}"/>
-														<p:menuitem value="Gastos" update="form:popup" icon="ui-icon-cart" action="#{GestorActivos.cargarGastos}"/>
+														<p:menuitem value="Gastos" update="form:popup" icon="ui-icon-cart" action="#{GestorActivos.cargarGastos}"/-->
 													</p:contextMenu>															
 
 													<p:dataTable id="activos" var="activo" value="#{GestorActivos.tablaactivos}" rowKey="#{activo.COACES}"  

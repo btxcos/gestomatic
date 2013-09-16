@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -13,9 +13,8 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Detalles del Activo #{GestorDetallesActivo.sCOACES}">
+				<p:layoutUnit position="north" size="auto" header="Detalles del Activo #{GestorDetallesActivo.sCOACES}">
 
- 
 								<h:panelGrid columns="3" cellpadding="5">
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
@@ -34,381 +33,445 @@
 
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
-									<p:fieldset legend="Activo #{GestorDetallesActivo.sCOACES}">
-										<h:panelGrid columns="1" cellpadding="5">
+							<p:panel header="Activo #{GestorDetallesActivo.sCOACES}">
+								<h:panelGrid columns="1" cellpadding="5">
 
-											<h:outputText for="COACES" value="COACES: " />
-												<p:inputText id="COACES" value="#{GestorDetallesActivo.sCOACES}" size="9" maxlength="9"  disabled="true">
-												</p:inputText>
+									<p:fieldset legend="Información">
+										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="NUINMU" value="NUINMU: " />
-												<p:inputText id="NUINMU" value="#{GestorDetallesActivo.sNUINMU}" size="9" maxlength="9" disabled="true">
-												</p:inputText>
+											<h:outputText for="NUINMU" value="Ficha de inmovilizado: " />
+											<p:inputText id="NUINMU" value="#{GestorDetallesActivo.sNUINMU}" size="9" maxlength="9" disabled="true"/>
 
-											<h:outputText for="COSOPA" value="COSOPA: " />
-												<p:inputText id="COSOPA" value="#{GestorDetallesActivo.sCOSOPA}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
+											<h:outputText for="COSOPA" value="Sociedad Patrimonial: " />
+											<p:inputText id="COSOPA" value="#{GestorDetallesActivo.sCOSOPA}" size="2" maxlength="2" disabled="true"/>
 
-											<h:outputText for="COENAE" value="COENAE: " />
-												<p:inputText id="COENAE" value="#{GestorDetallesActivo.sCOENAE}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
+											<h:outputText for="COENAE" value="Origen del activo: " />
+											<p:inputText id="COENAE" value="#{GestorDetallesActivo.sCOENAE}" size="2" maxlength="2" disabled="true"/>
 
-											<h:outputText for="COESEN" value="COESEN: " />
-												<p:inputText id="COESEN" value="#{GestorDetallesActivo.sCOESEN}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NOVIAS" value="NOVIAS: " />
-												<p:inputText id="NOVIAS" value="#{GestorDetallesActivo.sNOVIAS}" size="60" maxlength="60" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUPOAC" value="NUPOAC: " />
-												<p:inputText id="NUPOAC" value="#{GestorDetallesActivo.sNUPOAC}" size="17" maxlength="17" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUESAC" value="NUESAC: " />
-												<p:inputText id="NUESAC" value="#{GestorDetallesActivo.sNUESAC}" size="5" maxlength="5" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUPIAC" value="NUPIAC: " />
-												<p:inputText id="NUPIAC" value="#{GestorDetallesActivo.sNUPIAC}" size="11" maxlength="11" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUPUAC" value="NUPUAC: " />
-												<p:inputText id="NUPUAC" value="#{GestorDetallesActivo.sNUPUAC}" size="17" maxlength="17" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NOMUIN" value="NOMUIN: " />
-												<p:inputText id="NOMUIN" value="#{GestorDetallesActivo.sNOMUIN}" size="30" maxlength="30" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COPRAE" value="COPRAE: " />
-												<p:inputText id="COPRAE" value="#{GestorDetallesActivo.sCOPRAE}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NOPRAC" value="NOPRAC: " />
-												<p:inputText id="NOPRAC" value="#{GestorDetallesActivo.sNOPRAC}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COPOIN" value="COPOIN: " />
-												<p:inputText id="COPOIN" value="#{GestorDetallesActivo.sCOPOIN}" size="5" maxlength="5" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEREAP" value="FEREAP: " />
-												<p:inputText id="FEREAP" value="#{GestorDetallesActivo.sFEREAP}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COREAE" value="COREAE: " />
-												<p:inputText id="COREAE" value="#{GestorDetallesActivo.sCOREAE}" size="5" maxlength="5" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEINAU" value="FEINAU: " />
-												<p:inputText id="FEINAU" value="#{GestorDetallesActivo.sFEINAU}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FESOPO" value="FESOPO: " />
-												<p:inputText id="FESOPO" value="#{GestorDetallesActivo.sFESOPO}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FESEPO" value="FESEPO: " />
-												<p:inputText id="FESEPO" value="#{GestorDetallesActivo.sFESEPO}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEREPO" value="FEREPO: " />
-												<p:inputText id="FEREPO" value="#{GestorDetallesActivo.sFEREPO}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEADAC" value="IMCOST: " />
-												<p:inputText id="FEADAC" value="#{GestorDetallesActivo.sFEADAC}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CODIJU" value="CODIJU: " />
-												<p:inputText id="CODIJU" value="#{GestorDetallesActivo.sCODIJU}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COSJUP" value="COSJUP: " />
-												<p:inputText id="COSJUP" value="#{GestorDetallesActivo.sCOSJUP}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COSTLI" value="COSTLI: " />
-												<p:inputText id="COSTLI" value="#{GestorDetallesActivo.sCOSTLI}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COSCAR" value="COSCAR: " />
-												<p:inputText id="COSCAR" value="#{GestorDetallesActivo.sCOSCAR}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COESVE" value="COESVE: " />
-												<p:inputText id="COESVE" value="#{GestorDetallesActivo.sCOESVE}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COTSIN" value="COTSIN: " />
-												<p:inputText id="COTSIN" value="#{GestorDetallesActivo.sCOTSIN}" size="4" maxlength="4" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUFIRE" value="NUFIRE: " />
-												<p:inputText id="NUFIRE" value="#{GestorDetallesActivo.sNUFIRE}" size="9" maxlength="9" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUREGP" value="NUREGP: " />
-												<p:inputText id="NUREGP" value="#{GestorDetallesActivo.sNUREGP}" size="3" maxlength="3" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NOMUI0" value="NOMUI0: " />
-												<p:inputText id="NOMUI0" value="#{GestorDetallesActivo.sNOMUI0}" size="30" maxlength="30" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NULIBE" value="NULIBE: " />
-												<p:inputText id="NULIBE" value="#{GestorDetallesActivo.sNULIBE}" size="6" maxlength="6" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUTOME" value="NUTOME: " />
-												<p:inputText id="NUTOME" value="#{GestorDetallesActivo.sNUTOME}" size="6" maxlength="6" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUFOLE" value="NUFOLE: " />
-												<p:inputText id="NUFOLE" value="#{GestorDetallesActivo.sNUFOLE}" size="6" maxlength="6" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUINSR" value="NUINSR: " />
-												<p:inputText id="NUINSR" value="#{GestorDetallesActivo.sNUINSR}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COSOCU" value="COSOCU: " />
-												<p:inputText id="COSOCU" value="#{GestorDetallesActivo.sCOSOCU}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COXPRO" value="COXPRO: " />
-												<p:inputText id="COXPRO" value="#{GestorDetallesActivo.sCOXPRO}" size="5" maxlength="5" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FESOLA" value="FESOLA: " />
-												<p:inputText id="FESOLA" value="#{GestorDetallesActivo.sFESOLA}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FESELA" value="FESELA: " />
-												<p:inputText id="FESELA" value="#{GestorDetallesActivo.sFESELA}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FERELA" value="FERELA: " />
-												<p:inputText id="FERELA" value="#{GestorDetallesActivo.sFERELA}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FERLLA" value="FERLLA: " />
-												<p:inputText id="FERLLA" value="#{GestorDetallesActivo.sFERLLA}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CASPRE" value="CASPRE: " />
-												<p:inputText id="CASPRE" value="#{GestorDetallesActivo.sCASPRE}" size="11" maxlength="11" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CASUTR" value="CASUTR: " />
-												<p:inputText id="CASUTR" value="#{GestorDetallesActivo.sCASUTR}" size="11" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CASUTC" value="CASUTC: " />
-												<p:inputText id="CASUTC" value="#{GestorDetallesActivo.sCASUTC}" size="11" maxlength="11" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CASUTG" value="CASUTG: " />
-												<p:inputText id="CASUTG" value="#{GestorDetallesActivo.sCASUTG}" size="11" maxlength="11" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BIARRE" value="BIARRE: " />
-												<p:inputText id="BIARRE" value="#{GestorDetallesActivo.sBIARRE}" size="1" maxlength="1" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CADORM" value="CADORM: " />
-												<p:inputText id="CADORM" value="#{GestorDetallesActivo.sCADORM}" size="4" maxlength="4" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CABANO" value="CABANO: " />
-												<p:inputText id="CABANO" value="#{GestorDetallesActivo.sCABANO}" size="4" maxlength="4" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BIGAPA" value="BIGAPA: " />
-												<p:inputText id="BIGAPA" value="#{GestorDetallesActivo.sBIGAPA}" size="1" maxlength="1" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CAGAPA" value="CAGAPA: " />
-												<p:inputText id="CAGAPA" value="#{GestorDetallesActivo.sCAGAPA}" size="5" maxlength="5" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CASUTE" value="CASUTE: " />
-												<p:inputText id="CASUTE" value="#{GestorDetallesActivo.sCASUTE}" size="9" maxlength="9" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BILIPO" value="BILIPO: " />
-												<p:inputText id="BILIPO" value="#{GestorDetallesActivo.sBILIPO}" size="1" maxlength="1" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BILIAC" value="BILIAC: " />
-												<p:inputText id="BILIAC" value="#{GestorDetallesActivo.sBILIAC}" size="1" maxlength="1" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BILIUS" value="BILIUS: " />
-												<p:inputText id="BILIUS" value="#{GestorDetallesActivo.sBILIUS}" size="1" maxlength="1" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BIBOIN" value="BIBOIN: " />
-												<p:inputText id="BIBOIN" value="#{GestorDetallesActivo.sBIBOIN}" size="1" maxlength="1" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BICEFI" value="BICEFI: " />
-												<p:inputText id="BICEFI" value="#{GestorDetallesActivo.sBICEFI}" size="1" maxlength="1" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CASUCB" value="CASUCB: " />
-												<p:inputText id="CASUCB" value="#{GestorDetallesActivo.sCASUCB}" size="9" maxlength="9" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="CASUCS" value="CASUCS: " />
-												<p:inputText id="CASUCS" value="#{GestorDetallesActivo.sCASUCS}" size="9" maxlength="9" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEACON" value="FEACON: " />
-												<p:inputText id="FEACON" value="#{GestorDetallesActivo.sFEACON}" size="4" maxlength="4" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="IDAUTO" value="IDAUTO: " />
-												<p:inputText id="IDAUTO" value="#{GestorDetallesActivo.sIDAUTO}" size="10" maxlength="10" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEDEMA" value="FEDEMA: " />
-												<p:inputText id="FEDEMA" value="#{GestorDetallesActivo.sFEDEMA}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="YNOCUR" value="YNOCUR: " />
-												<p:inputText id="YNOCUR" value="#{GestorDetallesActivo.sYNOCUR}" size="30" maxlength="30" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="OBRECO" value="OBRECO: " />
-												<p:inputText id="OBRECO" value="#{GestorDetallesActivo.sOBRECO}" size="6" maxlength="6" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="YNOLEC" value="YNOLEC: " />
-												<p:inputText id="YNOLEC" value="#{GestorDetallesActivo.sYNOLEC}" size="30" maxlength="30" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NOLOJZ" value="NOLOJZ: " />
-												<p:inputText id="NOLOJZ" value="#{GestorDetallesActivo.sNOLOJZ}" size="30" maxlength="30" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEREDE" value="FEREDE: " />
-												<p:inputText id="FEREDE" value="#{GestorDetallesActivo.sFEREDE}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="POPROP" value="POPROP: " />
-												<p:inputText id="POPROP" value="#{GestorDetallesActivo.sPOPROP}" size="6" maxlength="6" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COGRAP" value="COGRAP: " />
-												<p:inputText id="COGRAP" value="#{GestorDetallesActivo.sCOGRAP}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEPREG" value="FEPREG: " />
-												<p:inputText id="FEPREG" value="#{GestorDetallesActivo.sFEPREG}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEPHAC" value="FEPHAC: " />
-												<p:inputText id="FEPHAC" value="#{GestorDetallesActivo.sFEPHAC}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEFOAC" value="FEFOAC: " />
-												<p:inputText id="FEFOAC" value="#{GestorDetallesActivo.sFEFOAC}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEVACT" value="FEVACT: " />
-												<p:inputText id="FEVACT" value="#{GestorDetallesActivo.sFEVACT}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="IMVACT" value="IMVACT: " />
-												<p:inputText id="IMVACT" value="#{GestorDetallesActivo.sIMVACT}" size="15" maxlength="15" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUFIPR" value="NUFIPR: " />
-												<p:inputText id="NUFIPR" value="#{GestorDetallesActivo.sNUFIPR}" size="9" maxlength="9" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COTPET" value="COTPET: " />
-												<p:inputText id="COTPET" value="#{GestorDetallesActivo.sCOTPET}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEEMPT" value="FEEMPT: " />
-												<p:inputText id="FEEMPT" value="#{GestorDetallesActivo.sFEEMPT}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FESORC" value="FESORC: " />
-												<p:inputText id="FESORC" value="#{GestorDetallesActivo.sFESORC}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FESODE" value="FESODE: " />
-												<p:inputText id="FESODE" value="#{GestorDetallesActivo.sFESODE}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEREAC" value="FEREAC: " />
-												<p:inputText id="FEREAC" value="#{GestorDetallesActivo.sFEREAC}" size="8" maxlength="8" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COXSIA" value="COXSIA: " />
-												<p:inputText id="COXSIA" value="#{GestorDetallesActivo.sCOXSIA}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUJUZD" value="NUJUZD: " />
-												<p:inputText id="NUJUZD" value="#{GestorDetallesActivo.sNUJUZD}" size="2" maxlength="2" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NURCAT" value="NURCAT: " />
-												<p:inputText id="NURCAT" value="#{GestorDetallesActivo.sNURCAT}" size="20" maxlength="20" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NOMPRC" value="NOMPRC: " />
-												<p:inputText id="NOMPRC" value="#{GestorDetallesActivo.sNOMPRC}" size="55" maxlength="55" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUTPRC" value="NUTPRC: " />
-												<p:inputText id="NUTPRC" value="#{GestorDetallesActivo.sNUTPRC}" size="14" maxlength="14" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NOMADC" value="NOMADC: " />
-												<p:inputText id="NOMADC" value="#{GestorDetallesActivo.sNOMADC}" size="55" maxlength="55" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUTADC" value="NUTADC: " />
-												<p:inputText id="NUTADC" value="#{GestorDetallesActivo.sNUTADC}" size="14" maxlength="14" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="IMPCOO" value="IMPCOO: " />
-												<p:inputText id="IMPCOO" value="#{GestorDetallesActivo.sIMPCOO}" size="15" maxlength="15" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COENOR" value="COENOR: " />
-												<p:inputText id="COENOR" value="#{GestorDetallesActivo.sCOENOR}" size="5" maxlength="5" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COSPAT" value="COSPAT: " />
-												<p:inputText id="COSPAT" value="#{GestorDetallesActivo.sCOSPAT}" size="5" maxlength="5" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COSPAS" value="COSPAS: " />
-												<p:inputText id="COSPAS" value="#{GestorDetallesActivo.sCOSPAS}" size="5" maxlength="5" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="IDCOL3" value="IDCOL3: " />
-												<p:inputText id="IDCOL3" value="#{GestorDetallesActivo.sIDCOL3}" size="4" maxlength="4" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BIOBNU" value="BIOBNU: " />
-												<p:inputText id="BIOBNU" value="#{GestorDetallesActivo.sBIOBNU}" size="1" maxlength="1" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="POBRAR" value="POBRAR: " />
-												<p:inputText id="POBRAR" value="#{GestorDetallesActivo.sPOBRAR}" size="6" maxlength="6" disabled="true">
-												</p:inputText>
+											<h:outputText for="COESEN" value="Estado de entrada: " />
+											<p:inputText id="COESEN" value="#{GestorDetallesActivo.sCOESEN}" size="2" maxlength="2" disabled="true"/>
 
 										</h:panelGrid>
 									</p:fieldset>
+
+									<p:fieldset legend="Dirección">
+										<h:panelGrid columns="1" cellpadding="1">
+
+											<p:panel>
+												<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
+											<p:inputText id="NOVIAS" value="#{GestorDetallesActivo.sNOVIAS}" size="60" maxlength="60" disabled="true"/>
+
+												</h:panelGrid>
+											</p:panel>
+
+
+											<p:panel>
+												<h:panelGrid columns="4" cellpadding="2">
+
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: " />
+													<p:inputText id="NUPOAC" value="#{GestorDetallesActivo.sNUPOAC}" size="17" maxlength="17" disabled="true"/>
+
+													<h:outputText for="NUESAC" value="Escalera: " />
+													<p:inputText id="NUESAC" value="#{GestorDetallesActivo.sNUESAC}" size="5" maxlength="5" disabled="true"/>
+
+												</h:panelGrid>
+											</p:panel>
+
+
+											<p:panel>
+												<h:panelGrid columns="4" cellpadding="2">
+
+													<h:outputText for="NUPIAC" value="Piso: " />
+													<p:inputText id="NUPIAC" value="#{GestorDetallesActivo.sNUPIAC}" size="11" maxlength="11" disabled="true"/>
+
+													<h:outputText for="NUPUAC" value="Puerta: " />
+													<p:inputText id="NUPUAC" value="#{GestorDetallesActivo.sNUPUAC}" size="17" maxlength="17" disabled="true"/>
+
+												</h:panelGrid>
+											</p:panel>
+
+											<p:panel>
+												<h:panelGrid columns="4" cellpadding="2">
+
+											<h:outputText for="NOMUIN" value="Municipio: " />
+											<p:inputText id="NOMUIN" value="#{GestorDetallesActivo.sNOMUIN}" size="30" maxlength="30" disabled="true"/>
+
+											<h:outputText for="NOPRAC" value="Provincia: " />
+											<p:inputText id="NOPRAC" value="#{GestorDetallesActivo.sNOPRAC}" size="18" maxlength="18" disabled="true"/>
+
+											<h:outputText for="COPOIN" value="Código Postal: " />
+											<p:inputText id="COPOIN" value="#{GestorDetallesActivo.sCOPOIN}" size="5" maxlength="5" disabled="true"/>
+
+											<h:outputText for="COPRAE" value="C. Provincia: " />
+											<p:inputText id="COPRAE" value="#{GestorDetallesActivo.sCOPRAE}" size="2" maxlength="2" disabled="true"/>
+
+												</h:panelGrid>
+											</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Gestoría">
+										<h:panelGrid columns="4" cellpadding="5">
+
+											<h:outputText for="FEREAP" value="fecha de recepción del auto: " />
+											<p:inputText id="FEREAP" value="#{GestorDetallesActivo.sFEREAP}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FEINAU" value="Fecha de inscripción del título: " />
+											<p:inputText id="FEINAU" value="#{GestorDetallesActivo.sFEINAU}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FESOPO" value="Fecha de solicitud de posesión: " />
+											<p:inputText id="FESOPO" value="#{GestorDetallesActivo.sFESOPO}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FESEPO" value="Fecha señalada de posesión: " />
+											<p:inputText id="FESEPO" value="#{GestorDetallesActivo.sFESEPO}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FEREPO" value="Fecha realizada posesión: " />
+											<p:inputText id="FEREPO" value="#{GestorDetallesActivo.sFEREPO}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FEADAC" value="Fecha de adjudicación: " />
+											<p:inputText id="FEADAC" value="#{GestorDetallesActivo.sFEADAC}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="COREAE" value="Gestoría: " />
+											<p:inputText id="COREAE" value="#{GestorDetallesActivo.sCOREAE}" size="5" maxlength="5" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Datos SEDAS">
+										<h:panelGrid columns="4" cellpadding="5">
+
+											<h:outputText for="CODIJU" value="Disponibilidad: " />
+											<p:inputText id="CODIJU" value="#{GestorDetallesActivo.sCODIJU}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="COSJUP" value="Situación jurídica procesal: " />
+											<p:inputText id="COSJUP" value="#{GestorDetallesActivo.sCOSJUP}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="COSTLI" value="Situación jurídica de liquidación: " />
+											<p:inputText id="COSTLI" value="#{GestorDetallesActivo.sCOSTLI}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="COSCAR" value="Situación jurídica de las cargas: " />
+											<p:inputText id="COSCAR" value="#{GestorDetallesActivo.sCOSCAR}" size="2" maxlength="2" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Datos SEDAS">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="COESVE" value="Estado de la venta: " />
+											<p:inputText id="COESVE" value="#{GestorDetallesActivo.sCOESVE}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="COTSIN" value="Subtipo de inmueble: " />
+											<p:inputText id="COTSIN" value="#{GestorDetallesActivo.sCOTSIN}" size="4" maxlength="4" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Registro del Activo">
+										<h:panelGrid columns="1" cellpadding="5">
+
+											<p:panel>
+												<h:panelGrid columns="2" cellpadding="5">
+
+													<h:outputText for="NOMUI0" value="Municipio de registro: " />
+													<p:inputText id="NOMUI0" value="#{GestorDetallesActivo.sNOMUI0}" size="30" maxlength="30" disabled="true"/>
+
+												</h:panelGrid>
+											</p:panel>
+
+											<p:panel>
+												<h:panelGrid columns="4" cellpadding="5">
+
+													<h:outputText for="NUFIRE" value="Número de finca registral: " />
+													<p:inputText id="NUFIRE" value="#{GestorDetallesActivo.sNUFIRE}" size="9" maxlength="9" disabled="true"/>
+
+													<h:outputText for="NUREGP" value="Número de registro de la propiedad: " />
+													<p:inputText id="NUREGP" value="#{GestorDetallesActivo.sNUREGP}" size="3" maxlength="3" disabled="true"/>
+
+												</h:panelGrid>
+											</p:panel>
+
+											<p:panel>
+												<h:panelGrid columns="6" cellpadding="5">
+
+													<h:outputText for="NULIBE" value="Número de libro de la escritura: " />
+													<p:inputText id="NULIBE" value="#{GestorDetallesActivo.sNULIBE}" size="6" maxlength="6" disabled="true"/>
+
+													<h:outputText for="NUTOME" value="Tomo: " />
+													<p:inputText id="NUTOME" value="#{GestorDetallesActivo.sNUTOME}" size="6" maxlength="6" disabled="true"/>
+
+													<h:outputText for="NUFOLE" value="Folio: " />
+													<p:inputText id="NUFOLE" value="#{GestorDetallesActivo.sNUFOLE}" size="6" maxlength="6" disabled="true"/>
+
+													<h:outputText for="NUINSR" value="Número de inscripción: " />
+													<p:inputText id="NUINSR" value="#{GestorDetallesActivo.sNUINSR}" size="8" maxlength="8" disabled="true"/>
+
+												</h:panelGrid>
+											</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Situación">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="COSOCU" value="Situación ocupacional: " />
+											<p:inputText id="COSOCU" value="#{GestorDetallesActivo.sCOSOCU}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="COXPRO" value="Régimen de protección: " />
+											<p:inputText id="COXPRO" value="#{GestorDetallesActivo.sCOXPRO}" size="5" maxlength="5" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Lanzamiento">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="FESOLA" value="Fecha de solicitud de lanzamiento: " />
+											<p:inputText id="FESOLA" value="#{GestorDetallesActivo.sFESOLA}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FESELA" value="Fecha señalada de lanzamiento: " />
+											<p:inputText id="FESELA" value="#{GestorDetallesActivo.sFESELA}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FERELA" value="Fecha de realizado lanzamiento: " />
+											<p:inputText id="FERELA" value="#{GestorDetallesActivo.sFERELA}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FERLLA" value="Fecha de recepción de llaves: " />
+											<p:inputText id="FERLLA" value="#{GestorDetallesActivo.sFERLLA}" size="8" maxlength="8" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Superficie">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="CASPRE" value="Supreficie real suelo/parcela: " />
+											<p:inputText id="CASPRE" value="#{GestorDetallesActivo.sCASPRE}" size="11" maxlength="11" disabled="true"/>
+
+											<h:outputText for="CASUTR" value="Supreficie real útil: " />
+											<p:inputText id="CASUTR" value="#{GestorDetallesActivo.sCASUTR}" size="11" maxlength="18" disabled="true"/>
+
+											<h:outputText for="CASUTC" value="Superficie real construida: " />
+											<p:inputText id="CASUTC" value="#{GestorDetallesActivo.sCASUTC}" size="11" maxlength="11" disabled="true"/>
+
+											<h:outputText for="CASUTG" value="Superficie total registral útil: " />
+											<p:inputText id="CASUTG" value="#{GestorDetallesActivo.sCASUTG}" size="11" maxlength="11" disabled="true"/>
+
+											<h:outputText for="BIARRE" value="Arrendado: " />
+											<p:inputText id="BIARRE" value="#{GestorDetallesActivo.sBIARRE}" size="1" maxlength="1" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Características">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="CADORM" value="Número de dormitorios: " />
+											<p:inputText id="CADORM" value="#{GestorDetallesActivo.sCADORM}" size="4" maxlength="4" disabled="true"/>
+
+											<h:outputText for="CABANO" value="Número de baños: " />
+											<p:inputText id="CABANO" value="#{GestorDetallesActivo.sCABANO}" size="4" maxlength="4" disabled="true"/>
+
+											<h:outputText for="BIGAPA" value="Garaje: " />
+											<p:inputText id="BIGAPA" value="#{GestorDetallesActivo.sBIGAPA}" size="1" maxlength="1" disabled="true"/>
+
+											<h:outputText for="CAGAPA" value="Plazas de apacamiento: " />
+											<p:inputText id="CAGAPA" value="#{GestorDetallesActivo.sCAGAPA}" size="5" maxlength="5" disabled="true"/>
+
+											<h:outputText for="CASUTE" value="Superficie de terraza: " />
+											<p:inputText id="CASUTE" value="#{GestorDetallesActivo.sCASUTE}" size="9" maxlength="9" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Licencias">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="BILIPO" value="Licencia de primera ocupación: " />
+											<p:inputText id="BILIPO" value="#{GestorDetallesActivo.sBILIPO}" size="1" maxlength="1" disabled="true"/>
+
+											<h:outputText for="BILIAC" value="Licencia de actividad: " />
+											<p:inputText id="BILIAC" value="#{GestorDetallesActivo.sBILIAC}" size="1" maxlength="1" disabled="true"/>
+
+											<h:outputText for="BILIUS" value="Licencia de uso: " />
+											<p:inputText id="BILIUS" value="#{GestorDetallesActivo.sBILIUS}" size="1" maxlength="1" disabled="true"/>
+
+											<h:outputText for="BIBOIN" value="Boletín de industria: " />
+											<p:inputText id="BIBOIN" value="#{GestorDetallesActivo.sBIBOIN}" size="1" maxlength="1" disabled="true"/>
+
+											<h:outputText for="BICEFI" value="Certificado de obra: " />
+											<p:inputText id="BICEFI" value="#{GestorDetallesActivo.sBICEFI}" size="1" maxlength="1" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Construcción">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="CASUCB" value="Superficie real construida bajo rasante: " />
+											<p:inputText id="CASUCB" value="#{GestorDetallesActivo.sCASUCB}" size="9" maxlength="9" disabled="true"/>
+
+											<h:outputText for="CASUCS" value="Superficie real construida sobre rasante: " />
+											<p:inputText id="CASUCS" value="#{GestorDetallesActivo.sCASUCS}" size="9" maxlength="9" disabled="true"/>
+
+											<h:outputText for="FEACON" value="Año de construcción: " />
+											<p:inputText id="FEACON" value="#{GestorDetallesActivo.sFEACON}" size="4" maxlength="4" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Juzgado">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="IDAUTO" value="Número de autos del juzgado: " />
+											<p:inputText id="IDAUTO" value="#{GestorDetallesActivo.sIDAUTO}" size="10" maxlength="10" disabled="true"/>
+
+											<h:outputText for="FEDEMA" value="Fecha de la demanda: " />
+											<p:inputText id="FEDEMA" value="#{GestorDetallesActivo.sFEDEMA}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="YNOCUR" value="Nombre del procurador: " />
+											<p:inputText id="YNOCUR" value="#{GestorDetallesActivo.sYNOCUR}" size="30" maxlength="30" disabled="true"/>
+
+											<h:outputText for="OBRECO" value="Referencia del procurador: " />
+											<p:inputText id="OBRECO" value="#{GestorDetallesActivo.sOBRECO}" size="6" maxlength="6" disabled="true"/>
+
+											<h:outputText for="YNOLEC" value="Letrado de cabecera: " />
+											<p:inputText id="YNOLEC" value="#{GestorDetallesActivo.sYNOLEC}" size="30" maxlength="30" disabled="true"/>
+
+											<h:outputText for="NOLOJZ" value="Localidad del juzgado: " />
+											<p:inputText id="NOLOJZ" value="#{GestorDetallesActivo.sNOLOJZ}" size="30" maxlength="30" disabled="true"/>
+
+											<h:outputText for="FEREDE" value="Fecha de la resolución: " />
+											<p:inputText id="FEREDE" value="#{GestorDetallesActivo.sFEREDE}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="POPROP" value="Porcentaje de propiedad: " />
+											<p:inputText id="POPROP" value="#{GestorDetallesActivo.sPOPROP}" size="6" maxlength="6" disabled="true"/>
+
+											<h:outputText for="COGRAP" value="Grado de propiedad: " />
+											<p:inputText id="COGRAP" value="#{GestorDetallesActivo.sCOGRAP}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="FEPREG" value="Fecha de presentación en el registro: " />
+											<p:inputText id="FEPREG" value="#{GestorDetallesActivo.sFEPREG}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FEPHAC" value="Fecha de presentación en hacienda: " />
+											<p:inputText id="FEPHAC" value="#{GestorDetallesActivo.sFEPHAC}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FEFOAC" value="Fecha de formalización: " />
+											<p:inputText id="FEFOAC" value="#{GestorDetallesActivo.sFEFOAC}" size="8" maxlength="8" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Venta">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="FEVACT" value="Fecha de venta: " />
+											<p:inputText id="FEVACT" value="#{GestorDetallesActivo.sFEVACT}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="IMVACT" value="Precio de venta: " />
+											<p:inputText id="IMVACT" value="#{GestorDetallesActivo.sIMVACT}" size="15" maxlength="15" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Cambio inmovilizado">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="NUFIPR" value="Número de ficha de inmovilizado anterior: " />
+											<p:inputText id="NUFIPR" value="#{GestorDetallesActivo.sNUFIPR}" size="9" maxlength="9" disabled="true"/>
+
+											<h:outputText for="COTPET" value="Tipo de petición: " />
+											<p:inputText id="COTPET" value="#{GestorDetallesActivo.sCOTPET}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="FEEMPT" value="Fecha de emisión de petición: " />
+											<p:inputText id="FEEMPT" value="#{GestorDetallesActivo.sFEEMPT}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FESORC" value="Fecha de solicitud de referencia catrastral: " />
+											<p:inputText id="FESORC" value="#{GestorDetallesActivo.sFESORC}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="FESODE" value="Fecha de solicitud de descalificación: " />
+											<p:inputText id="FESODE" value="#{GestorDetallesActivo.sFESODE}" size="8" maxlength="8" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Auto">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="FEREAC" value="Fecha de baja del activo: " />
+											<p:inputText id="FEREAC" value="#{GestorDetallesActivo.sFEREAC}" size="8" maxlength="8" disabled="true"/>
+
+											<h:outputText for="COXSIA" value="Sitaución del auto: " />
+											<p:inputText id="COXSIA" value="#{GestorDetallesActivo.sCOXSIA}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="NUJUZD" value="Númedo de juzgado: " />
+											<p:inputText id="NUJUZD" value="#{GestorDetallesActivo.sNUJUZD}" size="2" maxlength="2" disabled="true"/>
+
+											<h:outputText for="NURCAT" value="Número de referencia catrastral: " />
+											<p:inputText id="NURCAT" value="#{GestorDetallesActivo.sNURCAT}" size="20" maxlength="20" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Comunidad">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="NOMPRC" value="Presidente: " />
+											<p:inputText id="NOMPRC" value="#{GestorDetallesActivo.sNOMPRC}" size="55" maxlength="55" disabled="true"/>
+
+											<h:outputText for="NUTPRC" value="Número de contacto: " />
+											<p:inputText id="NUTPRC" value="#{GestorDetallesActivo.sNUTPRC}" size="14" maxlength="14" disabled="true"/>
+
+											<h:outputText for="NOMADC" value="Adminsitrador: " />
+											<p:inputText id="NOMADC" value="#{GestorDetallesActivo.sNOMADC}" size="55" maxlength="55" disabled="true"/>
+
+											<h:outputText for="NUTADC" value="Número de contacto: " />
+											<p:inputText id="NUTADC" value="#{GestorDetallesActivo.sNUTADC}" size="14" maxlength="14" disabled="true"/>
+
+											<h:outputText for="IMPCOO" value="Importe de comunidad: " />
+											<p:inputText id="IMPCOO" value="#{GestorDetallesActivo.sIMPCOO}" size="15" maxlength="15" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Sociedades">
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="COENOR" value="Entidad de origen: " />
+											<p:inputText id="COENOR" value="#{GestorDetallesActivo.sCOENOR}" size="5" maxlength="5" disabled="true"/>
+
+											<h:outputText for="COSPAT" value="Sociedad patrimonial: " />
+											<p:inputText id="COSPAT" value="#{GestorDetallesActivo.sCOSPAT}" size="5" maxlength="5" disabled="true"/>
+
+											<h:outputText for="COSPAS" value="Sociedad propietaria antes de SAREB: " />
+											<p:inputText id="COSPAS" value="#{GestorDetallesActivo.sCOSPAS}" size="5" maxlength="5" disabled="true"/>
+
+											<h:outputText for="IDCOL3" value="Mediador: " />
+											<p:inputText id="IDCOL3" value="#{GestorDetallesActivo.sIDCOL3}" size="4" maxlength="4" disabled="true"/>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Comunidad">
+										<h:panelGrid columns="5" cellpadding="5">
+
+											<h:outputText for="BIOBNU" value="Obra nueva: " />
+											<p:inputText id="BIOBNU" value="#{GestorDetallesActivo.sBIOBNU}" size="1" maxlength="1" disabled="true"/>
+
+											<h:outputText for="POBRAR" value="Porcentaje de obra realizado: " />
+											<p:inputText id="POBRAR" value="#{GestorDetallesActivo.sPOBRAR}" size="6" maxlength="6" disabled="true"/>
+											<h:outputText for="POBRAR" value="%" />
+
+										</h:panelGrid>
+									</p:fieldset>
+
 								</h:panelGrid>
 							</p:panel>
+						</h:panelGrid>
+					</p:panel>
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>

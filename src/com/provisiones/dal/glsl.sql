@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `ac_activos_tbl` (
   CONSTRAINT `ac_activos_tbl_ibfk_9` FOREIGN KEY (`cod_biliac`) REFERENCES `binaria_tbl` (`binaria_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- Volcando datos para la tabla glsl.ac_activos_tbl: ~1.198 rows (aproximadamente)
+-- Volcando datos para la tabla glsl.ac_activos_tbl: ~1.238 rows (aproximadamente)
 /*!40000 ALTER TABLE `ac_activos_tbl` DISABLE KEYS */;
 INSERT INTO `ac_activos_tbl` (`coaces_id`, `nuinmu`, `cod_cosopa`, `cod_coenae`, `cod_coesen`, `novias`, `nupoac`, `nuesac`, `nupiac`, `nupuac`, `nomuin`, `cod_coprae`, `noprac`, `copoin`, `fereap`, `cod_coreae`, `feinau`, `fesopo`, `fesepo`, `ferepo`, `feadac`, `cod_codiju`, `cod_cosjup`, `cod_costli`, `cod_coscar`, `cod_coesve`, `cod_cotsin`, `nufire`, `nuregp`, `nomui0`, `nulibe`, `nutome`, `nufole`, `nuinsr`, `cod_cosocu`, `cod_coxpro`, `fesola`, `fesela`, `ferela`, `ferlla`, `caspre`, `casutr`, `casutc`, `casutg`, `cod_biarre`, `cadorm`, `cabano`, `cod_bigapa`, `cagapa`, `casute`, `cod_bilipo`, `cod_biliac`, `cod_bilius`, `cod_biboin`, `cod_bicefi`, `casucb`, `casucs`, `feacon`, `idauto`, `fedema`, `ynocur`, `obreco`, `ynolec`, `nolojz`, `ferede`, `poprop`, `cod_cograp`, `fepreg`, `fephac`, `fefoac`, `fevact`, `imvact`, `nufipr`, `cod_cotpet`, `feempt`, `fesorc`, `fesode`, `fereac`, `cod_coxsia`, `nujuzd`, `nurcat`, `nomprc`, `nutprc`, `nomadc`, `nutadc`, `impcoo`, `coenor`, `cod_cospat`, `cod_cospas`, `idcol3`, `cod_biobnu`, `pobrar`) VALUES
 	(3100058, 113118753, 0, 1, 2, 'OLIVAR', '35', 'INT', '4 º', '3 Y 4', 'MADRID', 28, 'MADRID', 28012, 0, 3, 20120615, 20111011, 20121001, 20121001, 20120213, 1, 12, 1, 2, 9, 'VI01', '19280', 37, 'MADRID', 388, 1818, 160, 4, 5, 5, 20121001, 20121001, 20121001, 20121112, 0, 4365, 5456, 5446, 'N', 3, 1, '#', 0, 0, '#', '#', '#', '#', '#', 0, 0, 1900, '2989/2009', 20091201, 'ANTONIO BARREIRO-MEIRO BARBERO', 'C1145', 'AMADOR GARCIA CARRASCO Y GARCI', 'MADRID', 0, 100000, 1, 20120530, 20120424, 20110113, 0, 0, 0, 0, 0, 0, 0, 0, 1, 32, '0636320VK4703F0027HY', '', '', 'Francisco Sanz', '911111111', 3500, 2038, 9999, 1, 'D293', '0', 0),
@@ -2063,7 +2063,7 @@ CREATE TABLE IF NOT EXISTS `cospat_tbl` (
   PRIMARY KEY (`cospat_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- Volcando datos para la tabla glsl.cospat_tbl: ~605 rows (aproximadamente)
+-- Volcando datos para la tabla glsl.cospat_tbl: ~468 rows (aproximadamente)
 /*!40000 ALTER TABLE `cospat_tbl` DISABLE KEYS */;
 INSERT INTO `cospat_tbl` (`cospat_id`, `descripcion`) VALUES
 	(0, 'SIN INFORMACION'),

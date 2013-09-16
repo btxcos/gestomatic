@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -92,12 +93,14 @@ public class FileManager
 		ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado("P");
 		ArrayList<String> resultactivos = QMListaComunidadesActivos.getComunidadesActivoPorEstado("P");
 
-		ArrayList<String> resultcomunidadesactivos = new ArrayList<String>(resultactivos);
-
-		//Eliminamos duplicados
-		resultcomunidadesactivos.removeAll(resultcomunidades);
-		resultcomunidadesactivos.addAll(resultcomunidades);
+		ArrayList<String> resultcomunidadesactivos = new ArrayList<String>(resultcomunidades);
 		
+		resultcomunidadesactivos.addAll(resultactivos);
+		
+		HashSet<String> hslimpia = new HashSet<String>(resultcomunidadesactivos);
+
+	   resultcomunidadesactivos.clear();
+	   resultcomunidadesactivos.addAll(hslimpia);
 		
 		Collections.sort(resultcomunidadesactivos);
 

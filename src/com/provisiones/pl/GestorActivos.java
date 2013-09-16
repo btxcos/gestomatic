@@ -116,8 +116,8 @@ public class GestorActivos implements Serializable
 	private String sBIOBNU = "";
 	private String sPOBRAR = "";
 	
-	private ActivoTabla activoseleccionado = null;
-	private ArrayList<ActivoTabla> tablaactivos = null;
+	private transient ActivoTabla activoseleccionado = null;
+	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	
 	
 	public GestorActivos()

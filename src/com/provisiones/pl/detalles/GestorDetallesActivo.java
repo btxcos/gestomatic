@@ -135,17 +135,7 @@ public class GestorDetallesActivo implements Serializable
 	public void getCOACESElegido()
 	{
 		
-		/*FacesContext context = javax.faces.context.FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-		GestorActivos bean = (GestorActivos) context.getELContext().getELResolver().getValue(context.getELContext(), null, "GestorActivos");
-		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, "GestorDetallesActivo", "sCOACESbean:|"+bean.getsCOACES()+"|");
-		
-		GestorActivos nB =(GestorActivos) session.getAttribute("GestorActivos");
 
-		
-		
-		String sValor = nB.getsCOACES();*/
 		
 		String sValor = ((GestorActivos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorActivos")).getsCOACES();
 		
@@ -176,13 +166,13 @@ public class GestorDetallesActivo implements Serializable
 		this.sCOPRAE = activo.getCOPRAE();
 		this.sNOPRAC = activo.getNOPRAC();
 		this.sCOPOIN = activo.getCOPOIN();
-		this.sFEREAP = activo.getFEREAP();
+		this.sFEREAP = Utils.recuperaFecha(activo.getFEREAP());
 		this.sCOREAE = activo.getCOREAE();
-		this.sFEINAU = activo.getFEINAU();
-		this.sFESOPO = activo.getFESOPO();
-		this.sFESEPO = activo.getFESEPO();
-		this.sFEREPO = activo.getFEREPO();
-		this.sFEADAC = activo.getFEADAC();
+		this.sFEINAU = Utils.recuperaFecha(activo.getFEINAU());
+		this.sFESOPO = Utils.recuperaFecha(activo.getFESOPO());
+		this.sFESEPO = Utils.recuperaFecha(activo.getFESEPO());
+		this.sFEREPO = Utils.recuperaFecha(activo.getFEREPO());
+		this.sFEADAC = Utils.recuperaFecha(activo.getFEADAC());
 		this.sCODIJU = activo.getCODIJU();
 		this.sCOSJUP = activo.getCOSJUP();
 		this.sCOSTLI = activo.getCOSTLI();
@@ -198,14 +188,14 @@ public class GestorDetallesActivo implements Serializable
 		this.sNUINSR = activo.getNUINSR();
 		this.sCOSOCU = activo.getCOSOCU();
 		this.sCOXPRO = activo.getCOXPRO();
-		this.sFESOLA = activo.getFESOLA();
-		this.sFESELA = activo.getFESELA();
-		this.sFERELA = activo.getFERELA();
-		this.sFERLLA = activo.getFERLLA();
-		this.sCASPRE = activo.getCASPRE();
-		this.sCASUTR = activo.getCASUTR();
-		this.sCASUTC = activo.getCASUTC();
-		this.sCASUTG = activo.getCASUTG();
+		this.sFESOLA = Utils.recuperaFecha(activo.getFESOLA());
+		this.sFESELA = Utils.recuperaFecha(activo.getFESELA());
+		this.sFERELA = Utils.recuperaFecha(activo.getFERELA());
+		this.sFERLLA = Utils.recuperaFecha(activo.getFERLLA());
+		this.sCASPRE = Utils.recuperaImporte(false,activo.getCASPRE());
+		this.sCASUTR = Utils.recuperaImporte(false,activo.getCASUTR());
+		this.sCASUTC = Utils.recuperaImporte(false,activo.getCASUTC());
+		this.sCASUTG = Utils.recuperaImporte(false,activo.getCASUTG());
 		this.sBIARRE = activo.getBIARRE();
 		this.sCADORM = activo.getCADORM();
 		this.sCABANO = activo.getCABANO();
@@ -217,29 +207,29 @@ public class GestorDetallesActivo implements Serializable
 		this.sBILIUS = activo.getBILIUS();
 		this.sBIBOIN = activo.getBIBOIN();
 		this.sBICEFI = activo.getBICEFI();
-		this.sCASUCB = activo.getCASUCB();
-		this.sCASUCS = activo.getCASUCS();
+		this.sCASUCB = Utils.recuperaImporte(false,activo.getCASUCB());
+		this.sCASUCS = Utils.recuperaImporte(false,activo.getCASUCS());
 		this.sFEACON = activo.getFEACON();
 		this.sIDAUTO = activo.getIDAUTO();
-		this.sFEDEMA = activo.getFEDEMA();
+		this.sFEDEMA = Utils.recuperaFecha(activo.getFEDEMA());
 		this.sYNOCUR = activo.getYNOCUR();
 		this.sOBRECO = activo.getOBRECO();
 		this.sYNOLEC = activo.getYNOLEC();
 		this.sNOLOJZ = activo.getNOLOJZ();
-		this.sFEREDE = activo.getFEREDE();
+		this.sFEREDE = Utils.recuperaFecha(activo.getFEREDE());
 		this.sPOPROP = activo.getPOPROP();
 		this.sCOGRAP = activo.getCOGRAP();
-		this.sFEPREG = activo.getFEPREG();
-		this.sFEPHAC = activo.getFEPHAC();
-		this.sFEFOAC = activo.getFEFOAC();
-		this.sFEVACT = activo.getFEVACT();
-		this.sIMVACT = activo.getIMVACT();
+		this.sFEPREG = Utils.recuperaFecha(activo.getFEPREG());
+		this.sFEPHAC = Utils.recuperaFecha(activo.getFEPHAC());
+		this.sFEFOAC = Utils.recuperaFecha(activo.getFEFOAC());
+		this.sFEVACT = Utils.recuperaFecha(activo.getFEVACT());
+		this.sIMVACT = Utils.recuperaImporte(false,activo.getIMVACT());
 		this.sNUFIPR = activo.getNUFIPR();
 		this.sCOTPET = activo.getCOTPET();
-		this.sFEEMPT = activo.getFEEMPT();
-		this.sFESORC = activo.getFESORC();
-		this.sFESODE = activo.getFESODE();
-		this.sFEREAC = activo.getFEREAC();
+		this.sFEEMPT = Utils.recuperaFecha(activo.getFEEMPT());
+		this.sFESORC = Utils.recuperaFecha(activo.getFESORC());
+		this.sFESODE = Utils.recuperaFecha(activo.getFESODE());
+		this.sFEREAC = Utils.recuperaFecha(activo.getFEREAC());
 		this.sCOXSIA = activo.getCOXSIA();
 		this.sNUJUZD = activo.getNUJUZD();
 		this.sNURCAT = activo.getNURCAT();
@@ -247,13 +237,13 @@ public class GestorDetallesActivo implements Serializable
 		this.sNUTPRC = activo.getNUTPRC();
 		this.sNOMADC = activo.getNOMADC();
 		this.sNUTADC = activo.getNUTADC();
-		this.sIMPCOO = activo.getIMPCOO();
+		this.sIMPCOO = Utils.recuperaImporte(false,activo.getIMPCOO());
 		this.sCOENOR = activo.getCOENOR();
 		this.sCOSPAT = activo.getCOSPAT();
 		this.sCOSPAS = activo.getCOSPAS();
 		this.sIDCOL3 = activo.getIDCOL3();
 		this.sBIOBNU = activo.getBIOBNU();
-		this.sPOBRAR = activo.getPOBRAR();
+		this.sPOBRAR = Utils.recuperaImporte(false,activo.getPOBRAR());
 		}
 		
 	}

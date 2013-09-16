@@ -5,6 +5,10 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>provisiones</display-name>
 
+	<context-param>  
+		<param-name>log4jConfigLocation</param-name>  
+		<param-value>WEB-INF/log4j.xml</param-value>
+	</context-param>
 
 	<context-param>
 		<description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>

@@ -1,6 +1,7 @@
 package com.provisiones.ll;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
@@ -98,14 +99,40 @@ public class CLGastos
 		return sAccion;
 	}*/
 	
-	public static ArrayList<ActivoTabla> buscarActivosConGastos(ActivoTabla activo)
+	public static ArrayList<ActivoTabla> buscarActivosConGastos(ActivoTabla filtro)
 	{
-		return QMListaGastos.buscaActivosConGastos(activo);
+		return QMListaGastos.buscaActivosConGastos(filtro);
 	}
 	
 	public static ArrayList<GastoTabla> buscarGastosActivo(String sCodCOACES)
 	{
 		return QMListaGastos.buscaGastosActivo(sCodCOACES);
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivosConMovimientos(ActivoTabla filtro)
+	{
+		String sMethod = "buscarActivosConMovimientos";
+		
+		ArrayList<ActivoTabla> resultcuotas = CLCuotas.buscarActivosConCuotas(filtro);  
+		ArrayList<ActivoTabla> resultimpuestos = CLImpuestos.buscarActivosConImpuestosResueltos(filtro);
+		
+		ArrayList<ActivoTabla> resultcuotasimpuestos = new ArrayList<ActivoTabla>(resultcuotas);
+		resultcuotasimpuestos.addAll(resultimpuestos);
+		
+		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-C:|"+resultcuotas.size()+"|");
+		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-I:|"+resultimpuestos.size()+"|");
+		
+		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-CI:|"+resultcuotasimpuestos.size()+"|");
+		
+		//Eliminamos duplicados
+		HashSet<ActivoTabla> hslimpia = new HashSet<ActivoTabla>(resultcuotasimpuestos);
+		
+		Utils.debugTrace(true, sClassName, sMethod, "RESULT-CI:|"+hslimpia.toString()+"|");
+		
+		resultcuotasimpuestos.clear();
+		resultcuotasimpuestos.addAll(hslimpia);
+		
+		return resultcuotasimpuestos;
 	}
 	
 	public static String buscarDescripcionGasto(String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA)

@@ -16,23 +16,43 @@ import java.util.Date;
 
 import javax.faces.application.FacesMessage;
 
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+
+
 import com.provisiones.types.ImporteDevolucion;
 
 public class Utils 
 {
+	
+	
 	static String sClassName = Utils.class.getName();
 	
+	//private static Logger logger;
+	
 	static boolean bTraza = true;
+	
+	/*public static void debugTrace2(Logger logger, String sClass, String sMethod, String sMsg)
+	{
+		
+		logger.info(sMsg);
+		
+	}*/
 	
 	public static void debugTrace(boolean bEnable, String sClass, String sMethod, String sMsg)
 	{
 		boolean bContrazas = true;
-		//String sTimeStamp = "";
 		
+		//logger = LoggerFactory.getLogger(sClass);
+				
 		if (bContrazas && bEnable)
 		{
 			System.out.println(timeStamp()+":["+sClass+"."+sMethod+"] "+sMsg);
 		}
+		
+		
+		//logger.info(sMsg);
+		
 	}
 	
 	public static void debugTraceArrayList(boolean bEnable, String sClass, String sMethod, ArrayList<String> result)
