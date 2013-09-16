@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMProvisiones;
+import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Provision;
@@ -39,32 +40,33 @@ public class CLProvisiones
 		{
 			sCOSPAT = "0";
 		}
-		Utils.debugTrace(true, sClassName, sMethod, "tiempo:|"+Utils.timeStamp()+"|");
+
 		String sTipo = CLActivos.compruebaTipoActivoSAREB(sCodCOACES);
-		Utils.debugTrace(true, sClassName, sMethod, "tiempo:|"+Utils.timeStamp()+"|");
+
 		String sProvision = QMProvisiones.getProvisionAbierta(sCOSPAT,sTipo);
-		Utils.debugTrace(true, sClassName, sMethod, "tiempo:|"+Utils.timeStamp()+"|");
+
 		if (sProvision.equals(""))
 		{
 			sProvision = QMProvisiones.getUltimaProvision();
-			
-			Utils.debugTrace(true, sClassName, sMethod, "sProvision:|"+sProvision+"|");
-			
+	
 			Calendar fecha = Calendar.getInstance();
 			
 			if (sProvision.equals(""))
 			{
-				sProvision = fecha.get(Calendar.YEAR) + ValoresDefecto.DEF_COREAE + "000";
+				sProvision = "00" + fecha.get(Calendar.YEAR)%100 + ValoresDefecto.DEF_COREAE + "000";
 			}
 			else
 			{
+				//Ampliacion de numeros de provision de fondos
+				sProvision = Parser.formateaCampoNumerico(sProvision,9);
+				int iAmpliacion = Integer.parseInt(sProvision.substring(0, 2));
 				
-				int iAño = Integer.parseInt(sProvision.substring(0, 4));
+				int iAño = Integer.parseInt(sProvision.substring(2, 4));
 				int iNumero = Integer.parseInt(sProvision.substring(6));
 			
-				if (iAño < fecha.get(Calendar.YEAR))
+				if (iAño < fecha.get(Calendar.YEAR)%100)
 				{
-					iAño = fecha.get(Calendar.YEAR);
+					iAño = fecha.get(Calendar.YEAR)%100;
 				}
 			 
 				iNumero++;
@@ -77,14 +79,33 @@ public class CLProvisiones
 				}
 				else if (iNumero < 100)
 				{
-					sNumero = "00"+sNumero;
+					sNumero = "0"+sNumero;
 				}
+				//Ampliacion de numeros de provision de fondos
 				else if (iNumero > 999)
 				{
+					sNumero = "000";
+					iNumero = 0;
+					iAmpliacion++; 
+					
+				}
+				
+				String sAmpliacion = Integer.toString(iAmpliacion);
+				
+				if (iAmpliacion < 10)
+				{
+					sAmpliacion = "0"+sAmpliacion;
+				}
+				else if (iAmpliacion == 19 || iAmpliacion == 20)
+				{
+					sAmpliacion = "21";
+				}
+				else if (iAmpliacion > 99)
+				{
 					sNumero = "ERROR";
-				}					
+				}
 		
-				sProvision = iAño+ValoresDefecto.DEF_COREAE+sNumero;
+				sProvision = sAmpliacion+iAño+ValoresDefecto.DEF_COREAE+sNumero;
 			}			
 			
 			Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0",ValoresDefecto.DEF_ALTA);
