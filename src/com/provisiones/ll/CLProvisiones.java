@@ -6,7 +6,6 @@ import java.util.Calendar;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.misc.Parser;
-import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Provision;
 import com.provisiones.types.ProvisionTabla;
@@ -32,7 +31,7 @@ public class CLProvisiones
 	public static String provisionAsignada (String sCodCOACES)
 	{
 		
-		String sMethod = "provisionAsignada";
+		//String sMethod = "provisionAsignada";
 		
 		String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCodCOACES);
 		

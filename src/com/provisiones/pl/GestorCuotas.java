@@ -293,7 +293,7 @@ public class GestorCuotas implements Serializable
 
 		FacesMessage msg;
 		
-		if (CLCuotas.existeCuota(sCOACES, sCOCLDO, sNUDCOM.toUpperCase(), sCOSBAC))
+		if (CLCuotas.existeCuota(sCOACES, sCOCLDO, sNUDCOM.toUpperCase(), sCOSBAC) && !CLCuotas.estaDeBaja(sCOACES, sCOCLDO, sNUDCOM.toUpperCase(), sCOSBAC))
 		{
 			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - La cuota ya esta dada de alta. Por favor, revise los datos.");
 		}

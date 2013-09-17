@@ -3,6 +3,7 @@ package com.provisiones.test;
 import java.io.IOException;
 import java.util.Calendar;
 
+import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
@@ -27,7 +28,7 @@ public class TestActivos
 		 Calendar ahoraCal = Calendar.getInstance();
 
 		        
-		 Utils.debugTrace(bTraza, sClassName, sMethod,"|"+ahoraCal.get(Calendar.YEAR)+ValoresDefecto.DEF_COREAE+ahoraCal.get(Calendar.DAY_OF_YEAR)+"|");
+		 Utils.debugTrace(bTraza, sClassName, sMethod,"|"+QMListaComunidadesActivos.activoVinculadoComunidad("3106403")+"|");
 
 	}
 }

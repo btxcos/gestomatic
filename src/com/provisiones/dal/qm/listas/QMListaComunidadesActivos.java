@@ -3,7 +3,6 @@ package com.provisiones.dal.qm.listas;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
-import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
@@ -136,7 +135,7 @@ public class QMListaComunidadesActivos
 	}
 
 	public static boolean existeRelacionComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "existeRelacionComunidad";
 
@@ -217,7 +216,7 @@ public class QMListaComunidadesActivos
 	}
 
 	public static boolean compruebaRelacionComunidadActivo(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "compruebaRelacionComunidadActivo";
 
@@ -237,10 +236,29 @@ public class QMListaComunidadesActivos
 
 		String sQuery = "SELECT "
 			       + sField4  +               
+			       "  FROM " + sTable + " WHERE " +
+			       "("
+			       + sField3 + " = '" + sCodCOACES + 
 			       
-		"  FROM " + sTable + 
-				" WHERE " +
-				"(" + sField3 + " = '" + sCodCOACES + "')";
+			       "' AND "
+
+	      		   + sField1 + " IN (SELECT " 
+				   + QMComunidades.sField1 + 
+				   " FROM " + QMComunidades.sTable +
+				   " WHERE (" 
+				   + QMComunidades.sField1 + " = '" + sCodCOCLDO + "' AND " 
+			       + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "'))" +
+
+			       " AND "
+
+	      		   + sField2 + " IN (SELECT " 
+				   + QMComunidades.sField2 + 
+				   " FROM " + QMComunidades.sTable +
+				   " WHERE (" 
+				   + QMComunidades.sField2 + " = '" + sCodNUDCOM + "' AND " 
+			       + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "'))" +
+
+			       ")";
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 		
@@ -256,16 +274,16 @@ public class QMListaComunidadesActivos
 				       
 				       "' AND "
 
-		      		   + sField1 + "IN (SELECT " 
+		      		   + sField1 + " IN (SELECT " 
    					   + QMComunidades.sField1 + 
    					   " FROM " + QMComunidades.sTable +
    					   " WHERE (" 
    					   + QMComunidades.sField1 + " = '" + sCodCOCLDO + "' AND " 
 				       + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "'))" +
 
-				       "' AND "
+				       " AND "
 
-		      		   + sField2 + "IN (SELECT " 
+		      		   + sField2 + " IN (SELECT " 
    					   + QMComunidades.sField2 + 
    					   " FROM " + QMComunidades.sTable +
    					   " WHERE (" 
@@ -338,18 +356,18 @@ public class QMListaComunidadesActivos
 		"  FROM " + sTable + 
 				" WHERE " +
 	       "("
-	       + sField3 + " = '" + sCodCOACES + 
-	       
-	       "' AND "
+	       + sField3 + " = '" + sCodCOACES + "'" +
 
-	   + sField1 + "IN (SELECT " 
+	       " AND "
+
+	   + sField1 + " IN (SELECT " 
 		   + QMComunidades.sField1 + 
 		   " FROM " + QMComunidades.sTable +
 		   " WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "')" +
 
-	       "' AND "
+	       " AND "
 
-	   + sField2 + "IN (SELECT " 
+	   + sField2 + " IN (SELECT " 
 		   + QMComunidades.sField2 + 
 		   " FROM " + QMComunidades.sTable +
 		   " WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "')" +
@@ -368,18 +386,18 @@ public class QMListaComunidadesActivos
 			"  FROM " + sTable + 
 					" WHERE " +
 		       "("
-		       + sField3 + " = '" + sCodCOACES + 
+		       + sField3 + " = '" + sCodCOACES + "'" +
 		       
-		       "' AND "
+		       " AND "
 
-   		   + sField1 + "IN (SELECT " 
+   		   + sField1 + " IN (SELECT " 
 			   + QMComunidades.sField1 + 
 			   " FROM " + QMComunidades.sTable +
 			   " WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "')" +
 
-		       "' AND "
+		       " AND "
 
-   		   + sField2 + "IN (SELECT " 
+   		   + sField2 + " IN (SELECT " 
 			   + QMComunidades.sField2 + 
 			   " FROM " + QMComunidades.sTable +
 			   " WHERE " + QMComunidades.sField15 + " = '" + ValoresDefecto.DEF_ALTA + "')" +
@@ -449,8 +467,11 @@ public class QMListaComunidadesActivos
 			       + sField4  +               
 			       
 		"  FROM " + sTable + 
-				" WHERE " +
-				"(" + sField3 + " = '" + sCodCOACES + "')";
+				" WHERE (" 
+		+ sField1 + " = '" + sCodCOCLDO + "' AND  "
+		+ sField2 + " = '" + sCodNUDCOM + "' AND  "
+		+ sField3 + " = '" + sCodCOACES +
+		"')";
 		
 		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
 		
@@ -526,12 +547,11 @@ public class QMListaComunidadesActivos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					+ sField5 + " = '"+ sValidado + 
-					"' "+
+					+ sField5 + " = '"+ sValidado + "' "+
 					" WHERE "+
 					"(" 
-					+ sField4 + " = '" + sCodMovimiento	+ 
-					"')");
+					+ sField4 + " = '" + sCodMovimiento	+ "'" +
+					")");
 			
 			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 			
@@ -706,7 +726,7 @@ public class QMListaComunidadesActivos
 	}
 	
 	public static ArrayList<ActivoTabla> buscaActivosComunidad(String sCodCOCLDO, String sCodNUDCOM)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "buscaActivosComunidad";
 
@@ -753,12 +773,11 @@ public class QMListaComunidadesActivos
 					   " WHERE "+ QMActivos.sField1 +" IN (SELECT "
 					   +  sField3 + 
 					   "  FROM " + sTable + 
-					   " WHERE ("
-
+					   " WHERE " +
+					   "("
 					   + sField1 + " = '" + sCodCOCLDO	+ "' AND "  
-
-					   + sField2 + " = '" + sCodNUDCOM	+ 			   
-					   "'))");
+					   + sField2 + " = '" + sCodNUDCOM	+ "'" +
+					   "))");
 			
 
 			rs = pstmt.executeQuery();
@@ -818,7 +837,7 @@ public class QMListaComunidadesActivos
 	}
 	
 	public static ArrayList<ActivoTabla> buscaActivosSinComunidad(ActivoTabla activo)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "buscaActivosDisponibles";
 
@@ -950,7 +969,7 @@ public class QMListaComunidadesActivos
 	}
 	
 	public static ArrayList<ActivoTabla> buscaActivosConComunidad(ActivoTabla activo)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "buscaActivosDisponibles";
 

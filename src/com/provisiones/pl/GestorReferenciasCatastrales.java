@@ -193,9 +193,9 @@ public class GestorReferenciasCatastrales implements Serializable
 		
 		FacesMessage msg;
 		
-		if (CLReferencias.existeReferenciaCatastral(sNURCAT.toUpperCase()))
+		if (CLReferencias.existeReferenciaCatastral(sNURCAT.toUpperCase()) && !CLReferencias.estaDeBaja(sNURCAT.toUpperCase()))
 		{
-			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.");
+			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:049 - La referencia catastral propocionada ya esta dada de alta en el sistema. Por favor, revise los datos.");
 		}
 		else
 		{

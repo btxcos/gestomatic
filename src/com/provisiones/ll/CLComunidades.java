@@ -693,7 +693,7 @@ public class CLComunidades
 			
 			//Comunidad comunidad_modificada = convierteMovimientoenComunidad(movimiento);
 			
-			MovimientoComunidad movimiento_revisado = CLComunidades.revisaCodigosControl(movimiento);
+			MovimientoComunidad movimiento_revisado = revisaCodigosControl(movimiento);
 			
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	

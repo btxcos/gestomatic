@@ -179,10 +179,15 @@ public class CLReferencias
 		return QMListaReferencias.buscaReferenciasActivo(sCodCOACES);
 	}
 	
-	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento)
+	public static boolean estaDeBaja(String sCodNURCAT)
 	{
-		String sMethod = "registraMovimiento";
+		return QMReferencias.getEstado(sCodNURCAT).equals(ValoresDefecto.DEF_BAJA);
+	}
+	
+	public static int revisaMovimiento(MovimientoReferenciaCatastral movimiento)
+	{
 		
+		String sMethod = "revisaMovimiento";
 		
 		int iCodigo = 0;
 		
@@ -208,7 +213,7 @@ public class CLReferencias
 			//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 			iCodigo = -54;
 		}
-		else if (movimiento.getCOACCI().equals("A") && movimiento.getTIRCAT().equals(""))
+		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && movimiento.getTIRCAT().equals(""))
 		{
 			//Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
 			iCodigo = -52;
@@ -242,12 +247,12 @@ public class CLReferencias
 			iCodigo = -85;
 		}
 		
-		else if (!movimiento.getCOACCI().equals("A") &&  !comprobarRelacion(movimiento.getNURCAT(),movimiento.getCOACES()))
+		else if (!movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) &&  !comprobarRelacion(movimiento.getNURCAT(),movimiento.getCOACES()))
 		{
 			//error no existe relaccion con ese activo
 			iCodigo = -700;
 		}
-		else if (movimiento.getCOACCI().equals("A") && QMReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
+		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && !estaDeBaja(movimiento.getNURCAT()))
 		{
 			//Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
 			iCodigo = -49;
@@ -257,34 +262,44 @@ public class CLReferencias
 			//Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
 			iCodigo = -50;
 		}
-		else if (movimiento.getCOACCI().equals("B") && !QMReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
+		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA) && !QMReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
 		{
 			//Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
 			iCodigo = -51;
 		}
-		else if (movimiento.getCOACCI().equals("B") && QMImpuestos.tieneImpuestoRecurso(movimiento.getNURCAT()))
+		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA) && QMImpuestos.tieneImpuestoRecurso(movimiento.getNURCAT()))
 		{
 			//Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
 			iCodigo = -53;
 		}
 		
-		else if (sEstado.equals("A") && movimiento.getCOACCI().equals("A"))
+		else if (sEstado.equals(ValoresDefecto.DEF_ALTA) && movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA))
 		{
 			//error alta de una referencia en alta
 			iCodigo = -801;
 		}
-		else if (sEstado.equals("B") && !movimiento.getCOACCI().equals("A"))
+		else if (sEstado.equals(ValoresDefecto.DEF_BAJA) && !movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA))
 		{
 			//error referencia de baja, solo puede recibir altas
 			iCodigo = -802;
 		}
-		else if (sEstado.equals("") && !movimiento.getCOACCI().equals("A"))
+		else if (sEstado.equals("") && !movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA))
 		{
 			//error estado no disponible
 			iCodigo = -803;
-		}		
+		}
+		
+		return iCodigo;
+	}
+	
+	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento)
+	{
+		String sMethod = "registraMovimiento";
+		
+		
+		int iCodigo = revisaMovimiento(movimiento);
 
-		else
+		if (iCodigo == 0)
 		{
 			MovimientoReferenciaCatastral movimiento_revisado = revisaCodigosControl(movimiento);
 			if (movimiento_revisado.getCOACCI().equals("#"))
@@ -313,35 +328,77 @@ public class CLReferencias
 							com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la referencia...");
 							referenciadealta.pintaReferenciaCatastral();
 						
-							if (QMReferencias.addReferenciaCatastral(referenciadealta))
+							if (estaDeBaja(movimiento_revisado.getNURCAT()))
 							{
-								//OK - referencia creada
-								com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
 								if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
 								{
 									//OK 
-									iCodigo = 0;
+									if (QMReferencias.setEstado(movimiento_revisado.getNURCAT(), ValoresDefecto.DEF_ALTA))
+									{
+										//Se cambian los valores de la antigua referencia
+										if(QMReferencias.modReferenciaCatastral(convierteMovimientoenReferencia(movimiento), movimiento_revisado.getNURCAT()))
+										{
+											//OK 
+											iCodigo = 0;
+										}
+										else
+										{
+											QMMovimientosReferencias.delMovimientoReferenciaCatastral(Integer.toString(indice));
+											QMListaReferencias.delRelacionReferencia(Integer.toString(indice));
+											QMReferencias.setEstado(movimiento_revisado.getNURCAT(), ValoresDefecto.DEF_BAJA);
+											iCodigo = -904;						
+										}
+									}
+									else
+									{
+										//error estado no establecido - Rollback
+										QMMovimientosReferencias.delMovimientoReferenciaCatastral(Integer.toString(indice));
+										QMListaReferencias.delRelacionReferencia(Integer.toString(indice));
+										iCodigo = -903;
+									}
 								}
 								else
 								{
 									//error relacion referencia no creada - Rollback
-									QMReferencias.delReferenciaCatastral(movimiento_revisado.getNURCAT());
 									QMMovimientosReferencias.delMovimientoReferenciaCatastral(Integer.toString(indice));
 									iCodigo = -902;
 								}
+								
+
 							}
 							else
 							{
-								//error referencia no creada - Rollback
-								QMMovimientosReferencias.delMovimientoReferenciaCatastral(Integer.toString(indice));
-								iCodigo = -901;
+								if (QMReferencias.addReferenciaCatastral(referenciadealta))
+								{
+									//OK - referencia creada
+									com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
+									if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+									{
+										//OK 
+										iCodigo = 0;
+									}
+									else
+									{
+										//error relacion referencia no creada - Rollback
+										QMReferencias.delReferenciaCatastral(movimiento_revisado.getNURCAT());
+										QMMovimientosReferencias.delMovimientoReferenciaCatastral(Integer.toString(indice));
+										iCodigo = -902;
+									}
+								}
+								else
+								{
+									//error referencia no creada - Rollback
+									QMMovimientosReferencias.delMovimientoReferenciaCatastral(Integer.toString(indice));
+									iCodigo = -901;
+								}
 							}
+							
 							break;
 						case B:
 							if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
 							{
 							
-								if (QMReferencias.setEstado(movimiento_revisado.getNURCAT(), "B"))
+								if (QMReferencias.setEstado(movimiento_revisado.getNURCAT(), ValoresDefecto.DEF_BAJA))
 								{
 									//OK 
 									iCodigo = 0; 
@@ -427,7 +484,7 @@ public class CLReferencias
 		
 				
 		
-			if (movimiento.getCOACCI().equals("A"))
+			if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA))
 			{
 				
 				if (movimiento.getTIRCAT().equals(""))
@@ -456,7 +513,7 @@ public class CLReferencias
 				}
 				else
 				{
-					movimiento_revisado.setBITC09("A");
+					movimiento_revisado.setBITC09(ValoresDefecto.DEF_ALTA);
 					movimiento_revisado.setOBTEXC(movimiento.getOBTEXC());
 				}
 				
@@ -527,13 +584,13 @@ public class CLReferencias
 				}
 				else if (movimiento.getOBTEXC().equals("") && !referencia.getOBTEXC().equals(""))
 				{
-					movimiento_revisado.setBITC09("B");
+					movimiento_revisado.setBITC09(ValoresDefecto.DEF_BAJA);
 					movimiento_revisado.setOBTEXC("");
 					bCambio = true;
 				}
 				else if (!movimiento.getOBTEXC().equals("") &&  referencia.getOBTEXC().equals(""))
 				{
-					movimiento_revisado.setBITC09("A");
+					movimiento_revisado.setBITC09(ValoresDefecto.DEF_ALTA);
 					movimiento_revisado.setOBTEXC(movimiento.getOBTEXC());
 					bCambio = true;
 				}
@@ -582,7 +639,7 @@ public class CLReferencias
 					movimiento_revisado.setCOACCI("#");
 				
 			}
-			else if (movimiento.getCOACCI().equals("B"))
+			else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA))
 			{
 				movimiento_revisado.setBITC16("#");
 				movimiento_revisado.setBITC17("#");
