@@ -120,7 +120,7 @@ public class GestorReferenciasCatastrales implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		this.setTablaactivos(CLReferencias.buscarActivosSinReferencias(buscaactivos));
+		this.setTablaactivos(CLReferencias.buscarListaActivosReferencia(buscaactivos));
 		
 		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -139,12 +139,17 @@ public class GestorReferenciasCatastrales implements Serializable
     	
     	if (sNURCAT.equals(""))
     	{
-    		msg = Utils.pfmsgWarning(true, sClassName, sMethod, "No existe un numero de referencia catastral asociado.");
+    		msg = Utils.pfmsgWarning(true, sClassName, sMethod, "No existe un numero de referencia catastral asociado disponible.");
+    		FacesContext.getCurrentInstance().addMessage(null, msg);
+    	}
+    	else
+    	{
+    		msg = Utils.pfmsgWarning(true, sClassName, sMethod, "La Referencia '"+sNURCAT+"' se ha cargado correctamente.");
     		FacesContext.getCurrentInstance().addMessage(null, msg);
     	}
     		
     	
-    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Activo '"+ sCOACES +"' Seleccionado.");
+    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Referencias del Activo '"+ sCOACES +"' revisadas.");
  		FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 	
@@ -159,7 +164,7 @@ public class GestorReferenciasCatastrales implements Serializable
     	
     	if (sNURCAT.equals(""))
     	{
-    		msg = Utils.pfmsgWarning(true, sClassName, sMethod, "No existe un numero de referencia catastral asociado.");
+    		msg = Utils.pfmsgWarning(true, sClassName, sMethod, "No existe un numero de referencia catastral asociado disponible.");
     		FacesContext.getCurrentInstance().addMessage(null, msg);
     		
     	}
@@ -291,8 +296,8 @@ public class GestorReferenciasCatastrales implements Serializable
 				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.");
 				break;
 
-			case -802: //Error 802 - referencia catastral de baja no puede recibir mas movimientos
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La referencia catastral esta baja y no puede recibir mas movimientos. Por favor, revise los datos.");
+			case -802: //Error 802 - referencia catastral de baja no puede recibir movimientos
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La referencia catastral esta baja y no puede recibir movimientos. Por favor, revise los datos.");
 				break;
 				
 			case -803: //Error 803 - estado no disponible

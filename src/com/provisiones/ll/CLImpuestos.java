@@ -323,11 +323,11 @@ public class CLImpuestos
 			//error alta de una referencia en alta
 			iCodigo = -801;
 		}
-		/*else if (sEstado.equals(ValoresDefecto.DEF_BAJA) && !movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA))
+		else if (sEstado.equals(ValoresDefecto.DEF_BAJA) && !movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA))
 		{
 			//error referencia de baja no recibe altas
 			iCodigo = -802;
-		}*/
+		}
 		else if (sEstado.equals("") && !movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA))
 		{
 			//error estado no disponible

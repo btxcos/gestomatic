@@ -136,7 +136,13 @@ public class CLReferencias
 	
 	public static String referenciaCatastralActivo(String sCodCOACES)
 	{
-		return QMActivos.getReferenciaCatastral(sCodCOACES);
+		String sReferencia = QMActivos.getReferenciaCatastral(sCodCOACES);
+		
+		if (!sReferencia.equals("") && QMReferencias.getEstado(sReferencia).equals(ValoresDefecto.DEF_ALTA))
+		{
+			sReferencia = "";
+		}
+		return sReferencia;
 	}
 	
 	public static String referenciaCatastralAsociada(String sCodCOACES)
@@ -147,6 +153,11 @@ public class CLReferencias
 	public static ArrayList<ActivoTabla> buscarActivosSinReferencias (ActivoTabla activo)
 	{
 		return QMListaReferencias.buscaActivosNoAsociados(activo);
+	}
+	
+	public static ArrayList<ActivoTabla> buscarListaActivosReferencia (ActivoTabla activo)
+	{
+		return QMListaReferencias.buscaListaActivosReferencias(activo);
 	}
 	
 	public static ArrayList<ActivoTabla> buscarActivosConReferencias (ActivoTabla activo)
@@ -252,7 +263,7 @@ public class CLReferencias
 			//error no existe relaccion con ese activo
 			iCodigo = -700;
 		}
-		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && !estaDeBaja(movimiento.getNURCAT()))
+		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && QMReferencias.existeReferenciaCatastral(movimiento.getNURCAT()) && !estaDeBaja(movimiento.getNURCAT()))
 		{
 			//Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
 			iCodigo = -49;

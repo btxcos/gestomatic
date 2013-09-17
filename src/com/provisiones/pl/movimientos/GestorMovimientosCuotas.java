@@ -348,8 +348,8 @@ public class GestorMovimientosCuotas implements Serializable
 				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - La cuota ya esta dada de alta. Por favor, revise los datos.");
 				break;
 
-			case -802: //Error 802 - cuota de baja no puede recibir mas movimientos
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La cuota esta baja y no puede recibir mas movimientos. Por favor, revise los datos.");
+			case -802: //Error 802 - cuota de baja no puede recibir movimientos
+				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La cuota esta baja y no puede recibir movimientos. Por favor, revise los datos.");
 				break;
 				
 			case -803: //Error 803 - estado no disponible
