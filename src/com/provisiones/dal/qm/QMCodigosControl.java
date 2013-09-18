@@ -6,55 +6,74 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 
 public class QMCodigosControl 
 {
-	static String sClassName = QMCodigosControl.class.getName();
+
+	private static Logger logger = LoggerFactory.getLogger(QMCodigosControl.class.getName());
+
+	public static final String DESCRIPCION = "descripcion";
 	
-	static boolean bTrazas = true;
-
-
-
+	public static final String TCOCLDO = "cocldo_tbl";
+	public static final String ICOCLDO = "cocldo_id";
 	
-	public static String getDesCOCLDO(String sCodCOCLDO)
+	public static final String TCOSBGAT22 = "cosbga_t22_tbl";
+	public static final String ICOSBGAT22 = "cosbga_id";
+	
+	public static final String TCOSBGAT21 = "cosbga_t21_tbl";
+	public static final String ICOSBGAT21 = "cosbga_id";
+	
+	public static final String TCOSIGA = "cosiga_tbl";
+	public static final String ICOSIGA = "cosiga_id";
+	
+	public static final String TPTPAGO = "ptpago_tbl";
+	public static final String IPTPAGO = "ptpago_id";
+	
+	public static final String TSOCTIT = "sociedades_titulizadas_tbl";
+	public static final String ISOCTIT = "cospat_id";	
+	
+	public static final String TTIACSA = "tipo_activo_sareb_tbl";
+	public static final String ITIACSA = "tipo_id";
+	
+	public static final String TBIRESO = "bireso_tbl";
+	public static final String IBIRESO = "bireso_id";
+
+	public static final String TBINARIA = "binaria_tbl";
+	public static final String IBINARIA = "binaria_id";
+	
+	public static String getDesCampo(String sTable, String sField1, String sValor)
 	{
-		String sMethod = "getDesCOCLDO";
-
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+		
 		Statement stmt = null;
+
 		ResultSet rs = null;
-
-
 		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "cocldo_tbl";
-
-		String sField1  = "cocldo_id";    
-		String sField2  = "descripcion";
 		
 		String sDescripcion = "";
 
-		Connection conn = null;
+		boolean found = false;
 
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOCLDO + "')");
+			pstmt = conn.prepareStatement("SELECT "+DESCRIPCION+" FROM " + sTable + 
+					" WHERE "
+					+ sField1 + " = '" + sValor + "'");
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			
 			if (rs != null) 
@@ -64,34 +83,32 @@ public class QMCodigosControl
 				{
 					found = true;
 
-					sDescripcion = rs.getString(sField2);
+					sDescripcion = rs.getString(DESCRIPCION);
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
+					logger.debug("{}:|{}|",DESCRIPCION,sDescripcion);
 				}
 			}
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
+			logger.error("ERROR: {}:|{}|",sField1.toUpperCase(),sValor);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -100,8 +117,6 @@ public class QMCodigosControl
 	
 	public static String getDesCOSBGA(String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA)
 	{
-		String sMethod = "getDesCOSBGA";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -112,7 +127,6 @@ public class QMCodigosControl
 
 		String sTable = "";
 		String sField1  = "cosbga_id";    
-		String sField2  = "descripcion";
 		
 		String sDescripcion = "";
 		
@@ -147,7 +161,7 @@ public class QMCodigosControl
 						sTable = "cosbga_32_tbl";
 						break;
 					case 3:
-						sTable = "";//
+						sTable = "";
 						sDescripcion = "Obtencion de Licencias";
 						break;
 				}
@@ -161,20 +175,20 @@ public class QMCodigosControl
 
 			conn = ConnectionManager.OpenDBConnection();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+			logger.debug("Ejecutando Query...");
 
 			try 
 			{
 				stmt = conn.createStatement();
 
 
-				pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
+				pstmt = conn.prepareStatement("SELECT " + DESCRIPCION + "  FROM " + sTable + 
 						" WHERE " +
 						"(" + sField1 + " = '" + sCodCOSBGA + "')");
 
 				rs = pstmt.executeQuery();
 				
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+				logger.debug("Ejecutada con exito!");
 				
 				
 				if (rs != null) 
@@ -184,11 +198,11 @@ public class QMCodigosControl
 					{
 						found = true;
 
-						sDescripcion = rs.getString(sField2);
+						sDescripcion = rs.getString(DESCRIPCION);
 
-						com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+						logger.debug("Encontrado el registro!");
 
-						com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
+						logger.debug("{}:|{}|",DESCRIPCION,sDescripcion);
 
 
 					}
@@ -196,748 +210,28 @@ public class QMCodigosControl
 				if (found == false) 
 				{
 	 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+					logger.debug("No se encontró la información.");
 				}
 
 			} 
 			catch (SQLException ex) 
 			{
-				System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-				System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-				System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
+				logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+				logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+				logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
 
-				System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-				System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-				System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+				logger.error("ERROR: SQLException:{}",ex.getMessage());
+				logger.error("ERROR: SQLState:{}",ex.getSQLState());
+				logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			} 
 			finally 
 			{
-				Utils.closeResultSet(rs,sClassName,sMethod);
-				Utils.closeStatement(stmt, sClassName, sMethod);
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
 
 			ConnectionManager.CloseDBConnection(conn);
 		}
-		return sDescripcion;
-	}
-	
-	public static String getDesCOSBGA_E2(String sCodCOSBGA)
-	{
-		String sMethod = "getDesCOSBGA_E2";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "cosbga_t22_tbl";
-
-		String sField1  = "cosbga_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOSBGA + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-	
-	public static String getDesCOSBGA_E4(String sCodCOSBGA)
-	{
-		String sMethod = "getDesCOSBGA_E4";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "cosbga_t21_tbl";
-
-		String sField1  = "cosbga_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOSBGA + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-	
-	public static String getDesCOSIGA(String sCodCOSIGA)
-	{
-		String sMethod = "getDesCOSIGA";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "cosiga_tbl";
-
-		String sField1  = "cosiga_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOSIGA + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSIGA: " + sCodCOSIGA);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-
-	public static String getDesPTPAGO(String sCodPTPAGO)
-	{
-		String sMethod = "getDesPTPAGO";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "ptpago_tbl";
-
-		String sField1  = "ptpago_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodPTPAGO + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: PTPAGO: " + sCodPTPAGO);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-	
-	public static String getDesSociedadesTitulizadas(String sCodCOSPAT)
-	{
-		String sMethod = "getDesSociedadesTitulizadas";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "sociedades_titulizadas_tbl";
-
-		String sField1  = "cospat_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOSPAT + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSPAT: " + sCodCOSPAT);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-	
-	public static String getDesTipoActivo(String sCodTAS)
-	{
-		String sMethod = "getDesTipoActivo";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "tipo_activo_sareb_tbl";
-
-		String sField1  = "tipo_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodTAS + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: TAS: " + sCodTAS);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-	
-	public static String getDesBIRESO(String sCodBIRESO)
-	{
-		String sMethod = "getDesBIRESO";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "bireso_tbl";
-
-		String sField1  = "bireso_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodBIRESO + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: PTPAGO: " + sCodBIRESO);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-	
-	public static String getDesBINARIA(String sCodBINARIA)
-	{
-		String sMethod = "getDesBINARIA";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sTable = "binaria_tbl";
-
-		String sField1  = "binaria_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sCodBINARIA + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: PTPAGO: " + sCodBINARIA);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-	
-	public static String getDesCampo(String sTable, String sField1, String sValor)
-	{
-		String sMethod = "getDesBINARIA";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		//String sTable = "ptpago_tbl";
-
-		//String sField1  = "ptpago_id";    
-		String sField2  = "descripcion";
-		
-		String sDescripcion = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "  FROM " + sTable + 
-					" WHERE " +
-					"(" + sField1 + " = '" + sValor + "')");
-
-			rs = pstmt.executeQuery();
-			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sDescripcion = rs.getString(sField2);
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField2 + ": " + sDescripcion);
-
-
-				}
-			}
-			if (found == false) 
-			{
- 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VALOR: " + sValor);
-
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
 		return sDescripcion;
 	}
 }

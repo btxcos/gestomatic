@@ -17,12 +17,8 @@ import org.slf4j.LoggerFactory;
 
 public class QMActivos
 {
-	static String sClassName = QMActivos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(QMActivos.class.getName());
 	
-	private static Logger logger = LoggerFactory.getLogger(sClassName);
-	
-	static boolean bTrazas = true;
-
 	public static final String sTable = "ac_activos_tbl";
 
 	public static final String sField1 = "coaces_id";
@@ -120,22 +116,18 @@ public class QMActivos
 	public static final String sField92 = "pobrar";
 
 	public static boolean addActivo (Activo NuevoActivo) 
-	 
 	{
-		String sMethod = "addActivo";
-		Statement stmt = null;
 		Connection conn = null;
-		
-		boolean bSalida = true;
-
-		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Statement stmt = null;
+				
+		boolean bSalida = true;
+
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
-			
 			stmt = conn.createStatement();
 			stmt.executeUpdate("INSERT INTO " + sTable + " ("
 				       + sField1  + ","
@@ -324,24 +316,24 @@ public class QMActivos
 				       + NuevoActivo.getBIOBNU() + "','"  
 				       + NuevoActivo.getPOBRAR() + "' )");
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoActivo.getCOACES());
+			logger.error("ERROR: COACES:|{}|",NuevoActivo.getCOACES());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -349,16 +341,14 @@ public class QMActivos
 	}
 	public static boolean modActivo(Activo NuevoActivo, String sCodCOACES)
 	{
-		String sMethod = "modActivo";
-		Statement stmt = null;
-		
-		boolean bSalida = true;
-		
 		Connection conn = null;
-		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Statement stmt = null;
+				
+		boolean bSalida = true;
+		
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -459,23 +449,23 @@ public class QMActivos
 					" WHERE "
 					+ sField1 + " = '"+ sCodCOACES +"'");
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 					
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoActivo.getCOACES());
+			logger.error("ERROR: COACES:|{}|",NuevoActivo.getCOACES());
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 			
 		}
 		ConnectionManager.CloseDBConnection(conn);
@@ -484,15 +474,14 @@ public class QMActivos
 
 	public static boolean delActivo(String sCodCOACES)
 	{
-		String sMethod = "delActivo";
-		Statement stmt = null;
 		Connection conn = null;
-		
-		boolean bSalida = true;
-		
 		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		Statement stmt = null;
+
+		boolean bSalida = true;
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -500,23 +489,23 @@ public class QMActivos
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sCodCOACES + "' )");
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -524,12 +513,14 @@ public class QMActivos
 
 	public static Activo getActivo(String sCodCOACES)
 	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 		
-		String sMethod = "getActivo";
-
 		Statement stmt = null;
+				
 		ResultSet rs = null;
-
+		PreparedStatement pstmt = null;
+		
 		String sCOACES = "";
 		String sNUINMU = "";
 		String sCOSOPA = "";
@@ -623,14 +614,9 @@ public class QMActivos
 		String sBIOBNU = "";
 		String sPOBRAR = "";
 
-		PreparedStatement pstmt = null;
 		boolean found = false;
 		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -736,9 +722,9 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
-			Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sCodCOACES);
+			logger.debug("{}:|{}|",sField1,sCodCOACES);
 
 			if (rs != null) 
 			{
@@ -840,28 +826,28 @@ public class QMActivos
 					sBIOBNU = rs.getString(sField91);
 					sPOBRAR = rs.getString(sField92);
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontro la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new Activo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
@@ -882,22 +868,17 @@ public class QMActivos
 
 	public static boolean existeActivo(String sCodCOACES)
 	{
-		
-		String sMethod = "existeActivo";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
-
-		
-
 		PreparedStatement pstmt = null;
+
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -912,7 +893,7 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
 			
 
@@ -923,29 +904,28 @@ public class QMActivos
 				{
 					found = true;
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + rs.getString(sField1));
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField1,rs.getString(sField1));
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontro la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
@@ -953,22 +933,19 @@ public class QMActivos
 
 	public static String getReferenciaCatastral(String sCodCOACES)
 	{
-		
-		String sMethod = "getReferenciaCatastral";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
-
-		String sReferencia = "";
-
 		PreparedStatement pstmt = null;
+		
+		String sReferencia = "";
+		
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -983,9 +960,7 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-
-			
+			logger.debug("Ejecutada con éxito!");
 
 			if (rs != null) 
 			{
@@ -996,30 +971,29 @@ public class QMActivos
 					
 					sReferencia = rs.getString(sField81);
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					
-					if (!sReferencia.equals(""))
-						Utils.debugTrace(bTrazas, sClassName, sMethod, sField81 + ":|"+ sReferencia+"|");
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField81,sReferencia);
+
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontro la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sReferencia;
@@ -1027,22 +1001,19 @@ public class QMActivos
 	
 	public static String getCOTSINActivo(String sCodCOACES)
 	{
-		
-		String sMethod = "getCOTSINActivo";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sCOTSIN = "";
 
-		PreparedStatement pstmt = null;
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -1057,7 +1028,7 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
 			
 
@@ -1070,29 +1041,29 @@ public class QMActivos
 					
 					sCOTSIN = rs.getString(sField27);
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField27 + ":|"+ sCOTSIN+"|");
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField27,sCOTSIN);
+
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontro la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sCOTSIN;
@@ -1100,22 +1071,19 @@ public class QMActivos
 
 	public static String getBIARREActivo(String sCodCOACES)
 	{
-		
-		String sMethod = "getBIARREActivo";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sBIARRE = "";
 
-		PreparedStatement pstmt = null;
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -1126,13 +1094,9 @@ public class QMActivos
 					   "  FROM " + sTable + 
 					   " WHERE (" + sField1 + " = '" + sCodCOACES	+ "')");
 			
-			
-
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-
-			
+			logger.debug("Ejecutada con éxito!");
 
 			if (rs != null) 
 			{
@@ -1143,29 +1107,28 @@ public class QMActivos
 					
 					sBIARRE = rs.getString(sField45);
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField45 + ":|"+ sBIARRE+"|");
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField45,sBIARRE);
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontro la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sBIARRE;
@@ -1173,22 +1136,19 @@ public class QMActivos
 	
 	public static String getSociedadPatrimonial(String sCodCOACES)
 	{
-		
-		String sMethod = "getSociedadPatrimonial";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sCodCOSPAT = "0";
 
-		PreparedStatement pstmt = null;
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -1198,12 +1158,10 @@ public class QMActivos
 					   + sField88  +        
 					   "  FROM " + sTable + 
 					   " WHERE (" + sField1 + " = '" + sCodCOACES	+ "')");
-			
-			
-
+		
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
 			
 
@@ -1216,30 +1174,29 @@ public class QMActivos
 					
 					sCodCOSPAT = rs.getString(sField88);
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					
-					if (!sCodCOSPAT.equals(""))
-						Utils.debugTrace(bTrazas, sClassName, sMethod, sField88 + ":|"+ sCodCOSPAT+"|");
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField88,sCodCOSPAT);
+
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontro la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sCodCOSPAT;
@@ -1247,11 +1204,13 @@ public class QMActivos
 	
 	public static ArrayList<ActivoTabla> buscaActivos(ActivoTabla activo)
 	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 		
-		String sMethod = "buscaActivos";
-
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sCOACES = "";
 		String sCOPOIN = "";
@@ -1263,17 +1222,9 @@ public class QMActivos
 		String sNUPUAC = "";
 		
 		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
-		
 
-		PreparedStatement pstmt = null;
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		//Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-		
+
 		logger.debug("Ejecutando Query...");
 
 		try 
@@ -1304,9 +1255,7 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			//Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
 			if (rs != null) 
 			{
@@ -1328,39 +1277,27 @@ public class QMActivos
 					
 					result.add(activoencontrado);
 					
-					//Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
-					
 					logger.debug( "Encontrado el registro!");
-
-					//Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCOACES);
-					
-					logger.debug("{}:{}",sField1,sCOACES);
+					logger.debug("{}:|{}|",sField1,sCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				//Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
-				logger.info("No se encontro la informacion.");
+
+				logger.info("No se encontro la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			/*System.out.println("["+sClassName+"."+sMethod+"] ERROR: COPOIN: " + activo.getCOPOIN());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOMUIN: " + activo.getNOMUIN());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOPRAC: " + activo.getNOPRAC());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOVIAS: " + activo.getNOVIAS());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPIAC: " + activo.getNUPIAC());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPOAC: " + activo.getNUPOAC());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPUAC: " + activo.getNUPUAC());*/
-			
-			logger.error("ERROR: COPOIN:{}",activo.getCOPOIN());
-			logger.error("ERROR: NOMUIN:{}",activo.getNOMUIN());
-			logger.error("ERROR: NOPRAC:{}",activo.getNOPRAC());
-			logger.error("ERROR: NOVIAS:{}",activo.getNOVIAS());
-			logger.error("ERROR: NUPIAC:{}",activo.getNUPIAC());
-			logger.error("ERROR: NUPOAC:{}",activo.getNUPOAC());
-			logger.error("ERROR: NUPUAC:{}",activo.getNUPUAC());
+
+			logger.error("ERROR: COPOIN:|{}|",activo.getCOPOIN());
+			logger.error("ERROR: NOMUIN:|{}|",activo.getNOMUIN());
+			logger.error("ERROR: NOPRAC:|{}|",activo.getNOPRAC());
+			logger.error("ERROR: NOVIAS:|{}|",activo.getNOVIAS());
+			logger.error("ERROR: NUPIAC:|{}|",activo.getNUPIAC());
+			logger.error("ERROR: NUPOAC:|{}|",activo.getNUPOAC());
+			logger.error("ERROR: NUPUAC:|{}|",activo.getNUPUAC());
 			
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
@@ -1369,8 +1306,8 @@ public class QMActivos
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;

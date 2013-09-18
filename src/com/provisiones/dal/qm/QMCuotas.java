@@ -11,12 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QMCuotas
 {
-	static String sClassName = QMCuotas.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(QMCuotas.class.getName());
 	
-	static boolean bTrazas = true;
-
 	public static final String sTable = "e2_cuotas_tbl";
 
 	public static final String sField1  = "cod_coaces";
@@ -35,15 +36,14 @@ public class QMCuotas
 	public static boolean addCuota(Cuota NuevaCuota)
 
 	{
-		String sMethod = "addCuota";
-		Statement stmt = null;
 		Connection conn = null;
-		
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
 		boolean bSalida = true;
 
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try {
 
@@ -73,39 +73,39 @@ public class QMCuotas
 				       + NuevaCuota.getOBTEXC() + "','" 
 				       + ValoresDefecto.DEF_ALTA + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevaCuota.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevaCuota.getCOCLDO());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevaCuota.getNUDCOM());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevaCuota.getCOSBAC());
+			logger.error("ERROR: COACES:|{}|",NuevaCuota.getCOACES());
+			logger.error("ERROR: COCLDO:|{}|",NuevaCuota.getCOCLDO());
+			logger.error("ERROR: NUDCOM:|{}|",NuevaCuota.getNUDCOM());
+			logger.error("ERROR: COSBAC:|{}|",NuevaCuota.getCOSBAC());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	public static boolean modCuota(Cuota NuevaCuota, String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		String sMethod = "modCuota";
-		Statement stmt = null;
-		boolean bSalida = true;
 		Connection conn = null;
-		
 		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
+		boolean bSalida = true;
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -125,26 +125,26 @@ public class QMCuotas
 						sField3  + " = '"+ sCodNUDCOM +"' AND " +
 					    sField4  + " = '"+ sCodCOSBAC + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevaCuota.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevaCuota.getCOCLDO());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevaCuota.getNUDCOM());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevaCuota.getCOSBAC());
+			logger.error("ERROR: COACES:|{}|",NuevaCuota.getCOACES());
+			logger.error("ERROR: COCLDO:|{}|",NuevaCuota.getCOCLDO());
+			logger.error("ERROR: NUDCOM:|{}|",NuevaCuota.getNUDCOM());
+			logger.error("ERROR: COSBAC:|{}|",NuevaCuota.getCOSBAC());
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -152,15 +152,14 @@ public class QMCuotas
 
 	public static boolean delCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		String sMethod = "delCuota";
-		Statement stmt = null;
 		Connection conn = null;
-		
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
 		boolean bSalida = true;
 		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -172,26 +171,26 @@ public class QMCuotas
 					sField3  + " = '"+ sCodNUDCOM +"' AND " +
 				    sField4  + " = '"+ sCodCOSBAC + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -199,20 +198,17 @@ public class QMCuotas
 	
 	public static boolean existeCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		String sMethod = "existeCuota";
-
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
 		Connection conn = null;
-
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+
+		boolean found = false;
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -228,7 +224,7 @@ public class QMCuotas
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			
 			if (rs != null) 
@@ -238,31 +234,31 @@ public class QMCuotas
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 				}
 			}
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -271,11 +267,13 @@ public class QMCuotas
 
 	public static Cuota getCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		
-		String sMethod = "getCuota";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sCOACES = "";
 		String sCOCLDO = "";
@@ -288,14 +286,9 @@ public class QMCuotas
 		String sPTPAGO = "";
 		String sOBTEXC = "";
 
-		PreparedStatement pstmt = null;
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -321,7 +314,7 @@ public class QMCuotas
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -341,31 +334,31 @@ public class QMCuotas
 					sPTPAGO = rs.getString(sField9);
 					sOBTEXC = rs.getString(sField10);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 					
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCOSBAC);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: NUDCOM:|{}|",sCOSBAC);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new Cuota(sCOACES, sCOCLDO, sNUDCOM, sCOSBAC, sFIPAGO, sFFPAGO, sIMCUCO, sFAACTA, sPTPAGO, sOBTEXC);
@@ -373,20 +366,17 @@ public class QMCuotas
 	
 	public static boolean tieneCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM)
 	{
-		
-		String sMethod = "getCuota";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "              
 			       + sField3  +       
@@ -397,7 +387,7 @@ public class QMCuotas
 					sField3  + " = '"+ sCodNUDCOM +"' AND " +
 			      sField11  + " <> 'B' )";
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug(sQuery);
 
 		try 
 		{
@@ -414,7 +404,7 @@ public class QMCuotas
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 
 			if (rs != null) 
@@ -424,31 +414,31 @@ public class QMCuotas
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
@@ -456,14 +446,14 @@ public class QMCuotas
 	
 	public static boolean setEstado(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sEstado)
 	{
-		String sMethod = "setEstado";
-		Statement stmt = null;
-		boolean bSalida = true;
 		Connection conn = null;
-		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		Statement stmt = null;
+
+		boolean bSalida = true;
+
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -478,26 +468,26 @@ public class QMCuotas
 					sField3  + " = '"+ sCodNUDCOM +"' AND " +
 				    sField4  + " = '"+ sCodCOSBAC + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -505,23 +495,19 @@ public class QMCuotas
 	
 	public static String getEstado(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		String sMethod = "getEstado";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
-
-
 		PreparedStatement pstmt = null;
-		boolean found = false;
-	
 
 		String sEstado = "";
 
-		Connection conn = null;
+		boolean found = false;
 
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -537,7 +523,7 @@ public class QMCuotas
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			
 			if (rs != null) 
@@ -549,9 +535,9 @@ public class QMCuotas
 
 					sEstado = rs.getString(sField11);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField11 + ": " + sEstado);
+					logger.debug("{}:|{}|",sField11,sEstado);
 
 
 				}
@@ -559,25 +545,25 @@ public class QMCuotas
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + sCodCOSBAC);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);

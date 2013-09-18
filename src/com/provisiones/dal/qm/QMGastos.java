@@ -12,16 +12,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QMGastos
 {
-	static String sClassName = QMGastos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(QMGastos.class.getName());
 	
-	static boolean bTrazas = true;
-
 	public static final String sTable = "ga_gastos_tbl";
 
-	
-	
 	public static final String sField1  = "cod_coaces";
 	public static final String sField2  = "cod_cogrug";    
 	public static final String sField3  = "cotpga";    
@@ -64,16 +63,14 @@ public class QMGastos
 	public static boolean addGasto (Gasto NuevoGasto, String sEstado) 
 	 
 	{
-		String sMethod = "addGasto";
-		Statement stmt = null;
 		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
 		
 		boolean bSalida = true;
-		
 
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -151,26 +148,26 @@ public class QMGastos
 				       + NuevoGasto.getFEPGPR() + "','"
 				       + sEstado + "' )");
 
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
 	
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoGasto.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + NuevoGasto.getCOGRUG());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + NuevoGasto.getCOTPGA());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + NuevoGasto.getCOSBGA());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + NuevoGasto.getFEDEVE());
+			logger.error("ERROR: COACES:|{}|",NuevoGasto.getCOACES());
+			logger.error("ERROR: COGRUG:|{}|",NuevoGasto.getCOGRUG());
+			logger.error("ERROR: COTPGA:|{}|",NuevoGasto.getCOTPGA());
+			logger.error("ERROR: COSBGA:|{}|",NuevoGasto.getCOSBGA());
+			logger.error("ERROR: FEDEVE:|{}|",NuevoGasto.getFEDEVE());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		
@@ -178,20 +175,15 @@ public class QMGastos
 	}
 	public static boolean modGasto(Gasto NuevoGasto)
 	{
-		String sMethod = "modGasto";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+
 		Statement stmt = null;
 
 		boolean bSalida = true;
-		
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
 
+		logger.debug("Ejecutando Query...");
 
-		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -234,27 +226,27 @@ public class QMGastos
 						sField4  + " = '"+ NuevoGasto.getCOSBGA() +"' AND " +
 					    sField6  + " = '"+ NuevoGasto.getFEDEVE() + "' )");
 
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoGasto.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + NuevoGasto.getCOGRUG());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + NuevoGasto.getCOTPGA());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + NuevoGasto.getCOSBGA());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + NuevoGasto.getFEDEVE());
+			logger.error("ERROR: COACES:|{}|",NuevoGasto.getCOACES());
+			logger.error("ERROR: COGRUG:|{}|",NuevoGasto.getCOGRUG());
+			logger.error("ERROR: COTPGA:|{}|",NuevoGasto.getCOTPGA());
+			logger.error("ERROR: COSBGA:|{}|",NuevoGasto.getCOSBGA());
+			logger.error("ERROR: FEDEVE:|{}|",NuevoGasto.getFEDEVE());
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -262,15 +254,14 @@ public class QMGastos
 
 	public static boolean delGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
-		String sMethod = "delGasto";
-		Statement stmt = null;
 		Connection conn = null;
-		
-		boolean bSalida = true; 
-		
 		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		Statement stmt = null;
+
+		boolean bSalida = true; 
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -283,38 +274,40 @@ public class QMGastos
 					sField4  + " = '"+ sCodCOSBGA +"' AND " +
 				    sField6  + " = '"+ sFEDEVE + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static Gasto getGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getGasto";
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sPTPAGO = "";
 		String sFFGTVP = "";
@@ -345,15 +338,9 @@ public class QMGastos
 		String sFEAUFA = "";
 		String sFEPGPR = "";
 
-
-		PreparedStatement pstmt = null;
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -398,7 +385,7 @@ public class QMGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 
 
@@ -438,32 +425,32 @@ public class QMGastos
 					sFEAUFA = rs.getString(sField32);
 					sFEPGPR = rs.getString(sField33);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new Gasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA,
@@ -475,33 +462,18 @@ public class QMGastos
 	}
 	
 	public static boolean existeGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "existeGasto";
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
-
 		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-			       + sField1  +       
-		"  FROM " + sTable + 
-		" WHERE "+
-		"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
-		sField2  + " = '"+ sCodCOGRUG +"' AND " +
-		sField3  + " = '"+ sCodCOTPGA +"' AND " +
-		sField4  + " = '"+ sCodCOSBGA +"' AND " +
-	    sField6  + " = '"+ sFEDEVE + "' )";
 
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "sQuery: "+sQuery);
+		boolean found = false;
+
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -519,7 +491,7 @@ public class QMGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 
 
@@ -530,53 +502,50 @@ public class QMGastos
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	
 	public static boolean gastoAnulado(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "gastoAnulado";
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
-		ResultSet rs = null;
 
+		ResultSet rs = null;
 		PreparedStatement pstmt = null;
+
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -596,7 +565,7 @@ public class QMGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -605,34 +574,32 @@ public class QMGastos
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					//com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField7 + ": " + sEstado);
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
@@ -642,14 +609,14 @@ public class QMGastos
 
 	public static boolean setEstado(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sEstado)
 	{
-		String sMethod = "setEstado";
-		Statement stmt = null;
-		boolean bSalida = true;
 		Connection conn = null;
-		
 		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		Statement stmt = null;
+
+		boolean bSalida = true;
+
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -665,50 +632,47 @@ public class QMGastos
 					sField4  + " = '"+ sCodCOSBGA +"' AND " +
 				    sField6  + " = '"+ sFEDEVE + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
 	public static String getEstado(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getEstado";
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		String sEstado = "";
 
-		PreparedStatement pstmt = null;
 		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -727,7 +691,7 @@ public class QMGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -739,34 +703,34 @@ public class QMGastos
 					sEstado = rs.getString(sField34);
 					
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField7 + ": " + sEstado);
+					logger.debug("{}:|{}|",sField7,sEstado);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sEstado;

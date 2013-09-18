@@ -35,7 +35,7 @@ public class CLProvisiones
 		
 		String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCodCOACES);
 		
-		if (QMCodigosControl.getDesSociedadesTitulizadas(sCOSPAT).equals(""))
+		if (QMCodigosControl.getDesCampo(QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
 		{
 			sCOSPAT = "0";
 		}

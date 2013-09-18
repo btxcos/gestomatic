@@ -2,16 +2,19 @@ package com.provisiones.ll;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.qm.QMActivos;
+
 import com.provisiones.misc.Parser;
-import com.provisiones.misc.Utils;
 import com.provisiones.types.Activo;
 import com.provisiones.types.ActivoTabla;
 
 
 public class CLActivos 
 {
-	static String sClassName = CLActivos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(CLActivos.class.getName());
 	
 	
 	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla activobuscado)
@@ -28,9 +31,11 @@ public class CLActivos
 	
 	public static String compruebaTipoActivoSAREB (String sCodCOACES)
 	{
-		String sMethod = "compruebaTipoActivoSAREB";
+
 		String sTipo = "#";
-		Utils.debugTrace(true, sClassName, sMethod, "sCodCOACES|"+sCodCOACES+"|");
+		
+		logger.debug("sCodCOACES:|{}|",sCodCOACES);
+
 		if (QMActivos.getSociedadPatrimonial(sCodCOACES).equals("9999"))
 		{
 			if (QMActivos.getCOTSINActivo(sCodCOACES).startsWith("SU"))
@@ -46,7 +51,7 @@ public class CLActivos
 				sTipo = "T"; //PRODUCTO TERMINADO
 			}
 		}
-		Utils.debugTrace(true, sClassName, sMethod, "sTipo|"+sTipo+"|");
+		logger.debug("sTipo:|{}|",sTipo);
 		return sTipo;
 	}
 	
@@ -58,8 +63,6 @@ public class CLActivos
 	
 	public static boolean actualizaActivoLeido(String linea)
 	{
-		String sMethod = "actualizaActivoLeido";
-
 		boolean bSalida = false;
 		
 		Activo activo = Parser.leerActivo(linea);
@@ -68,27 +71,15 @@ public class CLActivos
 				
 		bSalida = QMActivos.addActivo(activo);
 		
-		Utils.debugTrace(true, sClassName, sMethod, "sCodActivo|"+sCodActivo+"|");
+		logger.debug("sCodActivo:|{}|",sCodActivo);
 		
-		/*
-		QMActivos.getActivo(activo.getCOACES()).pintaActivo();
-		
-		activo.setNUINMU("666");
-		
-		QMActivos.modActivo(activo, activo.getCOACES());
-		
-		QMActivos.getActivo(activo.getCOACES()).pintaActivo();
-		
-		QMActivos.delActivo(activo.getCOACES());
-		
-		//*/
-		
+	
 		bSalida =  bSalida && !sCodActivo.equals("");
 		
 		if (!bSalida)
 		{
-			Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro ya se encuentre en el sistema:");
-			Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
+			logger.warn("El siguiente registro ya se encuentre en el sistema:");
+			logger.warn("|{}|",linea);
 		}
 		
 		return bSalida;

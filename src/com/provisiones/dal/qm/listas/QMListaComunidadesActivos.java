@@ -16,12 +16,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QMListaComunidadesActivos
 {
-	static String sClassName = QMListaComunidadesActivos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(QMListaComunidadesActivos.class.getName());
 	
-	static boolean bTrazas = true;
-
 	static String sTable = "lista_comunidades_activos_multi";
 
 	static String sField1  = "cod_cocldo";
@@ -34,9 +35,8 @@ public class QMListaComunidadesActivos
 	static String sField7  = "fecha_movimiento";
 
 	public static boolean addRelacionComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
-
 	{
-		String sMethod = "addRelacionComunidad";
+
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -46,7 +46,7 @@ public class QMListaComunidadesActivos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -70,25 +70,25 @@ public class QMListaComunidadesActivos
 				       + Utils.timeStamp() + 
 				       "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -96,7 +96,6 @@ public class QMListaComunidadesActivos
 
 	public static boolean delRelacionComunidad(String sCodMovimiento)
 	{
-		String sMethod = "delRelacionComunidad";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -104,7 +103,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -113,22 +112,22 @@ public class QMListaComunidadesActivos
 					" WHERE " +
 					"(" + sField4 + " = '" + sCodMovimiento	+ "')");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -136,9 +135,6 @@ public class QMListaComunidadesActivos
 
 	public static boolean existeRelacionComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES, String sCodMovimiento)
 	{
-		
-		String sMethod = "existeRelacionComunidad";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 		
@@ -151,7 +147,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 
 		try 
@@ -172,7 +168,7 @@ public class QMListaComunidadesActivos
 			
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			
 			if (rs != null) 
@@ -182,34 +178,34 @@ public class QMListaComunidadesActivos
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 			
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return (found && bSalida);
@@ -217,9 +213,6 @@ public class QMListaComunidadesActivos
 
 	public static boolean compruebaRelacionComunidadActivo(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
 	{
-		
-		String sMethod = "compruebaRelacionComunidadActivo";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 		
@@ -232,7 +225,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		String sQuery = "SELECT "
 			       + sField4  +               
@@ -260,7 +253,7 @@ public class QMListaComunidadesActivos
 
 			       ")";
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug(sQuery);
 		
 		try 
 		{
@@ -294,7 +287,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -303,31 +296,31 @@ public class QMListaComunidadesActivos
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 			
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return (found && bSalida);
@@ -335,9 +328,6 @@ public class QMListaComunidadesActivos
 
 	public static boolean activoVinculadoComunidad(String sCodCOACES)
 	{
-		
-		String sMethod = "activoVinculadoComunidad";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 		
@@ -348,7 +338,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		String sQuery = "SELECT "
 			       + sField4  +               
@@ -374,7 +364,7 @@ public class QMListaComunidadesActivos
 
 				")";
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug(sQuery);
 		
 		try 
 		{
@@ -406,7 +396,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -415,30 +405,30 @@ public class QMListaComunidadesActivos
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 			
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return (found);
@@ -446,9 +436,6 @@ public class QMListaComunidadesActivos
 	
 	public static String getActivoVinculadoComunidadID(String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
 	{
-		
-		String sMethod = "getActivoVinculadoComunidadID";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 		
@@ -461,7 +448,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		String sQuery = "SELECT "
 			       + sField4  +               
@@ -473,7 +460,7 @@ public class QMListaComunidadesActivos
 		+ sField3 + " = '" + sCodCOACES +
 		"')";
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug(sQuery);
 		
 		try 
 		{
@@ -491,7 +478,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -502,30 +489,30 @@ public class QMListaComunidadesActivos
 
 					sID = rs.getString(sField4);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 			
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sID;
@@ -533,14 +520,13 @@ public class QMListaComunidadesActivos
 	
 	public static boolean setValidado(String sCodMovimiento, String sValidado)
 	{
-		String sMethod = "setValidado";
 		Statement stmt = null;
 		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -553,23 +539,23 @@ public class QMListaComunidadesActivos
 					+ sField4 + " = '" + sCodMovimiento	+ "'" +
 					")");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -577,8 +563,6 @@ public class QMListaComunidadesActivos
 	
 	public static String getValidado(String sCodMovimiento)
 	{
-		String sMethod = "getValidado";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -593,7 +577,7 @@ public class QMListaComunidadesActivos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -608,7 +592,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -619,32 +603,30 @@ public class QMListaComunidadesActivos
 
 					sValidado = rs.getString(sField5);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField5 + ": " + sValidado);
-
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField5,sValidado);
 
 				}
 			}
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -653,8 +635,6 @@ public class QMListaComunidadesActivos
 	
 	public static long buscaCantidadValidado(String sCodValidado)
 	{
-		String sMethod = "buscaCantidadValidado";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -669,7 +649,7 @@ public class QMListaComunidadesActivos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -682,7 +662,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -693,9 +673,9 @@ public class QMListaComunidadesActivos
 
 					liNumero = rs.getLong("COUNT(*)");
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,  "Numero de registros: " + liNumero);
+					logger.debug( "Numero de registros:|{}|",liNumero);
 
 
 				}
@@ -703,22 +683,22 @@ public class QMListaComunidadesActivos
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: CodValidado: " + sCodValidado);
+			logger.error("ERROR: CodValidado:|{}|",sCodValidado);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -727,9 +707,6 @@ public class QMListaComunidadesActivos
 	
 	public static ArrayList<ActivoTabla> buscaActivosComunidad(String sCodCOCLDO, String sCodNUDCOM)
 	{
-		
-		String sMethod = "buscaActivosComunidad";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -753,7 +730,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -782,7 +759,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			
 
@@ -807,30 +784,29 @@ public class QMListaComunidadesActivos
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + sCodCOCLDO);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + sCodNUDCOM);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
@@ -838,9 +814,6 @@ public class QMListaComunidadesActivos
 	
 	public static ArrayList<ActivoTabla> buscaActivosSinComunidad(ActivoTabla activo)
 	{
-		
-		String sMethod = "buscaActivosDisponibles";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -863,7 +836,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -918,7 +891,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			
 
@@ -942,27 +915,26 @@ public class QMListaComunidadesActivos
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
@@ -970,9 +942,6 @@ public class QMListaComunidadesActivos
 	
 	public static ArrayList<ActivoTabla> buscaActivosConComunidad(ActivoTabla activo)
 	{
-		
-		String sMethod = "buscaActivosDisponibles";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -995,7 +964,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -1050,7 +1019,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			
 
@@ -1074,27 +1043,26 @@ public class QMListaComunidadesActivos
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
@@ -1102,8 +1070,6 @@ public class QMListaComunidadesActivos
 	
 	public static ArrayList<String>  getComunidadesActivoPorEstado(String sEstado) 
 	{
-		String sMethod = "getComunidadesActivoPorEstado";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -1117,7 +1083,7 @@ public class QMListaComunidadesActivos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -1129,7 +1095,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		
 			int i = 0;
@@ -1143,33 +1109,32 @@ public class QMListaComunidadesActivos
 
 					result.add(rs.getString(sField4));
 										
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField5,sEstado);
+					logger.debug("{}:|{}|",sField4,result.get(i));
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField5 + ": " + sEstado);
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
-					
 					i++;
 				}
 			}
 			if (found == false) 
 			{
 				result = new ArrayList<String>(); 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Validado: " + sEstado);
+			logger.error("ERROR: Validado:|{}|",sEstado);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -1179,9 +1144,6 @@ public class QMListaComunidadesActivos
 	
 	public static ArrayList<ComunidadTabla> buscaComunidadActivo(String sCodCOACES)
 	{
-		
-		String sMethod = "buscaActivosComunidad";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -1201,7 +1163,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -1231,7 +1193,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			
 
@@ -1253,29 +1215,28 @@ public class QMListaComunidadesActivos
 					
 					result.add(comunidadencontrada);
 					
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField3 + ": " + sCodCOACES);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField3,sCodCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
@@ -1283,9 +1244,6 @@ public class QMListaComunidadesActivos
 	
 	public static Comunidad buscaComunidadPorActivo(String sCodCOACES)
 	{
-		
-		String sMethod = "buscaActivosComunidad";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -1311,7 +1269,7 @@ public class QMListaComunidadesActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -1350,7 +1308,7 @@ public class QMListaComunidadesActivos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			
 
@@ -1376,29 +1334,29 @@ public class QMListaComunidadesActivos
 					sNUCCNT = rs.getString(QMComunidades.sField13); 
 					sOBTEXC = rs.getString(QMComunidades.sField14); 
 					
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField3 + ": " + sCodCOACES);
+					logger.debug("{}:|{}|",sField3,sCodCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new Comunidad(

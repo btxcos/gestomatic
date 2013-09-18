@@ -26,7 +26,7 @@
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="logs/provisiones.log" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d %-5p [%c:%M:%L] %m %n" />
+            <param name="ConversionPattern" value="%d %-5p [%c:%M] %m %n" />
         </layout>
     </appender> 
     <root>

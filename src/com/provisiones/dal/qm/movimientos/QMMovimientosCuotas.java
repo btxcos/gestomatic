@@ -10,11 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QMMovimientosCuotas
 {
-	static String sClassName = QMMovimientosCuotas.class.getName();
-	
-	static boolean bTrazas = true;
+	private static Logger logger = LoggerFactory.getLogger(QMMovimientosCuotas.class.getName());
 
 	static String sTable = "e2_movimientos_tbl";
 
@@ -46,20 +47,16 @@ public class QMMovimientosCuotas
 	static String sField25 = "obdeer";     
 
 	public static int addMovimientoCuota(MovimientoCuota NuevoMovimientoCuota)
-
 	{
-		String sMethod = "addMovimientoCuota";
 		Statement stmt = null;
 		Connection conn = null;
 		ResultSet resulset = null;
 		
 		int iCodigo = 0;
-		
-		//boolean bSalida = true;
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "INSERT INTO " + sTable + " ("
 			       + sField2  + ","              
@@ -112,7 +109,7 @@ public class QMMovimientosCuotas
 			       + NuevoMovimientoCuota.getOBTEXC() + "','"
 			       + NuevoMovimientoCuota.getOBDEER() + "' )";
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug(sQuery);
 
 		try {
 
@@ -170,7 +167,7 @@ public class QMMovimientosCuotas
 			
 			resulset = stmt.getGeneratedKeys();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (resulset.next()) 
 			{
@@ -179,36 +176,35 @@ public class QMMovimientosCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoMovimientoCuota.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevoMovimientoCuota.getCOCLDO());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevoMovimientoCuota.getNUDCOM());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevoMovimientoCuota.getCOSBAC());
+			logger.error("ERROR: COACES:|{}|",NuevoMovimientoCuota.getCOACES());
+			logger.error("ERROR: COCLDO:|{}|",NuevoMovimientoCuota.getCOCLDO());
+			logger.error("ERROR: NUDCOM:|{}|",NuevoMovimientoCuota.getNUDCOM());
+			logger.error("ERROR: COSBAC:|{}|",NuevoMovimientoCuota.getCOSBAC());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			//bSalida = false;
 		} 
 		finally
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
-			Utils.closeResultSet(resulset,sClassName,sMethod);
+			Utils.closeStatement(stmt);
+			Utils.closeResultSet(resulset);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return iCodigo; //bSalida;
+		return iCodigo;
 	}
 	public static boolean modMovimientoCuota(MovimientoCuota NuevoMovimientoCuota, String sMovimientoCuotaID)
 	{
-		String sMethod = "modMovimientoCuota";
 		Statement stmt = null;
 		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -243,27 +239,27 @@ public class QMMovimientosCuotas
 					" WHERE "
 					+ sField1 + " = '"+ sMovimientoCuotaID +"'");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoCuotaID: " + sMovimientoCuotaID);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoMovimientoCuota.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + NuevoMovimientoCuota.getCOCLDO());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + NuevoMovimientoCuota.getNUDCOM());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevoMovimientoCuota.getCOSBAC());
+			logger.error("ERROR: MovimientoCuotaID:|{}|",sMovimientoCuotaID);
+			logger.error("ERROR: COACES:|{}|",NuevoMovimientoCuota.getCOACES());
+			logger.error("ERROR: COCLDO:|{}|",NuevoMovimientoCuota.getCOCLDO());
+			logger.error("ERROR: NUDCOM:|{}|",NuevoMovimientoCuota.getNUDCOM());
+			logger.error("ERROR: COSBAC:|{}|",NuevoMovimientoCuota.getCOSBAC());
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -271,7 +267,6 @@ public class QMMovimientosCuotas
 
 	public static boolean delMovimientoCuota(String sMovimientoCuotaID)
 	{
-		String sMethod = "delMovimientoCuota";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -279,7 +274,7 @@ public class QMMovimientosCuotas
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -287,33 +282,30 @@ public class QMMovimientosCuotas
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sMovimientoCuotaID + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoCuotaID: " + sMovimientoCuotaID);
+			logger.error("ERROR: MovimientoCuotaID:|{}|",sMovimientoCuotaID);
 
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static MovimientoCuota getMovimientoCuota(String sMovimientoCuotaID)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getMovimientoCuota";
-
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -349,7 +341,7 @@ public class QMMovimientosCuotas
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -386,7 +378,7 @@ public class QMMovimientosCuotas
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -420,31 +412,30 @@ public class QMMovimientosCuotas
 					sOBTEXC = rs.getString(sField24);
 					sOBDEER = rs.getString(sField25);
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField1 + ": " + sMovimientoCuotaID);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField1,sMovimientoCuotaID);
 
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoCuotaID: " + sMovimientoCuotaID);
+			logger.error("ERROR: MovimientoCuotaID:|{}|",sMovimientoCuotaID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new MovimientoCuota(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOCLDO, sNUDCOM,
@@ -454,10 +445,7 @@ public class QMMovimientosCuotas
 	}
 	
 	public static String getMovimientoCuotaID(MovimientoCuota cuota)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getMovimientoCuotaID";
-
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -470,7 +458,7 @@ public class QMMovimientosCuotas
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -507,7 +495,7 @@ public class QMMovimientosCuotas
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			
 			if (rs != null) 
@@ -519,31 +507,31 @@ public class QMMovimientosCuotas
 
 					sMovimientoCuotaID = rs.getString(sField1);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sMovimientoCuotaID);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField1,sMovimientoCuotaID);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + cuota.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COCLDO: " + cuota.getCOCLDO());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUDCOM: " + cuota.getNUDCOM());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + cuota.getCOSBAC());
+			logger.error("ERROR: COACES:|{}|",cuota.getCOACES());
+			logger.error("ERROR: COCLDO:|{}|",cuota.getCOCLDO());
+			logger.error("ERROR: NUDCOM:|{}|",cuota.getNUDCOM());
+			logger.error("ERROR: COSBAC:|{}|",cuota.getCOSBAC());
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sMovimientoCuotaID;

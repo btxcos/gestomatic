@@ -7,18 +7,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.misc.Utils;
+
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.misc.Utils;
 import com.provisiones.types.Provision;
 import com.provisiones.types.ProvisionTabla;
 
 public class QMProvisiones 
 {
-	static String sClassName = QMProvisiones.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(QMProvisiones.class.getName());
 	
-	static boolean bTrazas = true;
-
 	public static final String sTable = "provisiones_tbl";
 
 	public static final String sField1 = "nuprof_id";
@@ -38,17 +40,15 @@ public class QMProvisiones
 	public static boolean addProvision(Provision NuevaProvision)
 
 	{
-		String sMethod = "addProvision";
-		Statement stmt = null;
 		Connection conn = null;
-		
+		conn = ConnectionManager.OpenDBConnection();
 		String sUsuario = ValoresDefecto.DEF_USUARIO;
-		
+
+		Statement stmt = null;
+
 		boolean bSalida = true;
 
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -77,23 +77,23 @@ public class QMProvisiones
 					+ sUsuario + "','"
 					+ Utils.timeStamp() + "')");
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + NuevaProvision.getsNUPROF());
+			logger.error("ERROR: NUPROF:|{}|",NuevaProvision.getsNUPROF());
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -101,16 +101,15 @@ public class QMProvisiones
 
 	public static boolean modProvision(Provision NuevaProvision, String sNUPROF) 
 	{
-		String sMethod = "modProvision";
-		Statement stmt = null;
-		boolean bSalida = true;
 		Connection conn = null;
-		
+		conn = ConnectionManager.OpenDBConnection();
 		String sUsuario = ValoresDefecto.DEF_USUARIO;
 
-		conn = ConnectionManager.OpenDBConnection();
+		Statement stmt = null;
+
+		boolean bSalida = true;
 		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -127,23 +126,23 @@ public class QMProvisiones
 					+ sField10 + " = '" + Utils.timeStamp() + "' " 					
 					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
 
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
+			logger.error("ERROR: NUPROF:|{}|",sNUPROF);
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -151,15 +150,14 @@ public class QMProvisiones
 
 	public static boolean delProvision(String sNUPROF) 
 	{
-		String sMethod = "delProvision";
-		Statement stmt = null;
 		Connection conn = null;
-		
-		boolean bSalida = true;
-
 		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
+		boolean bSalida = true;
 		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -167,22 +165,22 @@ public class QMProvisiones
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sNUPROF + "' )");
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
+			logger.error("ERROR: NUPROF:|{}|",sNUPROF);
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -190,12 +188,13 @@ public class QMProvisiones
 
 	public static Provision getProvision(String sNUPROF) 
 	{
-
-
-		String sMethod = "getProvision";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sCOSPAT = "";
 		String sTAS = "";
@@ -205,15 +204,9 @@ public class QMProvisiones
 		String sFechaValidacion = "";
 		String sValidado = "";
 
-
-		PreparedStatement pstmt = null;
 		boolean found = false;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -226,7 +219,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 
 
@@ -246,30 +239,30 @@ public class QMProvisiones
 					sValidado = rs.getString(sField8);
 
 					
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					logger.debug("{}:|{}|",sField1,sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
+			logger.error("ERROR: NUPROF:|{}|",sNUPROF);
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs, sClassName, sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, sFEPFON, sFechaValidacion, sValidado);
@@ -277,14 +270,14 @@ public class QMProvisiones
 	
 	public static boolean setFechaEnvio(String sNUPROF, String sFechaEnvio) 
 	{
-		String sMethod = "setFechaEnvio";
-		Statement stmt = null;
-		boolean bSalida = true;
 		Connection conn = null;
-		
 		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
 		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		boolean bSalida = true;
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -293,23 +286,23 @@ public class QMProvisiones
 					+ sField7 + " = '" + sFechaEnvio + "' " 
 					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
 
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
+			logger.error("ERROR: NUPROF:|{}|",sNUPROF);
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod + "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -317,23 +310,19 @@ public class QMProvisiones
 	
 	public static long buscaCantidadProvisionesCerradasPendientes()
 	{
-		String sMethod = "buscaCantidadProvisionesCerradasPendientes";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
-
-
 		PreparedStatement pstmt = null;
-		boolean found = false;
-	
 
 		long liNumero = 0;
 
-		Connection conn = null;
+		boolean found = false;
 
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -349,7 +338,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -360,9 +349,9 @@ public class QMProvisiones
 
 					liNumero = rs.getLong("COUNT(*)");
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,  "Numero de registros: " + liNumero);
+					logger.debug("Numero de registros:|{}|",liNumero);
 
 
 				}
@@ -370,20 +359,20 @@ public class QMProvisiones
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);;
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -392,21 +381,17 @@ public class QMProvisiones
 	
 	public static boolean existeProvision(String sNUPROF) 
 	{
-
-
-		String sMethod = "existeProvision";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
-		ResultSet rs = null;
 
+		ResultSet rs = null;
 		PreparedStatement pstmt = null;
+
 		boolean found = false;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -418,7 +403,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 
 
@@ -429,29 +414,29 @@ public class QMProvisiones
 				{
 					found = true;
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField1,sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
+			logger.error("ERROR: NUPROF:|{}|",sNUPROF);
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs, sClassName, sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
@@ -459,21 +444,17 @@ public class QMProvisiones
 	
 	public static boolean provisionCerrada(String sNUPROF) 
 	{
-
-
-		String sMethod = "provisionCerrada";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
-		ResultSet rs = null;
 
+		ResultSet rs = null;
 		PreparedStatement pstmt = null;
+
 		boolean found = false;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -487,7 +468,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 
 
@@ -498,29 +479,29 @@ public class QMProvisiones
 				{
 					found = true;
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField1,sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: NUPROF: " + sNUPROF);
+			logger.error("ERROR: NUPROF:|{}|",sNUPROF);
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs, sClassName, sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
@@ -528,33 +509,19 @@ public class QMProvisiones
 	
 	public static String getProvisionAbierta(String sCodCOSPAT, String sCodTAS) 
 	{
-
-
-		String sMethod = "getProvisionAbierta";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sNUPROF = "";
 
-
-		PreparedStatement pstmt = null;
 		boolean found = false;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
-		
-		String sQuery = "SELECT " + sField1 + 
-				" FROM " + sTable + 
-				" WHERE " +
-				"( " + sField8 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
-				+ sField2 +" = '"+ sCodCOSPAT +"' AND "
-				+ sField3 +" = '"+ sCodTAS +"')";
-
-		Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -569,9 +536,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-
-
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -584,29 +549,29 @@ public class QMProvisiones
 
 
 					
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					logger.debug(sField1 + ":|{}|",sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs, sClassName, sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sNUPROF;
@@ -614,22 +579,19 @@ public class QMProvisiones
 	
 	public static ArrayList<String>  getProvisionesCerradasPendientes() 
 	{
-		String sMethod = "getProvisionesCerradasPendientes";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
-
-
 		PreparedStatement pstmt = null;
-		boolean found = false;
-	
 		
-		ArrayList<String> result = new ArrayList<String>(); 
-		Connection conn = null;
+		ArrayList<String> result = new ArrayList<String>();
 
-		conn = ConnectionManager.OpenDBConnection();
-		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		boolean found = false;
+
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -645,7 +607,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		
 			int i = 0;
@@ -659,9 +621,9 @@ public class QMProvisiones
 
 					result.add(rs.getString(sField1));
 										
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
+					logger.debug(result.get(i)); 
 					
 					i++;
 				}
@@ -669,20 +631,20 @@ public class QMProvisiones
 			if (found == false) 
 			{
 				result = new ArrayList<String>(); 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -691,13 +653,12 @@ public class QMProvisiones
 	
 	public static ArrayList<ProvisionTabla> buscaProvisionesAbiertas() 
 	{
-
-
-		String sMethod = "buscaProvisionesAbiertas";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
 		ResultSet rs = null;
-		
+		PreparedStatement pstmt = null;
 		
 		String sNUPROF = "";
 		String sTAS = "";
@@ -709,15 +670,9 @@ public class QMProvisiones
 
 		ArrayList<ProvisionTabla> result = new ArrayList<ProvisionTabla>();
 
-
-		PreparedStatement pstmt = null;
 		boolean found = false;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -735,7 +690,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 
 
@@ -748,9 +703,9 @@ public class QMProvisiones
 
 					sNUPROF =  rs.getString(sField1);
 					sCOSPAT =  rs.getString(sField2);
-					sDCOSPAT =  QMCodigosControl.getDesSociedadesTitulizadas(sCOSPAT);
+					sDCOSPAT =  QMCodigosControl.getDesCampo(QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
 					sTAS =  rs.getString(sField3);
-					sDTAS =  QMCodigosControl.getDesTipoActivo(sTAS);
+					sDTAS =  QMCodigosControl.getDesCampo(QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
 					sVALOR =   rs.getString(sField4);
 					sGASTOS =  rs.getString(sField5);
 
@@ -758,29 +713,29 @@ public class QMProvisiones
 					
 					result.add(provisionencontrada);
 					
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					logger.debug("{}:|{}|",sField1,sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs, sClassName, sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
@@ -788,24 +743,19 @@ public class QMProvisiones
 	
 	public static String getUltimaProvisionCerrada(String sCodCOSPAT) 
 	{
-
-
-		String sMethod = "getUltimaProvisionCerrada";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sNUPROF = "";
 
-
-		PreparedStatement pstmt = null;
 		boolean found = false;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -820,9 +770,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
-
-
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -833,56 +781,48 @@ public class QMProvisiones
 
 					sNUPROF = rs.getString(sField1);
 
-
-					
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField1,sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: sCodCOSPAT: " + sCodCOSPAT);
+			logger.error("ERROR: sCodCOSPAT:|{}|",sCodCOSPAT);
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs, sClassName, sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sNUPROF;
 	}
 	public static String getUltimaProvision() 
 	{
-
-
-		String sMethod = "getUltimaProvision";
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
 
 		Statement stmt = null;
+
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 
 		String sNUPROF = "";
 
-
-		PreparedStatement pstmt = null;
 		boolean found = false;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -894,7 +834,7 @@ public class QMProvisiones
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 
 
@@ -909,33 +849,31 @@ public class QMProvisiones
 
 
 					
-					Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sNUPROF);
+					logger.debug(sField1 + ":|{}|",sNUPROF);
 
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
 
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("[" + sClassName + "." + sMethod	+ "] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs, sClassName, sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sNUPROF;
 	}
-
-	
 }

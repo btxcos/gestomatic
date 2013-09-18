@@ -12,14 +12,12 @@ import com.provisiones.misc.Utils;
 
 public class ConnectionManager 
 {
-	static String sClassName = ConnectionManager.class.getName();
-	
 	private static String sConnector = "org.mariadb.jdbc.Driver";
 	private static String sConnectorType = "jdbc:mysql:";
 	private static String sHostResource = "//localhost/glsl";
 	private static String sLogin = "?user=root&password=glsl1234";
 	
-	private static Logger logger = LoggerFactory.getLogger(sClassName);
+	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class.getName());
 	
 	static boolean bEnable = false;
 

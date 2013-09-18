@@ -1,6 +1,7 @@
 package com.provisiones.dal.qm.movimientos;
 
 import com.provisiones.dal.ConnectionManager;
+
 import com.provisiones.misc.Utils;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 
@@ -10,11 +11,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QMMovimientosReferencias
 {
-	static String sClassName = QMMovimientosReferencias.class.getName();
-	
-	static boolean bTrazas = true;
+	private static Logger logger = LoggerFactory.getLogger(QMMovimientosReferencias.class.getName());
 
 	static String sTable = "e3_movimientos_tbl";
 
@@ -45,20 +47,16 @@ public class QMMovimientosReferencias
 
 
 	public static int addMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
-
 	{
-		String sMethod = "addMovimientoReferenciaCatastral";
 		Statement stmt = null;
 		Connection conn = null;
 		ResultSet resulset = null;
 		
 		int iCodigo = 0;
 
-		//boolean bSalida = true;
-		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try {
 
@@ -118,7 +116,7 @@ public class QMMovimientosReferencias
 			
 			resulset = stmt.getGeneratedKeys();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (resulset.next()) 
 			{
@@ -129,37 +127,36 @@ public class QMMovimientosReferencias
 		{
 
 
-			//System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRAP: " + NuevaComunidad.getCOGRAP());
+			//logger.error("ERROR: COGRAP:|{}|",NuevaComunidad.getCOGRAP());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + NuevoMovimientoReferenciaCatastral.getNURCAT());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoMovimientoReferenciaCatastral.getCOACES());
+			logger.error("ERROR: NURCAT:|{}|",NuevoMovimientoReferenciaCatastral.getNURCAT());
+			logger.error("ERROR: COACES:|{}|",NuevoMovimientoReferenciaCatastral.getCOACES());
 			
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			//bSalida = false;
 		} 
 		finally
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
-			Utils.closeResultSet(resulset,sClassName,sMethod);
+			Utils.closeStatement(stmt);
+			Utils.closeResultSet(resulset);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return iCodigo;//bSalida;
+		return iCodigo;
 	}
 	public static boolean modMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral, String sMovimientoReferenciaCatastralID)
 	{
-		String sMethod = "modMovimientoReferenciaCatastral";
 		Statement stmt = null;
 		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -195,23 +192,23 @@ public class QMMovimientosReferencias
 					" WHERE "
 					+ sField1 + " = '"+ sMovimientoReferenciaCatastralID +"'");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoReferenciaCatastralID: " + sMovimientoReferenciaCatastralID);
+			logger.error("ERROR: MovimientoReferenciaCatastralID:|{}|",sMovimientoReferenciaCatastralID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 
 		}
 		ConnectionManager.CloseDBConnection(conn);
@@ -220,7 +217,6 @@ public class QMMovimientosReferencias
 
 	public static boolean delMovimientoReferenciaCatastral(String sMovimientoReferenciaCatastralID)
 	{
-		String sMethod = "delMovimientoReferenciaCatastral";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -228,7 +224,7 @@ public class QMMovimientosReferencias
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -236,22 +232,22 @@ public class QMMovimientosReferencias
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sMovimientoReferenciaCatastralID + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoReferenciaCatastralID: " + sMovimientoReferenciaCatastralID);
+			logger.error("ERROR: MovimientoReferenciaCatastralID:|{}|",sMovimientoReferenciaCatastralID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -259,9 +255,6 @@ public class QMMovimientosReferencias
 
 	public static MovimientoReferenciaCatastral getMovimientoReferenciaCatastral(String sMovimientoReferenciaCatastralID)
 	{
-		
-		String sMethod = "getMovimientoReferenciaCatastral";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -297,7 +290,7 @@ public class QMMovimientosReferencias
 		
 		conn = ConnectionManager.OpenDBConnection();
 
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -334,7 +327,7 @@ public class QMMovimientosReferencias
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -366,30 +359,30 @@ public class QMMovimientosReferencias
   					sBITC25 = rs.getString(sField21);
   					sFERECA = rs.getString(sField22);
   					
-  					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+  					logger.debug("Encontrado el registro!");
 
-  					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sMovimientoReferenciaCatastralID);
+  					logger.debug("{}:|{}|",sField1,sMovimientoReferenciaCatastralID);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoReferenciaCatastralID: " + sMovimientoReferenciaCatastralID);
+			logger.error("ERROR: MovimientoReferenciaCatastralID:|{}|",sMovimientoReferenciaCatastralID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new MovimientoReferenciaCatastral(sCODTRN, sCOTDOR, sIDPROV, sCOACCI,
@@ -404,8 +397,6 @@ public class QMMovimientosReferencias
 
 	public static boolean existeMovimientoReferenciaCatastral(String sCodReferencia)
 	{
-		String sMethod = "existeMovimientoReferenciaCatastral";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -419,7 +410,7 @@ public class QMMovimientosReferencias
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -431,7 +422,7 @@ public class QMMovimientosReferencias
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -440,30 +431,30 @@ public class QMMovimientosReferencias
 				{
 					found = true;
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: CodReferencia: " + sCodReferencia);
+			logger.error("ERROR: CodReferencia:|{}|",sCodReferencia);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);

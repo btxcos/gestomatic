@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMCodigosControl;
@@ -18,10 +21,8 @@ import com.provisiones.types.GastoTabla;
 
 public class QMListaGastos 
 {
-	static String sClassName = QMListaGastos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(QMListaGastos.class.getName());
 	
-	static boolean bTrazas = true;
-
 	static String sTable = "lista_gastos_multi";
 
 	static String sField1 = "cod_coaces";
@@ -41,7 +42,6 @@ public class QMListaGastos
 
 	public static boolean addRelacionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodNUPROF, String sCodGasto) 
 	{
-		String sMethod = "addRelacionGastos";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -51,7 +51,7 @@ public class QMListaGastos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -81,28 +81,28 @@ public class QMListaGastos
 					    + Utils.timeStamp() +
 						"')");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
+			logger.error("ERROR: Gasto:|{}|",sCodGasto);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -110,7 +110,6 @@ public class QMListaGastos
 
 	public static boolean delRelacionGasto(String sCodGasto) 
 	{
-		String sMethod = "delRelacionGastos";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -118,7 +117,7 @@ public class QMListaGastos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -126,32 +125,29 @@ public class QMListaGastos
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField7 + " = '" + sCodGasto +"')");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodGasto);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
 	public static String getProvisionDeGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getProvisionDeGasto";
-
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -164,7 +160,7 @@ public class QMListaGastos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "
 				+ sField6 + 
@@ -176,7 +172,7 @@ public class QMListaGastos
 					sField4  + " = '"+ sCodCOSBGA +"' AND " +
 				    sField5  + " = '"+ sFEDEVE + "' )";
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug(sQuery);
 
 		try 
 		{
@@ -195,7 +191,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -207,34 +203,33 @@ public class QMListaGastos
 					sProvision = rs.getString(sField6);
 					
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField6 + ": " + sProvision);
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField6,sProvision);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + sCodCOGRUG);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + sCodCOTPGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + sCodCOSBGA);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: FEDEVE: " + sFEDEVE);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sProvision;
@@ -242,8 +237,6 @@ public class QMListaGastos
 	
 	public static String getProvisionDeMovimiento(String sCodGasto)
 	{
-		String sMethod = "getProvisionDeMovimiento";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -258,7 +251,7 @@ public class QMListaGastos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -271,7 +264,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			
 			if (rs != null) 
@@ -283,32 +276,30 @@ public class QMListaGastos
 
 					sValidado = rs.getString(sField4);
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField3 + ": " + sCodGasto);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField4 + ": " + sValidado);
-
-
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField3,sCodGasto);
+					logger.debug("{}:|{}|",sField4,sValidado);
 				}
 			}
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodGasto);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -317,8 +308,6 @@ public class QMListaGastos
 
 	public static ArrayList<String>  getGastosPorActivo(String sCodCOACES) 
 	{
-		String sMethod = "getGastosPorActivo";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -332,7 +321,7 @@ public class QMListaGastos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -344,7 +333,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		
 			int i = 0;
@@ -358,33 +347,33 @@ public class QMListaGastos
 
 					result.add(rs.getString(sField7));
 										
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCodCOACES);
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
-					
+					logger.debug("{}:|{}|",sField1,sCodCOACES);
+					logger.debug("{}:|{}|",sField7,result.get(i));
+				
 					i++;
 				}
 			}
 			if (found == false) 
 			{
 				result = new ArrayList<String>(); 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + sCodCOACES);
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -393,8 +382,6 @@ public class QMListaGastos
 	
 	public static ArrayList<String>  getGastosPorEstado(String sEstado) 
 	{
-		String sMethod = "getGastosPorEstado";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -408,7 +395,7 @@ public class QMListaGastos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -420,7 +407,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		
 			int i = 0;
@@ -434,33 +421,33 @@ public class QMListaGastos
 
 					result.add(rs.getString(sField7));
 										
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField8 + ": " + sEstado);
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
-					
+					logger.debug("{}:|{}|",sField8,sEstado);
+					logger.debug("{}:|{}|",sField7,result.get(i));
+
 					i++;
 				}
 			}
 			if (found == false) 
 			{
 				result = new ArrayList<String>(); 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Validado: " + sEstado);
+			logger.error("ERROR: Validado:|{}|",sEstado);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -469,8 +456,6 @@ public class QMListaGastos
 	
 	public static ArrayList<String>  getGastosPorProvision(String sCodNUPROF) 
 	{
-		String sMethod = "getGastosPorProvision";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -484,7 +469,7 @@ public class QMListaGastos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -496,7 +481,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			int i = 0;
 			
@@ -507,11 +492,11 @@ public class QMListaGastos
 				{
 					found = true;
 
-					result.add(rs.getString(sField3));
+					result.add(rs.getString(sField7));
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField2 + ": " + sCodNUPROF);
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod,result.get(i)); 
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField6,sCodNUPROF);
+					logger.debug("{}:|{}|",sField7,result.get(i));
 					
 					i++;
 				}
@@ -519,22 +504,22 @@ public class QMListaGastos
 			if (found == false) 
 			{
 				result = new ArrayList<String>(); 
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPROF: " + sCodNUPROF);
+			logger.error("ERROR: NUPROF:|{}|",sCodNUPROF);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -545,14 +530,13 @@ public class QMListaGastos
 	
 	public static boolean setValidado(String sCodGasto, String sValidado)
 	{
-		String sMethod = "setValidado";
 		Statement stmt = null;
 		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -564,23 +548,23 @@ public class QMListaGastos
 					" WHERE "
 					+ sField7 + " = '"+ sCodGasto +"'");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodGasto);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -588,8 +572,6 @@ public class QMListaGastos
 	
 	public static String getValidado(String sCodGasto)
 	{
-		String sMethod = "getValidado";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -604,7 +586,7 @@ public class QMListaGastos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -616,7 +598,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			
 			if (rs != null) 
@@ -628,32 +610,30 @@ public class QMListaGastos
 
 					sValidado = rs.getString(sField8);
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField7 + ": " + sCodGasto);
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField8 + ": " + sValidado);
-
-
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField7,sCodGasto);
+					logger.debug("{}:|{}|",sField8,sValidado);
 				}
 			}
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Gasto: " + sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodGasto);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -662,8 +642,6 @@ public class QMListaGastos
 	
 	public static long buscaCantidadValidado(String sCodValidado)
 	{
-		String sMethod = "buscaCantidadValidado";
-
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -678,7 +656,7 @@ public class QMListaGastos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -691,7 +669,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (rs != null) 
 			{
@@ -702,9 +680,9 @@ public class QMListaGastos
 
 					liNumero = rs.getLong("COUNT(*)");
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,  "Numero de registros: " + liNumero);
+					logger.debug( "Numero de registros:|{}|",liNumero);
 
 
 				}
@@ -712,22 +690,22 @@ public class QMListaGastos
 			if (found == false) 
 			{
  
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: CodValidado: " + sCodValidado);
+			logger.error("ERROR: CodValidado:|{}|",sCodValidado);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 
 		ConnectionManager.CloseDBConnection(conn);
@@ -735,10 +713,7 @@ public class QMListaGastos
 	}
 	
 	public static ArrayList<ActivoTabla> buscaActivosConGastos(ActivoTabla activo)
-	{//pendiente de coaces, de la tabla activos
-
-		String sMethod = "buscaActivosConGastos";
-		
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -761,7 +736,7 @@ public class QMListaGastos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		String sQuery = "SELECT "
 					
@@ -815,7 +790,7 @@ public class QMListaGastos
    					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' )" +
    					   "))";
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug(sQuery);
 		
 		try 
 		{
@@ -875,7 +850,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -897,27 +872,27 @@ public class QMListaGastos
 					
 					result.add(activoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, QMActivos.sField1 + ": " + sCOACES);
+					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
@@ -925,10 +900,7 @@ public class QMListaGastos
 	}
 	
 	public static ArrayList<GastoTabla> buscaGastosActivo(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "buscaGastosActivo";
-
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -954,7 +926,7 @@ public class QMListaGastos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		String sQuery = "SELECT "
 					
@@ -1010,7 +982,7 @@ public class QMListaGastos
 					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )";					   
 					   
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sQuery);
+		logger.debug(sQuery);
 		
 		try 
 		{
@@ -1077,7 +1049,7 @@ public class QMListaGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			
 
@@ -1095,7 +1067,7 @@ public class QMListaGastos
 					sCOSBGA  = rs.getString(QMGastos.sField4);
 					sDCOSBGA = QMCodigosControl.getDesCOSBGA(sCOGRUG,sCOTPGA,sCOSBGA);
 					sPTPAGO  = rs.getString(QMGastos.sField5);
-					sDPTPAGO = QMCodigosControl.getDesPTPAGO(sPTPAGO);
+					sDPTPAGO = QMCodigosControl.getDesCampo(QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
 					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.sField6));
 					sCOSIGA  = rs.getString(QMGastos.sField10);
 					sDCOSIGA = "";//QMCodigosControl.
@@ -1120,27 +1092,27 @@ public class QMListaGastos
 					
 					result.add(gastoencontrado);
 					
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCodCOACES);
+					logger.debug("{}:|{}|",sField1,sCodCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return result;

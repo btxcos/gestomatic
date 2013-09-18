@@ -1,6 +1,7 @@
 package com.provisiones.dal.qm.movimientos;
 
 import com.provisiones.dal.ConnectionManager;
+
 import com.provisiones.misc.Utils;
 import com.provisiones.types.MovimientoGasto;
 
@@ -10,12 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QMMovimientosGastos
 {
-	static String sClassName = QMMovimientosGastos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(QMMovimientosGastos.class.getName());
 	
-	static boolean bTrazas = true;
-
 	public static final String sTable = "ga_movimientos_tbl";
 
 	public static final String sField1  = "ga_movimiento_id";
@@ -66,21 +68,16 @@ public class QMMovimientosGastos
 	public static final String sField45 = "nuclii";
 	
 	public static int addMovimientoGasto (MovimientoGasto NuevoGasto) 
-	 
 	{
-		String sMethod = "addMovimientoGasto";
 		Statement stmt = null;
 		Connection conn = null;
 		ResultSet resulset = null;
 		
 		int iCodigo = 0;
 		
-		//boolean bSalida = true;
-		
-
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -184,27 +181,27 @@ public class QMMovimientosGastos
 				iCodigo= resulset.getInt(1);
 			} 
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
 	
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoGasto.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + NuevoGasto.getCOGRUG());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + NuevoGasto.getCOTPGA());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + NuevoGasto.getCOSBGA());
+			logger.error("ERROR: COACES:|{}|",NuevoGasto.getCOACES());
+			logger.error("ERROR: COGRUG:|{}|",NuevoGasto.getCOGRUG());
+			logger.error("ERROR: COTPGA:|{}|",NuevoGasto.getCOTPGA());
+			logger.error("ERROR: COSBGA:|{}|",NuevoGasto.getCOSBGA());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			//bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
-			Utils.closeResultSet(resulset,sClassName,sMethod);
+			Utils.closeStatement(stmt);
+			Utils.closeResultSet(resulset);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		
@@ -212,7 +209,6 @@ public class QMMovimientosGastos
 	}
 	public static boolean modMovimientoGasto(MovimientoGasto NuevoGasto, String sGastoID)
 	{
-		String sMethod = "modMovimientoGasto";
 		Statement stmt = null;
 
 		boolean bSalida = true;
@@ -222,7 +218,7 @@ public class QMMovimientosGastos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -277,28 +273,28 @@ public class QMMovimientosGastos
 					" WHERE "
 					+ sField1 + " = '"+ sGastoID +"'");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: GastoID: " + sGastoID);
+			logger.error("ERROR: GastoID:|{}|",sGastoID);
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoGasto.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + NuevoGasto.getCOGRUG());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + NuevoGasto.getCOTPGA());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + NuevoGasto.getCOSBGA());
+			logger.error("ERROR: COACES:|{}|",NuevoGasto.getCOACES());
+			logger.error("ERROR: COGRUG:|{}|",NuevoGasto.getCOGRUG());
+			logger.error("ERROR: COTPGA:|{}|",NuevoGasto.getCOTPGA());
+			logger.error("ERROR: COSBGA:|{}|",NuevoGasto.getCOSBGA());
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -306,7 +302,6 @@ public class QMMovimientosGastos
 
 	public static boolean delMovimientoGasto(String sGastoID)
 	{
-		String sMethod = "delMovimientoGasto";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -314,7 +309,7 @@ public class QMMovimientosGastos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -322,32 +317,29 @@ public class QMMovimientosGastos
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sGastoID + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: GastoID: " + sGastoID);
+			logger.error("ERROR: GastoID:|{}|",sGastoID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static MovimientoGasto getMovimientoGasto(String sGastoID)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getActivo";
-
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -403,7 +395,7 @@ public class QMMovimientosGastos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -459,7 +451,7 @@ public class QMMovimientosGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 
 
@@ -515,30 +507,30 @@ public class QMMovimientosGastos
 					sCOSPII = rs.getString(sField44);
 					sNUCLII = rs.getString(sField45);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sGastoID);
+					logger.debug("{}:|{}|",sField1,sGastoID);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: GastoID: " + sGastoID);
+			logger.error("ERROR: GastoID:|{}|",sGastoID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new MovimientoGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
@@ -551,10 +543,7 @@ public class QMMovimientosGastos
 	}
 
 	public static String getMovimientoGastoID(MovimientoGasto gasto)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getGastoID";
-
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -567,7 +556,7 @@ public class QMMovimientosGastos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -625,7 +614,7 @@ public class QMMovimientosGastos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -637,33 +626,33 @@ public class QMMovimientosGastos
 					sGastoID = rs.getString(sField1);
 					
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, sField1 + ": " + sGastoID);
+					logger.debug("{}:|{}|",sField1,sGastoID);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + gasto.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COGRUG: " + gasto.getCOGRUG());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTPGA: " + gasto.getCOTPGA());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBGA: " + gasto.getCOSBGA());
+			logger.error("ERROR: COACES:|{}|",gasto.getCOACES());
+			logger.error("ERROR: COGRUG:|{}|",gasto.getCOGRUG());
+			logger.error("ERROR: COTPGA:|{}|",gasto.getCOTPGA());
+			logger.error("ERROR: COSBGA:|{}|",gasto.getCOSBGA());
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sGastoID;

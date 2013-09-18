@@ -2,6 +2,9 @@ package com.provisiones.ll;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMCuotas;
@@ -20,13 +23,11 @@ import com.provisiones.types.MovimientoComunidad;
 
 public class CLComunidades 
 {
-	static String sClassName = CLComunidades.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(CLComunidades.class.getName());
 	
 
 	public static boolean actualizaComunidadLeida(String linea)
 	{
-		String sMethod = "actualizaComunidadLeida";
-
 		boolean bSalida = false;
 		
 		MovimientoComunidad comunidad = Parser.leerComunidad(linea);
@@ -34,7 +35,7 @@ public class CLComunidades
 			
 		String sValidado = "";
 		
-		Utils.debugTrace(true, sClassName, sMethod, "comunidad.getCOTDOR()|"+comunidad.getCOTDOR()+"|");
+		logger.debug("comunidad.getCOTDOR()|"+comunidad.getCOTDOR()+"|");
 		
 		if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
 		{
@@ -44,7 +45,7 @@ public class CLComunidades
 		else
 		{
 			sValidado = "X";
-			Utils.debugTrace(true, sClassName, sMethod, "sValidado|"+sValidado+"|");
+			logger.debug("sValidado|"+sValidado+"|");
 			
 			//comunidad.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
 			
@@ -52,7 +53,7 @@ public class CLComunidades
 			
 			String sCodMovimiento = QMMovimientosComunidades.getMovimientoComunidadID(comunidad);
 			
-			Utils.debugTrace(true, sClassName, sMethod, "sCodMovimiento|"+sCodMovimiento+"|");
+			logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
 			
 			bSalida = !(sCodMovimiento.equals(""));
 			
@@ -61,9 +62,6 @@ public class CLComunidades
 
 				if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
 				{
-									
-					
-									
 					
 					bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
 					
@@ -75,19 +73,16 @@ public class CLComunidades
 							QMListaComunidades.setValidado(sCodMovimiento, sValidado);
 						}
 						else
-							System.out.println("No Existe relacion.");
-						
+							logger.error("No Existe relacion.");
 					}
 					else
-						System.out.println("No Existe relacion.");
+						logger.error("No Existe relacion.");
 
 				}
 				else
 				{
-					String sMsg = "Ocurrio un error al administrar el error en la comunidad";
-					Utils.debugTrace(true, sClassName, sMethod, sMsg);
-					Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
-					System.out.println("No Information Found");				
+					logger.error("Ocurrio un error al administrar el error en la comunidad");
+					logger.error("|"+linea+"|");
 				}
 				
 			}
@@ -95,9 +90,8 @@ public class CLComunidades
 			{
 
 
-				Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
-				Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
-				System.out.println("No Information Found");
+				logger.error("El siguiente registro no se encuentre en el sistema:");
+				logger.error("|"+linea+"|");
 			}
 		}
 		
@@ -155,8 +149,6 @@ public class CLComunidades
 	
 	public static int comprobarActivo (String sCOACES)
 	{
-		String sMethod = "comprobarActivo";
-		
 		int iCodigo = 0;
 		
 		if (QMActivos.existeActivo(sCOACES))
@@ -173,15 +165,13 @@ public class CLComunidades
 			iCodigo = -2;
 		}
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:|"+iCodigo+"|");
+		logger.debug("Codigo de salida:|{}|",iCodigo);
 		
 		return iCodigo;
 	}
 	
 	public static Comunidad consultaComunidad (String sCOCLDO, String sNUDCOM)
 	{
-		//String sMethod = "consultaComunidad";
-		
 		Comunidad comunidad = QMComunidades.getComunidad(sCOCLDO,sNUDCOM);
 		
 		return comunidad;
@@ -196,9 +186,7 @@ public class CLComunidades
 	
 	public static MovimientoComunidad convierteComunidadenMovimiento(Comunidad comunidad, String sCodCOACES, String sCodCOACCI)
 	{
-		String sMethod = "convierteComunidadenMovimiento";
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		logger.debug("Convirtiendo...");
 		
 		return new MovimientoComunidad(ValoresDefecto.DEF_E1_CODTRN,
 				ValoresDefecto.DEF_COTDOR,
@@ -235,9 +223,7 @@ public class CLComunidades
 	}
 	public static Comunidad convierteMovimientoenComunidad(MovimientoComunidad movimiento)
 	{
-		String sMethod = "convierteMovimientoenComunidad";
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		logger.debug("Convirtiendo...");
 		
 		return new Comunidad(movimiento.getCOCLDO(),
 				movimiento.getNUDCOM(),
@@ -254,20 +240,9 @@ public class CLComunidades
 				movimiento.getNUCCNT(),
 				movimiento.getOBTEXC());
 	}
-	
-	
 
-
-
-	
-	
-
-	
-	
 	public static MovimientoComunidad revisaCodigosControl(MovimientoComunidad movimiento)
 	{
-		String sMethod = "revisaCodigosControl";
-		
 		Comunidad comunidad = QMComunidades.getComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM());
 		
 		String sEstado = QMComunidades.getEstado(movimiento.getCOCLDO(), movimiento.getNUDCOM());
@@ -278,7 +253,7 @@ public class CLComunidades
 		
 		MovimientoComunidad movimiento_revisado = new MovimientoComunidad("", "", "", "", "", "", "", "", "0", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "0", "0", "0", "0", "", "", "");
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Revisando Estado:|"+sEstado+"| Accion: |"+movimiento.getCOACCI()+"|");
+		logger.debug("Revisando Estado:|{}| Accion: |{}|",sEstado,movimiento.getCOACCI());
 		
 		movimiento_revisado.setCODTRN(movimiento.getCODTRN());
 		movimiento_revisado.setCOTDOR(movimiento.getCOTDOR());
@@ -548,7 +523,7 @@ public class CLComunidades
 
 
 
-		Utils.debugTrace(true, sClassName, sMethod, "Revisado! Nuevo movimiento:");
+		logger.debug("Revisado! Nuevo movimiento:");
 		movimiento_revisado.pintaMovimientoComunidad();
 		
 		return movimiento_revisado;
@@ -557,15 +532,13 @@ public class CLComunidades
 	
 	public static int revisaMovimiento(MovimientoComunidad movimiento)
 	{
-		String sMethod = "revisaMovimiento";
-		
 		int iCodigo = 0;
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Comprobando estado...");
+		logger.debug("Comprobando estado...");
 		String sEstado = QMComunidades.getEstado(movimiento.getCOCLDO(), movimiento.getNUDCOM());
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
-		Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
+		logger.debug("Estado:|{}|",sEstado);
+		logger.debug("Accion:|{}|",movimiento.getCOACCI());
 	
 		if (movimiento.getCOACCI().equals(""))
 		{
@@ -683,15 +656,11 @@ public class CLComunidades
 	}
 	public static int registraMovimiento(MovimientoComunidad movimiento)
 	{
-		String sMethod = "registraMovimiento";
-		
 		int iCodigo = revisaMovimiento(movimiento);
 
 		if (iCodigo == 0)
 		{
 			//OK correcto estado y accion
-			
-			//Comunidad comunidad_modificada = convierteMovimientoenComunidad(movimiento);
 			
 			MovimientoComunidad movimiento_revisado = revisaCodigosControl(movimiento);
 			
@@ -718,7 +687,7 @@ public class CLComunidades
 					{
 						case A:
 							
-							Utils.debugTrace(true, sClassName, sMethod, "Dando de Alta...");
+							logger.debug("Dando de Alta...");
 							
 							Comunidad comunidad = convierteMovimientoenComunidad(movimiento_revisado);
 							if (QMComunidades.addComunidad(comunidad))
@@ -728,7 +697,7 @@ public class CLComunidades
 								{	
 																
 
-									Utils.debugTrace(true, sClassName, sMethod, "COACES:|"+movimiento_revisado.getCOACES()+"|");
+									logger.debug("COACES:|{}|",movimiento_revisado.getCOACES());
 									if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().equals(""))
 									{
 										//OK 
@@ -767,7 +736,7 @@ public class CLComunidades
 							if (QMListaComunidades.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), Integer.toString(indice)))
 							{
 								
-								Utils.debugTrace(true, sClassName, sMethod, "Dando de Baja...");
+								logger.debug("Dando de Baja...");
 								if (QMComunidades.setEstado(movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), "B"))
 								{
 									//OK 
@@ -791,7 +760,7 @@ public class CLComunidades
 						case M:
 							if (QMListaComunidades.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), Integer.toString(indice)))
 							{
-								Utils.debugTrace(true, sClassName, sMethod, "Modificando...");
+								logger.debug("Modificando...");
 									
 								movimiento.pintaMovimientoComunidad();
 								movimiento_revisado.pintaMovimientoComunidad();
@@ -869,7 +838,7 @@ public class CLComunidades
 			}
 		}
 
-		Utils.debugTrace(true, sClassName, sMethod, "Codigo de Salida:|"+iCodigo+"|");
+		logger.debug("Codigo de Salida:|{}|",iCodigo);
 		return iCodigo;
 	}
 }

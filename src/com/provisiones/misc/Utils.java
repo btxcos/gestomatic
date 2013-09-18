@@ -16,44 +16,25 @@ import java.util.Date;
 
 import javax.faces.application.FacesMessage;
 
-import org.apache.log4j.xml.DOMConfigurator;
-
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.provisiones.types.ImporteDevolucion;
 
 public class Utils 
 {
+	private static Logger logger = LoggerFactory.getLogger(Utils.class.getName());
 	
 	
-	static String sClassName = Utils.class.getName();
-	
-	//private static Logger logger;
-	
-	static boolean bTraza = true;
-	
-	/*public static void debugTrace2(Logger logger, String sClass, String sMethod, String sMsg)
-	{
-		
-		logger.info(sMsg);
-		
-	}*/
-	
-	public static void debugTrace(boolean bEnable, String sClass, String sMethod, String sMsg)
+	public static void debugTrace1(boolean bEnable, String sClass, String sMethod, String sMsg)
 	{
 		boolean bContrazas = true;
 		
-		//logger = LoggerFactory.getLogger(sClass);
-				
+		
 		if (bContrazas && bEnable)
 		{
 			System.out.println(timeStamp()+":["+sClass+"."+sMethod+"] "+sMsg);
 		}
-		
-		
-		//logger.info(sMsg);
 		
 	}
 	
@@ -68,27 +49,23 @@ public class Utils
 		}
 	}
 	
-	public static FacesMessage pfmsgTrace(boolean bEnable, String sExtClass, String sMethod, String sMsg)
+	public static FacesMessage pfmsgTrace(String sMsg)
 	{
-		debugTrace(true, sExtClass, sMethod, sMsg);
 		return new FacesMessage(sMsg);
 	}
 	
-	public static FacesMessage pfmsgWarning(boolean bEnable, String sExtClass, String sMethod, String sMsg)
+	public static FacesMessage pfmsgWarning(String sMsg)
 	{
-		debugTrace(true, sExtClass, sMethod, sMsg);
 		return new FacesMessage(FacesMessage.SEVERITY_WARN, sMsg,null);
 	}
 	
-	public static FacesMessage pfmsgError(boolean bEnable, String sExtClass, String sMethod, String sMsg)
+	public static FacesMessage pfmsgError(String sMsg)
 	{
-		debugTrace(true, sExtClass, sMethod, sMsg);
 		return new FacesMessage(FacesMessage.SEVERITY_ERROR, sMsg,null);
 	}
 	
-	public static FacesMessage pfmsgFatal(boolean bEnable, String sExtClass, String sMethod, String sMsg)
+	public static FacesMessage pfmsgFatal(String sMsg)
 	{
-		debugTrace(true, sExtClass, sMethod, sMsg);
 		return new FacesMessage(FacesMessage.SEVERITY_FATAL, sMsg,null);
 	}
 
@@ -113,7 +90,7 @@ public class Utils
 		}
 		
 		
-		System.out.println("["+sClassName+".fechaDeHoy] |"+sHoy+"|");
+		logger.debug(sHoy);
 		
 		return sHoy;
 	}
@@ -127,12 +104,12 @@ public class Utils
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		sAhora = format.format(fechaHoy);
 		
-		//System.out.println("["+sClassName+".fechaDeHoy] |"+sAhora+"|");
+		logger.debug(sAhora);
 		
 		return sAhora;
 	}
 
-	public static boolean closeResultSet ( ResultSet rs, String sClassName, String sMethod)
+	public static boolean closeResultSet ( ResultSet rs)
 	{
 		boolean bExit = true;
 		if (rs != null) 
@@ -143,8 +120,10 @@ public class Utils
 			} 
 			catch (SQLException sqlEx) 
 			{
-				debugTrace(bTraza, sClassName, sMethod, "ERROR: Unspected connection close.");
+
 				bExit = false;
+				logger.error("ERROR: la conexíon se cerró de forma inesperada.");
+				
 			}
 			rs = null;
 		}
@@ -152,7 +131,7 @@ public class Utils
 		
 	}
 
-	public static boolean closeStatement( Statement stmt, String sClassName, String sMethod)
+	public static boolean closeStatement( Statement stmt)
 	{
 		boolean bExit = true;
 		if (stmt != null) 
@@ -163,7 +142,7 @@ public class Utils
 			} 
 			catch (SQLException sqlEx) 
 			{
-				debugTrace(bTraza, sClassName, sMethod, "ERROR: Unspected connection close.");
+				logger.error("ERROR: la conexíon se cerró de forma inesperada.");
 				bExit = false;
 				
 			}
@@ -184,11 +163,10 @@ public class Utils
 	}
 	public static void inicializarDirectorios ()
 	{
-		String sMethod = "inicializarDirectorios";
 		
-		debugTrace(true, sClassName, sMethod, "DEF_PATH_LOGS:|"+ValoresDefecto.DEF_PATH_LOGS+"|");
-		debugTrace(true, sClassName, sMethod, "DEF_PATH_BACKUP_RECIBIDOS:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+"|");
-		debugTrace(true, sClassName, sMethod, "DEF_PATH_BACKUP_GENERADOS:|"+ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+"|");
+		logger.debug("DEF_PATH_LOGS:|{}|",ValoresDefecto.DEF_PATH_LOGS);
+		logger.debug("DEF_PATH_BACKUP_RECIBIDOS:|{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS);
+		logger.debug("DEF_PATH_BACKUP_GENERADOS:|{}|",ValoresDefecto.DEF_PATH_BACKUP_GENERADOS);
 		
 		File dirLogs = new File(ValoresDefecto.DEF_PATH_LOGS);
 		
@@ -214,13 +192,13 @@ public class Utils
 	
 	public static void standardIO2File(String fileName)
 	{
-		debugTrace(true, sClassName, "standardIO2File", "user.dir:|"+System.getProperty("user.dir")+"|");
-		debugTrace(true, sClassName, "standardIO2File", "ValoresDefecto.DEF_EXEC_PATH:|"+ValoresDefecto.DEF_EXEC_PATH+"|");
+		logger.debug("user.dir:|{}|",System.getProperty("user.dir"));
+		logger.debug("ValoresDefecto.DEF_EXEC_PATH:|{}|",ValoresDefecto.DEF_EXEC_PATH);
 		
 		//DOMConfigurator.configure(System.getProperty("user.dir")+File.separator+"WebContent"+File.separator+"WEB-INF"+File.separator+"log4j.xml"); 
 		
         if(fileName.equals(""))
-        {//Si viene vacío usamos este por defecto
+        {
  
             fileName=ValoresDefecto.DEF_EXEC_PATH+"javalog.txt";
  
@@ -229,15 +207,8 @@ public class Utils
         try 
         {
  
-            //Creamos un printstream sobre el archivo permitiendo añadir al
+            PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(new File(fileName),true)),true);
  
-            //final para no sobreescribir.
- 
-            PrintStream ps = new PrintStream(new BufferedOutputStream(
- 
-                    new FileOutputStream(new File(fileName),true)),true);
- 
-            //Redirigimos entrada y salida estandar
  
             System.setOut(ps);
  
@@ -247,7 +218,7 @@ public class Utils
         catch (FileNotFoundException ex) 
         {
  
-            System.err.println("Se ha producido una excepción FileNotFoundException");
+            logger.error("Error al acceder al archivo '{}'",fileName);
  
         }
  
@@ -255,11 +226,9 @@ public class Utils
 	
 	public static String compruebaCodigoPago(boolean bCodDevolucion, String sTipoPago)
 	{
-		String sMethod = "compruebaPago";
-			
 		String sTipo = bCodDevolucion ? "5"+ sTipoPago : sTipoPago;
 		
-		debugTrace(bTraza, sClassName, sMethod, "Codigo de pago:|"+sTipo+"|");
+		logger.debug("Codigo de pago:|{}|",sTipo);
 		
 		
 		return sTipo;
@@ -267,7 +236,6 @@ public class Utils
 	
 	public static String compruebaCodigoAlfa(String sCodigo)
 	{
-		String sMethod = "compruebaCodigo";
 			
 		String sCodigoRevisado = sCodigo;
 		
@@ -276,13 +244,12 @@ public class Utils
 			sCodigoRevisado = "#";
 		}
 		
-		debugTrace(bTraza, sClassName, sMethod, "Codigo:|"+sCodigoRevisado+"|");
+		logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
 		
 		return sCodigoRevisado;
 	}
 	public static String compruebaCodigoNum(String sCodigo)
 	{
-		String sMethod = "compruebaCodigo";
 			
 		String sCodigoRevisado = sCodigo;
 		
@@ -291,25 +258,22 @@ public class Utils
 			sCodigoRevisado = "0";
 		}
 		
-		debugTrace(bTraza, sClassName, sMethod, "Codigo:|"+sCodigoRevisado+"|");
+		logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
 		
 		return sCodigoRevisado;
 	}
 
 	public static String compruebaImporte(String sImporte)
 	{
-		String sMethod = "compruebaImporte";
+
 		String sImporteReal = "#";
 		
-
 		String sSeparador = "";
 		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporte+"|");
+		logger.debug("sImporte:|{}|",sImporte);
 		
 		if (sImporte.matches("-?[\\d]+([\\.|,][\\d][\\d]?)?$"))
 		{
-			//sImporteReal = sImporte.replace(".", "");
-			//sImporteReal = sImporteReal.replace(".", "");
 			
 			if (sImporte.contains("."))
 			{
@@ -330,8 +294,8 @@ public class Utils
 					sCentimos = sCentimos +"0";
 				}
 				
-				Utils.debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
-				Utils.debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
+				logger.debug("sEuros:|{}|",sEuros);
+				logger.debug("sCentimos:|{}|",sCentimos);
 			
 				sImporteReal = sEuros + sCentimos;
 			}
@@ -344,24 +308,22 @@ public class Utils
 		{
 			sImporteReal= "0";
 		}
-		Utils.debugTrace(bTraza, sClassName, sMethod, "Importe Real:|"+sImporteReal+"|");
-
+		
+		logger.debug("sImporteReal:|{}|",sImporteReal);
 		
 		return sImporteReal;
 	}
 	
 	public static ImporteDevolucion separaImporteDevolucion(String sImporte)
 	{
-		String sMethod = "compruebaImporteDevolucion";
 		
-		debugTrace(bTraza, sClassName, sMethod, "sImporte:|"+sImporte+"|");
+		logger.debug("sImporte:|{}|",sImporte);
 	
 		return new ImporteDevolucion(sImporte.startsWith("-"),sImporte.replaceFirst("-", ""));
 	}
 	
 	public static String compruebaImporteDevolucion(boolean bNegativo, String sImporte)
 	{
-		String sMethod = "compruebaImporteDevolucion";
 		String sImporteReal = "#";
 		
 		if (sImporte.matches("-?[\\d]+([\\.|,][\\d]{2})?$"))
@@ -375,16 +337,17 @@ public class Utils
 				String sEuros = sImporteReal.substring(0, sImporte.length()-3);
 				String sCentimos = sImporteReal.substring(sImporte.length()-2,sImporte.length());
 		
-				debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
-				debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
-		
+				logger.debug("sEuros:|{}|",sEuros);
+				logger.debug("sCentimos:|{}|",sCentimos);
 			
 				sImporteReal = bNegativo ? "-"+ sEuros + sCentimos : sEuros + sCentimos;
 			}
 			else if (sImporte.equals(""))
+			{
 				sImporteReal= "0";
+			}
 		
-			debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
+			logger.debug("sImporteReal:|{}|",sImporteReal);
 		}
 
 		
@@ -393,39 +356,35 @@ public class Utils
 
 	public static String compruebaFecha(String sFecha)
 	{
-		String sMethod = "compruebaFecha";
-		
-		debugTrace(bTraza, sClassName, sMethod, "Fecha:|"+sFecha+"|");
+
+		logger.debug("sFecha:|{}|",sFecha);
 		
 		String sFechaFormateada = "";
 		
 		if (sFecha.matches("[\\d]{2}[/][\\d]{2}[/][\\d]{4}$"))
 		{
-			/*String sDia = sFecha.substring(0, 2);
-			String sMes = sFecha.substring(3, 5);
-			String sAño = sFecha.substring(6, 10);*/
 			
 			String[] arrayfecha = sFecha.split("/");
 			String sDia = arrayfecha[0];
 			String sMes = arrayfecha[1];
 			String sAño = arrayfecha[2];
-		
-			debugTrace(bTraza, sClassName, sMethod, "sDia:|"+sDia+"|");
-			debugTrace(bTraza, sClassName, sMethod, "sMes:|"+sMes+"|");
-			debugTrace(bTraza, sClassName, sMethod, "sAño:|"+sAño+"|");
-		
-		
+
+			logger.debug("sDia:|{}|",sDia);
+			logger.debug("sMes:|{}|",sMes);
+			logger.debug("sAño:|{}|",sAño);
+	
 			
 			sFechaFormateada = sAño+sMes+sDia;
 		
-			debugTrace(bTraza, sClassName, sMethod, "Fecha:|"+sFechaFormateada+"|");
+			logger.debug("sFechaFormateada:|{}|",sFechaFormateada);
 		
 			try 
 			{
 				DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 				formatter.setLenient(false);
 				Date myDate = formatter.parse(sFechaFormateada);
-				debugTrace(bTraza, sClassName, sMethod,"|"+myDate+"|");
+				
+				logger.debug("myDate:|{}|",myDate);
 			} 
 			catch (ParseException e) 
 			{
@@ -433,7 +392,9 @@ public class Utils
 			} 
 		}
 		else
+		{
 			sFechaFormateada = "0";
+		}
 		
 		return sFechaFormateada;
 	}
@@ -441,9 +402,6 @@ public class Utils
     public static boolean compruebaCC(String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT) 
     {
 
-		boolean bTraza = true;
-		String sMethod = "compruebaCC";
-		
     	String sDC = "";
         int iTotal = 0;
         int iProducto = 0;
@@ -452,10 +410,11 @@ public class Utils
         
         boolean bResultado = false;
         
-        Utils.debugTrace(bTraza, sClassName, sMethod, "sNUCCEN|"+sNUCCEN+"|");
-        Utils.debugTrace(bTraza, sClassName, sMethod, "sNUCCOF|"+sNUCCOF+"|");
-        Utils.debugTrace(bTraza, sClassName, sMethod, "sNUCCDI|"+sNUCCDI+"|");
-        Utils.debugTrace(bTraza, sClassName, sMethod, "sNUCCNT|"+sNUCCNT+"|");
+        logger.debug("sNUCCEN:|{}|",sNUCCEN);
+        logger.debug("sNUCCOF:|{}|",sNUCCOF);
+        logger.debug("sNUCCDI:|{}|",sNUCCDI);
+        logger.debug("sNUCCNT:|{}|",sNUCCNT);
+
         
         if ((sNUCCEN.length() == 4)
         	&& (sNUCCOF.length() == 4)
@@ -677,39 +636,33 @@ public class Utils
     
 	public static boolean compruebaCorreo(String sCorreo)
 	{
-		//String sMethod = "compruebaCorreo";
-		
 		return sCorreo.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 	}
 
 	
 	public static String recuperaImporte(boolean bNegativo, String sImporte)
 	{
-		String sMethod = "recuperaImporte";
-		
 		String sImporteReal = "0";
 		
 		if (sImporte.length()>2)
 		{
 			String sEuros = sImporte.substring(0, sImporte.length()-2);
 			String sCentimos = sImporte.substring(sImporte.length()-2,sImporte.length());
-		
-			debugTrace(bTraza, sClassName, sMethod, "sEuros:|"+sEuros+"|");
-			debugTrace(bTraza, sClassName, sMethod, "sCentimos:|"+sCentimos+"|");
-		
-			
+
+			logger.debug("sEuros:|{}|",sEuros);
+			logger.debug("sCentimos:|{}|",sCentimos);
+	
 			sImporteReal = bNegativo ? "-"+ sEuros + "." + sCentimos : sEuros + "." + sCentimos;
 		}
-		debugTrace(bTraza, sClassName, sMethod, "Importe:|"+sImporteReal+"|");
-		
+
+		logger.debug("sImporteReal:|{}|",sImporteReal);
+
 		return sImporteReal;
 	}
 	
 	public static String recuperaFecha(String sFecha)
 	{
-		String sMethod = "recuperaFecha";
-		
-		debugTrace(bTraza, sClassName, sMethod, "Fecha:|"+sFecha+"|");
+		logger.debug("sFecha:|{}|",sFecha);		
 		
 		String sFechaFormateada = "";
 		
@@ -720,15 +673,13 @@ public class Utils
 			String sDia = sFecha.substring(6, 8);
 			
 		
-			debugTrace(bTraza, sClassName, sMethod, "sDia:|"+sDia+"|");
-			debugTrace(bTraza, sClassName, sMethod, "sMes:|"+sMes+"|");
-			debugTrace(bTraza, sClassName, sMethod, "sAño:|"+sAño+"|");
-		
-		
+			logger.debug("sDia:|{}|",sDia);
+			logger.debug("sMes:|{}|",sMes);
+			logger.debug("sAño:|{}|",sAño);
 			
 			sFechaFormateada = sDia+"/"+sMes+"/"+sAño;
 		
-			debugTrace(bTraza, sClassName, sMethod, "Fecha:|"+sFechaFormateada+"|");
+			logger.debug("sFechaFormateada:|{}|",sFechaFormateada);
 		}
 		
 		return sFechaFormateada;
@@ -736,8 +687,6 @@ public class Utils
 	
 	public static String recuperaCodigo(String sCodigo)
 	{
-		String sMethod = "compruebaCodigo";
-			
 		String sCodigoRevisado = sCodigo;
 		
 		if (sCodigoRevisado.equals("#"))
@@ -745,7 +694,7 @@ public class Utils
 			sCodigoRevisado = "";
 		}
 		
-		debugTrace(bTraza, sClassName, sMethod, "Codigo:|"+sCodigoRevisado+"|");
+		logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
 		
 		return sCodigoRevisado;
 	}

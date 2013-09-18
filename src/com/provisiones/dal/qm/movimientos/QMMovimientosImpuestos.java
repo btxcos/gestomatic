@@ -1,6 +1,7 @@
 package com.provisiones.dal.qm.movimientos;
 
 import com.provisiones.dal.ConnectionManager;
+
 import com.provisiones.misc.Utils;
 import com.provisiones.types.MovimientoImpuestoRecurso;
 
@@ -10,11 +11,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QMMovimientosImpuestos 
 {
-	static String sClassName = QMMovimientosImpuestos.class.getName();
-	
-	static boolean bTrazas = true;
+	private static Logger logger = LoggerFactory.getLogger(QMMovimientosImpuestos.class.getName());
 
 	static String sTable = "e4_movimientos_tbl";
 
@@ -46,9 +48,7 @@ public class QMMovimientosImpuestos
 	static String sField25 = "obdeer";		
 
 	public static int addMovimientoImpuestoRecurso(MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso)
-
 	{
-		String sMethod = "addMovimientoImpuestoRecurso";
 		Statement stmt = null;
 		Connection conn = null;
 		ResultSet resulset = null;
@@ -57,7 +57,7 @@ public class QMMovimientosImpuestos
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try {
 
@@ -115,7 +115,7 @@ public class QMMovimientosImpuestos
 			
 			resulset = stmt.getGeneratedKeys();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 			if (resulset.next()) 
 			{
@@ -124,35 +124,34 @@ public class QMMovimientosImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + NuevoMovimientoImpuestoRecurso.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + NuevoMovimientoImpuestoRecurso.getNURCAT());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + NuevoMovimientoImpuestoRecurso.getCOSBAC());
+			logger.error("ERROR: COACES:|{}|",NuevoMovimientoImpuestoRecurso.getCOACES());
+			logger.error("ERROR: NURCAT:|{}|",NuevoMovimientoImpuestoRecurso.getNURCAT());
+			logger.error("ERROR: COSBAC:|{}|",NuevoMovimientoImpuestoRecurso.getCOSBAC());
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			//bSalida = false;
 		} 
 		finally
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
-			Utils.closeResultSet(resulset,sClassName,sMethod);
+			Utils.closeStatement(stmt);
+			Utils.closeResultSet(resulset);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return iCodigo;//bSalida;
+		return iCodigo;
 	}
 	public static boolean modMovimientoImpuestoRecurso(MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso, String sMovimientoImpuestoRecursoID)
 	{
-		String sMethod = "modMovimientoImpuestoRecurso";
 		Statement stmt = null;
 		boolean bSalida = true;
 		Connection conn = null;
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 		
 		try 
 		{
@@ -187,23 +186,23 @@ public class QMMovimientosImpuestos
 					" WHERE "
 					+ sField1 + " = '"+ sMovimientoImpuestoRecursoID +"'");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoImpuestoRecursoID: " + sMovimientoImpuestoRecursoID);
+			logger.error("ERROR: MovimientoImpuestoRecursoID:|{}|",sMovimientoImpuestoRecursoID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 
 		}
 		ConnectionManager.CloseDBConnection(conn);
@@ -212,7 +211,6 @@ public class QMMovimientosImpuestos
 
 	public static boolean delMovimientoImpuestoRecurso(String sMovimientoImpuestoRecursoID)
 	{
-		String sMethod = "delMovimientoImpuestoRecurso";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -220,7 +218,7 @@ public class QMMovimientosImpuestos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -228,32 +226,29 @@ public class QMMovimientosImpuestos
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField1 + " = '" + sMovimientoImpuestoRecursoID + "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoImpuestoRecursoID: " + sMovimientoImpuestoRecursoID);
+			logger.error("ERROR: MovimientoImpuestoRecursoID:|{}|",sMovimientoImpuestoRecursoID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static MovimientoImpuestoRecurso getMovimientoImpuestoRecurso(String sMovimientoImpuestoRecursoID)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getMovimientoImpuestoRecurso";
-
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -291,7 +286,7 @@ public class QMMovimientosImpuestos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -328,7 +323,7 @@ public class QMMovimientosImpuestos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -362,30 +357,30 @@ public class QMMovimientosImpuestos
 					sOBTEXC = rs.getString(sField24);
 					sOBDEER = rs.getString(sField25);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField1 + ": " + sMovimientoImpuestoRecursoID);
+					logger.debug("{}:|{}|",sField1,sMovimientoImpuestoRecursoID);
 
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: MovimientoImpuestoRecursoID: " + sMovimientoImpuestoRecursoID);
+			logger.error("ERROR: MovimientoImpuestoRecursoID:|{}|",sMovimientoImpuestoRecursoID);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return new MovimientoImpuestoRecurso(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOENGP,
@@ -395,14 +390,11 @@ public class QMMovimientosImpuestos
 	}
 
 	public static String getMovimientoImpuestoRecursoID(MovimientoImpuestoRecurso impuesto)
-	{//pendiente de coaces, de la tabla activos
-		
-		String sMethod = "getMovimientoImpuestoRecursoID";
-
+	{
 		Statement stmt = null;
 		ResultSet rs = null;
 
-		String sImpuestoID = "";
+		String sMovimientoImpuestoRecursoID = "";
 
 		PreparedStatement pstmt = null;
 		boolean found = false;
@@ -411,7 +403,7 @@ public class QMMovimientosImpuestos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -448,7 +440,7 @@ public class QMMovimientosImpuestos
 
 			rs = pstmt.executeQuery();
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -457,36 +449,36 @@ public class QMMovimientosImpuestos
 				{
 					found = true;
 
-					sImpuestoID = rs.getString(sField1);
+					sMovimientoImpuestoRecursoID = rs.getString(sField1);
 					
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Encontrado el registro!");
+					logger.debug("Encontrado el registro!");
 
-					com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod,sField1 + ": " + sImpuestoID);
+					logger.debug("{}:|{}|",sField1,sMovimientoImpuestoRecursoID);
 				}
 			}
 			if (found == false) 
 			{
-				com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COACES: " + impuesto.getCOACES());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NURCAT: " + impuesto.getNURCAT());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COSBAC: " + impuesto.getCOSBAC());
+			logger.error("ERROR: COACES:|{}|",impuesto.getCOACES());
+			logger.error("ERROR: NURCAT:|{}|",impuesto.getNURCAT());
+			logger.error("ERROR: COSBAC:|{}|",impuesto.getCOSBAC());
 
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs,sClassName,sMethod);
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
-		return sImpuestoID;
+		return sMovimientoImpuestoRecursoID;
 	}
 }

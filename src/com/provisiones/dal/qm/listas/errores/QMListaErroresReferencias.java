@@ -4,14 +4,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 
 public class QMListaErroresReferencias 
 {
-	static String sClassName = QMListaErroresReferencias.class.getName();
-	
-	static boolean bTrazas = true;
+	private static Logger logger = LoggerFactory.getLogger(QMListaErroresReferencias.class.getName());
 
 	static String sTable = "lista_errores_referencias_multi";
 
@@ -19,9 +20,7 @@ public class QMListaErroresReferencias
 	static String sField2  = "cod_cotdor";
 
 	public static boolean addErrorReferencia(String sCodMovimiento, String sCodCOTDOR)
-
 	{
-		String sMethod = "addErrorReferencia";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -29,7 +28,7 @@ public class QMListaErroresReferencias
 
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -42,23 +41,23 @@ public class QMListaErroresReferencias
 				       + sCodMovimiento + "','" 
 				       + sCodCOTDOR +  "' )");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTDOR: " + sCodCOTDOR);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+			logger.error("ERROR: COTDOR:|{}|",sCodCOTDOR);
 			
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
@@ -66,7 +65,6 @@ public class QMListaErroresReferencias
 
 	public static boolean delErrorReferencia(String sCodMovimiento, String sCodCOTDOR)
 	{
-		String sMethod = "delErrorReferencia";
 		Statement stmt = null;
 		Connection conn = null;
 		
@@ -74,7 +72,7 @@ public class QMListaErroresReferencias
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -84,23 +82,23 @@ public class QMListaErroresReferencias
 					"(" + sField1 + " = '" + sCodMovimiento	+ "' AND "
 						+ sField2 + " = '" + sCodCOTDOR	+ "')");
 			
-			com.provisiones.misc.Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: Movimiento: " + sCodMovimiento);
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COTDOR: " + sCodCOTDOR);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+			logger.error("ERROR: COTDOR:|{}|",sCodCOTDOR);
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
 		finally 
 		{
 
-			Utils.closeStatement(stmt, sClassName, sMethod);
+			Utils.closeStatement(stmt);
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
