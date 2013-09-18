@@ -12,9 +12,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class QMActivos
 {
 	static String sClassName = QMActivos.class.getName();
+	
+	private static Logger logger = LoggerFactory.getLogger(sClassName);
 	
 	static boolean bTrazas = true;
 
@@ -518,7 +523,7 @@ public class QMActivos
 	}
 
 	public static Activo getActivo(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "getActivo";
 
@@ -876,7 +881,7 @@ public class QMActivos
 	}
 
 	public static boolean existeActivo(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "existeActivo";
 
@@ -947,7 +952,7 @@ public class QMActivos
 	}
 
 	public static String getReferenciaCatastral(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "getReferenciaCatastral";
 
@@ -1021,7 +1026,7 @@ public class QMActivos
 	}
 	
 	public static String getCOTSINActivo(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "getCOTSINActivo";
 
@@ -1094,7 +1099,7 @@ public class QMActivos
 	}
 
 	public static String getBIARREActivo(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "getBIARREActivo";
 
@@ -1167,7 +1172,7 @@ public class QMActivos
 	}
 	
 	public static String getSociedadPatrimonial(String sCodCOACES)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "getSociedadPatrimonial";
 
@@ -1241,7 +1246,7 @@ public class QMActivos
 	}
 	
 	public static ArrayList<ActivoTabla> buscaActivos(ActivoTabla activo)
-	{//pendiente de coaces, de la tabla activos
+	{
 		
 		String sMethod = "buscaActivos";
 
@@ -1267,7 +1272,9 @@ public class QMActivos
 		
 		conn = ConnectionManager.OpenDBConnection();
 		
-		Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		//Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutando Query...");
+		
+		logger.debug("Ejecutando Query...");
 
 		try 
 		{
@@ -1297,9 +1304,9 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
+			//Utils.debugTrace(bTrazas, sClassName, sMethod, "Ejecutada con exito!");
 
-			
+			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
@@ -1321,31 +1328,44 @@ public class QMActivos
 					
 					result.add(activoencontrado);
 					
-					Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					//Utils.debugTrace(false, sClassName, sMethod, "Encontrado el registro!");
+					
+					logger.debug( "Encontrado el registro!");
 
-					Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCOACES);
+					//Utils.debugTrace(false, sClassName, sMethod, sField1 + ": " + sCOACES);
+					
+					logger.debug("{}:{}",sField1,sCOACES);
 				}
 			}
 			if (found == false) 
 			{
-				Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				//Utils.debugTrace(bTrazas, sClassName, sMethod, "No se encontro la informacion.");
+				logger.info("No se encontro la informacion.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: COPOIN: " + activo.getCOPOIN());
+			/*System.out.println("["+sClassName+"."+sMethod+"] ERROR: COPOIN: " + activo.getCOPOIN());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOMUIN: " + activo.getNOMUIN());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOPRAC: " + activo.getNOPRAC());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NOVIAS: " + activo.getNOVIAS());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPIAC: " + activo.getNUPIAC());
 			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPOAC: " + activo.getNUPOAC());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPUAC: " + activo.getNUPUAC());
+			System.out.println("["+sClassName+"."+sMethod+"] ERROR: NUPUAC: " + activo.getNUPUAC());*/
+			
+			logger.error("ERROR: COPOIN:{}",activo.getCOPOIN());
+			logger.error("ERROR: NOMUIN:{}",activo.getNOMUIN());
+			logger.error("ERROR: NOPRAC:{}",activo.getNOPRAC());
+			logger.error("ERROR: NOVIAS:{}",activo.getNOVIAS());
+			logger.error("ERROR: NUPIAC:{}",activo.getNUPIAC());
+			logger.error("ERROR: NUPOAC:{}",activo.getNUPOAC());
+			logger.error("ERROR: NUPUAC:{}",activo.getNUPUAC());
 			
 
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 		} 
 		finally 
 		{

@@ -16,6 +16,8 @@ import java.util.Date;
 
 import javax.faces.application.FacesMessage;
 
+import org.apache.log4j.xml.DOMConfigurator;
+
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
@@ -210,15 +212,22 @@ public class Utils
 		}
 	}
 	
-	public static void standardIO2File(String fileName){
-		 
-        if(fileName.equals("")){//Si viene vacío usamos este por defecto
+	public static void standardIO2File(String fileName)
+	{
+		debugTrace(true, sClassName, "standardIO2File", "user.dir:|"+System.getProperty("user.dir")+"|");
+		debugTrace(true, sClassName, "standardIO2File", "ValoresDefecto.DEF_EXEC_PATH:|"+ValoresDefecto.DEF_EXEC_PATH+"|");
+		
+		//DOMConfigurator.configure(System.getProperty("user.dir")+File.separator+"WebContent"+File.separator+"WEB-INF"+File.separator+"log4j.xml"); 
+		
+        if(fileName.equals(""))
+        {//Si viene vacío usamos este por defecto
  
             fileName=ValoresDefecto.DEF_EXEC_PATH+"javalog.txt";
  
         }
  
-        try {
+        try 
+        {
  
             //Creamos un printstream sobre el archivo permitiendo añadir al
  
@@ -234,7 +243,9 @@ public class Utils
  
             System.setErr(ps);
  
-        } catch (FileNotFoundException ex) {
+        } 
+        catch (FileNotFoundException ex) 
+        {
  
             System.err.println("Se ha producido una excepción FileNotFoundException");
  

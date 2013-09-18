@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.misc.Utils;
 
 
@@ -16,11 +19,13 @@ public class ConnectionManager
 	private static String sHostResource = "//localhost/glsl";
 	private static String sLogin = "?user=root&password=glsl1234";
 	
+	private static Logger logger = LoggerFactory.getLogger(sClassName);
+	
 	static boolean bEnable = false;
 
 	public static Connection OpenDBConnection() 
 	{
-		String sMethod = "OpenDBConnection";
+
 		try 
 		{
 
@@ -38,36 +43,36 @@ public class ConnectionManager
 
 		try 
 		{
-			Utils.debugTrace(true, sClassName, sMethod, "tiempo INI:|"+Utils.timeStamp()+"|");
+			
+			logger.debug("tiempo INI:|{}|", Utils.timeStamp());
 			conn = DriverManager.getConnection(sConnectionData);
-			Utils.debugTrace(true, sClassName, sMethod, "tiempo FIN:|"+Utils.timeStamp()+"|");
+			logger.debug("tiempo FIN:|{}|", Utils.timeStamp());
 
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
+			logger.error("SQLException: {}", ex.getMessage());
+			logger.error("SQLState: {}", ex.getSQLState());
+			logger.error("VendorError: {}", ex.getErrorCode());
 		}
 
-		Utils.debugTrace(bEnable,sClassName,sMethod,"Conectado con exito!");
+		logger.info("Conexión realizada.");
 		return conn;
 
 	}
 	public static boolean CloseDBConnection (Connection conn)
 	{
-		String sMethod = "CloseDBConnection";
 		try 
 		{
 				conn.close();
 		} 
 		catch (SQLException ex) 
 		{
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLException: " + ex.getMessage());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: SQLState: " + ex.getSQLState());
-			System.out.println("["+sClassName+"."+sMethod+"] ERROR: VendorError: " + ex.getErrorCode());
+			logger.error("SQLException: {}", ex.getMessage());
+			logger.error("SQLState: {}", ex.getSQLState());
+			logger.error("VendorError: {}", ex.getErrorCode());
 		}
-		Utils.debugTrace(bEnable,sClassName,sMethod,"Desconexion realizada.");
+		logger.info("Desconexión realizada.");
 		return true;
 	}
 }
