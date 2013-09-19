@@ -54,7 +54,7 @@ public class ConnectionManager
 			logger.error("VendorError: {}", ex.getErrorCode());
 		}
 
-		logger.info("Conexión realizada.");
+		logger.debug("Conexión realizada.");
 		return conn;
 
 	}
@@ -70,7 +70,7 @@ public class ConnectionManager
 			logger.error("SQLState: {}", ex.getSQLState());
 			logger.error("VendorError: {}", ex.getErrorCode());
 		}
-		logger.info("Desconexión realizada.");
+		logger.debug("Desconexión realizada.");
 		return true;
 	}
 }
