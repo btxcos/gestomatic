@@ -3,6 +3,9 @@ package com.provisiones.ll;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.misc.Parser;
@@ -12,7 +15,7 @@ import com.provisiones.types.ProvisionTabla;
 
 public class CLProvisiones
 {
-	static String sClassName = CLProvisiones.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(CLProvisiones.class.getName());
 
 	public static ArrayList<ProvisionTabla> buscarProvisionesAbiertas()
 	{
@@ -30,9 +33,6 @@ public class CLProvisiones
 	}
 	public static String provisionAsignada (String sCodCOACES)
 	{
-		
-		//String sMethod = "provisionAsignada";
-		
 		String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCodCOACES);
 		
 		if (QMCodigosControl.getDesCampo(QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
@@ -62,6 +62,10 @@ public class CLProvisiones
 				
 				int iAño = Integer.parseInt(sProvision.substring(2, 4));
 				int iNumero = Integer.parseInt(sProvision.substring(6));
+				
+				logger.debug("iAmpliacion:|{}|",iAmpliacion);
+				logger.debug("iAño:|{}|",iAño);
+				logger.debug("iNumero:|{}|",iNumero);
 			
 				if (iAño < fecha.get(Calendar.YEAR)%100)
 				{
@@ -105,6 +109,7 @@ public class CLProvisiones
 				}
 		
 				sProvision = sAmpliacion+iAño+ValoresDefecto.DEF_COREAE+sNumero;
+				logger.debug("sProvision:|{}|",sProvision);
 			}			
 			
 			Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0",ValoresDefecto.DEF_ALTA);

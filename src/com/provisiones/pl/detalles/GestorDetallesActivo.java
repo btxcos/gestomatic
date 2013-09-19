@@ -5,9 +5,13 @@ import java.io.Serializable;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.misc.Utils;
 import com.provisiones.pl.GestorActivos;
+
 import com.provisiones.types.Activo;
 
 public class GestorDetallesActivo implements Serializable 
@@ -15,7 +19,7 @@ public class GestorDetallesActivo implements Serializable
 
 	private static final long serialVersionUID = 6852249796176190672L;
 
-	static String sClassName = GestorDetallesActivo.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(GestorDetallesActivo.class.getName());
 	
 	private String sCOACES = "";
 	private String sNUINMU = "";
@@ -139,16 +143,16 @@ public class GestorDetallesActivo implements Serializable
 		
 		String sValor = ((GestorActivos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorActivos")).getsCOACES();
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, "GestorDetallesActivo", "sCOACESnB:|"+sValor+"|");
+		logger.debug("sCOACESnB:|{}|",sValor);
 
 		
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, "GestorDetallesActivo", "sCOACES:|"+sCOACES+"|");
+		logger.debug("sCOACES:|{}|",sCOACES);
 		
 		
 		if (!sValor.equals(""))
 		{
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, "GestorDetallesActivo", "It's Works!!!");
+
 		
 			Activo activo = QMActivos.getActivo(sValor);
 		

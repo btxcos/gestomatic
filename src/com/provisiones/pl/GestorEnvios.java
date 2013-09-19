@@ -11,6 +11,8 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuotas;
@@ -27,7 +29,7 @@ public class GestorEnvios implements Serializable
 
 	private static final long serialVersionUID = 2302669387183120830L;
 
-	static String sClassName = GestorEnvios.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(GestorEnvios.class.getName());
 	
 	private String sNumComunidades = "0";
 	private boolean bNumComunidades = true;
@@ -61,8 +63,6 @@ public class GestorEnvios implements Serializable
 
 	public void cargarMovimientosPendientes(ActionEvent actionEvent)
 	{
-		String sMethod = "cargaMovimientosPendientes";
-		
 		FacesMessage msg;
     	
     	String sMsg = "";
@@ -78,14 +78,16 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Comunidades a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgTrace(sMsg);
+	    		logger.info(sMsg);
     			
     		}
     		else
     		{
 	    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Comunidades.";
 	        	
-	    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
     		}
     		
     		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -103,14 +105,16 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Cuotas a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgTrace(sMsg);
+	    		logger.info(sMsg);
     			
     		}
     		else
     		{
 	    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Cuotas.";
 	        	
-	    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
     		}
     		
     		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -126,15 +130,16 @@ public class GestorEnvios implements Serializable
     		{
 
 	    		sMsg = "Generado el fichero de Referencias a enviar.";
-	        	
-	    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgTrace(sMsg);
+	    		logger.info(sMsg);
     			
     		}
     		else
     		{
 	    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Referencias.";
 	        	
-	    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
     		}
     		
     		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -151,14 +156,16 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Impuestos a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgTrace(sMsg);
+	    		logger.info(sMsg);
     			
     		}
     		else
     		{
 	    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Impuestos.";
 	        	
-	    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
     		}
     		
     		FacesContext.getCurrentInstance().addMessage(null, msg);	
@@ -175,14 +182,16 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Gastos a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgTrace(sMsg);
+	    		logger.info(sMsg);
     			
     		}
     		else
     		{
 	    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Gastos.";
 	        	
-	    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
     		}
     		
     		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -199,14 +208,16 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Provisiones a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgTrace(sMsg);
+	    		logger.info(sMsg);
     			
     		}
     		else
     		{
 	    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Provisiones.";
 	        	
-	    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
     		}
     		
     		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -215,12 +226,14 @@ public class GestorEnvios implements Serializable
     	if (bNumComunidades && bNumCuotas && bNumReferencias && bNumImpuestos && bNumGastos && bNumProvisiones)
     	{
     		sMsg = "No hay movimientos pendientes.";
-    		msg = Utils.pfmsgWarning(true, sClassName, sMethod, sMsg);    		
+    		msg = Utils.pfmsgWarning(sMsg);
+    		logger.warn(sMsg);
     	}
     	else
     	{
     		sMsg = "Cargados todos los movimientos pendientes.";
-    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);    		
+    		msg = Utils.pfmsgTrace(sMsg);
+    		logger.info(sMsg);
 
     	}
 
@@ -230,9 +243,6 @@ public class GestorEnvios implements Serializable
 	
 	public void descargarComunidades() 
     {  
-    	
-    	String sMethod = "descargarComunidades";
-
     	FacesMessage msg;
     	
     	String sMsg = "";
@@ -245,17 +255,18 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Comunidades a enviar.";
         	
-    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgTrace(sMsg);
+    		logger.info(sMsg);
 
 		} 
 		catch (FileNotFoundException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
     		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
         	
-    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgError(sMsg);
+    		logger.error(sMsg);
 		}
 
 		
@@ -265,9 +276,6 @@ public class GestorEnvios implements Serializable
 	
 	public void descargarCuotas() 
     {  
-    	
-    	String sMethod = "descargarCuotas";
-
     	FacesMessage msg;
     	
     	String sMsg = "";
@@ -280,17 +288,18 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Cuotas a enviar.";
         	
-    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgTrace(sMsg);
+    		logger.info(sMsg);
 
 		} 
 		catch (FileNotFoundException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
     		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
         	
-    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgError(sMsg);
+    		logger.error(sMsg);
 		}
 
 		
@@ -300,9 +309,6 @@ public class GestorEnvios implements Serializable
 	
 	public void descargarReferencias() 
     {  
-    	
-    	String sMethod = "descargarReferencias";
-
     	FacesMessage msg;
     	
     	String sMsg = "";
@@ -315,17 +321,18 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Referencias a enviar.";
         	
-    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgTrace(sMsg);
+    		logger.info(sMsg);
 
 		} 
 		catch (FileNotFoundException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
     		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
         	
-    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgError(sMsg);
+    		logger.error(sMsg);
 		}
 
 		
@@ -335,9 +342,6 @@ public class GestorEnvios implements Serializable
 	
 	public void descargarImpuestos() 
     {  
-    	
-    	String sMethod = "descargarImpuestos";
-
     	FacesMessage msg;
     	
     	String sMsg = "";
@@ -350,17 +354,18 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Impuestos a enviar.";
         	
-    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgTrace(sMsg);
+    		logger.info(sMsg);
 
 		} 
 		catch (FileNotFoundException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
     		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
         	
-    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgError(sMsg);
+    		logger.error(sMsg);
 		}
 
 		
@@ -370,9 +375,6 @@ public class GestorEnvios implements Serializable
 	
 	public void descargarGastos() 
     {  
-    	
-    	String sMethod = "descargarGastos";
-
     	FacesMessage msg;
     	
     	String sMsg = "";
@@ -385,17 +387,18 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Gastos a enviar.";
         	
-    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgTrace(sMsg);
+    		logger.info(sMsg);
 
 		} 
 		catch (FileNotFoundException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
     		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
         	
-    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgError(sMsg);
+    		logger.error(sMsg);
 		}
 
 		
@@ -405,9 +408,6 @@ public class GestorEnvios implements Serializable
 	
 	public void descargarProvisiones() 
     {  
-    	
-    	String sMethod = "descargarProvisiones";
-
     	FacesMessage msg;
     	
     	String sMsg = "";
@@ -420,17 +420,18 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Provisiones a enviar.";
         	
-    		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgTrace(sMsg);
+    		logger.info(sMsg);
 
 		} 
 		catch (FileNotFoundException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
     		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
         	
-    		msg = Utils.pfmsgError(true, sClassName, sMethod, sMsg);
+    		msg = Utils.pfmsgError(sMsg);
+    		logger.error(sMsg);
 		}
 
 		

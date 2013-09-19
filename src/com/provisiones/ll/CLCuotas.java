@@ -2,13 +2,15 @@ package com.provisiones.ll;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.misc.Parser;
-import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Cuota;
@@ -18,12 +20,10 @@ import com.provisiones.types.MovimientoCuota;
 public class CLCuotas 
 {
   
-	static String sClassName = CLCuotas.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(CLCuotas.class.getName());
 	
 	public static boolean actualizaCuotaLeida(String linea)
 	{
-		String sMethod = "actualizaCuotaLeida";
-
 		boolean bSalida = false;
 		
 		MovimientoCuota cuota = Parser.leerCuota(linea);
@@ -65,9 +65,9 @@ public class CLCuotas
 		}
 		else 
 		{
-			Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
-			Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
-			System.out.println("No Information Found");
+			logger.error("El siguiente registro no se encuentra en el sistema:");
+			logger.error("|{}|",linea);
+
 		}
 		
 		return bSalida;
@@ -100,8 +100,6 @@ public class CLCuotas
 	
 	public static int comprobarActivo (String sCOCLDO, String sNUDCOM, String sCOACES)
 	{
-		String sMethod = "comprobarActivo";
-		
 		int iCodigo = 0;
 		
 		if (QMActivos.existeActivo(sCOACES))
@@ -114,7 +112,7 @@ public class CLCuotas
 		else
 			iCodigo = -2;
 
-		Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:|"+iCodigo+"|");
+		logger.debug("Código de salida:|{}|",iCodigo);
 		
 		return iCodigo;
 	}
@@ -126,9 +124,7 @@ public class CLCuotas
 	
 	public static MovimientoCuota convierteCuotaenMovimiento(Cuota cuota, String sCodCOACES, String sCodCOACCI)
 	{
-		String sMethod = "convierteComunidadenMovimiento";
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		logger.debug("Convirtiendo...");
 		
 		return new MovimientoCuota(
 				ValoresDefecto.DEF_E2_CODTRN,
@@ -159,9 +155,7 @@ public class CLCuotas
 	}
 	public static Cuota convierteMovimientoenCuota(MovimientoCuota movimiento)
 	{
-		String sMethod = "convierteMovimientoenComunidad";
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		logger.debug("Convirtiendo...");
 		
 		return new Cuota(
 				movimiento.getCOACES(),
@@ -188,10 +182,7 @@ public class CLCuotas
 	
 	public static MovimientoCuota revisaCodigosControl(MovimientoCuota movimiento)
 	{
-		String sMethod = "revisaMovimiento";
-		
 		Cuota cuota = QMCuotas.getCuota(movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC());
-		
 		
 		cuota.pintaCuota();
 		
@@ -199,7 +190,7 @@ public class CLCuotas
 		
 		MovimientoCuota movimiento_revisado = new MovimientoCuota("", "", "", "", "", "", "", "0", "", "", "", "", "0", "", "0", "", "0", "", "0", "", "0", "", "", "");
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Revisando Accion: |"+movimiento.getCOACCI()+"|");
+		logger.debug("Revisando Acción:|{}|",movimiento.getCOACCI());
 		
 		movimiento_revisado.setCODTRN(movimiento.getCODTRN());
 		movimiento_revisado.setCOTDOR(movimiento.getCOTDOR());
@@ -386,7 +377,7 @@ public class CLCuotas
 
 		
 
-		Utils.debugTrace(true, sClassName, sMethod, "Revisado! Nuevo movimiento:");
+		logger.debug("Revisado! Nuevo movimiento:");
 		movimiento_revisado.pintaMovimientoCuota();
 		
 		return movimiento_revisado;
@@ -395,16 +386,14 @@ public class CLCuotas
 	
 	public static int revisaMovimiento(MovimientoCuota movimiento)
 	{
-		String sMethod = "revisaMovimiento";
-		
 		int iCodigo = 0;
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Comprobando estado...");
+		logger.debug("Comprobando estado...");
 		
 		String sEstado = QMCuotas.getEstado(movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC());
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
-		Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+movimiento.getCOACCI()+"|");
+		logger.debug("Estado:|{}|",sEstado);
+		logger.debug("Acción:|{}|",movimiento.getCOACCI());
 
 		
 		if (movimiento.getCOACCI().equals(""))
@@ -529,8 +518,6 @@ public class CLCuotas
 	
 	public static int registraMovimiento(MovimientoCuota movimiento)
 	{
-		String sMethod = "registraMovimiento";
-		
 		int iCodigo = revisaMovimiento(movimiento);
 		
 
@@ -562,7 +549,7 @@ public class CLCuotas
 						case A:
 							Cuota cuotadealta = convierteMovimientoenCuota(movimiento_revisado);
 
-							Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la cuota...");
+							logger.debug("Dando de alta la cuota...");
 							cuotadealta.pintaCuota();
 							if (estaDeBaja(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
 							{
@@ -608,7 +595,7 @@ public class CLCuotas
 								if (QMCuotas.addCuota(cuotadealta))
 								{
 									//OK - Cuota creada
-									Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
+									logger.debug("Hecho!");
 									if (QMListaCuotas.addRelacionCuotas(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
 									{
 										//OK 
@@ -685,6 +672,7 @@ public class CLCuotas
 				}
 			}
 		}
+		logger.debug("Codigo de Salida:|{}|",iCodigo);
 		return iCodigo;
 	}
 }

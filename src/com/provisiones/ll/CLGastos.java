@@ -3,11 +3,13 @@ package com.provisiones.ll;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
-import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Gasto;
@@ -17,7 +19,7 @@ import com.provisiones.types.MovimientoGasto;
 public class CLGastos 
 {
 
-	static String sClassName = CLGastos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(CLGastos.class.getName());
 	
 	/*public static boolean actualizaGastoLeido(String linea)
 	{
@@ -32,7 +34,7 @@ public class CLGastos
 		String sBKCOTERR = "";
 		
 		
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "Comprobando gasto leido...");
+		com.provisiones.misc.logger.debug("Comprobando gasto leido...");
 		
 		if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
 			sValidado = "V";
@@ -61,8 +63,8 @@ public class CLGastos
 		else 
 		{
 			QMGastos.addGasto(gasto);
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "El siguiente registro no se encuentre en el sistema:");
-			com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "|"+linea+"|");
+			com.provisiones.misc.logger.debug("El siguiente registro no se encuentre en el sistema:");
+			com.provisiones.misc.logger.debug("|"+linea+"|");
 			System.out.println("No Information Found");
 		}
 		
@@ -111,23 +113,21 @@ public class CLGastos
 	
 	public static ArrayList<ActivoTabla> buscarActivosConMovimientos(ActivoTabla filtro)
 	{
-		String sMethod = "buscarActivosConMovimientos";
-		
 		ArrayList<ActivoTabla> resultcuotas = CLCuotas.buscarActivosConCuotas(filtro);  
 		ArrayList<ActivoTabla> resultimpuestos = CLImpuestos.buscarActivosConImpuestosResueltos(filtro);
 		
 		ArrayList<ActivoTabla> resultcuotasimpuestos = new ArrayList<ActivoTabla>(resultcuotas);
 		resultcuotasimpuestos.addAll(resultimpuestos);
 		
-		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-C:|"+resultcuotas.size()+"|");
-		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-I:|"+resultimpuestos.size()+"|");
+		logger.debug("TAM RESULT-C:|{}|",resultcuotas.size());
+		logger.debug("TAM RESULT-I:|{}|",resultimpuestos.size());
 		
-		Utils.debugTrace(true, sClassName, sMethod, "TAM RESULT-CI:|"+resultcuotasimpuestos.size()+"|");
+		logger.debug("TAM RESULT-CI:|{}|",resultcuotasimpuestos.size());
 		
 		//Eliminamos duplicados
 		HashSet<ActivoTabla> hslimpia = new HashSet<ActivoTabla>(resultcuotasimpuestos);
 		
-		Utils.debugTrace(true, sClassName, sMethod, "RESULT-CI:|"+hslimpia.toString()+"|");
+		logger.debug("RESULT-CI:|{}|",hslimpia.toString());
 		
 		resultcuotasimpuestos.clear();
 		resultcuotasimpuestos.addAll(hslimpia);
@@ -158,9 +158,7 @@ public class CLGastos
 	
 	public static MovimientoGasto convierteGastoenMovimiento(Gasto gasto, String sNUPROF)
 	{
-		String sMethod = "convierteGastoenMovimiento";
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		logger.debug("Convirtiendo...");
 		
 		return new MovimientoGasto(
 				gasto.getCOACES(),
@@ -212,9 +210,7 @@ public class CLGastos
 	
 	public static Gasto convierteMovimientoenGasto(MovimientoGasto movimiento)
 	{
-		String sMethod = "convierteMovimientoenGasto";
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Convirtiendo...");
+		logger.debug("Convirtiendo...");
 		
 		return new Gasto(
 				movimiento.getCOACES(),
@@ -256,8 +252,6 @@ public class CLGastos
 	
 	public static String decideAccion(MovimientoGasto movimiento, String sEstado)
 	{
-		String sMethod = "decideAccion";
-		
 		String sAccion = "";
 		if (QMGastos.gastoAnulado(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()))
 		{
@@ -305,368 +299,19 @@ public class CLGastos
 			
 		}
 		
-		Utils.debugTrace(true, sClassName, sMethod, "sAccion:|"+sAccion+"|");
+		logger.debug("sAccion:|{}|",sAccion);
 		return sAccion;
-	}
-	
-
-	public static int registraMovimiento(MovimientoGasto movimiento)
-	{
-		String sMethod = "registraMovimiento";
-		
-		//movimiento.pintaMovimientoGasto();
-		
-		int iCodigo = 0;
-		
-		Utils.debugTrace(true, sClassName, sMethod, "Comprobando estado...");
-		
-		//Gasto gasto = QMGastos.getGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
-		String sEstado = QMGastos.getEstado(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
-		
-		String sAccion = decideAccion(movimiento,sEstado);
-		
-		MovimientoGasto movimiento_revisado = CLGastos.revisaSignos(movimiento,sAccion);
-		
-				
-		Utils.debugTrace(true, sClassName, sMethod, "Estado:|"+sEstado+"|");
-		Utils.debugTrace(true, sClassName, sMethod, "Nuevo Estado:|"+movimiento.getCOSIGA()+"|");
-		Utils.debugTrace(true, sClassName, sMethod, "Accion:|"+sAccion+"|");
-		
-		
-		
-		if (movimiento_revisado.getNUPROF().equals(""))
-		{
-			//Error 800 - Error, gasto sin provision  
-			iCodigo = -800;
-		}
-		else if (!movimiento_revisado.getFEAGTO().equals("0") && !QMGastos.existeGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE()))
-		{
-			//Error 002 - Llega fecha de anulación y no existe gasto en la tabla  
-			iCodigo = -2;
-		}
-		else if ((sEstado.equals("3") || sEstado.equals("4")) && movimiento_revisado.getYCOS02().equals("-"))
-		{
-			//Error 003 - Llega un abono de un gasto que NO está pagado           
-			iCodigo = -3;
-		}		
-		else if (Double.parseDouble(movimiento_revisado.getIMDTGA()) > Double.parseDouble(movimiento_revisado.getIMNGAS())) 
-		{
-			//Error 004 - Descuento mayor que importe nominal del gasto
-			iCodigo = -4;
-		}
-		else if (CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF()))
-		{
-			//Error 006 - La provisión ya está cerrada
-			iCodigo = -6;
-		}
-		else if ((movimiento_revisado.getCOGRUG().equals("")) 
-				|| (movimiento_revisado.getCOTPGA().equals("")) 
-				|| (movimiento_revisado.getCOSBGA().equals("")))
-		{
-			//Error 007 - Error en grupo / tipo / subtipo de acción     
-			iCodigo = -7;
-		}
-		else if (!CLActivos.compruebaActivo(movimiento_revisado.getCOACES()))
-		{
-			//Error 008 - No existe el activo en la base corporativa
-			iCodigo = -8;
-		}
-		else if (sEstado.equals("5") && movimiento_revisado.getYCOS02().equals("-"))
-		{
-			//Error 012 - Llega un abono de un gasto que está anulado
-			iCodigo = -12;
-		}
-		else if (sEstado.equals("6") && movimiento_revisado.getYCOS02().equals("-"))
-		{
-			//Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
-			iCodigo = -13;
-		}
-		else if (movimiento_revisado.getPTPAGO().equals("0") || movimiento_revisado.getPTPAGO().equals(""))
-		{
-			//Error 019 - Periodicidad del gasto es cero o espacios.
-			iCodigo = -19;
-		}		
-		else if (!movimiento_revisado.getFEAGTO().equals("0") && sEstado.equals("4"))
-		{
-			//Error 023 - Llega anulación de un gasto que YA está pagado
-			iCodigo = -23;
-		}		
-		else if (sAccion.equals("M") && sEstado.equals("4"))
-		{
-			//Error 024 - Llega modificación de un gasto que YA está pagado
-			iCodigo = -024;
-		}		
-		else if (!movimiento_revisado.getFEPGPR().equals("") && CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF()))
-		{
-			//Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
-			iCodigo = -61;
-		}
-		else if ((Integer.parseInt(movimiento_revisado.getCOSBGA()) > 49) && !movimiento_revisado.getYCOS02().equals("-"))
-		{
-			//Error 062 - Llega una devolución con importe positivo.
-			iCodigo = -62;
-		}
-		else if (movimiento_revisado.getFEDEVE().equals("#"))
-		{
-			//Error 701 - Fecha de devengo incorrecta
-			iCodigo = -701;
-		}
-		else if (movimiento_revisado.getFFGTVP().equals("#"))
-		{
-			//Error 702 - Fecha de fin de periodo incorrecta
-			iCodigo = -702;
-		}
-		else if (movimiento_revisado.getFEPAGA().equals("#"))
-		{
-			//Error 703 - Fecha de pago incorrecta
-			iCodigo = -703;
-		}
-		else if (movimiento_revisado.getFELIPG().equals("#"))
-		{
-			//Error 704 - Fecha de limite de pago incorrecta
-			iCodigo = -704;
-		}
-		else if (movimiento_revisado.getFEEESI().equals("#"))
-		{
-			//Error 705 - Fecha de estado estimado incorrecta
-			iCodigo = -705;
-		}
-		else if (movimiento_revisado.getFEECOI().equals("#"))
-		{
-			//Error 706 - Fecha de estado conocido incorrecta
-			iCodigo = -706;
-		}
-		else if (movimiento_revisado.getFEAGTO().equals("#"))
-		{
-			//Error 707 - Fecha de anulacion del gasto incorrecta
-			iCodigo = -707;
-		}
-		else if (movimiento_revisado.getFEPGPR().equals("#"))
-		{
-			//Error 708 - Fecha de pago al proveedor incorrecta
-			iCodigo = -708;
-		}
-		else if (movimiento_revisado.getIMNGAS().equals("#"))
-		{
-			//Error 709 - Importe del gasto incorrecto
-			iCodigo = -709;
-		}
-		else if (movimiento_revisado.getIMRGAS().equals("#"))
-		{
-			//Error 710 - Recargo en el importe del gasto incorrecto
-			iCodigo = -710;
-		}
-		else if (movimiento_revisado.getIMDGAS().equals("#"))
-		{
-			//Error 711 - Importe de demora del gasto incorrecto
-			iCodigo = -711;
-		}
-		else if (movimiento_revisado.getIMCOST().equals("#"))
-		{
-			//Error 712 - Importe de costas incorrecto
-			iCodigo = -712;
-		}
-		else if (movimiento_revisado.getIMOGAS().equals("#"))
-		{
-			//Error 713 - Importe de otros incrementos incorrecto
-			iCodigo = -713;
-		}
-		else if (movimiento_revisado.getIMDTGA().equals("#"))
-		{
-			//Error 714 - Importe de descuento incorrecto
-			iCodigo = -714;
-		}
-		else if (movimiento_revisado.getIMIMGA().equals("#"))
-		{
-			//Error 715 - Importe de impuestos incorrecto
-			iCodigo = -715;
-		}
-		
-		else if (movimiento_revisado.getFEEESI().equals("") && movimiento_revisado.getFEECOI().equals(""))
-		{
-			//Error 807 - Fecha de estado sin informar
-			iCodigo = -807;
-		}
-		else if (Double.parseDouble(movimiento_revisado.getIMDTGA()) < 0)
-		{
-			//Error 808 - Importe de descuento negativo
-			iCodigo = -808;
-		}
-		else if (Double.parseDouble(movimiento_revisado.getIMIMGA()) < 0)
-		{
-			//Error 809 - Importe de impuestos negativo
-			iCodigo = -809;
-		}	
-		
-		else if (movimiento_revisado.getFEDEVE().equals("0"))
-		{
-			//Error no se ha informado la fecha de devengo.
-			iCodigo = -801;
-		}
-		else if (movimiento_revisado.getCOSIGA().equals(""))
-		{
-			//Error no se ha elegido una situacion del gasto.
-			iCodigo = -802;
-		}
-		else if (movimiento_revisado.getIMNGAS().equals(""))
-		{
-			//Error no se ha informado el campo importe
-			iCodigo = -803;
-		}
-		else if (movimiento_revisado.getCOSIGA().equals("#"))
-		{
-			//error modificacion sin cambios
-			iCodigo = -806;	
-
-		}
-		else if (sEstado.equals("") && !movimiento_revisado.getCOSIGA().equals("1") && !movimiento_revisado.getCOSIGA().equals("2"))
-		{
-			//error estado no disponible
-			iCodigo = -805;
-		}
-		else
-		{
-			if (sAccion.equals("#"))
-			{	
-				//Error, Accion no permitida  
-				iCodigo = -804;
-			}
-			else
-			{
-				int indice = QMMovimientosGastos.addMovimientoGasto(movimiento_revisado);
-				if (indice == 0)
-				{
-					//error al crear un movimiento
-					iCodigo = -900;
-				}
-				else
-				{	
-			
-					ValoresDefecto.TIPOSACCIONESGASTO ACCION = ValoresDefecto.TIPOSACCIONESGASTO.valueOf(sAccion);
-				
-					switch (ACCION)
-					{
-						case D:case G:
-							Gasto gastonuevo = convierteMovimientoenGasto(movimiento_revisado);
-
-							Utils.debugTrace(true, sClassName, sMethod, "Dando de alta la cuota...");
-							gastonuevo.pintaGasto();
-						
-							if (QMGastos.addGasto(gastonuevo,movimiento_revisado.getCOSIGA()))
-							{
-								//OK - gasto creado
-								Utils.debugTrace(true, sClassName, sMethod, "Hecho!");
-								
-								if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
-								{
-									//OK 
-									iCodigo = 0;
-								}
-								else
-								{
-									//error relacion gasto no creada - Rollback
-									QMGastos.delGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE());
-									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
-									iCodigo = -902;
-								}
-							}
-							else
-							{
-								//error gasto no creado - Rollback
-								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
-								iCodigo = -901;
-							}
-							break;
-						case N:case A:
-							if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
-							{
-								String sNuevoEstado = "";
-								if (sAccion.equals("N"))
-								{
-									sNuevoEstado = "5"; //Anulado
-								}
-								else
-								{
-									sNuevoEstado = "6"; //Abonado
-								}
-								
-								if (QMGastos.setEstado(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), sNuevoEstado))
-								{
-									//OK 
-									iCodigo = 0; 
-								}
-								else
-								{
-									//error estado no establecido - Rollback
-									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
-									QMListaGastos.delRelacionGasto(Integer.toString(indice));
-									iCodigo = -903;
-								}
-							}
-							else
-							{
-								//error relacion gasto no creada - Rollback
-								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
-								iCodigo = -902;
-							}
-							break;
-						case M:
-							if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
-							{
-								//Gasto gastomodificado = QMGastos.getGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE());
-								if(QMGastos.modGasto(convierteMovimientoenGasto(movimiento_revisado)))
-								{
-									//OK 
-									if (QMGastos.setEstado(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getCOSIGA()))
-									{
-										//OK 
-										iCodigo = 0; 
-									}
-									else
-									{
-										//error estado no establecido - Rollback
-										QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
-										QMListaGastos.delRelacionGasto(Integer.toString(indice));
-										iCodigo = -903;
-									}
-								}
-								else
-								{
-									//Error gasto no modificado
-									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
-									QMListaGastos.delRelacionGasto(Integer.toString(indice));
-									iCodigo = -904;									
-								}
-
-							}
-							else
-							{
-								//error relacion gasto no creada - Rollback
-								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
-								iCodigo = -902;
-							}
-							break;
-						default:
-							break;
-					}
-				}
-			}
-		}
-		Utils.debugTrace(true, sClassName, sMethod, "iCodigo:|"+iCodigo+"|");
-		return iCodigo;
 	}
 	
 	public static MovimientoGasto revisaSignos(MovimientoGasto movimiento, String sAccion)
 	{
-		String sMethod = "revisaSignos";
-		
 		Gasto gasto = QMGastos.getGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 		
 		movimiento.pintaMovimientoGasto();
 	
 		MovimientoGasto movimiento_revisado = new MovimientoGasto("0","0","0","0","","0","0","0","0","0","0","0","0","0","0","","0","","0","","0","","0","","0","0","0","0","0","0","0","0","0","0","0","","0","0","0","0","0","","","0");
 		
-		//Utils.debugTrace(true, sClassName, sMethod, "Revisando Accion: |"+movimiento.getCOACCI()+"|");
+		//logger.debug("Revisando Accion: |"+movimiento.getCOACCI()+"|");
 		
 		movimiento_revisado.setCOACES(movimiento.getCOACES());
 		
@@ -1054,12 +699,365 @@ public class CLGastos
 		movimiento_revisado.setCOSPII(movimiento.getCOSPII());
 		movimiento_revisado.setNUCLII(movimiento.getNUCLII());		
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Revisado! Nuevo movimiento:");
+		logger.debug("Revisado! Nuevo movimiento:");
 		
 		movimiento_revisado.pintaMovimientoGasto();
 		
 		return movimiento_revisado;
 
+	}	
+	
+	public static int revisaMovimiento(MovimientoGasto movimiento_revisado, String sEstado, String sAccion)
+	{
+		int iCodigo = 0;
+		
+		
+		if (movimiento_revisado.getNUPROF().equals(""))
+		{
+			//Error 800 - Error, gasto sin provision  
+			iCodigo = -800;
+		}
+		else if (!movimiento_revisado.getFEAGTO().equals("0") && !QMGastos.existeGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE()))
+		{
+			//Error 002 - Llega fecha de anulación y no existe gasto en la tabla  
+			iCodigo = -2;
+		}
+		else if ((sEstado.equals("3") || sEstado.equals("4")) && movimiento_revisado.getYCOS02().equals("-"))
+		{
+			//Error 003 - Llega un abono de un gasto que NO está pagado           
+			iCodigo = -3;
+		}		
+		else if (Double.parseDouble(movimiento_revisado.getIMDTGA()) > Double.parseDouble(movimiento_revisado.getIMNGAS())) 
+		{
+			//Error 004 - Descuento mayor que importe nominal del gasto
+			iCodigo = -4;
+		}
+		else if (CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF()))
+		{
+			//Error 006 - La provisión ya está cerrada
+			iCodigo = -6;
+		}
+		else if ((movimiento_revisado.getCOGRUG().equals("")) 
+				|| (movimiento_revisado.getCOTPGA().equals("")) 
+				|| (movimiento_revisado.getCOSBGA().equals("")))
+		{
+			//Error 007 - Error en grupo / tipo / subtipo de acción     
+			iCodigo = -7;
+		}
+		else if (!CLActivos.compruebaActivo(movimiento_revisado.getCOACES()))
+		{
+			//Error 008 - No existe el activo en la base corporativa
+			iCodigo = -8;
+		}
+		else if (sEstado.equals("5") && movimiento_revisado.getYCOS02().equals("-"))
+		{
+			//Error 012 - Llega un abono de un gasto que está anulado
+			iCodigo = -12;
+		}
+		else if (sEstado.equals("6") && movimiento_revisado.getYCOS02().equals("-"))
+		{
+			//Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
+			iCodigo = -13;
+		}
+		else if (movimiento_revisado.getPTPAGO().equals("0") || movimiento_revisado.getPTPAGO().equals(""))
+		{
+			//Error 019 - Periodicidad del gasto es cero o espacios.
+			iCodigo = -19;
+		}		
+		else if (!movimiento_revisado.getFEAGTO().equals("0") && sEstado.equals("4"))
+		{
+			//Error 023 - Llega anulación de un gasto que YA está pagado
+			iCodigo = -23;
+		}		
+		else if (sAccion.equals("M") && sEstado.equals("4"))
+		{
+			//Error 024 - Llega modificación de un gasto que YA está pagado
+			iCodigo = -024;
+		}		
+		else if (!movimiento_revisado.getFEPGPR().equals("") && CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF()))
+		{
+			//Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
+			iCodigo = -61;
+		}
+		else if ((Integer.parseInt(movimiento_revisado.getCOSBGA()) > 49) && !movimiento_revisado.getYCOS02().equals("-"))
+		{
+			//Error 062 - Llega una devolución con importe positivo.
+			iCodigo = -62;
+		}
+		else if (movimiento_revisado.getFEDEVE().equals("#"))
+		{
+			//Error 701 - Fecha de devengo incorrecta
+			iCodigo = -701;
+		}
+		else if (movimiento_revisado.getFFGTVP().equals("#"))
+		{
+			//Error 702 - Fecha de fin de periodo incorrecta
+			iCodigo = -702;
+		}
+		else if (movimiento_revisado.getFEPAGA().equals("#"))
+		{
+			//Error 703 - Fecha de pago incorrecta
+			iCodigo = -703;
+		}
+		else if (movimiento_revisado.getFELIPG().equals("#"))
+		{
+			//Error 704 - Fecha de limite de pago incorrecta
+			iCodigo = -704;
+		}
+		else if (movimiento_revisado.getFEEESI().equals("#"))
+		{
+			//Error 705 - Fecha de estado estimado incorrecta
+			iCodigo = -705;
+		}
+		else if (movimiento_revisado.getFEECOI().equals("#"))
+		{
+			//Error 706 - Fecha de estado conocido incorrecta
+			iCodigo = -706;
+		}
+		else if (movimiento_revisado.getFEAGTO().equals("#"))
+		{
+			//Error 707 - Fecha de anulacion del gasto incorrecta
+			iCodigo = -707;
+		}
+		else if (movimiento_revisado.getFEPGPR().equals("#"))
+		{
+			//Error 708 - Fecha de pago al proveedor incorrecta
+			iCodigo = -708;
+		}
+		else if (movimiento_revisado.getIMNGAS().equals("#"))
+		{
+			//Error 709 - Importe del gasto incorrecto
+			iCodigo = -709;
+		}
+		else if (movimiento_revisado.getIMRGAS().equals("#"))
+		{
+			//Error 710 - Recargo en el importe del gasto incorrecto
+			iCodigo = -710;
+		}
+		else if (movimiento_revisado.getIMDGAS().equals("#"))
+		{
+			//Error 711 - Importe de demora del gasto incorrecto
+			iCodigo = -711;
+		}
+		else if (movimiento_revisado.getIMCOST().equals("#"))
+		{
+			//Error 712 - Importe de costas incorrecto
+			iCodigo = -712;
+		}
+		else if (movimiento_revisado.getIMOGAS().equals("#"))
+		{
+			//Error 713 - Importe de otros incrementos incorrecto
+			iCodigo = -713;
+		}
+		else if (movimiento_revisado.getIMDTGA().equals("#"))
+		{
+			//Error 714 - Importe de descuento incorrecto
+			iCodigo = -714;
+		}
+		else if (movimiento_revisado.getIMIMGA().equals("#"))
+		{
+			//Error 715 - Importe de impuestos incorrecto
+			iCodigo = -715;
+		}
+		
+		else if (movimiento_revisado.getFEEESI().equals("") && movimiento_revisado.getFEECOI().equals(""))
+		{
+			//Error 807 - Fecha de estado sin informar
+			iCodigo = -807;
+		}
+		else if (Double.parseDouble(movimiento_revisado.getIMDTGA()) < 0)
+		{
+			//Error 808 - Importe de descuento negativo
+			iCodigo = -808;
+		}
+		else if (Double.parseDouble(movimiento_revisado.getIMIMGA()) < 0)
+		{
+			//Error 809 - Importe de impuestos negativo
+			iCodigo = -809;
+		}	
+		
+		else if (movimiento_revisado.getFEDEVE().equals("0"))
+		{
+			//Error no se ha informado la fecha de devengo.
+			iCodigo = -801;
+		}
+		else if (movimiento_revisado.getCOSIGA().equals(""))
+		{
+			//Error no se ha elegido una situacion del gasto.
+			iCodigo = -802;
+		}
+		else if (movimiento_revisado.getIMNGAS().equals(""))
+		{
+			//Error no se ha informado el campo importe
+			iCodigo = -803;
+		}
+		else if (movimiento_revisado.getCOSIGA().equals("#"))
+		{
+			//error modificacion sin cambios
+			iCodigo = -806;	
+
+		}
+		else if (sEstado.equals("") && !movimiento_revisado.getCOSIGA().equals("1") && !movimiento_revisado.getCOSIGA().equals("2"))
+		{
+			//error estado no disponible
+			iCodigo = -805;
+		}
+				
+		return iCodigo;
 	}
 	
+
+	public static int registraMovimiento(MovimientoGasto movimiento)
+	{
+		
+		
+		logger.debug("Comprobando estado...");
+		
+		String sEstado = QMGastos.getEstado(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
+
+		
+		String sAccion = decideAccion(movimiento,sEstado);
+		
+		MovimientoGasto movimiento_revisado = CLGastos.revisaSignos(movimiento,sAccion);
+		
+				
+		logger.debug("Estado:|{}|",sEstado);
+		logger.debug("Nuevo Estado:|{}|",movimiento.getCOSIGA());
+		logger.debug("Accion:|{}|",sAccion);
+		
+		int iCodigo = revisaMovimiento(movimiento_revisado,sEstado,sAccion);
+		
+
+		if (iCodigo == 0)
+		{
+			if (sAccion.equals("#"))
+			{	
+				//Error, Accion no permitida  
+				iCodigo = -804;
+			}
+			else
+			{
+				int indice = QMMovimientosGastos.addMovimientoGasto(movimiento_revisado);
+				if (indice == 0)
+				{
+					//error al crear un movimiento
+					iCodigo = -900;
+				}
+				else
+				{	
+			
+					ValoresDefecto.TIPOSACCIONESGASTO ACCION = ValoresDefecto.TIPOSACCIONESGASTO.valueOf(sAccion);
+				
+					switch (ACCION)
+					{
+						case D:case G:
+							Gasto gastonuevo = convierteMovimientoenGasto(movimiento_revisado);
+
+							logger.debug("Dando de alta la cuota...");
+							gastonuevo.pintaGasto();
+						
+							if (QMGastos.addGasto(gastonuevo,movimiento_revisado.getCOSIGA()))
+							{
+								//OK - gasto creado
+								logger.debug("Hecho!");
+								
+								if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
+								{
+									//OK 
+									iCodigo = 0;
+								}
+								else
+								{
+									//error relacion gasto no creada - Rollback
+									QMGastos.delGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE());
+									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+									iCodigo = -902;
+								}
+							}
+							else
+							{
+								//error gasto no creado - Rollback
+								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+								iCodigo = -901;
+							}
+							break;
+						case N:case A:
+							if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
+							{
+								String sNuevoEstado = "";
+								if (sAccion.equals("N"))
+								{
+									sNuevoEstado = "5"; //Anulado
+								}
+								else
+								{
+									sNuevoEstado = "6"; //Abonado
+								}
+								
+								if (QMGastos.setEstado(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), sNuevoEstado))
+								{
+									//OK 
+									iCodigo = 0; 
+								}
+								else
+								{
+									//error estado no establecido - Rollback
+									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+									QMListaGastos.delRelacionGasto(Integer.toString(indice));
+									iCodigo = -903;
+								}
+							}
+							else
+							{
+								//error relacion gasto no creada - Rollback
+								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+								iCodigo = -902;
+							}
+							break;
+						case M:
+							if (QMListaGastos.addRelacionGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getNUPROF(),Integer.toString(indice)))
+							{
+								//Gasto gastomodificado = QMGastos.getGasto(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE());
+								if(QMGastos.modGasto(convierteMovimientoenGasto(movimiento_revisado)))
+								{
+									//OK 
+									if (QMGastos.setEstado(movimiento_revisado.getCOACES(), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE(), movimiento_revisado.getCOSIGA()))
+									{
+										//OK 
+										iCodigo = 0; 
+									}
+									else
+									{
+										//error estado no establecido - Rollback
+										QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+										QMListaGastos.delRelacionGasto(Integer.toString(indice));
+										iCodigo = -903;
+									}
+								}
+								else
+								{
+									//Error gasto no modificado
+									QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+									QMListaGastos.delRelacionGasto(Integer.toString(indice));
+									iCodigo = -904;									
+								}
+
+							}
+							else
+							{
+								//error relacion gasto no creada - Rollback
+								QMMovimientosGastos.delMovimientoGasto(Integer.toString(indice));
+								iCodigo = -902;
+							}
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		}
+		logger.debug("iCodigo:|{}|",iCodigo);
+		
+		return iCodigo;
+	}
 }

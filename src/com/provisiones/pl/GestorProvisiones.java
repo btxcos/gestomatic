@@ -1,6 +1,10 @@
 package com.provisiones.pl;
 
 import java.io.Serializable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
@@ -15,9 +19,9 @@ import com.provisiones.types.ProvisionTabla;
 
 public class GestorProvisiones implements Serializable 
 {
-	static String sClassName = GestorProvisiones.class.getName();
-	
 	private static final long serialVersionUID = 6140067108661410063L;
+
+	private static Logger logger = LoggerFactory.getLogger(GestorProvisiones.class.getName());
 
 	private String sNUPROF = "";
 	private String sCOSPAT = "";
@@ -36,32 +40,23 @@ public class GestorProvisiones implements Serializable
 	
 	public GestorProvisiones()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
+
 	}
 
 	public void cargaProvisionesAbiertas(ActionEvent actionEvent)
 	{
-		String sMethod = "cargaProvisionAbierta";
-		
 		FacesMessage msg;
     	
-    	String sMsg = "";
-
 		this.tablaprovisiones = CLProvisiones.buscarProvisionesAbiertas(); 
-		
-		
-		sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.";
-		Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		msg = new FacesMessage(sMsg);
+
+		msg = Utils.pfmsgTrace("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
+		logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
 	public void seleccionarProvision(ActionEvent actionEvent) 
     {  
-    	
-    	String sMethod = "seleccionarProvision";
-
     	FacesMessage msg;
     	
     	this.sNUPROF  = provisionseleccionada.getNUPROF();
@@ -72,9 +67,8 @@ public class GestorProvisiones implements Serializable
     	this.sValorTolal  = provisionseleccionada.getVALOR();
     	this.sNumGastos  = provisionseleccionada.getGASTOS();
     	
-    	msg = new FacesMessage("Provision '"+ sNUPROF +"' Seleccionada.");
-    	
-    	Utils.debugTrace(true, sClassName, sMethod, "Provision seleccionada: |"+sNUPROF+"|");
+    	msg = Utils.pfmsgTrace("Provision '"+ sNUPROF +"' Seleccionada.");
+    	logger.info("Provision '{}' Seleccionada.",sNUPROF);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
@@ -89,12 +83,8 @@ public class GestorProvisiones implements Serializable
 	
 	public void cerrarProvision(ActionEvent actionEvent)
 	{
-		String sMethod = "cerrarProvision";
-		
-    	FacesMessage msg;
+		FacesMessage msg;
     	
-    	String sMsg = "";
-		
 		Provision provision = CLProvisiones.detallesProvision(sNUPROF);
 		
 		provision.setsFEPFON(Utils.fechaDeHoy(false));
@@ -103,19 +93,17 @@ public class GestorProvisiones implements Serializable
 		
 		if (CLProvisiones.cerrarProvision(provision))
 		{
-			sMsg = "Provision '"+ sNUPROF +"' cerrada.";
-			msg = new FacesMessage(sMsg);
+			msg = Utils.pfmsgTrace("Provision '"+ sNUPROF +"' cerrada.");
+			logger.info("Provision '{}' cerrada.",sNUPROF);
 
 		}
 		else
 		{
-			sMsg = "ERROR: ha ocurrido un error al cerrar la provision.";
-			msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,sMsg,null);
+			msg = Utils.pfmsgFatal("[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.");
+			logger.error("[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.");
 		}
 
     	
-    	Utils.debugTrace(true, sClassName, sMethod, sMsg);
-		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 

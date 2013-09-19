@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class GestorDatosGenerales implements Serializable 
 {
-
-
 	private static final long serialVersionUID = -669897445986653574L;
+
+	//private static Logger logger = LoggerFactory.getLogger(GestorDatosGenerales.class.getName());
 
 	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposptpagoHM = new LinkedHashMap<String, String>();

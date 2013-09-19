@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public class GestorIndice implements Serializable 
 {
-	private static final long serialVersionUID = -2113184038806322518L;
+	private static final long serialVersionUID = -3089995402905654371L;
+	
+	//private static Logger logger = LoggerFactory.getLogger(GestorIndice.class.getName());
 
 
 }

@@ -73,10 +73,10 @@ public class CLComunidades
 							QMListaComunidades.setValidado(sCodMovimiento, sValidado);
 						}
 						else
-							logger.error("No Existe relacion.");
+							logger.error("No Existe relación.");
 					}
 					else
-						logger.error("No Existe relacion.");
+						logger.error("No Existe relación.");
 
 				}
 				else
@@ -90,7 +90,7 @@ public class CLComunidades
 			{
 
 
-				logger.error("El siguiente registro no se encuentre en el sistema:");
+				logger.error("El siguiente registro no se encuentra en el sistema:");
 				logger.error("|"+linea+"|");
 			}
 		}
@@ -165,7 +165,7 @@ public class CLComunidades
 			iCodigo = -2;
 		}
 		
-		logger.debug("Codigo de salida:|{}|",iCodigo);
+		logger.debug("Código de salida:|{}|",iCodigo);
 		
 		return iCodigo;
 	}
@@ -253,7 +253,8 @@ public class CLComunidades
 		
 		MovimientoComunidad movimiento_revisado = new MovimientoComunidad("", "", "", "", "", "", "", "", "0", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "0", "0", "0", "0", "", "", "");
 		
-		logger.debug("Revisando Estado:|{}| Accion: |{}|",sEstado,movimiento.getCOACCI());
+		logger.debug("Estado:|{}|",sEstado);
+		logger.debug("Acción:|{}|",movimiento.getCOACCI());
 		
 		movimiento_revisado.setCODTRN(movimiento.getCODTRN());
 		movimiento_revisado.setCOTDOR(movimiento.getCOTDOR());

@@ -1,14 +1,10 @@
 package com.provisiones.misc;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.provisiones.types.Cierre;
 import com.provisiones.types.Activo;
-
 import com.provisiones.types.MovimientoComunidad;
 import com.provisiones.types.MovimientoCuota;
 import com.provisiones.types.MovimientoGasto;
@@ -17,8 +13,7 @@ import com.provisiones.types.MovimientoReferenciaCatastral;
 
 public class Parser {
 
-	static String sClassName = Parser.class.getName();
-	static boolean bEnable = true;
+	private static Logger logger = LoggerFactory.getLogger(Parser.class.getName());
 
 	public static String limpiaCampoNumerico (String sCampo)
 	{
@@ -28,7 +23,10 @@ public class Parser {
         while ((sResultado.startsWith("0")) && (sResultado.length() > 1) ) 
         {
         	sResultado=sResultado.substring(1);
-        }	
+        }
+        
+        logger.debug(sResultado);
+        
 		return sResultado;
 	}
 
@@ -45,6 +43,8 @@ public class Parser {
 		if (sResultado.length()==0)
 			sResultado = sValorBlanco;
 
+		logger.debug(sResultado);
+		
 		return sResultado;
 	}
 	
@@ -56,7 +56,10 @@ public class Parser {
         while (sResultado.length() < iLongitud) 
         {
         	sResultado="0"+sResultado;
-        }	
+        }
+        
+        logger.debug(sResultado);
+        
 		return sResultado;
 	}
 
@@ -68,7 +71,10 @@ public class Parser {
         while (sResultado.length() < iLongitud) 
         {
         	sResultado = sResultado+" ";
-        }	
+        }
+        
+        logger.debug(sResultado);
+        
 		return sResultado;
 	}
 	
@@ -86,6 +92,8 @@ public class Parser {
 			}
 			
 		}
+		
+		logger.debug(sResultado);
 		
 		return sResultado;
 	}
@@ -185,9 +193,6 @@ public class Parser {
 		String sIDCOL3 = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_IDCOL3_P, Posiciones.AC_IDCOL3_P+Longitudes.IDCOL3_L));
 		String sBIOBNU = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BIOBNU_P, Posiciones.AC_BIOBNU_P+Longitudes.BIOBNU_L),"#");
 		String sPOBRAR = linea.substring(Posiciones.AC_POBRAR_P, Posiciones.AC_POBRAR_P+Longitudes.POBRAR_L);
-
-		
-		
 		
 		
 		return new Activo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
@@ -761,19 +766,4 @@ public class Parser {
 		return formateaCampoNumerico(sNUPROF,Longitudes.NUPROF_L) + formateaCampoNumerico(sFEPFON,Longitudes.FEPFON_L) + sFILLER;
 	}
 	
-	public static void main(String[] args) throws IOException {
-
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, "main",	"Conexion Realizada");
-		File archivo = new File("C:\\168AC.txt");
-		FileReader fr = new FileReader(archivo);
-		BufferedReader br = new BufferedReader(fr);
-		String linea = br.readLine();
-		br.close();
-
-		Activo activo = leerActivo(linea);
-
-		activo.pintaActivo();
-
-	}
-
 }

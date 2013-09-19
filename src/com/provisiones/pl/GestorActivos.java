@@ -7,6 +7,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.ll.CLActivos;
 
 import com.provisiones.misc.Utils;
@@ -18,7 +21,7 @@ public class GestorActivos implements Serializable
 
 	private static final long serialVersionUID = 1167759390910696681L;
 	
-	static String sClassName = GestorActivos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(GestorActivos.class.getName());
 	
 	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
@@ -151,18 +154,16 @@ public class GestorActivos implements Serializable
 	
 	public void encuentraActivos()
 	{
-		String sMethod = "buscaActivos";
-		
 		ActivoTabla buscaactivos = new ActivoTabla(
 				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Buscando Activos...");
+		logger.debug("Buscando Activos...");
 		
 		this.setTablaactivos(CLActivos.buscarActivos(buscaactivos));
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		logger.debug("Encontrados {} activos relacionados.",getTablaactivos().size());
 	}
 	
 	public void buscaActivos (ActionEvent actionEvent)
@@ -180,34 +181,24 @@ public class GestorActivos implements Serializable
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
-    	
-    	String sMethod = "seleccionarActivo";
-
     	FacesMessage msg;
-    	
-    	
-    	
-    	//this.sCOACESBuscado = activoseleccionado.getCOACES();
-    	
+
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
     	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Activo seleccionado: |"+sCOACES+"|");
+    	logger.debug("Activo seleccionado:|{}|",sCOACES);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
-		//return "listacomunidadesactivos.xhtml";
     }
 	
 	public String cargarComunidad() 
     {  
-    	
-    	String sMethod = "cargarComunidad";
-    	
+	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	logger.debug("Redirigiendo...");
     	
     	return "movimientoscomunidades.xhtml";
     }
@@ -215,11 +206,9 @@ public class GestorActivos implements Serializable
 	public String cargarCuota() 
     {  
     	
-    	String sMethod = "cargarCuota";
-    	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	logger.debug("Redirigiendo...");
     	
     	return "movimientoscuotas.xhtml";
     }
@@ -227,11 +216,9 @@ public class GestorActivos implements Serializable
 	public String cargarReferencia() 
     {  
     	
-    	String sMethod = "cargarReferencia";
-    	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	logger.debug("Redirigiendo...");
     	
     	return "movimientosreferencias.xhtml";
     }
@@ -239,38 +226,30 @@ public class GestorActivos implements Serializable
 	public String cargarImpuestos() 
     {  
     	
-    	String sMethod = "cargarImpuestos";
-    	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	logger.debug("Redirigiendo...");
     	
     	return "movimientosimpuestos.xhtml";
     }
 	public String cargarGastos() 
     {  
     	
-    	String sMethod = "cargarGastos";
-    	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
+    	logger.debug("Redirigiendo...");
     	
     	return "gastos.xhtml";
     }
 
 	public String cargarDetalles() 
     {  
-    	
-    	String sMethod = "cargarDetalles";
-    	
     	this.sCOACES = activoseleccionado.getCOACES();
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "sCOACES:|"+sCOACES+"|");
+    	logger.debug("sCOACES:|{}|",sCOACES);
     	
-    	Utils.debugTrace(true, sClassName, sMethod, "Redirigiendo...");
-    	
-    	
+    	logger.debug("Redirigiendo...");
+
     	return "detallesactivo.xhtml";
     }
 	
