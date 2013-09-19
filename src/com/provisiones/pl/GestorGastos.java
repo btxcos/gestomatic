@@ -312,7 +312,7 @@ public class GestorGastos implements Serializable
 		this.setTablaactivos(resultcuotasimpuestos);
 
 		
-		msg = Utils.pfmsgTrace("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
@@ -324,7 +324,7 @@ public class GestorGastos implements Serializable
     	
      	this.sCOACES  = activoseleccionado.getCOACES();
  
-     	msg = Utils.pfmsgTrace("Activo "+ sCOACES +" Seleccionado.");
+     	msg = Utils.pfmsgInfo("Activo "+ sCOACES +" Seleccionado.");
      	
      	logger.info("Activo {} Seleccionado.",sCOACES);
      	
@@ -339,21 +339,21 @@ public class GestorGastos implements Serializable
 		{
 			this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
 		
-			msg = Utils.pfmsgTrace("Encontradas "+getTablacuotas().size()+" cuotas pendientes.");
+			msg = Utils.pfmsgInfo("Encontradas "+getTablacuotas().size()+" cuotas pendientes.");
 			logger.info("Encontradas {} cuotas pendientes.",getTablacuotas().size());
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 
 			this.tabladevoluciones = CLImpuestos.buscarDevolucionesDelActivo(sCOACES.toUpperCase());
 		
-			msg = Utils.pfmsgTrace("Encontradas "+getTabladevoluciones().size()+" devoluciones pendientes.");
+			msg = Utils.pfmsgInfo("Encontradas "+getTabladevoluciones().size()+" devoluciones pendientes.");
 			logger.info("Encontradas {} devoluciones pendientes.",getTabladevoluciones().size());
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 			this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
 		
-			msg = Utils.pfmsgTrace("Provision '"+sNUPROF+"' asignada.");
+			msg = Utils.pfmsgInfo("Provision '"+sNUPROF+"' asignada.");
 			logger.info("Provision '{}' asignada.",sNUPROF);
 			
 		}
@@ -383,7 +383,7 @@ public class GestorGastos implements Serializable
     	tiposcosbgaHM = tiposcosbga_t22HM;
     	
 
-    	msg = Utils.pfmsgTrace("Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.");
+    	msg = Utils.pfmsgInfo("Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.");
     	logger.info("Cuota de '{}' Seleccionada.",cuotaseleccionada.getDCOSBAC());
     	
     	FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -404,7 +404,7 @@ public class GestorGastos implements Serializable
     	tiposcosbgaHM = tiposcosbga_t21HM;
     	
 
-    	msg = Utils.pfmsgTrace("Devolucion de '"+ devolucionseleccionada.getDCOSBAC() +"' Seleccionada.");
+    	msg = Utils.pfmsgInfo("Devolucion de '"+ devolucionseleccionada.getDCOSBAC() +"' Seleccionada.");
     	logger.info("Devolucion de '{}' Seleccionada.",devolucionseleccionada.getDCOSBAC());
     	
     	FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -660,7 +660,7 @@ public class GestorGastos implements Serializable
 			{
 			case 0: //Sin errores
 				sMsg = "El gasto se ha creado correctamente.";
-				msg = Utils.pfmsgTrace(sMsg);
+				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
 

@@ -121,7 +121,7 @@ public class GestorReferenciasCatastrales implements Serializable
 		
 		this.setTablaactivos(CLReferencias.buscarListaActivosReferencia(buscaactivos));
 		
-		msg = Utils.pfmsgTrace("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -142,7 +142,7 @@ public class GestorReferenciasCatastrales implements Serializable
     	}
     	else
     	{
-    		msg = Utils.pfmsgTrace("La Referencia '"+sNURCAT+"' se ha cargado correctamente.");
+    		msg = Utils.pfmsgInfo("La Referencia '"+sNURCAT+"' se ha cargado correctamente.");
     		logger.info("La Referencia '{}' se ha cargado correctamente.",sNURCAT);
     	}
  		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -163,7 +163,7 @@ public class GestorReferenciasCatastrales implements Serializable
 
 		if (CLActivos.compruebaActivo(sCOACES))
 		{
-			msg = Utils.pfmsgTrace("El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
+			msg = Utils.pfmsgInfo("El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
 			logger.info("El activo '{}' esta disponible.",sCOACES.toUpperCase());
 		}
 		else
@@ -228,7 +228,7 @@ public class GestorReferenciasCatastrales implements Serializable
 			{
 			case 0: //Sin errores
 				sMsg = "La referencia catastral se ha creado correctamente.";
-				msg = Utils.pfmsgTrace(sMsg);
+				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
 

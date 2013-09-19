@@ -141,7 +141,7 @@ public class GestorErroresComunidad implements Serializable
 		
 		this.setTablaerrores(CLComunidades.buscarErroresComunidades());
 		
-		msg = Utils.pfmsgTrace("Encontrados "+getTablaerrores().size()+" errores relacionados.");
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
 		logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -153,7 +153,7 @@ public class GestorErroresComunidad implements Serializable
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	msg = Utils.pfmsgTrace("Activo "+ sCOACES +" Seleccionado.");
+    	msg = Utils.pfmsgInfo("Activo "+ sCOACES +" Seleccionado.");
     	logger.debug("Activo seleccionado:|{}|",sCOACES);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -172,7 +172,7 @@ public class GestorErroresComunidad implements Serializable
 		
 		this.setTablaactivos(CLComunidades.buscaActivosConComunidad(buscaactivos));
 
-		msg = Utils.pfmsgTrace("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.debug("Encontrados {} activos relacionados.",getTablaactivos().size());
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -249,7 +249,7 @@ public class GestorErroresComunidad implements Serializable
 		}
 		else
 		{
-			msg = Utils.pfmsgTrace("La comunidad se ha cargado correctamente.");
+			msg = Utils.pfmsgInfo("La comunidad se ha cargado correctamente.");
 			logger.info("La comunidad se ha cargado correctamente.");
 		}
 		
@@ -286,7 +286,7 @@ public class GestorErroresComunidad implements Serializable
 		}
 		else
 		{
-			msg = Utils.pfmsgTrace("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
+			msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
 			logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());			
 		}
 		
@@ -309,7 +309,7 @@ public class GestorErroresComunidad implements Serializable
 		case 0: //Sin errores
 			
 			sMsg = "La comunidad se ha creado correctamente.";
-			msg = Utils.pfmsgTrace(sMsg);
+			msg = Utils.pfmsgInfo(sMsg);
 			logger.info(sMsg);
 			break;
 

@@ -36,7 +36,7 @@ public class GestorCargas implements Serializable
 		if (iCodigoError == 0)
 		{
 
-			msg = Utils.pfmsgTrace("'"+event.getFile().getFileName() +"' ha subido correctamente.");
+			msg = Utils.pfmsgInfo("'"+event.getFile().getFileName() +"' ha subido correctamente.");
 			logger.info("'{}' ha subido correctamente.",event.getFile().getFileName());
 
 		}

@@ -1,6 +1,10 @@
 package com.provisiones.pl.movimientos;
 
 import java.io.Serializable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,6 +18,7 @@ import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.GastoTabla;
@@ -25,7 +30,7 @@ public class GestorMovimientosGastos implements Serializable
 
 	private static final long serialVersionUID = 3669307013282571769L;
 
-	static String sClassName = GestorMovimientosGastos.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosGastos.class.getName());
 
 	private String sCOACES = "";
 	private boolean bDevolucion = false;
@@ -282,10 +287,6 @@ public class GestorMovimientosGastos implements Serializable
     
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		
-		String sMethod = "buscaActivos";
-		
-		
 		FacesMessage msg;
 		
 		ActivoTabla buscaactivos = new ActivoTabla(
@@ -295,40 +296,39 @@ public class GestorMovimientosGastos implements Serializable
 		
 		this.setTablaactivos(CLGastos.buscarActivosConGastos(buscaactivos));
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
-    	
-    	String sMethod = "seleccionarActivo";
-
     	FacesMessage msg;
  
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Activo '"+ sCOACES +"' Seleccionado.");
+    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
+    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+    	
     	FacesContext.getCurrentInstance().addMessage(null, msg);
-		
     }
 	
 	public void cargarDatos(ActionEvent actionEvent)
 	{
-		String sMethod = "cargarDatos";
-		
 		FacesMessage msg;
 		
 		if (CLActivos.compruebaActivo(sCOACES))
 		{
 			this.tablagastos = CLGastos.buscarGastosActivo(sCOACES);
 		
-			msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablagastos().size()+" gastos en curso.");
+			msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos en curso.");
+			logger.info("Encontrados {} gastos en curso.",getTablagastos().size());
 		}
 		else
 		{
-			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
+			msg = Utils.pfmsgError("ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
+			logger.error("ERROR: No exite el activo '{}'. Por favor, revise los datos.",sCOACES);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
@@ -336,9 +336,6 @@ public class GestorMovimientosGastos implements Serializable
 	
 	public void seleccionarGasto(ActionEvent actionEvent) 
     {  
-    	
-    	String sMethod = "seleccionarGasto";
-
     	FacesMessage msg;
     	
     	this.sCOGRUG = gastoseleccionado.getCOGRUG();
@@ -352,8 +349,6 @@ public class GestorMovimientosGastos implements Serializable
     	gasto.pintaGasto();
  
     	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
-
-
 
 		this.sPTPAGO = gasto.getPTPAGO();
 
@@ -399,7 +394,9 @@ public class GestorMovimientosGastos implements Serializable
 		
 		String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, sTipo+" de '"+sDCOSBGA+"' se ha cargado.");
+		msg = Utils.pfmsgInfo(sTipo+" de '"+sDCOSBGA+"' se ha cargado.");
+		logger.info("{} de '{}' se ha cargado.",sTipo,sDCOSBGA);
+
 		FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 	
@@ -414,8 +411,8 @@ public class GestorMovimientosGastos implements Serializable
 	
 	public void cambiaTipo()
 	{
-		String sMethod = "cambiaTipo";
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCOGRUG:|"+sCOGRUG+"|");
+		logger.debug("sCOGRUG:|{}|",sCOGRUG);
+
 		if (sCOGRUG !=null && !sCOGRUG.equals(""))
 		{
 			switch (Integer.parseInt(sCOGRUG)) 
@@ -441,8 +438,7 @@ public class GestorMovimientosGastos implements Serializable
 	
 	public void cambiaSubtipo()
 	{
-		String sMethod = "cambiaTipo";
-		com.provisiones.misc.Utils.debugTrace(true, sClassName, sMethod, "sCOTPGA:|"+sCOGRUG+"| sCOTPGA:|"+sCOTPGA+"|");
+		logger.debug("sCOGRUG:|{}| sCOTPGA:|{}|",sCOGRUG,sCOTPGA);
 		
 		if (sCOTPGA !=null && !sCOTPGA.equals(""))
 		{
@@ -542,71 +538,63 @@ public class GestorMovimientosGastos implements Serializable
 	
 	public void hoyFEDEVE (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFEDEVE";
 		this.setsFEDEVE(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFEDEVE:|"+sFEDEVE+"|");
+		logger.debug("sFEDEVE:|{}|",sFEDEVE);
 	}
 
 	public void hoyFFGTVP (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFFGTVP";
 		this.setsFFGTVP(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFFGTVP:|"+sFFGTVP+"|");
+		logger.debug("sFFGTVP:|{}|",sFFGTVP);
 	}
 
 	public void hoyFEPAGA (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFEPAGA";
 		this.setsFEPAGA(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFEPAGA:|"+sFEPAGA+"|");
+		logger.debug("sFEPAGA:|{}|",sFEPAGA);
 	}
 
 	public void hoyFELIPG (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFELIPG";
 		this.setsFELIPG(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFELIPG:|"+sFELIPG+"|");
+		logger.debug("sFELIPG:|{}|",sFELIPG);
 	}
 
 	public void hoyFEEESI (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFEEESI";
 		this.setsFEEESI(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFEEESI:|"+sFEEESI+"|");
+		logger.debug("sFEEESI:|{}|",sFEEESI);
 	}
 
 	public void hoyFEECOI (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFEECOI";
 		this.setsFEECOI(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFEECOI:|"+sFEECOI+"|");
+		logger.debug("sFEECOI:|{}|",sFEECOI);
 	}
 	
 	public void hoyFEPGPR (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFEPGPR";
 		this.setsFEPGPR(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFEPGPR:|"+sFEPGPR+"|");
+		logger.debug("sFEPGPR:|{}|",sFEPGPR);
 	}
 	
 	public void hoyFEAGTO (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFEAGTO";
 		this.setsFEAGTO(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFEAGTO:|"+sFEAGTO+"|");
+		logger.debug("sFEAGTO:|{}|",sFEAGTO);
 	}
 
 	public void registraGasto(ActionEvent actionEvent)
 	{
-		String sMethod = "registraMovimiento";
-		
 		FacesMessage msg;
 		
+		String sMsg = "";
 		
 		if (!CLGastos.existeGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 		{
-			msg = Utils.pfmsgError(true, sClassName, sMethod, "El gasto informado no se puede tramitar, no existe en el sistema.");
-
+			sMsg = "El gasto informado no se puede tramitar, no existe en el sistema.";
+			msg = Utils.pfmsgError(sMsg);
+			logger.error(sMsg);
 		}
 		else
 		{
@@ -660,196 +648,283 @@ public class GestorMovimientosGastos implements Serializable
 			
 			int iSalida = CLGastos.registraMovimiento(movimiento);
 			
-			Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
+			logger.debug("Codigo de salida:"+iSalida);
 			
 			switch (iSalida) 
 			{
 			case 0: //Sin errores
-				msg = Utils.pfmsgTrace(true, sClassName, sMethod, "El movimiento se ha registrado correctamente.");
+				sMsg = "El movimiento se ha registrado correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
 				break;
 
 			case -2: //Error 002 - Llega fecha de anulación y no existe gasto en la tabla
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:002 - El gasto que se anula no existe. Por favor, revise los datos.");
+				sMsg = "ERROR:002 - El gasto que se anula no existe. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -3: //Error 003 - Llega un abono de un gasto que NO está pagado
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:003 - El gasto a abonar no esta pagado. Por favor, revise los datos.");
+				sMsg = "ERROR:003 - El gasto a abonar no esta pagado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -4: //Error 004 - Descuento mayor que importe nominal del gasto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:004 - El descuento informado es superior al gasto. Por favor, revise los datos.");
+				sMsg = "ERROR:004 - El descuento informado es superior al gasto. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -6: //Error 006 - La provisión ya está cerrada
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:006 - La provisión ya esta cerrada. Por favor, revise los datos.");
+				sMsg = "ERROR:006 - La provisión ya esta cerrada. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -7: //Error 007 - Error en grupo / tipo / subtipo de acción
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:007 - El grupo, tipo y subtipo de gasto deben informarse. Por favor, revise los datos.");
+				sMsg = "ERROR:007 - El grupo, tipo y subtipo de gasto deben informarse. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -8: //Error 008 - No existe el activo en la base corporativa
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:008 - El activo informado no se encuentra resistrado en el sistema. Por favor, revise los datos.");
+				sMsg = "ERROR:008 - El activo informado no se encuentra resistrado en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -12: //Error 012 - Llega un abono de un gasto que está anulado
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:012 - El gasto a abonar esta anulado. Por favor, revise los datos.");
+				sMsg = "ERROR:012 - El gasto a abonar esta anulado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -13: //Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:013 - El gasto a abonar ya esta abonado. Por favor, revise los datos.");
+				sMsg = "ERROR:013 - El gasto a abonar ya esta abonado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -19: //Error 019 - Periodicidad del gasto es cero o espacios.
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:019 - El campo periodicidad del pago es obligatorio. Por favor, revise los datos.");
+				sMsg = "ERROR:019 - El campo periodicidad del pago es obligatorio. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -23: //Error 023 - Llega anulación de un gasto que YA está pagado
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:023 - El gasto a anular ya esta pagado. Por favor, revise los datos.");
+				sMsg = "ERROR:023 - El gasto a anular ya esta pagado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -24: //Error 024 - Llega modificación de un gasto que YA está pagado
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:024 - El gasto a modificar ya esta pagado. Por favor, revise los datos.");
+				sMsg = "ERROR:024 - El gasto a modificar ya esta pagado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -61: //Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:061 - La provision esta cerrada, no se puede actualizar la fecha de pago a proveedor. Por favor, revise los datos.");
+				sMsg = "ERROR:061 - La provision esta cerrada, no se puede actualizar la fecha de pago a proveedor. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -62: //Error 062 - Llega una devolución con importe positivo. 
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:062 - La devolucion debe incluir un importe del gasto con valor negativo. Por favor, revise los datos.");
+				sMsg = "ERROR:062 - La devolucion debe incluir un importe del gasto con valor negativo. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -701: //Error 701 - Fecha de devengo incorrecta  
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:701 - La fecha de devengo esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:701 - La fecha de devengo esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -702: //Error 702 - Fecha de fin de periodo incorrecta  
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:702 - La fecha de fin de periodo esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:702 - La fecha de fin de periodo esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -703: //Error 703 - Fecha de pago incorrecta
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:703 - La fecha de pago esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:703 - La fecha de pago esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -704: //Error 704 - Fecha de limite de pago incorrecta
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:704 - La fecha de limite de pago esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:704 - La fecha de limite de pago esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -705: //Error 705 - Fecha de estado estimado incorrecta
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:705 - La fecha de estado estimado esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:705 - La fecha de estado estimado esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -706: //Error 706 - Fecha de estado conocido incorrecta
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:706 - La fecha de estado conocido esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:706 - La fecha de estado conocido esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -707: //Error 707 - Fecha de anulacion del gasto incorrecta  
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:707 - La fecha de anulacion de gasto esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:707 - La fecha de anulacion de gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -708: //Error 708 - Fecha de pago al proveedor incorrecta
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:708 - La fecha de pago al proveedor esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:708 - La fecha de pago al proveedor esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;				
 				
 			case -709: //Error 709 - Importe del gasto incorrecto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:709 - El importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:709 - El importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -710: //Error 710 - Recargo en el importe del gasto incorrecto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:710 - El recargo en el importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:710 - El recargo en el importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -711: //Error 711 - Importe de demora del gasto incorrecto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:711 - El importe de demora del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:711 - El importe de demora del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -712: //Error 712 - Importe de costas incorrecto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:712 - El importe de costas esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:712 - El importe de costas esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;				
 				
 			case -713: //Error 713 - Importe de otros incrementos incorrecto   
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:713 - El importe de otros incrementos esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:713 - El importe de otros incrementos esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -714: //Error 714 - Importe de descuento incorrecto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:714 - El importe de descuento esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:714 - El importe de descuento esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -715: //Error 715 - Importe de impuestos incorrecto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:715 - El importe de impuestos esta incorrectamente informada. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:715 - El importe de impuestos esta incorrectamente informada. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -800: //Error 800 - Gasto sin provision  
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - No se ha cargado una provision de gastos. Por favor, cargue los datos del activo.");
+				sMsg = "ERROR:801 - No se ha cargado una provision de gastos. Por favor, cargue los datos del activo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -801: //Error 801 - No se ha informado la fecha de devengo
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - No se ha informado la fecha de devengo. Por favor, revise los datos.");
+				sMsg = "ERROR:801 - No se ha informado la fecha de devengo. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -802: //Error 802 - No se ha elegido una situacion del gasto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - No se ha elegido una situacion del gasto. Por favor, revise los datos.");
+				sMsg = "ERROR:802 - No se ha elegido una situacion del gasto. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -803: //Error 803 - No se ha informado el campo importe de gasto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:803 - No se ha informado el campo importe de gasto. Por favor, revise los datos.");
+				sMsg = "ERROR:803 - No se ha informado el campo importe de gasto. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -804: //Error 804 - Accion no permitida
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.");
+				sMsg = "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -805: //Error 805 - estado no disponible
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:805 - El estado del gasto no esta disponible. Por favor, revise los datos.");
+				sMsg = "ERROR:805 - El estado del gasto no esta disponible. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -806: //Error 806 - modificacion sin cambios
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.");
+				sMsg = "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -807: //Error 807 - Fecha de estado sin informar
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:807 - No se ha informado ninguna fecha de estado del gasto. Por favor, revise los datos.");
+				sMsg = "ERROR:807 - No se ha informado ninguna fecha de estado del gasto. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -808: //Error 808 - Importe de descuento negativo
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:808 - El importe del descuento no puede ser negativo. Por favor, revise los datos.");
+				sMsg = "ERROR:808 - El importe del descuento no puede ser negativo. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -809: //Error 809 - Importe de impuestos negativo
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:809 - El importe de impuestos no puede ser negativo. Por favor, revise los datos.");
+				sMsg = "ERROR:809 - El importe de impuestos no puede ser negativo. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -900: //Error 900 - al crear un movimiento
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -901: //Error 901 - error y rollback - error al crear el gasto
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:901 - Se ha producido un error al registrar el nuevo gasto. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar el nuevo gasto. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -902: //Error 902 - error y rollback - error al registrar la relaccion
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -903: //Error 903 - error y rollback - error al cambiar el estado
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:903 - Se ha producido un error al cambiar el estado del gasto. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:903 - Se ha producido un error al cambiar el estado del gasto. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -904: //Error 904 - error y rollback - error al modificar el gasto
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 
 			default: //error generico
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos.");
+				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
+				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
 				break;
 			}
-			
-			
 
 		}
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
+		logger.debug("Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);		
 
 

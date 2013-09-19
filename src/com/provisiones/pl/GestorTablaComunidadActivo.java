@@ -117,7 +117,7 @@ public class GestorTablaComunidadActivo implements Serializable
 
 		this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(buscaactivos));
 		
-		msg = Utils.pfmsgTrace("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -130,7 +130,7 @@ public class GestorTablaComunidadActivo implements Serializable
 
     	this.sCOACES  = activoseleccionadoalta.getCOACES();
     	
-    	msg = Utils.pfmsgTrace("Activo '"+ sCOACES +"' Seleccionado.");
+    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
     	logger.info("Activo '{}' Seleccionado.",sCOACES);
     	
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -158,12 +158,12 @@ public class GestorTablaComunidadActivo implements Serializable
 		
 			this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
 		
-			msg = Utils.pfmsgTrace("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
+			msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
 			logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			msg = Utils.pfmsgTrace("Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
 			logger.info("Encontrados {} activos relacionados.",getTablaactivoscomunidad().size());
 		}
 
@@ -223,7 +223,7 @@ public class GestorTablaComunidadActivo implements Serializable
 				}
 
 				sMsg = "Cambio realizado correctamente.";
-				msg = Utils.pfmsgTrace(sMsg);
+				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
 

@@ -49,7 +49,7 @@ public class GestorProvisiones implements Serializable
     	
 		this.tablaprovisiones = CLProvisiones.buscarProvisionesAbiertas(); 
 
-		msg = Utils.pfmsgTrace("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
+		msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
 		logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -67,7 +67,7 @@ public class GestorProvisiones implements Serializable
     	this.sValorTolal  = provisionseleccionada.getVALOR();
     	this.sNumGastos  = provisionseleccionada.getGASTOS();
     	
-    	msg = Utils.pfmsgTrace("Provision '"+ sNUPROF +"' Seleccionada.");
+    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
     	logger.info("Provision '{}' Seleccionada.",sNUPROF);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -93,7 +93,7 @@ public class GestorProvisiones implements Serializable
 		
 		if (CLProvisiones.cerrarProvision(provision))
 		{
-			msg = Utils.pfmsgTrace("Provision '"+ sNUPROF +"' cerrada.");
+			msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' cerrada.");
 			logger.info("Provision '{}' cerrada.",sNUPROF);
 
 		}

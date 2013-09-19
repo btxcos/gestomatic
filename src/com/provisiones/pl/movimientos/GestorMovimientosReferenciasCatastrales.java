@@ -1,6 +1,10 @@
 package com.provisiones.pl.movimientos;
 
 import java.io.Serializable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
@@ -16,10 +20,9 @@ import com.provisiones.types.ReferenciaTabla;
 
 public class GestorMovimientosReferenciasCatastrales implements Serializable 
 {
-
-	static String sClassName = GestorMovimientosReferenciasCatastrales.class.getName();
-	
 	private static final long serialVersionUID = -1805847552638917701L;
+	
+	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosReferenciasCatastrales.class.getName());
 
 	private String sCODTRN = ValoresDefecto.DEF_E3_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
@@ -124,10 +127,6 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		
-		String sMethod = "buscaActivos";
-		
-		
 		FacesMessage msg;
 		
 		ActivoTabla buscaactivos = new ActivoTabla(
@@ -137,44 +136,41 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		logger.info("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
-    	
-    	String sMethod = "seleccionarActivo";
-
     	FacesMessage msg;
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Activo '"+ sCOACES +"' cargado.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' cargado.");
+    	logger.info("Activo '{}' cargado.",sCOACES);
+
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		
     }
 	
 	public void cargarReferencias (ActionEvent actionEvent)
 	{
-		
-		String sMethod = "cargarReferencias";
-		
 		FacesMessage msg;
 		
 		this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
 		
-		msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Encontradas "+getTablareferencias().size()+" referencias relacionadas.");
+		msg = Utils.pfmsgInfo("Encontradas "+getTablareferencias().size()+" referencias relacionadas.");
+		logger.info("Encontradas {} referencias relacionadas.",getTablareferencias().size());
+
 		FacesContext.getCurrentInstance().addMessage(null, msg);		
 	}
 	
     
 	public void seleccionarReferencia(ActionEvent actionEvent) 
     {  
-    	
-    	String sMethod = "seleccionarReferencia";
-
     	FacesMessage msg;
     	
     	this.sNURCAT = referenciaseleccionada.getNURCAT(); 
@@ -187,27 +183,30 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.sIMCATA = referenciaseleccionada.getIMCATA();
     	this.sFERECA = referenciaseleccionada.getFERECA();
 
-    	msg = Utils.pfmsgTrace(true, sClassName, sMethod, "Referencia '"+ sNURCAT +"' Seleccionada.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+    	msg = Utils.pfmsgInfo("Referencia '"+ sNURCAT +"' Seleccionada.");
+    	logger.info("Referencia '{}' Seleccionada.",sNURCAT);
+
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
 
     }
 
 	public void hoyFERECA (ActionEvent actionEvent)
 	{
-		String sMethod = "hoyFERECA";
 		this.setsFERECA(Utils.fechaDeHoy(true));
-		Utils.debugTrace(true, sClassName, sMethod, "sFERECA:|"+sFERECA+"|");
+		logger.debug("sFERECA:|{}|",sFERECA);
 	}
 	
 	public void registraDatos(ActionEvent actionEvent)
 	{
-		String sMethod = "registraDatos";
-		
 		FacesMessage msg;
+		
+		String sMsg = "";
 		
 		if (!CLReferencias.existeReferenciaCatastral(sNURCAT.toUpperCase()))
 		{
-			msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.");
+			sMsg = "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
+			msg = Utils.pfmsgError(sMsg);
+			logger.error(sMsg);
 		}
 		else
 		{
@@ -236,116 +235,165 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 			
 			int iSalida = CLReferencias.registraMovimiento(movimiento);
 			
-			Utils.debugTrace(true, sClassName, sMethod, "Codigo de salida:"+iSalida);
+			logger.debug("Codigo de salida:"+iSalida);
 			
 			switch (iSalida) 
 			{
 			case 0: //Sin errores
-				msg = Utils.pfmsgTrace(true, sClassName, sMethod, "El movimiento se ha registrado correctamente.");
+				sMsg = "El movimiento se ha registrado correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
 				break;
 
 			case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.");
+				sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -3: //Error 003 - NO EXISTE EL ACTIVO
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.");
+				sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -49: //Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.");
+				sMsg = "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			/*case -50: //Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.");
+				sMsg = "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;*/			
 
 			case -51: //Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:051 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.");
+				sMsg = "ERROR:051 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -52: //Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:052 - El titular catastral es obligatorio. Por favor, revise los datos.");
+				sMsg = "ERROR:052 - El titular catastral es obligatorio. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -53: //Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:053 - Existen recursos o impuestos pendientes de esta referencia. Por favor, revise los datos.");
+				sMsg = "ERROR:053 - Existen recursos o impuestos pendientes de esta referencia. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.");
+				sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			//Ampliacion de valor catastral
 			case -82: //Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.");
+				sMsg = "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -83: //Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.");
+				sMsg = "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.");
+				sMsg = "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -700: //Error 700 - No existe realcion con ese activo
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.");
+				sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -701: //Error 701 - Valor del suelo incorrecto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.");
+				sMsg = "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -702: //Error 702 - Valor catastral incorrecto
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.");
+				sMsg = "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -801: //Error 801 - alta de una referencia en alta
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.");
+				sMsg = "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -802: //Error 802 - referencia catastral de baja no puede recibir movimientos
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:802 - La referencia catastral esta baja y no puede recibir movimientos. Por favor, revise los datos.");
+				sMsg = "ERROR:802 - La referencia catastral esta baja y no puede recibir movimientos. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -803: //Error 803 - estado no disponible
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:803 - El estado de la referencia catastral informada no esta disponible. Por favor, revise los datos.");
+				sMsg = "ERROR:803 - El estado de la referencia catastral informada no esta disponible. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -804: //Error 804 - modificacion sin cambios
-				msg = Utils.pfmsgError(true, sClassName, sMethod, "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.");
+				sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -900: //Error 900 - al crear un movimiento
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -901: //Error 901 - error y rollback - error al crear la cuota
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:901 - Se ha producido un error al registrar la referencia catastral. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la referencia catastral. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 				
 			case -902: //Error 902 - error y rollback - error al registrar la relaccion
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -903: //Error 903 - error y rollback - error al cambiar el estado
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:903 - Se ha producido un error al cambiar el estado de la referencia catastral. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:903 - Se ha producido un error al cambiar el estado de la referencia catastral. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 
 			case -904: //Error 904 - error y rollback - error al modificar la cuota
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos.");
+				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 
 			default: //error generico
-				msg = Utils.pfmsgFatal(true, sClassName, sMethod, "ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos.");
+				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
+				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
 				break;
 			}			
 		}
 
 		
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Finalizadas las comprobaciones.");
+		logger.debug("Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
 	}

@@ -135,7 +135,7 @@ public class GestorImpuestosRecursos implements Serializable
 	
 		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 		
-		msg = Utils.pfmsgTrace("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
@@ -147,7 +147,7 @@ public class GestorImpuestosRecursos implements Serializable
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
 
-		msg = Utils.pfmsgTrace("Activo '"+ sCOACES +"' cargado.");
+		msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' cargado.");
 		logger.info("Activo '{}' cargado.",sCOACES);
     	
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -159,7 +159,7 @@ public class GestorImpuestosRecursos implements Serializable
 		
 		this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
 		
-		msg = Utils.pfmsgTrace("Encontradas "+getTablareferencias().size()+" referencias relacionadas.");
+		msg = Utils.pfmsgInfo("Encontradas "+getTablareferencias().size()+" referencias relacionadas.");
 		logger.info("Encontradas {} referencias relacionadas.",getTablareferencias().size());
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);		
@@ -178,7 +178,7 @@ public class GestorImpuestosRecursos implements Serializable
     	}
     	else
 		{
-			msg = Utils.pfmsgTrace("Encontrada referencia para el activo '"+sCOACES.toUpperCase()+"'.");
+			msg = Utils.pfmsgInfo("Encontrada referencia para el activo '"+sCOACES.toUpperCase()+"'.");
 			logger.info("Encontrada referencia para el activo '{}'.",sCOACES.toUpperCase());
 		}
 		
@@ -193,7 +193,7 @@ public class GestorImpuestosRecursos implements Serializable
     	
     	this.sNURCAT = referenciaseleccionada.getNURCAT(); 
  	
-		msg = Utils.pfmsgTrace("Referencia '"+ sNURCAT +"' Seleccionada.");
+		msg = Utils.pfmsgInfo("Referencia '"+ sNURCAT +"' Seleccionada.");
 		logger.info("Referencia '{}' Seleccionada.",sNURCAT);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -251,7 +251,7 @@ public class GestorImpuestosRecursos implements Serializable
 			{
 			case 0: //Sin errores
 				sMsg = "El impuesto o recurso se ha creado correctamente.";
-				msg = Utils.pfmsgTrace(sMsg);
+				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
 

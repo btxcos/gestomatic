@@ -26,7 +26,7 @@ public class Utils
 	private static Logger logger = LoggerFactory.getLogger(Utils.class.getName());
 	
 	
-	public static void debugTrace1(boolean bEnable, String sClass, String sMethod, String sMsg)
+	public static void debugTrace(boolean bEnable, String sClass, String sMethod, String sMsg)
 	{
 		boolean bContrazas = true;
 		
@@ -49,7 +49,7 @@ public class Utils
 		}
 	}
 	
-	public static FacesMessage pfmsgTrace(String sMsg)
+	public static FacesMessage pfmsgInfo(String sMsg)
 	{
 		return new FacesMessage(sMsg);
 	}

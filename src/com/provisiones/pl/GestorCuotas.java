@@ -136,14 +136,14 @@ public class GestorCuotas implements Serializable
 		{
 			this.setTablaactivos(CLCuotas.buscarActivosComunidadDisponibles(buscaactivos, sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()));
 
-			msg = Utils.pfmsgTrace("Encontrados "+getTablaactivos().size()+" activos relacionados con la comunidad '"+sNUDCOM.toUpperCase()+"'.");
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados con la comunidad '"+sNUDCOM.toUpperCase()+"'.");
 			logger.info("Encontrados {} activos relacionados con la comunidad '{}'.",getTablaactivos().size(),sNUDCOM.toUpperCase());
 		}
 		else
 		{
 			this.setTablaactivos(CLComunidades.buscaActivosConComunidad(buscaactivos));
 			
-			msg = Utils.pfmsgTrace("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 		}
 		
@@ -158,7 +158,7 @@ public class GestorCuotas implements Serializable
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	msg = Utils.pfmsgTrace("Activo '"+ sCOACES +"' Seleccionado.");
+    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
     	
     	logger.info("Activo '{}' Seleccionado.",sCOACES);
 
@@ -192,7 +192,7 @@ public class GestorCuotas implements Serializable
 			else
 			{
 			
-				msg = Utils.pfmsgTrace("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
+				msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
 				logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
 			}
 		}
@@ -217,7 +217,7 @@ public class GestorCuotas implements Serializable
 		switch (iSalida) 
 		{
 		case 0: //Sin errores
-			msg = Utils.pfmsgTrace("El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
+			msg = Utils.pfmsgInfo("El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
 			logger.info("El activo '{}' esta disponible.",sCOACES.toUpperCase());
 			break;
 		case -1: //Error activo no pertenece comunidad
@@ -259,7 +259,7 @@ public class GestorCuotas implements Serializable
 		}
 		else
 		{
-			msg = Utils.pfmsgTrace("La comunidad se ha cargado correctamente.");
+			msg = Utils.pfmsgInfo("La comunidad se ha cargado correctamente.");
 			logger.info("La comunidad se ha cargado correctamente.");
 		}
 		
@@ -332,7 +332,7 @@ public class GestorCuotas implements Serializable
 			{
 			case 0: //Sin errores
 				sMsg = "La cuota se ha creado correctamente.";
-				msg = Utils.pfmsgTrace(sMsg);
+				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
 

@@ -78,7 +78,7 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Comunidades a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(sMsg);
+	    		msg = Utils.pfmsgInfo(sMsg);
 	    		logger.info(sMsg);
     			
     		}
@@ -105,7 +105,7 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Cuotas a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(sMsg);
+	    		msg = Utils.pfmsgInfo(sMsg);
 	    		logger.info(sMsg);
     			
     		}
@@ -130,7 +130,7 @@ public class GestorEnvios implements Serializable
     		{
 
 	    		sMsg = "Generado el fichero de Referencias a enviar.";
-	    		msg = Utils.pfmsgTrace(sMsg);
+	    		msg = Utils.pfmsgInfo(sMsg);
 	    		logger.info(sMsg);
     			
     		}
@@ -156,7 +156,7 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Impuestos a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(sMsg);
+	    		msg = Utils.pfmsgInfo(sMsg);
 	    		logger.info(sMsg);
     			
     		}
@@ -182,7 +182,7 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Gastos a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(sMsg);
+	    		msg = Utils.pfmsgInfo(sMsg);
 	    		logger.info(sMsg);
     			
     		}
@@ -208,7 +208,7 @@ public class GestorEnvios implements Serializable
 
 	    		sMsg = "Generado el fichero de Provisiones a enviar.";
 	        	
-	    		msg = Utils.pfmsgTrace(sMsg);
+	    		msg = Utils.pfmsgInfo(sMsg);
 	    		logger.info(sMsg);
     			
     		}
@@ -232,7 +232,7 @@ public class GestorEnvios implements Serializable
     	else
     	{
     		sMsg = "Cargados todos los movimientos pendientes.";
-    		msg = Utils.pfmsgTrace(sMsg);
+    		msg = Utils.pfmsgInfo(sMsg);
     		logger.info(sMsg);
 
     	}
@@ -255,7 +255,7 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Comunidades a enviar.";
         	
-    		msg = Utils.pfmsgTrace(sMsg);
+    		msg = Utils.pfmsgInfo(sMsg);
     		logger.info(sMsg);
 
 		} 
@@ -288,7 +288,7 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Cuotas a enviar.";
         	
-    		msg = Utils.pfmsgTrace(sMsg);
+    		msg = Utils.pfmsgInfo(sMsg);
     		logger.info(sMsg);
 
 		} 
@@ -321,7 +321,7 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Referencias a enviar.";
         	
-    		msg = Utils.pfmsgTrace(sMsg);
+    		msg = Utils.pfmsgInfo(sMsg);
     		logger.info(sMsg);
 
 		} 
@@ -354,7 +354,7 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Impuestos a enviar.";
         	
-    		msg = Utils.pfmsgTrace(sMsg);
+    		msg = Utils.pfmsgInfo(sMsg);
     		logger.info(sMsg);
 
 		} 
@@ -387,7 +387,7 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Gastos a enviar.";
         	
-    		msg = Utils.pfmsgTrace(sMsg);
+    		msg = Utils.pfmsgInfo(sMsg);
     		logger.info(sMsg);
 
 		} 
@@ -420,7 +420,7 @@ public class GestorEnvios implements Serializable
 			
     		sMsg = "Descargado el fichero de Provisiones a enviar.";
         	
-    		msg = Utils.pfmsgTrace(sMsg);
+    		msg = Utils.pfmsgInfo(sMsg);
     		logger.info(sMsg);
 
 		} 

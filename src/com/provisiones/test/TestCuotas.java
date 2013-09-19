@@ -1,41 +1,24 @@
 package com.provisiones.test;
 
-import java.io.File;
-import com.provisiones.misc.Utils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.xml.DOMConfigurator;
+import com.provisiones.misc.Utils;
 
 
+public class TestCuotas 
+{
 
-public class TestCuotas {
-	static String sClassName = TestCuotas.class.getName();
-	
-	//private static Logger logger = LoggerFactory.getLogger(TestCuotas.class);
-	
-	private static Logger logger = LoggerFactory.getLogger(sClassName);
+	private static Logger logger = LoggerFactory.getLogger(TestCuotas.class.getName());
 
-
-	/**
-	 * @param args
-	 */
-	
 
 	public static void main(String[] args) 
 	{
-		// TODO Auto-generated method stub
 
-		//Cuota cuota1 
-		//QMListaCuotas.buscaCuotasActivo("3109139");
-		
-		boolean bTraza = true;
-		String sMethod = "testFicheros";
 		
 		//logger.addAppender(new FileAppender(new PatternLayout(),"prueba.log", false));
 		
-		DOMConfigurator.configure(System.getProperty("user.dir")+File.separator+"WebContent"+File.separator+"WEB-INF"+File.separator+"log4j.xml");
+		//DOMConfigurator.configure(System.getProperty("user.dir")+File.separator+"WebContent"+File.separator+"WEB-INF"+File.separator+"log4j.xml");
 		
 		//PropertyConfigurator.configure(System.getProperty("user.dir")+File.separator+"log4j"+File.separator+"log4j.properties");
 		
@@ -48,7 +31,7 @@ public class TestCuotas {
 		
 		//BasicConfigurator.configure();
 		
-		Utils.debugTrace(true, sClassName, sMethod, "Generando ficheros...");
+		logger.debug("Generando ficheros...");
 		
 		//Utils.debugTrace2(logger, sClassName, sMethod, "Generando ficheros...");
 		
@@ -56,22 +39,22 @@ public class TestCuotas {
 		/*String sArchivo = "ID_168e1.txt";
 		
 		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "|"+sArchivo.substring(sArchivo.length()-9)+"|");
+		logger.debug("|"+sArchivo.substring(sArchivo.length()-9)+"|");
 		
 		if (sArchivo.substring(sArchivo.length()-9).toUpperCase().matches("(168)(AC|RG|PA|GA|PP|E1|E2|E3|E4)(\\.TXT)$"))
 		{
-			Utils.debugTrace(bTraza, sClassName, sMethod, "|"+sArchivo+"| Reconocido!");
+			logger.debug("|"+sArchivo+"| Reconocido!");
 		}
 		else
 		{
-			Utils.debugTrace(bTraza, sClassName, sMethod, "|"+sArchivo+"| NO Reconocido.");
+			logger.debug("|"+sArchivo+"| NO Reconocido.");
 		}
 		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "|"+File.separator+"|");
+		logger.debug("|"+File.separator+"|");
 
-		Utils.debugTrace(bTraza, sClassName, sMethod, "|"+Utils.fechaDeHoy(true)+"|");
+		logger.debug("|"+Utils.fechaDeHoy(true)+"|");
 		
-		Utils.debugTrace(bTraza, sClassName, sMethod, "|"+Utils.timeStamp()+"|");*/
+		logger.debug("|"+Utils.timeStamp()+"|");*/
 		
 
 		

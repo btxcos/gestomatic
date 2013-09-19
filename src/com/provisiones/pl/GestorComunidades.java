@@ -132,7 +132,7 @@ public class GestorComunidades implements Serializable
 		
 		this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(buscaactivos));
 
-		msg = Utils.pfmsgTrace("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		
 		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 		
@@ -146,7 +146,7 @@ public class GestorComunidades implements Serializable
     	
     	this.sCOACES  = activoseleccionado.getCOACES();
     	
-    	msg = Utils.pfmsgTrace("Activo '"+sCOACES+"' Seleccionado.");
+    	msg = Utils.pfmsgInfo("Activo '"+sCOACES+"' Seleccionado.");
     	
     	logger.info("Activo '{}' Seleccionado.",sCOACES);
     	
@@ -163,7 +163,7 @@ public class GestorComunidades implements Serializable
 		switch (iSalida) 
 		{
 			case 0: //Sin errores
-				msg = Utils.pfmsgTrace("El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
+				msg = Utils.pfmsgInfo("El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
 				logger.info("El activo '{}' esta disponible.",sCOACES.toUpperCase());
 				break;
 
@@ -247,7 +247,7 @@ public class GestorComunidades implements Serializable
 			case 0: //Sin errores
 				
 				sMsg = "La comunidad se ha creado correctamente.";
-				msg = Utils.pfmsgTrace(sMsg);
+				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
 
@@ -398,60 +398,60 @@ public class GestorComunidades implements Serializable
 
 			case -901: //Error 901 - error y rollback - error al crear la comuidad
 				sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la comunidad. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 				
 			case -902: //Error 902 - error y rollback - error al registrar la relaccion
 				sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 
 			case -903: //Error 903 - error y rollback - error al registrar el activo durante el alta
 				sMsg = "[FATAL] ERROR:903 - Se ha producido un error al asociar el activo durante el alta. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 
 			case -904: //Error 904 - error y rollback - error al cambiar el estado
 				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al cambiar el estado de la comunidad. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 
 			case -905: //Error 905 - error y rollback - error al modificar la comunidad
 				sMsg = "[FATAL] ERROR:905 - Se ha producido un error al modificar la comunidad. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 
 			case -906: //Error 906 - error y rollback - el activo ya esta vinculado
 				sMsg = "[FATAL] ERROR:906 - El activo ya ha sido vinculado. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 
 			case -907: //Error 907 - error y rollback - error al asociar el activo en la comunidad
 				sMsg = "[FATAL] ERROR:907 - Se ha producido un error al asociar el activo a la comunidad. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 
 			case -908: //Error 908 - error y rollback - el activo no esta vinculado
 				sMsg = "[FATAL] ERROR:908 - El activo no ha sido vinculado. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 
 			case -909: //Error 909 - error y rollback - error al desasociar el activo en la comunidad
 				sMsg = "[FATAL] ERROR:909 - Se ha producido un error al desasociar el activo a la comunidad. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgError(sMsg);
+				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 				
 			default: //error generico
-				msg = Utils.pfmsgError("[FATAL] ERROR:"+iSalida+" - La operación solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
+				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operación solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
 				logger.error("[FATAL] ERROR:{} - La operación solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
 				break;
 			}
