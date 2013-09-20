@@ -96,19 +96,9 @@ public class ReferenciaCatastral
 		FERECA = fERECA;
 	}
 
-	public void pintaReferenciaCatastral()
+	public String logReferenciaCatastral()
 	{
-		System.out.println("(REFERENCIA CATASTRAL)");
-		System.out.println("NURCAT:|"+NURCAT+"|");
-		System.out.println("TIRCAT:|"+TIRCAT+"|");
-		System.out.println("ENEMIS:|"+ENEMIS+"|");
-		System.out.println("COTEXA:|"+COTEXA+"|");
-		System.out.println("OBTEXC:|"+OBTEXC+"|");
-		
-		//Ampliacion de valor catastral
-		System.out.println("IMVSUE:|"+IMVSUE+"|");
-		System.out.println("IMCATA:|"+IMCATA+"|");
-		System.out.println("FERECA:|"+FERECA+"|");
+		return String.format("(REFERENCIA CATASTRAL)\nNURCAT:|%s|\nTIRCAT:|%s|\nENEMIS:|%s|\nCOTEXA:|%s|\nOBTEXC:|%s|\nIMVSUE:|%s|\nIMCATA:|%s|\nFERECA:|%s|",NURCAT,TIRCAT,ENEMIS,COTEXA,OBTEXC,IMVSUE,IMCATA,FERECA);
 	}
 
 

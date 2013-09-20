@@ -271,39 +271,8 @@ public class MovimientoComunidad
 		OBDEER = oBDEER;
 	}
 	
-	public void pintaMovimientoComunidad()
+	public String logMovimientoComunidad()
 	{
-		System.out.println("(MOVIMIENTO COMUNIDAD)");
-		System.out.println("CODTRN:|"+CODTRN+"|");
-		System.out.println("COTDOR:|"+COTDOR+"|");
-		System.out.println("IDPROV:|"+IDPROV+"|");
-		System.out.println("COACCI:|"+COACCI+"|");
-		System.out.println("COENGP:|"+COENGP+"|");
-		System.out.println("COCLDO:|"+COCLDO+"|");
-		System.out.println("NUDCOM:|"+NUDCOM+"|");
-		System.out.println("BITC10:|"+BITC10+"|");
-		System.out.println("COACES:|"+COACES+"|");
-		System.out.println("BITC01:|"+BITC01+"|");
-		System.out.println("NOMCOC:|"+NOMCOC+"|");
-		System.out.println("BITC02:|"+BITC02+"|");
-		System.out.println("NODCCO:|"+NODCCO+"|");
-		System.out.println("BITC03:|"+BITC03+"|");
-		System.out.println("NOMPRC:|"+NOMPRC+"|");
-		System.out.println("BITC04:|"+BITC04+"|");
-		System.out.println("NUTPRC:|"+NUTPRC+"|");
-		System.out.println("BITC05:|"+BITC05+"|");
-		System.out.println("NOMADC:|"+NOMADC+"|");
-		System.out.println("BITC06:|"+BITC06+"|");
-		System.out.println("NUTADC:|"+NUTADC+"|");
-		System.out.println("BITC07:|"+BITC07+"|");
-		System.out.println("NODCAD:|"+NODCAD+"|");
-		System.out.println("BITC08:|"+BITC08+"|");
-		System.out.println("NUCCEN:|"+NUCCEN+"|");
-		System.out.println("NUCCOF:|"+NUCCOF+"|");
-		System.out.println("NUCCDI:|"+NUCCDI+"|");
-		System.out.println("NUCCNT:|"+NUCCNT+"|");
-		System.out.println("BITC09:|"+BITC09+"|");
-		System.out.println("OBTEXC:|"+OBTEXC+"|");
-		System.out.println("OBDEER:|"+OBDEER+"|");
+		return String.format("(MOVIMIENTO COMUNIDAD)\nCODTRN:|%s|\nCOTDOR:|%s|\nIDPROV:|%s|\nCOACCI:|%s|\nCOENGP:|%s|\nCOCLDO:|%s|\nNUDCOM:|%s|\nBITC10:|%s|\nCOACES:|%s|\nBITC01:|%s|\nNOMCOC:|%s|\nBITC02:|%s|\nNODCCO:|%s|\nBITC03:|%s|\nNOMPRC:|%s|\nBITC04:|%s|\nNUTPRC:|%s|\nBITC05:|%s|\nNOMADC:|%s|\nBITC06:|%s|\nNUTADC:|%s|\nBITC07:|%s|\nNODCAD:|%s|\nBITC08:|%s|\nNUCCEN:|%s|\nNUCCOF:|%s|\nNUCCDI:|%s|\nNUCCNT:|%s|\nBITC09:|%s|\nOBTEXC:|%s|\nOBDEER:|%s|",CODTRN,COTDOR,IDPROV,COACCI,COENGP,COCLDO,NUDCOM,BITC10,COACES,BITC01,NOMCOC,BITC02,NODCCO,BITC03,NOMPRC,BITC04,NUTPRC,BITC05,NOMADC,BITC06,NUTADC,BITC07,NODCAD,BITC08,NUCCEN,NUCCOF,NUCCDI,NUCCNT,BITC09,OBTEXC,OBDEER);
 	}
 }

@@ -104,7 +104,7 @@ public class Utils
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		sAhora = format.format(fechaHoy);
 		
-		logger.debug(sAhora);
+		logger.debug("sAhora:|{}|",sAhora);
 		
 		return sAhora;
 	}

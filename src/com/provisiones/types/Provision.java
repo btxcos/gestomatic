@@ -111,17 +111,9 @@ public class Provision
 		this.sCodEstado = sCodEstado;
 	}
 
-	public void pintaProvision()
+	public String logProvision()
 	{
-		System.out.println("(PROVISION)");
-		System.out.println("sNUPROF         :|"+sNUPROF+"|");
-		System.out.println("sCOSPAT         :|"+sCOSPAT+"|");
-		System.out.println("sTAS            :|"+sTAS+"|");
-		System.out.println("sFEPFON         :|"+sFEPFON+"|");
-		System.out.println("sFechaValidacion:|"+sFechaValidacion+"|");
-		System.out.println("sCodEstado      :|"+sCodEstado+"|");
-		System.out.println("sValorTolal     :|"+sValorTolal+"|");
-		System.out.println("sNumGastos      :|"+sNumGastos+"|");
+		return String.format("(PROVISION)\nsNUPROF         :|%s|\nsCOSPAT         :|%s|\nsTAS            :|%s|\nsFEPFON         :|%s|\nsFechaValidacion:|%s|\nsCodEstado      :|%s|\nsValorTolal     :|%s|\nsNumGastos      :|%s|",sNUPROF,sCOSPAT,sTAS,sFEPFON,sFechaValidacion,sCodEstado,sValorTolal,sNumGastos);
 	}
 
 

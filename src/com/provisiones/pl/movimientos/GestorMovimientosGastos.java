@@ -346,7 +346,7 @@ public class GestorMovimientosGastos implements Serializable
     	
 	  	Gasto gasto = QMGastos.getGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
     	
-    	gasto.pintaGasto();
+    	logger.debug(gasto.logGasto());
  
     	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
 

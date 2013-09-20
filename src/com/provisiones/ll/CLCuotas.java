@@ -184,9 +184,9 @@ public class CLCuotas
 	{
 		Cuota cuota = QMCuotas.getCuota(movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC());
 		
-		cuota.pintaCuota();
+		logger.debug(cuota.logCuota());
 		
-		movimiento.pintaMovimientoCuota();
+		logger.debug(movimiento.logMovimientoCuota());
 		
 		MovimientoCuota movimiento_revisado = new MovimientoCuota("", "", "", "", "", "", "", "0", "", "", "", "", "0", "", "0", "", "0", "", "0", "", "0", "", "", "");
 		
@@ -378,7 +378,8 @@ public class CLCuotas
 		
 
 		logger.debug("Revisado! Nuevo movimiento:");
-		movimiento_revisado.pintaMovimientoCuota();
+
+		logger.debug(movimiento_revisado.logMovimientoCuota());
 		
 		return movimiento_revisado;
 
@@ -550,7 +551,9 @@ public class CLCuotas
 							Cuota cuotadealta = convierteMovimientoenCuota(movimiento_revisado);
 
 							logger.debug("Dando de alta la cuota...");
-							cuotadealta.pintaCuota();
+
+							logger.debug(cuotadealta.logCuota());
+							
 							if (estaDeBaja(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
 							{
 								if (QMListaCuotas.addRelacionCuotas(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))

@@ -263,33 +263,9 @@ public class MovimientoCuota
 		OBDEER = oBDEER;
 	}
 	
-	public void pintaMovimientoCuota()
+	public String logMovimientoCuota()
 	{
-		System.out.println("(MOVIMIENTO CUOTA)");
-		System.out.println("CODTRN:|"+CODTRN+"|");
-		System.out.println("COTDOR:|"+COTDOR+"|");
-		System.out.println("IDPROV:|"+IDPROV+"|");
-		System.out.println("COACCI:|"+COACCI+"|");
-		System.out.println("COCLDO:|"+COCLDO+"|");
-		System.out.println("NUDCOM:|"+NUDCOM+"|");
-		System.out.println("COENGP:|"+COENGP+"|");
-		System.out.println("COACES:|"+COACES+"|");
-		System.out.println("COGRUG:|"+COGRUG+"|");
-		System.out.println("COTACA:|"+COTACA+"|");
-		System.out.println("COSBAC:|"+COSBAC+"|");
-		System.out.println("BITC11:|"+BITC11+"|");
-		System.out.println("FIPAGO:|"+FIPAGO+"|");
-		System.out.println("BITC12:|"+BITC12+"|");
-		System.out.println("FFPAGO:|"+FFPAGO+"|");
-		System.out.println("BITC13:|"+BITC13+"|");
-		System.out.println("IMCUCO:|"+IMCUCO+"|");
-		System.out.println("BITC14:|"+BITC14+"|");
-		System.out.println("FAACTA:|"+FAACTA+"|");
-		System.out.println("BITC15:|"+BITC15+"|");
-		System.out.println("PTPAGO:|"+PTPAGO+"|");
-		System.out.println("BITC09:|"+BITC09+"|");
-		System.out.println("OBTEXC:|"+OBTEXC+"|");
-		System.out.println("OBDEER:|"+OBDEER+"|");
+		return String.format("(MOVIMIENTO CUOTA)\nCODTRN:|%s|\nCOTDOR:|%s|\nIDPROV:|%s|\nCOACCI:|%s|\nCOCLDO:|%s|\nNUDCOM:|%s|\nCOENGP:|%s|\nCOACES:|%s|\nCOGRUG:|%s|\nCOTACA:|%s|\nCOSBAC:|%s|\nBITC11:|%s|\nFIPAGO:|%s|\nBITC12:|%s|\nFFPAGO:|%s|\nBITC13:|%s|\nIMCUCO:|%s|\nBITC14:|%s|\nFAACTA:|%s|\nBITC15:|%s|\nPTPAGO:|%s|\nBITC09:|%s|\nOBTEXC:|%s|\nOBDEER:|%s|",CODTRN,COTDOR,IDPROV,COACCI,COCLDO,NUDCOM,COENGP,COACES,COGRUG,COTACA,COSBAC,BITC11,FIPAGO,BITC12,FFPAGO,BITC13,IMCUCO,BITC14,FAACTA,BITC15,PTPAGO,BITC09,OBTEXC,OBDEER);
 	}
 
 	public boolean equals(MovimientoCuota NuevaCuota)

@@ -197,9 +197,9 @@ public class CLReferencias
 		ReferenciaCatastral referencia = QMReferencias.getReferenciaCatastral(movimiento.getNURCAT());
 		
 		
-		referencia.pintaReferenciaCatastral();
+		logger.debug(referencia.logReferenciaCatastral());
 		
-		movimiento.pintaMovimientoReferenciaCatastral();
+		logger.debug(movimiento.logMovimientoReferenciaCatastral());
 		
 		MovimientoReferenciaCatastral movimiento_revisado = new MovimientoReferenciaCatastral("","0","0","","0","0","","","","","","0","","","","","0","","0","","0");
 		
@@ -392,7 +392,8 @@ public class CLReferencias
 		
 
 		logger.debug("Revisado! Nuevo movimiento:");
-		movimiento_revisado.pintaMovimientoReferenciaCatastral();
+
+		logger.debug(movimiento_revisado.logMovimientoReferenciaCatastral());
 		
 		return movimiento_revisado;
 
@@ -513,7 +514,7 @@ public class CLReferencias
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
 				//error modificacion sin cambios
-				iCodigo = -804;	
+				iCodigo = -804;
 			}
 			else
 			{
@@ -534,7 +535,8 @@ public class CLReferencias
 							ReferenciaCatastral referenciadealta = convierteMovimientoenReferencia(movimiento_revisado);
 
 							logger.debug("Dando de alta la referencia...");
-							referenciadealta.pintaReferenciaCatastral();
+
+							logger.debug(referenciadealta.logReferenciaCatastral());
 						
 							if (estaDeBaja(movimiento_revisado.getNURCAT()))
 							{

@@ -104,17 +104,8 @@ public class ImpuestoRecurso
 		OBTEXC = oBTEXC;
 	}
 
-	public void pintaImpuestoRecurso()
+	public String logImpuestoRecurso()
 	{
-		System.out.println("(IMPUESTO/RECURSO)");
-		System.out.println("NURCAT:|"+NURCAT+"|");
-		System.out.println("COSBAC:|"+COSBAC+"|");
-		System.out.println("FEPRRE:|"+FEPRRE+"|");
-		System.out.println("FERERE:|"+FERERE+"|");
-		System.out.println("FEDEIN:|"+FEDEIN+"|");
-		System.out.println("BISODE:|"+BISODE+"|");
-		System.out.println("BIRESO:|"+BIRESO+"|");
-		System.out.println("COTEXA:|"+COTEXA+"|");
-		System.out.println("OBTEXC:|"+OBTEXC+"|");
+		return String.format("(IMPUESTO/RECURSO)\nNURCAT:|%s|\nCOSBAC:|%s|\nFEPRRE:|%s|\nFERERE:|%s|\nFEDEIN:|%s|\nBISODE:|%s|\nBIRESO:|%s|\nCOTEXA:|%s|\nOBTEXC:|%s|",NURCAT,COSBAC,FEPRRE,FERERE,FEDEIN,BISODE,BIRESO,COTEXA,OBTEXC);
 	}
 }

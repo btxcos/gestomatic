@@ -129,19 +129,9 @@ public class Cuota
 				OBTEXC == NuevaCuota.getOBTEXC());
 	}
 	
-	public void pintaCuota()
+	public String logCuota()
 	{
-		System.out.println("(CUOTA)");
-		System.out.println("COACES:|"+COACES+"|");
-		System.out.println("COCLDO:|"+COCLDO+"|");
-		System.out.println("NUDCOM:|"+NUDCOM+"|");
-		System.out.println("COSBAC:|"+COSBAC+"|");
-		System.out.println("FIPAGO:|"+FIPAGO+"|");
-		System.out.println("FFPAGO:|"+FFPAGO+"|");
-		System.out.println("IMCUCO:|"+IMCUCO+"|");
-		System.out.println("FAACTA:|"+FAACTA+"|");
-		System.out.println("PTPAGO:|"+PTPAGO+"|");
-		System.out.println("OBTEXC:|"+OBTEXC+"|");
+		return String.format("(CUOTA)\nCOACES:|%s|\nCOCLDO:|%s|\nNUDCOM:|%s|\nCOSBAC:|%s|\nFIPAGO:|%s|\nFFPAGO:|%s|\nIMCUCO:|%s|\nFAACTA:|%s|\nPTPAGO:|%s|\nOBTEXC:|%s|",COACES,COCLDO,NUDCOM,COSBAC,FIPAGO,FFPAGO,IMCUCO,FAACTA,PTPAGO,OBTEXC);
 	}
 	
 }

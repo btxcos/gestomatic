@@ -31,9 +31,9 @@ public class ImporteDevolucion
 		this.sImporte = sImporte;
 	}
 	
-	public void pinta()
+	public String logImporteDevolucion()
 	{
-		System.out.println(bSigno ? "-"+ sImporte:sImporte);
+		return (bSigno ? "-"+ sImporte:sImporte);
 	}
 	
 }

@@ -156,22 +156,8 @@ public class Comunidad
 		OBTEXC = oBTEXC;
 	}
 	
-	public void pintaComunidad()
+	public String logComunidad()
 	{
-		System.out.println("(COMUNIDAD)");
-		System.out.println("COCLDO:|"+COCLDO+"|");
-		System.out.println("NUDCOM:|"+NUDCOM+"|");
-		System.out.println("NOMCOC:|"+NOMCOC+"|");
-		System.out.println("NODCCO:|"+NODCCO+"|");
-		System.out.println("NOMPRC:|"+NOMPRC+"|");
-		System.out.println("NUTPRC:|"+NUTPRC+"|");
-		System.out.println("NOMADC:|"+NOMADC+"|");
-		System.out.println("NUTADC:|"+NUTADC+"|");
-		System.out.println("NODCAD:|"+NODCAD+"|");
-		System.out.println("NUCCEN:|"+NUCCEN+"|");
-		System.out.println("NUCCOF:|"+NUCCOF+"|");
-		System.out.println("NUCCDI:|"+NUCCDI+"|");
-		System.out.println("NUCCNT:|"+NUCCNT+"|");
-		System.out.println("OBTEXC:|"+OBTEXC+"|");
+		return String.format("(COMUNIDAD)\nCOCLDO:|%s|\nNUDCOM:|%s|\nNOMCOC:|%s|\nNODCCO:|%s|\nNOMPRC:|%s|\nNUTPRC:|%s|\nNOMADC:|%s|\nNUTADC:|%s|\nNODCAD:|%s|\nNUCCEN:|%s|\nNUCCOF:|%s|\nNUCCDI:|%s|\nNUCCNT:|%s|\nOBTEXC:|%s|",COCLDO,NUDCOM,NOMCOC,NODCCO,NOMPRC,NUTPRC,NOMADC,NUTADC,NODCAD,NUCCEN,NUCCOF,NUCCDI,NUCCNT,OBTEXC);
 	}
 }

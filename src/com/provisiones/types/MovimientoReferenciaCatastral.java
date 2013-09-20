@@ -236,32 +236,9 @@ public class MovimientoReferenciaCatastral
 		return FILLER;
 	}
 
-	public void pintaMovimientoReferenciaCatastral()
+	public String logMovimientoReferenciaCatastral()
 	{
-		System.out.println("(MOVIMIENTO REFERENCIA CATASTRAL)");
-		System.out.println("CODTRN:|"+CODTRN+"|");
-		System.out.println("COTDOR:|"+COTDOR+"|");
-		System.out.println("IDPROV:|"+IDPROV+"|");
-		System.out.println("COACCI:|"+COACCI+"|");
-		System.out.println("COENGP:|"+COENGP+"|");
-		System.out.println("COACES:|"+COACES+"|");
-		System.out.println("NURCAT:|"+NURCAT+"|");
-		System.out.println("BITC16:|"+BITC16+"|");
-		System.out.println("TIRCAT:|"+TIRCAT+"|");
-		System.out.println("BITC17:|"+BITC17+"|");
-		System.out.println("ENEMIS:|"+ENEMIS+"|");
-		System.out.println("COTEXA:|"+COTEXA+"|");
-		System.out.println("BITC09:|"+BITC09+"|");
-		System.out.println("OBTEXC:|"+OBTEXC+"|");
-		System.out.println("OBDEER:|"+OBDEER+"|");
-		
-		//Ampliacion de valor catastral
-		System.out.println("BITC23:|"+BITC23+"|");
-		System.out.println("IMVSUE:|"+IMVSUE+"|");
-		System.out.println("BITC24:|"+BITC24+"|");
-		System.out.println("IMCATA:|"+IMCATA+"|");
-		System.out.println("BITC25:|"+BITC25+"|");
-		System.out.println("FERECA:|"+FERECA+"|");
+		return String.format("(MOVIMIENTO REFERENCIA CATASTRAL)\nCODTRN:|%s|\nCOTDOR:|%s|\nIDPROV:|%s|\nCOACCI:|%s|\nCOENGP:|%s|\nCOACES:|%s|\nNURCAT:|%s|\nBITC16:|%s|\nTIRCAT:|%s|\nBITC17:|%s|\nENEMIS:|%s|\nCOTEXA:|%s|\nBITC09:|%s|\nOBTEXC:|%s|\nOBDEER:|%s|\nBITC23:|%s|\nIMVSUE:|%s|\nBITC24:|%s|\nIMCATA:|%s|\nBITC25:|%s|\nFERECA:|%s|",CODTRN,COTDOR,IDPROV,COACCI,COENGP,COACES,NURCAT,BITC16,TIRCAT,BITC17,ENEMIS,COTEXA,BITC09,OBTEXC,OBDEER,BITC23,IMVSUE,BITC24,IMCATA,BITC25,FERECA);
 	}
 
 

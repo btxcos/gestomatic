@@ -162,9 +162,9 @@ public class CLImpuestos
 		ImpuestoRecurso impuesto = QMImpuestos.getImpuestoRecurso(movimiento.getNURCAT(),movimiento.getCOSBAC());
 		
 		
-		impuesto.pintaImpuestoRecurso();
+		logger.debug(impuesto.logImpuestoRecurso());
 		
-		movimiento.pintaMovimientoImpuestoRecurso();
+		logger.debug(movimiento.logMovimientoImpuestoRecurso());
 		
 		MovimientoImpuestoRecurso movimiento_revisado = new MovimientoImpuestoRecurso("","0","0","","0","0","","0","0","0","","0","","0","","0","","#","","#","0","","","");
 		
@@ -336,7 +336,8 @@ public class CLImpuestos
 		
 
 		logger.debug("Revisado! Nuevo movimiento:");
-		movimiento_revisado.pintaMovimientoImpuestoRecurso();
+		
+		logger.debug(movimiento_revisado.logMovimientoImpuestoRecurso());
 		
 		return movimiento_revisado;
 
@@ -350,7 +351,7 @@ public class CLImpuestos
 		
 		String sEstado = QMImpuestos.getEstado(movimiento.getNURCAT(),movimiento.getCOSBAC());
 		
-		movimiento.pintaMovimientoImpuestoRecurso();
+		logger.debug(movimiento.logMovimientoImpuestoRecurso());
 		
 		logger.debug("Estado:|{}|",sEstado);
 		logger.debug("Accion:|{}|",movimiento.getCOACCI());
@@ -548,7 +549,9 @@ public class CLImpuestos
 							ImpuestoRecurso impuestodealta = convierteMovimientoenImpuesto(movimiento_revisado);
 
 							logger.debug("Dando de alta la referencia...");
-							impuestodealta.pintaImpuestoRecurso();
+
+							logger.debug(impuestodealta.logImpuestoRecurso());
+
 							if (estaDeBaja (movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC())) //Alta de baja
 							{
 								if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))

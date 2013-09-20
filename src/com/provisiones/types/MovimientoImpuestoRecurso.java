@@ -262,32 +262,8 @@ public class MovimientoImpuestoRecurso
 		OBDEER = oBDEER;
 	}
 
-	public void pintaMovimientoImpuestoRecurso()
+	public String logMovimientoImpuestoRecurso()
 	{
-		System.out.println("(MOVIMIENTO IMPUESTO/RECURSO)");
-		System.out.println("CODTRN:|"+CODTRN+"|");
-		System.out.println("COTDOR:|"+COTDOR+"|");
-		System.out.println("IDPROV:|"+IDPROV+"|");
-		System.out.println("COACCI:|"+COACCI+"|");
-		System.out.println("COENGP:|"+COENGP+"|");
-		System.out.println("COACES:|"+COACES+"|");
-		System.out.println("NURCAT:|"+NURCAT+"|");
-		System.out.println("COGRUC:|"+COGRUC+"|");
-		System.out.println("COTACA:|"+COTACA+"|");
-		System.out.println("COSBAC:|"+COSBAC+"|");
-		System.out.println("BITC18:|"+BITC18+"|");
-		System.out.println("FEPRRE:|"+FEPRRE+"|");
-		System.out.println("BITC19:|"+BITC19+"|");
-		System.out.println("FERERE:|"+FERERE+"|");
-		System.out.println("BITC20:|"+BITC20+"|");
-		System.out.println("FEDEIN:|"+FEDEIN+"|");
-		System.out.println("BITC21:|"+BITC21+"|");
-		System.out.println("BISODE:|"+BISODE+"|");
-		System.out.println("BITC22:|"+BITC22+"|");
-		System.out.println("BIRESO:|"+BIRESO+"|");
-		System.out.println("COTEXA:|"+COTEXA+"|");
-		System.out.println("BITC09:|"+BITC09+"|");
-		System.out.println("OBTEXC:|"+OBTEXC+"|");
-		System.out.println("OBDEER:|"+OBDEER+"|");
+		return String.format("(MOVIMIENTO IMPUESTO/RECURSO)\nCODTRN:|%s|\nCOTDOR:|%s|\nIDPROV:|%s|\nCOACCI:|%s|\nCOENGP:|%s|\nCOACES:|%s|\nNURCAT:|%s|\nCOGRUC:|%s|\nCOTACA:|%s|\nCOSBAC:|%s|\nBITC18:|%s|\nFEPRRE:|%s|\nBITC19:|%s|\nFERERE:|%s|\nBITC20:|%s|\nFEDEIN:|%s|\nBITC21:|%s|\nBISODE:|%s|\nBITC22:|%s|\nBIRESO:|%s|\nCOTEXA:|%s|\nBITC09:|%s|\nOBTEXC:|%s|\nOBDEER:|%s|",CODTRN,COTDOR,IDPROV,COACCI,COENGP,COACES,NURCAT,COGRUC,COTACA,COSBAC,BITC18,FEPRRE,BITC19,FERERE,BITC20,FEDEIN,BITC21,BISODE,BITC22,BIRESO,COTEXA,BITC09,OBTEXC,OBDEER);
 	}
 }

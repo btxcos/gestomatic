@@ -19,15 +19,15 @@ public class Parser {
 	{
 
         String sResultado = sCampo;
-        
+ 
         while ((sResultado.startsWith("0")) && (sResultado.length() > 1) ) 
         {
         	sResultado=sResultado.substring(1);
         }
         
-        logger.debug(sResultado);
+        logger.debug("sResultado:|{}|",sResultado);
         
-		return sResultado;
+		return String.valueOf(Integer.parseInt(sCampo));
 	}
 
 	public static String limpiaCampoAlfanumerico(String sCampo)
@@ -43,7 +43,7 @@ public class Parser {
 		if (sResultado.length()==0)
 			sResultado = sValorBlanco;
 
-		logger.debug(sResultado);
+		 logger.debug("sResultado:|{}|",sResultado);
 		
 		return sResultado;
 	}
@@ -58,7 +58,7 @@ public class Parser {
         	sResultado="0"+sResultado;
         }
         
-        logger.debug(sResultado);
+        logger.debug("sResultado:|{}|",sResultado);
         
 		return sResultado;
 	}
@@ -73,7 +73,7 @@ public class Parser {
         	sResultado = sResultado+" ";
         }
         
-        logger.debug(sResultado);
+        logger.debug("sResultado:|{}|",sResultado);
         
 		return sResultado;
 	}
@@ -93,7 +93,7 @@ public class Parser {
 			
 		}
 		
-		logger.debug(sResultado);
+		 logger.debug("sResultado:|{}|",sResultado);
 		
 		return sResultado;
 	}

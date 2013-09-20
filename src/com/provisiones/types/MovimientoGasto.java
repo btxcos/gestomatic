@@ -552,52 +552,8 @@ public class MovimientoGasto
 	public void setNUCLII(String nUCLII) {
 		NUCLII = nUCLII;
 	}
-	public void pintaMovimientoGasto()
+	public String logMovimientoGasto()
 	{
-		System.out.println("(MOVIMIENTO GASTO)");
-		System.out.println("COACES:|"+COACES+"|");
-		System.out.println("COGRUG:|"+COGRUG+"|");
-		System.out.println("COTPGA:|"+COTPGA+"|");
-		System.out.println("COSBGA:|"+COSBGA+"|");
-		System.out.println("PTPAGO:|"+PTPAGO+"|");
-		System.out.println("FEDEVE:|"+FEDEVE+"|");
-		System.out.println("FFGTVP:|"+FFGTVP+"|");
-		System.out.println("FEPAGA:|"+FEPAGA+"|");
-		System.out.println("FELIPG:|"+FELIPG+"|");
-		System.out.println("COSIGA:|"+COSIGA+"|");
-		System.out.println("FEEESI:|"+FEEESI+"|");
-		System.out.println("FEECOI:|"+FEECOI+"|");
-		System.out.println("FEEAUI:|"+FEEAUI+"|");
-		System.out.println("FEEPAI:|"+FEEPAI+"|");
-		System.out.println("IMNGAS:|"+IMNGAS+"|");
-		System.out.println("YCOS02:|"+YCOS02+"|");
-		System.out.println("IMRGAS:|"+IMRGAS+"|");
-		System.out.println("YCOS04:|"+YCOS04+"|");
-		System.out.println("IMDGAS:|"+IMDGAS+"|");
-		System.out.println("YCOS06:|"+YCOS06+"|");
-		System.out.println("IMCOST:|"+IMCOST+"|");
-		System.out.println("YCOS08:|"+YCOS08+"|");
-		System.out.println("IMOGAS:|"+IMOGAS+"|");
-		System.out.println("YCOS10:|"+YCOS10+"|");
-		System.out.println("IMDTGA:|"+IMDTGA+"|");
-		System.out.println("COUNMO:|"+COUNMO+"|");
-		System.out.println("IMIMGA:|"+IMIMGA+"|");
-		System.out.println("COIMPT:|"+COIMPT+"|");
-		System.out.println("COTNEG:|"+COTNEG+"|");
-		System.out.println("COENCX:|"+COENCX+"|");
-		System.out.println("COOFCX:|"+COOFCX+"|");
-		System.out.println("NUCONE:|"+NUCONE+"|");
-		System.out.println("NUPROF:|"+NUPROF+"|");
-		System.out.println("FEAGTO:|"+FEAGTO+"|");
-		System.out.println("COMONA:|"+COMONA+"|");
-		System.out.println("BIAUTO:|"+BIAUTO+"|");
-		System.out.println("FEAUFA:|"+FEAUFA+"|");
-		System.out.println("COTERR:|"+COTERR+"|");
-		System.out.println("FMPAGN:|"+FMPAGN+"|");
-		System.out.println("FEPGPR:|"+FEPGPR+"|");
-		System.out.println("FEAPLI:|"+FEAPLI+"|");
-		System.out.println("COAPII:|"+COAPII+"|");
-		System.out.println("COSPII:|"+COSPII+"|");
-		System.out.println("NUCLII:|"+NUCLII+"|");
+		return String.format("(MOVIMIENTO GASTO)\nCOACES:|%s|\nCOGRUG:|%s|\nCOTPGA:|%s|\nCOSBGA:|%s|\nPTPAGO:|%s|\nFEDEVE:|%s|\nFFGTVP:|%s|\nFEPAGA:|%s|\nFELIPG:|%s|\nCOSIGA:|%s|\nFEEESI:|%s|\nFEECOI:|%s|\nFEEAUI:|%s|\nFEEPAI:|%s|\nIMNGAS:|%s|\nYCOS02:|%s|\nIMRGAS:|%s|\nYCOS04:|%s|\nIMDGAS:|%s|\nYCOS06:|%s|\nIMCOST:|%s|\nYCOS08:|%s|\nIMOGAS:|%s|\nYCOS10:|%s|\nIMDTGA:|%s|\nCOUNMO:|%s|\nIMIMGA:|%s|\nCOIMPT:|%s|\nCOTNEG:|%s|\nCOENCX:|%s|\nCOOFCX:|%s|\nNUCONE:|%s|\nNUPROF:|%s|\nFEAGTO:|%s|\nCOMONA:|%s|\nBIAUTO:|%s|\nFEAUFA:|%s|\nCOTERR:|%s|\nFMPAGN:|%s|\nFEPGPR:|%s|\nFEAPLI:|%s|\nCOAPII:|%s|\nCOSPII:|%s|\nNUCLII:|%s|",COACES,COGRUG,COTPGA,COSBGA,PTPAGO,FEDEVE,FFGTVP,FEPAGA,FELIPG,COSIGA,FEEESI,FEECOI,FEEAUI,FEEPAI,IMNGAS,YCOS02,IMRGAS,YCOS04,IMDGAS,YCOS06,IMCOST,YCOS08,IMOGAS,YCOS10,IMDTGA,COUNMO,IMIMGA,COIMPT,COTNEG,COENCX,COOFCX,NUCONE,NUPROF,FEAGTO,COMONA,BIAUTO,FEAUFA,COTERR,FMPAGN,FEPGPR,FEAPLI,COAPII,COSPII,NUCLII);
 	} 
 }

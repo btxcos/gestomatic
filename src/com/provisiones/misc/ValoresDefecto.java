@@ -56,7 +56,7 @@ public class ValoresDefecto
 	public static final String DEF_GASTO_CONOCIDO = "2";
 	
 	public static final String DEF_COTERR = "0";
-	public static final String DEF_COTDOR = "0";
+	public static final String DEF_COTDOR = "000";
 	public static final String DEF_OBDEER = "                                                                                ";
 
 	public static final String DEF_COENCX = "0";

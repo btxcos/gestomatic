@@ -307,7 +307,7 @@ public class CLGastos
 	{
 		Gasto gasto = QMGastos.getGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 		
-		movimiento.pintaMovimientoGasto();
+		logger.debug(movimiento.logMovimientoGasto());
 	
 		MovimientoGasto movimiento_revisado = new MovimientoGasto("0","0","0","0","","0","0","0","0","0","0","0","0","0","0","","0","","0","","0","","0","","0","0","0","0","0","0","0","0","0","0","0","","0","0","0","0","0","","","0");
 		
@@ -701,7 +701,7 @@ public class CLGastos
 		
 		logger.debug("Revisado! Nuevo movimiento:");
 		
-		movimiento_revisado.pintaMovimientoGasto();
+		logger.debug(movimiento_revisado.logMovimientoGasto());
 		
 		return movimiento_revisado;
 
@@ -954,7 +954,7 @@ public class CLGastos
 							Gasto gastonuevo = convierteMovimientoenGasto(movimiento_revisado);
 
 							logger.debug("Dando de alta la cuota...");
-							gastonuevo.pintaGasto();
+							logger.debug(gastonuevo.logGasto());
 						
 							if (QMGastos.addGasto(gastonuevo,movimiento_revisado.getCOSIGA()))
 							{

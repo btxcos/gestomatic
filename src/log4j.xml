@@ -8,7 +8,7 @@
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="logs/provisiones.log" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d  %-5p  [%c{1}] %m %n" />
+            <param name="ConversionPattern" value="%d  %-5p  [%c{1}] %m%n" />
         </layout>
     </appender>
     <appender name="uneFicherosError" class="org.apache.log4j.RollingFileAppender">
@@ -17,7 +17,7 @@
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="logs/provisiones.log" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d %-5p [%c:%M:%L] %m %n" />
+            <param name="ConversionPattern" value="%d %-5p [%c:%M:%L] %m%n" />
         </layout>
     </appender>
     <appender name="loggerSinLinea" class="org.apache.log4j.RollingFileAppender">
@@ -26,11 +26,11 @@
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="logs/provisiones.log" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d %-5p [%c:%M] %m %n" />
+            <param name="ConversionPattern" value="%d %-5p [%c:%M] %m%n" />
         </layout>
     </appender> 
     <root>
-        <priority value="info" />
+        <priority value="debug" />
         <appender-ref ref="loggerSinLinea" />
     </root>
 </log4j:configuration>

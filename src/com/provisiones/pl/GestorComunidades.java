@@ -236,7 +236,7 @@ public class GestorComunidades implements Serializable
 					sOBTEXC.toUpperCase(), 
 					sOBDEER.toUpperCase());
 			
-			movimiento.pintaMovimientoComunidad();
+			logger.debug(movimiento.logMovimientoComunidad());
 			
 			int iSalida = CLComunidades.registraMovimiento(movimiento);
 			
