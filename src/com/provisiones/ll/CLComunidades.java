@@ -26,9 +26,9 @@ public class CLComunidades
 	private static Logger logger = LoggerFactory.getLogger(CLComunidades.class.getName());
 	
 
-	public static boolean actualizaComunidadLeida(String linea)
+	public static int actualizaComunidadLeida(String linea)
 	{
-		boolean bSalida = false;
+		int iCodigo = 0;
 		
 		MovimientoComunidad comunidad = Parser.leerComunidad(linea);
 		
@@ -46,7 +46,31 @@ public class CLComunidades
 		
 		if (!(sCodMovimiento.equals("")))
 		{
+			ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(comunidad.getCOACCI());
 			
+			boolean bEnviado = false;
+			
+			switch (COACCI)
+			{
+			case X:case E:
+				bEnviado = QMListaComunidadesActivos.getValidado(sCodMovimiento).equals("E");
+				break;
+
+			case A:
+				bEnviado = (QMListaComunidadesActivos.getValidado(sCodMovimiento).equals("E") 
+						&& QMListaComunidades.getValidado(sCodMovimiento).equals("E"));
+				break;
+
+			case M: case B:
+				bEnviado = QMListaComunidades.getValidado(sCodMovimiento).equals("E");
+				break;
+				
+			default:
+				logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",comunidad.getCOACCI());
+				iCodigo = -9;
+				break;
+			}
+		
 			if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
 			{
 				sValidado = "V";
@@ -62,7 +86,7 @@ public class CLComunidades
 			
 			logger.debug(comunidad.logMovimientoComunidad());
 			
-			ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(comunidad.getCOACCI());
+			
 			
 			logger.debug("comunidad.getCOACCI()|{}|",comunidad.getCOACCI());
 			
@@ -73,40 +97,33 @@ public class CLComunidades
 				{
 					if (QMListaComunidadesActivos.setValidado(sCodMovimiento, sValidado))
 					{
-
 						if (sValidado.equals("X"))
 						{
-							//recibido error
-							bSalida = QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR());
-							
-							if (bSalida)
+							//recibido un error
+							if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
 							{
-								logger.info("Movimiento erroneo registrado.");
+								iCodigo = 2;
 							}
 							else
 							{
-								logger.error("Error al modificar el movimiento.");
 								QMListaComunidadesActivos.setValidado(sCodMovimiento, "E");
+								iCodigo = -3;
 							}
-							
 						}
 						else
 						{
-							//recibido OK
+							//recibido un OK
 							logger.info("Movimiento validado.");
-							bSalida = true;
 						}
-
 					}
 					else
 					{
-						logger.error("Error al validar la reclación con el activo.");
+						iCodigo = -8;
 					}
-
 				}
 				else
 				{
-					logger.error("No Existe relación.");
+					iCodigo = -6;
 				}
 				break;
 			case A:
@@ -123,17 +140,16 @@ public class CLComunidades
 								if (sValidado.equals("X"))
 								{
 									//recibido error
-									bSalida = QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR());
-									
-									if (bSalida)
+									if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
 									{
-										logger.info("Movimiento erroneo registrado.");
+										iCodigo = 1;
 									}
 									else
 									{
-										logger.error("Error al modificar el movimiento.");
+										
 										QMListaComunidadesActivos.setValidado(sCodMovimiento, "E");
 										QMListaComunidades.setValidado(sCodMovimiento, "E");
+										iCodigo = -2;
 									}
 									
 								}
@@ -141,31 +157,33 @@ public class CLComunidades
 								{
 									//recibido OK
 									logger.info("Movimiento validado.");
-									bSalida = true;
 								}
 
 							}
 							else
 							{
-								logger.error("Error al validar la reclación con el activo.");
+								
 								QMListaComunidades.setValidado(sCodMovimiento, "E");
+								iCodigo = -8;
 							}
 
 						}
 						else
 						{
-							logger.error("Error al validar la reclación con la comunidad.");
+							iCodigo = -7;
 						}
 
 					}
 					else
 					{
-						logger.error("No Existe relación.");
+						
+						iCodigo = -6;						
 					}
 				}
 				else
 				{
-					logger.error("No Existe relación con esa comunidad.");
+					
+					iCodigo = -5;
 				}
 				break;
 			case M: case B:
@@ -176,40 +194,37 @@ public class CLComunidades
 						if (sValidado.equals("X"))
 						{
 							//recibido error
-							bSalida = QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR());
-							
-							if (bSalida)
+							if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
 							{
-								logger.info("Movimiento erroneo registrado.");
+								iCodigo = 3;
 							}
 							else
 							{
-								logger.error("Error al modificar el movimiento.");
+								
 								QMListaComunidades.setValidado(sCodMovimiento, "E");
+								iCodigo = -4;
 							}
 						}
 						else
 						{
 							//recibido OK
 							logger.info("Movimiento validado.");
-							bSalida = true;
 						}
-						
-
 					}
 					else
 					{
-						logger.error("Error al validar la reclación con la comunidad.");
+						iCodigo = -7;
 					}
 				}
 				else
 				{
-					logger.error("No Existe relación con esa comunidad.");
+					iCodigo = -5;
 				}
 				break;
 				
 			default:
 				logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",comunidad.getCOACCI());
+				iCodigo = -9;
 				break;
 			
 			}
@@ -222,13 +237,14 @@ public class CLComunidades
 		}
 		else 
 		{
-
-
 			logger.error("El siguiente registro no se encuentra en el sistema:");
-			logger.error("|"+linea+"|");
+			logger.error("|{}|",linea);
+			iCodigo = -1;
 		}
 		
-		return bSalida;
+		logger.error("iCodigo:|{}|",iCodigo);
+		
+		return iCodigo;
 	}
 	
 	public static ArrayList<ActivoTabla> buscarActivosComunidad (String sCodCOCLDO, String sCodNUDCOM)

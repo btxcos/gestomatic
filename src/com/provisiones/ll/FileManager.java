@@ -1,5 +1,8 @@
 package com.provisiones.ll;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,25 +20,29 @@ import java.util.HashSet;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.qm.QMProvisiones;
+
 import com.provisiones.dal.qm.listas.QMListaComunidades;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.listas.QMListaReferencias;
+
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
+
 import com.provisiones.misc.Longitudes;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+
+import com.provisiones.types.Carga;
+import com.provisiones.types.CargaTabla;
 import com.provisiones.types.Provision;
 
 public class FileManager 
@@ -667,13 +674,14 @@ public class FileManager
         return bSalida;
 	}
 
-	public static boolean leerComunidadesRevisadas(String sNombre)
+	public static ArrayList<CargaTabla> leerComunidadesRevisadas(String sNombre)
 	{
-		boolean bSalida = false;
 		
-		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
+		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		
+		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
 		
 		FileReader fr;
 		try 
@@ -694,7 +702,6 @@ public class FileManager
 
 			int contador= 0 ;
 			int registros = 0;
-			bSalida = true;
 			
 			int iLongitudValida = Longitudes.COMUNIDADES_L-Longitudes.FILLER_COMUNIDADES_L-Longitudes.OBDEER_L;
 				
@@ -717,8 +724,82 @@ public class FileManager
 	    		}
 	    		else
 	    		{
-	    			if (CLComunidades.actualizaComunidadLeida(linea))
+	    			int iCodigo = CLComunidades.actualizaComunidadLeida(linea);
+	    			String sMensaje = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sMensaje = "Movimiento validado.";
+	    				logger.info("Linea {}: {}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case 1:
+	    				sMensaje = "Movimento erroneo en alta de comunidad registrado.";
+	    				logger.info("Linea {}: {}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case 2:
+	    				sMensaje = "Movimiento erroneo en cambio de activos registrado.";
+	    				logger.info("Linea {}: {}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case 3:
+	    				sMensaje = "Movimiento erroneo en modificación o baja de comunidad registrado.";
+	    				logger.info("Linea {}: {}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -1:
+	    				sMensaje = "Registro no encontrado en el sistema.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -2:
+	    				sMensaje = "Error al registrar el error en alta de comunidad.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -3:
+	    				sMensaje = "Error al registrar el error en cambio de activos.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -4:
+	    				sMensaje = "Error al registrar el error en modificación o baja de comunidad.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -5:
+	    				sMensaje = "No Existe relación con la comunidad.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -6:
+	    				sMensaje = "No Existe relación activo-comunidad.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -7:
+	    				sMensaje = "[FATAL] Error al validar la reclación con la comunidad.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -8:
+	    				sMensaje = "[FATAL] Error al validar la relación activo-comunidad.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			case -9:
+	    				sMensaje = "[FATAL] Accion desconocida.";
+	    				logger.error("Linea {}:{}",contador,sMensaje);
+	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				break;
+	    			}
+	    			if ( iCodigo >= 0 )
 	    				registros++;
+	    			
+	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
+	    			tabla.add(mensajes);
 	    		}
 	        }
 		
@@ -726,7 +807,7 @@ public class FileManager
 		
 			logger.debug("Contador:|{}|\n Registros:|{}|",contador,registros);
 			
-			bSalida = ((contador-registros-1) == 0);
+			//bSalida = ((contador-registros-1) == 0);
 			
 			logger.debug( "Lectura de {} finalizada.",sNombre);
 			logger.debug( "Actualizados {} registros.",registros);
@@ -746,7 +827,9 @@ public class FileManager
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-        return bSalida;
+		logger.debug("tabla.size():|{}|",tabla.size());
+		
+        return tabla;
 	}
 	
 	public static boolean leerCuotasRevisadas(String sNombre) 
@@ -958,10 +1041,13 @@ public class FileManager
         return bSalida;
 	}
 	
-	public static int splitter(String sNombre) throws IOException 
+	public static Carga splitter(String sNombre) 
 	{
 		int iCodigo = 0;
-
+		Carga carga;
+		
+		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		
 		logger.debug("|{}|{}|",sNombre,sNombre.substring(0, 3));
 		
 		
@@ -976,8 +1062,7 @@ public class FileManager
 			
 			if (sNombreOriginal.toUpperCase().matches("("+ValoresDefecto.DEF_COAPII+")(AC|RG|PA|GA|PP|E1|E2|E3|E4)(\\.TXT)$"))
 			{
-				
-				
+
 				String sTipo = sNombreOriginal.substring(3, 5).toUpperCase();
 
 				logger.debug("Redirigiendo lectura...");
@@ -1032,8 +1117,9 @@ public class FileManager
 					break;
 				case E1:
 					logger.debug("Comunidades");
-
-					if (!leerComunidadesRevisadas(sNombre))
+					tabla = leerComunidadesRevisadas(sNombre);
+					logger.debug("tabla.size():|{}|",tabla.size());
+					if (tabla.size() == 0)
 					{
 						iCodigo = 6;
 					}
@@ -1074,13 +1160,16 @@ public class FileManager
 			} 
 			else
 			{
-				iCodigo = -2;
+				iCodigo = -1;
 				logger.error("El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
 				//lista = new ArrayList<String>();
 			}
 			
 
 		}
-		return iCodigo;
+		
+		carga = new Carga(iCodigo,tabla);
+		
+		return carga;
 	}
 }
