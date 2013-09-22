@@ -82,7 +82,7 @@ public class GestorErroresComunidad implements Serializable
 	
 	public GestorErroresComunidad()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
+		encuentraErroresComunidad();
 	}
 
     public void borrarPlantillaActivo() 
@@ -146,6 +146,42 @@ public class GestorErroresComunidad implements Serializable
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
+	
+	public void buscaErrores(ActionEvent actionEvent)
+	{
+		encuentraErroresComunidad();
+	}
+	
+	public void seleccionarError(ActionEvent actionEvent) 
+    {  
+		FacesMessage msg;
+		
+		String sMovimiento = errorseleccionado.getMOVIMIENTO();
+    	
+		
+		MovimientoComunidad movimiento = CLComunidades.buscarMovimientoComunidad(sMovimiento);
+		
+		this.sCOCLDO = movimiento.getCOCLDO();
+		this.sNUDCOM = movimiento.getNUDCOM();
+		this.sNOMCOC = movimiento.getNOMCOC();
+		this.sNODCCO = movimiento.getNODCCO();
+		this.sNOMPRC = movimiento.getNOMPRC();
+		this.sNUTPRC = movimiento.getNUTPRC();
+		this.sNOMADC = movimiento.getNOMADC();
+		this.sNUTADC = movimiento.getNUTADC();
+		this.sNODCAD = movimiento.getNODCAD();
+		this.sNUCCEN = movimiento.getNUCCEN();
+		this.sNUCCOF = movimiento.getNUCCOF();
+		this.sNUCCDI = movimiento.getNUCCDI();
+		this.sNUCCNT = movimiento.getNUCCNT();
+		this.sOBTEXC = movimiento.getOBTEXC();
+				
+        	
+    	msg = Utils.pfmsgInfo("Registro erroneo cargado.");
+    	logger.debug("Registro erroneo cargado.");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  

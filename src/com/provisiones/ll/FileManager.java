@@ -120,7 +120,7 @@ public class FileManager
 
             for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
             {
-                pw.println(Parser.escribirComunidad(QMMovimientosComunidades.getMovimientoComunidad(resultcomunidadesactivos.get(i))));
+                pw.println(Parser.escribirComunidad(CLComunidades.buscarMovimientoComunidad(resultcomunidadesactivos.get(i))));
             }
 
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);

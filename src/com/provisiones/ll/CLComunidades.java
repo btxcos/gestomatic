@@ -251,6 +251,12 @@ public class CLComunidades
 		return QMListaComunidadesActivos.buscaComunidadPorActivo(sCodCOACES);
 	}
 	
+	public static MovimientoComunidad buscarMovimientoComunidad (String sCodMovimiento)
+	{
+
+		return QMMovimientosComunidades.getMovimientoComunidad(sCodMovimiento);
+	}
+	
 	public static long buscarNumeroMovimientosComunidadesPendientes()
 	{
 		return (QMListaComunidadesActivos.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE) 
