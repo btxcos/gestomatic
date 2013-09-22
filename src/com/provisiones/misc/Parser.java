@@ -331,50 +331,50 @@ public class Parser {
 	public static MovimientoGasto leerGasto (String linea)
 	{
 
-		String sCOACES = linea.substring(Posiciones.GA_COACES_P, Posiciones.GA_COACES_P+Longitudes.COACES_L);
-		String sCOGRUG = linea.substring(Posiciones.GA_COGRUG_P, Posiciones.GA_COGRUG_P+Longitudes.COGRUG_L);
-		String sCOTPGA = linea.substring(Posiciones.GA_COTPGA_P, Posiciones.GA_COTPGA_P+Longitudes.COTPGA_L);
-		String sCOSBGA = linea.substring(Posiciones.GA_COSBGA_P, Posiciones.GA_COSBGA_P+Longitudes.COSBGA_L);
+		String sCOACES = limpiaCampoNumerico(linea.substring(Posiciones.GA_COACES_P, Posiciones.GA_COACES_P+Longitudes.COACES_L));
+		String sCOGRUG = limpiaCampoNumerico(linea.substring(Posiciones.GA_COGRUG_P, Posiciones.GA_COGRUG_P+Longitudes.COGRUG_L));
+		String sCOTPGA = limpiaCampoNumerico(linea.substring(Posiciones.GA_COTPGA_P, Posiciones.GA_COTPGA_P+Longitudes.COTPGA_L));
+		String sCOSBGA = limpiaCampoNumerico(linea.substring(Posiciones.GA_COSBGA_P, Posiciones.GA_COSBGA_P+Longitudes.COSBGA_L));
 		String sPTPAGO = linea.substring(Posiciones.GA_PTPAGO_P, Posiciones.GA_PTPAGO_P+Longitudes.PTPAGO_L);
 		String sFEDEVE = linea.substring(Posiciones.GA_FEDEVE_P, Posiciones.GA_FEDEVE_P+Longitudes.FEDEVE_L);
 		String sFFGTVP = linea.substring(Posiciones.GA_FFGTVP_P, Posiciones.GA_FFGTVP_P+Longitudes.FFGTVP_L);
 		String sFEPAGA = linea.substring(Posiciones.GA_FEPAGA_P, Posiciones.GA_FEPAGA_P+Longitudes.FEPAGA_L);
 		String sFELIPG = linea.substring(Posiciones.GA_FELIPG_P, Posiciones.GA_FELIPG_P+Longitudes.FELIPG_L);
-		String sCOSIGA = linea.substring(Posiciones.GA_COSIGA_P, Posiciones.GA_COSIGA_P+Longitudes.COSIGA_L);
+		String sCOSIGA = limpiaCampoNumerico(linea.substring(Posiciones.GA_COSIGA_P, Posiciones.GA_COSIGA_P+Longitudes.COSIGA_L));
 		String sFEEESI = linea.substring(Posiciones.GA_FEEESI_P, Posiciones.GA_FEEESI_P+Longitudes.FEEESI_L);
 		String sFEECOI = linea.substring(Posiciones.GA_FEECOI_P, Posiciones.GA_FEECOI_P+Longitudes.FEECOI_L);
 		String sFEEAUI = linea.substring(Posiciones.GA_FEEAUI_P, Posiciones.GA_FEEAUI_P+Longitudes.FEEAUI_L);
 		String sFEEPAI = linea.substring(Posiciones.GA_FEEPAI_P, Posiciones.GA_FEEPAI_P+Longitudes.FEEPAI_L);
-		String sIMNGAS = linea.substring(Posiciones.GA_IMNGAS_P, Posiciones.GA_IMNGAS_P+Longitudes.IMNGAS_L);
+		String sIMNGAS = limpiaCampoNumerico(linea.substring(Posiciones.GA_IMNGAS_P, Posiciones.GA_IMNGAS_P+Longitudes.IMNGAS_L));
 		String sYCOS02 = linea.substring(Posiciones.GA_YCOS02_P, Posiciones.GA_YCOS02_P+Longitudes.YCOS02_L);
-		String sIMRGAS = linea.substring(Posiciones.GA_IMRGAS_P, Posiciones.GA_IMRGAS_P+Longitudes.IMRGAS_L);
+		String sIMRGAS = limpiaCampoNumerico(linea.substring(Posiciones.GA_IMRGAS_P, Posiciones.GA_IMRGAS_P+Longitudes.IMRGAS_L));
 		String sYCOS04 = linea.substring(Posiciones.GA_YCOS04_P, Posiciones.GA_YCOS04_P+Longitudes.YCOS04_L);
-		String sIMDGAS = linea.substring(Posiciones.GA_IMDGAS_P, Posiciones.GA_IMDGAS_P+Longitudes.IMDGAS_L);
+		String sIMDGAS = limpiaCampoNumerico(linea.substring(Posiciones.GA_IMDGAS_P, Posiciones.GA_IMDGAS_P+Longitudes.IMDGAS_L));
 		String sYCOS06 = linea.substring(Posiciones.GA_YCOS06_P, Posiciones.GA_YCOS06_P+Longitudes.YCOS06_L);
-		String sIMCOST = linea.substring(Posiciones.GA_IMCOST_P, Posiciones.GA_IMCOST_P+Longitudes.IMCOST_L);
+		String sIMCOST = limpiaCampoNumerico(linea.substring(Posiciones.GA_IMCOST_P, Posiciones.GA_IMCOST_P+Longitudes.IMCOST_L));
 		String sYCOS08 = linea.substring(Posiciones.GA_YCOS08_P, Posiciones.GA_YCOS08_P+Longitudes.YCOS08_L);
-		String sIMOGAS = linea.substring(Posiciones.GA_IMOGAS_P, Posiciones.GA_IMOGAS_P+Longitudes.IMOGAS_L);
+		String sIMOGAS = limpiaCampoNumerico(linea.substring(Posiciones.GA_IMOGAS_P, Posiciones.GA_IMOGAS_P+Longitudes.IMOGAS_L));
 		String sYCOS10 = linea.substring(Posiciones.GA_YCOS10_P, Posiciones.GA_YCOS10_P+Longitudes.YCOS10_L);
-		String sIMDTGA = linea.substring(Posiciones.GA_IMDTGA_P, Posiciones.GA_IMDTGA_P+Longitudes.IMDTGA_L);
+		String sIMDTGA = limpiaCampoNumerico(linea.substring(Posiciones.GA_IMDTGA_P, Posiciones.GA_IMDTGA_P+Longitudes.IMDTGA_L));
 		String sCOUNMO = linea.substring(Posiciones.GA_COUNMO_P, Posiciones.GA_COUNMO_P+Longitudes.COUNMO_L);
-		String sIMIMGA = linea.substring(Posiciones.GA_IMIMGA_P, Posiciones.GA_IMIMGA_P+Longitudes.IMIMGA_L);
-		String sCOIMPT = linea.substring(Posiciones.GA_COIMPT_P, Posiciones.GA_COIMPT_P+Longitudes.COIMPT_L);
-		String sCOTNEG = linea.substring(Posiciones.GA_COTNEG_P, Posiciones.GA_COTNEG_P+Longitudes.COTNEG_L);
-		String sCOENCX = linea.substring(Posiciones.GA_COENCX_P, Posiciones.GA_COENCX_P+Longitudes.COENCX_L);
-		String sCOOFCX = linea.substring(Posiciones.GA_COOFCX_P, Posiciones.GA_COOFCX_P+Longitudes.COOFCX_L);
-		String sNUCONE = linea.substring(Posiciones.GA_NUCONE_P, Posiciones.GA_NUCONE_P+Longitudes.NUCONE_L);
-		String sNUPROF = linea.substring(Posiciones.GA_NUPROF_P, Posiciones.GA_NUPROF_P+Longitudes.NUPROF_L);
+		String sIMIMGA = limpiaCampoNumerico(linea.substring(Posiciones.GA_IMIMGA_P, Posiciones.GA_IMIMGA_P+Longitudes.IMIMGA_L));
+		String sCOIMPT = limpiaCampoNumerico(linea.substring(Posiciones.GA_COIMPT_P, Posiciones.GA_COIMPT_P+Longitudes.COIMPT_L));
+		String sCOTNEG = limpiaCampoNumerico(linea.substring(Posiciones.GA_COTNEG_P, Posiciones.GA_COTNEG_P+Longitudes.COTNEG_L));
+		String sCOENCX = limpiaCampoNumerico(linea.substring(Posiciones.GA_COENCX_P, Posiciones.GA_COENCX_P+Longitudes.COENCX_L));
+		String sCOOFCX = limpiaCampoNumerico(linea.substring(Posiciones.GA_COOFCX_P, Posiciones.GA_COOFCX_P+Longitudes.COOFCX_L));
+		String sNUCONE = limpiaCampoNumerico(linea.substring(Posiciones.GA_NUCONE_P, Posiciones.GA_NUCONE_P+Longitudes.NUCONE_L));
+		String sNUPROF = limpiaCampoNumerico(linea.substring(Posiciones.GA_NUPROF_P, Posiciones.GA_NUPROF_P+Longitudes.NUPROF_L));
 		String sFEAGTO = linea.substring(Posiciones.GA_FEAGTO_P, Posiciones.GA_FEAGTO_P+Longitudes.FEAGTO_L);
-		String sCOMONA = linea.substring(Posiciones.GA_COMONA_P, Posiciones.GA_COMONA_P+Longitudes.COMONA_L);
+		String sCOMONA = limpiaCampoNumerico(linea.substring(Posiciones.GA_COMONA_P, Posiciones.GA_COMONA_P+Longitudes.COMONA_L));
 		String sBIAUTO = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.GA_BIAUTO_P, Posiciones.GA_BIAUTO_P+Longitudes.BIAUTO_L),"0");
 		String sFEAUFA = linea.substring(Posiciones.GA_FEAUFA_P, Posiciones.GA_FEAUFA_P+Longitudes.FEAUFA_L);
-		String sCOTERR = linea.substring(Posiciones.GA_COTERR_P, Posiciones.GA_COTERR_P+Longitudes.COTERR_L);
+		String sCOTERR = limpiaCampoNumerico(linea.substring(Posiciones.GA_COTERR_P, Posiciones.GA_COTERR_P+Longitudes.COTERR_L));
 		String sFMPAGN = linea.substring(Posiciones.GA_FMPAGN_P, Posiciones.GA_FMPAGN_P+Longitudes.FMPAGN_L);
 		String sFEPGPR = linea.substring(Posiciones.GA_FEPGPR_P, Posiciones.GA_FEPGPR_P+Longitudes.FEPGPR_L);
 		String sFEAPLI = linea.substring(Posiciones.GA_FEAPLI_P, Posiciones.GA_FEAPLI_P+Longitudes.FEAPLI_L);
 		String sCOAPII = linea.substring(Posiciones.GA_COAPII_P, Posiciones.GA_COAPII_P+Longitudes.COAPII_L);
 		String sCOSPII = linea.substring(Posiciones.GA_COSPII_P, Posiciones.GA_COSPII_P+Longitudes.COSPII_L);
-		String sNUCLII = linea.substring(Posiciones.GA_NUCLII_P, Posiciones.GA_NUCLII_P+Longitudes.NUCLII_L);
+		String sNUCLII = limpiaCampoNumerico(linea.substring(Posiciones.GA_NUCLII_P, Posiciones.GA_NUCLII_P+Longitudes.NUCLII_L));
 		
 		
 		return new MovimientoGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
@@ -452,14 +452,14 @@ public class Parser {
 	{
 
 		String sCODTRN = linea.substring(Posiciones.E1_CODTRN_P, Posiciones.E1_CODTRN_P+Longitudes.CODTRN_L);
-		String sCOTDOR = linea.substring(Posiciones.E1_COTDOR_P, Posiciones.E1_COTDOR_P+Longitudes.COTDOR_L);
-		String sIDPROV = linea.substring(Posiciones.E1_IDPROV_P, Posiciones.E1_IDPROV_P+Longitudes.IDPROV_L);
+		String sCOTDOR = limpiaCampoNumerico(linea.substring(Posiciones.E1_COTDOR_P, Posiciones.E1_COTDOR_P+Longitudes.COTDOR_L));
+		String sIDPROV = limpiaCampoNumerico(linea.substring(Posiciones.E1_IDPROV_P, Posiciones.E1_IDPROV_P+Longitudes.IDPROV_L));
 		String sCOACCI = linea.substring(Posiciones.E1_COACCI_P, Posiciones.E1_COACCI_P+Longitudes.COACCI_L);
-		String sCOENGP = linea.substring(Posiciones.E1_COENGP_P, Posiciones.E1_COENGP_P+Longitudes.COENGP_L);
+		String sCOENGP = limpiaCampoNumerico(linea.substring(Posiciones.E1_COENGP_P, Posiciones.E1_COENGP_P+Longitudes.COENGP_L));
 		String sCOCLDO = linea.substring(Posiciones.E1_COCLDO_P, Posiciones.E1_COCLDO_P+Longitudes.COCLDO_L);
 		String sNUDCOM = linea.substring(Posiciones.E1_NUDCOM_P, Posiciones.E1_NUDCOM_P+Longitudes.NUDCOM_L).trim();
 		String sBITC10 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC10_P, Posiciones.E1_BITC10_P+Longitudes.BITC10_L),"#");
-		String sCOACES = linea.substring(Posiciones.E1_COACES_P, Posiciones.E1_COACES_P+Longitudes.COACES_L);
+		String sCOACES = limpiaCampoNumerico(linea.substring(Posiciones.E1_COACES_P, Posiciones.E1_COACES_P+Longitudes.COACES_L));
 		String sBITC01 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC01_P, Posiciones.E1_BITC01_P+Longitudes.BITC01_L),"#");
 		String sNOMCOC = linea.substring(Posiciones.E1_NOMCOC_P, Posiciones.E1_NOMCOC_P+Longitudes.NOMCOC_L).trim();
 		String sBITC02 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC02_P, Posiciones.E1_BITC02_P+Longitudes.BITC02_L),"#");
@@ -475,10 +475,10 @@ public class Parser {
 		String sBITC07 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC07_P, Posiciones.E1_BITC07_P+Longitudes.BITC07_L),"#");
 		String sNODCAD = linea.substring(Posiciones.E1_NODCAD_P, Posiciones.E1_NODCAD_P+Longitudes.NODCAD_L).trim();
 		String sBITC08 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC08_P, Posiciones.E1_BITC08_P+Longitudes.BITC08_L),"#");
-		String sNUCCEN = linea.substring(Posiciones.E1_NUCCEN_P, Posiciones.E1_NUCCEN_P+Longitudes.NUCCEN_L);
-		String sNUCCOF = linea.substring(Posiciones.E1_NUCCOF_P, Posiciones.E1_NUCCOF_P+Longitudes.NUCCOF_L);
-		String sNUCCDI = linea.substring(Posiciones.E1_NUCCDI_P, Posiciones.E1_NUCCDI_P+Longitudes.NUCCDI_L);
-		String sNUCCNT = linea.substring(Posiciones.E1_NUCCNT_P, Posiciones.E1_NUCCNT_P+Longitudes.NUCCNT_L);
+		String sNUCCEN = limpiaCampoNumerico(linea.substring(Posiciones.E1_NUCCEN_P, Posiciones.E1_NUCCEN_P+Longitudes.NUCCEN_L));
+		String sNUCCOF = limpiaCampoNumerico(linea.substring(Posiciones.E1_NUCCOF_P, Posiciones.E1_NUCCOF_P+Longitudes.NUCCOF_L));
+		String sNUCCDI = limpiaCampoNumerico(linea.substring(Posiciones.E1_NUCCDI_P, Posiciones.E1_NUCCDI_P+Longitudes.NUCCDI_L));
+		String sNUCCNT = limpiaCampoNumerico(linea.substring(Posiciones.E1_NUCCNT_P, Posiciones.E1_NUCCNT_P+Longitudes.NUCCNT_L));
 		String sBITC09 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E1_BITC09_P, Posiciones.E1_BITC09_P+Longitudes.BITC09_L),"#");
 		String sOBTEXC = linea.substring(Posiciones.E1_OBTEXC_P, Posiciones.E1_OBTEXC_P+Longitudes.OBTEXC_L).trim();
 		//String sOBDEER = linea.substring(Posiciones.E1_OBDEER_P, Posiciones.E1_OBDEER_P+Longitudes.OBDEER_L);
@@ -542,28 +542,28 @@ public class Parser {
 	{
 
 		String sCODTRN = linea.substring(Posiciones.E2_CODTRN_P, Posiciones.E2_CODTRN_P+Longitudes.CODTRN_L);
-		String sCOTDOR = linea.substring(Posiciones.E2_COTDOR_P, Posiciones.E2_COTDOR_P+Longitudes.COTDOR_L);
-		String sIDPROV = linea.substring(Posiciones.E2_IDPROV_P, Posiciones.E2_IDPROV_P+Longitudes.IDPROV_L);
+		String sCOTDOR = limpiaCampoNumerico(linea.substring(Posiciones.E2_COTDOR_P, Posiciones.E2_COTDOR_P+Longitudes.COTDOR_L));
+		String sIDPROV = limpiaCampoNumerico(linea.substring(Posiciones.E2_IDPROV_P, Posiciones.E2_IDPROV_P+Longitudes.IDPROV_L));
 		String sCOACCI = linea.substring(Posiciones.E2_COACCI_P, Posiciones.E2_COACCI_P+Longitudes.COACCI_L);
 		String sCOCLDO = linea.substring(Posiciones.E2_COCLDO_P, Posiciones.E2_COCLDO_P+Longitudes.COCLDO_L);
-		String sNUDCOM = linea.substring(Posiciones.E2_NUDCOM_P, Posiciones.E2_NUDCOM_P+Longitudes.NUDCOM_L);
-		String sCOENGP = linea.substring(Posiciones.E2_COENGP_P, Posiciones.E2_COENGP_P+Longitudes.COENGP_L);
-		String sCOACES = linea.substring(Posiciones.E2_COACES_P, Posiciones.E2_COACES_P+Longitudes.COACES_L);
-		String sCOGRUG = linea.substring(Posiciones.E2_COGRUG_P, Posiciones.E2_COGRUG_P+Longitudes.COGRUG_L);
-		String sCOTACA = linea.substring(Posiciones.E2_COTACA_P, Posiciones.E2_COTACA_P+Longitudes.COTACA_L);
-		String sCOSBAC = linea.substring(Posiciones.E2_COSBAC_P, Posiciones.E2_COSBAC_P+Longitudes.COSBAC_L);
+		String sNUDCOM = linea.substring(Posiciones.E2_NUDCOM_P, Posiciones.E2_NUDCOM_P+Longitudes.NUDCOM_L).trim();
+		String sCOENGP = limpiaCampoNumerico(linea.substring(Posiciones.E2_COENGP_P, Posiciones.E2_COENGP_P+Longitudes.COENGP_L));
+		String sCOACES = limpiaCampoNumerico(linea.substring(Posiciones.E2_COACES_P, Posiciones.E2_COACES_P+Longitudes.COACES_L));
+		String sCOGRUG = limpiaCampoNumerico(linea.substring(Posiciones.E2_COGRUG_P, Posiciones.E2_COGRUG_P+Longitudes.COGRUG_L));
+		String sCOTACA = limpiaCampoNumerico(linea.substring(Posiciones.E2_COTACA_P, Posiciones.E2_COTACA_P+Longitudes.COTACA_L));
+		String sCOSBAC = limpiaCampoNumerico(linea.substring(Posiciones.E2_COSBAC_P, Posiciones.E2_COSBAC_P+Longitudes.COSBAC_L));
 		String sBITC11 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E2_BITC11_P, Posiciones.E2_BITC11_P+Longitudes.BITC11_L),"#");
 		String sFIPAGO = linea.substring(Posiciones.E2_FIPAGO_P, Posiciones.E2_FIPAGO_P+Longitudes.FIPAGO_L);
 		String sBITC12 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E2_BITC12_P, Posiciones.E2_BITC12_P+Longitudes.BITC12_L),"#");
 		String sFFPAGO = linea.substring(Posiciones.E2_FFPAGO_P, Posiciones.E2_FFPAGO_P+Longitudes.FFPAGO_L);
 		String sBITC13 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E2_BITC13_P, Posiciones.E2_BITC13_P+Longitudes.BITC13_L),"#");
-		String sIMCUCO = linea.substring(Posiciones.E2_IMCUCO_P, Posiciones.E2_IMCUCO_P+Longitudes.IMCUCO_L);
+		String sIMCUCO = limpiaCampoNumerico(linea.substring(Posiciones.E2_IMCUCO_P, Posiciones.E2_IMCUCO_P+Longitudes.IMCUCO_L));
 		String sBITC14 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E2_BITC14_P, Posiciones.E2_BITC14_P+Longitudes.BITC14_L),"#");
 		String sFAACTA = linea.substring(Posiciones.E2_FAACTA_P, Posiciones.E2_FAACTA_P+Longitudes.FAACTA_L);
 		String sBITC15 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E2_BITC15_P, Posiciones.E2_BITC15_P+Longitudes.BITC15_L),"#");
 		String sPTPAGO = linea.substring(Posiciones.E2_PTPAGO_P, Posiciones.E2_PTPAGO_P+Longitudes.PTPAGO_L);
 		String sBITC09 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E2_BITC09_P, Posiciones.E2_BITC09_P+Longitudes.BITC09_L),"#");
-		String sOBTEXC = linea.substring(Posiciones.E2_OBTEXC_P, Posiciones.E2_OBTEXC_P+Longitudes.OBTEXC_L);
+		String sOBTEXC = linea.substring(Posiciones.E2_OBTEXC_P, Posiciones.E2_OBTEXC_P+Longitudes.OBTEXC_L).trim();
 		//String sOBDEER = linea.substring(Posiciones.E2_OBDEER_P, Posiciones.E2_OBDEER_P+Longitudes.OBDEER_L);
 		String sOBDEER = linea.substring(Posiciones.E2_OBDEER_P);
 		
@@ -614,27 +614,27 @@ public class Parser {
 	public static MovimientoReferenciaCatastral leerReferenciaCatastral (String linea)
 	{
 
-		String sCODTRN = linea.substring(Posiciones.E3_CODTRN_P, Posiciones.E3_CODTRN_P+Longitudes.CODTRN_L);
-		String sCOTDOR = linea.substring(Posiciones.E3_COTDOR_P, Posiciones.E3_COTDOR_P+Longitudes.COTDOR_L);
-		String sIDPROV = linea.substring(Posiciones.E3_IDPROV_P, Posiciones.E3_IDPROV_P+Longitudes.IDPROV_L);
+		String sCODTRN = limpiaCampoNumerico(linea.substring(Posiciones.E3_CODTRN_P, Posiciones.E3_CODTRN_P+Longitudes.CODTRN_L));
+		String sCOTDOR = limpiaCampoNumerico(linea.substring(Posiciones.E3_COTDOR_P, Posiciones.E3_COTDOR_P+Longitudes.COTDOR_L));
+		String sIDPROV = limpiaCampoNumerico(linea.substring(Posiciones.E3_IDPROV_P, Posiciones.E3_IDPROV_P+Longitudes.IDPROV_L));
 		String sCOACCI = linea.substring(Posiciones.E3_COACCI_P, Posiciones.E3_COACCI_P+Longitudes.COACCI_L);
-		String sCOENGP = linea.substring(Posiciones.E3_COENGP_P, Posiciones.E3_COENGP_P+Longitudes.COENGP_L);
-		String sCOACES = linea.substring(Posiciones.E3_COACES_P, Posiciones.E3_COACES_P+Longitudes.COACES_L);
-		String sNURCAT = linea.substring(Posiciones.E3_NURCAT_P, Posiciones.E3_NURCAT_P+Longitudes.NURCAT_L);
+		String sCOENGP = limpiaCampoNumerico(linea.substring(Posiciones.E3_COENGP_P, Posiciones.E3_COENGP_P+Longitudes.COENGP_L));
+		String sCOACES = limpiaCampoNumerico(linea.substring(Posiciones.E3_COACES_P, Posiciones.E3_COACES_P+Longitudes.COACES_L));
+		String sNURCAT = linea.substring(Posiciones.E3_NURCAT_P, Posiciones.E3_NURCAT_P+Longitudes.NURCAT_L).trim();
 		String sBITC16 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E3_BITC16_P, Posiciones.E3_BITC16_P+Longitudes.BITC16_L),"#");
 		String sTIRCAT = linea.substring(Posiciones.E3_TIRCAT_P, Posiciones.E3_TIRCAT_P+Longitudes.TIRCAT_L).trim();
 		String sBITC17 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E3_BITC17_P, Posiciones.E3_BITC17_P+Longitudes.BITC17_L),"#");
 		String sENEMIS = linea.substring(Posiciones.E3_ENEMIS_P, Posiciones.E3_ENEMIS_P+Longitudes.ENEMIS_L).trim();
-		String sCOTEXA = linea.substring(Posiciones.E3_COTEXA_P, Posiciones.E3_COTEXA_P+Longitudes.COTEXA_L);
+		String sCOTEXA = limpiaCampoNumerico(linea.substring(Posiciones.E3_COTEXA_P, Posiciones.E3_COTEXA_P+Longitudes.COTEXA_L));
 		String sBITC09 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E3_BITC09_P, Posiciones.E3_BITC09_P+Longitudes.BITC09_L),"#");
 		String sOBTEXC = linea.substring(Posiciones.E3_OBTEXC_P, Posiciones.E3_OBTEXC_P+Longitudes.OBTEXC_L).trim();
 		String sOBDEER = linea.substring(Posiciones.E3_OBDEER_P, Posiciones.E3_OBDEER_P+Longitudes.OBDEER_L).trim();
 
 		//Ampliacion de valor catastral
 		String sBITC23 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E3_BITC23_P, Posiciones.E3_BITC23_P+Longitudes.BITC23_L),"#");
-		String sIMVSUE = linea.substring(Posiciones.E3_IMVSUE_P, Posiciones.E3_IMVSUE_P+Longitudes.IMVSUE_L);
+		String sIMVSUE = limpiaCampoNumerico(linea.substring(Posiciones.E3_IMVSUE_P, Posiciones.E3_IMVSUE_P+Longitudes.IMVSUE_L));
 		String sBITC24 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E3_BITC24_P, Posiciones.E3_BITC24_P+Longitudes.BITC24_L),"#");
-		String sIMCATA = linea.substring(Posiciones.E3_IMCATA_P, Posiciones.E3_IMCATA_P+Longitudes.IMCATA_L);
+		String sIMCATA = limpiaCampoNumerico(linea.substring(Posiciones.E3_IMCATA_P, Posiciones.E3_IMCATA_P+Longitudes.IMCATA_L));
 		String sBITC25 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E3_BITC25_P, Posiciones.E3_BITC25_P+Longitudes.BITC25_L),"#");
 		String sFERECA = linea.substring(Posiciones.E3_FERECA_P, Posiciones.E3_FERECA_P+Longitudes.FERECA_L);
 		
@@ -684,15 +684,15 @@ public class Parser {
 	{
 
 		String sCODTRN = linea.substring(Posiciones.E4_CODTRN_P, Posiciones.E4_CODTRN_P+Longitudes.CODTRN_L);
-		String sCOTDOR = linea.substring(Posiciones.E4_COTDOR_P, Posiciones.E4_COTDOR_P+Longitudes.COTDOR_L);
-		String sIDPROV = linea.substring(Posiciones.E4_IDPROV_P, Posiciones.E4_IDPROV_P+Longitudes.IDPROV_L);
+		String sCOTDOR = limpiaCampoNumerico(linea.substring(Posiciones.E4_COTDOR_P, Posiciones.E4_COTDOR_P+Longitudes.COTDOR_L));
+		String sIDPROV = limpiaCampoNumerico(linea.substring(Posiciones.E4_IDPROV_P, Posiciones.E4_IDPROV_P+Longitudes.IDPROV_L));
 		String sCOACCI = linea.substring(Posiciones.E4_COACCI_P, Posiciones.E4_COACCI_P+Longitudes.COACCI_L);
-		String sCOENGP = linea.substring(Posiciones.E4_COENGP_P, Posiciones.E4_COENGP_P+Longitudes.COENGP_L);
-		String sCOACES = linea.substring(Posiciones.E4_COACES_P, Posiciones.E4_COACES_P+Longitudes.COACES_L);
-		String sNURCAT = linea.substring(Posiciones.E4_NURCAT_P, Posiciones.E4_NURCAT_P+Longitudes.NURCAT_L);
-		String sCOGRUC = linea.substring(Posiciones.E4_COGRUC_P, Posiciones.E4_COGRUC_P+Longitudes.COGRUC_L);
-		String sCOTACA = linea.substring(Posiciones.E4_COTACA_P, Posiciones.E4_COTACA_P+Longitudes.COTACA_L);
-		String sCOSBAC = linea.substring(Posiciones.E4_COSBAC_P, Posiciones.E4_COSBAC_P+Longitudes.COSBAC_L);
+		String sCOENGP = limpiaCampoNumerico(linea.substring(Posiciones.E4_COENGP_P, Posiciones.E4_COENGP_P+Longitudes.COENGP_L));
+		String sCOACES = limpiaCampoNumerico(linea.substring(Posiciones.E4_COACES_P, Posiciones.E4_COACES_P+Longitudes.COACES_L));
+		String sNURCAT = linea.substring(Posiciones.E4_NURCAT_P, Posiciones.E4_NURCAT_P+Longitudes.NURCAT_L).trim();
+		String sCOGRUC = limpiaCampoNumerico(linea.substring(Posiciones.E4_COGRUC_P, Posiciones.E4_COGRUC_P+Longitudes.COGRUC_L));
+		String sCOTACA = limpiaCampoNumerico(linea.substring(Posiciones.E4_COTACA_P, Posiciones.E4_COTACA_P+Longitudes.COTACA_L));
+		String sCOSBAC = limpiaCampoNumerico(linea.substring(Posiciones.E4_COSBAC_P, Posiciones.E4_COSBAC_P+Longitudes.COSBAC_L));
 		String sBITC18 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BITC18_P, Posiciones.E4_BITC18_P+Longitudes.BITC18_L),"#");
 		String sFEPRRE = linea.substring(Posiciones.E4_FEPRRE_P, Posiciones.E4_FEPRRE_P+Longitudes.FEPRRE_L);
 		String sBITC19 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BITC19_P, Posiciones.E4_BITC19_P+Longitudes.BITC19_L),"#");
@@ -703,7 +703,7 @@ public class Parser {
 		String sBISODE = linea.substring(Posiciones.E4_BISODE_P, Posiciones.E4_BISODE_P+Longitudes.BISODE_L);
 		String sBITC22 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BITC22_P, Posiciones.E4_BITC22_P+Longitudes.BITC22_L),"#");
 		String sBIRESO = linea.substring(Posiciones.E4_BIRESO_P, Posiciones.E4_BIRESO_P+Longitudes.BIRESO_L);
-		String sCOTEXA = linea.substring(Posiciones.E4_COTEXA_P, Posiciones.E4_COTEXA_P+Longitudes.COTEXA_L);
+		String sCOTEXA = limpiaCampoNumerico(linea.substring(Posiciones.E4_COTEXA_P, Posiciones.E4_COTEXA_P+Longitudes.COTEXA_L));
 		String sBITC09 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BITC09_P, Posiciones.E4_BITC09_P+Longitudes.BITC09_L),"#");
 		String sOBTEXC = linea.substring(Posiciones.E4_OBTEXC_P, Posiciones.E4_OBTEXC_P+Longitudes.OBTEXC_L).trim();
 		//String sOBDEER = linea.substring(Posiciones.E4_OBDEER_P, Posiciones.E4_OBDEER_P+Longitudes.OBDEER_L);
@@ -753,7 +753,7 @@ public class Parser {
 
 	public static Cierre LeerCierre(String linea)
 	{
-		String sNUPROF = linea.substring(0, Longitudes.NUPROF_L);
+		String sNUPROF = limpiaCampoNumerico(linea.substring(0, Longitudes.NUPROF_L));
 		String sFEPFON = linea.substring(Longitudes.NUPROF_L+1, Longitudes.NUPROF_L+Longitudes.FEPFON_L+1);
 
 		return new Cierre(sNUPROF,sFEPFON);

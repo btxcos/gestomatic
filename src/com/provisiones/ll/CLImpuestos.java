@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
+import com.provisiones.dal.qm.listas.errores.QMListaErroresImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
+
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
+
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.ImpuestoRecurso;
 import com.provisiones.types.ImpuestoRecursoTabla;
@@ -20,54 +23,118 @@ public class CLImpuestos
 {
 	private static Logger logger = LoggerFactory.getLogger(CLImpuestos.class.getName());
 	
-	public static boolean actualizaImpuestoLeido(String linea)
+	public static int actualizaImpuestoLeido(String linea)
 	{
-		boolean bSalida = false;
+		int iCodigo = 0;
 		
 		MovimientoImpuestoRecurso impuesto = Parser.leerImpuestoRecurso(linea);
 		
-		String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
-		String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
+		logger.debug(impuesto.logMovimientoImpuestoRecurso());
 		
-		String sValidado = "";
+		String sCodMovimiento = QMMovimientosImpuestos.getMovimientoImpuestoRecursoID(impuesto);
 		
-		if (impuesto.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+		logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+		
+		if (!(sCodMovimiento.equals("")))
 		{
-			sValidado = "V";
-			sBKOBDEER = impuesto.getOBDEER();
-		}
-		else
-		{
-			sValidado = "X";
-			sBKCOTDOR = impuesto.getCOTDOR();
-			sBKOBDEER = impuesto.getOBDEER();
-			impuesto.setCOTDOR(ValoresDefecto.DEF_COTDOR);
 
-		}
-		
-		impuesto.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
-		
-			   				
-		String sCodMovimientoImpuesto = QMMovimientosImpuestos.getMovimientoImpuestoRecursoID(impuesto);
-		
-		bSalida = !(sCodMovimientoImpuesto.equals(""));
-		
-		if (bSalida)
-		{
-		
-			impuesto.setCOTDOR(sBKCOTDOR);
-			impuesto.setOBDEER(sBKOBDEER);
 			
-			QMMovimientosImpuestos.modMovimientoImpuestoRecurso(impuesto, sCodMovimientoImpuesto);
-			QMListaImpuestos.setValidado( sCodMovimientoImpuesto, sValidado);
+			String sEstado = QMListaImpuestos.getValidado(sCodMovimiento);;
+			
+			if (sEstado.equals("P"))
+			{
+				iCodigo = -11;
+			}
+			else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
+			{
+				iCodigo = -12;
+			}
+			else if (sEstado.equals("E"))
+			{
+				String sValidado = "";
+				
+				logger.debug("impuesto.getCOTDOR()|{}|",impuesto.getCOTDOR());
+				logger.debug("ValoresDefecto.DEF_COTDOR|{}|",ValoresDefecto.DEF_COTDOR);
+
+				if (impuesto.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+				{
+					sValidado = "V";
+				}
+				else
+				{
+					sValidado = "X";
+				}
+				
+				logger.debug("sValidado|{}|",sValidado);
+				
+				logger.debug("impuesto.getCOACCI()|{}|",impuesto.getCOACCI());
+
+				ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(impuesto.getCOACCI());
+
+				switch (COACCI)
+				{
+				case A: case M: case B:
+					if (QMListaImpuestos.existeRelacionImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC(), impuesto.getCOACES(), sCodMovimiento))
+					{
+						if(QMListaImpuestos.setValidado(sCodMovimiento, sValidado))
+						{
+							if (sValidado.equals("X"))
+							{
+								//recibido error
+								if (QMListaErroresImpuestos.addErrorImpuesto(sCodMovimiento, impuesto.getCOTDOR()))
+								{
+									iCodigo = 1;
+								}
+								else
+								{
+									QMListaImpuestos.setValidado(sCodMovimiento, "E");
+									iCodigo = -4;
+								}
+							}
+							else
+							{
+								//recibido OK
+								logger.info("Movimiento validado.");
+							}
+						}
+						else
+						{
+							iCodigo = -3;
+						}
+					}
+					else
+					{
+						iCodigo = -2;
+					}
+					break;
+					
+				default:
+					logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",impuesto.getCOACCI());
+					iCodigo = -9;
+					break;
+				
+				}
+				
+				//bSalida = QMMovimientosImpuestos.modMovimientoImpuesto(impuesto, sCodMovimiento);
+				//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+				//recuperaremos el codigo de error de la tabla pertinente.
+			}
+			else
+			{
+				iCodigo = -10;
+			}
+				
 		}
 		else 
 		{
-			logger.error("El siguiente registro no se encuentre en el sistema:");
+			logger.error("El siguiente registro no se encuentra en el sistema:");
 			logger.error("|{}|",linea);
+			iCodigo = -1;
 		}
 		
-		return bSalida;
+		logger.error("iCodigo:|{}|",iCodigo);
+		
+		return iCodigo;
 	}
 	
 	public static MovimientoImpuestoRecurso convierteImpuestoenMovimiento(ImpuestoRecurso impuesto, String sCodCOACES, String sCodCOACCI)

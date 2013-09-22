@@ -8,10 +8,15 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.QMReferencias;
+
 import com.provisiones.dal.qm.listas.QMListaReferencias;
+import com.provisiones.dal.qm.listas.errores.QMListaErroresReferencias;
+
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
+
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
+
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 import com.provisiones.types.ReferenciaCatastral;
@@ -22,55 +27,118 @@ public class CLReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(CLReferencias.class.getName());
 	
-	public static boolean actualizaReferenciaLeida(String linea)
+	public static int actualizaReferenciaLeida(String linea)
 	{
-		boolean bSalida = false;
+		int iCodigo = 0;
 		
 		MovimientoReferenciaCatastral referencia = Parser.leerReferenciaCatastral(linea);
 		
-		String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
-		String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
-		
-		String sValidado = "";
-		
-		if (referencia.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
-		{
-			sValidado = "V";
-			sBKOBDEER = referencia.getOBDEER();
-		}
-		else
-		{
-			sValidado = "X";
-			sBKCOTDOR = referencia.getCOTDOR();
-			sBKOBDEER = referencia.getOBDEER();
-			referencia.setCOTDOR(ValoresDefecto.DEF_COTDOR);
+		logger.debug(referencia.logMovimientoReferenciaCatastral());
 
-		}
+		String sCodMovimiento = QMMovimientosReferencias.getMovimientoReferenciaCatastralID(referencia);
 		
-		referencia.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
+		logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
 		
-		//Revisar V
-		String sCodMovimientoReferencia = referencia.getNURCAT();
-		
-		bSalida = !(sCodMovimientoReferencia.equals(""));
-		
-		if (bSalida)
+		if (!(sCodMovimiento.equals("")))
 		{
-		
-			referencia.setCOTDOR(sBKCOTDOR);
-			referencia.setOBDEER(sBKOBDEER);
+
 			
-			bSalida = QMMovimientosReferencias.modMovimientoReferenciaCatastral(referencia, sCodMovimientoReferencia);
-			QMListaReferencias.setValidado(sCodMovimientoReferencia, sValidado);
+			String sEstado = QMListaReferencias.getValidado(sCodMovimiento);;
+			
+			if (sEstado.equals("P"))
+			{
+				iCodigo = -11;
+			}
+			else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
+			{
+				iCodigo = -12;
+			}
+			else if (sEstado.equals("E"))
+			{
+				String sValidado = "";
+				
+				logger.debug("referencia.getCOTDOR()|{}|",referencia.getCOTDOR());
+				logger.debug("ValoresDefecto.DEF_COTDOR|{}|",ValoresDefecto.DEF_COTDOR);
+
+				if (referencia.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+				{
+					sValidado = "V";
+				}
+				else
+				{
+					sValidado = "X";
+				}
+				
+				logger.debug("sValidado|{}|",sValidado);
+				
+				logger.debug("referencia.getCOACCI()|{}|",referencia.getCOACCI());
+
+				ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(referencia.getCOACCI());
+
+				switch (COACCI)
+				{
+				case A: case M: case B:
+					if (QMListaReferencias.existeRelacionReferencia(referencia.getNURCAT(),referencia.getCOACES(), sCodMovimiento))
+					{
+						if(QMListaReferencias.setValidado(sCodMovimiento, sValidado))
+						{
+							if (sValidado.equals("X"))
+							{
+								//recibido error
+								if (QMListaErroresReferencias.addErrorReferencia(sCodMovimiento, referencia.getCOTDOR()))
+								{
+									iCodigo = 1;
+								}
+								else
+								{
+									QMListaReferencias.setValidado(sCodMovimiento, "E");
+									iCodigo = -4;
+								}
+							}
+							else
+							{
+								//recibido OK
+								logger.info("Movimiento validado.");
+							}
+						}
+						else
+						{
+							iCodigo = -3;
+						}
+					}
+					else
+					{
+						iCodigo = -2;
+					}
+					break;
+					
+				default:
+					logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",referencia.getCOACCI());
+					iCodigo = -9;
+					break;
+				
+				}
+				
+				//bSalida = QMMovimientosReferencias.modMovimientoReferencia(referencia, sCodMovimiento);
+				//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+				//recuperaremos el codigo de error de la tabla pertinente.
+			}
+			else
+			{
+				iCodigo = -10;
+			}
+				
 		}
 		else 
 		{
-			logger.debug("El siguiente registro no se encuentre en el sistema:");
-			logger.debug("|{}|",linea);
-
+			logger.error("El siguiente registro no se encuentra en el sistema:");
+			logger.error("|{}|",linea);
+			iCodigo = -1;
 		}
 		
-		return bSalida;
+		logger.error("iCodigo:|{}|",iCodigo);
+		
+		return iCodigo;
 	}
 	
 	public static MovimientoReferenciaCatastral convierteCuotaenMovimiento(ReferenciaCatastral referencia, String sCodCOACES, String sCodCOACCI)

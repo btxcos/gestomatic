@@ -169,7 +169,6 @@ public class QMListaReferencias
 					found = true;
 
 					logger.debug("Encontrado el registro!");
-
 				}
 			}
 			if (found == false) 

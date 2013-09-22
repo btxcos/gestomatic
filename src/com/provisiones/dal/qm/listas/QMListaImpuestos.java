@@ -129,6 +129,76 @@ public class QMListaImpuestos
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
+	
+	public static boolean existeRelacionImpuesto(String sCodNURCAT, String sCodCOSBAC, String sCodCOACES, String sCodMovimiento)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+		
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField4 + "  FROM " + sTable + 
+					" WHERE " +
+					"(" + sField1 + " = '" + sCodCOACES + "' " +
+					" AND " + sField2 + " = '" + sCodNURCAT + "' " +
+					" AND " + sField3 + " = '" + sCodCOSBAC + "' " +
+					" AND " + sField4 + " = '" + sCodMovimiento +"' )");
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					logger.debug("Encontrado el registro!");
+				}
+			}
+			if (found == false) 
+			{
+ 
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: NURCAT:|{}|",sCodNURCAT);
+			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
+	}
 
 	public static boolean compruebaRelacionImpuestoActivo(String sCodNURCAT, String sCodCOSBAC, String sCodCOACES)
 	{

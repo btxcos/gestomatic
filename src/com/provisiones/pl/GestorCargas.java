@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.FileUploadEvent;
 import org.slf4j.Logger;
@@ -25,10 +26,24 @@ public class GestorCargas implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorCargas.class.getName());
 	
-	private transient ArrayList<CargaTabla> tablamensajes = new ArrayList<CargaTabla>() ;
+	private transient ArrayList<CargaTabla> tablamensajes = new ArrayList<CargaTabla>();
+	
+	public GestorCargas ()
+	{
+		
+	}
 
+	public void borrarResultadosCarga()
+	{
+    	this.tablamensajes = new ArrayList<CargaTabla>();
+	}
+	
+    public void limpiarPlantilla(ActionEvent actionEvent) 
+    {  
+    	borrarResultadosCarga();
+    }
 
-	public void handleFileUpload(FileUploadEvent event) 
+	public void cargaArchivo(FileUploadEvent event) 
     {
 		FacesMessage msg;
 		
@@ -40,18 +55,11 @@ public class GestorCargas implements Serializable
 		
 		logger.debug("iCodigoError:|{}|",iCodigoError);
 		
-		/*ArrayList<CargaTabla> result = getTablamensajes();
+		if (carga.getAlCarga().size() > 0)
+		{
 		
-		logger.debug("result.size():|{}|",result.size());
-		
-		result.addAll(carga.getAlCarga());
-		
-		logger.debug("result.size():|{}|",result.size());
-		
-		
-		this.setTablamensajes(result);*/
-		
-		this.tablamensajes.addAll(carga.getAlCarga());
+			this.tablamensajes.addAll(carga.getAlCarga());
+		}
 		
 		logger.debug("tablamensajes.size():|{}|",tablamensajes.size());
 		
@@ -70,9 +78,18 @@ public class GestorCargas implements Serializable
 			logger.error("ERROR: El archivo '{}' no tiene un nombre reconocible. Por favor, reviselo.",event.getFile().getFileName());
 
 		}
+		else if (iCodigoError == 4)
+		{
+			msg = Utils.pfmsgWarning("El archivo de Gastos debe de ser primero supervisado por la entidad.");
+			logger.warn("El archivo de Gastos debe de ser primero supervisado por la entidad.");
+		}
+		else if (iCodigoError == 5)
+		{
+			msg = Utils.pfmsgWarning("El archivo de Cierres debe comprobado por la entidad.");
+			logger.warn("El archivo de Cierres debe comprobado por la entidad.");
+		}
 		else
 		{
-
 			msg = Utils.pfmsgFatal("ERROR: Se encontraron problemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.");
 			logger.error("[FATAL] ERROR: Se encontraron problemas al procesar el archivo '{}', contiene registros inconsistentes con el sistema. Por favor, reviselo.",event.getFile().getFileName());
 		}

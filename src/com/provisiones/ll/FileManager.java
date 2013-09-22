@@ -527,142 +527,99 @@ public class FileManager
         return sNombreFichero;
 	}
 	
-	
-	public static boolean leerActivos(String sNombre)
+	public static ArrayList<CargaTabla> leerActivos(String sNombre)
 	{
-
-		boolean bSalida = false;
-
-		
+		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		FileReader fr;
+		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
 		
+		FileReader fr;
 		try 
 		{
 			fr = new FileReader (archivo);
+			
 			BufferedReader br = new BufferedReader(fr);
-
+			
 			String linea = "";
 
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
-
 			
-			
-			
-			logger.debug( "Leyendo fichero..");
+			logger.debug("Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
 			logger.debug("Inicio:|{}|",new Timestamp(date.getTime()));
 
-			int contador=0;
+			int contador= 0 ;
 			int registros = 0;
-
+			
+			int iLongitudValida = Longitudes.ACTIVOS_L-Longitudes.FILLER_ACTIVOS_L-Longitudes.OBDEER_L;
+			
 			while((linea=br.readLine())!=null)
 	        {
 				contador++;
+
+				logger.debug("Longitud de línea leida:|{}|",linea.length());
+				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+
 	    		if (linea.equals(sFinFichero))
 	    		{
-	    			logger.debug( "Lectura finalizada!");
+	    			logger.info("Lectura finalizada.");
 	    		}
-	    		else if (linea.length()< (Longitudes.ACTIVOS_L-Longitudes.FILLER_ACTIVOS_L) )
+	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en linea {}",contador);
+	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
 	    		}
 	    		else
 	    		{
-	    			if (CLActivos.actualizaActivoLeido(linea))
+	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			String sMensaje = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sMensaje = "Activo registrado.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -1:
+	    				sMensaje = "Registro ya se enconcuentra en el sistema.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -2:
+	    				sMensaje = "[FATAL] Error al registrar el Activo.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			}
+	    			if ( iCodigo >= 0 )
+	    			{
 	    				registros++;
+	    			}
+
+	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
+	    			tabla.add(mensajes);
 	    		}
-	            
 	        }
-			
-			
+		
 			br.close();
-
-			
-			bSalida = ((contador-registros-1) == 0);
-			
-			logger.debug( "Lectura de {} finalizada.",sNombre);
-			logger.debug( "Actualizados {} registros.",registros);
-			logger.debug( "Encontrados {} registros erroneos.",(contador-registros-1));
 		
-		
+			logger.debug("Contador:|{}|",contador);
+			logger.debug("Registros:|{}|",registros);
 
-		} 
-		catch (FileNotFoundException e) 
-		{
-			// TODO Auto-generated catch block
-			logger.error("Ocurrió un error al acceder al fichero recibido.");
-			e.printStackTrace();
+			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
+			
+			logger.info( "Lectura de {} finalizada.",sNombre);
+			logger.info( "Actualizados {} registros.",registros);
+			logger.info( "Encontrados {} registros erróneos.\n",(contador-registros-1));
 		}
-		catch (IOException e) 
-		{
-			// TODO Auto-generated catch block
-			logger.error("Ocurrió un error al acceder al fichero recibido.");
-			e.printStackTrace();
-		}		
-        return bSalida;
-	}
-	
-	public static boolean leerGastosRevisados(String sNombre) 
-	{
-		boolean bSalida = false;
-		
-		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
-		FileReader fr;
-		try 
-		{
-			fr = new FileReader (archivo);
-
-			BufferedReader br = new BufferedReader(fr);
-			
-			String linea = "";
-
-			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
-			
-
-			logger.debug( "Leyendo fichero..");
-
-			java.util.Date date= new java.util.Date();
-			logger.debug("Inicio:|{}|", new Timestamp(date.getTime()));
-
-			int contador=0;
-			int registros = 0;
-			
-			while((linea=br.readLine())!=null)
-	        {
-				contador++;
-	    		if (linea.equals(sFinFichero))
-	    		{
-	    			logger.debug( "Lectura finalizada!");
-	    		}
-	    		else if (linea.length()< (Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L) )
-	    		{
-	    			logger.error("Error en linea {}",contador);
-	    		}
-	    		else
-	    		{
-	    				registros++;
-	    		}
-	            
-	        }
-			
-			br.close();
-			
-			bSalida = ((contador-registros-1) == 0);
-			
-			logger.debug( "Lectura de {} finalizada.",sNombre);
-			logger.debug( "Actualizados {} registros.",registros);
-			logger.debug( "Encontrados {} registros erroneos.",(contador-registros-1));
-			
-		} 
 		catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
-			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			logger.error("No se encontró el fichero recibido.");
 			e.printStackTrace();
 		}
 		catch (IOException e)
@@ -670,8 +627,149 @@ public class FileManager
 			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
-		}				
-        return bSalida;
+		}
+		logger.debug("tabla.size():|{}|",tabla.size());
+		
+        return tabla;
+	}
+
+	public static ArrayList<CargaTabla> leerGastosRevisados(String sNombre) 
+	{
+		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		
+		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		
+		FileReader fr;
+
+		try 
+		{
+			fr = new FileReader (archivo);
+			
+			BufferedReader br = new BufferedReader(fr);
+			
+			String linea = "";
+
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
+			
+			logger.debug("Leyendo fichero..");
+
+			java.util.Date date= new java.util.Date();
+			logger.debug("Inicio:|{}|",new Timestamp(date.getTime()));
+
+			int contador= 0 ;
+			int registros = 0;
+			
+			int iLongitudValida = Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L-Longitudes.OBDEER_L;
+			
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+
+				logger.debug("Longitud de línea leida:|{}|",linea.length());
+				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+
+	    		if (linea.equals(sFinFichero))
+	    		{
+	    			logger.info("Lectura finalizada.");
+	    		}
+	    		else if (linea.length()< iLongitudValida )
+	    		{
+	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
+	    		}
+	    		else
+	    		{
+	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			String sMensaje = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sMensaje = "Movimiento validado.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case 1:
+	    				sMensaje = "Movimento de Gasto pendiente de revisión.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -1:
+	    				sMensaje = "Registro no encontrado en el sistema.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -2:
+	    				sMensaje = "No Existe relación con la Gasto.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -3:
+	    				sMensaje = "[FATAL] Error al validar la reclación con el Gasto.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -4:
+	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;	    				
+	    			case -10:
+	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -11:
+	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -12:
+	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
+	    				logger.warn("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			}
+	    			if ( iCodigo >= 0 )
+	    			{
+	    				registros++;
+	    			}
+
+	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
+	    			tabla.add(mensajes);
+	    		}
+	        }
+		
+			br.close();
+		
+			logger.debug("Contador:|{}|",contador);
+			logger.debug("Registros:|{}|",registros);
+
+			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
+			
+			logger.info( "Lectura de {} finalizada.",sNombre);
+			logger.info( "Actualizados {} registros.",registros);
+			logger.info( "Encontrados {} registros erróneos.\n",(contador-registros-1));
+		}
+		catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			logger.error("No se encontró el fichero recibido.");
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			e.printStackTrace();
+		}
+		logger.debug("tabla.size():|{}|",tabla.size());
+		
+        return tabla;
+		
+	
 	}
 
 	public static ArrayList<CargaTabla> leerComunidadesRevisadas(String sNombre)
@@ -709,18 +807,16 @@ public class FileManager
 	        {
 				contador++;
 
-				logger.debug("Posiciones leidas:|{}|",linea.length());
-				logger.debug("Comunidades:|{}|",Longitudes.COMUNIDADES_L);
-				logger.debug("Filler:|{}|",Longitudes.FILLER_COMUNIDADES_L);
-				logger.debug("Resta:|{}|",iLongitudValida);
+				logger.debug("Longitud de línea leida:|{}|",linea.length());
+				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
 
 	    		if (linea.equals(sFinFichero))
 	    		{
-	    			logger.debug("Lectura finalizada!");
+	    			logger.info("Lectura finalizada.");
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.debug("Error en linea {}",contador);
+	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
 	    		}
 	    		else
 	    		{
@@ -731,73 +827,70 @@ public class FileManager
 	    			{
 	    			case 0:
 	    				sMensaje = "Movimiento validado.";
-	    				logger.info("Linea {}: {}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case 1:
-	    				sMensaje = "Movimento erroneo en alta de comunidad registrado.";
-	    				logger.info("Linea {}: {}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
-	    				break;
-	    			case 2:
-	    				sMensaje = "Movimiento erroneo en cambio de activos registrado.";
-	    				logger.info("Linea {}: {}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
-	    				break;
-	    			case 3:
-	    				sMensaje = "Movimiento erroneo en modificación o baja de comunidad registrado.";
-	    				logger.info("Linea {}: {}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				sMensaje = "Movimento de Comunidad pendiente de revisión.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -1:
 	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -2:
-	    				sMensaje = "Error al registrar el error en alta de comunidad.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				sMensaje = "No Existe relación con la Comunidad.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -3:
-	    				sMensaje = "Error al registrar el error en cambio de activos.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				sMensaje = "No Existe relación Activo-Comunidad.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -4:
-	    				sMensaje = "Error al registrar el error en modificación o baja de comunidad.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				sMensaje = "[FATAL] Error al validar la reclación con la Comunidad.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -5:
-	    				sMensaje = "No Existe relación con la comunidad.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				sMensaje = "[FATAL] Error al validar la relación Activo-Comunidad.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -6:
-	    				sMensaje = "No Existe relación activo-comunidad.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
-	    				break;
-	    			case -7:
-	    				sMensaje = "[FATAL] Error al validar la reclación con la comunidad.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
-	    				break;
-	    			case -8:
-	    				sMensaje = "[FATAL] Error al validar la relación activo-comunidad.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -9:
 	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				logger.error("Linea {}:{}",contador,sMensaje);
-	    				sMensaje = "Linea "+contador+": "+sMensaje;
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -10:
+	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -11:
+	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -12:
+	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
+	    				logger.warn("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			}
 	    			if ( iCodigo >= 0 )
+	    			{
 	    				registros++;
-	    			
+	    			}
+
 	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
 	    			tabla.add(mensajes);
 	    		}
@@ -805,20 +898,19 @@ public class FileManager
 		
 			br.close();
 		
-			logger.debug("Contador:|{}|\n Registros:|{}|",contador,registros);
-			
-			//bSalida = ((contador-registros-1) == 0);
-			
-			logger.debug( "Lectura de {} finalizada.",sNombre);
-			logger.debug( "Actualizados {} registros.",registros);
-			logger.debug( "Encontrados {} registros erroneos.",(contador-registros-1));
+			logger.debug("Contador:|{}|",contador);
+			logger.debug("Registros:|{}|",registros);
 
-		
+			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
+			
+			logger.info( "Lectura de {} finalizada.",sNombre);
+			logger.info( "Actualizados {} registros.",registros);
+			logger.info( "Encontrados {} registros erróneos.\n",(contador-registros-1));
 		}
 		catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
-			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			logger.error("No se encontró el fichero recibido.");
 			e.printStackTrace();
 		}
 		catch (IOException e)
@@ -832,11 +924,14 @@ public class FileManager
         return tabla;
 	}
 	
-	public static boolean leerCuotasRevisadas(String sNombre) 
+	public static ArrayList<CargaTabla> leerCuotasRevisadas(String sNombre) 
 	{
-		boolean bSalida = false;
-		
+		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		
+		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		
 		FileReader fr;
 		try 
 		{
@@ -848,65 +943,136 @@ public class FileManager
 
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
-
+			
 			logger.debug("Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
-			logger.debug("Inicio:|{}|", new Timestamp(date.getTime()));
+			logger.debug("Inicio:|{}|",new Timestamp(date.getTime()));
 
 			int contador= 0 ;
 			int registros = 0;
 			
+			int iLongitudValida = Longitudes.CUOTAS_L-Longitudes.FILLER_CUOTAS_L-Longitudes.OBDEER_L;
+			
 			while((linea=br.readLine())!=null)
 	        {
 				contador++;
+
+				logger.debug("Longitud de línea leida:|{}|",linea.length());
+				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+
 	    		if (linea.equals(sFinFichero))
 	    		{
-	    			logger.debug("Lectura finalizada!");
+	    			logger.info("Lectura finalizada.");
 	    		}
-	    		else if (linea.length()< (Longitudes.CUOTAS_L-Longitudes.FILLER_CUOTAS_L) )
+	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en linea {}",contador);
+	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
 	    		}
 	    		else
 	    		{
-	    			if (CLCuotas.actualizaCuotaLeida(linea))
+	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			String sMensaje = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sMensaje = "Movimiento validado.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case 1:
+	    				sMensaje = "Movimento de Cuota pendiente de revisión.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -1:
+	    				sMensaje = "Registro no encontrado en el sistema.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -2:
+	    				sMensaje = "No Existe relación con la Cuota.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -3:
+	    				sMensaje = "[FATAL] Error al validar la reclación con la Cuota.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -4:
+	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;	    				
+	    			case -9:
+	    				sMensaje = "[FATAL] Accion desconocida.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -10:
+	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -11:
+	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -12:
+	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
+	    				logger.warn("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			}
+	    			if ( iCodigo >= 0 )
+	    			{
 	    				registros++;
+	    			}
+
+	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
+	    			tabla.add(mensajes);
 	    		}
 	        }
-			
-			br.close();
-			
-			logger.debug("Contador:|{}|\n Registros:|{}|",contador,registros);
-			
-			bSalida = ((contador-registros-1) == 0);
-			
-			logger.debug( "Lectura de {} finalizada.",sNombre);
-			logger.debug( "Actualizados {} registros.",registros);
-			logger.debug( "Encontrados {} registros erroneos.",(contador-registros-1));
-
 		
+			br.close();
+		
+			logger.debug("Contador:|{}|",contador);
+			logger.debug("Registros:|{}|",registros);
+
+			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
+			
+			logger.info( "Lectura de {} finalizada.",sNombre);
+			logger.info( "Actualizados {} registros.",registros);
+			logger.info( "Encontrados {} registros erróneos.\n",(contador-registros-1));
 		}
 		catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
-			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			logger.error("No se encontró el fichero recibido.");
 			e.printStackTrace();
-		} 
-		catch (IOException e) 
+		}
+		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-        return bSalida;
+		logger.debug("tabla.size():|{}|",tabla.size());
+		
+        return tabla;
 	}
 	
-	public static boolean leerReferenciasRevisadas(String sNombre) 
+	public static ArrayList<CargaTabla> leerReferenciasRevisadas(String sNombre) 
 	{
-		boolean bSalida = false;
-		
+		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		
+		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		
 		FileReader fr;
 		try 
 		{
@@ -917,7 +1083,8 @@ public class FileManager
 			String linea = "";
 
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
-
+			
+			
 			logger.debug("Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
@@ -926,40 +1093,106 @@ public class FileManager
 			int contador= 0 ;
 			int registros = 0;
 			
+			int iLongitudValida = Longitudes.REFERENCIAS_L-Longitudes.FILLER_REFERENCIAS_L-Longitudes.OBDEER_L;
+
 			while((linea=br.readLine())!=null)
 	        {
 				contador++;
+
+				logger.debug("Longitud de línea leida:|{}|",linea.length());
+				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+
 	    		if (linea.equals(sFinFichero))
 	    		{
-	    			logger.debug( "Lectura finalizada!");
+	    			logger.info("Lectura finalizada.");
 	    		}
-	    		else if (linea.length()< (Longitudes.REFERENCIAS_L-Longitudes.FILLER_REFERENCIAS_L) )
+	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en linea {}"+contador);
+	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
 	    		}
 	    		else
 	    		{
-	    			if (CLReferencias.actualizaReferenciaLeida(linea))
+	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			String sMensaje = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sMensaje = "Movimiento validado.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case 1:
+	    				sMensaje = "Movimento de Referencia Catastral pendiente de revisión.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -1:
+	    				sMensaje = "Registro no encontrado en el sistema.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -2:
+	    				sMensaje = "No Existe relación con la Referencia Catastral.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -3:
+	    				sMensaje = "[FATAL] Error al validar la reclación con la Referencia Catastral.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -4:
+	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;	    				
+	    			case -9:
+	    				sMensaje = "[FATAL] Accion desconocida.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -10:
+	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -11:
+	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -12:
+	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
+	    				logger.warn("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			}
+	    			if ( iCodigo >= 0 )
+	    			{
 	    				registros++;
+	    			}
+
+	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
+	    			tabla.add(mensajes);
 	    		}
 	        }
 		
 			br.close();
-			
-			logger.debug("Contador:|{}|\n Registros:|{}|",contador,registros);
 		
-			bSalida = ((contador-registros-1) == 0);
-			
-			logger.debug( "Lectura de {} finalizada.",sNombre);
-			logger.debug( "Actualizados {} registros.",registros);
-			logger.debug( "Encontrados {} registros erroneos.",(contador-registros-1));
+			logger.debug("Contador:|{}|",contador);
+			logger.debug("Registros:|{}|",registros);
 
-		
+			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
+			
+			logger.info( "Lectura de {} finalizada.",sNombre);
+			logger.info( "Actualizados {} registros.",registros);
+			logger.info( "Encontrados {} registros erróneos.\n",(contador-registros-1));
 		}
 		catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
-			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			logger.error("No se encontró el fichero recibido.");
 			e.printStackTrace();
 		}
 		catch (IOException e)
@@ -968,27 +1201,33 @@ public class FileManager
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-        return bSalida;
+		logger.debug("tabla.size():|{}|",tabla.size());
+		
+        return tabla;
 	}
 
-	public static boolean leerImpuestosRevisadas(String sNombre) 
+	public static ArrayList<CargaTabla> leerImpuestosRevisadas(String sNombre) 
 	{
-		boolean bSalida = false;
-		
+
+		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
+		
+		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		
 		FileReader fr;
 
 		try 
 		{
 			fr = new FileReader (archivo);
-
+			
 			BufferedReader br = new BufferedReader(fr);
 			
 			String linea = "";
 
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
-
+			
 			logger.debug("Leyendo fichero..");
 
 			java.util.Date date= new java.util.Date();
@@ -997,39 +1236,106 @@ public class FileManager
 			int contador= 0 ;
 			int registros = 0;
 			
+			int iLongitudValida = Longitudes.IMPUESTOS_L-Longitudes.FILLER_IMPUESTOS_L-Longitudes.OBDEER_L;
+
 			while((linea=br.readLine())!=null)
 	        {
 				contador++;
+
+				logger.debug("Longitud de línea leida:|{}|",linea.length());
+				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+
 	    		if (linea.equals(sFinFichero))
 	    		{
-	    			logger.debug( "Lectura finalizada!");
+	    			logger.info("Lectura finalizada.");
 	    		}
-	    		else if (linea.length()< (Longitudes.IMPUESTOS_L-Longitudes.FILLER_IMPUESTOS_L) )
+	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error( "Error en linea "+contador);
+	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
 	    		}
 	    		else
 	    		{
-	    			if (CLImpuestos.actualizaImpuestoLeido(linea))
+	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			String sMensaje = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sMensaje = "Movimiento validado.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case 1:
+	    				sMensaje = "Movimento de Impuesto pendiente de revisión.";
+	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -1:
+	    				sMensaje = "Registro no encontrado en el sistema.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -2:
+	    				sMensaje = "No Existe relación con el Impuesto.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -3:
+	    				sMensaje = "[FATAL] Error al validar la reclación con el Impuestos.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -4:
+	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;	    				
+	    			case -9:
+	    				sMensaje = "[FATAL] Accion desconocida.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -10:
+	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -11:
+	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case -12:
+	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
+	    				logger.warn("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			}
+	    			if ( iCodigo >= 0 )
+	    			{
 	    				registros++;
+	    			}
+
+	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
+	    			tabla.add(mensajes);
 	    		}
 	        }
-			
+		
 			br.close();
-			
-			logger.debug("Contador:|{}|\n Registros:|{}|",contador,registros);
+		
+			logger.debug("Contador:|{}|",contador);
+			logger.debug("Registros:|{}|",registros);
 
-			bSalida = ((contador-registros-1) == 0);
+			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
 			
-			logger.debug( "Lectura de {} finalizada.",sNombre);
-			logger.debug( "Actualizados {} registros.",registros);
-			logger.debug( "Encontrados {} registros erroneos.",(contador-registros-1));
-
+			logger.info( "Lectura de {} finalizada.",sNombre);
+			logger.info( "Actualizados {} registros.",registros);
+			logger.info( "Encontrados {} registros erróneos.\n",(contador-registros-1));
 		}
 		catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
-			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			logger.error("No se encontró el fichero recibido.");
 			e.printStackTrace();
 		}
 		catch (IOException e)
@@ -1037,8 +1343,11 @@ public class FileManager
 			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
-		}	
-        return bSalida;
+		}
+		logger.debug("tabla.size():|{}|",tabla.size());
+		
+        return tabla;
+
 	}
 	
 	public static Carga splitter(String sNombre) 
@@ -1074,51 +1383,53 @@ public class FileManager
 				switch (COSPII) {
 				case AC:
 					logger.debug("Activos");
+					tabla = leerActivos(sNombre);
 
-					if (!leerActivos(sNombre))
+					if (tabla.size() == 0)	
 					{
 						iCodigo = 1;
 					}
 					break;
 				case RG:
 					logger.debug("Rechazados");
-					
-					if (!leerGastosRevisados(sNombre))
+					tabla = leerGastosRevisados(sNombre);
+
+					if (tabla.size() == 0)					
 					{
 						iCodigo = 2;
 					}
 					break;
 				case PA:
 					logger.debug("Autorizados");
+					tabla = leerGastosRevisados(sNombre);
 
-					if (!leerGastosRevisados(sNombre))
+					if (tabla.size() == 0)					
 					{
 						iCodigo = 3;
 					}
 					break;
 				case GA:
 					logger.debug("Gastos");
-					
-					logger.warn("El archivo de gastos debe de ser primero supervisado por la entidad.");
+					/*tabla = leerGastosRevisados(sNombre);
 
-					/*if (!leerGastosRevisados(sNombre))
-					{
+					if (tabla.size() == 0)	
+					{*/
 						iCodigo = 4;
-					}*/
+					//}
 					break;
 				case PP:
 					logger.debug("Cierres");
-					logger.warn("El archivo de cierres debe comprobado por la entidad.");
+					/*tabla = leerCierres(sNombre); //No implementable
 
-					/*if (!leerCierres(sNombre)) //No implementable
-					{
+					if (tabla.size() == 0)	
+					{*/
 						iCodigo = 5;
-					}*/
+					//}
 					break;
 				case E1:
 					logger.debug("Comunidades");
 					tabla = leerComunidadesRevisadas(sNombre);
-					logger.debug("tabla.size():|{}|",tabla.size());
+
 					if (tabla.size() == 0)
 					{
 						iCodigo = 6;
@@ -1126,24 +1437,27 @@ public class FileManager
 					break;
 				case E2:
 					logger.debug("Cuotas");
+					tabla = leerCuotasRevisadas(sNombre);
 
-					if (!leerCuotasRevisadas(sNombre))
+					if (tabla.size() == 0)
 					{
 						iCodigo = 7;
 					}
 					break;
 				case E3:
 					logger.debug("Referencias Catastrales");
+					tabla = leerReferenciasRevisadas(sNombre);
 
-					if (!leerReferenciasRevisadas(sNombre))
+					if (tabla.size() == 0)
 					{
 						iCodigo = 8;
 					}
 					break;
 				case E4:
 					logger.debug("Impuestos");
+					tabla = leerImpuestosRevisadas(sNombre);
 
-					if (!leerImpuestosRevisadas(sNombre))
+					if (tabla.size() == 0)
 					{
 						iCodigo = 9;
 					}
@@ -1154,7 +1468,7 @@ public class FileManager
 					iCodigo = -3;
 					break;
 				}
-
+				logger.debug("tabla.size():|{}|",tabla.size());
 				logger.debug("Operativa completa.");
 
 			} 

@@ -155,7 +155,7 @@ public class QMListaComunidadesActivos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField4  + " " +               
+				       + sField5  + " " +               
        
 			"  FROM " + sTable + 
 					" WHERE " +
@@ -179,7 +179,6 @@ public class QMListaComunidadesActivos
 					found = true;
 
 					logger.debug("Encontrado el registro!");
-
 				}
 			}
 			if (found == false) 

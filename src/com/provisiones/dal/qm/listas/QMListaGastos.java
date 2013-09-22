@@ -40,7 +40,7 @@ public class QMListaGastos
 	static String sField10 = "fecha_movimiento";
 
 
-	public static boolean addRelacionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodNUPROF, String sCodGasto) 
+	public static boolean addRelacionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodNUPROF, String sCodMovimiento) 
 	{
 		Statement stmt = null;
 		Connection conn = null;
@@ -75,7 +75,7 @@ public class QMListaGastos
 						+ sCodCOSBGA + "','"
 						+ sFEDEVE + "','"
 						+ sCodNUPROF + "','"
-						+ sCodGasto + "','"
+						+ sCodMovimiento + "','"
 						+ ValoresDefecto.DEF_PENDIENTE + "','"
 					    + sUsuario + "','"
 					    + Utils.timeStamp() +
@@ -91,7 +91,7 @@ public class QMListaGastos
 			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
 			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
-			logger.error("ERROR: Gasto:|{}|",sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
@@ -108,7 +108,7 @@ public class QMListaGastos
 		return bSalida;
 	}
 
-	public static boolean delRelacionGasto(String sCodGasto) 
+	public static boolean delRelacionGasto(String sCodMovimiento) 
 	{
 		Statement stmt = null;
 		Connection conn = null;
@@ -123,13 +123,13 @@ public class QMListaGastos
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField7 + " = '" + sCodGasto +"')");
+					" WHERE (" + sField7 + " = '" + sCodMovimiento +"')");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Gasto:|{}|",sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
@@ -144,6 +144,78 @@ public class QMListaGastos
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
+	}
+	
+	public static boolean existeRelacionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodNUPROF, String sCodMovimiento)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+		
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					+ sField8 + 
+					"  FROM " + sTable + 
+						" WHERE " +
+						"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
+						sField2  + " = '"+ sCodCOGRUG +"' AND " +
+						sField3  + " = '"+ sCodCOTPGA +"' AND " +
+						sField4  + " = '"+ sCodCOSBGA +"' AND " +
+						sField5  + " = '"+ sFEDEVE +"' AND " +
+						sField6  + " = '"+ sCodNUPROF +"' AND " +
+					    sField7  + " = '"+ sCodMovimiento + "' )");
+
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
+			logger.error("ERROR: NUPROF:|{}|",sCodNUPROF);
+			logger.error("ERROR: MOVIMIENTO:|{}|",sCodMovimiento);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
 	}
 	
 	public static String getProvisionDeGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
@@ -235,7 +307,7 @@ public class QMListaGastos
 		return sProvision;
 	}
 	
-	public static String getProvisionDeMovimiento(String sCodGasto)
+	public static String getProvisionDeMovimiento(String sCodMovimiento)
 	{
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -260,7 +332,7 @@ public class QMListaGastos
 
 			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
 					" WHERE " +
-					"("	+ sField7  + " = '"+ sCodGasto +"' )");
+					"("	+ sField7  + " = '"+ sCodMovimiento +"' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -277,7 +349,7 @@ public class QMListaGastos
 					sValidado = rs.getString(sField4);
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField3,sCodGasto);
+					logger.debug("{}:|{}|",sField3,sCodMovimiento);
 					logger.debug("{}:|{}|",sField4,sValidado);
 				}
 			}
@@ -290,7 +362,7 @@ public class QMListaGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Gasto:|{}|",sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
@@ -528,7 +600,7 @@ public class QMListaGastos
 
 
 	
-	public static boolean setValidado(String sCodGasto, String sValidado)
+	public static boolean setValidado(String sCodMovimiento, String sValidado)
 	{
 		Statement stmt = null;
 		boolean bSalida = true;
@@ -546,14 +618,14 @@ public class QMListaGastos
 					+ sField8 + " = '"+ sValidado + 
 					"' "+
 					" WHERE "
-					+ sField7 + " = '"+ sCodGasto +"'");
+					+ sField7 + " = '"+ sCodMovimiento +"'");
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Gasto:|{}|",sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
@@ -570,7 +642,7 @@ public class QMListaGastos
 		return bSalida;
 	}
 	
-	public static String getValidado(String sCodGasto)
+	public static String getValidado(String sCodMovimiento)
 	{
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -594,7 +666,7 @@ public class QMListaGastos
 
 
 			pstmt = conn.prepareStatement("SELECT " + sField8 + "  FROM " + sTable + 
-					" WHERE (" + sField7 + " = '" + sCodGasto + "')");
+					" WHERE (" + sField7 + " = '" + sCodMovimiento + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -611,7 +683,7 @@ public class QMListaGastos
 					sValidado = rs.getString(sField8);
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField7,sCodGasto);
+					logger.debug("{}:|{}|",sField7,sCodMovimiento);
 					logger.debug("{}:|{}|",sField8,sValidado);
 				}
 			}
@@ -624,7 +696,7 @@ public class QMListaGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Gasto:|{}|",sCodGasto);
+			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());

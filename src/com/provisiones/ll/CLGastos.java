@@ -9,7 +9,10 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.listas.QMListaGastos;
+import com.provisiones.dal.qm.listas.errores.QMListaErroresGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
+
+import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Gasto;
@@ -21,85 +24,105 @@ public class CLGastos
 
 	private static Logger logger = LoggerFactory.getLogger(CLGastos.class.getName());
 	
-	/*public static boolean actualizaGastoLeido(String linea)
+	public static int actualizaGastoLeido(String linea)
 	{
-		String sMethod = "actualizaGastoLeido";
-
-		boolean bSalida = false;
+		int iCodigo = 0;
 		
 		MovimientoGasto gasto = Parser.leerGasto(linea);
-		String sCodGastos = "";
-		
-		String sValidado = "";
-		String sBKCOTERR = "";
+
+		logger.debug(gasto.logMovimientoGasto());
 		
 		
-		com.provisiones.misc.logger.debug("Comprobando gasto leido...");
+		String sCodMovimiento = QMMovimientosGastos.getMovimientoGastoID(gasto);
 		
-		if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
-			sValidado = "V";
-		else
+		logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+		
+		if (!(sCodMovimiento.equals("")))
 		{
-			sValidado = "X";
-			sBKCOTERR = gasto.getCOTERR();
-		}
-		
-		
-		////sCodGastos = QMGastos.getGastoID(gasto);
-		
-		
-		
-		//lista_rechazados.add(sCodGastos);
-		
-		
-		bSalida = !(sCodGastos.equals(""));
-		
-		if (bSalida)
-		{
-		
-			QMGastos.modGasto(gasto);
-			QMListaGastos.setValidado(sCodGastos, sValidado);
+
+			
+			String sEstado = QMListaGastos.getValidado(sCodMovimiento);;
+			
+			if (sEstado.equals("P"))
+			{
+				iCodigo = -11;
+			}
+			else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
+			{
+				iCodigo = -12;
+			}
+			else if (sEstado.equals("E"))
+			{
+				String sValidado = "";
+				
+				logger.debug("gasto.getCOTERR()|{}|",gasto.getCOTERR());
+				logger.debug("ValoresDefecto.DEF_COTERR|{}|",ValoresDefecto.DEF_COTERR);
+				
+				if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
+				{
+					sValidado = "V";
+				}
+				else
+				{
+					sValidado = "X";
+				}
+				
+				logger.debug("sValidado|{}|",sValidado);
+				
+				if (QMListaGastos.existeRelacionGasto(gasto.getCOACES(), gasto.getCOGRUG(), gasto.getCOTPGA(), gasto.getCOSBGA(), gasto.getFEDEVE(), gasto.getNUPROF(), sCodMovimiento))
+				{
+					if(QMListaGastos.setValidado(sCodMovimiento, sValidado))
+					{
+						if (sValidado.equals("X"))
+						{
+							//recibido error
+							if (QMListaErroresGastos.addErrorGasto(sCodMovimiento, gasto.getCOTERR()))
+							{
+								iCodigo = 1;
+							}
+							else
+							{
+								QMListaGastos.setValidado(sCodMovimiento, "E");
+								iCodigo = -4;
+							}
+						}
+						else
+						{
+							//recibido OK
+							logger.info("Movimiento validado.");
+						}
+					}
+					else
+					{
+						iCodigo = -3;
+					}
+				}
+				else
+				{
+					iCodigo = -2;
+				}
+				
+				//bSalida = QMMovimientosGastos.modMovimientoGasto(gasto, sCodMovimiento);
+				//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+				//recuperaremos el codigo de error de la tabla pertinente.
+			}
+			else
+			{
+				iCodigo = -10;
+			}
+				
 		}
 		else 
 		{
-			QMGastos.addGasto(gasto);
-			com.provisiones.misc.logger.debug("El siguiente registro no se encuentre en el sistema:");
-			com.provisiones.misc.logger.debug("|"+linea+"|");
-			System.out.println("No Information Found");
+			logger.error("El siguiente registro no se encuentra en el sistema:");
+			logger.error("|{}|",linea);
+			iCodigo = -1;
 		}
 		
+		logger.error("iCodigo:|{}|",iCodigo);
 		
-		return bSalida;
-	}*/
-	
-	/*public static String decideAccion(String sEstado, String sMovimiento)
-	{
-		String sAccion = "";
-		if ((sEstado.equals("") && sMovimiento.equals("0"))
-				|| (sEstado.equals("") && sMovimiento.equals("1")))
-		{
-			sAccion = "A";
-		}		
-		else if ((sEstado.equals("0") && sMovimiento.equals("0"))
-			|| (sEstado.equals("0") && sMovimiento.equals("1"))
-			|| (sEstado.equals("1") && sMovimiento.equals("0"))//revisar
-			|| (sEstado.equals("1") && sMovimiento.equals("1"))
-			|| (sEstado.equals("2") && sMovimiento.equals("2"))
-			|| (sEstado.equals("3") && sMovimiento.equals("3")))
-		{
-			sAccion = "M";
-		}
-		else if ((sEstado.equals("0") && sMovimiento.equals("A"))
-				|| (sEstado.equals("1") && sMovimiento.equals("A"))
-				|| (sEstado.equals("2") && sMovimiento.equals("3")))
-		{
-			sAccion = "B";
-		}
-		else
-			sAccion = "#";
-		
-		return sAccion;
-	}*/
+		return iCodigo;
+	}
 	
 	public static ArrayList<ActivoTabla> buscarActivosConGastos(ActivoTabla filtro)
 	{

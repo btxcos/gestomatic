@@ -14,7 +14,12 @@
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="auto" header="Cargar Archivo">
-					<h:panelGrid columns="4" cellpadding="5">
+					<h:panelGrid columns="2" cellpadding="5">
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="1" cellpadding="5">
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, tabla" actionListener="#{GestorCargas.limpiarPlantilla}" />
+							</h:panelGrid>
+						</p:fieldset>
 						<p:fieldset legend="Info">
 							<h:panelGrid columns="3" cellpadding="5">
 
@@ -40,7 +45,7 @@
 				<p:layoutUnit position="center">
 					<p:panel>
 						<h:panelGrid columns="2" cellpadding="5">
-						<p:fileUpload fileUploadListener="#{GestorCargas.handleFileUpload}" mode="advanced" dragDropSupport="true"  
+						<p:fileUpload fileUploadListener="#{GestorCargas.cargaArchivo}" mode="advanced" dragDropSupport="true"  
 							update="popup, msgs, tabla" allowTypes="/(\.|\/)(txt)$/" /> 
 						<p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">  
 							<f:facet name="start">  
@@ -55,7 +60,6 @@
 					</p:panel>
 					<p:panel>
 						<p:dataTable id="tabla" var="mensaje" value="#{GestorCargas.tablamensajes}" rowKey="#{mensaje.sArchivo}"  
-								selection="#{GestorActivos.activoseleccionado}" selectionMode="single"
 									paginator="true" paginatorPosition="bottom" rows="10" 
 									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
 									rowsPerPageTemplate="10,15,20">  

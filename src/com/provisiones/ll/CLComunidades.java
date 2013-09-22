@@ -32,13 +32,8 @@ public class CLComunidades
 		
 		MovimientoComunidad comunidad = Parser.leerComunidad(linea);
 		
+		logger.debug(comunidad.logMovimientoComunidad());
 			
-		String sValidado = "";
-		
-		logger.debug("comunidad.getCOTDOR()|{}|",comunidad.getCOTDOR());
-		logger.debug("ValoresDefecto.DEF_COTDOR|{}|",ValoresDefecto.DEF_COTDOR);
-		
-		
 		
 		String sCodMovimiento = QMMovimientosComunidades.getMovimientoComunidadID(comunidad);
 		
@@ -46,23 +41,20 @@ public class CLComunidades
 		
 		if (!(sCodMovimiento.equals("")))
 		{
+			logger.debug("comunidad.getCOACCI()|{}|",comunidad.getCOACCI());
+
 			ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(comunidad.getCOACCI());
 			
-			boolean bEnviado = false;
+			String sEstado = "";
 			
 			switch (COACCI)
 			{
 			case X:case E:
-				bEnviado = QMListaComunidadesActivos.getValidado(sCodMovimiento).equals("E");
+				sEstado = QMListaComunidadesActivos.getValidado(sCodMovimiento);
 				break;
 
-			case A:
-				bEnviado = (QMListaComunidadesActivos.getValidado(sCodMovimiento).equals("E") 
-						&& QMListaComunidades.getValidado(sCodMovimiento).equals("E"));
-				break;
-
-			case M: case B:
-				bEnviado = QMListaComunidades.getValidado(sCodMovimiento).equals("E");
+			case M: case B: case A:
+				sEstado = QMListaComunidades.getValidado(sCodMovimiento);
 				break;
 				
 			default:
@@ -70,170 +62,170 @@ public class CLComunidades
 				iCodigo = -9;
 				break;
 			}
-		
-			if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+			
+			if (sEstado.equals("P"))
 			{
-				sValidado = "V";
+				iCodigo = -11;
 			}
-			else
+			else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
 			{
-				sValidado = "X";
+				iCodigo = -12;
 			}
-			
-			logger.debug("sValidado|{}|",sValidado);
-			
-			//comunidad.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
-			
-			logger.debug(comunidad.logMovimientoComunidad());
-			
-			
-			
-			logger.debug("comunidad.getCOACCI()|{}|",comunidad.getCOACCI());
-			
-			switch (COACCI)
+			else if (sEstado.equals("E"))
 			{
-			case X:case E:
-				if (QMListaComunidadesActivos.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento))
+				String sValidado = "";
+				
+				logger.debug("comunidad.getCOTDOR()|{}|",comunidad.getCOTDOR());
+				logger.debug("ValoresDefecto.DEF_COTDOR|{}|",ValoresDefecto.DEF_COTDOR);
+
+				if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
 				{
-					if (QMListaComunidadesActivos.setValidado(sCodMovimiento, sValidado))
-					{
-						if (sValidado.equals("X"))
-						{
-							//recibido un error
-							if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
-							{
-								iCodigo = 2;
-							}
-							else
-							{
-								QMListaComunidadesActivos.setValidado(sCodMovimiento, "E");
-								iCodigo = -3;
-							}
-						}
-						else
-						{
-							//recibido un OK
-							logger.info("Movimiento validado.");
-						}
-					}
-					else
-					{
-						iCodigo = -8;
-					}
+					sValidado = "V";
 				}
 				else
 				{
-					iCodigo = -6;
+					sValidado = "X";
 				}
-				break;
-			case A:
-				if (QMListaComunidades.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), sCodMovimiento))
+				
+				logger.debug("sValidado|{}|",sValidado);
+
+				switch (COACCI)
 				{
+				case X:case E:
 					if (QMListaComunidadesActivos.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento))
 					{
-						if (QMListaComunidades.setValidado(sCodMovimiento, sValidado))
+						if (QMListaComunidadesActivos.setValidado(sCodMovimiento, sValidado))
 						{
-
-							if (QMListaComunidadesActivos.setValidado(sCodMovimiento, sValidado))
+							if (sValidado.equals("X"))
 							{
-
-								if (sValidado.equals("X"))
+								//recibido un error
+								if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
 								{
-									//recibido error
-									if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
-									{
-										iCodigo = 1;
-									}
-									else
-									{
-										
-										QMListaComunidadesActivos.setValidado(sCodMovimiento, "E");
-										QMListaComunidades.setValidado(sCodMovimiento, "E");
-										iCodigo = -2;
-									}
-									
+									iCodigo = 1;
 								}
 								else
 								{
-									//recibido OK
-									logger.info("Movimiento validado.");
+									QMListaComunidadesActivos.setValidado(sCodMovimiento, "E");
+									iCodigo = -6;
 								}
-
 							}
 							else
 							{
-								
-								QMListaComunidades.setValidado(sCodMovimiento, "E");
-								iCodigo = -8;
+								//recibido un OK
+								logger.info("Movimiento validado.");
 							}
-
 						}
 						else
 						{
-							iCodigo = -7;
+							iCodigo = -5;
 						}
-
 					}
 					else
 					{
-						
-						iCodigo = -6;						
+						iCodigo = -3;
 					}
-				}
-				else
-				{
-					
-					iCodigo = -5;
-				}
-				break;
-			case M: case B:
-				if (QMListaComunidades.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), sCodMovimiento))
-				{
-					if(QMListaComunidades.setValidado(sCodMovimiento, sValidado))
+					break;
+				case A:
+					if (QMListaComunidades.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), sCodMovimiento))
 					{
-						if (sValidado.equals("X"))
+						if (QMListaComunidadesActivos.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), comunidad.getCOACES(), sCodMovimiento))
 						{
-							//recibido error
-							if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
+							if (QMListaComunidades.setValidado(sCodMovimiento, sValidado))
 							{
-								iCodigo = 3;
+								if (QMListaComunidadesActivos.setValidado(sCodMovimiento, sValidado))
+								{
+									if (sValidado.equals("X"))
+									{
+										//recibido error
+										if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
+										{
+											iCodigo = 1;
+										}
+										else
+										{
+											QMListaComunidadesActivos.setValidado(sCodMovimiento, "E");
+											QMListaComunidades.setValidado(sCodMovimiento, "E");
+											iCodigo = -6;
+										}
+									}
+									else
+									{
+										//recibido OK
+										logger.info("Movimiento validado.");
+									}
+								}
+								else
+								{
+									QMListaComunidades.setValidado(sCodMovimiento, "E");
+									iCodigo = -5;
+								}
 							}
 							else
 							{
-								
-								QMListaComunidades.setValidado(sCodMovimiento, "E");
 								iCodigo = -4;
 							}
 						}
 						else
 						{
-							//recibido OK
-							logger.info("Movimiento validado.");
+							iCodigo = -3;						
 						}
 					}
 					else
 					{
-						iCodigo = -7;
+						iCodigo = -2;
 					}
-				}
-				else
-				{
-					iCodigo = -5;
-				}
-				break;
+					break;
+				case M: case B:
+					if (QMListaComunidades.existeRelacionComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM(), sCodMovimiento))
+					{
+						if(QMListaComunidades.setValidado(sCodMovimiento, sValidado))
+						{
+							if (sValidado.equals("X"))
+							{
+								//recibido error
+								if (QMListaErroresComunidades.addErrorComunidad(sCodMovimiento, comunidad.getCOTDOR()))
+								{
+									iCodigo = 1;
+								}
+								else
+								{
+									QMListaComunidades.setValidado(sCodMovimiento, "E");
+									iCodigo = -6;
+								}
+							}
+							else
+							{
+								//recibido OK
+								logger.info("Movimiento validado.");
+							}
+						}
+						else
+						{
+							iCodigo = -4;
+						}
+					}
+					else
+					{
+						iCodigo = -2;
+					}
+					break;
+					
+				default:
+					logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",comunidad.getCOACCI());
+					iCodigo = -9;
+					break;
 				
-			default:
-				logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",comunidad.getCOACCI());
-				iCodigo = -9;
-				break;
-			
+				}
+				
+				//bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
+				//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+				//recuperaremos el codigo de error de la tabla pertinente.
 			}
-			
-			//bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
-			//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
-			//recuperaremos el codigo de error de la tabla pertinente.
-			
-			
+			else
+			{
+				iCodigo = -10;
+			}
+				
 		}
 		else 
 		{

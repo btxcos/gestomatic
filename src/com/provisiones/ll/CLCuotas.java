@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMCuotas;
+
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
+import com.provisiones.dal.qm.listas.errores.QMListaErroresCuotas;
 import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
@@ -22,55 +24,119 @@ public class CLCuotas
   
 	private static Logger logger = LoggerFactory.getLogger(CLCuotas.class.getName());
 	
-	public static boolean actualizaCuotaLeida(String linea)
+	public static int actualizaCuotaLeida(String linea)
 	{
-		boolean bSalida = false;
+		int iCodigo = 0;
 		
 		MovimientoCuota cuota = Parser.leerCuota(linea);
-		
-		String sBKCOTDOR = ValoresDefecto.DEF_COTDOR;
-		String sBKOBDEER = ValoresDefecto.DEF_OBDEER.trim();
-		
-		String sValidado = "";
-		
-		if (cuota.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
-		{
-			sValidado = "V";
-			sBKOBDEER = cuota.getOBDEER();
-		}
-		else
-		{
-			sValidado = "X";
-			sBKCOTDOR = cuota.getCOTDOR();
-			sBKOBDEER = cuota.getOBDEER();
-			cuota.setCOTDOR(ValoresDefecto.DEF_COTDOR);
 
-		}
+		logger.debug(cuota.logMovimientoCuota());
 		
-		cuota.setOBDEER(ValoresDefecto.DEF_OBDEER.trim());
-		
-			   				
 		String sCodMovimiento = QMMovimientosCuotas.getMovimientoCuotaID(cuota);
 		
-		bSalida = !(sCodMovimiento.equals(""));
+		logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
 		
-		if (bSalida)
+		if (!(sCodMovimiento.equals("")))
 		{
-		
-			cuota.setCOTDOR(sBKCOTDOR);
-			cuota.setOBDEER(sBKOBDEER);
+
 			
-			QMMovimientosCuotas.modMovimientoCuota(cuota, sCodMovimiento);
-			QMListaCuotas.setValidado(sCodMovimiento, sValidado);
+			String sEstado = QMListaCuotas.getValidado(sCodMovimiento);;
+			
+			if (sEstado.equals("P"))
+			{
+				iCodigo = -11;
+			}
+			else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
+			{
+				iCodigo = -12;
+			}
+			else if (sEstado.equals("E"))
+			{
+				String sValidado = "";
+
+				logger.debug("cuota.getCOTDOR()|{}|",cuota.getCOTDOR());
+				logger.debug("ValoresDefecto.DEF_COTDOR|{}|",ValoresDefecto.DEF_COTDOR);
+
+				if (cuota.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+				{
+					sValidado = "V";
+				}
+				else
+				{
+					sValidado = "X";
+				}
+				
+				logger.debug("sValidado|{}|",sValidado);
+				
+				logger.debug("cuota.getCOACCI()|{}|",cuota.getCOACCI());
+
+				ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(cuota.getCOACCI());
+
+				switch (COACCI)
+				{
+				case A: case M: case B:
+					if (QMListaCuotas.existeRelacionCuota(cuota.getCOCLDO(),cuota.getNUDCOM(),cuota.getCOSBAC(),cuota.getCOACES(), sCodMovimiento))
+					{
+						if(QMListaCuotas.setValidado(sCodMovimiento, sValidado))
+						{
+							if (sValidado.equals("X"))
+							{
+								//recibido error
+								if (QMListaErroresCuotas.addErrorCuota(sCodMovimiento, cuota.getCOTDOR()))
+								{
+									iCodigo = 1;
+								}
+								else
+								{
+									QMListaCuotas.setValidado(sCodMovimiento, "E");
+									iCodigo = -4;
+								}
+							}
+							else
+							{
+								//recibido OK
+								logger.info("Movimiento validado.");
+							}
+						}
+						else
+						{
+							iCodigo = -3;
+						}
+					}
+					else
+					{
+						iCodigo = -2;
+					}
+					break;
+					
+				default:
+					logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",cuota.getCOACCI());
+					iCodigo = -9;
+					break;
+				
+				}
+				
+				//bSalida = QMMovimientosCuotas.modMovimientoCuota(cuota, sCodMovimiento);
+				//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+				//recuperaremos el codigo de error de la tabla pertinente.
+			}
+			else
+			{
+				iCodigo = -10;
+			}
+				
 		}
 		else 
 		{
 			logger.error("El siguiente registro no se encuentra en el sistema:");
 			logger.error("|{}|",linea);
-
+			iCodigo = -1;
 		}
 		
-		return bSalida;
+		logger.error("iCodigo:|{}|",iCodigo);
+		
+		return iCodigo;
+		
 	}
 	
 	public static ArrayList<ActivoTabla> buscarActivosComunidadDisponibles (ActivoTabla activo, String sCodCOCLDO, String sCodNUDCOM)

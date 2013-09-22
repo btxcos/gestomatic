@@ -253,6 +253,100 @@ public class QMMovimientosReferencias
 		return bSalida;
 	}
 
+	public static String getMovimientoReferenciaCatastralID(MovimientoReferenciaCatastral referencia)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sMovimientoReferenciaCatastralID = "";
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+
+		logger.debug("Ejecutando Query...");
+		
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					+ sField1  +               
+					" FROM " + sTable + 
+					" WHERE ("
+					+ sField2  + " = '" + referencia.getCODTRN()	+ "' AND "
+					+ sField3  + " = '" + referencia.getCOTDOR()	+ "' AND "
+					+ sField4  + " = '" + referencia.getIDPROV()	+ "' AND "
+					+ sField5  + " = '" + referencia.getCOACCI()	+ "' AND "
+					+ sField6  + " = '" + referencia.getCOENGP()	+ "' AND "
+					+ sField7  + " = '" + referencia.getCOACES()	+ "' AND "
+					+ sField8  + " = '" + referencia.getNURCAT()	+ "' AND "
+					+ sField9  + " = '" + referencia.getBITC16()	+ "' AND "
+					+ sField10 + " = '" + referencia.getTIRCAT()	+ "' AND "
+					+ sField11 + " = '" + referencia.getBITC17()	+ "' AND "
+					+ sField12 + " = '" + referencia.getENEMIS()	+ "' AND "
+					+ sField13 + " = '" + referencia.getCOTEXA()	+ "' AND "
+					+ sField14 + " = '" + referencia.getBITC09()	+ "' AND "
+					+ sField15 + " = '" + referencia.getOBTEXC()	+ "' AND "
+					+ sField16 + " = '" + referencia.getOBDEER()	+ "'" +
+
+
+					//Ampliacion de valor catastral
+					" AND "
+					+ sField17 + " = '" + referencia.getBITC23()	+ "' AND "
+					+ sField18 + " = '" + referencia.getIMVSUE()	+ "' AND "
+					+ sField19 + " = '" + referencia.getBITC24()	+ "' AND "
+					+ sField20 + " = '" + referencia.getIMCATA()	+ "' AND "
+					+ sField21 + " = '" + referencia.getBITC25()	+ "' AND "
+					+ sField22 + " = '" + referencia.getFERECA()	+ "'" +
+
+					")"); 
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					sMovimientoReferenciaCatastralID = rs.getString(sField1); 
+
+  					
+  					logger.debug("Encontrado el registro!");
+
+  					logger.debug("{}:|{}|",sField1,sMovimientoReferenciaCatastralID);
+
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return sMovimientoReferenciaCatastralID;
+	}
+	
 	public static MovimientoReferenciaCatastral getMovimientoReferenciaCatastral(String sMovimientoReferenciaCatastralID)
 	{
 		Statement stmt = null;

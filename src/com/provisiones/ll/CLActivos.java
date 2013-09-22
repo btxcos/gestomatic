@@ -16,7 +16,37 @@ public class CLActivos
 {
 	private static Logger logger = LoggerFactory.getLogger(CLActivos.class.getName());
 	
-	
+	public static int actualizaActivoLeido(String linea)
+	{
+		int iCodigo = 0;
+		
+		Activo activo = Parser.leerActivo(linea);
+		
+		String sCodActivo =  activo.getCOACES();
+		
+		logger.debug("sCodActivo:|{}|",sCodActivo);
+		
+		if (!QMActivos.existeActivo(sCodActivo))
+		{
+			if (QMActivos.addActivo(activo))
+			{
+				logger.info("Nuevo Activo registrado.");
+			}
+			else
+			{
+				iCodigo = -2;
+			}
+		}
+		else
+		{
+			logger.warn("El siguiente registro ya se encuentre en el sistema:");
+			logger.warn("|{}|",linea);
+			iCodigo = -2;
+		}
+				
+		return iCodigo;
+	}	
+
 	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla activobuscado)
 	{
 			
@@ -60,29 +90,4 @@ public class CLActivos
 			
 		return QMActivos.getSociedadPatrimonial(sCodCOACES);
 	}
-	
-	public static boolean actualizaActivoLeido(String linea)
-	{
-		boolean bSalida = false;
-		
-		Activo activo = Parser.leerActivo(linea);
-		
-		String sCodActivo =  activo.getCOACES();
-				
-		bSalida = QMActivos.addActivo(activo);
-		
-		logger.debug("sCodActivo:|{}|",sCodActivo);
-		
-	
-		bSalida =  bSalida && !sCodActivo.equals("");
-		
-		if (!bSalida)
-		{
-			logger.warn("El siguiente registro ya se encuentre en el sistema:");
-			logger.warn("|{}|",linea);
-		}
-		
-		return bSalida;
-	}
-
 }

@@ -72,7 +72,7 @@ public class QMListaCuotas
 		    + Utils.timeStamp() + 
 			"')");
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 		} 
 		catch (SQLException ex) 
 		{
@@ -113,7 +113,7 @@ public class QMListaCuotas
 			stmt.executeUpdate("DELETE FROM " + sTable + 
 					" WHERE (" + sField5 + " = '" + sCodMovimiento +"')");
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 		} 
 		catch (SQLException ex) 
 		{
@@ -132,6 +132,78 @@ public class QMListaCuotas
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
+	}
+	
+	public static boolean existeRelacionCuota(String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodCOACES, String sCodMovimiento)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
+					" WHERE " +
+					"(" + sField1 + " = '" + sCodCOACES + "' " +
+					"AND" + sField2 + " = '" + sCodCOCLDO + "' " +
+					"AND" + sField3 + " = '" + sCodNUDCOM + "' " +
+					"AND" + sField4 + " = '" + sCodCOSBAC + "' " +
+					"AND" + sField5 + " = '" + sCodMovimiento + "' )");
+
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con éxito!");			
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					logger.debug("Encontrado el registro!");
+				}
+			}
+			if (found == false) 
+			{
+ 
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
 	}
 	
 	public static boolean compruebaRelacionCuotaActivo(String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodCOACES)
@@ -164,7 +236,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");			
+			logger.debug("Ejecutada con éxito!");			
 			
 			if (rs != null) 
 			{
@@ -231,7 +303,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 			
 		
 			int i = 0;
@@ -308,7 +380,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 			
 			int i = 0;
 			
@@ -395,7 +467,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 			
 			int i = 0;
 			
@@ -468,7 +540,7 @@ public class QMListaCuotas
 					" WHERE " +
 					"(" + sField5 + " = '" + sCodMovimiento +"' )");
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
 			
 		} 
@@ -508,7 +580,13 @@ public class QMListaCuotas
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " + sField6 + "  FROM " + sTable + 
+				" WHERE " +
+				"(" + sField5 + " = '" + sCodMovimiento +"' )";
 
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -521,7 +599,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");			
+			logger.debug("Ejecutada con éxito!");			
 			
 			if (rs != null) 
 			{
@@ -592,7 +670,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 			
 			if (rs != null) 
 			{
@@ -710,7 +788,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
 			
 
@@ -838,7 +916,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
 			
 
@@ -974,7 +1052,7 @@ public class QMListaCuotas
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutada con éxito!");
 
 			if (rs != null) 
 			{
