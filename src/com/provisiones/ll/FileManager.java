@@ -681,7 +681,8 @@ public class FileManager
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			int iCodigo = CLGastos.actualizaGastoLeido(linea);
+	    			
 	    			String sMensaje = "";
 	    			
 	    			switch (iCodigo)
@@ -1112,7 +1113,8 @@ public class FileManager
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			int iCodigo = CLReferencias.actualizaReferenciaLeida(linea);
+
 	    			String sMensaje = "";
 	    			
 	    			switch (iCodigo)
@@ -1255,7 +1257,8 @@ public class FileManager
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			int iCodigo = CLImpuestos.actualizaImpuestoLeido(linea);
+
 	    			String sMensaje = "";
 	    			
 	    			switch (iCodigo)

@@ -27,7 +27,7 @@ public class Parser {
         
         logger.debug("sResultado:|{}|",sResultado);
         
-		return String.valueOf(Integer.parseInt(sCampo));
+		return sResultado;
 	}
 
 	public static String limpiaCampoAlfanumerico(String sCampo)
@@ -614,7 +614,7 @@ public class Parser {
 	public static MovimientoReferenciaCatastral leerReferenciaCatastral (String linea)
 	{
 
-		String sCODTRN = limpiaCampoNumerico(linea.substring(Posiciones.E3_CODTRN_P, Posiciones.E3_CODTRN_P+Longitudes.CODTRN_L));
+		String sCODTRN = linea.substring(Posiciones.E3_CODTRN_P, Posiciones.E3_CODTRN_P+Longitudes.CODTRN_L);
 		String sCOTDOR = limpiaCampoNumerico(linea.substring(Posiciones.E3_COTDOR_P, Posiciones.E3_COTDOR_P+Longitudes.COTDOR_L));
 		String sIDPROV = limpiaCampoNumerico(linea.substring(Posiciones.E3_IDPROV_P, Posiciones.E3_IDPROV_P+Longitudes.IDPROV_L));
 		String sCOACCI = linea.substring(Posiciones.E3_COACCI_P, Posiciones.E3_COACCI_P+Longitudes.COACCI_L);
@@ -700,9 +700,9 @@ public class Parser {
 		String sBITC20 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BITC20_P, Posiciones.E4_BITC20_P+Longitudes.BITC20_L),"#");
 		String sFEDEIN = linea.substring(Posiciones.E4_FEDEIN_P, Posiciones.E4_FEDEIN_P+Longitudes.FEDEIN_L);
 		String sBITC21 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BITC21_P, Posiciones.E4_BITC21_P+Longitudes.BITC21_L),"#");
-		String sBISODE = linea.substring(Posiciones.E4_BISODE_P, Posiciones.E4_BISODE_P+Longitudes.BISODE_L);
+		String sBISODE = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BISODE_P, Posiciones.E4_BISODE_P+Longitudes.BISODE_L),"#");
 		String sBITC22 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BITC22_P, Posiciones.E4_BITC22_P+Longitudes.BITC22_L),"#");
-		String sBIRESO = linea.substring(Posiciones.E4_BIRESO_P, Posiciones.E4_BIRESO_P+Longitudes.BIRESO_L);
+		String sBIRESO = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BIRESO_P, Posiciones.E4_BIRESO_P+Longitudes.BIRESO_L),"#");
 		String sCOTEXA = limpiaCampoNumerico(linea.substring(Posiciones.E4_COTEXA_P, Posiciones.E4_COTEXA_P+Longitudes.COTEXA_L));
 		String sBITC09 = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.E4_BITC09_P, Posiciones.E4_BITC09_P+Longitudes.BITC09_L),"#");
 		String sOBTEXC = linea.substring(Posiciones.E4_OBTEXC_P, Posiciones.E4_OBTEXC_P+Longitudes.OBTEXC_L).trim();

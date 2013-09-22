@@ -157,10 +157,10 @@ public class QMListaCuotas
 			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
 					" WHERE " +
 					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					"AND" + sField2 + " = '" + sCodCOCLDO + "' " +
-					"AND" + sField3 + " = '" + sCodNUDCOM + "' " +
-					"AND" + sField4 + " = '" + sCodCOSBAC + "' " +
-					"AND" + sField5 + " = '" + sCodMovimiento + "' )");
+					" AND " + sField2 + " = '" + sCodCOCLDO + "' " +
+					" AND " + sField3 + " = '" + sCodNUDCOM + "' " +
+					" AND " + sField4 + " = '" + sCodCOSBAC + "' " +
+					" AND " + sField5 + " = '" + sCodMovimiento + "' )");
 
 
 			rs = pstmt.executeQuery();
@@ -581,12 +581,6 @@ public class QMListaCuotas
 		
 		logger.debug("Ejecutando Query...");
 		
-		String sQuery = "SELECT " + sField6 + "  FROM " + sTable + 
-				" WHERE " +
-				"(" + sField5 + " = '" + sCodMovimiento +"' )";
-
-		logger.debug(sQuery);
-		
 		try 
 		{
 			stmt = conn.createStatement();
@@ -608,7 +602,7 @@ public class QMListaCuotas
 				{
 					found = true;
 
-					sValidado = rs.getString(sField5);
+					sValidado = rs.getString(sField6);
 					
 					logger.debug("Encontrado el registro!");
 					
@@ -624,7 +618,6 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-
 			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());

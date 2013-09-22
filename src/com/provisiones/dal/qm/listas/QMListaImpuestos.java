@@ -1118,7 +1118,7 @@ public class QMListaImpuestos
 				{
 					found = true;
 
-					sValidado = rs.getString(sField4);
+					sValidado = rs.getString(sField5);
 
 					logger.debug("Encontrado el registro!");
 
