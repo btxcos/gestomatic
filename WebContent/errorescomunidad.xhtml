@@ -33,9 +33,9 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorErroresComunidad.limpiarPlantilla}"/>
+								<p:commandButton value="Limpiar Plantilla" update="panel, form:errores, form:comunidadeserror" actionListener="#{GestorErroresComunidad.limpiarPlantilla}"/>
 								
-								<p:commandButton value="Buscar Errores" update="errores, msgs, popup" actionListener="#{GestorErroresComunidad.buscaErrores}"/>
+								<p:commandButton value="Buscar Errores" update="msgs, popup, form:comunidadeserror" oncomplete="dlgBuscarComunidadesError.show()"/>
 
 								<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorErroresComunidad.registraDatos}"/>
 
@@ -71,11 +71,11 @@
 				<h:panelGrid columns="1" cellpadding="5">
 					<p:panel>
 						<p:contextMenu for="errores">
-							<p:menuitem value="Cargar Errores" update="form:popup, form:msgs" icon="ui-icon-folder-open" action="#{GestorErroresComunidad.seleccionarError}"/>
+							<p:menuitem value="Cargar Error" update="form:popup, form:msgs, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresComunidad.seleccionarError}"/>
 						</p:contextMenu>  
 
-						<p:dataTable id="errores" var="error" value="#{GestorErroresComunidad.tablaerrores}" rowKey="#{error.MOVIMIENTO}"  
-								selection="#{GestorErroresComunidad.errorseleccionado}" selectionMode="single"
+						<p:dataTable id="errores" var="error" value="#{GestorErroresComunidad.tablaerrores}" rowKey="#{error.sCodError}"  
+									selection="#{GestorErroresComunidad.errorseleccionado}" selectionMode="single"
 									paginator="true" paginatorPosition="bottom" rows="10" 
 									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
 									rowsPerPageTemplate="5,10,15">  
@@ -83,21 +83,13 @@
 								Errores recibidos
 							</f:facet>
 
-							<p:column sortBy="#{error.COCLDO}" headerText="Documento">  
-								#{error.COCLDO}  
-							</p:column>  
+							<p:column sortBy="#{error.sCodError}" headerText="Error">  
+								#{error.sCodError}  
+							</p:column>
 
-							<p:column sortBy="#{error.NUDCOM}" headerText="Numero">  
-								#{error.NUDCOM}  
-							</p:column>  
-
-							<p:column sortBy="#{error.NOMCOC}" headerText="Comunidad">
-								#{error.NOMCOC}  
-							</p:column>  
-
-							<p:column sortBy="#{error.ERRORES}" headerText="Errores">
-								#{error.ERRORES}  
-							</p:column>  
+							<p:column sortBy="#{error.sDescripcion}" headerText="Descripcion">  
+								#{error.sDescripcion}  
+							</p:column>
 
 						</p:dataTable>
 					</p:panel>
@@ -111,14 +103,14 @@
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="COACES" value="Código de activo: "/>
-											<p:inputText id="COACES" value="#{GestorErroresComunidad.sCOACES}" size="9" maxlength="9"/>
+											<p:inputText id="COACES" value="#{GestorErroresComunidad.sCOACES}" size="9" maxlength="9" disabled="#{GestorErroresComunidad.bRCOACES}"/>
 
-											<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel" actionListener="#{GestorErroresComunidad.buscarComunidad}"/>	
+											<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel" actionListener="#{GestorErroresComunidad.buscarComunidad}" disabled="#{GestorErroresComunidad.bRCOACES}"/>	
 
 										</h:panelGrid>
 									</p:panel>
 
-								<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+								<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()" disabled="#{GestorErroresComunidad.bRCOACES}"/>		
 
 								</h:panelGrid>
 							</p:fieldset>
@@ -130,15 +122,15 @@
 										<h:panelGrid columns="6" cellpadding="5">
 
 											<h:outputText for="COCLDO" value="Documento: "/>
-											<p:selectOneMenu id="COCLDO" value="#{GestorErroresComunidad.sCOCLDO}">
+											<p:selectOneMenu id="COCLDO" value="#{GestorErroresComunidad.sCOCLDO}" disabled="#{GestorErroresComunidad.bRCOCLDO}">
 												<f:selectItem itemLabel="Elija..." itemValue=""/>
 												<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}"/>
 											</p:selectOneMenu>
 
 											<h:outputText for="NUDCOM" value="Número: "/>
-											<p:inputText id="NUDCOM" value="#{GestorErroresComunidad.sNUDCOM}" size="10" maxlength="10"/>
+											<p:inputText id="NUDCOM" value="#{GestorErroresComunidad.sNUDCOM}" size="10" maxlength="10" disabled="#{GestorErroresComunidad.bRNUDCOM}"/>
 
-											<p:commandButton value="Cargar" update="panel, msgs, popup" actionListener="#{GestorErroresComunidad.cargarComunidad}"/>
+											<p:commandButton value="Cargar" update="panel, msgs, popup" actionListener="#{GestorErroresComunidad.cargarComunidad}" disabled="#{GestorErroresComunidad.bRNUDCOM}"/>
 
 										</h:panelGrid>
 								  </p:panel>
@@ -147,10 +139,10 @@
 										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="NOMCOC" value="Nombre comunidad: "/>
-											<p:inputText id="NOMCOC" value="#{GestorErroresComunidad.sNOMCOC}" size="60" maxlength="60"/>
+											<p:inputText id="NOMCOC" value="#{GestorErroresComunidad.sNOMCOC}" size="60" maxlength="60" disabled="#{GestorErroresComunidad.bRNOMCOC}"/>
 
 											<h:outputText for="NODCCO"  value="Correo electrónico: "/>
-											<p:inputText id="NODCCO" value="#{GestorErroresComunidad.sNODCCO}" size="60"  maxlength="60"/>
+											<p:inputText id="NODCCO" value="#{GestorErroresComunidad.sNODCCO}" size="60"  maxlength="60" disabled="#{GestorErroresComunidad.bRNODCCO}"/>
 
 										</h:panelGrid>
 								  </p:panel>
@@ -162,10 +154,10 @@
 								<h:panelGrid columns="2" cellpadding="5">
 
 									<h:outputText for="NOMPRC" value="Presidente: "/>
-									<p:inputText id="NOMPRC" value="#{GestorErroresComunidad.sNOMPRC}" size="55" maxlength="55"/>
+									<p:inputText id="NOMPRC" value="#{GestorErroresComunidad.sNOMPRC}" size="55" maxlength="55" disabled="#{GestorErroresComunidad.bRNOMPRC}"/>
 
 									<h:outputText for="NUTPRC" value="Número de contacto: "/>
-									<p:inputText id="NUTPRC" value="#{GestorErroresComunidad.sNUTPRC}" size="14" maxlength="14"/>
+									<p:inputText id="NUTPRC" value="#{GestorErroresComunidad.sNUTPRC}" size="14" maxlength="14" disabled="#{GestorErroresComunidad.bRNUTPRC}"/>
 
 								</h:panelGrid>
 							</p:fieldset>
@@ -174,13 +166,13 @@
 								<h:panelGrid columns="2" cellpadding="5">
 
 									<h:outputText for="NOMADC" value="Administrador: "/>
-									<p:inputText id="NOMADC" value="#{GestorErroresComunidad.sNOMADC}" size="55" maxlength="55"/>
+									<p:inputText id="NOMADC" value="#{GestorErroresComunidad.sNOMADC}" size="55" maxlength="55" disabled="#{GestorErroresComunidad.bRNOMADC}"/>
 
 									<h:outputText for="NUTADC" value="Número de contacto: "/>
-									<p:inputText id="NUTADC" value="#{GestorErroresComunidad.sNUTADC}" size="14" maxlength="14"/>
+									<p:inputText id="NUTADC" value="#{GestorErroresComunidad.sNUTADC}" size="14" maxlength="14" disabled="#{GestorErroresComunidad.bRNUTADC}"/>
 
 									<h:outputText for="NODCAD" value="Correo electrónico: "/>
-									<p:inputText id="NODCAD" value="#{GestorErroresComunidad.sNODCAD}" size="60" maxlength="60"/>
+									<p:inputText id="NODCAD" value="#{GestorErroresComunidad.sNODCAD}" size="60" maxlength="60" disabled="#{GestorErroresComunidad.bRNODCAD}"/>
 
 								</h:panelGrid>
 							</p:fieldset>
@@ -190,19 +182,19 @@
 
 									<h:outputText for="NUCCNT" value="Número de Cuenta: "/>
 
-									<p:inputMask id="NUCCEN" value="#{GestorErroresComunidad.sNUCCEN}" mask="9999" size="4" >
+									<p:inputMask id="NUCCEN" value="#{GestorErroresComunidad.sNUCCEN}" mask="9999" size="4" disabled="#{GestorErroresComunidad.bRNUCCEN}">
 										<f:validateLength minimum="4"/>
 									</p:inputMask>
 									
-									<p:inputMask id="NUCCOF" value="#{GestorErroresComunidad.sNUCCOF}" mask="9999" size="4" >
+									<p:inputMask id="NUCCOF" value="#{GestorErroresComunidad.sNUCCOF}" mask="9999" size="4" disabled="#{GestorErroresComunidad.bRNUCCOF}">
 										<f:validateLength minimum="4"/>
 									</p:inputMask>
 									
-									<p:inputMask id="NUCCDI" value="#{GestorErroresComunidad.sNUCCDI}" mask="99" size="2" >
+									<p:inputMask id="NUCCDI" value="#{GestorErroresComunidad.sNUCCDI}" mask="99" size="2" disabled="#{GestorErroresComunidad.bRNUCCDI}">
 										<f:validateLength minimum="2"/>
 									</p:inputMask>
 									
-									<p:inputMask id="NUCCNT" value="#{GestorErroresComunidad.sNUCCNT}" mask="9999999999" size="10" >
+									<p:inputMask id="NUCCNT" value="#{GestorErroresComunidad.sNUCCNT}" mask="9999999999" size="10" disabled="#{GestorErroresComunidad.bRNUCCNT}">
 										<f:validateLength minimum="10"/>
 									</p:inputMask>
 
@@ -213,7 +205,7 @@
 								<h:panelGrid columns="1" cellpadding="5">
 
 								<p:inputTextarea id="OBTEXC" value="#{GestorErroresComunidad.sOBTEXC}" rows="2" cols="80" counter="counter" maxlength="110"
-									counterTemplate="{0} carácteres restantes." autoResize="false"/>
+									counterTemplate="{0} carácteres restantes." autoResize="false" disabled="#{GestorErroresComunidad.bROBTEXC}"/>
 								<h:outputText id="counter"/>
 
 								</h:panelGrid>
@@ -304,6 +296,84 @@
 								</p:panel>
 							</h:panelGrid>
 						</p:fieldset>
+					</p:dialog>
+
+					<p:dialog header="Buscar Comunidades con errores" widgetVar="dlgBuscarComunidadesError" resizable="false">
+						<p:fieldset legend="Criterios de Búsqueda">
+							<h:panelGrid columns="1" cellpadding="5">
+								<p:panel id="panelBuscarErrores" >
+									<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText for="COCLDOB" value="Documento: "/>
+											<p:selectOneMenu id="COCLDOB" value="#{GestorErroresComunidad.sCOCLDOB}">
+												<f:selectItem itemLabel="Elija..." itemValue=""/>
+												<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}"/>
+											</p:selectOneMenu>
+
+											<h:outputText for="NUDCOMB" value="Número: "/>
+											<p:inputText id="NUDCOMB" value="#{GestorErroresComunidad.sNUDCOMB}" size="10" maxlength="10"/>
+
+
+									</h:panelGrid>
+
+									<h:panelGrid columns="2" cellpadding="5">
+
+
+
+										<h:outputText for="NOMCOCB" value="Nombre comunidad: "/>
+										<p:inputText id="NOMCOCB" value="#{GestorErroresComunidad.sNOMCOCB}" size="60" maxlength="60"/>
+
+										<h:outputText for="COACESB" value="Código de activo: "/>
+										<p:inputText id="COACESB" value="#{GestorErroresComunidad.sCOACESB}" size="9" maxlength="9"/>
+
+									</h:panelGrid>
+
+								</p:panel>
+								<p:panel >
+									<h:panelGrid columns="3" cellpadding="5">
+
+										<p:commandButton value="Buscar" update="popup, form:comunidadeserror" actionListener="#{GestorErroresComunidad.buscaComunidadesError}" oncomplete="dlgTablaComunidadesError.show()"/>	
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorErroresComunidad.limpiarPlantillaError}"/>
+
+									</h:panelGrid>
+								</p:panel>
+							</h:panelGrid>
+						</p:fieldset>
+					</p:dialog>
+
+					<p:dialog header="Comunidades con errores: " widgetVar="dlgTablaComunidadesError" resizable="false">
+
+						<p:contextMenu for="comunidadeserror">
+							<p:menuitem value="Cargar Errores" update="form:popup, form:msgs, form:errores, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresComunidad.seleccionarComunidad}" oncomplete="dlgTablaComunidadesError.hide(); dlgBuscarComunidadesError.hide()"/>
+						</p:contextMenu>  
+
+						<p:dataTable id="comunidadeserror" var="comunidad" value="#{GestorErroresComunidad.tablacomunidadeserror}" rowKey="#{comunidad.MOVIMIENTO}"  
+								selection="#{GestorErroresComunidad.comunidadseleccionada}" selectionMode="single"
+									paginator="true" paginatorPosition="bottom" rows="10" 
+									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+									rowsPerPageTemplate="5,10,15">  
+							<f:facet name="header">  
+								Comunidades
+							</f:facet>
+
+							<p:column sortBy="#{comunidad.COCLDO}" headerText="Documento">
+								#{comunidad.COCLDO}  
+							</p:column>
+
+							<p:column sortBy="#{comunidad.NUDCOM}" headerText="Número">
+								#{comunidad.NUDCOM}  
+							</p:column>
+
+							<p:column sortBy="#{comunidad.NOMCOC}" headerText="Comunidad">
+								#{comunidad.NOMCOC}  
+							</p:column>
+
+							<p:column sortBy="#{comunidad.ERRORES}" headerText="Errores">
+								#{comunidad.ERRORES}  
+							</p:column>
+
+						</p:dataTable>
+
 					</p:dialog>
 
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">

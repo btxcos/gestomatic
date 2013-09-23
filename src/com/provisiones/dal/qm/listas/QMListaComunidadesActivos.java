@@ -1375,4 +1375,75 @@ public class QMListaComunidadesActivos
 				sOBTEXC);
 	}
 	
+	public static ArrayList<String> buscarDependencias(String sCodCOCLDO, String sCodNUDCOM, String sCodMovimiento)
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;		
+
+		boolean found = false;
+		
+		ArrayList<String> result = new ArrayList<String>();
+
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField4  + 
+					"  FROM " + sTable + 
+					" WHERE " +
+					"(" 
+					+ sField1 + " = '" + sCodCOCLDO + "' AND "
+					+ sField2 + " = '" + sCodNUDCOM + "' AND "
+					+ sField4 + " >=  '" + sCodMovimiento + "')");
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					result.add(rs.getString(sField4));
+
+					logger.debug("Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}			
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
+	
 }

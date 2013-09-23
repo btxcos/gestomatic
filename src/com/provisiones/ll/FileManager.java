@@ -30,7 +30,6 @@ import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.listas.QMListaReferencias;
 
-import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;

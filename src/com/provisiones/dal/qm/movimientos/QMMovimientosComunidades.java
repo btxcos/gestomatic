@@ -281,6 +281,47 @@ public class QMMovimientosComunidades
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
+	
+	public static boolean existeMovimientoComunidad(String sMovimientoComunidadID)
+	{
+		Statement stmt = null;
+		Connection conn = null;
+		
+		boolean bSalida = true;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+			stmt.executeUpdate("SELECT " 
+					+ sField1 + 
+					" FROM " 
+					+ sTable + 
+					" WHERE " + sField1 + " = '" + sMovimientoComunidadID + "'");
+			
+			logger.debug("Ejecutada con exito!");
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: MovimientoComunidadID:|{}|",sMovimientoComunidadID);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			
+			bSalida = false;
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return bSalida;
+	}
 
 	public static MovimientoComunidad getMovimientoComunidad(String sMovimientoComunidadID)
 	{

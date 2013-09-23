@@ -46,6 +46,18 @@ public class QMCodigosControl
 	public static final String TBINARIA = "binaria_tbl";
 	public static final String IBINARIA = "binaria_id";
 	
+	public static final String TCOTDORE1 = "cotdor_e1_tbl";
+	public static final String ICOTDORE1 = "cotdor_id";
+	
+	public static final String TCOTDORE2 = "cotdor_e2_tbl";
+	public static final String ICOTDORE2 = "cotdor_id";
+	
+	public static final String TCOTDORE3 = "cotdor_e3_tbl";
+	public static final String ICOTDORE3 = "cotdor_id";
+	
+	public static final String TCOTDORE4 = "cotdor_e4_tbl";
+	public static final String ICOTDORE4 = "cotdor_id";
+	
 	public static String getDesCampo(String sTable, String sField1, String sValor)
 	{
 		Connection conn = null;

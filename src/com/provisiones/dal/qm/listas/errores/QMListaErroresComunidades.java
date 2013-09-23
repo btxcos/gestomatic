@@ -1,5 +1,8 @@
 package com.provisiones.dal.qm.listas.errores;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,14 +10,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.dal.qm.QMActivos;
+
+import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.ErrorComunidadTabla;
+import com.provisiones.types.ErrorTabla;
 
 
 public class QMListaErroresComunidades 
@@ -111,7 +113,79 @@ public class QMListaErroresComunidades
 		return bSalida;
 	}
 	
-	public static ArrayList<ErrorComunidadTabla> buscaErrores()
+	public static long buscaCantidadErrores(String sMovimiento)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+
+		long liNumero = 0;
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
+					" WHERE " 
+					+ sField1 + " = '" + sMovimiento + "'");
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					liNumero = rs.getLong("COUNT(*)");
+					
+					logger.debug("Encontrado el registro!");
+
+					logger.debug( "Numero de registros:|{}|",liNumero);
+
+
+				}
+			}
+			if (found == false) 
+			{
+ 
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: sMovimiento:|{}|",sMovimiento);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return liNumero;
+	}
+	
+	public static ArrayList<ErrorComunidadTabla> buscaComunidadesConError(ErrorComunidadTabla filtro)
 	{
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -139,15 +213,21 @@ public class QMListaErroresComunidades
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-					   + QMMovimientosComunidades.sField7 + ","        
+					
+					   + QMMovimientosComunidades.sField1 + ","
+					   + QMMovimientosComunidades.sField7 + ","
 					   + QMMovimientosComunidades.sField8 + ","
 					   + QMMovimientosComunidades.sField12 + 
 
 					   "  FROM " + QMMovimientosComunidades.sTable + 
-					   " WHERE "+ QMMovimientosComunidades.sField1 +" IN (SELECT "
+					   " WHERE ( "
+					   + QMMovimientosComunidades.sField7 +" LIKE '%"+ filtro.getCOCLDO() +"%' AND "
+					   + QMMovimientosComunidades.sField8 +" LIKE '%"+ filtro.getNUDCOM() +"%' AND "
+					   + QMMovimientosComunidades.sField7 +" LIKE '%"+ filtro.getNOMCOC() +"%' AND "
+					   + QMMovimientosComunidades.sField1 +" IN (SELECT DISTINCT "
 					   +  sField1 + 
 					   "  FROM " + sTable + "))");
-			
+					   
 
 			rs = pstmt.executeQuery();
 			
@@ -162,11 +242,11 @@ public class QMListaErroresComunidades
 				{
 					found = true;
 					
-					COCLDO = rs.getString(QMMovimientosComunidades.sField7);
+					COCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMMovimientosComunidades.sField7));
 					NUDCOM = rs.getString(QMMovimientosComunidades.sField8);
 					NOMCOC = rs.getString(QMMovimientosComunidades.sField12);
 					MOVIMIENTO = rs.getString(QMMovimientosComunidades.sField1);
-					ERRORES = "";
+					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					
 					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
 					
@@ -174,7 +254,7 @@ public class QMListaErroresComunidades
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",QMActivos.sField1,MOVIMIENTO);
+					logger.debug("{}:|{}|",QMMovimientosComunidades.sField1,MOVIMIENTO);
 				}
 			}
 			if (found == false) 
@@ -197,6 +277,87 @@ public class QMListaErroresComunidades
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
+	
+	public static ArrayList<ErrorTabla> buscaErrores(String sMovimiento)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCodError = "";
+		String sDescripcion = "";
+		
+		ArrayList<ErrorTabla> result = new ArrayList<ErrorTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " +
+					   sField2 + 
+					   " FROM " + sTable + 
+					   " WHERE "
+					   + sField1 +" = '"+ sMovimiento +"'");
+			
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sCodError = rs.getString(sField2);
+					sDescripcion = QMCodigosControl.getDesCampo(QMCodigosControl.TCOTDORE1, QMCodigosControl.ICOTDORE1, sCodError);
+
+					
+					ErrorTabla errorencontrado = new ErrorTabla(sCodError, sDescripcion);
+					
+					result.add(errorencontrado);
+					
+					logger.debug("Encontrado el registro!");
+
+					logger.debug("{}:|{}|",sCodError,sDescripcion);
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: sMovimiento:{}",sMovimiento);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
+	
 
 /*	public static ArrayList<String> buscaErroresMovimientoComunidad(String sCodMovimiento)
 	{//pendiente de coaces, de la tabla activos

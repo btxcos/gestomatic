@@ -17,7 +17,6 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
-import com.provisiones.types.ErrorComunidadTabla;
 import com.provisiones.types.MovimientoComunidad;
 
 
@@ -269,6 +268,14 @@ public class CLComunidades
 		return QMComunidades.existeComunidad(sCodCOCLDO, sCodNUDCOM);
 	}
 	
+	public static boolean existeMovimientoComunidad (String sCodMovimiento)
+	{
+
+		return QMMovimientosComunidades.existeMovimientoComunidad(sCodMovimiento);
+	}
+	
+	
+	
 	public static ArrayList<ActivoTabla> buscarActivosSinComunidad (ActivoTabla activofiltro)
 	{
 			
@@ -279,11 +286,6 @@ public class CLComunidades
 	{
 			
 		return QMListaComunidadesActivos.buscaActivosConComunidad(activofiltro);
-	}
-	
-	public static ArrayList<ErrorComunidadTabla> buscarErroresComunidades()
-	{
-		return QMListaErroresComunidades.buscaErrores();
 	}
 	
 	public static boolean comprobarRelacion (String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
@@ -987,4 +989,6 @@ public class CLComunidades
 		logger.debug("Codigo de Salida:|{}|",iCodigo);
 		return iCodigo;
 	}
+	
+	
 }
