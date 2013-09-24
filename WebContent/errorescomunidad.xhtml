@@ -37,7 +37,7 @@
 								
 								<p:commandButton value="Buscar Errores" update="msgs, popup, form:comunidadeserror" oncomplete="dlgBuscarComunidadesError.show()"/>
 
-								<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorErroresComunidad.registraDatos}"/>
+								<p:commandButton value="Registrar Datos" update="panel, msgs, popup, form:errores" actionListener="#{GestorErroresComunidad.registraDatos}"/>
 
 							</h:panelGrid>
 						</p:fieldset>

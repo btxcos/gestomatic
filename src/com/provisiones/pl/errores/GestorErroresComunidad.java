@@ -232,13 +232,22 @@ public class GestorErroresComunidad implements Serializable
 	{
 		FacesMessage msg;
 		
-		ErrorComunidadTabla filtro = new ErrorComunidadTabla(
-				sCOCLDOB.toUpperCase(), sNUDCOMB.toUpperCase(), sNOMCOCB.toUpperCase(),
-				"", "");
-
 		logger.debug("Buscando Comunidades con errores...");
 		
-		this.setTablacomunidadeserror(CLErrores.buscarComunidadesConErrores(filtro));
+		if (sCOACESB.equals(""))
+		{
+			ErrorComunidadTabla filtro = new ErrorComunidadTabla(
+					sCOCLDOB.toUpperCase(), sNUDCOMB.toUpperCase(), sNOMCOCB.toUpperCase(),
+					"", "");
+
+			this.setTablacomunidadeserror(CLErrores.buscarComunidadesConErrores(filtro));
+
+		}
+		else
+		{
+			this.setTablacomunidadeserror(CLErrores.buscarComunidadesActivoConErrores(sCOACESB));
+		}
+		
 		
 		msg = Utils.pfmsgInfo("Encontradas "+getTablacomunidadeserror().size()+" Comunidades relacionadas.");
 		logger.debug("Encontradas {} comunidades relacionadas.",getTablacomunidadeserror().size());

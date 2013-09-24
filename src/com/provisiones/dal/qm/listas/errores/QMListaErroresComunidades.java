@@ -278,6 +278,99 @@ public class QMListaErroresComunidades
 		return result;
 	}
 	
+	public static ArrayList<ErrorComunidadTabla> buscaComunidadesActivoConError(String sCOACES)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String COCLDO = "";
+		String NUDCOM = "";
+		String NOMCOC = "";
+		String MOVIMIENTO = "";
+		String ERRORES = "";
+		
+		ArrayList<ErrorComunidadTabla> result = new ArrayList<ErrorComunidadTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT "
+					
+					   + QMMovimientosComunidades.sField1 + ","
+					   + QMMovimientosComunidades.sField7 + ","
+					   + QMMovimientosComunidades.sField8 + ","
+					   + QMMovimientosComunidades.sField12 + 
+
+					   "  FROM " + QMMovimientosComunidades.sTable + 
+					   " WHERE ( "
+					   + QMMovimientosComunidades.sField10 +" LIKE '%"+ sCOACES +"%' AND "
+					   + QMMovimientosComunidades.sField1 +" IN (SELECT DISTINCT "
+					   +  sField1 + 
+					   "  FROM " + sTable + "))");
+					   
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					COCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMMovimientosComunidades.sField7));
+					NUDCOM = rs.getString(QMMovimientosComunidades.sField8);
+					NOMCOC = rs.getString(QMMovimientosComunidades.sField12);
+					MOVIMIENTO = rs.getString(QMMovimientosComunidades.sField1);
+					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
+					
+					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
+					
+					result.add(errorencontrado);
+					
+					logger.debug("Encontrado el registro!");
+
+					logger.debug("{}:|{}|",QMMovimientosComunidades.sField1,MOVIMIENTO);
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: COACES:|{}|",sCOACES);
+			
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
+	
 	public static ArrayList<ErrorTabla> buscaErrores(String sMovimiento)
 	{
 		Statement stmt = null;

@@ -24,6 +24,11 @@ public class CLErrores
 		return QMListaErroresComunidades.buscaComunidadesConError(filtro);
 	}
 	
+	public static ArrayList<ErrorComunidadTabla> buscarComunidadesActivoConErrores(String sCOACES)
+	{
+		return QMListaErroresComunidades.buscaComunidadesActivoConError(sCOACES);
+	}
+	
 	public static ArrayList<ErrorTabla> buscarErroresComunidad(String sMovimiento)
 	{
 		return QMListaErroresComunidades.buscaErrores(sMovimiento);

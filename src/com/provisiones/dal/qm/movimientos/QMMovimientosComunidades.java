@@ -29,7 +29,7 @@ public class QMMovimientosComunidades
 	public static String sField7 = "cod_cocldo";
 	public static String sField8 = "cod_nudcom";
 	static String sField9 = "cod_bitc10";
-	static String sField10 = "cod_coaces";
+	public static String sField10 = "cod_coaces";
 	static String sField11 = "cod_bitc01";
 	public static String sField12 = "nomcoc";
 	static String sField13 = "cod_bitc02";
