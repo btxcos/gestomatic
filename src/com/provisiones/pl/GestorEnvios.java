@@ -57,8 +57,7 @@ public class GestorEnvios implements Serializable
 	
 	public GestorEnvios()
 	{
-		Utils.inicializarDirectorios();
-		Utils.standardIO2File("");//Salida por fichero de texto
+
 	}
 
 	public void cargarMovimientosPendientes(ActionEvent actionEvent)

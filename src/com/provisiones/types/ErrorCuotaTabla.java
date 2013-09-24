@@ -1,29 +1,38 @@
 package com.provisiones.types;
 
-public class ErrorComunidadTabla 
+public class ErrorCuotaTabla 
 {
-
+	private String COACES = "";
 	private String COCLDO = "";
 	private String NUDCOM = "";
-	private String NOMCOC = "";
+	private String COSBAC = "";
 	
 	private String MOVIMIENTO = "";
 	private String ERRORES = "";
 	
 	//Constructor de clase
 
-	public ErrorComunidadTabla(String cOCLDO, String nUDCOM, String nOMCOC,
-			String mOVIMIENTO, String eRRORES) {
+	public ErrorCuotaTabla(String cOACES, String cOCLDO, String nUDCOM,
+			String cOSBAC, String mOVIMIENTO, String eRRORES) {
 		super();
+		COACES = cOACES;
 		COCLDO = cOCLDO;
 		NUDCOM = nUDCOM;
-		NOMCOC = nOMCOC;
+		COSBAC = cOSBAC;
 		MOVIMIENTO = mOVIMIENTO;
 		ERRORES = eRRORES;
 	}
-
-	//Métodos de acceso
 	
+	//Métodos de acceso
+
+	public String getCOACES() {
+		return COACES;
+	}
+
+	public void setCOACES(String cOACES) {
+		COACES = cOACES;
+	}
+
 	public String getCOCLDO() {
 		return COCLDO;
 	}
@@ -40,12 +49,12 @@ public class ErrorComunidadTabla
 		NUDCOM = nUDCOM;
 	}
 
-	public String getNOMCOC() {
-		return NOMCOC;
+	public String getCOSBAC() {
+		return COSBAC;
 	}
 
-	public void setNOMCOC(String nOMCOC) {
-		NOMCOC = nOMCOC;
+	public void setCOSBAC(String cOSBAC) {
+		COSBAC = cOSBAC;
 	}
 
 	public String getMOVIMIENTO() {
@@ -63,5 +72,6 @@ public class ErrorComunidadTabla
 	public void setERRORES(String eRRORES) {
 		ERRORES = eRRORES;
 	}
-
+	
+	
 }

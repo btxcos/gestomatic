@@ -13,25 +13,23 @@ import com.provisiones.misc.Utils;
 public class ConnectionManager 
 {
 	private static String sConnector = "org.mariadb.jdbc.Driver";
-	private static String sConnectorType = "jdbc:mysql:";
+	private static String sConnectorType = "jdbc:mariadb:";
 	private static String sHostResource = "//localhost/glsl";
 	private static String sLogin = "?user=root&password=glsl1234";
 	
 	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class.getName());
 	
-	static boolean bEnable = false;
 
 	public static Connection OpenDBConnection() 
 	{
 
 		try 
 		{
-
 			Class.forName(sConnector);
 		} 
 		catch (Exception ex) 
 		{
-			ex.printStackTrace();
+			logger.error("ErrorMessage: {}", ex.getMessage());
 			return null;
 		}
 
@@ -42,9 +40,9 @@ public class ConnectionManager
 		try 
 		{
 			
-			logger.debug("tiempo INI:|{}|", Utils.timeStamp());
+			//logger.debug("tiempo INI:|{}|", Utils.timeStamp());
 			conn = DriverManager.getConnection(sConnectionData);
-			logger.debug("tiempo FIN:|{}|", Utils.timeStamp());
+			//logger.debug("tiempo FIN:|{}|", Utils.timeStamp());
 
 		} 
 		catch (SQLException ex) 
@@ -62,7 +60,9 @@ public class ConnectionManager
 	{
 		try 
 		{
+				//logger.debug("tiempo INI:|{}|", Utils.timeStamp());
 				conn.close();
+				//logger.debug("tiempo FIN:|{}|", Utils.timeStamp());
 		} 
 		catch (SQLException ex) 
 		{
@@ -70,7 +70,7 @@ public class ConnectionManager
 			logger.error("SQLState: {}", ex.getSQLState());
 			logger.error("VendorError: {}", ex.getErrorCode());
 		}
-		logger.debug("Desconexión realizada.");
+		//logger.debug("Desconexión realizada.");
 		return true;
 	}
 }

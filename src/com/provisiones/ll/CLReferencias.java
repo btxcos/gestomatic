@@ -8,10 +8,8 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.QMReferencias;
-
 import com.provisiones.dal.qm.listas.QMListaReferencias;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresReferencias;
-
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 
 import com.provisiones.misc.Parser;
@@ -228,6 +226,18 @@ public class CLReferencias
 	public static ArrayList<ActivoTabla> buscarActivosConReferencias (ActivoTabla activo)
 	{
 		return QMListaReferencias.buscaActivosAsociados(activo);
+	}
+	
+	public static MovimientoReferenciaCatastral buscarMovimientoReferenciaCatastral (String sCodMovimiento)
+	{
+
+		return QMMovimientosReferencias.getMovimientoReferenciaCatastral(sCodMovimiento);
+	}
+	
+	public static boolean existeMovimientoReferenciaCatastral (String sCodMovimiento)
+	{
+
+		return QMMovimientosReferencias.existeMovimientoReferenciaCatastral(sCodMovimiento);
 	}
 	
 	public static long buscarNumeroMovimientosReferenciasPendientes()

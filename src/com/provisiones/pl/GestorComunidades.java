@@ -64,7 +64,6 @@ public class GestorComunidades implements Serializable
 	public GestorComunidades()
 	{
 
-		Utils.standardIO2File("");//Salida por fichero de texto
 	}
 	
 	public void borrarCamposActivo()

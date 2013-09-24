@@ -3,13 +3,9 @@ package com.provisiones.test;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
-import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
-import com.provisiones.ll.CLComunidades;
-import com.provisiones.misc.Parser;
-import com.provisiones.misc.Utils;
 import com.provisiones.types.CargaTabla;
 
 
@@ -23,7 +19,7 @@ public class TestActivos
 	{
 		
 	
-		CargaTabla datos = new CargaTabla("A","B");
+		//CargaTabla datos = new CargaTabla("A","B");
 		
 		
 		//Utils.debugTrace(true, "TEST", "TEST", "|"+getTabla().size()+"|");

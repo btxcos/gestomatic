@@ -1,9 +1,10 @@
-package com.provisiones.pl.movimientos;
+package com.provisiones.pl.errores;
 
 import java.io.Serializable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import java.util.ArrayList;
 
@@ -12,19 +13,23 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import com.provisiones.ll.CLCuotas;
+import com.provisiones.ll.CLErrores;
+
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.CuotaTabla;
+import com.provisiones.types.ErrorCuotaTabla;
+import com.provisiones.types.ErrorTabla;
 import com.provisiones.types.MovimientoCuota;
 
-public class GestorMovimientosCuotas implements Serializable 
+public class GestorErroresCuotas implements Serializable 
 {
+	private static final long serialVersionUID = -4267610637904788595L;
 
-	private static final long serialVersionUID = 558593056565873600L;
+	private static Logger logger = LoggerFactory.getLogger(GestorErroresCuotas.class.getName());
 	
-	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosCuotas.class.getName());
-
 	private String sCODTRN = ValoresDefecto.DEF_E2_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
 	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
@@ -32,24 +37,39 @@ public class GestorMovimientosCuotas implements Serializable
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 
 	private String sCOACES = "";
+	private boolean bRCOACES = true;
 	
 	private String sCOCLDO = "";
 	private String sDesCOCLDO = "";
+	private boolean bRCOCLDO = true;
 	
 	private String sNUDCOM = "";
+	private boolean bRNUDCOM = true;
 	private String sNOMCOC = "";
+	private boolean bRNOMCOC = true;
 	private String sNODCCO = "";
+	private boolean bRNODCCO = true;
 	
 
 	private String sCOSBAC = "";
 	private String sDesCOSBAC = "";
+	private boolean bRCOSBAC = true;
+	
 	private String sFIPAGO = "";
+	private boolean bRFIPAGO = true;
 	private String sFFPAGO = "";
+	private boolean bRFFPAGO = true;
 	private String sIMCUCO = "";
+	private boolean bRIMCUCO = true;
 	private String sFAACTA = "";
+	private boolean bRFAACTA = true;
+	
 	private String sPTPAGO = "";
 	private String sDesPTPAGO = "";
+	private boolean bRPTPAGO = true;
+	
 	private String sOBTEXC = "";
+	private boolean bROBTEXC = true;
 	
 	private String sOBDEER = "";
 	
@@ -61,6 +81,23 @@ public class GestorMovimientosCuotas implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	//Buscar errores
+	private String sCodMovimiento ="";
+	private String sCodError = "";
+	
+	private String sCOACESB = "";
+	private String sCOCLDOB = "";
+	private String sNUDCOMB = "";
+	private String sCOSBACB = "";
+	
+	
+	private transient ErrorCuotaTabla movimientoseleccionado = null;
+	private transient ArrayList<ErrorCuotaTabla> tablacuotaserror = null;
+	
+
+	private transient ErrorTabla errorseleccionado = null;
+	private transient ArrayList<ErrorTabla> tablaerrores = null;
+	
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -69,10 +106,34 @@ public class GestorMovimientosCuotas implements Serializable
 	private transient ArrayList<CuotaTabla> tablacuotas = null;
 
 	
-	public GestorMovimientosCuotas()
+	public GestorErroresCuotas()
 	{
 
 	}
+	
+    public void borrarPlantillaError() 
+    {  
+    	this.sCOACESB = "";
+    	this.sCOCLDOB = "";
+    	this.sNUDCOMB = "";
+    	this.sCOSBACB = "";
+
+    	this.movimientoseleccionado = null;
+    	this.tablacuotaserror = null;
+    	
+    	this.errorseleccionado = null;
+    	this.tablaerrores = null;
+    	
+    	this.sCodMovimiento ="";
+    	this.sCodError = "";
+   	
+    }
+	
+    public void limpiarPlantillaError(ActionEvent actionEvent) 
+    {  
+    	borrarPlantillaError();
+   	
+    }
 	
 	public void borrarCamposActivo()
 	{
@@ -127,9 +188,123 @@ public class GestorMovimientosCuotas implements Serializable
 
     	borrarCamposCuota();
     	borrarResultadosCuota();
+    	borrarPlantillaError();
     }
     
+    public boolean editarError(int iCodError) 
+    {  
+    	boolean bSalida = false;
+  	
+		switch (iCodError) 
+		{
+		default://error no recuperable
+			this.bRCOACES = true;
+			this.bRCOCLDO = true;
+			this.bRCOSBAC = true;
+			this.bRFAACTA = true;
+			this.bRFIPAGO = true;
+			this.bRFFPAGO = true;
+			this.bRIMCUCO = true;
+			this.bRNODCCO = true;
+			this.bRNOMCOC = true;
+			this.bRNUDCOM = true;
+			this.bROBTEXC = true;
+			this.bRPTPAGO = true;
+			bSalida = false;
+			break;
+		}
+		
+		return bSalida;
+   	
+    }
+	
+	public void buscaCuotasError(ActionEvent actionEvent)
+	{
+		FacesMessage msg;
+		
+		logger.debug("Buscando Cuotas con errores...");
+		
+    	this.sCOACESB = "";
+    	this.sCOCLDOB = "";
+    	this.sNUDCOMB = "";
+    	this.sCOSBACB = "";
+		
+		ErrorCuotaTabla filtro = new ErrorCuotaTabla(
+					sCOACESB.toUpperCase(), sCOCLDOB, sNUDCOMB.toUpperCase(),sCOSBACB,
+					"", "");
 
+			this.setTablacuotaserror(CLErrores.buscarCuotasConErrores(filtro));
+
+		
+		
+		msg = Utils.pfmsgInfo("Encontradas "+getTablacuotaserror().size()+" Cuotas relacionadas.");
+		logger.debug("Encontradas {} Cuotas relacionadas.",getTablacuotaserror().size());
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+	
+	public void seleccionarMovimiento(ActionEvent actionEvent) 
+    {  
+		FacesMessage msg;
+		
+		this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
+    	
+		this.setTablaerrores(CLErrores.buscarErroresCuota(sCodMovimiento));
+		
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
+		logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		MovimientoCuota movimiento = CLCuotas.buscarMovimientoCuota(sCodMovimiento);
+		
+		this.sCOACCI = movimiento.getCOACCI();
+		this.sCOACES = movimiento.getCOACES();
+    	this.sCOCLDO = movimiento.getCOCLDO(); 
+    	this.sNUDCOM = movimiento.getNUDCOM();
+    	this.sCOSBAC = movimiento.getCOSBAC();
+    	this.sFIPAGO = Utils.recuperaFecha(movimiento.getFIPAGO());
+    	this.sFFPAGO = Utils.recuperaFecha(movimiento.getFFPAGO());
+    	this.sIMCUCO = Utils.recuperaImporte(false,movimiento.getIMCUCO());
+    	this.sFAACTA = Utils.recuperaFecha(movimiento.getFAACTA());
+    	this.sPTPAGO = movimiento.getPTPAGO();
+    	this.sOBTEXC = movimiento.getOBTEXC();
+				
+        	
+    	msg = Utils.pfmsgInfo("Errores de Cuota cargados.");
+    	logger.debug("Errores de Cuota cargados.");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+	
+	public void seleccionarError(ActionEvent actionEvent) 
+    {  
+		FacesMessage msg;
+    	
+		this.sCodError = errorseleccionado.getsCodError(); 
+		
+    	int iCodError  = Integer.parseInt(sCodError);
+    	
+    	
+    	logger.debug("Error seleccionado:|{}|",iCodError);
+    	
+    	String sMsg ="";
+    	
+    	if (editarError(iCodError))
+    	{
+    		sMsg = "Error editado.";
+    		msg = Utils.pfmsgInfo(sMsg);
+    		logger.info(sMsg);
+    	}
+    	else
+    	{
+    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
+    		msg = Utils.pfmsgFatal(sMsg);
+    		logger.error(sMsg);
+    	}
+
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
     
 	public void buscaActivos (ActionEvent actionEvent)
 	{
@@ -220,10 +395,10 @@ public class GestorMovimientosCuotas implements Serializable
 		
 		String sMsg = "";
 		
-		if (!CLCuotas.existeCuota(sCOACES, sCOCLDO, sNUDCOM.toUpperCase(), sCOSBAC))
+		if (!CLCuotas.existeMovimientoCuota(sCodMovimiento))
 		{
-			sMsg = "ERROR: La cuota no esta dada de alta. Por favor, revise los datos.";
-			msg = Utils.pfmsgError(sMsg);
+			sMsg = "[FATAL] ERROR:911 - No se puede modificar la cuota, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
+			msg = Utils.pfmsgFatal(sMsg);
 			logger.error(sMsg);
 		}
 		else
@@ -255,143 +430,17 @@ public class GestorMovimientosCuotas implements Serializable
 					sOBDEER.toUpperCase());
 			
 			
-			
-			int iSalida = CLCuotas.registraMovimiento(movimiento);
+			logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
+			logger.debug("sCodError:|{}|",sCodError);
+			int iSalida = CLErrores.reparaMovimientoCuota(movimiento,sCodMovimiento, sCodError);
 			
 			switch (iSalida) 
 			{
 			case 0: //Sin errores
-				sMsg = "El movimiento se ha registrado correctamente.";
+				tablaerrores.remove(errorseleccionado);
+				sMsg = "El movimiento se ha modificado correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
-				break;
-
-			case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
-				sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -3: //Error 003 - NO EXISTE EL ACTIVO
-				sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-
-			case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO O NULO
-				sMsg = "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -32: //Error 032 - EL SUBTIPO DE ACCION NO EXISTE
-				sMsg = "ERROR:032 - El concepto de pago es obligatorio. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -33: //Error 033 - LA FECHA DE PRIMER PAGO DEBE SER LOGICA Y OBLIGATORIA
-				sMsg = "ERROR:033 - La fecha del primer pago es obligatoria. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-
-			case -34: //Error 034 - LA FECHA DE ULTIMO PAGO DEBE SER LOGICA Y OBLIGATORIA
-				sMsg = "ERROR:034 - La fecha del ultimo pago es obligatoria. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -35: //Error 035 - LA FECHA DE ULTIMO PAGO NO DEBE DE SER MENOR QUE LA FECHA DE PRIMER PAGO
-				sMsg = "ERROR:35 - La fecha del ultimo pago no puede ser menor que la del primero.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -36: //Error 036 - IMPORTE DE CUOTA TIENE QUE SER MAYOR DE CERO
-				sMsg = "ERROR:036 - El importe de la cuota tiene ser mayor que cero. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -41: //Error 041 - LA COMUNIDAD NO EXISTE EN LA TABLA DE COMUNIDADES GMAE10
-				sMsg = "ERROR:041 - La comunidad propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -42: //Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
-				sMsg = "ERROR:042 - El activo proporcionado esta asociado a otra comunidad. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -43: //Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
-				sMsg = "ERROR:043 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -44: //Error 044 - NO EXISTE PERIOCIDAD DE PAGO
-				sMsg = "ERROR:044 - La periodicidad de pago es obligatoria. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -45: //Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
-				sMsg = "ERROR:045 - El activo prorcionado no pertenece a la comunidad. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -46: //Error 046 - LA FECHA DEL ACTA DEBE SER LOGICA Y OBLIGATORIA 
-				sMsg = "ERROR:046 - La fecha de acta es obligatoria. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -701: //Error 701 - error en importe
-				sMsg = "ERROR:701 - El campo importe no se ha informado correctamente. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -702: //Error 702 - fecha de primer pago incorrecta
-				sMsg = "ERROR:702 - La fecha del primer pago no se ha informado correctamente. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -703: //Error 703 - fecha de ultimo pago incorrecta
-				sMsg = "ERROR:703 - La fecha del ultimo pago no se ha informado correctamente. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -704: //Error 704 - fecha de acta incorrecta
-				sMsg = "ERROR:704 - La fecha de acta no se ha informado correctamente. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -801: //Error 801 - alta de una cuota en alta
-				sMsg = "ERROR:801 - La cuota ya esta dada de alta. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -802: //Error 802 - cuota de baja no puede recibir movimientos
-				sMsg = "ERROR:802 - La cuota esta baja y no puede recibir movimientos. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -803: //Error 803 - estado no disponible
-				sMsg = "ERROR:803 - El estado de la cuota informada no esta disponible. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
 				break;
 
 			case -804: //Error 804 - modificacion sin cambios
@@ -406,23 +455,6 @@ public class GestorMovimientosCuotas implements Serializable
 				logger.error(sMsg);
 				break;
 
-			case -901: //Error 901 - error y rollback - error al crear la cuota
-				sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la cuota. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -902: //Error 902 - error y rollback - error al registrar la relaccion
-				sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -903: //Error 903 - error y rollback - error al cambiar el estado
-				sMsg = "[FATAL] ERROR:903 - Se ha producido un error al cambiar el estado de la cuota. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
 
 			case -904: //Error 904 - error y rollback - error al modificar la cuota
 				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la cuota. Por favor, revise los datos y avise a soporte.";
@@ -441,6 +473,174 @@ public class GestorMovimientosCuotas implements Serializable
 		logger.debug("Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 
+	}
+
+	public String getsCODTRN() {
+		return sCODTRN;
+	}
+
+	public void setsCODTRN(String sCODTRN) {
+		this.sCODTRN = sCODTRN;
+	}
+
+	public String getsCOTDOR() {
+		return sCOTDOR;
+	}
+
+	public void setsCOTDOR(String sCOTDOR) {
+		this.sCOTDOR = sCOTDOR;
+	}
+
+	public String getsIDPROV() {
+		return sIDPROV;
+	}
+
+	public void setsIDPROV(String sIDPROV) {
+		this.sIDPROV = sIDPROV;
+	}
+
+	public String getsCOACCI() {
+		return sCOACCI;
+	}
+
+	public void setsCOACCI(String sCOACCI) {
+		this.sCOACCI = sCOACCI;
+	}
+
+	public String getsCOENGP() {
+		return sCOENGP;
+	}
+
+	public void setsCOENGP(String sCOENGP) {
+		this.sCOENGP = sCOENGP;
+	}
+
+	public String getsCOACES() {
+		return sCOACES;
+	}
+
+	public void setsCOACES(String sCOACES) {
+		this.sCOACES = sCOACES;
+	}
+
+	public String getsCOCLDO() {
+		return sCOCLDO;
+	}
+
+	public void setsCOCLDO(String sCOCLDO) {
+		this.sCOCLDO = sCOCLDO;
+	}
+
+	public String getsDesCOCLDO() {
+		return sDesCOCLDO;
+	}
+
+	public void setsDesCOCLDO(String sDesCOCLDO) {
+		this.sDesCOCLDO = sDesCOCLDO;
+	}
+
+	public String getsNUDCOM() {
+		return sNUDCOM;
+	}
+
+	public void setsNUDCOM(String sNUDCOM) {
+		this.sNUDCOM = sNUDCOM;
+	}
+
+	public String getsNOMCOC() {
+		return sNOMCOC;
+	}
+
+	public void setsNOMCOC(String sNOMCOC) {
+		this.sNOMCOC = sNOMCOC;
+	}
+
+	public String getsNODCCO() {
+		return sNODCCO;
+	}
+
+	public void setsNODCCO(String sNODCCO) {
+		this.sNODCCO = sNODCCO;
+	}
+
+	public String getsCOSBAC() {
+		return sCOSBAC;
+	}
+
+	public void setsCOSBAC(String sCOSBAC) {
+		this.sCOSBAC = sCOSBAC;
+	}
+
+	public String getsDesCOSBAC() {
+		return sDesCOSBAC;
+	}
+
+	public void setsDesCOSBAC(String sDesCOSBAC) {
+		this.sDesCOSBAC = sDesCOSBAC;
+	}
+
+	public String getsFIPAGO() {
+		return sFIPAGO;
+	}
+
+	public void setsFIPAGO(String sFIPAGO) {
+		this.sFIPAGO = sFIPAGO;
+	}
+
+	public String getsFFPAGO() {
+		return sFFPAGO;
+	}
+
+	public void setsFFPAGO(String sFFPAGO) {
+		this.sFFPAGO = sFFPAGO;
+	}
+
+	public String getsIMCUCO() {
+		return sIMCUCO;
+	}
+
+	public void setsIMCUCO(String sIMCUCO) {
+		this.sIMCUCO = sIMCUCO;
+	}
+
+	public String getsFAACTA() {
+		return sFAACTA;
+	}
+
+	public void setsFAACTA(String sFAACTA) {
+		this.sFAACTA = sFAACTA;
+	}
+
+	public String getsPTPAGO() {
+		return sPTPAGO;
+	}
+
+	public void setsPTPAGO(String sPTPAGO) {
+		this.sPTPAGO = sPTPAGO;
+	}
+
+	public String getsDesPTPAGO() {
+		return sDesPTPAGO;
+	}
+
+	public void setsDesPTPAGO(String sDesPTPAGO) {
+		this.sDesPTPAGO = sDesPTPAGO;
+	}
+
+	public String getsOBTEXC() {
+		return sOBTEXC;
+	}
+
+	public void setsOBTEXC(String sOBTEXC) {
+		this.sOBTEXC = sOBTEXC;
+	}
+
+	public String getsOBDEER() {
+		return sOBDEER;
+	}
+
+	public void setsOBDEER(String sOBDEER) {
+		this.sOBDEER = sOBDEER;
 	}
 
 	public String getsCOPOIN() {
@@ -499,148 +699,180 @@ public class GestorMovimientosCuotas implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 
-	public String getsCOACES() {
-		return sCOACES;
+	public String getsCodMovimiento() {
+		return sCodMovimiento;
 	}
 
-	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+	public void setsCodMovimiento(String sCodMovimiento) {
+		this.sCodMovimiento = sCodMovimiento;
 	}
 
-	public String getsCODTRN() {
-		return sCODTRN;
+	public String getsCodError() {
+		return sCodError;
 	}
 
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
+	public void setsCodError(String sCodError) {
+		this.sCodError = sCodError;
 	}
 
-	public String getsCOTDOR() {
-		return sCOTDOR;
+	public String getsCOACESB() {
+		return sCOACESB;
 	}
 
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
+	public void setsCOACESB(String sCOACESB) {
+		this.sCOACESB = sCOACESB;
 	}
 
-	public String getsIDPROV() {
-		return sIDPROV;
+	public String getsCOCLDOB() {
+		return sCOCLDOB;
 	}
 
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
+	public void setsCOCLDOB(String sCOCLDOB) {
+		this.sCOCLDOB = sCOCLDOB;
 	}
 
-	public String getsCOACCI() {
-		return sCOACCI;
+	public String getsNUDCOMB() {
+		return sNUDCOMB;
 	}
 
-	public void setsCOACCI(String sCOACCI) {
-		this.sCOACCI = sCOACCI;
+	public void setsNUDCOMB(String sNUDCOMB) {
+		this.sNUDCOMB = sNUDCOMB;
 	}
 
-	public String getsCOENGP() {
-		return sCOENGP;
+	public String getsCOSBACB() {
+		return sCOSBACB;
 	}
 
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
+	public void setsCOSBACB(String sCOSBACB) {
+		this.sCOSBACB = sCOSBACB;
 	}
 
-	public String getsCOCLDO() {
-		return sCOCLDO;
+	public boolean isbRCOACES() {
+		return bRCOACES;
 	}
 
-	public void setsCOCLDO(String sCOCLDO) {
-		this.sCOCLDO = sCOCLDO;
+	public void setbRCOACES(boolean bRCOACES) {
+		this.bRCOACES = bRCOACES;
 	}
 
-	public String getsNUDCOM() {
-		return sNUDCOM;
+	public boolean isbRCOCLDO() {
+		return bRCOCLDO;
 	}
 
-	public void setsNUDCOM(String sNUDCOM) {
-		this.sNUDCOM = sNUDCOM;
+	public void setbRCOCLDO(boolean bRCOCLDO) {
+		this.bRCOCLDO = bRCOCLDO;
 	}
 
-	public String getsNOMCOC() {
-		return sNOMCOC;
+	public boolean isbRNUDCOM() {
+		return bRNUDCOM;
 	}
 
-	public void setsNOMCOC(String sNOMCOC) {
-		this.sNOMCOC = sNOMCOC;
+	public void setbRNUDCOM(boolean bRNUDCOM) {
+		this.bRNUDCOM = bRNUDCOM;
 	}
 
-	public String getsNODCCO() {
-		return sNODCCO;
+	public boolean isbRNOMCOC() {
+		return bRNOMCOC;
 	}
 
-	public void setsNODCCO(String sNODCCO) {
-		this.sNODCCO = sNODCCO;
+	public void setbRNOMCOC(boolean bRNOMCOC) {
+		this.bRNOMCOC = bRNOMCOC;
 	}
 
-	public String getsCOSBAC() {
-		return sCOSBAC;
+	public boolean isbRNODCCO() {
+		return bRNODCCO;
 	}
 
-	public void setsCOSBAC(String sCOSBAC) {
-		this.sCOSBAC = sCOSBAC;
+	public void setbRNODCCO(boolean bRNODCCO) {
+		this.bRNODCCO = bRNODCCO;
 	}
 
-	public String getsFIPAGO() {
-		return sFIPAGO;
+	public boolean isbRCOSBAC() {
+		return bRCOSBAC;
 	}
 
-	public void setsFIPAGO(String sFIPAGO) {
-		this.sFIPAGO = sFIPAGO;
+	public void setbRCOSBAC(boolean bRCOSBAC) {
+		this.bRCOSBAC = bRCOSBAC;
 	}
 
-	public String getsFFPAGO() {
-		return sFFPAGO;
+	public boolean isbRFIPAGO() {
+		return bRFIPAGO;
 	}
 
-	public void setsFFPAGO(String sFFPAGO) {
-		this.sFFPAGO = sFFPAGO;
+	public void setbRFIPAGO(boolean bRFIPAGO) {
+		this.bRFIPAGO = bRFIPAGO;
 	}
 
-	public String getsIMCUCO() {
-		return sIMCUCO;
+	public boolean isbRFFPAGO() {
+		return bRFFPAGO;
 	}
 
-	public void setsIMCUCO(String sIMCUCO) {
-		this.sIMCUCO = sIMCUCO;
+	public void setbRFFPAGO(boolean bRFFPAGO) {
+		this.bRFFPAGO = bRFFPAGO;
 	}
 
-	public String getsFAACTA() {
-		return sFAACTA;
+	public boolean isbRIMCUCO() {
+		return bRIMCUCO;
 	}
 
-	public void setsFAACTA(String sFAACTA) {
-		this.sFAACTA = sFAACTA;
+	public void setbRIMCUCO(boolean bRIMCUCO) {
+		this.bRIMCUCO = bRIMCUCO;
 	}
 
-	public String getsPTPAGO() {
-		return sPTPAGO;
+	public boolean isbRFAACTA() {
+		return bRFAACTA;
 	}
 
-	public void setsPTPAGO(String sPTPAGO) {
-		this.sPTPAGO = sPTPAGO;
+	public void setbRFAACTA(boolean bRFAACTA) {
+		this.bRFAACTA = bRFAACTA;
 	}
 
-	public String getsOBTEXC() {
-		return sOBTEXC;
+	public boolean isbRPTPAGO() {
+		return bRPTPAGO;
 	}
 
-	public void setsOBTEXC(String sOBTEXC) {
-		this.sOBTEXC = sOBTEXC;
+	public void setbRPTPAGO(boolean bRPTPAGO) {
+		this.bRPTPAGO = bRPTPAGO;
 	}
 
-	public String getsOBDEER() {
-		return sOBDEER;
+	public boolean isbROBTEXC() {
+		return bROBTEXC;
 	}
 
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
+	public void setbROBTEXC(boolean bROBTEXC) {
+		this.bROBTEXC = bROBTEXC;
+	}
+
+	public ErrorCuotaTabla getMovimientoseleccionado() {
+		return movimientoseleccionado;
+	}
+
+	public void setMovimientoseleccionado(ErrorCuotaTabla movimientoseleccionado) {
+		this.movimientoseleccionado = movimientoseleccionado;
+	}
+
+	public ArrayList<ErrorCuotaTabla> getTablacuotaserror() {
+		return tablacuotaserror;
+	}
+
+	public void setTablacuotaserror(ArrayList<ErrorCuotaTabla> tablacuotaserror) {
+		this.tablacuotaserror = tablacuotaserror;
+	}
+
+	public ErrorTabla getErrorseleccionado() {
+		return errorseleccionado;
+	}
+
+	public void setErrorseleccionado(ErrorTabla errorseleccionado) {
+		this.errorseleccionado = errorseleccionado;
+	}
+
+	public ArrayList<ErrorTabla> getTablaerrores() {
+		return tablaerrores;
+	}
+
+	public void setTablaerrores(ArrayList<ErrorTabla> tablaerrores) {
+		this.tablaerrores = tablaerrores;
 	}
 
 	public ActivoTabla getActivoseleccionado() {
@@ -674,31 +906,4 @@ public class GestorMovimientosCuotas implements Serializable
 	public void setTablacuotas(ArrayList<CuotaTabla> tablacuotas) {
 		this.tablacuotas = tablacuotas;
 	}
-
-	public String getsDesCOSBAC() {
-		return sDesCOSBAC;
-	}
-
-	public void setsDesCOSBAC(String sDesCOSBAC) {
-		this.sDesCOSBAC = sDesCOSBAC;
-	}
-
-	public String getsDesPTPAGO() {
-		return sDesPTPAGO;
-	}
-
-	public void setsDesPTPAGO(String sDesPTPAGO) {
-		this.sDesPTPAGO = sDesPTPAGO;
-	}
-
-	public String getsDesCOCLDO() {
-		return sDesCOCLDO;
-	}
-
-	public void setsDesCOCLDO(String sDesCOCLDO) {
-		this.sDesCOCLDO = sDesCOCLDO;
-	}
-	
-	
-	
 }

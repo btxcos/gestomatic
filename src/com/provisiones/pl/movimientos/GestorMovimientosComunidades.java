@@ -61,7 +61,7 @@ public class GestorMovimientosComunidades implements Serializable
 	
 	public GestorMovimientosComunidades()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
+
 	}
 	public void borrarCamposActivo()
 	{

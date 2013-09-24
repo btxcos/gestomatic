@@ -268,32 +268,4 @@ public class MovimientoCuota
 		return String.format("(MOVIMIENTO CUOTA)\nCODTRN:|%s|\nCOTDOR:|%s|\nIDPROV:|%s|\nCOACCI:|%s|\nCOCLDO:|%s|\nNUDCOM:|%s|\nCOENGP:|%s|\nCOACES:|%s|\nCOGRUG:|%s|\nCOTACA:|%s|\nCOSBAC:|%s|\nBITC11:|%s|\nFIPAGO:|%s|\nBITC12:|%s|\nFFPAGO:|%s|\nBITC13:|%s|\nIMCUCO:|%s|\nBITC14:|%s|\nFAACTA:|%s|\nBITC15:|%s|\nPTPAGO:|%s|\nBITC09:|%s|\nOBTEXC:|%s|\nOBDEER:|%s|",CODTRN,COTDOR,IDPROV,COACCI,COCLDO,NUDCOM,COENGP,COACES,COGRUG,COTACA,COSBAC,BITC11,FIPAGO,BITC12,FFPAGO,BITC13,IMCUCO,BITC14,FAACTA,BITC15,PTPAGO,BITC09,OBTEXC,OBDEER);
 	}
 
-	public boolean equals(MovimientoCuota NuevaCuota)
-	{	
-		return (CODTRN == NuevaCuota.getCODTRN() && 
-				COTDOR == NuevaCuota.getCOTDOR()  && 
-				IDPROV == NuevaCuota.getIDPROV()  && 
-				COACCI == NuevaCuota.getCOACCI()  && 
-				COCLDO == NuevaCuota.getCOCLDO()  && 
-				NUDCOM == NuevaCuota.getNUDCOM()  && 
-				COENGP == NuevaCuota.getCOENGP()  && 
-				COACES == NuevaCuota.getCOACES()  && 
-				COGRUG == NuevaCuota.getCOGRUG()  && 
-				COTACA == NuevaCuota.getCOTACA()  && 
-				COSBAC == NuevaCuota.getCOSBAC()  && 
-				BITC11 == NuevaCuota.getBITC11()  && 
-				FIPAGO == NuevaCuota.getFIPAGO()  && 
-				BITC12 == NuevaCuota.getBITC12()  && 
-				FFPAGO == NuevaCuota.getFFPAGO()  && 
-				BITC13 == NuevaCuota.getBITC13()  && 
-				IMCUCO == NuevaCuota.getIMCUCO()  && 
-				BITC14 == NuevaCuota.getBITC14()  && 
-				FAACTA == NuevaCuota.getFAACTA()  && 
-				BITC15 == NuevaCuota.getBITC15()  && 
-				PTPAGO == NuevaCuota.getPTPAGO()  && 
-				BITC09 == NuevaCuota.getBITC09()  && 
-				OBTEXC == NuevaCuota.getOBTEXC()  && 
-				OBDEER == NuevaCuota.getOBDEER());
-	}
-
 }

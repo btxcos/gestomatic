@@ -6,14 +6,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.qm.QMComunidades;
+import com.provisiones.dal.qm.QMCuotas;
+import com.provisiones.dal.qm.QMReferencias;
 import com.provisiones.dal.qm.listas.QMListaComunidades;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
+import com.provisiones.dal.qm.listas.QMListaCuotas;
+import com.provisiones.dal.qm.listas.QMListaReferencias;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresComunidades;
+import com.provisiones.dal.qm.listas.errores.QMListaErroresCuotas;
+import com.provisiones.dal.qm.listas.errores.QMListaErroresReferencias;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
+import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
+import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ErrorComunidadTabla;
+import com.provisiones.types.ErrorCuotaTabla;
+import com.provisiones.types.ErrorReferenciaTabla;
 import com.provisiones.types.ErrorTabla;
 import com.provisiones.types.MovimientoComunidad;
+import com.provisiones.types.MovimientoCuota;
+import com.provisiones.types.MovimientoReferenciaCatastral;
 
 public class CLErrores 
 {
@@ -33,8 +45,7 @@ public class CLErrores
 	{
 		return QMListaErroresComunidades.buscaErrores(sMovimiento);
 	}
-	
-	
+
 	public static int reparaMovimientoComunidad(MovimientoComunidad movimiento, String sCodMovimiento, String sCodError)
 	{
 		int iCodigo = 0;
@@ -77,7 +88,7 @@ public class CLErrores
 			            {
 			            	QMListaComunidadesActivos.setValidado(dependenciasactivoscomunidades.get(i),ValoresDefecto.DEF_PENDIENTE);
 			            }
-
+			            
 					}
 					else
 					{
@@ -93,6 +104,148 @@ public class CLErrores
 					//error y rollback - error al eliminar el error
 					iCodigo = -905;
 					QMMovimientosComunidades.modMovimientoComunidad(movimiento_antiguo,sCodMovimiento);
+				}
+			}
+		}
+
+		logger.debug("Codigo de Salida:|{}|",iCodigo);
+		return iCodigo;
+	}
+
+	public static ArrayList<ErrorCuotaTabla> buscarCuotasConErrores(ErrorCuotaTabla filtro)
+	{
+		return QMListaErroresCuotas.buscaCuotasConError(filtro);
+	}
+
+	public static ArrayList<ErrorTabla> buscarErroresCuota(String sMovimiento)
+	{
+		return QMListaErroresCuotas.buscaErrores(sMovimiento);
+	}
+	
+	public static int reparaMovimientoCuota(MovimientoCuota movimiento, String sCodMovimiento, String sCodError)
+	{
+		int iCodigo = 0;
+		
+		MovimientoCuota movimiento_revisado = CLCuotas.revisaCodigosControl(movimiento);
+		
+		if (movimiento_revisado.getCOACCI().equals("#"))
+		{	
+			//Error modificacion sin cambios
+			iCodigo = -804;	
+		}
+		else
+		{
+			MovimientoCuota movimiento_antiguo = QMMovimientosCuotas.getMovimientoCuota(sCodMovimiento);
+			
+			if (!QMMovimientosCuotas.modMovimientoCuota(movimiento_revisado,sCodMovimiento))
+			{
+				//Error al crear un movimiento
+				iCodigo = -900;
+			}
+			else
+			{
+				if(QMListaErroresCuotas.delErrorCuota(sCodMovimiento, sCodError))
+				{	
+
+					if (QMCuotas.modCuota(CLCuotas.convierteMovimientoenCuota(movimiento), movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC()))	
+					{
+						//OK 
+						iCodigo = 0;
+						
+						ArrayList<String> dependenciascuotas = QMListaCuotas.buscarDependencias(movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC(), sCodMovimiento);
+
+
+						for (int i = 0; i < dependenciascuotas.size() ; i++)
+			            {
+			            	QMListaCuotas.setValidado(dependenciascuotas.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            }
+			            
+					}
+					else
+					{
+						//error y rollback - error al modificar la cuota
+						iCodigo = -904;
+						QMListaErroresCuotas.addErrorCuota(sCodMovimiento, sCodError);
+						QMMovimientosCuotas.modMovimientoCuota(movimiento_antiguo,sCodMovimiento);
+					}
+
+				}
+				else
+				{
+					//error y rollback - error al eliminar el error
+					iCodigo = -904;
+					QMMovimientosCuotas.modMovimientoCuota(movimiento_antiguo,sCodMovimiento);
+				}
+			}
+		}
+
+		logger.debug("Codigo de Salida:|{}|",iCodigo);
+		return iCodigo;
+	}
+	
+	public static ArrayList<ErrorReferenciaTabla> buscarReferenciasConErrores(ErrorReferenciaTabla filtro)
+	{
+		return QMListaErroresReferencias.buscaReferenciasConError(filtro);
+	}
+
+	public static ArrayList<ErrorTabla> buscarErroresReferencia(String sMovimiento)
+	{
+		return QMListaErroresReferencias.buscaErrores(sMovimiento);
+	}
+	
+	public static int reparaMovimientoReferencia(MovimientoReferenciaCatastral movimiento, String sCodMovimiento, String sCodError)
+	{
+		int iCodigo = 0;
+		
+		MovimientoReferenciaCatastral movimiento_revisado = CLReferencias.revisaCodigosControl(movimiento);
+		
+		if (movimiento_revisado.getCOACCI().equals("#"))
+		{	
+			//Error modificacion sin cambios
+			iCodigo = -804;	
+		}
+		else
+		{
+			MovimientoReferenciaCatastral movimiento_antiguo = QMMovimientosReferencias.getMovimientoReferenciaCatastral(sCodMovimiento);
+			
+			if (!QMMovimientosReferencias.modMovimientoReferenciaCatastral(movimiento_revisado,sCodMovimiento))
+			{
+				//Error al crear un movimiento
+				iCodigo = -900;
+			}
+			else
+			{
+				if(QMListaErroresReferencias.delErrorReferencia(sCodMovimiento, sCodError))
+				{	
+
+					if (QMReferencias.modReferenciaCatastral(CLReferencias.convierteMovimientoenReferencia(movimiento), movimiento.getNURCAT()))	
+					{
+						//OK 
+						iCodigo = 0;
+						
+						ArrayList<String> dependenciascuotas = QMListaReferencias.buscarDependencias(movimiento.getNURCAT(), movimiento.getCOACES(), sCodMovimiento);
+
+
+						for (int i = 0; i < dependenciascuotas.size() ; i++)
+			            {
+			            	QMListaReferencias.setValidado(dependenciascuotas.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            }
+			            
+					}
+					else
+					{
+						//error y rollback - error al modificar la referencia
+						iCodigo = -904;
+						QMListaErroresReferencias.addErrorReferencia(sCodMovimiento, sCodError);
+						QMMovimientosReferencias.modMovimientoReferenciaCatastral(movimiento_antiguo,sCodMovimiento);
+					}
+
+				}
+				else
+				{
+					//error y rollback - error al eliminar el error
+					iCodigo = -904;
+					QMMovimientosReferencias.modMovimientoReferenciaCatastral(movimiento_antiguo,sCodMovimiento);
 				}
 			}
 		}

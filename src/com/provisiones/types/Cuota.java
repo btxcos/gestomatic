@@ -115,20 +115,6 @@ public class Cuota
 		OBTEXC = oBTEXC;
 	}
 
-	public boolean equals(Cuota NuevaCuota)
-	{	
-		return (COACES == NuevaCuota.getCOACES()  && 
-				COCLDO == NuevaCuota.getCOCLDO()  && 
-				NUDCOM == NuevaCuota.getNUDCOM()  && 
-				COSBAC == NuevaCuota.getCOSBAC()  && 
-				FIPAGO == NuevaCuota.getFIPAGO()  && 
-				FFPAGO == NuevaCuota.getFFPAGO()  && 
-				IMCUCO == NuevaCuota.getIMCUCO()  && 
-				FAACTA == NuevaCuota.getFAACTA()  && 
-				PTPAGO == NuevaCuota.getPTPAGO()  && 
-				OBTEXC == NuevaCuota.getOBTEXC());
-	}
-	
 	public String logCuota()
 	{
 		return String.format("(CUOTA)\nCOACES:|%s|\nCOCLDO:|%s|\nNUDCOM:|%s|\nCOSBAC:|%s|\nFIPAGO:|%s|\nFFPAGO:|%s|\nIMCUCO:|%s|\nFAACTA:|%s|\nPTPAGO:|%s|\nOBTEXC:|%s|",COACES,COCLDO,NUDCOM,COSBAC,FIPAGO,FFPAGO,IMCUCO,FAACTA,PTPAGO,OBTEXC);

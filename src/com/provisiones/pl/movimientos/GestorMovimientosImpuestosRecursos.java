@@ -67,7 +67,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
 	public GestorMovimientosImpuestosRecursos()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
+
 	}
 	
 	public void borrarPlantillaActivo()

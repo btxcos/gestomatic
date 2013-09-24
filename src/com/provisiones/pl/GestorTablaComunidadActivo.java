@@ -40,7 +40,7 @@ public class GestorTablaComunidadActivo implements Serializable
 	
 	public GestorTablaComunidadActivo()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
+
 	}
 	
 

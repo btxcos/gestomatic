@@ -17,21 +17,21 @@ public class QMMovimientosCuotas
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosCuotas.class.getName());
 
-	static String sTable = "e2_movimientos_tbl";
+	public static String sTable = "e2_movimientos_tbl";
 
-	static String sField1 = "e2_movimiento_id";
+	public static String sField1 = "e2_movimiento_id";
 
 	static String sField2  = "cod_codtrn";
 	static String sField3  = "cod_cotdor";
 	static String sField4  = "idprov";
 	static String sField5  = "cod_coacci";
-	static String sField6  = "cod_cocldo";
-	static String sField7  = "cod_nudcom";
+	public static String sField6  = "cod_cocldo";
+	public static String sField7  = "cod_nudcom";
 	static String sField8  = "coengp";
-	static String sField9  = "cod_coaces";
+	public static String sField9  = "cod_coaces";
 	static String sField10 = "cogrug";     
 	static String sField11 = "cotaca";     
-	static String sField12 = "cod_cosbac";     
+	public static String sField12 = "cod_cosbac";     
 	static String sField13 = "cod_bitc11"; 
 	static String sField14 = "fipago";     
 	static String sField15 = "cod_bitc12"; 
@@ -288,6 +288,47 @@ public class QMMovimientosCuotas
 		{
 			logger.error("ERROR: MovimientoCuotaID:|{}|",sMovimientoCuotaID);
 
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			
+			bSalida = false;
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return bSalida;
+	}
+	
+	public static boolean existeMovimientoCuota(String sMovimientoCuotaID)
+	{
+		Statement stmt = null;
+		Connection conn = null;
+		
+		boolean bSalida = true;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+			stmt.executeUpdate("SELECT " 
+					+ sField1 + 
+					" FROM " 
+					+ sTable + 
+					" WHERE " + sField1 + " = '" + sMovimientoCuotaID + "'");
+			
+			logger.debug("Ejecutada con exito!");
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: sMovimientoCuotaID:|{}|",sMovimientoCuotaID);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());

@@ -110,5 +110,15 @@
 		<managed-bean-class>com.provisiones.pl.GestorEnvios</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorErroresCuotas</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.errores.GestorErroresCuotas</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorErroresReferenciasCatastrales</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.errores.GestorErroresReferenciasCatastrales</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

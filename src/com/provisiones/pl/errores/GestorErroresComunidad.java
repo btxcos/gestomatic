@@ -74,6 +74,7 @@ public class GestorErroresComunidad implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	//Buscar errores
 	private String sCodMovimiento ="";
 	private String sCodError = "";
 	
@@ -83,13 +84,11 @@ public class GestorErroresComunidad implements Serializable
 	private String sCOACESB = "";
 	
 	
-	private transient ErrorComunidadTabla comunidadseleccionada = null;
-	
+	private transient ErrorComunidadTabla movimientoseleccionado = null;
 	private transient ArrayList<ErrorComunidadTabla> tablacomunidadeserror = null;
 	
 
 	private transient ErrorTabla errorseleccionado = null;
-	
 	private transient ArrayList<ErrorTabla> tablaerrores = null;
 	
 	
@@ -113,7 +112,7 @@ public class GestorErroresComunidad implements Serializable
     	this.sNOMCOCB = "";
 
     	
-    	this.comunidadseleccionada = null;
+    	this.movimientoseleccionado = null;
     	this.tablacomunidadeserror = null;
     	
     	this.errorseleccionado = null;
@@ -186,24 +185,6 @@ public class GestorErroresComunidad implements Serializable
   	
 		switch (iCodError) 
 		{
-		case 2://No existe la entidad
-			this.bRCOACES = true;
-			this.bRCOCLDO = true;
-			this.bRNODCAD = true;
-			this.bRNODCCO = true;
-			this.bRNOMADC = true;
-			this.bRNOMCOC = true;
-			this.bRNOMPRC = true;
-			this.bRNUCCDI = false;
-			this.bRNUCCEN = false;
-			this.bRNUCCNT = false;
-			this.bRNUCCOF = false;
-			this.bRNUDCOM = true;
-			this.bRNUTADC = true;
-			this.bRNUTPRC = true;
-			this.bROBTEXC = true;
-			bSalida = true;
-			break;
 		default://error no recuperable
 			this.bRCOACES = true;
 			this.bRCOCLDO = true;
@@ -255,11 +236,11 @@ public class GestorErroresComunidad implements Serializable
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
-	public void seleccionarComunidad(ActionEvent actionEvent) 
+	public void seleccionarMovimiento(ActionEvent actionEvent) 
     {  
 		FacesMessage msg;
 		
-		this.sCodMovimiento = comunidadseleccionada.getMOVIMIENTO(); 
+		this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
     	
 		this.setTablaerrores(CLErrores.buscarErroresComunidad(sCodMovimiento));
 		
@@ -911,12 +892,12 @@ public class GestorErroresComunidad implements Serializable
 		this.bROBTEXC = bROBTEXC;
 	}
 
-	public ErrorComunidadTabla getComunidadseleccionada() {
-		return comunidadseleccionada;
+	public ErrorComunidadTabla getMovimientoseleccionado() {
+		return movimientoseleccionado;
 	}
 
-	public void setComunidadseleccionada(ErrorComunidadTabla comunidadseleccionada) {
-		this.comunidadseleccionada = comunidadseleccionada;
+	public void setMovimientoseleccionado(ErrorComunidadTabla movimientoseleccionado) {
+		this.movimientoseleccionado = movimientoseleccionado;
 	}
 
 	public ArrayList<ErrorComunidadTabla> getTablacomunidadeserror() {
@@ -959,8 +940,4 @@ public class GestorErroresComunidad implements Serializable
 	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
 		this.tablaactivos = tablaactivos;
 	}
-
-	
-	
-	
 }

@@ -116,16 +116,9 @@ public class GestorDetallesActivo implements Serializable
 	
 	public GestorDetallesActivo()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
 		getCOACESElegido();
-    	//FacesContext FCInstance = FacesContext.getCurrentInstance();
-    	//String theBeanName = "GestorActivos";
-    	//GestorActivos bean = (GestorActivos) FCInstance.getELContext().getELResolver().getValue(FCInstance.getELContext(), null, theBeanName);
-    	
-		//String sValor = bean.getsCOACES();
-
 	}
+
 	public String volver()
 	{
 		

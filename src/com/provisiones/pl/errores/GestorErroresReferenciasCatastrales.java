@@ -1,4 +1,4 @@
-package com.provisiones.pl.movimientos;
+package com.provisiones.pl.errores;
 
 import java.io.Serializable;
 
@@ -11,19 +11,25 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+
+import com.provisiones.ll.CLErrores;
 import com.provisiones.ll.CLReferencias;
+
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+
 import com.provisiones.types.ActivoTabla;
+import com.provisiones.types.ErrorReferenciaTabla;
+import com.provisiones.types.ErrorTabla;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 import com.provisiones.types.ReferenciaTabla;
 
-public class GestorMovimientosReferenciasCatastrales implements Serializable 
+public class GestorErroresReferenciasCatastrales implements Serializable 
 {
-	private static final long serialVersionUID = -1805847552638917701L;
+	private static final long serialVersionUID = 4706436052659575697L;
 	
-	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosReferenciasCatastrales.class.getName());
-
+	private static Logger logger = LoggerFactory.getLogger(GestorErroresReferenciasCatastrales.class.getName());
+	
 	private String sCODTRN = ValoresDefecto.DEF_E3_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
 	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
@@ -31,21 +37,29 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 	
 	private String sNURCAT = "";
+	private boolean bRNURCAT = true;
 	private String sTIRCAT = "";
+	private boolean bRTIRCAT = true;
 	private String sENEMIS = "";
+	private boolean bRENEMIS = true;
 	private String sCOTEXA = ValoresDefecto.DEF_COTEXA;
 	private String sOBTEXC = "";
+	private boolean bROBTEXC = true;
 	
 	private String sOBDEER = "";
 	
 	//Ampliacion de valor catastral
 	private String sIMVSUE = "";
+	private boolean bRIMVSUE = true;
 	private String sIMCATA = "";
+	private boolean bRIMCATA = true;
 	private String sFERECA = "";
+	private boolean bRFERECA = true;
 	
-	//Buscar activos
 	private String sCOACES = "";
+	private boolean bRCOACES = true;
 
+	//Buscar activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";	
 	private String sNOPRAC = "";
@@ -54,6 +68,20 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	//Buscar errores
+	private String sCodMovimiento ="";
+	private String sCodError = "";
+	
+	private String sCOACESB = "";
+	private String sNURCATB = "";
+
+	
+	private transient ErrorReferenciaTabla movimientoseleccionado = null;
+	private transient ArrayList<ErrorReferenciaTabla> tablareferenciaserror = null;
+	
+	private transient ErrorTabla errorseleccionado = null;
+	private transient ArrayList<ErrorTabla> tablaerrores = null;
+	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	private transient ActivoTabla activoseleccionado = null;
 	
@@ -61,10 +89,33 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private transient ReferenciaTabla referenciaseleccionada = null;
 	
 	
-	public GestorMovimientosReferenciasCatastrales()
+	public GestorErroresReferenciasCatastrales()
 	{
 
 	}
+	
+    public void borrarPlantillaError() 
+    {  
+    	this.sCOACESB = "";
+    	this.sNURCATB = "";
+
+
+    	this.movimientoseleccionado = null;
+    	this.tablareferenciaserror = null;
+    	
+    	this.errorseleccionado = null;
+    	this.tablaerrores = null;
+    	
+    	this.sCodMovimiento ="";
+    	this.sCodError = "";
+   	
+    }
+	
+    public void limpiarPlantillaError(ActionEvent actionEvent) 
+    {  
+    	borrarPlantillaError();
+   	
+    }
 	
 	public void borrarPlantillaActivo()
 	{
@@ -118,11 +169,124 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     {  
     	this.sCOACES = "";
     	
+    	borrarPlantillaError();
+    	
     	borrarResultadosActivo();
     	
     	borrarPlantillaReferencia();
     	
     	borrarResultadosReferencia();
+    }
+    
+    public boolean editarError(int iCodError) 
+    {  
+    	boolean bSalida = false;
+  	
+		switch (iCodError) 
+		{
+		default://error no recuperable
+			this.bRENEMIS = true;
+			this.bRFERECA = true;
+			this.bRIMCATA = true;
+			this.bRIMVSUE = true;
+			this.bRNURCAT = true;
+			this.bROBTEXC = true;
+			this.bRTIRCAT = true;
+			bSalida = false;
+			break;
+		}
+		
+		return bSalida;
+   	
+    }
+	
+	public void buscaReferenciasError(ActionEvent actionEvent)
+	{
+		FacesMessage msg;
+		
+		logger.debug("Buscando Referencias con errores...");
+		
+    	this.sCOACESB = "";
+    	this.sNURCATB = "";
+
+		
+		ErrorReferenciaTabla filtro = new ErrorReferenciaTabla(
+					sCOACESB.toUpperCase(), sNURCATB.toUpperCase(),
+					"", "");
+
+			this.setTablareferenciaserror(CLErrores.buscarReferenciasConErrores(filtro));
+
+		
+		
+		msg = Utils.pfmsgInfo("Encontradas "+getTablareferenciaserror().size()+" Referencias relacionadas.");
+		logger.debug("Encontradas {} Referencias relacionadas.",getTablareferenciaserror().size());
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+	
+	public void seleccionarMovimiento(ActionEvent actionEvent) 
+    {  
+		FacesMessage msg;
+		
+		this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
+    	
+		this.setTablaerrores(CLErrores.buscarErroresReferencia(sCodMovimiento));
+		
+		msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
+		logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		MovimientoReferenciaCatastral movimiento = CLReferencias.buscarMovimientoReferenciaCatastral(sCodMovimiento);
+		
+		this.sCOACCI = movimiento.getCOACCI();
+		this.sCOACES = movimiento.getCOACES();
+		
+    	this.sNURCAT = movimiento.getNURCAT(); 
+    	this.sTIRCAT = movimiento.getTIRCAT();
+    	this.sENEMIS = movimiento.getENEMIS();
+    	this.sOBTEXC = movimiento.getOBTEXC();
+    	
+    	//Ampliacion de valor catastral
+    	this.sIMVSUE = Utils.recuperaImporte(false,movimiento.getIMVSUE());
+    	this.sIMCATA = Utils.recuperaImporte(false,movimiento.getIMCATA());
+    	this.sFERECA = Utils.recuperaFecha(movimiento.getFERECA());
+    	
+				
+        	
+    	msg = Utils.pfmsgInfo("Errores de Referencia Catastral cargados.");
+    	logger.debug("Errores de Referencia Catastral cargados.");
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+	
+	public void seleccionarError(ActionEvent actionEvent) 
+    {  
+		FacesMessage msg;
+    	
+		this.sCodError = errorseleccionado.getsCodError(); 
+		
+    	int iCodError  = Integer.parseInt(sCodError);
+    	
+    	
+    	logger.debug("Error seleccionado:|{}|",iCodError);
+    	
+    	String sMsg ="";
+    	
+    	if (editarError(iCodError))
+    	{
+    		sMsg = "Error editado.";
+    		msg = Utils.pfmsgInfo(sMsg);
+    		logger.info(sMsg);
+    	}
+    	else
+    	{
+    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
+    		msg = Utils.pfmsgFatal(sMsg);
+    		logger.error(sMsg);
+    	}
+
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
 	public void buscaActivos (ActionEvent actionEvent)
@@ -202,9 +366,9 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		
 		String sMsg = "";
 		
-		if (!CLReferencias.existeReferenciaCatastral(sNURCAT.toUpperCase()))
+		if (!CLReferencias.existeMovimientoReferenciaCatastral(sCodMovimiento))
 		{
-			sMsg = "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
+			sMsg = "[FATAL] ERROR:911 - No se puede modificar la Referencia, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 			msg = Utils.pfmsgError(sMsg);
 			logger.error(sMsg);
 		}
@@ -232,120 +396,20 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 					Utils.compruebaImporte(sIMCATA.toUpperCase()),
 					"", 
 					Utils.compruebaFecha(sFERECA.toUpperCase()));
-			
-			int iSalida = CLReferencias.registraMovimiento(movimiento);
+
+			logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
+			logger.debug("sCodError:|{}|",sCodError);			
+			int iSalida = CLErrores.reparaMovimientoReferencia(movimiento,sCodMovimiento, sCodError);
 			
 			logger.debug("Codigo de salida:"+iSalida);
 			
 			switch (iSalida) 
 			{
 			case 0: //Sin errores
-				sMsg = "El movimiento se ha registrado correctamente.";
+				tablaerrores.remove(errorseleccionado);
+				sMsg = "El movimiento se ha modificado correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
-				break;
-
-			case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
-				sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -3: //Error 003 - NO EXISTE EL ACTIVO
-				sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -49: //Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
-				sMsg = "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			/*case -50: //Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
-				sMsg = "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;*/			
-
-			case -51: //Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
-				sMsg = "ERROR:051 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -52: //Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
-				sMsg = "ERROR:052 - El titular catastral es obligatorio. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -53: //Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
-				sMsg = "ERROR:053 - Existen recursos o impuestos pendientes de esta referencia. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
-				sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			//Ampliacion de valor catastral
-			case -82: //Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
-				sMsg = "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -83: //Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
-				sMsg = "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
-				sMsg = "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -700: //Error 700 - No existe realcion con ese activo
-				sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -701: //Error 701 - Valor del suelo incorrecto
-				sMsg = "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -702: //Error 702 - Valor catastral incorrecto
-				sMsg = "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -801: //Error 801 - alta de una referencia en alta
-				sMsg = "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -802: //Error 802 - referencia catastral de baja no puede recibir movimientos
-				sMsg = "ERROR:802 - La referencia catastral esta baja y no puede recibir movimientos. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -803: //Error 803 - estado no disponible
-				sMsg = "ERROR:803 - El estado de la referencia catastral informada no esta disponible. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
 				break;
 
 			case -804: //Error 804 - modificacion sin cambios
@@ -356,24 +420,6 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 
 			case -900: //Error 900 - al crear un movimiento
 				sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -901: //Error 901 - error y rollback - error al crear la cuota
-				sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la referencia catastral. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -902: //Error 902 - error y rollback - error al registrar la relaccion
-				sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -903: //Error 903 - error y rollback - error al cambiar el estado
-				sMsg = "[FATAL] ERROR:903 - Se ha producido un error al cambiar el estado de la referencia catastral. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
@@ -486,6 +532,30 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		this.sOBDEER = sOBDEER;
 	}
 
+	public String getsIMVSUE() {
+		return sIMVSUE;
+	}
+
+	public void setsIMVSUE(String sIMVSUE) {
+		this.sIMVSUE = sIMVSUE;
+	}
+
+	public String getsIMCATA() {
+		return sIMCATA;
+	}
+
+	public void setsIMCATA(String sIMCATA) {
+		this.sIMCATA = sIMCATA;
+	}
+
+	public String getsFERECA() {
+		return sFERECA;
+	}
+
+	public void setsFERECA(String sFERECA) {
+		this.sFERECA = sFERECA;
+	}
+
 	public String getsCOACES() {
 		return sCOACES;
 	}
@@ -549,6 +619,128 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	public void setsNUPUAC(String sNUPUAC) {
 		this.sNUPUAC = sNUPUAC;
 	}
+	
+	public String getsCOACESB() {
+		return sCOACESB;
+	}
+
+	public void setsCOACESB(String sCOACESB) {
+		this.sCOACESB = sCOACESB;
+	}
+
+	public String getsNURCATB() {
+		return sNURCATB;
+	}
+
+	public void setsNURCATB(String sNURCATB) {
+		this.sNURCATB = sNURCATB;
+	}
+
+	public String getsCodMovimiento() {
+		return sCodMovimiento;
+	}
+
+	public void setsCodMovimiento(String sCodMovimiento) {
+		this.sCodMovimiento = sCodMovimiento;
+	}
+
+	public String getsCodError() {
+		return sCodError;
+	}
+
+	public void setsCodError(String sCodError) {
+		this.sCodError = sCodError;
+	}
+
+	public boolean isbRNURCAT() {
+		return bRNURCAT;
+	}
+
+	public void setbRNURCAT(boolean bRNURCAT) {
+		this.bRNURCAT = bRNURCAT;
+	}
+
+	public boolean isbRTIRCAT() {
+		return bRTIRCAT;
+	}
+
+	public void setbRTIRCAT(boolean bRTIRCAT) {
+		this.bRTIRCAT = bRTIRCAT;
+	}
+
+	public boolean isbRENEMIS() {
+		return bRENEMIS;
+	}
+
+	public void setbRENEMIS(boolean bRENEMIS) {
+		this.bRENEMIS = bRENEMIS;
+	}
+
+	public boolean isbROBTEXC() {
+		return bROBTEXC;
+	}
+
+	public void setbROBTEXC(boolean bROBTEXC) {
+		this.bROBTEXC = bROBTEXC;
+	}
+
+	public boolean isbRIMVSUE() {
+		return bRIMVSUE;
+	}
+
+	public void setbRIMVSUE(boolean bRIMVSUE) {
+		this.bRIMVSUE = bRIMVSUE;
+	}
+
+	public boolean isbRIMCATA() {
+		return bRIMCATA;
+	}
+
+	public void setbRIMCATA(boolean bRIMCATA) {
+		this.bRIMCATA = bRIMCATA;
+	}
+
+	public boolean isbRFERECA() {
+		return bRFERECA;
+	}
+
+	public void setbRFERECA(boolean bRFERECA) {
+		this.bRFERECA = bRFERECA;
+	}
+
+	public ErrorReferenciaTabla getMovimientoseleccionado() {
+		return movimientoseleccionado;
+	}
+
+	public void setMovimientoseleccionado(
+			ErrorReferenciaTabla movimientoseleccionado) {
+		this.movimientoseleccionado = movimientoseleccionado;
+	}
+
+	public ArrayList<ErrorReferenciaTabla> getTablareferenciaserror() {
+		return tablareferenciaserror;
+	}
+
+	public void setTablareferenciaserror(
+			ArrayList<ErrorReferenciaTabla> tablareferenciaserror) {
+		this.tablareferenciaserror = tablareferenciaserror;
+	}
+
+	public ErrorTabla getErrorseleccionado() {
+		return errorseleccionado;
+	}
+
+	public void setErrorseleccionado(ErrorTabla errorseleccionado) {
+		this.errorseleccionado = errorseleccionado;
+	}
+
+	public ArrayList<ErrorTabla> getTablaerrores() {
+		return tablaerrores;
+	}
+
+	public void setTablaerrores(ArrayList<ErrorTabla> tablaerrores) {
+		this.tablaerrores = tablaerrores;
+	}
 
 	public ArrayList<ActivoTabla> getTablaactivos() {
 		return tablaactivos;
@@ -582,29 +774,12 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		this.referenciaseleccionada = referenciaseleccionada;
 	}
 
-	public String getsIMVSUE() {
-		return sIMVSUE;
+	public boolean isbRCOACES() {
+		return bRCOACES;
 	}
 
-	public void setsIMVSUE(String sIMVSUE) {
-		this.sIMVSUE = sIMVSUE;
+	public void setbRCOACES(boolean bRCOACES) {
+		this.bRCOACES = bRCOACES;
 	}
-
-	public String getsIMCATA() {
-		return sIMCATA;
-	}
-
-	public void setsIMCATA(String sIMCATA) {
-		this.sIMCATA = sIMCATA;
-	}
-
-	public String getsFERECA() {
-		return sFERECA;
-	}
-
-	public void setsFERECA(String sFERECA) {
-		this.sFERECA = sFERECA;
-	}
-	
-	
 }
+

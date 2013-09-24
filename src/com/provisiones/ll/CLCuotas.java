@@ -7,13 +7,14 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMCuotas;
-
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresCuotas;
 import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
+
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
+
 import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Cuota;
 import com.provisiones.types.CuotaTabla;
@@ -159,6 +160,12 @@ public class CLCuotas
 		return QMListaCuotas.buscaCuotasActivo(sCOACES);
 	}
 	
+	public static MovimientoCuota buscarMovimientoCuota (String sCodMovimiento)
+	{
+
+		return QMMovimientosCuotas.getMovimientoCuota(sCodMovimiento);
+	}
+	
 	public static long buscarNumeroMovimientosCuotasPendientes()
 	{
 		return (QMListaCuotas.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
@@ -239,6 +246,12 @@ public class CLCuotas
 	public static boolean existeCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
 		return QMCuotas.existeCuota(sCodCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC);
+	}
+	
+	public static boolean existeMovimientoCuota (String sCodMovimiento)
+	{
+
+		return QMMovimientosCuotas.existeMovimientoCuota(sCodMovimiento);
 	}
 	
 	public static boolean estaDeBaja (String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)

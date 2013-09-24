@@ -12,9 +12,13 @@
 	<h:body>
 		<h:form>
 			<p:layout fullPage="true">
-
 				<p:layoutUnit position="north" size="25%" header="Portal Provisiones">
-					<h:outputText value=" " />
+					<h:panelGrid columns="2" cellpadding="5">
+						<p:panel>
+							<h:outputText value="USUARIO "/>
+							<p:inputText id="USUARIO" value="#{GestorIndice.sUsuario}" disabled="true"/>
+						</p:panel>
+					</h:panelGrid>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="west" size="20%" header="Menus">

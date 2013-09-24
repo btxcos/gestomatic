@@ -192,34 +192,26 @@ public class Utils
 	
 	public static void standardIO2File(String fileName)
 	{
+		//redirige la salida estandar a un fichero. Alternativa a log4j. Peor rendimiento.
+
 		logger.debug("user.dir:|{}|",System.getProperty("user.dir"));
 		logger.debug("ValoresDefecto.DEF_EXEC_PATH:|{}|",ValoresDefecto.DEF_EXEC_PATH);
 		
-		//DOMConfigurator.configure(System.getProperty("user.dir")+File.separator+"WebContent"+File.separator+"WEB-INF"+File.separator+"log4j.xml"); 
-		
-        if(fileName.equals(""))
-        {
- 
-            fileName=ValoresDefecto.DEF_EXEC_PATH+"javalog.txt";
- 
-        }
+		 if(fileName.equals(""))
+		 {
+             fileName=ValoresDefecto.DEF_EXEC_PATH+"javalog.txt";
+         }
  
         try 
         {
- 
             PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(new File(fileName),true)),true);
  
- 
             System.setOut(ps);
- 
             System.setErr(ps);
- 
         } 
         catch (FileNotFoundException ex) 
         {
- 
             logger.error("Error al acceder al archivo '{}'",fileName);
- 
         }
  
     }

@@ -129,7 +129,6 @@ public class GestorGastos implements Serializable
 
 	public GestorGastos()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
 		
 		tiposcotpga_g1HM.put("Plusvalia", "1");
 		tiposcotpga_g1HM.put("Notaria",   "2");

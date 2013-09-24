@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.ll.CLActivos;
 
-import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ActivoTabla;
 
@@ -125,8 +124,6 @@ public class GestorActivos implements Serializable
 	
 	public GestorActivos()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
-		
 		encuentraActivos();
 	}
 	

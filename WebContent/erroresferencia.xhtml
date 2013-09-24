@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/>
+	</h:head>
+
+	<h:body>
+		<h:form id="form" onkeypress="return event.keyCode != 13">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="auto" header="Gestión de errores Referencia Catastral">
+					<h:panelGrid columns="4" cellpadding="5">
+
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
+
+								<h:outputText value="CODTRN: " />
+								<p:inputText id="CODTRN" value="#{GestorErroresReferenciasCatastrales.sCODTRN}" disabled="true" />
+
+								<h:outputText value="IDPROV: " />
+								<p:inputText id="IDPROV" value="#{GestorErroresReferenciasCatastrales.sIDPROV}" disabled="true" />
+
+							</h:panelGrid>
+						</p:panel>
+
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Limpiar Plantilla" update="panel, form:errores" actionListener="#{GestorErroresReferenciasCatastrales.limpiarPlantilla}" />
+
+								<p:commandButton value="Buscar Errores" update="msgs, popup, form:referenciaserror" oncomplete="dlgBuscarReferenciasError.show()"/>
+
+								<p:commandButton value="Registrar Datos" update="panel, msgs, popup, form:errores" actionListener="#{GestorErroresReferenciasCatastrales.registraDatos}" />
+
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup" />
+
+							</h:panelGrid>
+						</p:fieldset>
+
+					</h:panelGrid>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Operativas">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<h:panelGrid columns="1" cellpadding="5">
+						<p:panel>
+							<p:contextMenu for="errores">
+								<p:menuitem value="Cargar Error" update="form:popup, form:msgs, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresReferenciasCatastrales.seleccionarError}"/>
+							</p:contextMenu>  
+
+							<p:dataTable id="errores" var="error" value="#{GestorErroresReferenciasCatastrales.tablaerrores}" rowKey="#{error.sCodError}"  
+										selection="#{GestorErroresReferenciasCatastrales.errorseleccionado}" selectionMode="single"
+										paginator="true" paginatorPosition="bottom" rows="10" 
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+										rowsPerPageTemplate="5,10,15">  
+								<f:facet name="header">  
+									Errores recibidos
+								</f:facet>
+
+								<p:column sortBy="#{error.sCodError}" headerText="Error">  
+									#{error.sCodError}  
+								</p:column>
+
+								<p:column sortBy="#{error.sDescripcion}" headerText="Descripcion">  
+									#{error.sDescripcion}  
+								</p:column>
+
+							</p:dataTable>
+						</p:panel>
+
+						<p:panel id="panel">
+							<h:panelGrid columns="1" cellpadding="5">
+
+								<p:fieldset legend="Activo relacionado">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+
+												<h:outputText for="COACES" value="Código de activo: " />
+												<p:inputText id="COACES" value="#{GestorErroresReferenciasCatastrales.sCOACES}" size="9" maxlength="9" disabled="#{GestorErroresReferenciasCatastrales.bRCOACES}"/>
+
+												<p:commandButton value="Carga Referencias" update="msgs, popup, panel, referencias" actionListener="#{GestorErroresReferenciasCatastrales.cargarReferencias}"  oncomplete="dlgTablaReferencias.show()" disabled="#{GestorErroresReferenciasCatastrales.bRCOACES}"/>
+
+											</h:panelGrid>
+										</p:panel>
+
+										<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()" disabled="#{GestorErroresReferenciasCatastrales.bRCOACES}"/>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Referencia Catastral">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NURCAT" value="Número: " />
+										<p:inputText id="NURCAT" value="#{GestorErroresReferenciasCatastrales.sNURCAT}" size="20" maxlength="20"  disabled="#{GestorErroresReferenciasCatastrales.bRNURCAT}"/>
+
+										<h:outputText for="TIRCAT" value="Titular: " />
+										<p:inputText id="TIRCAT" value="#{GestorErroresReferenciasCatastrales.sTIRCAT}" size="60" maxlength="60" disabled="#{GestorErroresReferenciasCatastrales.bRTIRCAT}"/>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Valor Catastral">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+
+												<h:outputText for="IMVSUE"  value="Valor del suelo: " />
+												<p:inputText id="IMVSUE" value="#{GestorErroresReferenciasCatastrales.sIMVSUE}" size="16"  maxlength="16" disabled="#{GestorErroresReferenciasCatastrales.bRIMVSUE}"/>
+												<h:outputText value="€" />
+
+												<h:outputText for="IMCATA" value="Valor catastral: " />
+												<p:inputText id="IMCATA" value="#{GestorErroresReferenciasCatastrales.sIMCATA}" size="16" maxlength="16" disabled="#{GestorErroresReferenciasCatastrales.bRIMCATA}"/>
+												<h:outputText value="€" />
+
+											</h:panelGrid>
+										</p:panel>
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+
+												<h:outputText for="FERECA" value="Fecha de revisión: " />
+												<p:inputMask id="FERECA" value="#{GestorErroresReferenciasCatastrales.sFERECA}" mask="99/99/9999" size="10" maxlength="8" disabled="#{GestorErroresReferenciasCatastrales.bRFERECA}"/>
+												<p:commandButton id="hFERECA" icon="ui-icon-clock" update="FERECA" actionListener="#{GestorErroresReferenciasCatastrales.hoyFERECA}" disabled="#{GestorErroresReferenciasCatastrales.bRFERECA}"/>
+
+											</h:panelGrid>
+										</p:panel>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Emisión">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="ENEMIS"  value="Entidad de emisión: " />
+										<p:inputText id="ENEMIS" value="#{GestorErroresReferenciasCatastrales.sENEMIS}" size="60"  maxlength="60" disabled="#{GestorErroresReferenciasCatastrales.bRENEMIS}"/>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Observaciones">
+									<h:panelGrid columns="1" cellpadding="5">
+
+										<p:inputTextarea id="OBTEXC" value="#{GestorErroresReferenciasCatastrales.sOBTEXC}" rows="2" cols="80" counter="counter" maxlength="110"
+											counterTemplate="{0} carácteres restantes." autoResize="false" disabled="#{GestorErroresReferenciasCatastrales.bROBTEXC}"/>
+										<h:outputText id="counter" />
+
+									</h:panelGrid>
+								</p:fieldset>
+
+							</h:panelGrid>
+						</p:panel>
+					</h:panelGrid>
+
+					<p:dialog header="Referencias asociadas al Activo: " widgetVar="dlgTablaReferencias" resizable="false">
+						<p:contextMenu for="referencias">
+							<p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NURCAT, form:TIRCAT, form:IMVSUE, form:IMCATA, form:FERECA, form:ENEMIS, form:OBTEXC"
+								icon="ui-icon-check" actionListener="#{GestorErroresReferenciasCatastrales.seleccionarReferencia}" oncomplete="dlgTablaReferencias.hide();"/>
+							</p:contextMenu>
+
+							<p:dataTable id="referencias" var="referencia" value="#{GestorErroresReferenciasCatastrales.tablareferencias}" rowKey="#{referencia.NURCAT}"
+												selection="#{GestorErroresReferenciasCatastrales.referenciaseleccionada}" selectionMode="single"
+												paginator="true" paginatorPosition="bottom" rows="10"
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">
+
+								<p:column headerText="Referencia Catastral">
+									#{referencia.NURCAT}
+								</p:column>
+
+								<p:column headerText="Titular">
+									#{referencia.TIRCAT}
+								</p:column>
+
+								<p:column headerText="Valor del suelo">
+									#{referencia.IMVSUE}
+								</p:column>
+
+								<p:column headerText="Valor Catastral">
+									#{referencia.IMCATA}
+								</p:column>
+
+								<p:column headerText="Fecha de Revisión">
+									#{referencia.FERECA}
+								</p:column>
+
+								<p:column headerText="Entidad de emisión">
+									#{referencia.ENEMIS}
+								</p:column>
+
+							</p:dataTable>
+					</p:dialog>
+
+					<p:dialog header="Activos con Referencias asociadas: " widgetVar="dlgTablaActivos" resizable="false">
+						<p:contextMenu for="activos">
+							 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorErroresReferenciasCatastrales.seleccionarActivo}" oncomplete="dlgTablaActivos.hide(); dlgBuscar.hide()"/>
+						</p:contextMenu>
+
+						<p:dataTable id="activos" var="activo" value="#{GestorErroresReferenciasCatastrales.tablaactivos}" rowKey="#{activo.COACES}"
+											selection="#{GestorErroresReferenciasCatastrales.activoseleccionado}" selectionMode="single"
+											paginator="true" paginatorPosition="bottom" rows="10"
+											paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+											rowsPerPageTemplate="5,10,15">
+
+							<p:column headerText="Código Activo">
+								#{activo.COACES}
+							</p:column>
+
+							<p:column headerText="Provincia">
+								#{activo.NOPRAC}
+							</p:column>
+
+							<p:column headerText="Municipio">
+								#{activo.NOMUIN}
+							</p:column>
+
+							<p:column headerText="Vía">
+								#{activo.NOVIAS}
+							</p:column>
+
+							<p:column headerText="Portal">
+								#{activo.NUPOAC}
+							</p:column>
+
+							<p:column headerText="Piso">
+								#{activo.NUPIAC}
+							</p:column>
+
+							<p:column headerText="Puerta">
+								#{activo.NUPUAC}
+							</p:column>
+
+						</p:dataTable>
+					</p:dialog>
+
+					<p:dialog header="Buscar Activos con Referencias asociadas" widgetVar="dlgBuscar" resizable="false">
+						<p:fieldset legend="Criterios de Busqueda">
+							<h:panelGrid columns="1" cellpadding="5">
+
+								<p:panel id="panelBuscar" >
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NOPRAC" value="Provincia: " />
+										<p:inputText id="NOPRAC" value="#{GestorErroresReferenciasCatastrales.sNOPRAC}" size="18" maxlength="18"/>
+
+										<h:outputText for="NOMUIN" value="Municipio: " />
+										<p:inputText id="NOMUIN" value="#{GestorErroresReferenciasCatastrales.sNOMUIN}" size="30" maxlength="30"/>
+
+										<h:outputText for="COPOIN" value="Código Postal: " />
+										<p:inputText id="COPOIN" value="#{GestorErroresReferenciasCatastrales.sCOPOIN}" size="5" maxlength="5"/>
+
+										<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
+										<p:inputText id="NOVIAS" value="#{GestorErroresReferenciasCatastrales.sNOVIAS}" size="60" maxlength="60"/>
+
+										<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: " />
+										<p:inputText id="NUPOAC" value="#{GestorErroresReferenciasCatastrales.sNUPOAC}" size="17" maxlength="17"/>
+
+										<h:outputText for="NUPIAC" value="Piso: " />
+										<p:inputText id="NUPIAC" value="#{GestorErroresReferenciasCatastrales.sNUPIAC}" size="11" maxlength="11"/>
+
+										<h:outputText for="NUPUAC" value="Puerta: " />
+										<p:inputText id="NUPUAC" value="#{GestorErroresReferenciasCatastrales.sNUPUAC}" size="17" maxlength="17"/>
+
+									</h:panelGrid>
+								</p:panel>
+
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorErroresReferenciasCatastrales.buscaActivos}" oncomplete="dlgTablaActivos.show()"/>
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorErroresReferenciasCatastrales.limpiarPlantillaActivo}" />
+
+									</h:panelGrid>
+								</p:panel>
+
+							</h:panelGrid>
+						</p:fieldset>
+					</p:dialog>
+
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog>
+
+					<p:dialog header="Buscar Referencias con errores" widgetVar="dlgBuscarReferenciasError" resizable="false">
+						<p:fieldset legend="Criterios de Búsqueda">
+							<h:panelGrid columns="1" cellpadding="5">
+								<p:panel id="panelBuscarErrores" >
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="COACESB" value="Código de activo: "/>
+										<p:inputText id="COACESB" value="#{GestorErroresReferenciasCatastrales.sCOACESB}" size="9" maxlength="9"/>
+
+										<h:outputText for="NURCATB" value="Referencia Catastral: " />
+										<p:inputText id="NURCATB" value="#{GestorErroresReferenciasCatastrales.sNURCATB}" size="20" maxlength="20"/>
+
+									</h:panelGrid>
+
+								</p:panel>
+								<p:panel >
+									<h:panelGrid columns="3" cellpadding="5">
+
+										<p:commandButton value="Buscar" update="popup, form:referenciaserror" actionListener="#{GestorErroresReferenciasCatastrales.buscaReferenciasError}" oncomplete="dlgTablaReferenciasError.show()"/>	
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorErroresReferenciasCatastrales.limpiarPlantillaError}"/>
+
+									</h:panelGrid>
+								</p:panel>
+							</h:panelGrid>
+						</p:fieldset>
+					</p:dialog>
+
+					<p:dialog header="Referencias con errores: " widgetVar="dlgTablaReferenciasError" resizable="false">
+
+						<p:contextMenu for="referenciaserror">
+							<p:menuitem value="Cargar Errores" update="form:popup, form:msgs, form:errores, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresReferenciasCatastrales.seleccionarMovimiento}" oncomplete="dlgTablaReferenciasError.hide(); dlgBuscarReferenciasError.hide()"/>
+						</p:contextMenu>  
+
+						<p:dataTable id="referenciaserror" var="referenciae" value="#{GestorErroresReferenciasCatastrales.tablareferenciaserror}" rowKey="#{referenciae.MOVIMIENTO}"  
+								selection="#{GestorErroresReferenciasCatastrales.movimientoseleccionado}" selectionMode="single"
+									paginator="true" paginatorPosition="bottom" rows="10" 
+									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+									rowsPerPageTemplate="5,10,15">  
+							<f:facet name="header">  
+								Referencias
+							</f:facet>
+
+							<p:column sortBy="#{referenciae.COACES}" headerText="Activo">
+								#{referenciae.COACES}  
+							</p:column>
+
+							<p:column sortBy="#{referenciae.NURCAT}" headerText="Referencia Catastral">
+								#{referenciae.NURCAT}  
+							</p:column>
+
+							<p:column sortBy="#{referenciae.ERRORES}" headerText="Errores">
+								#{referenciae.ERRORES}  
+							</p:column>
+
+						</p:dataTable>
+
+					</p:dialog>
+				</p:layoutUnit>
+
+			</p:layout>
+		</h:form>
+	</h:body>
+
+</f:view>
+</html>

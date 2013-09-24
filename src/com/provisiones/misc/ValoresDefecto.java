@@ -92,8 +92,8 @@ public class ValoresDefecto
 
 	public static final String DEF_FIN_FICHERO = new Character((char) iNumChar).toString();
 
-	public static final String DEF_PATH = "provisiones"+File.separator;
-	public static final String DEF_EXEC_PATH = System.getProperty("user.dir")+File.separator;
+	public static final String DEF_PATH = "GLSL-portales"+File.separator+"provisiones"+File.separator;
+	public static final String DEF_EXEC_PATH = System.getProperty("user.dir")+File.separator+DEF_PATH;
 	public static final String DEF_PATH_BACKUP_RECIBIDOS = DEF_EXEC_PATH+"recibidos"+File.separator;
 	public static final String DEF_PATH_BACKUP_GENERADOS = DEF_EXEC_PATH+"generados"+File.separator;
 	public static final String DEF_PATH_LOGS = DEF_EXEC_PATH+"logs"+File.separator;

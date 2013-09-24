@@ -61,7 +61,7 @@ public class GestorReferenciasCatastrales implements Serializable
 	
 	public GestorReferenciasCatastrales()
 	{
-		Utils.standardIO2File("");//Salida por fichero de texto
+
 	}
 
 	public void borrarPlantillaActivo()

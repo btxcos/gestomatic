@@ -18,16 +18,16 @@ public class QMMovimientosReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosReferencias.class.getName());
 
-	static String sTable = "e3_movimientos_tbl";
+	public static String sTable = "e3_movimientos_tbl";
 
-	static String sField1  = "e3_movimiento_id";
+	public static String sField1  = "e3_movimiento_id";
 	static String sField2  = "cod_codtrn";  
 	static String sField3  = "cod_cotdor";  
 	static String sField4  = "idprov";      
 	static String sField5  = "cod_coacci";  
 	static String sField6  = "coengp";       
-	static String sField7  = "cod_coaces";
-	static String sField8  = "nurcat_id";   
+	public static String sField7  = "cod_coaces";
+	public static String sField8  = "nurcat_id";   
 	static String sField9  = "cod_bitc16";  
 	static String sField10 = "tircat";      
 	static String sField11 = "cod_bitc17";  
@@ -511,8 +511,11 @@ public class QMMovimientosReferencias
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField16 + "  FROM " + sTable + 
-					" WHERE (" + sField3 + " = '" + sCodReferencia + "')");
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField1 + 
+					"  FROM " 
+					+ sTable + 
+					" WHERE (" + sField1 + " = '" + sCodReferencia + "')");
 
 			rs = pstmt.executeQuery();
 			

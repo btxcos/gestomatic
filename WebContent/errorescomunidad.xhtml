@@ -344,11 +344,11 @@
 					<p:dialog header="Comunidades con errores: " widgetVar="dlgTablaComunidadesError" resizable="false">
 
 						<p:contextMenu for="comunidadeserror">
-							<p:menuitem value="Cargar Errores" update="form:popup, form:msgs, form:errores, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresComunidad.seleccionarComunidad}" oncomplete="dlgTablaComunidadesError.hide(); dlgBuscarComunidadesError.hide()"/>
+							<p:menuitem value="Cargar Errores" update="form:popup, form:msgs, form:errores, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresComunidad.seleccionarMovimiento}" oncomplete="dlgTablaComunidadesError.hide(); dlgBuscarComunidadesError.hide()"/>
 						</p:contextMenu>  
 
-						<p:dataTable id="comunidadeserror" var="comunidad" value="#{GestorErroresComunidad.tablacomunidadeserror}" rowKey="#{comunidad.MOVIMIENTO}"  
-								selection="#{GestorErroresComunidad.comunidadseleccionada}" selectionMode="single"
+						<p:dataTable id="comunidadeserror" var="comunidade" value="#{GestorErroresComunidad.tablacomunidadeserror}" rowKey="#{comunidade.MOVIMIENTO}"  
+								selection="#{GestorErroresComunidad.movimientoseleccionado}" selectionMode="single"
 									paginator="true" paginatorPosition="bottom" rows="10" 
 									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
 									rowsPerPageTemplate="5,10,15">  
@@ -356,20 +356,20 @@
 								Comunidades
 							</f:facet>
 
-							<p:column sortBy="#{comunidad.COCLDO}" headerText="Documento">
-								#{comunidad.COCLDO}  
+							<p:column sortBy="#{comunidade.COCLDO}" headerText="Documento">
+								#{comunidade.COCLDO}  
 							</p:column>
 
-							<p:column sortBy="#{comunidad.NUDCOM}" headerText="Número">
-								#{comunidad.NUDCOM}  
+							<p:column sortBy="#{comunidade.NUDCOM}" headerText="Número">
+								#{comunidade.NUDCOM}  
 							</p:column>
 
-							<p:column sortBy="#{comunidad.NOMCOC}" headerText="Comunidad">
-								#{comunidad.NOMCOC}  
+							<p:column sortBy="#{comunidade.NOMCOC}" headerText="Comunidad">
+								#{comunidade.NOMCOC}  
 							</p:column>
 
-							<p:column sortBy="#{comunidad.ERRORES}" headerText="Errores">
-								#{comunidad.ERRORES}  
+							<p:column sortBy="#{comunidade.ERRORES}" headerText="Errores">
+								#{comunidade.ERRORES}  
 							</p:column>
 
 						</p:dataTable>

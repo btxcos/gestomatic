@@ -1093,4 +1093,81 @@ public class QMListaCuotas
 		return result;
 
 	}
+	
+	public static ArrayList<String> buscarDependencias(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento)
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;		
+
+		boolean found = false;
+		
+		ArrayList<String> result = new ArrayList<String>();
+
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+
+			
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField5  + 
+					"  FROM " + sTable + 
+					" WHERE " +
+					"(" 
+					+ sField1 + " = '" + sCodCOACES + "' AND "
+					+ sField2 + " = '" + sCodCOCLDO + "' AND "
+					+ sField3 + " = '" + sCodNUDCOM + "' AND "
+					+ sField4 + " = '" + sCodCOSBAC + "' AND "
+					+ sField5 + " >=  '" + sCodMovimiento + "')");
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					result.add(rs.getString(sField5));
+
+					logger.debug("Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}			
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
+			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			found = false;
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
 }
+

@@ -64,9 +64,6 @@ public class GestorCuotas implements Serializable
 	public GestorCuotas()
 	{
 
-
-		Utils.standardIO2File("");//Salida por fichero de texto
-
 	}
 	
 	public void borrarCamposActivo()

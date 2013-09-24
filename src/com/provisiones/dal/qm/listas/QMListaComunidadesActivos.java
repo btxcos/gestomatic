@@ -1436,6 +1436,7 @@ public class QMListaComunidadesActivos
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
 			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			found = false;
 		} 
 		finally 
 		{

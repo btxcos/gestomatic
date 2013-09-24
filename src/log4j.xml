@@ -6,7 +6,7 @@
         <param name="MaxFileSize" value="1024KB" />
         <param name="MaxBackupIndex" value="20" />
         <param name="Threshold" value="DEBUG" />
-        <param name="File" value="logs/provisiones.log" />
+        <param name="File" value="GLSL-portales/provisiones/logs/provisiones.log" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d  %-5p  [%c{1}] %m%n" />
         </layout>
@@ -15,7 +15,7 @@
         <param name="MaxFileSize" value="1024KB" />
         <param name="MaxBackupIndex" value="20" />
         <param name="Threshold" value="DEBUG" />
-        <param name="File" value="logs/provisiones.log" />
+        <param name="File" value="GLSL-portales/provisiones/logs/provisiones.log" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d %-5p [%c:%M:%L] %m%n" />
         </layout>
@@ -24,7 +24,7 @@
         <param name="MaxFileSize" value="1024KB" />
         <param name="MaxBackupIndex" value="20" />
         <param name="Threshold" value="DEBUG" />
-        <param name="File" value="logs/provisiones.log" />
+        <param name="File" value="GLSL-portales/provisiones/logs/provisiones.log" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d %-5p [%c:%M] %m%n" />
         </layout>
