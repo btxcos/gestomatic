@@ -204,6 +204,18 @@ public class CLImpuestos
 		return QMListaImpuestos.buscaDevolucionesActivo(sCodCOACES);
 	}
 	
+	public static MovimientoImpuestoRecurso buscarMovimientoImpuestoRecurso (String sCodMovimiento)
+	{
+
+		return QMMovimientosImpuestos.getMovimientoImpuestoRecurso(sCodMovimiento);
+	}
+	
+	public static boolean existeMovimientoImpuestoRecurso (String sCodMovimiento)
+	{
+
+		return QMMovimientosImpuestos.existeMovimientoImpuestoRecurso(sCodMovimiento);
+	}
+	
 	public static long buscarNumeroMovimientosImpuestosPendientes()
 	{
 		return (QMListaImpuestos.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));

@@ -197,6 +197,21 @@ public class GestorErroresCuotas implements Serializable
   	
 		switch (iCodError) 
 		{
+		/*case 2://prueba
+			this.bRCOACES = true;
+			this.bRCOCLDO = true;
+			this.bRCOSBAC = true;
+			this.bRFAACTA = false;
+			this.bRFIPAGO = true;
+			this.bRFFPAGO = true;
+			this.bRIMCUCO = true;
+			this.bRNODCCO = true;
+			this.bRNOMCOC = true;
+			this.bRNUDCOM = true;
+			this.bROBTEXC = true;
+			this.bRPTPAGO = true;
+			bSalida = true;
+			break;*/
 		default://error no recuperable
 			this.bRCOACES = true;
 			this.bRCOCLDO = true;
@@ -224,13 +239,8 @@ public class GestorErroresCuotas implements Serializable
 		
 		logger.debug("Buscando Cuotas con errores...");
 		
-    	this.sCOACESB = "";
-    	this.sCOCLDOB = "";
-    	this.sNUDCOMB = "";
-    	this.sCOSBACB = "";
-		
 		ErrorCuotaTabla filtro = new ErrorCuotaTabla(
-					sCOACESB.toUpperCase(), sCOCLDOB, sNUDCOMB.toUpperCase(),sCOSBACB,
+					sCOACESB.toUpperCase(), sCOCLDOB, "", sNUDCOMB.toUpperCase(),sCOSBACB, "",
 					"", "");
 
 			this.setTablacuotaserror(CLErrores.buscarCuotasConErrores(filtro));

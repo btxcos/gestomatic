@@ -4,18 +4,20 @@ public class ErrorComunidadTabla
 {
 
 	private String COCLDO = "";
+	private String DCOCLDO = "";
 	private String NUDCOM = "";
 	private String NOMCOC = "";
 	
 	private String MOVIMIENTO = "";
 	private String ERRORES = "";
-	
+
 	//Constructor de clase
 
-	public ErrorComunidadTabla(String cOCLDO, String nUDCOM, String nOMCOC,
-			String mOVIMIENTO, String eRRORES) {
+	public ErrorComunidadTabla(String cOCLDO, String dCOCLDO, String nUDCOM,
+			String nOMCOC, String mOVIMIENTO, String eRRORES) {
 		super();
 		COCLDO = cOCLDO;
+		setDCOCLDO(dCOCLDO);
 		NUDCOM = nUDCOM;
 		NOMCOC = nOMCOC;
 		MOVIMIENTO = mOVIMIENTO;
@@ -30,6 +32,14 @@ public class ErrorComunidadTabla
 
 	public void setCOCLDO(String cOCLDO) {
 		COCLDO = cOCLDO;
+	}
+
+	public String getDCOCLDO() {
+		return DCOCLDO;
+	}
+
+	public void setDCOCLDO(String dCOCLDO) {
+		DCOCLDO = dCOCLDO;
 	}
 
 	public String getNUDCOM() {

@@ -198,8 +198,10 @@ public class QMListaErroresCuotas
 
 		String COACES = "";
 		String COCLDO = "";
+		String DCOCLDO = "";
 		String NUDCOM = "";
 		String COSBAC = "";
+		String DCOSBAC = "";
 		
 		String MOVIMIENTO = "";
 		String ERRORES = "";
@@ -253,13 +255,15 @@ public class QMListaErroresCuotas
 					found = true;
 					
 					COACES = rs.getString(QMMovimientosCuotas.sField9);
-					COCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMMovimientosCuotas.sField6));
+					COCLDO = rs.getString(QMMovimientosCuotas.sField6);
+					DCOCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, COCLDO);
 					NUDCOM = rs.getString(QMMovimientosCuotas.sField7);
 					COSBAC = rs.getString(QMMovimientosCuotas.sField12);
+					DCOSBAC = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,COSBAC);
 					MOVIMIENTO = rs.getString(QMMovimientosCuotas.sField1);
 					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					
-					ErrorCuotaTabla errorencontrado = new ErrorCuotaTabla(COACES, COCLDO, NUDCOM, COSBAC, MOVIMIENTO, ERRORES);
+					ErrorCuotaTabla errorencontrado = new ErrorCuotaTabla(COACES, COCLDO, DCOCLDO, NUDCOM, COSBAC, DCOSBAC,MOVIMIENTO, ERRORES);
 					
 					result.add(errorencontrado);
 					

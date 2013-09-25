@@ -191,6 +191,7 @@ public class QMListaErroresComunidades
 		ResultSet rs = null;
 
 		String COCLDO = "";
+		String DCOCLDO = "";
 		String NUDCOM = "";
 		String NOMCOC = "";
 		String MOVIMIENTO = "";
@@ -242,13 +243,14 @@ public class QMListaErroresComunidades
 				{
 					found = true;
 					
-					COCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMMovimientosComunidades.sField7));
+					COCLDO = rs.getString(QMMovimientosComunidades.sField7);
+					DCOCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, COCLDO);
 					NUDCOM = rs.getString(QMMovimientosComunidades.sField8);
 					NOMCOC = rs.getString(QMMovimientosComunidades.sField12);
 					MOVIMIENTO = rs.getString(QMMovimientosComunidades.sField1);
 					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					
-					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
+					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, DCOCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
 					
 					result.add(errorencontrado);
 					
@@ -284,6 +286,7 @@ public class QMListaErroresComunidades
 		ResultSet rs = null;
 
 		String COCLDO = "";
+		String DCOCLDO = "";
 		String NUDCOM = "";
 		String NOMCOC = "";
 		String MOVIMIENTO = "";
@@ -333,13 +336,14 @@ public class QMListaErroresComunidades
 				{
 					found = true;
 					
-					COCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMMovimientosComunidades.sField7));
+					COCLDO = rs.getString(QMMovimientosComunidades.sField7);
+					DCOCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, COCLDO);
 					NUDCOM = rs.getString(QMMovimientosComunidades.sField8);
 					NOMCOC = rs.getString(QMMovimientosComunidades.sField12);
 					MOVIMIENTO = rs.getString(QMMovimientosComunidades.sField1);
 					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					
-					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
+					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, DCOCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
 					
 					result.add(errorencontrado);
 					

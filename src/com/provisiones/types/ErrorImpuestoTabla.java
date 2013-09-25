@@ -1,33 +1,30 @@
 package com.provisiones.types;
 
-public class ErrorCuotaTabla 
+public class ErrorImpuestoTabla 
 {
 	private String COACES = "";
-	private String COCLDO = "";
-	private String DCOCLDO = "";
-	private String NUDCOM = "";
+	
+	private String NURCAT = "";
 	private String COSBAC = "";
 	private String DCOSBAC = "";
-	
+
 	private String MOVIMIENTO = "";
 	private String ERRORES = "";
-	
+
 	//Constructor de clase
 
-	public ErrorCuotaTabla(String cOACES, String cOCLDO, String dCOCLDO,
-			String nUDCOM, String cOSBAC, String dCOSBAC, String mOVIMIENTO,
-			String eRRORES) {
+	public ErrorImpuestoTabla(String cOACES, String nURCAT, String cOSBAC,
+			String dCOSBAC, String mOVIMIENTO, String eRRORES) {
 		super();
 		COACES = cOACES;
-		COCLDO = cOCLDO;
-		DCOCLDO = dCOCLDO;
-		NUDCOM = nUDCOM;
+		NURCAT = nURCAT;
 		COSBAC = cOSBAC;
 		DCOSBAC = dCOSBAC;
 		MOVIMIENTO = mOVIMIENTO;
 		ERRORES = eRRORES;
-	}
-	
+	}	
+
+
 	//Métodos de acceso
 
 	public String getCOACES() {
@@ -37,29 +34,13 @@ public class ErrorCuotaTabla
 	public void setCOACES(String cOACES) {
 		COACES = cOACES;
 	}
-
-	public String getCOCLDO() {
-		return COCLDO;
+		
+	public String getNURCAT() {
+		return NURCAT;
 	}
 
-	public void setCOCLDO(String cOCLDO) {
-		COCLDO = cOCLDO;
-	}
-
-	public String getDCOCLDO() {
-		return DCOCLDO;
-	}
-
-	public void setDCOCLDO(String dCOCLDO) {
-		DCOCLDO = dCOCLDO;
-	}
-
-	public String getNUDCOM() {
-		return NUDCOM;
-	}
-
-	public void setNUDCOM(String nUDCOM) {
-		NUDCOM = nUDCOM;
+	public void setNURCAT(String nURCAT) {
+		NURCAT = nURCAT;
 	}
 
 	public String getCOSBAC() {
@@ -95,4 +76,5 @@ public class ErrorCuotaTabla
 	}
 	
 	
+
 }

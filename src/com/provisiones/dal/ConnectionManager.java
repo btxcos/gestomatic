@@ -7,9 +7,6 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.misc.Utils;
-
-
 public class ConnectionManager 
 {
 	private static String sConnector = "org.mariadb.jdbc.Driver";

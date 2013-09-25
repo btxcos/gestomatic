@@ -96,8 +96,8 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>GestorErroresComunidad</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.errores.GestorErroresComunidad</managed-bean-class>
+		<managed-bean-name>GestorErroresComunidades</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.errores.GestorErroresComunidades</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
@@ -118,6 +118,11 @@
 	<managed-bean>
 		<managed-bean-name>GestorErroresReferenciasCatastrales</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.errores.GestorErroresReferenciasCatastrales</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorErroresImpuestosRecursos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.errores.GestorErroresImpuestosRecursos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

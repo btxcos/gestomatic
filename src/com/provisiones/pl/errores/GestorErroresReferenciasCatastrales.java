@@ -184,6 +184,16 @@ public class GestorErroresReferenciasCatastrales implements Serializable
   	
 		switch (iCodError) 
 		{
+		/*case 2://prueba
+			this.bRENEMIS = false;
+			this.bRFERECA = true;
+			this.bRIMCATA = true;
+			this.bRIMVSUE = true;
+			this.bRNURCAT = true;
+			this.bROBTEXC = true;
+			this.bRTIRCAT = true;
+			bSalida = true;
+			break;*/
 		default://error no recuperable
 			this.bRENEMIS = true;
 			this.bRFERECA = true;
@@ -205,10 +215,6 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 		FacesMessage msg;
 		
 		logger.debug("Buscando Referencias con errores...");
-		
-    	this.sCOACESB = "";
-    	this.sNURCATB = "";
-
 		
 		ErrorReferenciaTabla filtro = new ErrorReferenciaTabla(
 					sCOACESB.toUpperCase(), sNURCATB.toUpperCase(),

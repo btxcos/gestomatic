@@ -15,7 +15,7 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="auto" header="Gestión de errores Referencia Catastral">
+				<p:layoutUnit position="north" size="auto" header="Gestión de errores en Referencias Catastrales">
 					<h:panelGrid columns="4" cellpadding="5">
 
 						<p:panel>
@@ -306,10 +306,6 @@
 						</p:fieldset>
 					</p:dialog>
 
-					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
-						<p:graphicImage value="recursos/loadingBar.gif" />
-					</p:dialog>
-
 					<p:dialog header="Buscar Referencias con errores" widgetVar="dlgBuscarReferenciasError" resizable="false">
 						<p:fieldset legend="Criterios de Búsqueda">
 							<h:panelGrid columns="1" cellpadding="5">
@@ -367,6 +363,11 @@
 						</p:dataTable>
 
 					</p:dialog>
+
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog>
+
 				</p:layoutUnit>
 
 			</p:layout>

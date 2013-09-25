@@ -22,11 +22,11 @@ import com.provisiones.types.ErrorComunidadTabla;
 import com.provisiones.types.ErrorTabla;
 import com.provisiones.types.MovimientoComunidad;
 
-public class GestorErroresComunidad implements Serializable 
+public class GestorErroresComunidades implements Serializable 
 {
 	private static final long serialVersionUID = 8107483385802371051L;
 
-	private static Logger logger = LoggerFactory.getLogger(GestorErroresComunidad.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(GestorErroresComunidades.class.getName());
 	
 	private String sCODTRN = ValoresDefecto.DEF_E1_CODTRN;
 	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
@@ -98,7 +98,7 @@ public class GestorErroresComunidad implements Serializable
 	
 
 	
-	public GestorErroresComunidad()
+	public GestorErroresComunidades()
 	{
 
 	}
@@ -185,6 +185,24 @@ public class GestorErroresComunidad implements Serializable
   	
 		switch (iCodError) 
 		{
+		/*case 2://prueba
+			this.bRCOACES = true;
+			this.bRCOCLDO = true;
+			this.bRNODCAD = false;
+			this.bRNODCCO = true;
+			this.bRNOMADC = true;
+			this.bRNOMCOC = true;
+			this.bRNOMPRC = true;
+			this.bRNUCCDI = true;
+			this.bRNUCCEN = true;
+			this.bRNUCCNT = true;
+			this.bRNUCCOF = true;
+			this.bRNUDCOM = true;
+			this.bRNUTADC = true;
+			this.bRNUTPRC = true;
+			this.bROBTEXC = true;
+			bSalida = true;
+			break;*/
 		default://error no recuperable
 			this.bRCOACES = true;
 			this.bRCOCLDO = true;
@@ -218,7 +236,7 @@ public class GestorErroresComunidad implements Serializable
 		if (sCOACESB.equals(""))
 		{
 			ErrorComunidadTabla filtro = new ErrorComunidadTabla(
-					sCOCLDOB.toUpperCase(), sNUDCOMB.toUpperCase(), sNOMCOCB.toUpperCase(),
+					sCOCLDOB.toUpperCase(), "", sNUDCOMB.toUpperCase(), sNOMCOCB.toUpperCase(),
 					"", "");
 
 			this.setTablacomunidadeserror(CLErrores.buscarComunidadesConErrores(filtro));

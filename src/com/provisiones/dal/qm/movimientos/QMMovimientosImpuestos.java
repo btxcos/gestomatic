@@ -18,20 +18,20 @@ public class QMMovimientosImpuestos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosImpuestos.class.getName());
 
-	static String sTable = "e4_movimientos_tbl";
+	public static String sTable = "e4_movimientos_tbl";
 
-	static String sField1 = "e4_movimiento_id";
+	public static String sField1 = "e4_movimiento_id";
 
 	static String sField2  = "cod_codtrn";
 	static String sField3  = "cod_cotdor";
 	static String sField4  = "idprov";    
 	static String sField5  = "cod_coacci";
 	static String sField6  = "coengp";    
-	static String sField7  = "cod_coaces";
-	static String sField8  = "cod_nurcat";    
+	public static String sField7  = "cod_coaces";
+	public static String sField8  = "cod_nurcat";    
 	static String sField9  = "cogruc";
 	static String sField10 = "cotaca";
-	static String sField11 = "cod_cosbac";
+	public static String sField11 = "cod_cosbac";
 	static String sField12 = "cod_bitc18";
 	static String sField13 = "feprre";    
 	static String sField14 = "cod_bitc19";
@@ -480,5 +480,74 @@ public class QMMovimientosImpuestos
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sMovimientoImpuestoRecursoID;
+	}
+	
+	public static boolean existeMovimientoImpuestoRecurso(String sCodImpuesto)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		boolean bSalida = true;
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+	
+
+		Connection conn = null;
+
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField1 + 
+					"  FROM " 
+					+ sTable + 
+					" WHERE (" + sField1 + " = '" + sCodImpuesto + "')");
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					logger.debug("Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: sCodImpuesto:|{}|",sCodImpuesto);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			
+			bSalida = false;
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+
+		ConnectionManager.CloseDBConnection(conn);
+		return (found && bSalida);
 	}
 }
