@@ -125,5 +125,10 @@
 		<managed-bean-class>com.provisiones.pl.errores.GestorErroresImpuestosRecursos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorErroresGastos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.errores.GestorErroresGastos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

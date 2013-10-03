@@ -437,8 +437,8 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 				break;
 
 			default: //error generico
-				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
-				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
+				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.");
+				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.",iSalida);
 				break;
 			}			
 		}

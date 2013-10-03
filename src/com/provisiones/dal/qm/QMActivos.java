@@ -916,6 +916,7 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
+			found = false;
 			logger.error("ERROR: COACES:|{}|",sCodCOACES);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());

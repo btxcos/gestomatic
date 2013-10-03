@@ -157,6 +157,11 @@ public class CLGastos
 		
 		return resultcuotasimpuestos;
 	}
+
+	public static Gasto buscarGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
+	{
+		return QMGastos.getGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE);
+	}
 	
 	public static String buscarDescripcionGasto(String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA)
 	{
@@ -168,11 +173,21 @@ public class CLGastos
 		return QMListaGastos.getProvisionDeGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE);
 	}
 	
+	public static MovimientoGasto buscarMovimientoGasto (String sCodMovimiento)
+	{
+
+		return QMMovimientosGastos.getMovimientoGasto(sCodMovimiento);
+	}
+	
 	public static long buscarNumeroMovimientosGastosPendientes()
 	{
 		return (QMListaGastos.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
 	}
 	
+	public static boolean existeMovimientoGasto(String sCodMovimiento)
+	{
+		return QMMovimientosGastos.existeMovimientoGasto(sCodMovimiento);
+	}
 	
 	public static boolean existeGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{

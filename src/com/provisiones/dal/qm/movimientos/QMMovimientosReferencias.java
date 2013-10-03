@@ -489,19 +489,17 @@ public class QMMovimientosReferencias
 	}
 
 
-	public static boolean existeMovimientoReferenciaCatastral(String sCodReferencia)
+	public static boolean existeMovimientoReferenciaCatastral(String sMovimientoReferenciaID)
 	{
 		Statement stmt = null;
+
 		ResultSet rs = null;
-
-		boolean bSalida = true;
-
 		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
+		
 		Connection conn = null;
-
+		
+		boolean found = false;
+		
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
@@ -510,13 +508,12 @@ public class QMMovimientosReferencias
 		{
 			stmt = conn.createStatement();
 
-
 			pstmt = conn.prepareStatement("SELECT " 
 					+ sField1 + 
-					"  FROM " 
+					" FROM " 
 					+ sTable + 
-					" WHERE (" + sField1 + " = '" + sCodReferencia + "')");
-
+					" WHERE " + sField1 + " = '" + sMovimientoReferenciaID + "'");
+			
 			rs = pstmt.executeQuery();
 			
 			logger.debug("Ejecutada con exito!");
@@ -529,33 +526,32 @@ public class QMMovimientosReferencias
 					found = true;
 
 					logger.debug("Encontrado el registro!");
-
+					logger.debug("{}:|{}|",sField1,rs.getString(sField1));
 				}
 			}
 			if (found == false) 
 			{
-				logger.debug("No se encontró la información.");
+				logger.debug("No se encontro la información.");
 			}
-
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: CodReferencia:|{}|",sCodReferencia);
+			found = false;
+			logger.error("ERROR: sMovimientoReferenciaID:|{}|",sMovimientoReferenciaID);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
 			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
 			
-			bSalida = false;
+			
 		} 
 		finally 
 		{
-			Utils.closeResultSet(rs);
+
 			Utils.closeStatement(stmt);
 		}
-
 		ConnectionManager.CloseDBConnection(conn);
-		return (found && bSalida);
+		return found;
 	}
 	
 }

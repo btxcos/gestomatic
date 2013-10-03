@@ -1190,5 +1190,83 @@ public class QMListaGastos
 		return result;
 	}
 	
-	
+	public static ArrayList<String> buscarDependencias(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodMovimiento)
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;		
+
+		boolean found = false;
+		
+		ArrayList<String> result = new ArrayList<String>();
+
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+
+			
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField7  + 
+					"  FROM " + sTable + 
+					" WHERE " +
+					"(" 
+					+ sField1 + " = '" + sCodCOACES + "' AND "
+					+ sField2 + " = '" + sCodCOGRUG + "' AND "
+					+ sField3 + " = '" + sCodCOTPGA + "' AND "
+					+ sField4 + " = '" + sCodCOSBGA + "' AND "
+					+ sField5 + " = '" + sFEDEVE + "' AND "
+					+ sField7 + " >=  '" + sCodMovimiento + "')");
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					result.add(rs.getString(sField7));
+
+					logger.debug("Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}			
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
+			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
+			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
+			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			found = false;
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
 }

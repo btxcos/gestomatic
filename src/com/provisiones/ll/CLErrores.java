@@ -7,29 +7,35 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMCuotas;
+import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.QMReferencias;
 import com.provisiones.dal.qm.listas.QMListaComunidades;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
+import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.listas.QMListaReferencias;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresComunidades;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresCuotas;
+import com.provisiones.dal.qm.listas.errores.QMListaErroresGastos;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresImpuestos;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresReferencias;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
+import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ErrorComunidadTabla;
 import com.provisiones.types.ErrorCuotaTabla;
+import com.provisiones.types.ErrorGastoTabla;
 import com.provisiones.types.ErrorImpuestoTabla;
 import com.provisiones.types.ErrorReferenciaTabla;
 import com.provisiones.types.ErrorTabla;
 import com.provisiones.types.MovimientoComunidad;
 import com.provisiones.types.MovimientoCuota;
+import com.provisiones.types.MovimientoGasto;
 import com.provisiones.types.MovimientoImpuestoRecurso;
 import com.provisiones.types.MovimientoReferenciaCatastral;
 
@@ -323,6 +329,87 @@ public class CLErrores
 					//error y rollback - error al eliminar el error
 					iCodigo = -904;
 					QMMovimientosImpuestos.modMovimientoImpuestoRecurso(movimiento_antiguo,sCodMovimiento);
+				}
+			}
+		}
+
+		logger.debug("Codigo de Salida:|{}|",iCodigo);
+		return iCodigo;
+	}
+	public static ArrayList<ErrorGastoTabla> buscarGastosConErrores(ErrorGastoTabla filtro)
+	{
+		return QMListaErroresGastos.buscaGastosConError(filtro);
+	}
+
+	public static ArrayList<ErrorTabla> buscarErroresGasto(String sMovimiento)
+	{
+		return QMListaErroresGastos.buscaErrores(sMovimiento);
+	}
+	
+	public static int reparaMovimientoGasto(MovimientoGasto movimiento, String sCodMovimiento, String sCodError)
+	{
+		int iCodigo = 0;
+		
+		String sEstado = QMGastos.getEstado(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
+
+		
+		String sAccion = CLGastos.decideAccion(movimiento,sEstado);
+		
+		MovimientoGasto movimiento_revisado = CLGastos.revisaSignos(movimiento,sAccion);
+		
+		if (sAccion.equals("#"))
+		{	
+			//Error modificacion sin cambios
+			iCodigo = -804;	
+		}
+		else if (movimiento_revisado.getCOSIGA().equals("#"))
+		{
+			//error modificacion sin cambios
+			iCodigo = -806;	
+
+		}
+		else
+		{
+			MovimientoGasto movimiento_antiguo = QMMovimientosGastos.getMovimientoGasto(sCodMovimiento);
+			
+			if (!QMMovimientosGastos.modMovimientoGasto(movimiento_revisado,sCodMovimiento))
+			{
+				//Error al crear un movimiento
+				iCodigo = -900;
+			}
+			else
+			{
+				if(QMListaErroresGastos.delErrorGasto(sCodMovimiento, sCodError))
+				{	
+
+					if (QMGastos.modGasto(CLGastos.convierteMovimientoenGasto(movimiento)))	
+					{
+						//OK 
+						iCodigo = 0;
+						
+						ArrayList<String> dependenciasgastos = QMListaGastos.buscarDependencias(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE(), sCodMovimiento);
+
+
+						for (int i = 0; i < dependenciasgastos.size() ; i++)
+			            {
+			            	QMListaGastos.setValidado(dependenciasgastos.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            }
+			            
+					}
+					else
+					{
+						//error y rollback - error al modificar la gasto
+						iCodigo = -904;
+						QMListaErroresGastos.addErrorGasto(sCodMovimiento, sCodError);
+						QMMovimientosGastos.modMovimientoGasto(movimiento_antiguo,sCodMovimiento);
+					}
+
+				}
+				else
+				{
+					//error y rollback - error al eliminar el error
+					iCodigo = -904;
+					QMMovimientosGastos.modMovimientoGasto(movimiento_antiguo,sCodMovimiento);
 				}
 			}
 		}

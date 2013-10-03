@@ -7,6 +7,7 @@
         <param name="MaxBackupIndex" value="20" />
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="GLSL-portales/provisiones/logs/provisiones.log" />
+        <param name="DatePattern" value=".yyyy-MM-dd" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d  %-5p  [%c{1}] %m%n" />
         </layout>
@@ -16,6 +17,7 @@
         <param name="MaxBackupIndex" value="20" />
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="GLSL-portales/provisiones/logs/provisiones.log" />
+        <param name="DatePattern" value=".yyyy-MM-dd" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d %-5p [%c:%M:%L] %m%n" />
         </layout>
@@ -25,6 +27,7 @@
         <param name="MaxBackupIndex" value="20" />
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="GLSL-portales/provisiones/logs/provisiones.log" />
+        <param name="DatePattern" value=".yyyy-MM-dd" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d %-5p [%c:%M] %m%n" />
         </layout>

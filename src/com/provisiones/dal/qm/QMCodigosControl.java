@@ -57,6 +57,9 @@ public class QMCodigosControl
 	
 	public static final String TCOTDORE4 = "cotdor_e4_tbl";
 	public static final String ICOTDORE4 = "cotdor_id";
+
+	public static final String TCOTERR = "coterr_tbl";
+	public static final String ICOTERR = "coterr_id";
 	
 	public static String getDesCampo(String sTable, String sField1, String sValor)
 	{

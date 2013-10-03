@@ -337,7 +337,7 @@ public class QMMovimientosGastos
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
-
+	
 	public static MovimientoGasto getMovimientoGasto(String sGastoID)
 	{
 		Statement stmt = null;
@@ -655,4 +655,70 @@ public class QMMovimientosGastos
 		ConnectionManager.CloseDBConnection(conn);
 		return sGastoID;
 	}
+
+	public static boolean existeMovimientoGasto(String sMovimientoGastoID)
+	{
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+		
+		Connection conn = null;
+		
+		boolean found = false;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField1 + 
+					" FROM " 
+					+ sTable + 
+					" WHERE " + sField1 + " = '" + sMovimientoGastoID + "'");
+			
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField1,rs.getString(sField1));
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontro la información.");
+			}
+		} 
+		catch (SQLException ex) 
+		{
+			found = false;
+			logger.error("ERROR: sMovimientoGastoID:|{}|",sMovimientoGastoID);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			
+			
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
+	}
+	
 }

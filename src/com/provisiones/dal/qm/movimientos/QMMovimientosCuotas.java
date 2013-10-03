@@ -304,47 +304,6 @@ public class QMMovimientosCuotas
 		return bSalida;
 	}
 	
-	public static boolean existeMovimientoCuota(String sMovimientoCuotaID)
-	{
-		Statement stmt = null;
-		Connection conn = null;
-		
-		boolean bSalida = true;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate("SELECT " 
-					+ sField1 + 
-					" FROM " 
-					+ sTable + 
-					" WHERE " + sField1 + " = '" + sMovimientoCuotaID + "'");
-			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR: sMovimientoCuotaID:|{}|",sMovimientoCuotaID);
-
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
-			
-			bSalida = false;
-		} 
-		finally 
-		{
-
-			Utils.closeStatement(stmt);
-		}
-		ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
-	}
-
 	public static MovimientoCuota getMovimientoCuota(String sMovimientoCuotaID)
 	{
 		Statement stmt = null;
@@ -576,6 +535,71 @@ public class QMMovimientosCuotas
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return sMovimientoCuotaID;
+	}
+	
+	public static boolean existeMovimientoCuota(String sMovimientoCuotaID)
+	{
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+		
+		Connection conn = null;
+		
+		boolean found = false;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField1 + 
+					" FROM " 
+					+ sTable + 
+					" WHERE " + sField1 + " = '" + sMovimientoCuotaID + "'");
+			
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+
+					logger.debug("Encontrado el registro!");
+					logger.debug("{}:|{}|",sField1,rs.getString(sField1));
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontro la información.");
+			}
+		} 
+		catch (SQLException ex) 
+		{
+			found = false;
+			logger.error("ERROR: sMovimientoCuotaID:|{}|",sMovimientoCuotaID);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			
+			
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return found;
 	}
 
 }
