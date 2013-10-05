@@ -971,6 +971,199 @@ public class QMListaGastos
 
 	}
 	
+	public static ArrayList<ActivoTabla> buscaActivosConGastosValidados(ActivoTabla activo)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOACES = "";
+		String sCOPOIN = "";
+		String sNOMUIN = "";
+		String sNOPRAC = "";
+		String sNOVIAS = "";
+		String sNUPIAC = "";
+		String sNUPOAC = "";
+		String sNUPUAC = "";
+		
+		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		String sQuery = "SELECT "
+					
+					   + QMActivos.sField1 + ","        
+					   + QMActivos.sField14 + ","
+					   + QMActivos.sField11 + ","
+					   + QMActivos.sField13 + ","
+					   + QMActivos.sField6 + ","
+					   + QMActivos.sField9 + ","
+					   + QMActivos.sField7 + ","
+					   + QMActivos.sField10 + 
+
+					   " FROM " + QMActivos.sTable + 
+					   " WHERE ("
+
+					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+
+					   + QMActivos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable +
+					   " WHERE " + 
+					   
+					   sField2 + " IN (SELECT "
+					   + QMGastos.sField2 + 
+   					   " FROM " + QMGastos.sTable +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
+   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND " 
+
+   					   + sField3 + " IN (SELECT "
+					   + QMGastos.sField3 + 
+   					   " FROM " + QMGastos.sTable +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
+   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
+
+   					   + sField4 + " IN (SELECT "
+					   + QMGastos.sField4 + 
+   					   " FROM " + QMGastos.sTable +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
+   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
+   					   
+   					   + sField5 + " IN (SELECT "
+   					   + QMGastos.sField6 + 
+   					   " FROM " + QMGastos.sTable +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
+   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
+
+						+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+   					   		
+   					   	"))";
+		
+		logger.debug(sQuery);
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			
+			pstmt = conn.prepareStatement("SELECT "
+					
+					   + QMActivos.sField1 + ","        
+					   + QMActivos.sField14 + ","
+					   + QMActivos.sField11 + ","
+					   + QMActivos.sField13 + ","
+					   + QMActivos.sField6 + ","
+					   + QMActivos.sField9 + ","
+					   + QMActivos.sField7 + ","
+					   + QMActivos.sField10 + 
+
+					   " FROM " + QMActivos.sTable + 
+					   " WHERE ("
+
+					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+
+					   + QMActivos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable +
+					   " WHERE " + 
+					   
+					   sField2 + " IN (SELECT "
+					   + QMGastos.sField2 + 
+   					   " FROM " + QMGastos.sTable +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
+   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND " 
+
+   					   + sField3 + " IN (SELECT "
+					   + QMGastos.sField3 + 
+   					   " FROM " + QMGastos.sTable +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
+   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
+
+   					   + sField4 + " IN (SELECT "
+					   + QMGastos.sField4 + 
+   					   " FROM " + QMGastos.sTable +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
+   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
+   					   
+   					   + sField5 + " IN (SELECT "
+   					   + QMGastos.sField6 + 
+   					   " FROM " + QMGastos.sTable +
+   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
+   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
+
+						+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+
+						"))");
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sCOACES = rs.getString(QMActivos.sField1);
+					sCOPOIN = rs.getString(QMActivos.sField14);
+					sNOMUIN = rs.getString(QMActivos.sField11);
+					sNOPRAC = rs.getString(QMActivos.sField13);
+					sNOVIAS = rs.getString(QMActivos.sField6);
+					sNUPIAC = rs.getString(QMActivos.sField9);
+					sNUPOAC = rs.getString(QMActivos.sField7);
+					sNUPUAC = rs.getString(QMActivos.sField10);
+					
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+					
+					result.add(activoencontrado);
+					
+					logger.debug("Encontrado el registro!");
+
+					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+
+	}
+	
 	public static ArrayList<GastoTabla> buscaGastosActivo(String sCodCOACES)
 	{
 		Statement stmt = null;
@@ -1113,6 +1306,244 @@ public class QMListaGastos
 					   " FROM " + sTable + 
 					   " WHERE (" 
 					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )");
+
+			
+
+
+			
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					   
+					
+					sCOACES  = rs.getString(QMGastos.sField1);
+					sCOGRUG  = rs.getString(QMGastos.sField2);
+					sCOTPGA  = rs.getString(QMGastos.sField3);
+					sCOSBGA  = rs.getString(QMGastos.sField4);
+					sDCOSBGA = QMCodigosControl.getDesCOSBGA(sCOGRUG,sCOTPGA,sCOSBGA);
+					sPTPAGO  = rs.getString(QMGastos.sField5);
+					sDPTPAGO = QMCodigosControl.getDesCampo(QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.sField6));
+					sCOSIGA  = rs.getString(QMGastos.sField10);
+					sDCOSIGA = "";//QMCodigosControl.
+					sIMNGAS  = rs.getString(QMGastos.sField16)+Utils.recuperaImporte(false,rs.getString(QMGastos.sField15));
+							
+
+ 
+
+					
+					GastoTabla gastoencontrado = new GastoTabla(
+							sCOACES,
+							sCOGRUG,
+							sCOTPGA,
+							sCOSBGA,
+							sDCOSBGA,
+							sPTPAGO,
+							sDPTPAGO,
+							sFEDEVE,
+							sCOSIGA,
+							sDCOSIGA,
+							sIMNGAS);
+					
+					result.add(gastoencontrado);
+					
+					logger.debug("Encontrado el registro!");
+
+					logger.debug("{}:|{}|",sField1,sCodCOACES);
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
+	
+	public static ArrayList<GastoTabla> buscaGastosValidadosActivo(String sCodCOACES)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOACES = "";
+		String sCOGRUG = "";
+		String sCOTPGA = "";
+		String sCOSBGA = "";
+		String sDCOSBGA = "";
+		String sPTPAGO = "";
+		String sDPTPAGO = "";
+		String sFEDEVE = "";
+		String sCOSIGA = "";
+		String sDCOSIGA = "";
+		String sIMNGAS = "";
+		
+		ArrayList<GastoTabla> result = new ArrayList<GastoTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.OpenDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		String sQuery = "SELECT "
+					
+					   + QMGastos.sField1 + ","        
+					   + QMGastos.sField2 + ","
+					   + QMGastos.sField3 + ","
+					   + QMGastos.sField4 + ","
+					   + QMGastos.sField5 + ","
+					   + QMGastos.sField6 + ","
+					   + QMGastos.sField10 + ","
+					   + QMGastos.sField15 + ","
+					   + QMGastos.sField16+
+					    
+
+					   " FROM " + QMGastos.sTable + 
+					   " WHERE (" +
+					   "(" +
+					   "("+ QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
+					   + QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + "') AND "
+					   + QMGastos.sField16 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
+					   ") AND "					   
+					   
+					   + QMGastos.sField6 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+
+					   + QMGastos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+					   	") ) AND "  
+
+					   + QMGastos.sField2 +" IN (SELECT "
+					   +  sField2 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+					   	") ) AND " 
+
+					   + QMGastos.sField3 +" IN (SELECT "
+					   +  sField3 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+					   	") ) AND " 
+					   
+					   + QMGastos.sField4 +" IN (SELECT "
+					   +  sField4 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+					   	") ) AND " 					   
+					   
+					   
+					   + QMGastos.sField6 +" IN (SELECT "
+					   +  sField5 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' ) ) )";					   
+					   
+		
+		logger.debug(sQuery);
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			
+			pstmt = conn.prepareStatement("SELECT "
+					
+					   + QMGastos.sField1 + ","        
+					   + QMGastos.sField2 + ","
+					   + QMGastos.sField3 + ","
+					   + QMGastos.sField4 + ","
+					   + QMGastos.sField5 + ","
+					   + QMGastos.sField6 + ","
+					   + QMGastos.sField10 + ","
+					   + QMGastos.sField15 + ","
+					   + QMGastos.sField16+
+					    
+
+					   " FROM " + QMGastos.sTable + 
+					   " WHERE (" +
+					   "(" +
+					   "("+ QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
+					   + QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + "') AND "
+					   + QMGastos.sField16 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
+					   ") AND "					   
+					   
+					   + QMGastos.sField6 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+
+					   + QMGastos.sField1 +" IN (SELECT "
+					   +  sField1 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+					   	") ) AND " 	
+
+					   + QMGastos.sField2 +" IN (SELECT "
+					   +  sField2 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+					   	") ) AND " 	 
+
+					   + QMGastos.sField3 +" IN (SELECT "
+					   +  sField3 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+					   	") ) AND " 	
+					   
+					   + QMGastos.sField4 +" IN (SELECT "
+					   +  sField4 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+					   	") ) AND " 					   
+					   
+					   
+					   + QMGastos.sField6 +" IN (SELECT "
+					   +  sField5 + 
+					   " FROM " + sTable + 
+					   " WHERE (" 
+					   + sField1 + " = '" + sCodCOACES	+ "' AND "
+					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' ) ) )");
 
 			
 

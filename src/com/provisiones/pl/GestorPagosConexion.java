@@ -122,7 +122,7 @@ public class GestorPagosConexion implements Serializable
 
 	private Map<String,String> tiposcosigaHM = new LinkedHashMap<String, String>();
 
-	public GestorMovimientosGastos()
+	public GestorPagosConexion()
 	{
 		tiposcotpga_g1HM.put("Plusvalia", "1");
 		tiposcotpga_g1HM.put("Notaria",   "2");
@@ -167,6 +167,7 @@ public class GestorPagosConexion implements Serializable
 		
 		tiposcosigaHM.put("ESTIMADO",            "1");
 		tiposcosigaHM.put("CONOCIDO",            "2");
+		tiposcosigaHM.put("PAGADO CONEXION",     "7");
 		
 	}
 	
@@ -288,7 +289,7 @@ public class GestorPagosConexion implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		this.setTablaactivos(CLGastos.buscarActivosConGastos(buscaactivos));
+		this.setTablaactivos(CLGastos.buscarActivosConGastosValidados(buscaactivos));
 		
 		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
@@ -314,10 +315,10 @@ public class GestorPagosConexion implements Serializable
 		
 		if (CLActivos.compruebaActivo(sCOACES))
 		{
-			this.tablagastos = CLGastos.buscarGastosActivo(sCOACES);
+			this.tablagastos = CLGastos.buscarGastosValidadosActivo(sCOACES);
 		
-			msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos en curso.");
-			logger.info("Encontrados {} gastos en curso.",getTablagastos().size());
+			msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos validados.");
+			logger.info("Encontrados {} gastos validados.",getTablagastos().size());
 		}
 		else
 		{
@@ -349,7 +350,7 @@ public class GestorPagosConexion implements Serializable
 		this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
 		this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
 		this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
-		this.sCOSIGA = gasto.getCOSIGA();
+		this.sCOSIGA = ValoresDefecto.DEF_GASTO_PAGADO_CONEXION;
 		this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
 		this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
 		this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
@@ -372,14 +373,15 @@ public class GestorPagosConexion implements Serializable
 		
 		this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
 		
-		this.sCOENCX = ValoresDefecto.DEF_COENCX;
-		this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-		this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+		this.sCOENCX = "";
+		this.sCOOFCX = "";
+		this.sNUCONE = "";
+		this.sFMPAGN = "";
 		
-		this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+		this.sNUPROF = ValoresDefecto.DEF_GASTO_PROVISION_CONEXION;
 
 		this.sCOTERR = ValoresDefecto.DEF_COTERR;
-		this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
+		
 	
 		this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 		this.sCOAPII = ValoresDefecto.DEF_COAPII;
@@ -577,6 +579,12 @@ public class GestorPagosConexion implements Serializable
 		this.setsFEAGTO(Utils.fechaDeHoy(true));
 		logger.debug("sFEAGTO:|{}|",sFEAGTO);
 	}
+	
+	public void hoyFMPAGN (ActionEvent actionEvent)
+	{
+		this.setsFMPAGN(Utils.fechaDeHoy(true));
+		logger.debug("FMPAGN:|{}|",sFMPAGN);
+	}
 
 	public void registraGasto(ActionEvent actionEvent)
 	{
@@ -586,7 +594,7 @@ public class GestorPagosConexion implements Serializable
 		
 		if (!CLGastos.existeGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 		{
-			sMsg = "El gasto informado no se puede tramitar, no existe en el sistema.";
+			sMsg = "El pago informado no se puede tramitar, no existe en el sistema.";
 			msg = Utils.pfmsgError(sMsg);
 			logger.error(sMsg);
 		}
@@ -622,16 +630,16 @@ public class GestorPagosConexion implements Serializable
 					Utils.compruebaImporte(sIMIMGA.toUpperCase()),
 					Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
 					ValoresDefecto.DEF_COTNEG,
-					ValoresDefecto.DEF_COENCX,
-					ValoresDefecto.DEF_COOFCX,
-					ValoresDefecto.DEF_NUCONE,
-					sNUPROF.toUpperCase(),
+					sCOENCX,
+					sCOOFCX,
+					sNUCONE,
+					"0",
 					Utils.compruebaFecha(sFEAGTO),
 					ValoresDefecto.DEF_COMONA,
 					ValoresDefecto.DEF_BIAUTO,
 					ValoresDefecto.DEF_FEAUFA,
 					ValoresDefecto.DEF_COTERR,
-					ValoresDefecto.DEF_FMPAGN,
+					Utils.compruebaFecha(sFMPAGN),
 					Utils.compruebaFecha(sFEPGPR),
 					ValoresDefecto.DEF_FEAPLI,
 					ValoresDefecto.DEF_COAPII,
@@ -640,7 +648,7 @@ public class GestorPagosConexion implements Serializable
 
 			//movimiento.pintaMovimientoGasto();
 			
-			int iSalida = CLGastos.registraMovimiento(movimiento);
+			int iSalida = CLGastos.registraPagoConexion(movimiento);
 			
 			logger.debug("Codigo de salida:"+iSalida);
 			
@@ -920,7 +928,615 @@ public class GestorPagosConexion implements Serializable
 		
 		logger.debug("Finalizadas las comprobaciones.");
 		FacesContext.getCurrentInstance().addMessage(null, msg);		
-
-
 	}
+
+	public String getsCOACES() {
+		return sCOACES;
+	}
+
+	public void setsCOACES(String sCOACES) {
+		this.sCOACES = sCOACES;
+	}
+
+	public boolean isbDevolucion() {
+		return bDevolucion;
+	}
+
+	public void setbDevolucion(boolean bDevolucion) {
+		this.bDevolucion = bDevolucion;
+	}
+
+	public String getsCOGRUG() {
+		return sCOGRUG;
+	}
+
+	public void setsCOGRUG(String sCOGRUG) {
+		this.sCOGRUG = sCOGRUG;
+	}
+
+	public String getsCOTPGA() {
+		return sCOTPGA;
+	}
+
+	public void setsCOTPGA(String sCOTPGA) {
+		this.sCOTPGA = sCOTPGA;
+	}
+
+	public String getsCOSBGA() {
+		return sCOSBGA;
+	}
+
+	public void setsCOSBGA(String sCOSBGA) {
+		this.sCOSBGA = sCOSBGA;
+	}
+
+	public String getsDCOSBGA() {
+		return sDCOSBGA;
+	}
+
+	public void setsDCOSBGA(String sDCOSBGA) {
+		this.sDCOSBGA = sDCOSBGA;
+	}
+
+	public String getsPTPAGO() {
+		return sPTPAGO;
+	}
+
+	public void setsPTPAGO(String sPTPAGO) {
+		this.sPTPAGO = sPTPAGO;
+	}
+
+	public String getsFEDEVE() {
+		return sFEDEVE;
+	}
+
+	public void setsFEDEVE(String sFEDEVE) {
+		this.sFEDEVE = sFEDEVE;
+	}
+
+	public String getsFFGTVP() {
+		return sFFGTVP;
+	}
+
+	public void setsFFGTVP(String sFFGTVP) {
+		this.sFFGTVP = sFFGTVP;
+	}
+
+	public boolean isbFFGTVP() {
+		return bFFGTVP;
+	}
+
+	public void setbFFGTVP(boolean bFFGTVP) {
+		this.bFFGTVP = bFFGTVP;
+	}
+
+	public String getsFEPAGA() {
+		return sFEPAGA;
+	}
+
+	public void setsFEPAGA(String sFEPAGA) {
+		this.sFEPAGA = sFEPAGA;
+	}
+
+	public String getsFELIPG() {
+		return sFELIPG;
+	}
+
+	public void setsFELIPG(String sFELIPG) {
+		this.sFELIPG = sFELIPG;
+	}
+
+	public String getsCOSIGA() {
+		return sCOSIGA;
+	}
+
+	public void setsCOSIGA(String sCOSIGA) {
+		this.sCOSIGA = sCOSIGA;
+	}
+
+	public String getsFEEESI() {
+		return sFEEESI;
+	}
+
+	public void setsFEEESI(String sFEEESI) {
+		this.sFEEESI = sFEEESI;
+	}
+
+	public boolean isbFEEESI() {
+		return bFEEESI;
+	}
+
+	public void setbFEEESI(boolean bFEEESI) {
+		this.bFEEESI = bFEEESI;
+	}
+
+	public String getsFEECOI() {
+		return sFEECOI;
+	}
+
+	public void setsFEECOI(String sFEECOI) {
+		this.sFEECOI = sFEECOI;
+	}
+
+	public boolean isbFEECOI() {
+		return bFEECOI;
+	}
+
+	public void setbFEECOI(boolean bFEECOI) {
+		this.bFEECOI = bFEECOI;
+	}
+
+	public String getsFEEAUI() {
+		return sFEEAUI;
+	}
+
+	public void setsFEEAUI(String sFEEAUI) {
+		this.sFEEAUI = sFEEAUI;
+	}
+
+	public String getsFEEPAI() {
+		return sFEEPAI;
+	}
+
+	public void setsFEEPAI(String sFEEPAI) {
+		this.sFEEPAI = sFEEPAI;
+	}
+
+	public String getsIMNGAS() {
+		return sIMNGAS;
+	}
+
+	public void setsIMNGAS(String sIMNGAS) {
+		this.sIMNGAS = sIMNGAS;
+	}
+
+	public String getsYCOS02() {
+		return sYCOS02;
+	}
+
+	public void setsYCOS02(String sYCOS02) {
+		this.sYCOS02 = sYCOS02;
+	}
+
+	public String getsIMRGAS() {
+		return sIMRGAS;
+	}
+
+	public void setsIMRGAS(String sIMRGAS) {
+		this.sIMRGAS = sIMRGAS;
+	}
+
+	public String getsYCOS04() {
+		return sYCOS04;
+	}
+
+	public void setsYCOS04(String sYCOS04) {
+		this.sYCOS04 = sYCOS04;
+	}
+
+	public String getsIMDGAS() {
+		return sIMDGAS;
+	}
+
+	public void setsIMDGAS(String sIMDGAS) {
+		this.sIMDGAS = sIMDGAS;
+	}
+
+	public String getsYCOS06() {
+		return sYCOS06;
+	}
+
+	public void setsYCOS06(String sYCOS06) {
+		this.sYCOS06 = sYCOS06;
+	}
+
+	public String getsIMCOST() {
+		return sIMCOST;
+	}
+
+	public void setsIMCOST(String sIMCOST) {
+		this.sIMCOST = sIMCOST;
+	}
+
+	public String getsYCOS08() {
+		return sYCOS08;
+	}
+
+	public void setsYCOS08(String sYCOS08) {
+		this.sYCOS08 = sYCOS08;
+	}
+
+	public String getsIMOGAS() {
+		return sIMOGAS;
+	}
+
+	public void setsIMOGAS(String sIMOGAS) {
+		this.sIMOGAS = sIMOGAS;
+	}
+
+	public String getsYCOS10() {
+		return sYCOS10;
+	}
+
+	public void setsYCOS10(String sYCOS10) {
+		this.sYCOS10 = sYCOS10;
+	}
+
+	public String getsIMDTGA() {
+		return sIMDTGA;
+	}
+
+	public void setsIMDTGA(String sIMDTGA) {
+		this.sIMDTGA = sIMDTGA;
+	}
+
+	public String getsCOUNMO() {
+		return sCOUNMO;
+	}
+
+	public void setsCOUNMO(String sCOUNMO) {
+		this.sCOUNMO = sCOUNMO;
+	}
+
+	public String getsIMIMGA() {
+		return sIMIMGA;
+	}
+
+	public void setsIMIMGA(String sIMIMGA) {
+		this.sIMIMGA = sIMIMGA;
+	}
+
+	public boolean isbIMIMGA() {
+		return bIMIMGA;
+	}
+
+	public void setbIMIMGA(boolean bIMIMGA) {
+		this.bIMIMGA = bIMIMGA;
+	}
+
+	public String getsCOIMPT() {
+		return sCOIMPT;
+	}
+
+	public void setsCOIMPT(String sCOIMPT) {
+		this.sCOIMPT = sCOIMPT;
+	}
+
+	public String getsCOTNEG() {
+		return sCOTNEG;
+	}
+
+	public void setsCOTNEG(String sCOTNEG) {
+		this.sCOTNEG = sCOTNEG;
+	}
+
+	public String getsCOENCX() {
+		return sCOENCX;
+	}
+
+	public void setsCOENCX(String sCOENCX) {
+		this.sCOENCX = sCOENCX;
+	}
+
+	public String getsCOOFCX() {
+		return sCOOFCX;
+	}
+
+	public void setsCOOFCX(String sCOOFCX) {
+		this.sCOOFCX = sCOOFCX;
+	}
+
+	public String getsNUCONE() {
+		return sNUCONE;
+	}
+
+	public void setsNUCONE(String sNUCONE) {
+		this.sNUCONE = sNUCONE;
+	}
+
+	public String getsNUPROF() {
+		return sNUPROF;
+	}
+
+	public void setsNUPROF(String sNUPROF) {
+		this.sNUPROF = sNUPROF;
+	}
+
+	public String getsFEAGTO() {
+		return sFEAGTO;
+	}
+
+	public void setsFEAGTO(String sFEAGTO) {
+		this.sFEAGTO = sFEAGTO;
+	}
+
+	public String getsCOMONA() {
+		return sCOMONA;
+	}
+
+	public void setsCOMONA(String sCOMONA) {
+		this.sCOMONA = sCOMONA;
+	}
+
+	public String getsBIAUTO() {
+		return sBIAUTO;
+	}
+
+	public void setsBIAUTO(String sBIAUTO) {
+		this.sBIAUTO = sBIAUTO;
+	}
+
+	public String getsFEAUFA() {
+		return sFEAUFA;
+	}
+
+	public void setsFEAUFA(String sFEAUFA) {
+		this.sFEAUFA = sFEAUFA;
+	}
+
+	public String getsCOTERR() {
+		return sCOTERR;
+	}
+
+	public void setsCOTERR(String sCOTERR) {
+		this.sCOTERR = sCOTERR;
+	}
+
+	public String getsFMPAGN() {
+		return sFMPAGN;
+	}
+
+	public void setsFMPAGN(String sFMPAGN) {
+		this.sFMPAGN = sFMPAGN;
+	}
+
+	public String getsFEPGPR() {
+		return sFEPGPR;
+	}
+
+	public void setsFEPGPR(String sFEPGPR) {
+		this.sFEPGPR = sFEPGPR;
+	}
+
+	public String getsFEAPLI() {
+		return sFEAPLI;
+	}
+
+	public void setsFEAPLI(String sFEAPLI) {
+		this.sFEAPLI = sFEAPLI;
+	}
+
+	public String getsCOAPII() {
+		return sCOAPII;
+	}
+
+	public void setsCOAPII(String sCOAPII) {
+		this.sCOAPII = sCOAPII;
+	}
+
+	public String getsCOSPII() {
+		return sCOSPII;
+	}
+
+	public void setsCOSPII(String sCOSPII) {
+		this.sCOSPII = sCOSPII;
+	}
+
+	public String getsNUCLII() {
+		return sNUCLII;
+	}
+
+	public void setsNUCLII(String sNUCLII) {
+		this.sNUCLII = sNUCLII;
+	}
+
+	public String getsCOSBAC() {
+		return sCOSBAC;
+	}
+
+	public void setsCOSBAC(String sCOSBAC) {
+		this.sCOSBAC = sCOSBAC;
+	}
+
+	public String getsIMCUCO() {
+		return sIMCUCO;
+	}
+
+	public void setsIMCUCO(String sIMCUCO) {
+		this.sIMCUCO = sIMCUCO;
+	}
+
+	public String getsCOPOIN() {
+		return sCOPOIN;
+	}
+
+	public void setsCOPOIN(String sCOPOIN) {
+		this.sCOPOIN = sCOPOIN;
+	}
+
+	public String getsNOMUIN() {
+		return sNOMUIN;
+	}
+
+	public void setsNOMUIN(String sNOMUIN) {
+		this.sNOMUIN = sNOMUIN;
+	}
+
+	public String getsNOPRAC() {
+		return sNOPRAC;
+	}
+
+	public void setsNOPRAC(String sNOPRAC) {
+		this.sNOPRAC = sNOPRAC;
+	}
+
+	public String getsNOVIAS() {
+		return sNOVIAS;
+	}
+
+	public void setsNOVIAS(String sNOVIAS) {
+		this.sNOVIAS = sNOVIAS;
+	}
+
+	public String getsNUPIAC() {
+		return sNUPIAC;
+	}
+
+	public void setsNUPIAC(String sNUPIAC) {
+		this.sNUPIAC = sNUPIAC;
+	}
+
+	public String getsNUPOAC() {
+		return sNUPOAC;
+	}
+
+	public void setsNUPOAC(String sNUPOAC) {
+		this.sNUPOAC = sNUPOAC;
+	}
+
+	public String getsNUPUAC() {
+		return sNUPUAC;
+	}
+
+	public void setsNUPUAC(String sNUPUAC) {
+		this.sNUPUAC = sNUPUAC;
+	}
+
+	public ActivoTabla getActivoseleccionado() {
+		return activoseleccionado;
+	}
+
+	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
+		this.activoseleccionado = activoseleccionado;
+	}
+
+	public ArrayList<ActivoTabla> getTablaactivos() {
+		return tablaactivos;
+	}
+
+	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
+		this.tablaactivos = tablaactivos;
+	}
+
+	public GastoTabla getGastoseleccionado() {
+		return gastoseleccionado;
+	}
+
+	public void setGastoseleccionado(GastoTabla gastoseleccionado) {
+		this.gastoseleccionado = gastoseleccionado;
+	}
+
+	public ArrayList<GastoTabla> getTablagastos() {
+		return tablagastos;
+	}
+
+	public void setTablagastos(ArrayList<GastoTabla> tablagastos) {
+		this.tablagastos = tablagastos;
+	}
+
+	public Map<String, String> getTiposcotpgaHM() {
+		return tiposcotpgaHM;
+	}
+
+	public void setTiposcotpgaHM(Map<String, String> tiposcotpgaHM) {
+		this.tiposcotpgaHM = tiposcotpgaHM;
+	}
+
+	public Map<String, String> getTiposcosbgaHM() {
+		return tiposcosbgaHM;
+	}
+
+	public void setTiposcosbgaHM(Map<String, String> tiposcosbgaHM) {
+		this.tiposcosbgaHM = tiposcosbgaHM;
+	}
+
+	public Map<String, String> getTiposcotpga_g1HM() {
+		return tiposcotpga_g1HM;
+	}
+
+	public void setTiposcotpga_g1HM(Map<String, String> tiposcotpga_g1HM) {
+		this.tiposcotpga_g1HM = tiposcotpga_g1HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g2HM() {
+		return tiposcotpga_g2HM;
+	}
+
+	public void setTiposcotpga_g2HM(Map<String, String> tiposcotpga_g2HM) {
+		this.tiposcotpga_g2HM = tiposcotpga_g2HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g3HM() {
+		return tiposcotpga_g3HM;
+	}
+
+	public void setTiposcotpga_g3HM(Map<String, String> tiposcotpga_g3HM) {
+		this.tiposcotpga_g3HM = tiposcotpga_g3HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t11HM() {
+		return tiposcosbga_t11HM;
+	}
+
+	public void setTiposcosbga_t11HM(Map<String, String> tiposcosbga_t11HM) {
+		this.tiposcosbga_t11HM = tiposcosbga_t11HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t12HM() {
+		return tiposcosbga_t12HM;
+	}
+
+	public void setTiposcosbga_t12HM(Map<String, String> tiposcosbga_t12HM) {
+		this.tiposcosbga_t12HM = tiposcosbga_t12HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t21HM() {
+		return tiposcosbga_t21HM;
+	}
+
+	public void setTiposcosbga_t21HM(Map<String, String> tiposcosbga_t21HM) {
+		this.tiposcosbga_t21HM = tiposcosbga_t21HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t22HM() {
+		return tiposcosbga_t22HM;
+	}
+
+	public void setTiposcosbga_t22HM(Map<String, String> tiposcosbga_t22HM) {
+		this.tiposcosbga_t22HM = tiposcosbga_t22HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t23HM() {
+		return tiposcosbga_t23HM;
+	}
+
+	public void setTiposcosbga_t23HM(Map<String, String> tiposcosbga_t23HM) {
+		this.tiposcosbga_t23HM = tiposcosbga_t23HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t32HM() {
+		return tiposcosbga_t32HM;
+	}
+
+	public void setTiposcosbga_t32HM(Map<String, String> tiposcosbga_t32HM) {
+		this.tiposcosbga_t32HM = tiposcosbga_t32HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t33HM() {
+		return tiposcosbga_t33HM;
+	}
+
+	public void setTiposcosbga_t33HM(Map<String, String> tiposcosbga_t33HM) {
+		this.tiposcosbga_t33HM = tiposcosbga_t33HM;
+	}
+
+	public Map<String, String> getTiposcosigaHM() {
+		return tiposcosigaHM;
+	}
+
+	public void setTiposcosigaHM(Map<String, String> tiposcosigaHM) {
+		this.tiposcosigaHM = tiposcosigaHM;
+	}
+	
+	
 }

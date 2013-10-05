@@ -83,7 +83,7 @@ public class CLErrores
 				if(QMListaErroresComunidades.delErrorComunidad(sCodMovimiento, sCodError))
 				{	
 					
-					if (QMComunidades.modComunidad(CLComunidades.convierteMovimientoenComunidad(movimiento_revisado), movimiento.getCOCLDO(), movimiento.getNUDCOM()))	
+					if (QMComunidades.modComunidad(CLComunidades.convierteMovimientoenComunidad(movimiento), movimiento.getCOCLDO(), movimiento.getNUDCOM()))	
 					{
 						//OK 
 						iCodigo = 0;
@@ -159,7 +159,7 @@ public class CLErrores
 				if(QMListaErroresCuotas.delErrorCuota(sCodMovimiento, sCodError))
 				{	
 
-					if (QMCuotas.modCuota(CLCuotas.convierteMovimientoenCuota(movimiento_revisado), movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC()))	
+					if (QMCuotas.modCuota(CLCuotas.convierteMovimientoenCuota(movimiento), movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC()))	
 					{
 						//OK 
 						iCodigo = 0;
@@ -230,7 +230,7 @@ public class CLErrores
 				if(QMListaErroresReferencias.delErrorReferencia(sCodMovimiento, sCodError))
 				{	
 
-					if (QMReferencias.modReferenciaCatastral(CLReferencias.convierteMovimientoenReferencia(movimiento_revisado), movimiento.getNURCAT()))	
+					if (QMReferencias.modReferenciaCatastral(CLReferencias.convierteMovimientoenReferencia(movimiento), movimiento.getNURCAT()))	
 					{
 						//OK 
 						iCodigo = 0;
@@ -301,7 +301,7 @@ public class CLErrores
 				if(QMListaErroresImpuestos.delErrorImpuesto(sCodMovimiento, sCodError))
 				{	
 
-					if (QMImpuestos.modImpuestoRecurso(CLImpuestos.convierteMovimientoenImpuesto(movimiento_revisado), movimiento.getNURCAT(), movimiento.getCOSBAC()))	
+					if (QMImpuestos.modImpuestoRecurso(CLImpuestos.convierteMovimientoenImpuesto(movimiento), movimiento.getNURCAT(), movimiento.getCOSBAC()))	
 					{
 						//OK 
 						iCodigo = 0;

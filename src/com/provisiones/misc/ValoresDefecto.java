@@ -49,11 +49,17 @@ public class ValoresDefecto
 	public static final String DEF_BAJA = "B";
 	public static final String DEF_PENDIENTE = "P";
 	public static final String DEF_ENVIADO = "E";
+	public static final String DEF_VALIDADO = "V";
+	
+	public static final String DEF_NEGATIVO = "-";
 	
 	public static final String DEF_GASTO_ANULADO = "4";
 	
 	public static final String DEF_GASTO_ESTIMADO = "1";
 	public static final String DEF_GASTO_CONOCIDO = "2";
+	public static final String DEF_GASTO_PAGADO_CONEXION = "7";
+	
+	public static final String DEF_GASTO_PROVISION_CONEXION = "0";
 	
 	public static final String DEF_COTERR = "0";
 	public static final String DEF_COTDOR = "0";

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/>
+	</h:head>
+
+	<h:body>
+		<h:form id="form">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="auto" header="Pago por Conexión">
+					<h:panelGrid columns="4" cellpadding="5">
+
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
+
+								<h:outputText value="Número de provision de fondos: "/>
+								<p:inputText id="NUPROF" value="#{GestorPagosConexion.sNUPROF}" disabled="true" size="9" maxlength="9"/>
+
+							</h:panelGrid>
+						</p:panel>
+
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Limpiar Plantilla" update="NUPROF, panel" actionListener="#{GestorPagosConexion.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Registrar Pago" update="panel, popup, msgs" actionListener="#{GestorPagosConexion.registraGasto}"/>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+					</h:panelGrid>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Operativas">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center" size="auto">
+					<h:panelGrid columns="1" cellpadding="5">
+
+						<p:panel id="panel" size="auto">
+							<h:panelGrid columns="1" cellpadding="5">
+
+								<p:fieldset legend="Activo">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+
+												<h:outputText for="COACES" value="Código de activo: "/>
+												<p:inputText id="COACES" value="#{GestorPagosConexion.sCOACES}" size="9" maxlength="9"/>
+
+												<p:commandButton value="Cargar Datos" update="msgs, popup, COACES, NUPROF, form:gastos" actionListener="#{GestorPagosConexion.cargarDatos}" oncomplete="dlgTablaPendientes.show()"/>
+
+											</h:panelGrid>
+										</p:panel>
+
+										<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Conexión">
+									<h:panelGrid columns="1" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="6" cellpadding="5">
+
+												<h:outputText value="Código de entidad: "/>
+												<p:inputText id="COENCX" value="#{GestorPagosConexion.sCOENCX}" size="4" maxlength="4"/>
+
+												<h:outputText value="Oficina de emisión: "/>
+												<p:inputText id="COOFCX" value="#{GestorPagosConexion.sCOOFCX}" size="4" maxlength="9"/>
+
+												<h:outputText value="Numero: "/>
+												<p:inputText id="NUCONE" value="#{GestorPagosConexion.sNUCONE}" size="13" maxlength="9"/>
+
+											</h:panelGrid>
+										</p:panel>
+
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText value="Fecha de pago: "/>
+											<p:inputMask id="FMPAGN" value="#{GestorPagosConexion.sFMPAGN}" mask="99/99/9999" size="10" maxlength="10"/>
+											<p:commandButton icon="ui-icon-clock" update="FMPAGN" actionListener="#{GestorPagosConexion.hoyFMPAGN}"/>
+
+										</h:panelGrid>
+
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Datos">
+									<h:panelGrid columns="2" cellpadding="1">
+
+										<p:panel>
+											<p:fieldset legend="Tipo de Gasto">
+												<h:panelGrid columns="2" cellpadding="5">
+
+													<h:outputText value="Devolución: "/>
+													<p:selectBooleanCheckbox id="bDEVO" value="#{GestorPagosConexion.bDevolucion}" disabled="true"/>
+
+													<h:outputText value="Concepto: "/>
+													<p:inputText id="DCOSBGA" value="#{GestorPagosConexion.sDCOSBGA}" size="26" maxlength="26" disabled="true"/>
+
+													<h:outputText value="Periodicidad de pago: "/>
+													<p:selectOneMenu id="PTPAGO" value="#{GestorPagosConexion.sPTPAGO}" disabled="true">
+														<f:selectItem itemLabel="Periodicidad..." itemValue=""/>
+														<f:selectItems value="#{GestorDatosGenerales.tiposptpagoHM}"/>
+														<p:ajax update="PTPAGO, FFGTVP, hFFGTVP" listener="#{GestorPagosConexion.cambiaFechaFinPeriodo}"/>
+													</p:selectOneMenu>
+
+												</h:panelGrid>
+											</p:fieldset>
+
+											<p:fieldset legend="Fechas del gasto">
+												<h:panelGrid columns="1" cellpadding="1">
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText value="Fecha del devengo: "/>
+															<p:inputText id="FEDEVE" value="#{GestorPagosConexion.sFEDEVE}" size="10" maxlength="10" disabled="true"/>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+
+															<h:outputText value="Fecha de fin de periodo: "/>
+															<p:inputMask id="FFGTVP" value="#{GestorPagosConexion.sFFGTVP}" mask="99/99/9999" size="10" maxlength="10" disabled="true"/>
+															<p:commandButton id="hFFGTVP" icon="ui-icon-clock" update="FFGTVP" actionListener="#{GestorPagosConexion.hoyFFGTVP}" disabled="true"/>
+
+															<h:outputText value="Fecha límite del pago: "/>
+															<p:inputMask id="FELIPG" value="#{GestorPagosConexion.sFELIPG}" mask="99/99/9999" size="10" maxlength="10" disabled="true"/>
+															<p:commandButton icon="ui-icon-clock" update="FELIPG" actionListener="#{GestorPagosConexion.hoyFELIPG}" disabled="true"/>
+
+															<h:outputText value="Fecha de pago al proveedor: "/>
+															<p:inputMask id="FEPGPR" value="#{GestorPagosConexion.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10" disabled="true"/>
+															<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorPagosConexion.hoyFEPGPR}" disabled="true"/>
+
+														</h:panelGrid>
+													</p:panel>
+
+												</h:panelGrid>
+											</p:fieldset>
+
+											<p:fieldset legend="Situación del gasto">
+												<h:panelGrid columns="1" cellpadding="5">
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="3">
+
+															<h:outputText value="Situación del gasto: "/>
+															<p:selectOneMenu id="COSIGA" value="#{GestorPagosConexion.sCOSIGA}" disabled="true">
+																<f:selectItem itemLabel="Situación..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosConexion.tiposcosigaHM}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+												</h:panelGrid>
+											</p:fieldset>
+										</p:panel>
+
+										<p:panel>
+
+											<p:fieldset legend="Importes del gasto">
+												<h:panelGrid columns="1" cellpadding="5">
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+
+															<h:outputText value="Importe del gasto: "/>
+															<p:inputText id="IMNGAS" value="#{GestorPagosConexion.sIMNGAS}" size="16" maxlength="16" disabled="true"/>
+															<h:outputText value="€"/>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+
+															<h:outputText value="Recargo en el importe del gasto: "/>
+															<p:inputText id="IMRGAS" value="#{GestorPagosConexion.sIMRGAS}" size="16" maxlength="16" disabled="true"/>
+															<h:outputText value="€"/>
+
+
+															<h:outputText value="Importe de demora del gasto: "/>
+															<p:inputText id="IMDGAS" value="#{GestorPagosConexion.sIMDGAS}" size="16" maxlength="16" disabled="true"/>
+															<h:outputText value="€"/>
+
+															<h:outputText value="Importe de costas: "/>
+															<p:inputText id="IMCOST" value="#{GestorPagosConexion.sIMCOST}" size="16" maxlength="16" disabled="true"/>
+															<h:outputText value="€"/>
+
+															<h:outputText value="Importe de otros incrementos: "/>
+															<p:inputText id="IMOGAS" value="#{GestorPagosConexion.sIMOGAS}" size="16" maxlength="16" disabled="true"/>
+															<h:outputText value="€"/>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+
+															<h:outputText value="Importe de descuento de gastos: "/>
+															<p:inputText id="IMDTGA" value="#{GestorPagosConexion.sIMDTGA}" size="16" maxlength="16" disabled="true"/>
+															<h:outputText value="€"/>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+
+															<h:outputText value="Importe de impuestos del gasto: "/>
+															<p:inputText id="IMIMGA" value="#{GestorPagosConexion.sIMIMGA}" size="16" maxlength="16" disabled="true"/>
+															<h:outputText value="€"/>
+
+															<h:outputText value="Tipo de impuesto: "/>
+															<p:selectOneMenu id="COIMPT" value="#{GestorPagosConexion.sCOIMPT}" disabled="true">
+																<f:selectItem itemLabel="Tipo..." itemValue=""/>
+																<f:selectItems value="#{GestorDatosGenerales.tiposcoimptHM}"/>
+																	<p:ajax update="IMIMGA" listener="#{GestorPagosConexion.cambiaImporteImpuesto}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+												</h:panelGrid>
+											</p:fieldset>
+										</p:panel>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+							</h:panelGrid>
+						</p:panel>
+					</h:panelGrid>
+
+					<p:dialog header="Gastos del Activo: " widgetVar="dlgTablaPendientes" resizable="false">
+
+						<p:contextMenu for="gastos">
+							<p:menuitem value="Seleccionar" update="form:panel, form:popup, form:msgs, form:DCOSBGA, form:PTPAGO, form:bDEVO form:NUPROF" icon="ui-icon-check" actionListener="#{GestorPagosConexion.seleccionarGasto}" oncomplete="dlgTablaPendientes.hide()"/>
+						</p:contextMenu>
+
+						<p:dataTable id="gastos" var="gasto" value="#{GestorPagosConexion.tablagastos}" rowKey="#{gasto.DCOSBGA}"
+															selection="#{GestorPagosConexion.gastoseleccionado}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15">
+
+							<p:column headerText="Gasto">
+								#{gasto.DCOSBGA}
+							</p:column>
+
+							<p:column headerText="Periodicidad">
+								#{gasto.DPTPAGO}
+							</p:column>
+
+							<p:column headerText="Importe">
+								#{gasto.IMNGAS}
+							</p:column>
+
+							<p:column headerText="Fecha de Devengo">
+								#{gasto.FEDEVE}
+							</p:column>
+
+						</p:dataTable>
+
+					</p:dialog>
+					<p:dialog header="Activos con Gastos: " widgetVar="dlgTabla" resizable="false">
+
+							<p:contextMenu for="activos">
+								<p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NUPROF" icon="ui-icon-check" actionListener="#{GestorPagosConexion.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+							</p:contextMenu>
+
+							<p:dataTable id="activos" var="activo" value="#{GestorPagosConexion.tablaactivos}" rowKey="#{activo.COACES}"
+															selection="#{GestorPagosConexion.activoseleccionado}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15">
+
+								<p:column headerText="Código Activo">
+									#{activo.COACES}
+								</p:column>
+
+								<p:column headerText="Provincia">
+									#{activo.NOPRAC}
+								</p:column>
+
+								<p:column headerText="Municipio">
+									#{activo.NOMUIN}
+								</p:column>
+
+								<p:column headerText="Vía">
+									#{activo.NOVIAS}
+								</p:column>
+
+								<p:column headerText="Portal">
+									#{activo.NUPOAC}
+								</p:column>
+
+								<p:column headerText="Piso">
+									#{activo.NUPIAC}
+								</p:column>
+
+								<p:column headerText="Puerta">
+									#{activo.NUPUAC}
+								</p:column>
+
+							</p:dataTable>
+					</p:dialog>
+					<p:dialog header="Buscar un Activo con Gastos" widgetVar="dlgBuscar" resizable="false">
+						<p:fieldset legend="Criterios de Búsqueda">
+							<h:panelGrid columns="1" cellpadding="5">
+
+								<p:panel id="panelBuscar" >
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NOPRAC" value="Provincia: "/>
+										<p:inputText id="NOPRAC" value="#{GestorPagosConexion.sNOPRAC}" size="18" maxlength="18"/>
+
+										<h:outputText for="NOMUIN" value="Municipio: "/>
+										<p:inputText id="NOMUIN" value="#{GestorPagosConexion.sNOMUIN}" size="30" maxlength="30"/>
+
+										<h:outputText for="COPOIN" value="Código Postal: "/>
+										<p:inputText id="COPOIN" value="#{GestorPagosConexion.sCOPOIN}" size="5" maxlength="5"/>
+
+										<h:outputText for="NOVIAS" value="Nombre de la Vía: "/>
+										<p:inputText id="NOVIAS" value="#{GestorPagosConexion.sNOVIAS}" size="60" maxlength="60"/>
+
+										<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: "/>
+										<p:inputText id="NUPOAC" value="#{GestorPagosConexion.sNUPOAC}" size="17" maxlength="17"/>
+
+										<h:outputText for="NUPIAC" value="Piso: "/>
+										<p:inputText id="NUPIAC" value="#{GestorPagosConexion.sNUPIAC}" size="11" maxlength="11"/>
+
+										<h:outputText for="NUPUAC" value="Puerta: "/>
+										<p:inputText id="NUPUAC" value="#{GestorPagosConexion.sNUPUAC}" size="17" maxlength="17"/>
+
+									</h:panelGrid>
+								</p:panel>
+
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorPagosConexion.buscaActivos}" oncomplete="dlgTabla.show()"/>
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorPagosConexion.limpiarPlantillaActivo}"/>
+
+									</h:panelGrid>
+								</p:panel>
+
+							</h:panelGrid>
+						</p:fieldset>
+					</p:dialog>
+
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
+						<p:graphicImage value="recursos/loadingBar.gif"/>
+					</p:dialog>
+
+				</p:layoutUnit>
+
+			</p:layout>
+		</h:form>
+	</h:body>
+
+</f:view>
+</html>
