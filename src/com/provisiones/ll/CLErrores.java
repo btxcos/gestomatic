@@ -83,7 +83,7 @@ public class CLErrores
 				if(QMListaErroresComunidades.delErrorComunidad(sCodMovimiento, sCodError))
 				{	
 					
-					if (QMComunidades.modComunidad(CLComunidades.convierteMovimientoenComunidad(movimiento), movimiento.getCOCLDO(), movimiento.getNUDCOM()))	
+					if (QMComunidades.modComunidad(CLComunidades.convierteMovimientoenComunidad(movimiento_revisado), movimiento.getCOCLDO(), movimiento.getNUDCOM()))	
 					{
 						//OK 
 						iCodigo = 0;
@@ -159,7 +159,7 @@ public class CLErrores
 				if(QMListaErroresCuotas.delErrorCuota(sCodMovimiento, sCodError))
 				{	
 
-					if (QMCuotas.modCuota(CLCuotas.convierteMovimientoenCuota(movimiento), movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC()))	
+					if (QMCuotas.modCuota(CLCuotas.convierteMovimientoenCuota(movimiento_revisado), movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC()))	
 					{
 						//OK 
 						iCodigo = 0;
@@ -230,7 +230,7 @@ public class CLErrores
 				if(QMListaErroresReferencias.delErrorReferencia(sCodMovimiento, sCodError))
 				{	
 
-					if (QMReferencias.modReferenciaCatastral(CLReferencias.convierteMovimientoenReferencia(movimiento), movimiento.getNURCAT()))	
+					if (QMReferencias.modReferenciaCatastral(CLReferencias.convierteMovimientoenReferencia(movimiento_revisado), movimiento.getNURCAT()))	
 					{
 						//OK 
 						iCodigo = 0;
@@ -301,7 +301,7 @@ public class CLErrores
 				if(QMListaErroresImpuestos.delErrorImpuesto(sCodMovimiento, sCodError))
 				{	
 
-					if (QMImpuestos.modImpuestoRecurso(CLImpuestos.convierteMovimientoenImpuesto(movimiento), movimiento.getNURCAT(), movimiento.getCOSBAC()))	
+					if (QMImpuestos.modImpuestoRecurso(CLImpuestos.convierteMovimientoenImpuesto(movimiento_revisado), movimiento.getNURCAT(), movimiento.getCOSBAC()))	
 					{
 						//OK 
 						iCodigo = 0;
@@ -352,17 +352,13 @@ public class CLErrores
 		
 		String sEstado = QMGastos.getEstado(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 
+		logger.debug("sEstado:|{}|",sEstado);
 		
-		String sAccion = CLGastos.decideAccion(movimiento,sEstado);
+		String sAccion = "M";
 		
 		MovimientoGasto movimiento_revisado = CLGastos.revisaSignos(movimiento,sAccion);
 		
-		if (sAccion.equals("#"))
-		{	
-			//Error modificacion sin cambios
-			iCodigo = -804;	
-		}
-		else if (movimiento_revisado.getCOSIGA().equals("#"))
+		if (movimiento_revisado.getCOSIGA().equals("#"))
 		{
 			//error modificacion sin cambios
 			iCodigo = -806;	
@@ -371,6 +367,8 @@ public class CLErrores
 		else
 		{
 			MovimientoGasto movimiento_antiguo = QMMovimientosGastos.getMovimientoGasto(sCodMovimiento);
+			
+			logger.debug(movimiento_revisado.logMovimientoGasto());
 			
 			if (!QMMovimientosGastos.modMovimientoGasto(movimiento_revisado,sCodMovimiento))
 			{
@@ -382,7 +380,7 @@ public class CLErrores
 				if(QMListaErroresGastos.delErrorGasto(sCodMovimiento, sCodError))
 				{	
 
-					if (QMGastos.modGasto(CLGastos.convierteMovimientoenGasto(movimiento)))	
+					if (QMGastos.modGasto(CLGastos.convierteMovimientoenGasto(movimiento_revisado)))
 					{
 						//OK 
 						iCodigo = 0;

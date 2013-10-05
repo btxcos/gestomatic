@@ -382,9 +382,9 @@ public class GestorMovimientosGastos implements Serializable
 		this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
 
 		this.sCOTERR = ValoresDefecto.DEF_COTERR;
-		this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
+		this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
 	
-		this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+		this.sFEAPLI = Utils.recuperaFecha(ValoresDefecto.DEF_FEAPLI);
 		this.sCOAPII = ValoresDefecto.DEF_COAPII;
 		this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 		this.sNUCLII = ValoresDefecto.DEF_NUCLII;
@@ -592,6 +592,12 @@ public class GestorMovimientosGastos implements Serializable
 			sMsg = "El gasto informado no se puede tramitar, no existe en el sistema.";
 			msg = Utils.pfmsgError(sMsg);
 			logger.error(sMsg);
+		}
+		else if (bDevolucion)
+		{
+			sMsg = "Las devoluciones no pueden ser modificadas.";
+			msg = Utils.pfmsgError(sMsg);
+			logger.error(sMsg);			
 		}
 		else
 		{

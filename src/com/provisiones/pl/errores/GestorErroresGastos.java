@@ -147,22 +147,22 @@ public class GestorErroresGastos implements Serializable
 	private transient GastoTabla gastoseleccionado = null;
 	private transient ArrayList<GastoTabla> tablagastos = null;
 	
-	private Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
 	
-	private Map<String,String> tiposcotpga_g1HM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcotpga_g2HM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcotpga_g3HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcotpga_g1HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcotpga_g2HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcotpga_g3HM = new LinkedHashMap<String, String>();
 	
-	private Map<String,String> tiposcosbga_t11HM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcosbga_t12HM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcosbga_t21HM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcosbga_t22HM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcosbga_t23HM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
-	private Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosbga_t11HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosbga_t12HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosbga_t21HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosbga_t22HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosbga_t23HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
 
-	private Map<String,String> tiposcosigaHM = new LinkedHashMap<String, String>();
+	private transient Map<String,String> tiposcosigaHM = new LinkedHashMap<String, String>();
 
 	public GestorErroresGastos()
 	{
@@ -457,12 +457,12 @@ public class GestorErroresGastos implements Serializable
 		
 		MovimientoGasto movimiento = CLGastos.buscarMovimientoGasto(sCodMovimiento);
 		
-		this.sCOACES = movimientoseleccionado.getCOACES();
-	   	this.sCOGRUG = movimientoseleccionado.getCOGRUG();
-    	this.sCOTPGA = movimientoseleccionado.getCOTPGA();
-    	this.sCOSBGA = movimientoseleccionado.getCOSBGA();
+		this.sCOACES = movimiento.getCOACES();
+	   	this.sCOGRUG = movimiento.getCOGRUG();
+    	this.sCOTPGA = movimiento.getCOTPGA();
+    	this.sCOSBGA = movimiento.getCOSBGA();
     	this.sDCOSBGA = movimientoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
-    	this.sFEDEVE = movimientoseleccionado.getFEDEVE();
+    	this.sFEDEVE = Utils.recuperaFecha(movimiento.getFEDEVE());
     	
     	
 		logger.debug("sCOACES:|{}|",sCOACES);
@@ -508,9 +508,9 @@ public class GestorErroresGastos implements Serializable
 		this.sNUPROF = movimiento.getNUPROF();
 
 		this.sCOTERR = movimiento.getCOTERR();
-		this.sFMPAGN = movimiento.getFMPAGN();
+		this.sFMPAGN = Utils.recuperaFecha(movimiento.getFMPAGN());
 	
-		this.sFEAPLI = movimiento.getFEAPLI();
+		this.sFEAPLI = Utils.recuperaFecha(movimiento.getFEAPLI());
 		this.sCOAPII = movimiento.getCOAPII();
 		this.sCOSPII = movimiento.getCOSPII();
 		this.sNUCLII = movimiento.getNUCLII();
@@ -676,13 +676,13 @@ public class GestorErroresGastos implements Serializable
 		
 	}
 	
-	public void cambiaTipo()
+	public void cambiaTipoB()
 	{
-		logger.debug("sCOGRUG:|{}|",sCOGRUG);
+		logger.debug("sCOGRUGB:|{}|",sCOGRUGB);
 
-		if (sCOGRUG !=null && !sCOGRUG.equals(""))
+		if (sCOGRUGB !=null && !sCOGRUGB.equals(""))
 		{
-			switch (Integer.parseInt(sCOGRUG)) 
+			switch (Integer.parseInt(sCOGRUGB)) 
 			{
 				case 1:
 					tiposcotpgaHM = tiposcotpga_g1HM;
@@ -698,18 +698,18 @@ public class GestorErroresGastos implements Serializable
 					break;
 			}
 			tiposcosbgaHM = new LinkedHashMap<String, String>();
-			sCOTPGA = "";
-			sCOSBGA = "";
+			sCOTPGAB = "";
+			sCOSBGAB = "";
 		}
 	}
 	
-	public void cambiaSubtipo()
+	public void cambiaSubtipoB()
 	{
-		logger.debug("sCOGRUG:|{}| sCOTPGA:|{}|",sCOGRUG,sCOTPGA);
+		logger.debug("sCOGRUGB:|{}| sCOTPGAB:|{}|",sCOGRUGB,sCOTPGAB);
 		
-		if (sCOTPGA !=null && !sCOTPGA.equals(""))
+		if (sCOTPGAB !=null && !sCOTPGAB.equals(""))
 		{
-			switch (Integer.parseInt(sCOGRUG+sCOTPGA)) 
+			switch (Integer.parseInt(sCOGRUGB+sCOTPGAB)) 
 			{
 				case 11:
 					tiposcosbgaHM = tiposcosbga_t11HM;
@@ -736,7 +736,7 @@ public class GestorErroresGastos implements Serializable
 					tiposcosbgaHM = new LinkedHashMap<String, String>();
 					break;
 			}
-			sCOSBGA = "";
+			sCOSBGAB = "";
 		}
 	}
 	
@@ -807,6 +807,12 @@ public class GestorErroresGastos implements Serializable
 	{
 		this.setsFEDEVE(Utils.fechaDeHoy(true));
 		logger.debug("sFEDEVE:|{}|",sFEDEVE);
+	}
+	
+	public void hoyFEDEVEB (ActionEvent actionEvent)
+	{
+		this.setsFEDEVEB(Utils.fechaDeHoy(true));
+		logger.debug("sFEDEVEB:|{}|",sFEDEVEB);
 	}
 
 	public void hoyFFGTVP (ActionEvent actionEvent)
@@ -931,12 +937,6 @@ public class GestorErroresGastos implements Serializable
 				logger.info(sMsg);
 				break;
 
-			case -804: //Error 804 - Accion no permitida
-				sMsg = "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
 			case -806: //Error 806 - modificacion sin cambios
 				sMsg = "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -983,6 +983,7 @@ public class GestorErroresGastos implements Serializable
 	}
 
 	public void setsCOGRUG(String sCOGRUG) {
+		logger.debug(sCOGRUG);
 		this.sCOGRUG = sCOGRUG;
 	}
 

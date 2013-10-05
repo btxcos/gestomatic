@@ -122,25 +122,8 @@
 													<h:outputText value="Devolución: "/>
 													<p:selectBooleanCheckbox id="bDEVO" value="#{GestorErroresGastos.bDevolucion}" disabled="#{GestorErroresGastos.bDevolucion}"/>
 
-													<h:outputText value="Grupo de gasto: "/>
-													<p:selectOneMenu id="COGRUG" value="#{GestorErroresGastos.sCOGRUG}" disabled="#{GestorErroresGastos.bCOGRUG}">
-														<f:selectItem itemLabel="Grupo..." itemValue=""/>
-														<f:selectItems value="#{GestorDatosGenerales.tiposcogrugHM}"/>
-															<p:ajax update="COTPGA, COSBGA" listener="#{GestorErroresGastos.cambiaTipo}"/>
-													</p:selectOneMenu>
-
-													<h:outputText value="Tipo de gasto:  "/>
-													<p:selectOneMenu id="COTPGA" value="#{GestorErroresGastos.sCOTPGA}" disabled="#{GestorErroresGastos.bCOTPGA}">
-														<f:selectItem itemLabel="Tipo..." itemValue=""/>
-														<f:selectItems value="#{GestorErroresGastos.tiposcotpgaHM}"/>
-														<p:ajax update="COSBGA" listener="#{GestorErroresGastos.cambiaSubtipo}"/>
-													</p:selectOneMenu>
-
-													<h:outputText value="Subtipo de gasto: "/>
-													<p:selectOneMenu id="COSBGA" value="#{GestorErroresGastos.sCOSBGA}" disabled="#{GestorErroresGastos.bCOSBGA}">
-														<f:selectItem itemLabel="Subtipo..." itemValue=""/>
-														<f:selectItems value="#{GestorErroresGastos.tiposcosbgaHM}"/>
-													</p:selectOneMenu>
+													<h:outputText value="Concepto: "/>
+													<p:inputText id="DCOSBGA" value="#{GestorErroresGastos.sDCOSBGA}" size="26" maxlength="26" disabled="true"/>
 
 													<h:outputText value="Periodicidad de pago: "/>
 													<p:selectOneMenu id="PTPAGO" value="#{GestorErroresGastos.sPTPAGO}" disabled="#{GestorErroresGastos.bPTPAGO}">
@@ -312,7 +295,7 @@
 					<p:dialog header="Gastos del Activo: " widgetVar="dlgTablaPendientes" resizable="false">
 
 						<p:contextMenu for="gastos">
-							<p:menuitem value="Seleccionar" update="form:panel, form:popup, form:msgs, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO, form:bDEVO form:NUPROF" icon="ui-icon-check" actionListener="#{GestorErroresGastos.seleccionarGasto}" oncomplete="dlgTablaPendientes.hide()"/>
+							<p:menuitem value="Seleccionar" update="form:panel, form:popup, form:msgs, form:DCOSBGA, form:PTPAGO, form:bDEVO form:NUPROF" icon="ui-icon-check" actionListener="#{GestorErroresGastos.seleccionarGasto}" oncomplete="dlgTablaPendientes.hide()"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastos" var="gasto" value="#{GestorErroresGastos.tablagastos}" rowKey="#{gasto.DCOSBGA}"
@@ -436,21 +419,21 @@
 											<p:inputText id="COACESB" value="#{GestorErroresGastos.sCOACESB}" size="10" maxlength="10"/>
 
 											<h:outputText value="Grupo de gasto: "/>
-											<p:selectOneMenu id="COGRUGB" value="#{GestorErroresGastos.sCOGRUG}">
+											<p:selectOneMenu id="COGRUGB" value="#{GestorErroresGastos.sCOGRUGB}">
 												<f:selectItem itemLabel="Grupo..." itemValue=""/>
 												<f:selectItems value="#{GestorDatosGenerales.tiposcogrugHM}"/>
-													<p:ajax update="COTPGAB, COSBGAB" listener="#{GestorErroresGastos.cambiaTipo}"/>
+													<p:ajax update="COTPGAB, COSBGAB" listener="#{GestorErroresGastos.cambiaTipoB}"/>
 											</p:selectOneMenu>
 
 											<h:outputText value="Tipo de gasto:  "/>
-											<p:selectOneMenu id="COTPGAB" value="#{GestorErroresGastos.sCOTPGA}">
+											<p:selectOneMenu id="COTPGAB" value="#{GestorErroresGastos.sCOTPGAB}">
 												<f:selectItem itemLabel="Tipo..." itemValue=""/>
 												<f:selectItems value="#{GestorErroresGastos.tiposcotpgaHM}"/>
-												<p:ajax update="COSBGAB" listener="#{GestorErroresGastos.cambiaSubtipo}"/>
+												<p:ajax update="COSBGAB" listener="#{GestorErroresGastos.cambiaSubtipoB}"/>
 											</p:selectOneMenu>
 
 											<h:outputText value="Subtipo de gasto: "/>
-											<p:selectOneMenu id="COSBGAB" value="#{GestorErroresGastos.sCOSBGA}">
+											<p:selectOneMenu id="COSBGAB" value="#{GestorErroresGastos.sCOSBGAB}">
 												<f:selectItem itemLabel="Subtipo..." itemValue=""/>
 												<f:selectItems value="#{GestorErroresGastos.tiposcosbgaHM}"/>
 											</p:selectOneMenu>
@@ -463,8 +446,8 @@
 									<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText value="Fecha del devengo: "/>
-											<p:inputText id="FEDEVEB" value="#{GestorErroresGastos.sFEDEVE}" size="10" maxlength="10"/>
-											<p:commandButton id="hFEDEVEB" icon="ui-icon-clock" update="FEDEVEB" actionListener="#{GestorErroresGastos.hoyFEDEVE}"/>
+											<p:inputText id="FEDEVEB" value="#{GestorErroresGastos.sFEDEVEB}" size="10" maxlength="10"/>
+											<p:commandButton id="hFEDEVEB" icon="ui-icon-clock" update="FEDEVEB" actionListener="#{GestorErroresGastos.hoyFEDEVEB}"/>
 
 									</h:panelGrid>
 
@@ -473,7 +456,7 @@
 									<h:panelGrid columns="3" cellpadding="5">
 
 										<p:commandButton value="Buscar" update="popup, form:gastoserror" actionListener="#{GestorErroresGastos.buscaGastosError}" oncomplete="dlgTablaGastosError.show()"/>
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorErroresGastos.limpiarPlantillaError}"/>
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscarErrores" actionListener="#{GestorErroresGastos.limpiarPlantillaError}"/>
 
 									</h:panelGrid>
 								</p:panel>

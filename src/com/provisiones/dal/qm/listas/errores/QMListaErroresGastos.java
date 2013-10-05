@@ -259,6 +259,7 @@ public class QMListaErroresGastos
 					DCOSBGA = QMCodigosControl.getDesCOSBGA(COGRUG,COTPGA,COSBGA);
 					IMNGAS = rs.getString(QMMovimientosGastos.sField17)+Utils.recuperaImporte(false, rs.getString(QMMovimientosGastos.sField16));
 					FEDEVE = Utils.recuperaFecha(rs.getString(QMMovimientosGastos.sField7));
+					logger.debug("{}:|{}|",QMMovimientosGastos.sField7,FEDEVE);
 					MOVIMIENTO = rs.getString(QMMovimientosGastos.sField1);
 					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					

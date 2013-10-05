@@ -183,6 +183,47 @@ public class QMGastos
 		boolean bSalida = true;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "UPDATE " + sTable + 
+				" SET " 
+				+ sField5  + " = '"+ NuevoGasto.getPTPAGO() + "', "
+				+ sField7  + " = '"+ NuevoGasto.getFFGTVP() + "', "
+				+ sField8  + " = '"+ NuevoGasto.getFEPAGA() + "', "
+				+ sField9  + " = '"+ NuevoGasto.getFELIPG() + "', "
+				+ sField10 + " = '"+ NuevoGasto.getCOSIGA() + "', "
+				+ sField11 + " = '"+ NuevoGasto.getFEEESI() + "', "
+				+ sField12 + " = '"+ NuevoGasto.getFEECOI() + "', "
+				+ sField13 + " = '"+ NuevoGasto.getFEEAUI() + "', "
+				+ sField14 + " = '"+ NuevoGasto.getFEEPAI() + "', "
+				+ sField15 + " = '"+ NuevoGasto.getIMNGAS() + "', "
+				+ sField16 + " = '"+ NuevoGasto.getYCOS02() + "', "
+				+ sField17 + " = '"+ NuevoGasto.getIMRGAS() + "', "
+				+ sField18 + " = '"+ NuevoGasto.getYCOS04() + "', "
+				+ sField19 + " = '"+ NuevoGasto.getIMDGAS() + "', "
+				+ sField20 + " = '"+ NuevoGasto.getYCOS06() + "', "
+				+ sField21 + " = '"+ NuevoGasto.getIMCOST() + "', "
+				+ sField22 + " = '"+ NuevoGasto.getYCOS08() + "', "
+				+ sField23 + " = '"+ NuevoGasto.getIMOGAS() + "', "
+				+ sField24 + " = '"+ NuevoGasto.getYCOS10() + "', "
+				+ sField25 + " = '"+ NuevoGasto.getIMDTGA() + "', "
+				+ sField26 + " = '"+ NuevoGasto.getIMIMGA() + "', "
+				+ sField27 + " = '"+ NuevoGasto.getCOIMPT() + "', "
+				+ sField28 + " = '"+ NuevoGasto.getCOTNEG() + "', "
+				+ sField29 + " = '"+ NuevoGasto.getFEAGTO() + "', "
+				+ sField30 + " = '"+ NuevoGasto.getCOMONA() + "', "
+				+ sField31 + " = '"+ NuevoGasto.getBIAUTO() + "', "
+				+ sField32 + " = '"+ NuevoGasto.getFEAUFA() + "', "
+				+ sField33 + " = '"+ NuevoGasto.getFEPGPR() + 
+				"' "+
+				" WHERE " +
+				"("	+ 
+					sField1  + " = '"+ NuevoGasto.getCOACES() +"' AND " +
+					sField2  + " = '"+ NuevoGasto.getCOGRUG() +"' AND " +
+					sField3  + " = '"+ NuevoGasto.getCOTPGA() +"' AND " +
+					sField4  + " = '"+ NuevoGasto.getCOSBGA() +"' AND " +
+				    sField6  + " = '"+ NuevoGasto.getFEDEVE() + "' )";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
@@ -705,7 +746,7 @@ public class QMGastos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField7,sEstado);
+					logger.debug("{}:|{}|",sField34,sEstado);
 
 				}
 			}
