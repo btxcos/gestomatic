@@ -685,8 +685,9 @@ public class QMProvisiones
 					+ sField4 + ","
 					+ sField5 + 
 					" FROM " + sTable + 
-					" WHERE ( " + sField8 + " = '"
-					+ ValoresDefecto.DEF_ALTA + "')");
+					" WHERE ( " 
+					+ sField8 + " = '"+ ValoresDefecto.DEF_ALTA + "' AND "
+					+sField1+" <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+"' )");
 
 			rs = pstmt.executeQuery();
 			

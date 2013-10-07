@@ -140,5 +140,18 @@ public class CLProvisiones
 		//Anular todos los gastos pendientes con fecha actual
 		return QMProvisiones.modProvision(provision, provision.getsNUPROF());
 	}
+	
+	public static void inicializaProvisiones() 
+	{
+		logger.info("Inicializando provisiones...");
+		if (!existeProvision("0"))
+		{
+			Provision provision = new Provision ("0", "0", "#", "0","0","0","0",ValoresDefecto.DEF_ALTA);
+			
+			QMProvisiones.addProvision(provision);
+		}
+		logger.info("Provisiones inicializadas.");
+	
+	}
 
 }
