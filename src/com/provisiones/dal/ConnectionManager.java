@@ -49,7 +49,7 @@ public class ConnectionManager
 			logger.error("VendorError: {}", ex.getErrorCode());
 		}
 
-		logger.debug("Conexión realizada.");
+		//logger.debug("Conexión realizada.");
 		return conn;
 
 	}

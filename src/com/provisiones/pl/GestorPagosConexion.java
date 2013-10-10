@@ -12,7 +12,6 @@ import javax.faces.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.misc.Utils;
@@ -339,7 +338,8 @@ public class GestorPagosConexion implements Serializable
     	this.sDCOSBGA = gastoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
     	this.sFEDEVE = gastoseleccionado.getFEDEVE();
     	
-	  	Gasto gasto = QMGastos.getGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+    	
+	  	Gasto gasto = CLGastos.buscarGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
     	
     	logger.debug(gasto.logGasto());
  

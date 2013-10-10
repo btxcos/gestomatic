@@ -348,9 +348,10 @@ public class CLErrores
 	
 	public static int reparaMovimientoGasto(MovimientoGasto movimiento, String sCodMovimiento, String sCodError)
 	{
+		
 		int iCodigo = 0;
 		
-		String sEstado = QMGastos.getEstado(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
+		String sEstado = QMGastos.getEstado(QMGastos.getGastoID(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()));
 
 		logger.debug("sEstado:|{}|",sEstado);
 		
@@ -385,7 +386,9 @@ public class CLErrores
 						//OK 
 						iCodigo = 0;
 						
-						ArrayList<String> dependenciasgastos = QMListaGastos.buscarDependencias(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE(), sCodMovimiento);
+						String sCodGasto = QMGastos.getGastoID(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
+						
+						ArrayList<String> dependenciasgastos = QMListaGastos.buscarDependencias(sCodGasto, sCodMovimiento);
 
 
 						for (int i = 0; i < dependenciasgastos.size() ; i++)

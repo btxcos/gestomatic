@@ -74,13 +74,6 @@ public class GestorProvisiones implements Serializable
 		
     }
 	
-	public void cargarProvision(ActionEvent actionEvent)
-	{
-		CLProvisiones.detallesProvision(sNUPROF);
-	}
-	
-
-	
 	public void cerrarProvision(ActionEvent actionEvent)
 	{
 		FacesMessage msg;

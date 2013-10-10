@@ -24,7 +24,6 @@ public class CLComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(CLComunidades.class.getName());
 	
-
 	public static int actualizaComunidadLeida(String linea)
 	{
 		int iCodigo = 0;
@@ -846,12 +845,12 @@ public class CLComunidades
 																
 
 									logger.debug("COACES:|{}|",movimiento_revisado.getCOACES());
-									if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().equals(""))
+									/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().equals(""))
 									{
 										//OK 
 										iCodigo = 0;
 									}
-									else if (QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+									else*/ if (QMListaComunidadesActivos.addRelacionComunidad(movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
 									{
 										//OK 
 										iCodigo = 0;

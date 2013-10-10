@@ -25,22 +25,16 @@ public class QMListaGastos
 	
 	static String sTable = "lista_gastos_multi";
 
-	static String sField1 = "cod_coaces";
-	static String sField2 = "cod_cogrug";    
-	static String sField3 = "cotpga";    
-	static String sField4 = "cosbga";    
-	static String sField5 = "fedeve";
+	static String sField1 = "cod_gasto";
+	static String sField2 = "cod_movimiento";
 	
-	static String sField6 = "cod_nuprof";
-	static String sField7 = "cod_movimiento";
-
-	static String sField8 = "cod_validado";
+	static String sField3 = "cod_validado";
 	
-	static String sField9 = "usuario_movimiento";    
-	static String sField10 = "fecha_movimiento";
+	static String sField4 = "usuario_movimiento";    
+	static String sField5 = "fecha_movimiento";
 
 
-	public static boolean addRelacionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodNUPROF, String sCodMovimiento) 
+	public static boolean addRelacionGasto(String sCodGasto, String sCodMovimiento) 
 	{
 		Statement stmt = null;
 		Connection conn = null;
@@ -61,20 +55,10 @@ public class QMListaGastos
 						+ sField2 + "," 
 						+ sField3 + "," 
 						+ sField4 + ","
-						+ sField5 + "," 
-						+ sField6 + "," 
-						+ sField7 + "," 
-						+ sField8 + ","
-						+ sField9 + "," 
-						+ sField10 +						
+						+ sField5 +						
 						") " +
 					"VALUES ('" 
-						+ sCodCOACES + "','"
-						+ sCodCOGRUG + "','"
-						+ sCodCOTPGA + "','" 
-						+ sCodCOSBGA + "','"
-						+ sFEDEVE + "','"
-						+ sCodNUPROF + "','"
+						+ sCodGasto + "','"
 						+ sCodMovimiento + "','"
 						+ ValoresDefecto.DEF_PENDIENTE + "','"
 					    + sUsuario + "','"
@@ -85,13 +69,8 @@ public class QMListaGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
-			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
-			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
-			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
+			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+			logger.error("ERROR: MOVIMIENTO:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
@@ -123,13 +102,13 @@ public class QMListaGastos
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField7 + " = '" + sCodMovimiento +"')");
+					" WHERE (" + sField2 + " = '" + sCodMovimiento +"')");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
+			logger.error("ERROR: MOVIMIENTO:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
@@ -146,7 +125,7 @@ public class QMListaGastos
 		return bSalida;
 	}
 	
-	public static boolean existeRelacionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodNUPROF, String sCodMovimiento)
+	public static boolean existeRelacionGasto(String sCodGasto, String sCodMovimiento)
 	{
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -165,16 +144,11 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-					+ sField8 + 
+					+ sField1 + 
 					"  FROM " + sTable + 
 						" WHERE " +
-						"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
-						sField2  + " = '"+ sCodCOGRUG +"' AND " +
-						sField3  + " = '"+ sCodCOTPGA +"' AND " +
-						sField4  + " = '"+ sCodCOSBGA +"' AND " +
-						sField5  + " = '"+ sFEDEVE +"' AND " +
-						sField6  + " = '"+ sCodNUPROF +"' AND " +
-					    sField7  + " = '"+ sCodMovimiento + "' )");
+						"("	+ sField1  + " = '"+ sCodGasto +"' AND " +
+					    sField2  + " = '"+ sCodMovimiento + "' )");
 
 
 			rs = pstmt.executeQuery();
@@ -197,12 +171,7 @@ public class QMListaGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
-			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
-			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
-			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
-			logger.error("ERROR: NUPROF:|{}|",sCodNUPROF);
+			logger.error("ERROR: GASTO:|{}|",sCodGasto);
 			logger.error("ERROR: MOVIMIENTO:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
@@ -216,240 +185,6 @@ public class QMListaGastos
 		}
 		ConnectionManager.CloseDBConnection(conn);
 		return found;
-	}
-	
-	public static String getProvisionDeGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		String sProvision = "";
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				+ sField6 + 
-				"  FROM " + sTable + 
-					" WHERE " +
-					"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
-					sField2  + " = '"+ sCodCOGRUG +"' AND " +
-					sField3  + " = '"+ sCodCOTPGA +"' AND " +
-					sField4  + " = '"+ sCodCOSBGA +"' AND " +
-				    sField5  + " = '"+ sFEDEVE + "' )";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement("SELECT "
-					+ sField6 + 
-					"  FROM " + sTable + 
-						" WHERE " +
-						"("	+ sField1  + " = '"+ sCodCOACES +"' AND " +
-						sField2  + " = '"+ sCodCOGRUG +"' AND " +
-						sField3  + " = '"+ sCodCOTPGA +"' AND " +
-						sField4  + " = '"+ sCodCOSBGA +"' AND " +
-					    sField5  + " = '"+ sFEDEVE + "' )");
-
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					found = true;
-
-					sProvision = rs.getString(sField6);
-					
-					
-					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField6,sProvision);
-
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
-			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
-			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
-			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
-
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		ConnectionManager.CloseDBConnection(conn);
-		return sProvision;
-	}
-	
-	public static String getProvisionDeMovimiento(String sCodMovimiento)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sValidado = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
-					" WHERE " +
-					"("	+ sField7  + " = '"+ sCodMovimiento +"' )");
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					sValidado = rs.getString(sField4);
-
-					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField3,sCodMovimiento);
-					logger.debug("{}:|{}|",sField4,sValidado);
-				}
-			}
-			if (found == false) 
-			{
- 
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
-
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return sValidado;
-	}
-
-	public static ArrayList<String>  getGastosPorActivo(String sCodCOACES) 
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-		
-		ArrayList<String> result = new ArrayList<String>(); 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField7+ "  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sCodCOACES + "' )");
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-		
-			int i = 0;
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					result.add(rs.getString(sField7));
-										
-					logger.debug("Encontrado el registro!");
-
-					logger.debug("{}:|{}|",sField1,sCodCOACES);
-					logger.debug("{}:|{}|",sField7,result.get(i));
-				
-					i++;
-				}
-			}
-			if (found == false) 
-			{
-				result = new ArrayList<String>(); 
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return result;
 	}
 	
 	public static ArrayList<String>  getGastosPorEstado(String sEstado) 
@@ -474,8 +209,8 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField7+ "  FROM " + sTable + 
-					" WHERE (" + sField8 + " = '" + sEstado + "' )");
+			pstmt = conn.prepareStatement("SELECT " + sField2+ "  FROM " + sTable + 
+					" WHERE (" + sField3 + " = '" + sEstado + "' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -491,12 +226,12 @@ public class QMListaGastos
 				{
 					found = true;
 
-					result.add(rs.getString(sField7));
+					result.add(rs.getString(sField2));
 										
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField8,sEstado);
-					logger.debug("{}:|{}|",sField7,result.get(i));
+					logger.debug("{}:|{}|",sField3,sEstado);
+					logger.debug("{}:|{}|",sField2,result.get(i));
 
 					i++;
 				}
@@ -526,80 +261,7 @@ public class QMListaGastos
 		return result;
 	}
 	
-	public static ArrayList<String>  getGastosPorProvision(String sCodNUPROF) 
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
 
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-		
-		ArrayList<String> result = new ArrayList<String>(); 
-		Connection conn = null;
-
-		conn = ConnectionManager.OpenDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement("SELECT " + sField7 + "  FROM " + sTable + 
-					" WHERE (" + sField6 + " = '" + sCodNUPROF + "' )");
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			int i = 0;
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					result.add(rs.getString(sField7));
-
-					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField6,sCodNUPROF);
-					logger.debug("{}:|{}|",sField7,result.get(i));
-					
-					i++;
-				}
-			}
-			if (found == false) 
-			{
-				result = new ArrayList<String>(); 
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR: NUPROF:|{}|",sCodNUPROF);
-
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-
-		ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
-
-
-	
 	public static boolean setValidado(String sCodMovimiento, String sValidado)
 	{
 		Statement stmt = null;
@@ -613,12 +275,13 @@ public class QMListaGastos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
+			stmt.executeUpdate(
+					"UPDATE " 
+					+ sTable + 
 					" SET " 
-					+ sField8 + " = '"+ sValidado + 
-					"' "+
+					+ sField3 + " = '"+ sValidado + "' "+
 					" WHERE "
-					+ sField7 + " = '"+ sCodMovimiento +"'");
+					+ sField2 + " = '"+ sCodMovimiento +"'");
 			
 			logger.debug("Ejecutada con exito!");
 			
@@ -665,8 +328,8 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField8 + "  FROM " + sTable + 
-					" WHERE (" + sField7 + " = '" + sCodMovimiento + "')");
+			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
+					" WHERE (" + sField2 + " = '" + sCodMovimiento + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -680,11 +343,11 @@ public class QMListaGastos
 				{
 					found = true;
 
-					sValidado = rs.getString(sField8);
+					sValidado = rs.getString(sField3);
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField7,sCodMovimiento);
-					logger.debug("{}:|{}|",sField8,sValidado);
+					logger.debug("{}:|{}|",sField2,sCodMovimiento);
+					logger.debug("{}:|{}|",sField3,sValidado);
 				}
 			}
 			if (found == false) 
@@ -737,7 +400,7 @@ public class QMListaGastos
 
 			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
 					" WHERE " +
-					"(" + sField8 + " = '" + sCodValidado + "')");
+					"(" + sField3 + " = '" + sCodValidado + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -784,192 +447,7 @@ public class QMListaGastos
 		return liNumero;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosConGastos(ActivoTabla activo)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
 
-		String sCOACES = "";
-		String sCOPOIN = "";
-		String sNOMUIN = "";
-		String sNOPRAC = "";
-		String sNOVIAS = "";
-		String sNUPIAC = "";
-		String sNUPOAC = "";
-		String sNUPUAC = "";
-		
-		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		String sQuery = "SELECT "
-					
-					   + QMActivos.sField1 + ","        
-					   + QMActivos.sField14 + ","
-					   + QMActivos.sField11 + ","
-					   + QMActivos.sField13 + ","
-					   + QMActivos.sField6 + ","
-					   + QMActivos.sField9 + ","
-					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
-
-					   " FROM " + QMActivos.sTable + 
-					   " WHERE ("
-
-					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
-
-					   + QMActivos.sField1 +" IN (SELECT "
-					   +  sField1 + 
-					   " FROM " + sTable +
-					   " WHERE " + 
-					   
-					   sField2 + " IN (SELECT "
-					   + QMGastos.sField2 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND " 
-
-   					   + sField3 + " IN (SELECT "
-					   + QMGastos.sField3 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-
-   					   + sField4 + " IN (SELECT "
-					   + QMGastos.sField4 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-   					   
-   					   + sField5 + " IN (SELECT "
-   					   + QMGastos.sField6 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' )" +
-   					   "))";
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conn.createStatement();
-			
-			pstmt = conn.prepareStatement("SELECT "
-					
-					   + QMActivos.sField1 + ","        
-					   + QMActivos.sField14 + ","
-					   + QMActivos.sField11 + ","
-					   + QMActivos.sField13 + ","
-					   + QMActivos.sField6 + ","
-					   + QMActivos.sField9 + ","
-					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
-
-					   " FROM " + QMActivos.sTable + 
-					   " WHERE ("
-
-					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
-
-					   + QMActivos.sField1 +" IN (SELECT "
-					   +  sField1 + 
-					   " FROM " + sTable +
-					   " WHERE " + 
-					   
-					   sField2 + " IN (SELECT "
-					   + QMGastos.sField2 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND " 
-
-   					   + sField3 + " IN (SELECT "
-					   + QMGastos.sField3 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-
-   					   + sField4 + " IN (SELECT "
-					   + QMGastos.sField4 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-   					   
-   					   + sField5 + " IN (SELECT "
-   					   + QMGastos.sField6 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' )" +
-   					   "))");
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					found = true;
-					
-					sCOACES = rs.getString(QMActivos.sField1);
-					sCOPOIN = rs.getString(QMActivos.sField14);
-					sNOMUIN = rs.getString(QMActivos.sField11);
-					sNOPRAC = rs.getString(QMActivos.sField13);
-					sNOVIAS = rs.getString(QMActivos.sField6);
-					sNUPIAC = rs.getString(QMActivos.sField9);
-					sNUPOAC = rs.getString(QMActivos.sField7);
-					sNUPUAC = rs.getString(QMActivos.sField10);
-					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
-					
-					result.add(activoencontrado);
-					
-					logger.debug("Encontrado el registro!");
-
-					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		ConnectionManager.CloseDBConnection(conn);
-		return result;
-
-	}
 	
 	public static ArrayList<ActivoTabla> buscaActivosConGastosValidados(ActivoTabla activo)
 	{
@@ -1020,37 +498,20 @@ public class QMListaGastos
 					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
 
 					   + QMActivos.sField1 +" IN (SELECT "
-					   +  sField1 + 
-					   " FROM " + sTable +
-					   " WHERE " + 
-					   
-					   sField2 + " IN (SELECT "
 					   + QMGastos.sField2 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND " 
+   					   " FROM " 
+					   + QMGastos.sTable +
+   					   " WHERE " 
+   					   + QMGastos.sField35 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
+   					   + QMGastos.sField35 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' AND " 
 
-   					   + sField3 + " IN (SELECT "
-					   + QMGastos.sField3 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-
-   					   + sField4 + " IN (SELECT "
-					   + QMGastos.sField4 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-   					   
-   					   + sField5 + " IN (SELECT "
-   					   + QMGastos.sField6 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-
-						+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+   					   + QMGastos.sField1 + " IN (SELECT "
+					   + sField1 + 
+   					   " FROM " + sTable +
+   					   " WHERE " 
+   					   + sField3 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
    					   		
-   					   	"))";
+   					   	")))";
 		
 		logger.debug(sQuery);
 		
@@ -1081,37 +542,19 @@ public class QMListaGastos
 					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
 
 					   + QMActivos.sField1 +" IN (SELECT "
-					   +  sField1 + 
-					   " FROM " + sTable +
-					   " WHERE " + 
-					   
-					   sField2 + " IN (SELECT "
 					   + QMGastos.sField2 + 
    					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND " 
+   					   " WHERE " 
+   					   + QMGastos.sField35 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
+   					   + QMGastos.sField35 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' AND " 
 
-   					   + sField3 + " IN (SELECT "
-					   + QMGastos.sField3 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-
-   					   + sField4 + " IN (SELECT "
-					   + QMGastos.sField4 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-   					   
-   					   + sField5 + " IN (SELECT "
-   					   + QMGastos.sField6 + 
-   					   " FROM " + QMGastos.sTable +
-   					   " WHERE " + QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " +
-   					   		" OR "+ QMGastos.sField34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) AND "
-
-						+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-
-						"))");
+   					   + QMGastos.sField1 + " IN (SELECT "
+					   + sField1 + 
+   					   " FROM " + sTable +
+   					   " WHERE " 
+   					   + sField3 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+   					   		
+   					   	")))");
 
 			rs = pstmt.executeQuery();
 			
@@ -1164,225 +607,6 @@ public class QMListaGastos
 
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosActivo(String sCodCOACES)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		String sCOACES = "";
-		String sCOGRUG = "";
-		String sCOTPGA = "";
-		String sCOSBGA = "";
-		String sDCOSBGA = "";
-		String sPTPAGO = "";
-		String sDPTPAGO = "";
-		String sFEDEVE = "";
-		String sCOSIGA = "";
-		String sDCOSIGA = "";
-		String sIMNGAS = "";
-		
-		ArrayList<GastoTabla> result = new ArrayList<GastoTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.OpenDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		String sQuery = "SELECT "
-					
-					   + QMGastos.sField1 + ","        
-					   + QMGastos.sField2 + ","
-					   + QMGastos.sField3 + ","
-					   + QMGastos.sField4 + ","
-					   + QMGastos.sField5 + ","
-					   + QMGastos.sField6 + ","
-					   + QMGastos.sField10 + ","
-					   + QMGastos.sField15 + ","
-					   + QMGastos.sField16+
-					    
-
-					   " FROM " + QMGastos.sTable + 
-					   " WHERE (" +
-					   "("
-					   + QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-					   + QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + 					   
-					   "') AND "					   
-					   
-					   + QMGastos.sField6 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
-
-					   + QMGastos.sField1 +" IN (SELECT "
-					   +  sField1 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
-
-					   + QMGastos.sField2 +" IN (SELECT "
-					   +  sField2 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
-
-					   + QMGastos.sField3 +" IN (SELECT "
-					   +  sField3 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND " 
-					   
-					   + QMGastos.sField4 +" IN (SELECT "
-					   +  sField4 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "					   
-					   
-					   
-					   + QMGastos.sField6 +" IN (SELECT "
-					   +  sField5 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )";					   
-					   
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conn.createStatement();
-			
-			pstmt = conn.prepareStatement("SELECT "
-					
-					   + QMGastos.sField1 + ","        
-					   + QMGastos.sField2 + ","
-					   + QMGastos.sField3 + ","
-					   + QMGastos.sField4 + ","
-					   + QMGastos.sField5 + ","
-					   + QMGastos.sField6 + ","
-					   + QMGastos.sField10 + ","
-					   + QMGastos.sField15 + ","
-					   + QMGastos.sField16+
-					    
-
-					   " FROM " + QMGastos.sTable + 
-					   " WHERE (" +
-					   "("
-					   + QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-					   + QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + 
-			   
-					   "') AND "					   
-					   
-					   + QMGastos.sField6 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
-
-					   + QMGastos.sField1 +" IN (SELECT "
-					   +  sField1 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
-
-					   + QMGastos.sField2 +" IN (SELECT "
-					   +  sField2 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
-
-					   + QMGastos.sField3 +" IN (SELECT "
-					   +  sField3 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND " 
-					   
-					   + QMGastos.sField4 +" IN (SELECT "
-					   +  sField4 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "					   
-					   
-					   
-					   + QMGastos.sField6 +" IN (SELECT "
-					   +  sField5 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )");
-
-			
-
-
-			
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-
-			
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					found = true;
-					   
-					
-					sCOACES  = rs.getString(QMGastos.sField1);
-					sCOGRUG  = rs.getString(QMGastos.sField2);
-					sCOTPGA  = rs.getString(QMGastos.sField3);
-					sCOSBGA  = rs.getString(QMGastos.sField4);
-					sDCOSBGA = QMCodigosControl.getDesCOSBGA(sCOGRUG,sCOTPGA,sCOSBGA);
-					sPTPAGO  = rs.getString(QMGastos.sField5);
-					sDPTPAGO = QMCodigosControl.getDesCampo(QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.sField6));
-					sCOSIGA  = rs.getString(QMGastos.sField10);
-					sDCOSIGA = "";//QMCodigosControl.
-					sIMNGAS  = rs.getString(QMGastos.sField16)+Utils.recuperaImporte(false,rs.getString(QMGastos.sField15));
-							
-
- 
-
-					
-					GastoTabla gastoencontrado = new GastoTabla(
-							sCOACES,
-							sCOGRUG,
-							sCOTPGA,
-							sCOSBGA,
-							sDCOSBGA,
-							sPTPAGO,
-							sDPTPAGO,
-							sFEDEVE,
-							sCOSIGA,
-							sDCOSIGA,
-							sIMNGAS);
-					
-					result.add(gastoencontrado);
-					
-					logger.debug("Encontrado el registro!");
-
-					logger.debug("{}:|{}|",sField1,sCodCOACES);
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
-	
 	public static ArrayList<GastoTabla> buscaGastosValidadosActivo(String sCodCOACES)
 	{
 		Statement stmt = null;
@@ -1414,66 +638,30 @@ public class QMListaGastos
 
 		String sQuery = "SELECT "
 					
-					   + QMGastos.sField1 + ","        
-					   + QMGastos.sField2 + ","
+					   + QMGastos.sField2 + ","        
 					   + QMGastos.sField3 + ","
 					   + QMGastos.sField4 + ","
 					   + QMGastos.sField5 + ","
 					   + QMGastos.sField6 + ","
-					   + QMGastos.sField10 + ","
-					   + QMGastos.sField15 + ","
-					   + QMGastos.sField16+
+					   + QMGastos.sField7 + ","
+					   + QMGastos.sField11 + ","
+					   + QMGastos.sField16 + ","
+					   + QMGastos.sField17 +
 					    
 
 					   " FROM " + QMGastos.sTable + 
-					   " WHERE (" +
-					   "(" +
-					   "("+ QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-					   + QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + "') AND "
-					   + QMGastos.sField16 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
+					   " WHERE ((("
+					   + QMGastos.sField35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
+					   + QMGastos.sField35 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + "') AND "
+					   + QMGastos.sField17 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
 					   ") AND "					   
-					   
-					   + QMGastos.sField6 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+					   + QMGastos.sField2 + " = '" + sCodCOACES	+ "' AND "
+					   + QMGastos.sField7 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
 
 					   + QMGastos.sField1 +" IN (SELECT "
 					   +  sField1 + 
 					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-					   	") ) AND "  
-
-					   + QMGastos.sField2 +" IN (SELECT "
-					   +  sField2 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-					   	") ) AND " 
-
-					   + QMGastos.sField3 +" IN (SELECT "
-					   +  sField3 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-					   	") ) AND " 
-					   
-					   + QMGastos.sField4 +" IN (SELECT "
-					   +  sField4 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-					   	") ) AND " 					   
-					   
-					   
-					   + QMGastos.sField6 +" IN (SELECT "
-					   +  sField5 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' ) ) )";					   
+					   " WHERE " + sField3 + " = '"+ ValoresDefecto.DEF_VALIDADO + "'))";					   
 					   
 		
 		logger.debug(sQuery);
@@ -1484,66 +672,30 @@ public class QMListaGastos
 			
 			pstmt = conn.prepareStatement("SELECT "
 					
-					   + QMGastos.sField1 + ","        
-					   + QMGastos.sField2 + ","
+					   + QMGastos.sField2 + ","        
 					   + QMGastos.sField3 + ","
 					   + QMGastos.sField4 + ","
 					   + QMGastos.sField5 + ","
 					   + QMGastos.sField6 + ","
-					   + QMGastos.sField10 + ","
-					   + QMGastos.sField15 + ","
-					   + QMGastos.sField16+
+					   + QMGastos.sField7 + ","
+					   + QMGastos.sField11 + ","
+					   + QMGastos.sField16 + ","
+					   + QMGastos.sField17 +
 					    
 
 					   " FROM " + QMGastos.sTable + 
-					   " WHERE (" +
-					   "(" +
-					   "("+ QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-					   + QMGastos.sField34 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + "') AND "
-					   + QMGastos.sField16 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
+					   " WHERE ((("
+					   + QMGastos.sField35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
+					   + QMGastos.sField35 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + "') AND "
+					   + QMGastos.sField17 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
 					   ") AND "					   
-					   
-					   + QMGastos.sField6 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+					   + QMGastos.sField2 + " = '" + sCodCOACES	+ "' AND "
+					   + QMGastos.sField7 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
 
 					   + QMGastos.sField1 +" IN (SELECT "
 					   +  sField1 + 
 					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-					   	") ) AND " 	
-
-					   + QMGastos.sField2 +" IN (SELECT "
-					   +  sField2 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-					   	") ) AND " 	 
-
-					   + QMGastos.sField3 +" IN (SELECT "
-					   +  sField3 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-					   	") ) AND " 	
-					   
-					   + QMGastos.sField4 +" IN (SELECT "
-					   +  sField4 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
-					   	") ) AND " 					   
-					   
-					   
-					   + QMGastos.sField6 +" IN (SELECT "
-					   +  sField5 + 
-					   " FROM " + sTable + 
-					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' AND "
-					   	+ sField8 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' ) ) )");
+					   " WHERE " + sField3 + " = '"+ ValoresDefecto.DEF_VALIDADO + "'))");
 
 			
 
@@ -1564,17 +716,17 @@ public class QMListaGastos
 					found = true;
 					   
 					
-					sCOACES  = rs.getString(QMGastos.sField1);
-					sCOGRUG  = rs.getString(QMGastos.sField2);
-					sCOTPGA  = rs.getString(QMGastos.sField3);
-					sCOSBGA  = rs.getString(QMGastos.sField4);
+					sCOACES  = rs.getString(QMGastos.sField2);
+					sCOGRUG  = rs.getString(QMGastos.sField3);
+					sCOTPGA  = rs.getString(QMGastos.sField4);
+					sCOSBGA  = rs.getString(QMGastos.sField5);
 					sDCOSBGA = QMCodigosControl.getDesCOSBGA(sCOGRUG,sCOTPGA,sCOSBGA);
-					sPTPAGO  = rs.getString(QMGastos.sField5);
+					sPTPAGO  = rs.getString(QMGastos.sField6);
 					sDPTPAGO = QMCodigosControl.getDesCampo(QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.sField6));
-					sCOSIGA  = rs.getString(QMGastos.sField10);
-					sDCOSIGA = "";//QMCodigosControl.
-					sIMNGAS  = rs.getString(QMGastos.sField16)+Utils.recuperaImporte(false,rs.getString(QMGastos.sField15));
+					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.sField7));
+					sCOSIGA  = rs.getString(QMGastos.sField11);
+					sDCOSIGA = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+					sIMNGAS  = rs.getString(QMGastos.sField17)+Utils.recuperaImporte(false,rs.getString(QMGastos.sField16));
 							
 
  
@@ -1608,6 +760,8 @@ public class QMListaGastos
 		} 
 		catch (SQLException ex) 
 		{
+			logger.error("ERROR: COACES:{}",sCodCOACES);
+			
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
 			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
@@ -1621,7 +775,7 @@ public class QMListaGastos
 		return result;
 	}
 	
-	public static ArrayList<String> buscarDependencias(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(String sCodGasto, String sCodMovimiento)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.OpenDBConnection();
@@ -1644,16 +798,12 @@ public class QMListaGastos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " 
-					+ sField7  + 
+					+ sField2  + 
 					"  FROM " + sTable + 
 					" WHERE " +
 					"(" 
-					+ sField1 + " = '" + sCodCOACES + "' AND "
-					+ sField2 + " = '" + sCodCOGRUG + "' AND "
-					+ sField3 + " = '" + sCodCOTPGA + "' AND "
-					+ sField4 + " = '" + sCodCOSBGA + "' AND "
-					+ sField5 + " = '" + sFEDEVE + "' AND "
-					+ sField7 + " >=  '" + sCodMovimiento + "')");
+					+ sField1 + " = '" + sCodGasto + "' AND "
+					+ sField2 + " >=  '" + sCodMovimiento + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -1666,7 +816,7 @@ public class QMListaGastos
 				{
 					found = true;
 					
-					result.add(rs.getString(sField7));
+					result.add(rs.getString(sField2));
 
 					logger.debug("Encontrado el registro!");
 
@@ -1680,12 +830,8 @@ public class QMListaGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
-			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
-			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
-			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+			logger.error("ERROR: MOVIMIENTO:|{}|",sCodMovimiento);
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
