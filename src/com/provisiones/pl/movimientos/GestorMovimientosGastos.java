@@ -649,7 +649,7 @@ public class GestorMovimientosGastos implements Serializable
 
 			//movimiento.pintaMovimientoGasto();
 			
-			int iSalida = CLGastos.registraMovimiento(movimiento);
+			int iSalida = CLGastos.registraMovimiento(movimiento,true);
 			
 			logger.debug("Codigo de salida:"+iSalida);
 			

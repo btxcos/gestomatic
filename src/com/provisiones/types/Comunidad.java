@@ -3,161 +3,173 @@ package com.provisiones.types;
 public class Comunidad 
 {
 
-	String COCLDO = "";
-	String NUDCOM = "";
-	String NOMCOC = "";
-	String NODCCO = "";
-	String NOMPRC = "";
-	String NUTPRC = "";
-	String NOMADC = "";
-	String NUTADC = "";
-	String NODCAD = "";
-	String NUCCEN = "";
-	String NUCCOF = "";
-	String NUCCDI = "";
-	String NUCCNT = "";
-	String OBTEXC = "";
+	String sCOCLDO = "";
+	String sNUDCOM = "";
+	String sNOMCOC = "";
+	String sNODCCO = "";
+	String sNOMPRC = "";
+	String sNUTPRC = "";
+	String sNOMADC = "";
+	String sNUTADC = "";
+	String sNODCAD = "";
+	String sNUCCEN = "";
+	String sNUCCOF = "";
+	String sNUCCDI = "";
+	String sNUCCNT = "";
+	String sOBTEXC = "";
 
 	//Constructor de clase
 
-	public Comunidad(String cOCLDO, String nUDCOM, String nOMCOC,
-			String nODCCO, String nOMPRC, String nUTPRC, String nOMADC,
-			String nUTADC, String nODCAD, String nUCCEN, String nUCCOF,
-			String nUCCDI, String nUCCNT, String oBTEXC) {
+	public Comunidad(String sCOCLDO, String sNUDCOM, String sNOMCOC,
+			String sNODCCO, String sNOMPRC, String sNUTPRC, String sNOMADC,
+			String sNUTADC, String sNODCAD, String sNUCCEN, String sNUCCOF,
+			String sNUCCDI, String sNUCCNT, String sOBTEXC) {
 		super();
-
-		COCLDO = cOCLDO;
-		NUDCOM = nUDCOM;
-		NOMCOC = nOMCOC;
-		NODCCO = nODCCO;
-		NOMPRC = nOMPRC;
-		NUTPRC = nUTPRC;
-		NOMADC = nOMADC;
-		NUTADC = nUTADC;
-		NODCAD = nODCAD;
-		NUCCEN = nUCCEN;
-		NUCCOF = nUCCOF;
-		NUCCDI = nUCCDI;
-		NUCCNT = nUCCNT;
-		OBTEXC = oBTEXC;
+		this.sCOCLDO = sCOCLDO;
+		this.sNUDCOM = sNUDCOM;
+		this.sNOMCOC = sNOMCOC;
+		this.sNODCCO = sNODCCO;
+		this.sNOMPRC = sNOMPRC;
+		this.sNUTPRC = sNUTPRC;
+		this.sNOMADC = sNOMADC;
+		this.sNUTADC = sNUTADC;
+		this.sNODCAD = sNODCAD;
+		this.sNUCCEN = sNUCCEN;
+		this.sNUCCOF = sNUCCOF;
+		this.sNUCCDI = sNUCCDI;
+		this.sNUCCNT = sNUCCNT;
+		this.sOBTEXC = sOBTEXC;
 	}
 
 	//Métodos de acceso
 
-	public String getCOCLDO() {
-		return COCLDO;
+	public String getsCOCLDO() {
+		return sCOCLDO;
 	}
 
-	public void setCOCLDO(String cOCLDO) {
-		COCLDO = cOCLDO;
+	public void setsCOCLDO(String sCOCLDO) {
+		this.sCOCLDO = sCOCLDO;
 	}
 
-	public String getNUDCOM() {
-		return NUDCOM;
+	public String getsNUDCOM() {
+		return sNUDCOM;
 	}
 
-	public void setNUDCOM(String nUDCOM) {
-		NUDCOM = nUDCOM;
+	public void setsNUDCOM(String sNUDCOM) {
+		this.sNUDCOM = sNUDCOM;
 	}
 
-	public String getNOMCOC() {
-		return NOMCOC;
+	public String getsNOMCOC() {
+		return sNOMCOC;
 	}
 
-	public void setNOMCOC(String nOMCOC) {
-		NOMCOC = nOMCOC;
+	public void setsNOMCOC(String sNOMCOC) {
+		this.sNOMCOC = sNOMCOC;
 	}
 
-	public String getNODCCO() {
-		return NODCCO;
+	public String getsNODCCO() {
+		return sNODCCO;
 	}
 
-	public void setNODCCO(String nODCCO) {
-		NODCCO = nODCCO;
+	public void setsNODCCO(String sNODCCO) {
+		this.sNODCCO = sNODCCO;
 	}
 
-	public String getNOMPRC() {
-		return NOMPRC;
+	public String getsNOMPRC() {
+		return sNOMPRC;
 	}
 
-	public void setNOMPRC(String nOMPRC) {
-		NOMPRC = nOMPRC;
+	public void setsNOMPRC(String sNOMPRC) {
+		this.sNOMPRC = sNOMPRC;
 	}
 
-	public String getNUTPRC() {
-		return NUTPRC;
+	public String getsNUTPRC() {
+		return sNUTPRC;
 	}
 
-	public void setNUTPRC(String nUTPRC) {
-		NUTPRC = nUTPRC;
+	public void setsNUTPRC(String sNUTPRC) {
+		this.sNUTPRC = sNUTPRC;
 	}
 
-	public String getNOMADC() {
-		return NOMADC;
+	public String getsNOMADC() {
+		return sNOMADC;
 	}
 
-	public void setNOMADC(String nOMADC) {
-		NOMADC = nOMADC;
+	public void setsNOMADC(String sNOMADC) {
+		this.sNOMADC = sNOMADC;
 	}
 
-	public String getNUTADC() {
-		return NUTADC;
+	public String getsNUTADC() {
+		return sNUTADC;
 	}
 
-	public void setNUTADC(String nUTADC) {
-		NUTADC = nUTADC;
+	public void setsNUTADC(String sNUTADC) {
+		this.sNUTADC = sNUTADC;
 	}
 
-	public String getNODCAD() {
-		return NODCAD;
+	public String getsNODCAD() {
+		return sNODCAD;
 	}
 
-	public void setNODCAD(String nODCAD) {
-		NODCAD = nODCAD;
+	public void setsNODCAD(String sNODCAD) {
+		this.sNODCAD = sNODCAD;
 	}
 
-	public String getNUCCEN() {
-		return NUCCEN;
+	public String getsNUCCEN() {
+		return sNUCCEN;
 	}
 
-	public void setNUCCEN(String nUCCEN) {
-		NUCCEN = nUCCEN;
+	public void setsNUCCEN(String sNUCCEN) {
+		this.sNUCCEN = sNUCCEN;
 	}
 
-	public String getNUCCOF() {
-		return NUCCOF;
+	public String getsNUCCOF() {
+		return sNUCCOF;
 	}
 
-	public void setNUCCOF(String nUCCOF) {
-		NUCCOF = nUCCOF;
+	public void setsNUCCOF(String sNUCCOF) {
+		this.sNUCCOF = sNUCCOF;
 	}
 
-	public String getNUCCDI() {
-		return NUCCDI;
+	public String getsNUCCDI() {
+		return sNUCCDI;
 	}
 
-	public void setNUCCDI(String nUCCDI) {
-		NUCCDI = nUCCDI;
+	public void setsNUCCDI(String sNUCCDI) {
+		this.sNUCCDI = sNUCCDI;
 	}
 
-	public String getNUCCNT() {
-		return NUCCNT;
+	public String getsNUCCNT() {
+		return sNUCCNT;
 	}
 
-	public void setNUCCNT(String nUCCNT) {
-		NUCCNT = nUCCNT;
+	public void setsNUCCNT(String sNUCCNT) {
+		this.sNUCCNT = sNUCCNT;
 	}
 
-	public String getOBTEXC() {
-		return OBTEXC;
+	public String getsOBTEXC() {
+		return sOBTEXC;
 	}
 
-	public void setOBTEXC(String oBTEXC) {
-		OBTEXC = oBTEXC;
+	public void setsOBTEXC(String sOBTEXC) {
+		this.sOBTEXC = sOBTEXC;
 	}
 	
 	public String logComunidad()
 	{
-		return String.format("(COMUNIDAD)\nCOCLDO:|%s|\nNUDCOM:|%s|\nNOMCOC:|%s|\nNODCCO:|%s|\nNOMPRC:|%s|\nNUTPRC:|%s|\nNOMADC:|%s|\nNUTADC:|%s|\nNODCAD:|%s|\nNUCCEN:|%s|\nNUCCOF:|%s|\nNUCCDI:|%s|\nNUCCNT:|%s|\nOBTEXC:|%s|",COCLDO,NUDCOM,NOMCOC,NODCCO,NOMPRC,NUTPRC,NOMADC,NUTADC,NODCAD,NUCCEN,NUCCOF,NUCCDI,NUCCNT,OBTEXC);
+		return "(COMUNIDAD)\nCOCLDO:|"+sCOCLDO+
+				"|\nNUDCOM:|"+sNUDCOM+
+				"|\nNOMCOC:|"+sNOMCOC+
+				"|\nNODCCO:|"+sNODCCO+
+				"|\nNOMPRC:|"+sNOMPRC+
+				"|\nNUTPRC:|"+sNUTPRC+
+				"|\nNOMADC:|"+sNOMADC+
+				"|\nNUTADC:|"+sNUTADC+
+				"|\nNODCAD:|"+sNODCAD+
+				"|\nNUCCEN:|"+sNUCCEN+
+				"|\nNUCCOF:|"+sNUCCOF+
+				"|\nNUCCDI:|"+sNUCCDI+
+				"|\nNUCCNT:|"+sNUCCNT+
+				"|\nOBTEXC:|"+sOBTEXC+"|";
 	}
 }

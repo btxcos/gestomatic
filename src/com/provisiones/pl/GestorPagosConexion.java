@@ -648,6 +648,7 @@ public class GestorPagosConexion implements Serializable
 
 			//movimiento.pintaMovimientoGasto();
 			
+			//movimiento.setIMNGAS("-"+movimiento.getIMNGAS());
 			int iSalida = CLGastos.registraPagoConexion(movimiento);
 			
 			logger.debug("Codigo de salida:"+iSalida);

@@ -257,8 +257,8 @@ public class CLComunidades
 	
 	public static long buscarNumeroMovimientosComunidadesPendientes()
 	{
-		return (QMListaComunidadesActivos.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE) 
-				+ QMListaComunidades.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
+		return (QMListaComunidadesActivos.buscaCantidadValidado(ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE) 
+				+ QMListaComunidades.buscaCantidadValidado(ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
 	}
 	
 	public static boolean existeComunidad (String sCodCOCLDO, String sCodNUDCOM)
@@ -339,31 +339,31 @@ public class CLComunidades
 				ValoresDefecto.DEF_IDPROV,
 				sCodCOACCI,
 				ValoresDefecto.DEF_COENGP,
-				comunidad.getCOCLDO(),
-				comunidad.getNUDCOM(),
+				comunidad.getsCOCLDO(),
+				comunidad.getsNUDCOM(),
 				"",
 				sCodCOACES,
 				"",
-				comunidad.getNOMCOC(),
+				comunidad.getsNOMCOC(),
 				"",
-				comunidad.getNODCCO(),
+				comunidad.getsNODCCO(),
 				"",
-				comunidad.getNOMPRC(),
+				comunidad.getsNOMPRC(),
 				"",
-				comunidad.getNUTPRC(),
+				comunidad.getsNUTPRC(),
 				"",
-				comunidad.getNOMADC(),
+				comunidad.getsNOMADC(),
 				"",
-				comunidad.getNUTADC(),
+				comunidad.getsNUTADC(),
 				"",
-				comunidad.getNODCAD(),
+				comunidad.getsNODCAD(),
 				"",
-				comunidad.getNUCCEN(),
-				comunidad.getNUCCOF(),
-				comunidad.getNUCCDI(),
-				comunidad.getNUCCNT(),
+				comunidad.getsNUCCEN(),
+				comunidad.getsNUCCOF(),
+				comunidad.getsNUCCDI(),
+				comunidad.getsNUCCNT(),
 				"",
-				comunidad.getOBTEXC(),
+				comunidad.getsOBTEXC(),
 				"");
 		
 	}
@@ -524,7 +524,7 @@ public class CLComunidades
 			{
 				boolean bCambio = false;
 				
-				if (movimiento.getNOMCOC().equals(comunidad.getNOMCOC()))
+				if (movimiento.getNOMCOC().equals(comunidad.getsNOMCOC()))
 				{
 					movimiento_revisado.setBITC01("#");
 				}
@@ -535,7 +535,7 @@ public class CLComunidades
 					bCambio = true;
 				}
 
-				if (movimiento.getNODCCO().equals(comunidad.getNODCCO()))
+				if (movimiento.getNODCCO().equals(comunidad.getsNODCCO()))
 				{
 					movimiento_revisado.setBITC02("#");
 				}
@@ -546,7 +546,7 @@ public class CLComunidades
 					bCambio = true;
 				}
 
-				if (movimiento.getNOMPRC().equals(comunidad.getNOMPRC()))
+				if (movimiento.getNOMPRC().equals(comunidad.getsNOMPRC()))
 				{
 					movimiento_revisado.setBITC03("#");
 				}
@@ -557,7 +557,7 @@ public class CLComunidades
 					bCambio = true;
 				}
 				
-				if (movimiento.getNUTPRC().equals(comunidad.getNUTPRC()))
+				if (movimiento.getNUTPRC().equals(comunidad.getsNUTPRC()))
 				{
 					movimiento_revisado.setBITC04("#");
 				}
@@ -568,7 +568,7 @@ public class CLComunidades
 					bCambio = true;
 				}
 				
-				if (movimiento.getNOMADC().equals(comunidad.getNOMADC()))
+				if (movimiento.getNOMADC().equals(comunidad.getsNOMADC()))
 				{
 					movimiento_revisado.setBITC05("#");
 				}
@@ -579,7 +579,7 @@ public class CLComunidades
 					bCambio = true;
 				}
 				
-				if (movimiento.getNUTADC().equals(comunidad.getNUTADC()))
+				if (movimiento.getNUTADC().equals(comunidad.getsNUTADC()))
 				{
 					movimiento_revisado.setBITC06("#");
 				}
@@ -590,7 +590,7 @@ public class CLComunidades
 					bCambio = true;
 				}
 				
-				if (movimiento.getNODCAD().equals(comunidad.getNODCAD()))
+				if (movimiento.getNODCAD().equals(comunidad.getsNODCAD()))
 				{
 					movimiento_revisado.setBITC07("#");
 				}
@@ -601,7 +601,7 @@ public class CLComunidades
 					bCambio = true;
 				}
 				
-				if (movimiento.getNUCCEN().equals(comunidad.getNUCCEN()) && movimiento.getNUCCOF().equals(comunidad.getNUCCOF()) && movimiento.getNUCCDI().equals(comunidad.getNUCCDI()) && movimiento.getNUCCNT().equals(comunidad.getNUCCNT()))
+				if (movimiento.getNUCCEN().equals(comunidad.getsNUCCEN()) && movimiento.getNUCCOF().equals(comunidad.getsNUCCOF()) && movimiento.getNUCCDI().equals(comunidad.getsNUCCDI()) && movimiento.getNUCCNT().equals(comunidad.getsNUCCNT()))
 				{
 					movimiento_revisado.setBITC08("#");
 
@@ -616,17 +616,17 @@ public class CLComunidades
 					bCambio = true;
 				}
 				
-				if (movimiento.getOBTEXC().equals(comunidad.getOBTEXC()))
+				if (movimiento.getOBTEXC().equals(comunidad.getsOBTEXC()))
 				{
 					movimiento_revisado.setBITC09("#");
 				}
-				else if (movimiento.getOBTEXC().equals("") && !comunidad.getOBTEXC().equals(""))
+				else if (movimiento.getOBTEXC().equals("") && !comunidad.getsOBTEXC().equals(""))
 				{
 					movimiento_revisado.setBITC09("B");
 					movimiento_revisado.setOBTEXC("");
 					bCambio = true;
 				}
-				else if (!movimiento.getOBTEXC().equals("") &&  comunidad.getOBTEXC().equals(""))
+				else if (!movimiento.getOBTEXC().equals("") &&  comunidad.getsOBTEXC().equals(""))
 				{
 					movimiento_revisado.setBITC09("A");
 					movimiento_revisado.setOBTEXC(movimiento.getOBTEXC());

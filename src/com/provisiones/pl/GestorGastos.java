@@ -653,7 +653,7 @@ public class GestorGastos implements Serializable
 					ValoresDefecto.DEF_COSPII_GA,
 					ValoresDefecto.DEF_NUCLII);
 
-			int iSalida = CLGastos.registraMovimiento(movimiento);
+			int iSalida = CLGastos.registraMovimiento(movimiento,true);
 			
 			switch (iSalida) 
 			{

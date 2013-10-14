@@ -6,6 +6,9 @@ public class ValoresDefecto
 {
 	
 	public static final int iNumChar = 26;
+	
+	public static final String CAMPO_SIN_INFORMAR = "0";
+	
 	public static final String DEF_COAPII = "168";
 	public static final String DEF_NUCLII = "2306894218400";
 	public static final String DEF_IDPROV = "68942184";
@@ -47,16 +50,21 @@ public class ValoresDefecto
 	
 	public static final String DEF_ALTA = "A";
 	public static final String DEF_BAJA = "B";
-	public static final String DEF_PENDIENTE = "P";
-	public static final String DEF_ENVIADO = "E";
-	public static final String DEF_VALIDADO = "V";
+
+	public static final String DEF_MOVIMIENTO_PENDIENTE = "P";
+	public static final String DEF_MOVIMIENTO_ENVIADO = "E";
+	public static final String DEF_MOVIMIENTO_VALIDADO = "V";
+	public static final String DEF_MOVIMIENTO_RESUELTO = "R";
+	public static final String DEF_MOVIMIENTO_ERRONEO = "X";
 	
 	public static final String DEF_NEGATIVO = "-";
 	
-	public static final String DEF_GASTO_ANULADO = "4";
-	
 	public static final String DEF_GASTO_ESTIMADO = "1";
 	public static final String DEF_GASTO_CONOCIDO = "2";
+	public static final String DEF_GASTO_AUTORIZADO = "3";
+	public static final String DEF_GASTO_PAGADO = "4";
+	public static final String DEF_GASTO_ANULADO = "5";
+	public static final String DEF_GASTO_ABONADO = "6";
 	public static final String DEF_GASTO_PAGADO_CONEXION = "7";
 	
 	public static final String DEF_GASTO_PROVISION_CONEXION = "0";

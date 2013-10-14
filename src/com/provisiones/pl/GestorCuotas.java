@@ -173,15 +173,15 @@ public class GestorCuotas implements Serializable
 		{
 			Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
-			this.sCOCLDO = comunidad.getCOCLDO();
-			this.sNUDCOM = comunidad.getNUDCOM();
-			this.sNOMCOC = comunidad.getNOMCOC();
-			this.sNODCCO = comunidad.getNODCCO();
+			this.sCOCLDO = comunidad.getsCOCLDO();
+			this.sNUDCOM = comunidad.getsNUDCOM();
+			this.sNOMCOC = comunidad.getsNOMCOC();
+			this.sNODCCO = comunidad.getsNODCCO();
 		
 			this.sCOACES = "";
 		
 		
-			if (comunidad.getNUDCOM().equals(""))
+			if (comunidad.getsNUDCOM().equals(""))
 			{
 				msg = Utils.pfmsgError("ERROR: La comunidad solicitada no esta registrada en el sistema.");
 				logger.error("ERROR: La comunidad solicitada no esta registrada en el sistema.");
@@ -244,12 +244,12 @@ public class GestorCuotas implements Serializable
 
 		Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES.toUpperCase());
 		
-		this.sCOCLDO = comunidad.getCOCLDO();
-		this.sNUDCOM = comunidad.getNUDCOM();
-		this.sNOMCOC = comunidad.getNOMCOC();
-		this.sNODCCO = comunidad.getNODCCO();
+		this.sCOCLDO = comunidad.getsCOCLDO();
+		this.sNUDCOM = comunidad.getsNUDCOM();
+		this.sNOMCOC = comunidad.getsNOMCOC();
+		this.sNODCCO = comunidad.getsNODCCO();
 		
-		if (comunidad.getNUDCOM().equals(""))
+		if (comunidad.getsNUDCOM().equals(""))
 		{
 			msg = Utils.pfmsgError("ERROR: El Activo '"+sCOACES.toUpperCase()+"' no esta asociado a ninguna comunidad.");
 			logger.error("ERROR: El Activo '{}' no esta asociado a ninguna comunidad.",sCOACES.toUpperCase());

@@ -242,7 +242,7 @@ public class CLReferencias
 	
 	public static long buscarNumeroMovimientosReferenciasPendientes()
 	{
-		return (QMListaReferencias.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
+		return (QMListaReferencias.buscaCantidadValidado(ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
 	}
 
 	public static boolean estaAsociado(String sCodCOACES)

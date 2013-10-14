@@ -115,12 +115,13 @@
 								
 							</p:dataTable> 
 					</p:dialog>
-					<p:dialog header="Confirmacion" widgetVar="dlgConfirma" resizable="false"> 
+					<p:dialog header="Confirmación" widgetVar="dlgConfirma" resizable="false"> 
 						<h:panelGrid columns="1">
 							<p:panel>
 								<h:panelGrid columns="1">
 							<h:outputText value="¿Está seguro de cerrar la provisión #{GestorProvisiones.sNUPROF}?" />
-							<h:outputText value=" La operación no puede deshacerse una vez concluida." />
+							<h:outputText value="- La operación no puede deshacerse una vez concluida." />
+							<h:outputText value="- Todos los gastos no validados en la provisión serán anulados." />
 								</h:panelGrid>
 							<p:panel>
 								<h:panelGrid columns="2" cellpadding="5">

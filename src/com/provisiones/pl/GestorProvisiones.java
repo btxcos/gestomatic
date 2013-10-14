@@ -80,10 +80,7 @@ public class GestorProvisiones implements Serializable
     	
 		Provision provision = CLProvisiones.detallesProvision(sNUPROF);
 		
-		provision.setsFEPFON(Utils.fechaDeHoy(false));
-		
-		provision.setsCodEstado("B");
-		
+	
 		if (CLProvisiones.cerrarProvision(provision))
 		{
 			msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' cerrada.");

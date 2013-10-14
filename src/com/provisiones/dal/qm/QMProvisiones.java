@@ -35,8 +35,6 @@ public class QMProvisiones
 	public static final String sField9 = "usuario_modificacion";
 	public static final String sField10 = "fecha_modificacion";
 
-	
-
 	public static boolean addProvision(Provision NuevaProvision)
 
 	{
@@ -49,33 +47,40 @@ public class QMProvisiones
 		boolean bSalida = true;
 
 		logger.debug("Ejecutando Query...");
+	    
+		String sQuery = "INSERT INTO " 
+				+ sTable + 
+				" (" 
+				+ sField1 + ","
+				+ sField2 + ","
+				+ sField3 + "," 
+				+ sField4 + ","
+				+ sField5 + ","
+				+ sField6 + ","
+				+ sField7 + ","
+				+ sField8 + ","
+				+ sField9 + ","
+				+ sField10 +
+				") VALUES ('" 
+				+ NuevaProvision.getsNUPROF() + "','"
+				+ NuevaProvision.getsCOSPAT() + "','"
+				+ NuevaProvision.getsTAS() + "','"
+				+ NuevaProvision.getsValorTolal() + "','"
+				+ NuevaProvision.getsNumGastos() + "','"
+				+ NuevaProvision.getsFEPFON() + "','" 
+				+ NuevaProvision.getsFechaValidacion() + "','" 
+				+ NuevaProvision.getsCodEstado() + "','"
+				+ sUsuario + "','"
+				+ Utils.timeStamp() + 
+				"')";
+
+		logger.debug(sQuery);
 
 		try 
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " (" 
-					+ sField1 + ","
-					+ sField2 + ","
-					+ sField3 + "," 
-					+ sField4 + ","
-					+ sField5 + ","
-					+ sField6 + ","
-					+ sField7 + ","
-					+ sField8 + ","
-					+ sField9 + ","
-					+ sField10
-					+ ") VALUES ('" 
-					+ NuevaProvision.getsNUPROF() + "','"
-					+ NuevaProvision.getsCOSPAT() + "','"
-					+ NuevaProvision.getsTAS() + "','"
-					+ NuevaProvision.getsValorTolal() + "','"
-					+ NuevaProvision.getsNumGastos() + "','"
-					+ NuevaProvision.getsFEPFON() + "','" 
-					+ NuevaProvision.getsFechaValidacion() + "','" 
-					+ NuevaProvision.getsCodEstado() + "','"
-					+ sUsuario + "','"
-					+ Utils.timeStamp() + "')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 
@@ -99,7 +104,7 @@ public class QMProvisiones
 		return bSalida;
 	}
 
-	public static boolean modProvision(Provision NuevaProvision, String sNUPROF) 
+	public static boolean modProvision(Provision provision) 
 	{
 		Connection conn = null;
 		conn = ConnectionManager.OpenDBConnection();
@@ -115,23 +120,23 @@ public class QMProvisiones
 		{
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + " SET " 
-					+ sField2 + " = '" + NuevaProvision.getsCOSPAT() + "', "
-					+ sField3 + " = '" + NuevaProvision.getsTAS() + "', "
-					+ sField4 + " = '" + NuevaProvision.getsValorTolal() + "', " 
-					+ sField5 + " = '" + NuevaProvision.getsNumGastos() + "', "
-					+ sField6 + " = '" + NuevaProvision.getsFEPFON() + "', " 
-					+ sField7 + " = '" + NuevaProvision.getsFechaValidacion() + "', " 
-					+ sField8 + " = '" + NuevaProvision.getsCodEstado() + "', " 
+					+ sField2 + " = '" + provision.getsCOSPAT() + "', "
+					+ sField3 + " = '" + provision.getsTAS() + "', "
+					+ sField4 + " = '" + provision.getsValorTolal() + "', " 
+					+ sField5 + " = '" + provision.getsNumGastos() + "', "
+					+ sField6 + " = '" + provision.getsFEPFON() + "', " 
+					+ sField7 + " = '" + provision.getsFechaValidacion() + "', " 
+					+ sField8 + " = '" + provision.getsCodEstado() + "', " 
 					+ sField9 + " = '" + sUsuario + "', " 
 					+ sField10 + " = '" + Utils.timeStamp() + "' " 					
-					+ " WHERE " + sField1 + " = '" + sNUPROF + "'");
+					+ " WHERE " + sField1 + " = '" + provision.getsNUPROF() + "'");
 
 			logger.debug("Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NUPROF:|{}|",sNUPROF);
+			logger.error("ERROR: NUPROF:|{}|",provision.getsNUPROF());
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
@@ -212,10 +217,18 @@ public class QMProvisiones
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT " + sField2 + "," + sField3
-					+ "," + sField4 + "," + sField5 + "," + sField6 + "," + sField7 + "," + sField8 +
-					" FROM " + sTable + " WHERE (" + sField1 + " = '"
-					+ sNUPROF + "')");
+			pstmt = conn.prepareStatement("SELECT " 
+					+ sField2 + "," 
+					+ sField3 + "," 
+					+ sField4 + "," 
+					+ sField5 + "," 
+					+ sField6 + "," 
+					+ sField7 + "," 
+					+ sField8 +
+					" FROM " 
+					+ sTable + 
+					" WHERE " 
+					+ sField1 + " = '" + sNUPROF + "'");
 
 			rs = pstmt.executeQuery();
 			
@@ -741,6 +754,8 @@ public class QMProvisiones
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
+	
+
 	
 	public static String getUltimaProvisionCerrada(String sCodCOSPAT) 
 	{

@@ -7,9 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.qm.QMCodigosControl;
+import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMProvisiones;
+import com.provisiones.dal.qm.listas.QMListaGastos;
+import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.MovimientoGasto;
 import com.provisiones.types.Provision;
 import com.provisiones.types.ProvisionTabla;
 
@@ -31,6 +36,7 @@ public class CLProvisiones
 	{
 		return QMProvisiones.getUltimaProvisionCerrada(sCodCOSPAT);
 	}
+
 	public static String provisionAsignada (String sCodCOACES)
 	{
 		String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCodCOACES);
@@ -137,8 +143,110 @@ public class CLProvisiones
 	
 	public static boolean cerrarProvision (Provision provision)
 	{
-		//Anular todos los gastos pendientes con fecha actual
-		return QMProvisiones.modProvision(provision, provision.getsNUPROF());
+
+		boolean bError = false;
+		
+		provision.setsFEPFON(Utils.fechaDeHoy(false));
+		
+		provision.setsCodEstado("B");
+		
+		
+		
+        if (QMProvisiones.modProvision(provision))
+        {
+        	
+    		//Anular todos los gastos pendientes con fecha actual		
+    		ArrayList<String> listagastos = QMListaGastosProvisiones.buscaGastosSinValidarEnProvision(provision.getsNUPROF());
+    		
+    		if (listagastos.size() > 0)
+    		{
+
+    			String sActivo = QMGastos.getGasto(listagastos.get(0)).getCOACES();
+				
+	        	String sNuevaProvision = provisionAsignada(sActivo);
+	        	
+	        	for (int i = 0; i < listagastos.size() ; i++)
+		        {
+		        	ArrayList<String> listamovimientos = QMListaGastos.buscarMovimientosGasto(listagastos.get(i));
+		        	ArrayList<String> listaestados = new ArrayList<String>();
+
+		        	for (int j = 0; j < listamovimientos.size() ; j++)
+			        {
+			        	listaestados.add(QMListaGastos.getValidado(listamovimientos.get(i)));
+
+			        	bError = !QMListaGastos.setValidado(listamovimientos.get(i), ValoresDefecto.DEF_MOVIMIENTO_RESUELTO);
+			            
+			            if (bError)
+			            {
+			            	//Si falla volvemos a dejar los gastos en el estado anterior
+				            for (int k = 0; k < j ; k++)
+				            {
+				            	QMListaGastos.setValidado(listamovimientos.get(k), listaestados.get(k));
+				            }
+			            	i = listagastos.size();
+			            	j = listamovimientos.size();
+			            }
+			        }
+		        	
+			        if(!bError)
+			        {
+
+			        	MovimientoGasto movimiento = CLGastos.convierteGastoenMovimiento(QMGastos.getGasto(listagastos.get(i)), provision.getsNUPROF());
+			        	
+			        	
+			        	movimiento.setFEAGTO(Utils.fechaDeHoy(false));
+			        	
+			        	
+			        	//anulamos el gasto antiguo
+			        	bError = (CLGastos.registraMovimiento(movimiento,false) < 0);
+			        	
+				        if(!bError)
+				        {
+				        	//creamos un nuevo gasto con fecha de hoy
+				        	movimiento.setFEAGTO("0");
+				        	movimiento.setFEDEVE(Utils.fechaDeHoy(false));
+				        	movimiento.setNUPROF(sNuevaProvision);
+
+				        	bError = (CLGastos.registraMovimiento(movimiento,false) < 0);
+				        
+				        }
+				        
+				        if(bError)
+				        {
+				        	//Devolver estado anterior a los movimientos
+				        	for (int j = 0; j < listamovimientos.size() ; j++)
+					        {
+					        	QMListaGastos.setValidado(listamovimientos.get(j), listaestados.get(j));
+					        }
+			            	i = listagastos.size();
+				        }
+
+			        }
+
+			        if(bError)
+		        	{
+			        	//encaso de fallo en gasto, paramos ejecucion y volvemos a dar de alta la provision
+		        		i = listagastos.size();
+		        		
+		        		provision.setsFEPFON("0");
+		        		provision.setsCodEstado("A");
+		        		
+		        		QMProvisiones.modProvision(provision);
+		        	}
+		        	
+		        	
+		        	
+		        }
+    	        	
+
+   	        }
+    	        	
+    	        
+    	        
+
+		}
+
+		return !bError;
 	}
 	
 	public static void inicializaProvisiones() 

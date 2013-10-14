@@ -57,7 +57,7 @@ public class QMListaComunidades
 				       + sCodCOCLDO + "','" 
 				       + sCodNUDCOM + "','" 
 				       + sCodMovimiento + "','"
-				       + ValoresDefecto.DEF_PENDIENTE + "','"
+				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				       + sUsuario + "','"
 				       + Utils.timeStamp() +
 				       "' )");

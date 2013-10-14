@@ -73,20 +73,20 @@ public class QMComunidades
 				       + sField14 + "," 
 				       + sField15 +               
 				       ") VALUES ('" 
-				       + NuevaComunidad.getCOCLDO() + "','" 
-				       + NuevaComunidad.getNUDCOM() + "','"
-				       + NuevaComunidad.getNOMCOC() + "','"
-				       + NuevaComunidad.getNODCCO() + "','"
-				       + NuevaComunidad.getNOMPRC() + "','"
-				       + NuevaComunidad.getNUTPRC() + "','"
-				       + NuevaComunidad.getNOMADC() + "','"
-				       + NuevaComunidad.getNUTADC() + "','"
-				       + NuevaComunidad.getNODCAD() + "','"
-				       + NuevaComunidad.getNUCCEN() + "','"
-				       + NuevaComunidad.getNUCCOF() + "','"
-				       + NuevaComunidad.getNUCCDI() + "','"
-				       + NuevaComunidad.getNUCCNT() + "','"
-				       + NuevaComunidad.getOBTEXC() + "','" 
+				       + NuevaComunidad.getsCOCLDO() + "','" 
+				       + NuevaComunidad.getsNUDCOM() + "','"
+				       + NuevaComunidad.getsNOMCOC() + "','"
+				       + NuevaComunidad.getsNODCCO() + "','"
+				       + NuevaComunidad.getsNOMPRC() + "','"
+				       + NuevaComunidad.getsNUTPRC() + "','"
+				       + NuevaComunidad.getsNOMADC() + "','"
+				       + NuevaComunidad.getsNUTADC() + "','"
+				       + NuevaComunidad.getsNODCAD() + "','"
+				       + NuevaComunidad.getsNUCCEN() + "','"
+				       + NuevaComunidad.getsNUCCOF() + "','"
+				       + NuevaComunidad.getsNUCCDI() + "','"
+				       + NuevaComunidad.getsNUCCNT() + "','"
+				       + NuevaComunidad.getsOBTEXC() + "','" 
 				       + ValoresDefecto.DEF_ALTA + "' )");
 			
 			logger.debug("Ejecutada con exito!");
@@ -96,8 +96,8 @@ public class QMComunidades
 
 
 			
-			logger.error("ERROR: COCLDO:|{}|",NuevaComunidad.getCOCLDO());
-			logger.error("ERROR: NUDCOM:|{}|",NuevaComunidad.getNUDCOM());
+			logger.error("ERROR: COCLDO:|{}|",NuevaComunidad.getsCOCLDO());
+			logger.error("ERROR: NUDCOM:|{}|",NuevaComunidad.getsNUDCOM());
 			
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());
@@ -129,20 +129,20 @@ public class QMComunidades
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + sTable + 
 					" SET " 
-					//+ sField1  + " = '"+ NuevaComunidad.getCOCLDO() + "', "
-					//+ sField2  + " = '"+ NuevaComunidad.getNUDCOM() + "', "
-					+ sField3  + " = '"+ NuevaComunidad.getNOMCOC() + "', "
-					+ sField4  + " = '"+ NuevaComunidad.getNODCCO() + "', "
-					+ sField5  + " = '"+ NuevaComunidad.getNOMPRC() + "', "
-					+ sField6  + " = '"+ NuevaComunidad.getNUTPRC() + "', "
-					+ sField7  + " = '"+ NuevaComunidad.getNOMADC() + "', "
-					+ sField8  + " = '"+ NuevaComunidad.getNUTADC() + "', "
-					+ sField9  + " = '"+ NuevaComunidad.getNODCAD() + "', "
-					+ sField10 + " = '"+ NuevaComunidad.getNUCCEN() + "', "
-					+ sField11 + " = '"+ NuevaComunidad.getNUCCOF() + "', "
-					+ sField12 + " = '"+ NuevaComunidad.getNUCCDI() + "', "
-					+ sField13 + " = '"+ NuevaComunidad.getNUCCNT() + "', "
-					+ sField14 + " = '"+ NuevaComunidad.getOBTEXC() +
+					//+ sField1  + " = '"+ NuevaComunidad.getsCOCLDO() + "', "
+					//+ sField2  + " = '"+ NuevaComunidad.getsNUDCOM() + "', "
+					+ sField3  + " = '"+ NuevaComunidad.getsNOMCOC() + "', "
+					+ sField4  + " = '"+ NuevaComunidad.getsNODCCO() + "', "
+					+ sField5  + " = '"+ NuevaComunidad.getsNOMPRC() + "', "
+					+ sField6  + " = '"+ NuevaComunidad.getsNUTPRC() + "', "
+					+ sField7  + " = '"+ NuevaComunidad.getsNOMADC() + "', "
+					+ sField8  + " = '"+ NuevaComunidad.getsNUTADC() + "', "
+					+ sField9  + " = '"+ NuevaComunidad.getsNODCAD() + "', "
+					+ sField10 + " = '"+ NuevaComunidad.getsNUCCEN() + "', "
+					+ sField11 + " = '"+ NuevaComunidad.getsNUCCOF() + "', "
+					+ sField12 + " = '"+ NuevaComunidad.getsNUCCDI() + "', "
+					+ sField13 + " = '"+ NuevaComunidad.getsNUCCNT() + "', "
+					+ sField14 + " = '"+ NuevaComunidad.getsOBTEXC() +
 					"' "+
 					" WHERE " +
 					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
@@ -153,8 +153,8 @@ public class QMComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",NuevaComunidad.getCOCLDO());
-			logger.error("ERROR: NUDCOM:|{}|",NuevaComunidad.getNUDCOM());
+			logger.error("ERROR: COCLDO:|{}|",NuevaComunidad.getsCOCLDO());
+			logger.error("ERROR: NUDCOM:|{}|",NuevaComunidad.getsNUDCOM());
 
 			logger.error("ERROR: SQLException:{}",ex.getMessage());
 			logger.error("ERROR: SQLState:{}",ex.getSQLState());

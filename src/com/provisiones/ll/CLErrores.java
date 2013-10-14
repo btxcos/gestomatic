@@ -93,12 +93,12 @@ public class CLErrores
 
 						for (int i = 0; i < dependenciascomunidades.size() ; i++)
 			            {
-			            	QMListaComunidades.setValidado(dependenciascomunidades.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            	QMListaComunidades.setValidado(dependenciascomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			            }
 			            
 			            for (int i = 0; i < dependenciasactivoscomunidades.size() ; i++)
 			            {
-			            	QMListaComunidadesActivos.setValidado(dependenciasactivoscomunidades.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            	QMListaComunidadesActivos.setValidado(dependenciasactivoscomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			            }
 			            
 					}
@@ -169,7 +169,7 @@ public class CLErrores
 
 						for (int i = 0; i < dependenciascuotas.size() ; i++)
 			            {
-			            	QMListaCuotas.setValidado(dependenciascuotas.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            	QMListaCuotas.setValidado(dependenciascuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			            }
 			            
 					}
@@ -240,7 +240,7 @@ public class CLErrores
 
 						for (int i = 0; i < dependenciascuotas.size() ; i++)
 			            {
-			            	QMListaReferencias.setValidado(dependenciascuotas.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            	QMListaReferencias.setValidado(dependenciascuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			            }
 			            
 					}
@@ -311,7 +311,7 @@ public class CLErrores
 
 						for (int i = 0; i < dependenciasimpuestos.size() ; i++)
 			            {
-			            	QMListaImpuestos.setValidado(dependenciasimpuestos.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            	QMListaImpuestos.setValidado(dependenciasimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			            }
 			            
 					}
@@ -351,7 +351,7 @@ public class CLErrores
 		
 		int iCodigo = 0;
 		
-		String sEstado = QMGastos.getEstado(QMGastos.getGastoID(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()));
+		String sEstado = QMGastos.getEstado(CLGastos.buscarCodigoGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()));
 
 		logger.debug("sEstado:|{}|",sEstado);
 		
@@ -393,7 +393,7 @@ public class CLErrores
 
 						for (int i = 0; i < dependenciasgastos.size() ; i++)
 			            {
-			            	QMListaGastos.setValidado(dependenciasgastos.get(i),ValoresDefecto.DEF_PENDIENTE);
+			            	QMListaGastos.setValidado(dependenciasgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			            }
 			            
 					}

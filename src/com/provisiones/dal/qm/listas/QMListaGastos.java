@@ -60,7 +60,7 @@ public class QMListaGastos
 					"VALUES ('" 
 						+ sCodGasto + "','"
 						+ sCodMovimiento + "','"
-						+ ValoresDefecto.DEF_PENDIENTE + "','"
+						+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 					    + sUsuario + "','"
 					    + Utils.timeStamp() +
 						"')");
@@ -272,16 +272,19 @@ public class QMListaGastos
 		
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "UPDATE " 
+				+ sTable + 
+				" SET " 
+				+ sField3 + " = '"+ sValidado + "' "+
+				" WHERE "
+				+ sField2 + " = '"+ sCodMovimiento +"'";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate(
-					"UPDATE " 
-					+ sTable + 
-					" SET " 
-					+ sField3 + " = '"+ sValidado + "' "+
-					" WHERE "
-					+ sField2 + " = '"+ sCodMovimiento +"'");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 			
@@ -509,7 +512,7 @@ public class QMListaGastos
 					   + sField1 + 
    					   " FROM " + sTable +
    					   " WHERE " 
-   					   + sField3 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+   					   + sField3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "' "+
    					   		
    					   	")))";
 		
@@ -552,7 +555,7 @@ public class QMListaGastos
 					   + sField1 + 
    					   " FROM " + sTable +
    					   " WHERE " 
-   					   + sField3 + " = '"+ ValoresDefecto.DEF_VALIDADO + "' "+
+   					   + sField3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "' "+
    					   		
    					   	")))");
 
@@ -647,12 +650,14 @@ public class QMListaGastos
 					   + QMGastos.sField11 + ","
 					   + QMGastos.sField16 + ","
 					   + QMGastos.sField17 +
-					    
 
 					   " FROM " + QMGastos.sTable + 
 					   " WHERE ((("
-					   + QMGastos.sField35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-					   + QMGastos.sField35 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + "') AND "
+					   + QMGastos.sField35 + 
+					   " IN ('" 
+					   + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" 
+					   + ValoresDefecto.DEF_GASTO_CONOCIDO + 
+					   "')) AND "
 					   + QMGastos.sField17 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
 					   ") AND "					   
 					   + QMGastos.sField2 + " = '" + sCodCOACES	+ "' AND "
@@ -661,7 +666,7 @@ public class QMListaGastos
 					   + QMGastos.sField1 +" IN (SELECT "
 					   +  sField1 + 
 					   " FROM " + sTable + 
-					   " WHERE " + sField3 + " = '"+ ValoresDefecto.DEF_VALIDADO + "'))";					   
+					   " WHERE " + sField3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "'))";					   
 					   
 		
 		logger.debug(sQuery);
@@ -670,37 +675,7 @@ public class QMListaGastos
 		{
 			stmt = conn.createStatement();
 			
-			pstmt = conn.prepareStatement("SELECT "
-					
-					   + QMGastos.sField2 + ","        
-					   + QMGastos.sField3 + ","
-					   + QMGastos.sField4 + ","
-					   + QMGastos.sField5 + ","
-					   + QMGastos.sField6 + ","
-					   + QMGastos.sField7 + ","
-					   + QMGastos.sField11 + ","
-					   + QMGastos.sField16 + ","
-					   + QMGastos.sField17 +
-					    
-
-					   " FROM " + QMGastos.sTable + 
-					   " WHERE ((("
-					   + QMGastos.sField35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-					   + QMGastos.sField35 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + "') AND "
-					   + QMGastos.sField17 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
-					   ") AND "					   
-					   + QMGastos.sField2 + " = '" + sCodCOACES	+ "' AND "
-					   + QMGastos.sField7 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
-
-					   + QMGastos.sField1 +" IN (SELECT "
-					   +  sField1 + 
-					   " FROM " + sTable + 
-					   " WHERE " + sField3 + " = '"+ ValoresDefecto.DEF_VALIDADO + "'))");
-
-			
-
-
-			
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -790,6 +765,15 @@ public class QMListaGastos
 		ArrayList<String> result = new ArrayList<String>();
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ sField2  + 
+				"  FROM " + sTable + 
+				" WHERE " +
+				"(" 
+				+ sField1 + " = '" + sCodGasto + "' AND "
+				+ sField2 + " >=  '" + sCodMovimiento + 
+				"')";
 
 		try 
 		{
@@ -797,13 +781,7 @@ public class QMListaGastos
 			
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT " 
-					+ sField2  + 
-					"  FROM " + sTable + 
-					" WHERE " +
-					"(" 
-					+ sField1 + " = '" + sCodGasto + "' AND "
-					+ sField2 + " >=  '" + sCodMovimiento + "')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -846,4 +824,78 @@ public class QMListaGastos
 		ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
+	
+	public static ArrayList<String> buscarMovimientosGasto(String sCodGasto)
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;		
+
+		boolean found = false;
+		
+		ArrayList<String> result = new ArrayList<String>();
+
+		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ sField2  + 
+				"  FROM " + sTable + 
+				" WHERE "
+				+ sField1 + " = '" + sCodGasto + "'";
+		
+		logger.debug(sQuery);
+
+		try 
+		{
+
+			
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement(sQuery);
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					result.add(rs.getString(sField2));
+
+					logger.debug("Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}			
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			found = false;
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
+	
 }

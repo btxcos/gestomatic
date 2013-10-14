@@ -142,13 +142,13 @@ public class GestorTablaComunidadActivo implements Serializable
 		
 		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
-		this.sCOCLDO = comunidad.getCOCLDO();
-		this.sNUDCOM = comunidad.getNUDCOM();
-		this.sNOMCOC = comunidad.getNOMCOC();
-		this.sNODCCO = comunidad.getNODCCO();
+		this.sCOCLDO = comunidad.getsCOCLDO();
+		this.sNUDCOM = comunidad.getsNUDCOM();
+		this.sNOMCOC = comunidad.getsNOMCOC();
+		this.sNODCCO = comunidad.getsNODCCO();
 	
 		
-		if (comunidad.getNUDCOM().equals(""))
+		if (comunidad.getsNUDCOM().equals(""))
 		{
 			msg = Utils.pfmsgError("ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.");
 			logger.error("ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.");

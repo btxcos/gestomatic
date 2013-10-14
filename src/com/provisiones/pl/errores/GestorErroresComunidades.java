@@ -404,22 +404,22 @@ public class GestorErroresComunidades implements Serializable
 
 		Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES.toUpperCase());
 		
-		this.sCOCLDO = comunidad.getCOCLDO();
-		this.sNUDCOM = comunidad.getNUDCOM();
-		this.sNOMCOC = comunidad.getNOMCOC();
-		this.sNODCCO = comunidad.getNODCCO();
-		this.sNOMPRC = comunidad.getNOMPRC();
-		this.sNUTPRC = comunidad.getNUTPRC();
-		this.sNOMADC = comunidad.getNOMADC();
-		this.sNUTADC = comunidad.getNUTADC();
-		this.sNODCAD = comunidad.getNODCAD();
-		this.sNUCCEN = comunidad.getNUCCEN();
-		this.sNUCCOF = comunidad.getNUCCOF();
-		this.sNUCCDI = comunidad.getNUCCDI();
-		this.sNUCCNT = comunidad.getNUCCNT();
-		this.sOBTEXC = comunidad.getOBTEXC();
+		this.sCOCLDO = comunidad.getsCOCLDO();
+		this.sNUDCOM = comunidad.getsNUDCOM();
+		this.sNOMCOC = comunidad.getsNOMCOC();
+		this.sNODCCO = comunidad.getsNODCCO();
+		this.sNOMPRC = comunidad.getsNOMPRC();
+		this.sNUTPRC = comunidad.getsNUTPRC();
+		this.sNOMADC = comunidad.getsNOMADC();
+		this.sNUTADC = comunidad.getsNUTADC();
+		this.sNODCAD = comunidad.getsNODCAD();
+		this.sNUCCEN = comunidad.getsNUCCEN();
+		this.sNUCCOF = comunidad.getsNUCCOF();
+		this.sNUCCDI = comunidad.getsNUCCDI();
+		this.sNUCCNT = comunidad.getsNUCCNT();
+		this.sOBTEXC = comunidad.getsOBTEXC();
 		
-		if (comunidad.getNUDCOM().equals(""))
+		if (comunidad.getsNUDCOM().equals(""))
 		{
 			msg = Utils.pfmsgError("ERROR: El Activo '"+sCOACES.toUpperCase()+"' no esta asociado a ninguna comunidad.");
 			logger.error("ERROR: El Activo '{}' no esta asociado a ninguna comunidad.",sCOACES.toUpperCase());
@@ -441,22 +441,22 @@ public class GestorErroresComunidades implements Serializable
 		
 		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
-		this.sCOCLDO = comunidad.getCOCLDO();
-		this.sNUDCOM = comunidad.getNUDCOM();
-		this.sNOMCOC = comunidad.getNOMCOC();
-		this.sNODCCO = comunidad.getNODCCO();
-		this.sNOMPRC = comunidad.getNOMPRC();
-		this.sNUTPRC = comunidad.getNUTPRC();
-		this.sNOMADC = comunidad.getNOMADC();
-		this.sNUTADC = comunidad.getNUTADC();
-		this.sNODCAD = comunidad.getNODCAD();
-		this.sNUCCEN = comunidad.getNUCCEN();
-		this.sNUCCOF = comunidad.getNUCCOF();
-		this.sNUCCDI = comunidad.getNUCCDI();
-		this.sNUCCNT = comunidad.getNUCCNT();
-		this.sOBTEXC = comunidad.getOBTEXC();
+		this.sCOCLDO = comunidad.getsCOCLDO();
+		this.sNUDCOM = comunidad.getsNUDCOM();
+		this.sNOMCOC = comunidad.getsNOMCOC();
+		this.sNODCCO = comunidad.getsNODCCO();
+		this.sNOMPRC = comunidad.getsNOMPRC();
+		this.sNUTPRC = comunidad.getsNUTPRC();
+		this.sNOMADC = comunidad.getsNOMADC();
+		this.sNUTADC = comunidad.getsNUTADC();
+		this.sNODCAD = comunidad.getsNODCAD();
+		this.sNUCCEN = comunidad.getsNUCCEN();
+		this.sNUCCOF = comunidad.getsNUCCOF();
+		this.sNUCCDI = comunidad.getsNUCCDI();
+		this.sNUCCNT = comunidad.getsNUCCNT();
+		this.sOBTEXC = comunidad.getsOBTEXC();
 
-		if (comunidad.getNUDCOM().equals(""))
+		if (comunidad.getsNUDCOM().equals(""))
 		{
 			msg = Utils.pfmsgError("Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
 			logger.error("Error: La comunidad '{}' no esta registrada en el sistema.",sNUDCOM.toUpperCase());

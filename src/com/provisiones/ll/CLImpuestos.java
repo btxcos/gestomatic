@@ -218,7 +218,7 @@ public class CLImpuestos
 	
 	public static long buscarNumeroMovimientosImpuestosPendientes()
 	{
-		return (QMListaImpuestos.buscaCantidadValidado(ValoresDefecto.DEF_PENDIENTE));
+		return (QMListaImpuestos.buscaCantidadValidado(ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
 	}	
 	
 	public static boolean comprobarRelacion (String sCodNURCAT,String sCodCOSBAC, String sCodCOACES)

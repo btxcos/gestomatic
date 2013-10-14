@@ -126,12 +126,12 @@ public class FileManager
 
             for (int i = 0; i < resultcomunidades.size() ; i++)
             {
-               QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_ENVIADO);
+               QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
             }
             
             for (int i = 0; i < resultactivos.size() ; i++)
             {
-         	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_ENVIADO);
+         	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
             }
         } 
         catch (IOException e) 
@@ -142,12 +142,12 @@ public class FileManager
             
             for (int i = 0; i < resultcomunidades.size() ; i++)
             {
-               QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_PENDIENTE);
+               QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
             }
             
             for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
             {
-         	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_PENDIENTE);
+         	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
             }
             
             logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
@@ -172,12 +172,12 @@ public class FileManager
               
               for (int i = 0; i < resultcomunidades.size() ; i++)
               {
-                 QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_PENDIENTE);
+                 QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
               }
               
               for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
               {
-           	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_PENDIENTE);
+           	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
               }
               
               logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
@@ -204,7 +204,7 @@ public class FileManager
             for (int i = 0; i < resultcuotas.size() ; i++)
             {
                 pw.println(Parser.escribirCuota(QMMovimientosCuotas.getMovimientoCuota(resultcuotas.get(i))));
-                QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_ENVIADO);
+                QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
             }
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
             
@@ -218,7 +218,7 @@ public class FileManager
             
             for (int i = 0; i < resultcuotas.size() ; i++)
             {
-            	QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_PENDIENTE);
+            	QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
             }
             
             logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
@@ -243,7 +243,7 @@ public class FileManager
               
               for (int i = 0; i < resultcuotas.size() ; i++)
               {
-            	  QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_PENDIENTE);
+            	  QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
               }
               
               logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
@@ -271,7 +271,7 @@ public class FileManager
             for (int i = 0; i < resultreferencias.size() ; i++)
             {
                 pw.println(Parser.escribirReferenciaCatastral(QMMovimientosReferencias.getMovimientoReferenciaCatastral(resultreferencias.get(i))));
-                QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_ENVIADO);
+                QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
             }
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
             
@@ -285,7 +285,7 @@ public class FileManager
             
             for (int i = 0; i < resultreferencias.size() ; i++)
             {
-            	QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_PENDIENTE);
+            	QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
             }
             
             logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
@@ -309,7 +309,7 @@ public class FileManager
               
               for (int i = 0; i < resultreferencias.size() ; i++)
               {
-              	QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_PENDIENTE);
+              	QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
               }
               
               logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
@@ -337,7 +337,7 @@ public class FileManager
             for (int i = 0; i < resultimpuestos.size() ; i++)
             {
                 pw.println(Parser.escribirImpuestoRecurso(QMMovimientosImpuestos.getMovimientoImpuestoRecurso(resultimpuestos.get(i))));
-                QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_ENVIADO);
+                QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
             }
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
         } 
@@ -350,7 +350,7 @@ public class FileManager
             
             for (int i = 0; i < resultimpuestos.size() ; i++)
             {
-            	QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_PENDIENTE);
+            	QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
             }
             
             logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
@@ -374,7 +374,7 @@ public class FileManager
               
               for (int i = 0; i < resultimpuestos.size() ; i++)
               {
-              	QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_PENDIENTE);
+              	QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
               }
               
               logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
@@ -404,7 +404,7 @@ public class FileManager
             for (int i = 0; i < resultgastos.size(); i++)
             {
                 pw.println(Parser.escribirGasto(QMMovimientosGastos.getMovimientoGasto(resultgastos.get(i))));
-                QMListaGastos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_ENVIADO);
+                QMListaGastos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
             }
             pw.print(ValoresDefecto.DEF_FIN_FICHERO);
  
@@ -419,7 +419,7 @@ public class FileManager
             
             for (int i = 0; i < resultgastos.size() ; i++)
             {
-            	QMListaImpuestos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_PENDIENTE);
+            	QMListaImpuestos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
             }
             
             logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
@@ -445,7 +445,7 @@ public class FileManager
               
               for (int i = 0; i < resultgastos.size() ; i++)
               {
-              	QMListaImpuestos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_PENDIENTE);
+              	QMListaImpuestos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
               }
               
               logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
