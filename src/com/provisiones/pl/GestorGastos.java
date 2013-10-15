@@ -915,15 +915,34 @@ public class GestorGastos implements Serializable
 				logger.error(sMsg);
 				break;
 
-			case -904: //Error 904 - error y rollback - error al modificar el gasto
-				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos y avise a soporte.";
+			case -904: //Error 904 - error y rollback - error al revisar el gasto
+				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al revisar el gasto. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+
+			case -905: //Error 905 - error y rollback - error al modificar el gasto
+				sMsg = "[FATAL] ERROR:905 - Se ha producido un error al modificar el gasto. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+				
+			case -906: //Error 906 - error y rollback - error al registrar la relaccion en provision
+				sMsg = "[FATAL] ERROR:906 - Se ha producido un error al registra la relacion con la provisión. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+				
+			case -907: //Error 906 - error y rollback - error al registrar la fecha de anulacion
+				sMsg = "[FATAL] ERROR:906 - Se ha producido un error al registra la fecha de anulación del gasto. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
 				break;
 
 			default: //error generico
-				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
-				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
+				sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 				break;
 			}
 			

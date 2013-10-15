@@ -13,6 +13,7 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Provision;
 import com.provisiones.types.ProvisionTabla;
@@ -62,10 +63,10 @@ public class GestorProvisiones implements Serializable
     	this.sNUPROF  = provisionseleccionada.getNUPROF();
     	this.sCOSPAT  = provisionseleccionada.getCOSPAT();
     	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
-    	this.sTAS  = provisionseleccionada.getCOSPAT();
+    	this.sTAS  = provisionseleccionada.getTAS();
     	this.sDTAS  = provisionseleccionada.getDTAS();
-    	this.sValorTolal  = provisionseleccionada.getVALOR();
-    	this.sNumGastos  = provisionseleccionada.getGASTOS();
+    	this.sValorTolal  = Double.toString(CLProvisiones.calcularValorProvision(sNUPROF));
+    	this.sNumGastos  = Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
     	
     	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
     	logger.info("Provision '{}' Seleccionada.",sNUPROF);
@@ -77,20 +78,25 @@ public class GestorProvisiones implements Serializable
 	public void cerrarProvision(ActionEvent actionEvent)
 	{
 		FacesMessage msg;
-    	
-		Provision provision = CLProvisiones.detallesProvision(sNUPROF);
 		
-	
+		Provision provision = new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, Utils.fechaDeHoy(false),ValoresDefecto.CAMPO_SIN_INFORMAR, ValoresDefecto.DEF_BAJA);
+		
+				
+		//CLProvisiones.detallesProvision(sNUPROF);
+		String sMsg = "";
+
 		if (CLProvisiones.cerrarProvision(provision))
 		{
-			msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' cerrada.");
-			logger.info("Provision '{}' cerrada.",sNUPROF);
+			sMsg = "Provision '"+ sNUPROF +"' cerrada.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 
 		}
 		else
 		{
-			msg = Utils.pfmsgFatal("[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.");
-			logger.error("[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.");
+			sMsg = "[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
 		}
 
     	

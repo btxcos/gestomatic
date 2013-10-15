@@ -11,6 +11,7 @@ import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
+import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -36,7 +37,17 @@ public class CLProvisiones
 	{
 		return QMProvisiones.getUltimaProvisionCerrada(sCodCOSPAT);
 	}
+	
+	public static double calcularValorProvision (String sNUPROF)
+	{
+		return QMListaGastosProvisiones.calculaValorProvision(sNUPROF);
+	}
 
+	public static long buscarNumeroGastosProvision(String sNUPROF)
+	{
+		return QMListaGastosProvisiones.buscaCantidadGastos(sNUPROF);
+	}
+	
 	public static String provisionAsignada (String sCodCOACES)
 	{
 		String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCodCOACES);
@@ -143,19 +154,14 @@ public class CLProvisiones
 	
 	public static boolean cerrarProvision (Provision provision)
 	{
-
-		boolean bError = false;
+		logger.debug(provision.logProvision());
 		
-		provision.setsFEPFON(Utils.fechaDeHoy(false));
+		boolean bError = !QMProvisiones.modProvision(provision);
 		
-		provision.setsCodEstado("B");
-		
-		
-		
-        if (QMProvisiones.modProvision(provision))
+        if (!bError)
         {
-        	
-    		//Anular todos los gastos pendientes con fecha actual		
+        	long OK = 0;
+    		//Anular todos los gastos pendientes	
     		ArrayList<String> listagastos = QMListaGastosProvisiones.buscaGastosSinValidarEnProvision(provision.getsNUPROF());
     		
     		if (listagastos.size() > 0)
@@ -169,6 +175,8 @@ public class CLProvisiones
 		        {
 		        	ArrayList<String> listamovimientos = QMListaGastos.buscarMovimientosGasto(listagastos.get(i));
 		        	ArrayList<String> listaestados = new ArrayList<String>();
+		        	
+		        	String sEstadoGasto = CLGastos.estadoGasto(listagastos.get(i));
 
 		        	for (int j = 0; j < listamovimientos.size() ; j++)
 			        {
@@ -178,7 +186,8 @@ public class CLProvisiones
 			            
 			            if (bError)
 			            {
-			            	//Si falla volvemos a dejar los gastos en el estado anterior
+			            	logger.error("ERROR: No se pudo validad el movimiento '"+listamovimientos.get(i)+"'.");
+			            	//Si falla volvemos a dejar los movimientos en el estado anterior
 				            for (int k = 0; k < j ; k++)
 				            {
 				            	QMListaGastos.setValidado(listamovimientos.get(k), listaestados.get(k));
@@ -190,30 +199,61 @@ public class CLProvisiones
 		        	
 			        if(!bError)
 			        {
-
+			        	
 			        	MovimientoGasto movimiento = CLGastos.convierteGastoenMovimiento(QMGastos.getGasto(listagastos.get(i)), provision.getsNUPROF());
+
+			        	String sRevisadoAnterior = QMListaGastosProvisiones.getRevisado(listagastos.get(i));
 			        	
 			        	
-			        	movimiento.setFEAGTO(Utils.fechaDeHoy(false));
 			        	
 			        	
 			        	//anulamos el gasto antiguo
+			        	movimiento.setFEAGTO(Utils.fechaDeHoy(false));
+			        	
 			        	bError = (CLGastos.registraMovimiento(movimiento,false) < 0);
+			        	
+			        	
+			        	
 			        	
 				        if(!bError)
 				        {
+				        	
+				        	String sCodMovimiento = QMMovimientosGastos.getMovimientoGastoID(movimiento);
+
 				        	//creamos un nuevo gasto con fecha de hoy
 				        	movimiento.setFEAGTO("0");
 				        	movimiento.setFEDEVE(Utils.fechaDeHoy(false));
 				        	movimiento.setNUPROF(sNuevaProvision);
 
 				        	bError = (CLGastos.registraMovimiento(movimiento,false) < 0);
+				        	if(!bError)
+					        {
+				        		bError = !QMListaGastosProvisiones.setRevisado(listagastos.get(i), ValoresDefecto.DEF_MOVIMIENTO_RESUELTO);
+					        	if(!bError)
+						        {
+					        		OK++;
+					        		logger.debug("Gasto '"+listagastos.get(i)+"' procesado correctamente.");
+						        }
+					        }
+				        	else
+				        	{
+				        		logger.error("ERROR: No se pudo registrar el nuevo movimiento.");
+
+				        		//restauramos el gasto antiguo
+				        		QMMovimientosGastos.delMovimientoGasto(sCodMovimiento);
+								QMListaGastos.delRelacionGasto(sCodMovimiento);
+								QMGastos.setEstado(listagastos.get(i), sEstadoGasto);
+								QMListaGastosProvisiones.setRevisado(listagastos.get(i), sRevisadoAnterior);
+								QMGastos.setFechaAnulado(listagastos.get(i), "0");
+				        	}
 				        
 				        }
 				        
 				        if(bError)
 				        {
 				        	//Devolver estado anterior a los movimientos
+				        	logger.error("ERROR: No se pudo anular el movimiento '"+listamovimientos.get(i)+"'.");
+				        	
 				        	for (int j = 0; j < listamovimientos.size() ; j++)
 					        {
 					        	QMListaGastos.setValidado(listamovimientos.get(j), listaestados.get(j));
@@ -230,21 +270,24 @@ public class CLProvisiones
 		        		
 		        		provision.setsFEPFON("0");
 		        		provision.setsCodEstado("A");
-		        		
-		        		QMProvisiones.modProvision(provision);
 		        	}
-		        	
-		        	
-		        	
-		        }
-    	        	
 
-   	        }
-    	        	
-    	        
-    	        
+		        }
+	        	if (OK > 0)
+	        	{
+		        	//Se han anulado gastos, recalculamos el valor de la provision
+		        	provision.setsValorTolal(Double.toString(calcularValorProvision(provision.getsNUPROF())));
+	        	}
+	        	QMProvisiones.modProvision(provision);
+    		}
 
 		}
+        
+        if(!bError)
+        {
+        	//OK
+        	logger.debug("Gastos pendientes resueltos.");
+        }
 
 		return !bError;
 	}

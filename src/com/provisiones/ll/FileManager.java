@@ -40,8 +40,8 @@ import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
-import com.provisiones.types.Carga;
-import com.provisiones.types.CargaTabla;
+import com.provisiones.types.Resultados;
+import com.provisiones.types.ResultadosTabla;
 import com.provisiones.types.Provision;
 
 public class FileManager 
@@ -526,13 +526,13 @@ public class FileManager
         return sNombreFichero;
 	}
 	
-	public static ArrayList<CargaTabla> leerActivos(String sNombre)
+	public static ArrayList<ResultadosTabla> leerActivos(String sNombre)
 	{
 		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 		try 
@@ -599,8 +599,8 @@ public class FileManager
 	    				registros++;
 	    			}
 
-	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
-	    			tabla.add(mensajes);
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
 	    		}
 	        }
 		
@@ -632,13 +632,13 @@ public class FileManager
         return tabla;
 	}
 
-	public static ArrayList<CargaTabla> leerGastosRevisados(String sNombre) 
+	public static ArrayList<ResultadosTabla> leerGastosRevisados(String sNombre) 
 	{
 		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 
@@ -707,7 +707,7 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -3:
-	    				sMensaje = "[FATAL] Error al validar la reclación con el Gasto.";
+	    				sMensaje = "[FATAL] Error al validar la relación con el Gasto.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
@@ -715,7 +715,12 @@ public class FileManager
 	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				break;	    				
+	    				break;
+	    			case -5:
+	    				sMensaje = "[FATAL] Error al actualizar la revisión del gasto.";
+	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;	
 	    			case -10:
 	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
@@ -737,8 +742,8 @@ public class FileManager
 	    				registros++;
 	    			}
 
-	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
-	    			tabla.add(mensajes);
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
 	    		}
 	        }
 		
@@ -772,14 +777,14 @@ public class FileManager
 	
 	}
 
-	public static ArrayList<CargaTabla> leerComunidadesRevisadas(String sNombre)
+	public static ArrayList<ResultadosTabla> leerComunidadesRevisadas(String sNombre)
 	{
 		
 		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 		try 
@@ -891,8 +896,8 @@ public class FileManager
 	    				registros++;
 	    			}
 
-	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
-	    			tabla.add(mensajes);
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
 	    		}
 	        }
 		
@@ -924,13 +929,13 @@ public class FileManager
         return tabla;
 	}
 	
-	public static ArrayList<CargaTabla> leerCuotasRevisadas(String sNombre) 
+	public static ArrayList<ResultadosTabla> leerCuotasRevisadas(String sNombre) 
 	{
 		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 		try 
@@ -1032,8 +1037,8 @@ public class FileManager
 	    				registros++;
 	    			}
 
-	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
-	    			tabla.add(mensajes);
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
 	    		}
 	        }
 		
@@ -1065,13 +1070,13 @@ public class FileManager
         return tabla;
 	}
 	
-	public static ArrayList<CargaTabla> leerReferenciasRevisadas(String sNombre) 
+	public static ArrayList<ResultadosTabla> leerReferenciasRevisadas(String sNombre) 
 	{
 		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 		try 
@@ -1174,8 +1179,8 @@ public class FileManager
 	    				registros++;
 	    			}
 
-	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
-	    			tabla.add(mensajes);
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
 	    		}
 	        }
 		
@@ -1207,14 +1212,14 @@ public class FileManager
         return tabla;
 	}
 
-	public static ArrayList<CargaTabla> leerImpuestosRevisadas(String sNombre) 
+	public static ArrayList<ResultadosTabla> leerImpuestosRevisadas(String sNombre) 
 	{
 
 		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
-		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 
@@ -1318,8 +1323,8 @@ public class FileManager
 	    				registros++;
 	    			}
 
-	    			CargaTabla mensajes = new CargaTabla(sNombre, sMensaje);
-	    			tabla.add(mensajes);
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
 	    		}
 	        }
 		
@@ -1352,12 +1357,12 @@ public class FileManager
 
 	}
 	
-	public static Carga splitter(String sNombre) 
+	public static Resultados splitter(String sNombre) 
 	{
 		int iCodigo = 0;
-		Carga carga;
+		Resultados carga;
 		
-		ArrayList<CargaTabla> tabla = new ArrayList<CargaTabla>();
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		logger.debug("|{}|{}|",sNombre,sNombre.substring(0, 3));
 		
@@ -1484,7 +1489,7 @@ public class FileManager
 
 		}
 		
-		carga = new Carga(iCodigo,tabla);
+		carga = new Resultados(iCodigo,tabla);
 		
 		return carga;
 	}

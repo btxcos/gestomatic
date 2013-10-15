@@ -307,7 +307,7 @@ public class QMListaGastos
 		ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
-	
+
 	public static String getValidado(String sCodMovimiento)
 	{
 		Statement stmt = null;
@@ -701,7 +701,7 @@ public class QMListaGastos
 					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.sField7));
 					sCOSIGA  = rs.getString(QMGastos.sField11);
 					sDCOSIGA = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-					sIMNGAS  = rs.getString(QMGastos.sField17)+Utils.recuperaImporte(false,rs.getString(QMGastos.sField16));
+					sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.sField17).equals("-"),rs.getString(QMGastos.sField16));
 							
 
  
@@ -846,6 +846,80 @@ public class QMListaGastos
 				"  FROM " + sTable + 
 				" WHERE "
 				+ sField1 + " = '" + sCodGasto + "'";
+		
+		logger.debug(sQuery);
+
+		try 
+		{
+
+			
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement(sQuery);
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+			
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					result.add(rs.getString(sField2));
+
+					logger.debug("Encontrado el registro!");
+
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}			
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			found = false;
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return result;
+	}
+	
+	public static ArrayList<String> buscarMovimientosValidadosGasto(String sCodGasto)
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;		
+
+		boolean found = false;
+		
+		ArrayList<String> result = new ArrayList<String>();
+
+		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+				   + sField1 + 
+				   " FROM " 
+				   + sTable + 
+				   " WHERE " 
+				   + sField3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "'";
 		
 		logger.debug(sQuery);
 

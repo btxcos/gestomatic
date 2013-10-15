@@ -698,6 +698,7 @@ public class QMGastos
 						sField4  + " = '"+ sCodCOTPGA +"' AND " +
 						sField5  + " = '"+ sCodCOSBGA +"' AND " +
 						sField7  + " = '"+ sFEDEVE +"' AND " +
+						sField30 + " <> '"+  ValoresDefecto.CAMPO_SIN_INFORMAR +"' AND " +
 					    sField35  + " = '"+ ValoresDefecto.DEF_GASTO_ANULADO + "' )");
 
 
@@ -743,7 +744,47 @@ public class QMGastos
 		return found;
 	}
 	
-	
+	public static boolean setFechaAnulado(String sCodGasto, String sFEAGTO)
+	{
+		Connection conn = null;
+		conn = ConnectionManager.OpenDBConnection();
+
+		Statement stmt = null;
+
+		boolean bSalida = true;
+
+		logger.debug("Ejecutando Query...");
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			stmt.executeUpdate("UPDATE " + sTable + 
+					" SET " 
+					+ sField30 + " = '"+ sFEAGTO + "' "+
+					" WHERE "
+					+ sField1  + " = '"+ sCodGasto +"'");
+			
+			logger.debug("Ejecutada con exito!");
+			
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+
+			logger.error("ERROR: SQLException:{}",ex.getMessage());
+			logger.error("ERROR: SQLState:{}",ex.getSQLState());
+			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			
+			bSalida = false;
+		} 
+		finally 
+		{
+
+			Utils.closeStatement(stmt);
+		}
+		ConnectionManager.CloseDBConnection(conn);
+		return bSalida;
+	}
 
 	public static boolean setEstado(String sCodGasto, String sEstado)
 	{
@@ -1179,8 +1220,7 @@ public class QMGastos
 					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.sField7));
 					sCOSIGA  = rs.getString(QMGastos.sField11);
 					sDCOSIGA = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-					sIMNGAS  = rs.getString(QMGastos.sField17)+Utils.recuperaImporte(false,rs.getString(QMGastos.sField16));
-							
+					sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.sField17).equals("-"),rs.getString(QMGastos.sField16));
 
  
 

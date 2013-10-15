@@ -52,7 +52,7 @@
 									<p:panel >
 										<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText for="NUPROF" value="Provisión de fondos: " />
-												<p:inputText id="NUPROF" value="#{GestorProvisiones.sNUPROF}" size="9" maxlength="9">
+												<p:inputText id="NUPROF" value="#{GestorProvisiones.sNUPROF}" size="9" maxlength="9" disabled="true">
 												</p:inputText>
 											<p:commandButton value="Cargar Provisiones Abiertas" update="msgs, popup, form:provisiones" actionListener="#{GestorProvisiones.cargaProvisionesAbiertas}" oncomplete="dlgTablaProvisiones.show()"/>	
 										</h:panelGrid>
@@ -91,8 +91,11 @@
 							</p:contextMenu>  
 									
 							<p:dataTable id="provisiones" var="provision" value="#{GestorProvisiones.tablaprovisiones}" rowKey="#{provision.NUPROF}"  
-									              selection="#{GestorProvisiones.provisionseleccionada}" selectionMode="single">  
-									
+									            selection="#{GestorProvisiones.provisionseleccionada}" selectionMode="single"  
+												paginator="true" paginatorPosition="bottom" rows="10"
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">									
+
 								<p:column headerText="Número de Provisión">  
 								    #{provision.NUPROF}  
 								</p:column>  
@@ -105,14 +108,6 @@
 								    #{provision.DTAS}  
 								</p:column>
 
-								<p:column headerText="Valor de provisión">  
-								    #{provision.VALOR}  
-								</p:column>  
-								
-								<p:column headerText="Gastos en provisión">  
-								    #{provision.GASTOS}  
-								</p:column>  
-								
 							</p:dataTable> 
 					</p:dialog>
 					<p:dialog header="Confirmación" widgetVar="dlgConfirma" resizable="false"> 

@@ -26,7 +26,7 @@ public class ConnectionManager
 		} 
 		catch (Exception ex) 
 		{
-			logger.error("ErrorMessage: {}", ex.getMessage());
+			logger.error("ErrorMessage: "+ ex.getMessage());
 			return null;
 		}
 
@@ -44,9 +44,7 @@ public class ConnectionManager
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("SQLException: {}", ex.getMessage());
-			logger.error("SQLState: {}", ex.getSQLState());
-			logger.error("VendorError: {}", ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		}
 
 		//logger.debug("Conexión realizada.");
@@ -55,18 +53,24 @@ public class ConnectionManager
 	}
 	public static boolean CloseDBConnection (Connection conn)
 	{
-		try 
+		if (conn != null)
 		{
-				//logger.debug("tiempo INI:|{}|", Utils.timeStamp());
-				conn.close();
-				//logger.debug("tiempo FIN:|{}|", Utils.timeStamp());
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("SQLException: {}", ex.getMessage());
-			logger.error("SQLState: {}", ex.getSQLState());
-			logger.error("VendorError: {}", ex.getErrorCode());
+			try 
+			{
+					//logger.debug("tiempo INI:|{}|", Utils.timeStamp());
+					conn.close();
+					//logger.debug("tiempo FIN:|{}|", Utils.timeStamp());
+			} 
+			catch (SQLException ex)
+			{
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			}
 		}
+		else
+		{
+			logger.error("ERROR: La conexión proporcionada no es válida.");
+		}
+
 		//logger.debug("Desconexión realizada.");
 		return true;
 	}

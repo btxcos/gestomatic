@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
 
-import com.provisiones.types.Carga;
-import com.provisiones.types.CargaTabla;
+import com.provisiones.types.Resultados;
+import com.provisiones.types.ResultadosTabla;
 
 
 public class GestorCargas implements Serializable
@@ -26,7 +26,7 @@ public class GestorCargas implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorCargas.class.getName());
 	
-	private transient ArrayList<CargaTabla> tablamensajes = new ArrayList<CargaTabla>();
+	private transient ArrayList<ResultadosTabla> tablamensajes = new ArrayList<ResultadosTabla>();
 	
 	public GestorCargas ()
 	{
@@ -35,7 +35,7 @@ public class GestorCargas implements Serializable
 
 	public void borrarResultadosCarga()
 	{
-    	this.tablamensajes = new ArrayList<CargaTabla>();
+    	this.tablamensajes = new ArrayList<ResultadosTabla>();
 	}
 	
     public void limpiarPlantilla(ActionEvent actionEvent) 
@@ -49,7 +49,7 @@ public class GestorCargas implements Serializable
 		
 		logger.debug("Iniciando carga...");
 		
-		Carga carga = FileManager.splitter(FileManager.guardarFichero(event));
+		Resultados carga = FileManager.splitter(FileManager.guardarFichero(event));
 		
 		int iCodigoError = carga.getiCodigo();
 		
@@ -100,12 +100,12 @@ public class GestorCargas implements Serializable
 	}
 
 
-	public ArrayList<CargaTabla> getTablamensajes() {
+	public ArrayList<ResultadosTabla> getTablamensajes() {
 		return tablamensajes;
 	}
 
 
-	public void setTablamensajes(ArrayList<CargaTabla> tablamensajes) {
+	public void setTablamensajes(ArrayList<ResultadosTabla> tablamensajes) {
 		this.tablamensajes = tablamensajes;
 	}  
 }

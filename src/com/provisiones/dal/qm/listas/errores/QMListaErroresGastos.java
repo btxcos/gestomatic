@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
+import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.ErrorGastoTabla;
@@ -257,7 +258,7 @@ public class QMListaErroresGastos
 					COTPGA = rs.getString(QMMovimientosGastos.sField4);
 					COSBGA = rs.getString(QMMovimientosGastos.sField5);
 					DCOSBGA = QMCodigosControl.getDesCOSBGA(COGRUG,COTPGA,COSBGA);
-					IMNGAS = rs.getString(QMMovimientosGastos.sField17)+Utils.recuperaImporte(false, rs.getString(QMMovimientosGastos.sField16));
+					IMNGAS = Utils.recuperaImporte(rs.getString(QMMovimientosGastos.sField17).equals("-"),rs.getString(QMMovimientosGastos.sField16));
 					FEDEVE = Utils.recuperaFecha(rs.getString(QMMovimientosGastos.sField7));
 					logger.debug("{}:|{}|",QMMovimientosGastos.sField7,FEDEVE);
 					MOVIMIENTO = rs.getString(QMMovimientosGastos.sField1);

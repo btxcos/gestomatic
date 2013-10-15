@@ -22,7 +22,7 @@ public class TestLog
 		
 		logger.debug("user.dir:|"+System.getProperty("user.dir")+"|");
 
-	    /*long prev_time1;
+	    long prev_time1;
 	    long time1;
 	    Runtime runtime1;
 	    long prev_memory1;
@@ -88,10 +88,10 @@ public class TestLog
 	    System.out.println("Memoria del {}: " + memory3);
 	    System.out.println("Tiempo del {}: " + time3);
 	    
-	    System.out.println("runtime3: "+ runtime3.toString());*/
+	    System.out.println("runtime3: "+ runtime3.toString());
 
 	    
-	    Utils.debugTraceArrayList(true, "TestLog", "main", QMListaGastosProvisiones.buscaGastosSinValidarEnProvision("1304000"));
+	    //Utils.debugTraceArrayList(true, "TestLog", "main", QMListaGastosProvisiones.buscaGastosSinValidarEnProvision("1304000"));
 		
 	}
 

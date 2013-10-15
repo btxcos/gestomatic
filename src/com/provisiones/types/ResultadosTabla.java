@@ -1,34 +1,35 @@
 package com.provisiones.types;
 
-public class CargaTabla 
+public class ResultadosTabla 
 {
 
-	private String sArchivo = "";
+	private String sObjeto = "";
 	private String sResultado = "";
 
 	//Constructor de clase
 
-	public CargaTabla(String sArchivo, String sResultado) {
+	public ResultadosTabla(String sObjeto, String sResultado) {
 		super();
-		this.sArchivo = sArchivo;
+		this.sObjeto = sObjeto;
 		this.sResultado = sResultado;
 	}
 
 	//Métodos de acceso
+	
+	public String getsObjeto() {
+		return sObjeto;
+	}
 
-	public String getsArchivo() {
-		return sArchivo;
+	public void setsObjeto(String sObjeto) {
+		this.sObjeto = sObjeto;
 	}
-	public void setsArchivo(String sArchivo) {
-		this.sArchivo = sArchivo;
-	}
+
 	public String getsResultado() {
 		return sResultado;
 	}
+
 	public void setsResultado(String sResultado) {
 		this.sResultado = sResultado;
 	}
-	
-	
-	
+
 }
