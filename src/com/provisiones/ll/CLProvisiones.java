@@ -276,7 +276,7 @@ public class CLProvisiones
 	        	if (OK > 0)
 	        	{
 		        	//Se han anulado gastos, recalculamos el valor de la provision
-		        	provision.setsValorTolal(Double.toString(calcularValorProvision(provision.getsNUPROF())));
+		        	provision.setsValorTolal(Utils.compruebaImporte(Double.toString(calcularValorProvision(provision.getsNUPROF()))));
 	        	}
 	        	QMProvisiones.modProvision(provision);
     		}

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Utils;
 
+@SuppressWarnings("unused")
 public class TestLog 
 {
 	private static Logger logger = LoggerFactory.getLogger(TestLog.class.getName());

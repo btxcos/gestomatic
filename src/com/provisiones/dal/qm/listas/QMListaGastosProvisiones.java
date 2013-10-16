@@ -770,7 +770,7 @@ public class QMListaGastosProvisiones
 				" FROM "
 				+ QMGastos.sTable + 
 				" WHERE (" 
-				+ QMGastos.sField2 + " NOT IN ('" 
+				+ QMGastos.sField35 + " NOT IN ('" 
 				+ ValoresDefecto.DEF_GASTO_ANULADO + "','"
 				+ ValoresDefecto.DEF_GASTO_ABONADO +
 				"') AND "

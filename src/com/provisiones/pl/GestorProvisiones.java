@@ -79,7 +79,7 @@ public class GestorProvisiones implements Serializable
 	{
 		FacesMessage msg;
 		
-		Provision provision = new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, Utils.fechaDeHoy(false),ValoresDefecto.CAMPO_SIN_INFORMAR, ValoresDefecto.DEF_BAJA);
+		Provision provision = new Provision(sNUPROF, sCOSPAT, sTAS, Utils.compruebaImporte(sValorTolal), sNumGastos, Utils.fechaDeHoy(false),ValoresDefecto.CAMPO_SIN_INFORMAR, ValoresDefecto.DEF_BAJA);
 		
 				
 		//CLProvisiones.detallesProvision(sNUPROF);
