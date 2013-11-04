@@ -57,62 +57,68 @@ public class QMMovimientosReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "INSERT INTO " 
+				   + TABLA + 
+				   " ("
+			       + CAMPO2  + ","              
+			       + CAMPO3  + ","              
+			       + CAMPO4  + ","              
+			       + CAMPO5  + ","              
+			       + CAMPO6  + ","              
+			       + CAMPO7  + ","              
+			       + CAMPO8  + ","              
+			       + CAMPO9  + ","              
+			       + CAMPO10 + ","              
+			       + CAMPO11 + ","              
+			       + CAMPO12 + ","              
+			       + CAMPO13 + ","
+			       + CAMPO14 + ","
+			       + CAMPO15 + ","
+			       + CAMPO16 +
+			       //Ampliacion de valor catastral
+			       ","
+			       + CAMPO17 + ","              
+			       + CAMPO18 + ","              
+			       + CAMPO19 + ","
+			       + CAMPO20 + ","
+			       + CAMPO21 + ","
+			       + CAMPO22 +
+			       
+			       ") VALUES ('" 
+			       + NuevoMovimientoReferenciaCatastral.getCODTRN() + "','" 
+			       + NuevoMovimientoReferenciaCatastral.getCOTDOR() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getIDPROV() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getCOACCI() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getCOENGP() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getCOACES() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getNURCAT() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getBITC16() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getTIRCAT() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getBITC17() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getENEMIS() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getCOTEXA() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getBITC09() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getOBTEXC() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getOBDEER()
 
-		try {
+			       //Ampliacion de valor catastral
+			       + "','"
+			       + NuevoMovimientoReferenciaCatastral.getBITC23() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getIMVSUE() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getBITC24() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getIMCATA() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getBITC25() + "','"
+			       + NuevoMovimientoReferenciaCatastral.getFERECA() + 
+			       "' )";
+		
+		logger.debug(sQuery);
+
+		try 
+		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
-				       + CAMPO2  + ","              
-				       + CAMPO3  + ","              
-				       + CAMPO4  + ","              
-				       + CAMPO5  + ","              
-				       + CAMPO6  + ","              
-				       + CAMPO7  + ","              
-				       + CAMPO8  + ","              
-				       + CAMPO9  + ","              
-				       + CAMPO10 + ","              
-				       + CAMPO11 + ","              
-				       + CAMPO12 + ","              
-				       + CAMPO13 + ","
-				       + CAMPO14 + ","
-				       + CAMPO15 + ","
-				       + CAMPO16 +
-				       //Ampliacion de valor catastral
-				       ","
-				       + CAMPO17 + ","              
-				       + CAMPO18 + ","              
-				       + CAMPO19 + ","
-				       + CAMPO20 + ","
-				       + CAMPO21 + ","
-				       + CAMPO22 +
-				       
-				       ") VALUES ('" 
-				       + NuevoMovimientoReferenciaCatastral.getCODTRN() + "','" 
-				       + NuevoMovimientoReferenciaCatastral.getCOTDOR() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getIDPROV() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getCOACCI() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getCOENGP() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getCOACES() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getNURCAT() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getBITC16() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getTIRCAT() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getBITC17() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getENEMIS() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getCOTEXA() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getBITC09() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getOBTEXC() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getOBDEER()
-
-				       //Ampliacion de valor catastral
-				       + "','"
-				       + NuevoMovimientoReferenciaCatastral.getBITC23() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getIMVSUE() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getBITC24() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getIMCATA() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getBITC25() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getFERECA() + "' )"
-
-				       , Statement.RETURN_GENERATED_KEYS);
+			stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
 			
 			resulset = stmt.getGeneratedKeys();
 			
@@ -156,39 +162,44 @@ public class QMMovimientosReferencias
 		
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "UPDATE " 
+				+ TABLA + 
+				" SET " 
+				+ CAMPO2  + " = '"+ NuevoMovimientoReferenciaCatastral.getCODTRN() + "', "
+				+ CAMPO3  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTDOR() + "', "
+				+ CAMPO4  + " = '"+ NuevoMovimientoReferenciaCatastral.getIDPROV() + "', "
+				+ CAMPO5  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACCI() + "', "
+				+ CAMPO6  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOENGP() + "', "
+				+ CAMPO7  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACES() + "', "
+				+ CAMPO8  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "', "
+				+ CAMPO9  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "', "
+				+ CAMPO10 + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
+				+ CAMPO11 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "', "
+				+ CAMPO12 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
+				+ CAMPO13 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "', "
+				+ CAMPO14 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
+				+ CAMPO15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
+				+ CAMPO16 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBDEER() + 
+
+				//Ampliacion de valor catastral
+				"', "
+				+ CAMPO17 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC23() + "', "
+				+ CAMPO18 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMVSUE() + "', "
+				+ CAMPO19 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC24() + "', "
+				+ CAMPO20 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMCATA() + "', "
+				+ CAMPO21 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC25() + "', "
+				+ CAMPO22 + " = '"+ NuevoMovimientoReferenciaCatastral.getFERECA() + 
+				
+				"' "+
+				" WHERE "
+				+ CAMPO1 + " = '"+ sMovimientoReferenciaCatastralID +"'";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + TABLA + 
-					" SET " 
-					+ CAMPO2  + " = '"+ NuevoMovimientoReferenciaCatastral.getCODTRN() + "', "
-					+ CAMPO3  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTDOR() + "', "
-					+ CAMPO4  + " = '"+ NuevoMovimientoReferenciaCatastral.getIDPROV() + "', "
-					+ CAMPO5  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACCI() + "', "
-					+ CAMPO6  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOENGP() + "', "
-					+ CAMPO7  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACES() + "', "
-					+ CAMPO8  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "', "
-					+ CAMPO9  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "', "
-					+ CAMPO10 + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
-					+ CAMPO11 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "', "
-					+ CAMPO12 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
-					+ CAMPO13 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "', "
-					+ CAMPO14 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
-					+ CAMPO15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
-					+ CAMPO16 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBDEER() + 
-
-					//Ampliacion de valor catastral
-					"', "
-					+ CAMPO17 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC23() + "', "
-					+ CAMPO18 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMVSUE() + "', "
-					+ CAMPO19 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC24() + "', "
-					+ CAMPO20 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMCATA() + "', "
-					+ CAMPO21 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC25() + "', "
-					+ CAMPO22 + " = '"+ NuevoMovimientoReferenciaCatastral.getFERECA() + 
-					
-					"' "+
-					" WHERE "
-					+ CAMPO1 + " = '"+ sMovimientoReferenciaCatastralID +"'");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 			
@@ -221,12 +232,18 @@ public class QMMovimientosReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "DELETE FROM " 
+				+ TABLA + 
+				" WHERE "
+				+ CAMPO1 + " = '" + sMovimientoReferenciaCatastralID + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + TABLA + 
-					" WHERE (" + CAMPO1 + " = '" + sMovimientoReferenciaCatastralID + "' )");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
@@ -264,41 +281,46 @@ public class QMMovimientosReferencias
 
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "SELECT "
+				+ CAMPO1  +               
+				" FROM " 
+				+ TABLA + 
+				" WHERE ("
+				+ CAMPO2  + " = '" + referencia.getCODTRN()	+ "' AND "
+				+ CAMPO3  + " = '" + referencia.getCOTDOR()	+ "' AND "
+				+ CAMPO4  + " = '" + referencia.getIDPROV()	+ "' AND "
+				+ CAMPO5  + " = '" + referencia.getCOACCI()	+ "' AND "
+				+ CAMPO6  + " = '" + referencia.getCOENGP()	+ "' AND "
+				+ CAMPO7  + " = '" + referencia.getCOACES()	+ "' AND "
+				+ CAMPO8  + " = '" + referencia.getNURCAT()	+ "' AND "
+				+ CAMPO9  + " = '" + referencia.getBITC16()	+ "' AND "
+				+ CAMPO10 + " = '" + referencia.getTIRCAT()	+ "' AND "
+				+ CAMPO11 + " = '" + referencia.getBITC17()	+ "' AND "
+				+ CAMPO12 + " = '" + referencia.getENEMIS()	+ "' AND "
+				+ CAMPO13 + " = '" + referencia.getCOTEXA()	+ "' AND "
+				+ CAMPO14 + " = '" + referencia.getBITC09()	+ "' AND "
+				+ CAMPO15 + " = '" + referencia.getOBTEXC()	+ "' AND "
+				+ CAMPO16 + " = '" + referencia.getOBDEER()	+ "'" +
+
+
+				//Ampliacion de valor catastral
+				" AND "
+				+ CAMPO17 + " = '" + referencia.getBITC23()	+ "' AND "
+				+ CAMPO18 + " = '" + referencia.getIMVSUE()	+ "' AND "
+				+ CAMPO19 + " = '" + referencia.getBITC24()	+ "' AND "
+				+ CAMPO20 + " = '" + referencia.getIMCATA()	+ "' AND "
+				+ CAMPO21 + " = '" + referencia.getBITC25()	+ "' AND "
+				+ CAMPO22 + " = '" + referencia.getFERECA()	+ "'" +
+
+				")";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-					+ CAMPO1  +               
-					" FROM " + TABLA + 
-					" WHERE ("
-					+ CAMPO2  + " = '" + referencia.getCODTRN()	+ "' AND "
-					+ CAMPO3  + " = '" + referencia.getCOTDOR()	+ "' AND "
-					+ CAMPO4  + " = '" + referencia.getIDPROV()	+ "' AND "
-					+ CAMPO5  + " = '" + referencia.getCOACCI()	+ "' AND "
-					+ CAMPO6  + " = '" + referencia.getCOENGP()	+ "' AND "
-					+ CAMPO7  + " = '" + referencia.getCOACES()	+ "' AND "
-					+ CAMPO8  + " = '" + referencia.getNURCAT()	+ "' AND "
-					+ CAMPO9  + " = '" + referencia.getBITC16()	+ "' AND "
-					+ CAMPO10 + " = '" + referencia.getTIRCAT()	+ "' AND "
-					+ CAMPO11 + " = '" + referencia.getBITC17()	+ "' AND "
-					+ CAMPO12 + " = '" + referencia.getENEMIS()	+ "' AND "
-					+ CAMPO13 + " = '" + referencia.getCOTEXA()	+ "' AND "
-					+ CAMPO14 + " = '" + referencia.getBITC09()	+ "' AND "
-					+ CAMPO15 + " = '" + referencia.getOBTEXC()	+ "' AND "
-					+ CAMPO16 + " = '" + referencia.getOBDEER()	+ "'" +
-
-
-					//Ampliacion de valor catastral
-					" AND "
-					+ CAMPO17 + " = '" + referencia.getBITC23()	+ "' AND "
-					+ CAMPO18 + " = '" + referencia.getIMVSUE()	+ "' AND "
-					+ CAMPO19 + " = '" + referencia.getBITC24()	+ "' AND "
-					+ CAMPO20 + " = '" + referencia.getIMCATA()	+ "' AND "
-					+ CAMPO21 + " = '" + referencia.getBITC25()	+ "' AND "
-					+ CAMPO22 + " = '" + referencia.getFERECA()	+ "'" +
-
-					")"); 
+			pstmt = conn.prepareStatement(sQuery); 
 
 			rs = pstmt.executeQuery();
 			
@@ -378,38 +400,44 @@ public class QMMovimientosReferencias
 
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "SELECT "
+			       + CAMPO2  + ","              
+			       + CAMPO3  + ","              
+			       + CAMPO4  + ","              
+			       + CAMPO5  + ","              
+			       + CAMPO6  + ","              
+			       + CAMPO7  + ","              
+			       + CAMPO8  + ","              
+			       + CAMPO9  + ","              
+			       + CAMPO10 + ","              
+			       + CAMPO11 + ","              
+			       + CAMPO12 + ","              
+			       + CAMPO13 + ","
+			       + CAMPO14 + ","
+			       + CAMPO15 + ","
+			       + CAMPO16 +             
+
+			       //Ampliacion de valor catastral
+			       ","
+			       + CAMPO17 + ","              
+			       + CAMPO18 + ","              
+			       + CAMPO19 + ","
+			       + CAMPO20 + ","
+			       + CAMPO21 + ","
+			       + CAMPO22 + 
+
+			       " FROM " 
+			       + TABLA + 
+			       " WHERE " 
+			       + CAMPO1 + " = '" + sMovimientoReferenciaCatastralID	+ "'";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-				       + CAMPO2  + ","              
-				       + CAMPO3  + ","              
-				       + CAMPO4  + ","              
-				       + CAMPO5  + ","              
-				       + CAMPO6  + ","              
-				       + CAMPO7  + ","              
-				       + CAMPO8  + ","              
-				       + CAMPO9  + ","              
-				       + CAMPO10 + ","              
-				       + CAMPO11 + ","              
-				       + CAMPO12 + ","              
-				       + CAMPO13 + ","
-				       + CAMPO14 + ","
-				       + CAMPO15 + ","
-				       + CAMPO16 +             
-
-				       //Ampliacion de valor catastral
-				       ","
-				       + CAMPO17 + ","              
-				       + CAMPO18 + ","              
-				       + CAMPO19 + ","
-				       + CAMPO20 + ","
-				       + CAMPO21 + ","
-				       + CAMPO22 + 
-       
-			"  FROM " + TABLA + 
-					" WHERE (" + CAMPO1 + " = '" + sMovimientoReferenciaCatastralID	+ "')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -493,16 +521,21 @@ public class QMMovimientosReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ CAMPO1 + 
+				" FROM " 
+				+ TABLA + 
+				" WHERE " 
+				+ CAMPO1 + " = '" + sMovimientoReferenciaID + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT " 
-					+ CAMPO1 + 
-					" FROM " 
-					+ TABLA + 
-					" WHERE " + CAMPO1 + " = '" + sMovimientoReferenciaID + "'");
+			pstmt = conn.prepareStatement(sQuery);
 			
 			rs = pstmt.executeQuery();
 			

@@ -37,17 +37,24 @@ public class QMListaErroresImpuestos
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "INSERT INTO " 
+				+ TABLA + 
+				" ("
+				+ CAMPO1  + "," 
+			    + CAMPO2  +             
+			    ") VALUES ('"
+			    + sCodMovimiento + "','" 
+			    + sCodCOTDOR +  
+			    "')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
-					   + CAMPO1  + "," 
-				       + CAMPO2  +             
-				       ") VALUES ('"
-				       + sCodMovimiento + "','" 
-				       + sCodCOTDOR +  "' )");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
@@ -79,14 +86,20 @@ public class QMListaErroresImpuestos
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "DELETE FROM " 
+				+ TABLA + 
+				" WHERE ("
+				+ CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+				+ CAMPO2 + " = '" + sCodCOTDOR	+ 
+				"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
-						+ CAMPO2 + " = '" + sCodCOTDOR	+ "')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
@@ -125,15 +138,20 @@ public class QMListaErroresImpuestos
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT COUNT(*) FROM " 
+				+ TABLA + 
+				" WHERE " 
+				+ CAMPO1 + " = '" + sMovimiento + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + TABLA + 
-					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimiento + "'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -202,26 +220,34 @@ public class QMListaErroresImpuestos
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement("SELECT "
+		
+		String sQuery = "SELECT "
 					
 					   + QMMovimientosImpuestos.CAMPO1 + ","
 					   + QMMovimientosImpuestos.CAMPO7 + ","
 					   + QMMovimientosImpuestos.CAMPO8 + ","
 					   + QMMovimientosImpuestos.CAMPO11 + 
 
-					   "  FROM " + QMMovimientosImpuestos.TABLA + 
+					   "  FROM " 
+					   + QMMovimientosImpuestos.TABLA + 
 					   " WHERE ( "
 					   + QMMovimientosImpuestos.CAMPO7 +" LIKE '%"+ filtro.getCOACES() +"%' AND "
 					   + QMMovimientosImpuestos.CAMPO8 +" LIKE '%"+ filtro.getNURCAT() +"%' AND "
 					   + QMMovimientosImpuestos.CAMPO11 +" LIKE '%"+ filtro.getCOSBAC() +"%' AND "
+					   
 					   + QMMovimientosImpuestos.CAMPO1 +" IN (SELECT DISTINCT "
 					   +  CAMPO1 + 
-					   "  FROM " + TABLA + "))");
+					   "  FROM " 
+					   + TABLA + 
+					   "))";
+		
+		logger.debug(sQuery);
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement(sQuery);
 					   
 
 			rs = pstmt.executeQuery();
@@ -292,16 +318,21 @@ public class QMListaErroresImpuestos
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ CAMPO2 + 
+				" FROM " 
+				+ TABLA + 
+				" WHERE "
+				+ CAMPO1 +" = '"+ sMovimiento +"'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT " +
-					   CAMPO2 + 
-					   " FROM " + TABLA + 
-					   " WHERE "
-					   + CAMPO1 +" = '"+ sMovimiento +"'");
+			pstmt = conn.prepareStatement(sQuery);
 			
 
 			rs = pstmt.executeQuery();

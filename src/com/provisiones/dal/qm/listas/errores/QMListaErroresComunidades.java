@@ -38,17 +38,23 @@ public class QMListaErroresComunidades
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "INSERT INTO " 
+					+ TABLA + 
+					" ("
+					+ CAMPO1  + "," 
+					+ CAMPO2  +             
+					") VALUES ('"
+					+ sCodMovimiento + "','" 
+					+ sCodCOTDOR +  "' )";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
-					   + CAMPO1  + "," 
-				       + CAMPO2  +             
-				       ") VALUES ('"
-				       + sCodMovimiento + "','" 
-				       + sCodCOTDOR +  "' )");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
@@ -80,25 +86,31 @@ public class QMListaErroresComunidades
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "DELETE FROM " 
+				+ TABLA + 
+				" WHERE (" 
+				+ CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+				+ CAMPO2 + " = '" + sCodCOTDOR	+ 
+				"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
-						+ CAMPO2 + " = '" + sCodCOTDOR	+ "')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -126,15 +138,20 @@ public class QMListaErroresComunidades
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT COUNT(*) FROM " 
+				+ TABLA + 
+				" WHERE " 
+				+ CAMPO1 + " = '" + sMovimiento + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + TABLA + 
-					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimiento + "'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -202,26 +219,34 @@ public class QMListaErroresComunidades
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement("SELECT "
+		
+		String sQuery = "SELECT "
 					
 					   + QMMovimientosComunidades.CAMPO1 + ","
 					   + QMMovimientosComunidades.CAMPO7 + ","
 					   + QMMovimientosComunidades.CAMPO8 + ","
 					   + QMMovimientosComunidades.CAMPO12 + 
 
-					   "  FROM " + QMMovimientosComunidades.TABLA + 
+					   " FROM " 
+					   + QMMovimientosComunidades.TABLA + 
 					   " WHERE ( "
 					   + QMMovimientosComunidades.CAMPO7 +" LIKE '%"+ filtro.getCOCLDO() +"%' AND "
 					   + QMMovimientosComunidades.CAMPO8 +" LIKE '%"+ filtro.getNUDCOM() +"%' AND "
 					   + QMMovimientosComunidades.CAMPO7 +" LIKE '%"+ filtro.getNOMCOC() +"%' AND "
+					   
 					   + QMMovimientosComunidades.CAMPO1 +" IN (SELECT DISTINCT "
 					   +  CAMPO1 + 
-					   "  FROM " + TABLA + "))");
+					   " FROM "
+					   + TABLA + 
+					   "))";
+		
+		logger.debug(sQuery);
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement(sQuery);
 					   
 
 			rs = pstmt.executeQuery();
@@ -295,24 +320,31 @@ public class QMListaErroresComunidades
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement("SELECT "
+		
+		String sQuery = "SELECT "
 					
 					   + QMMovimientosComunidades.CAMPO1 + ","
 					   + QMMovimientosComunidades.CAMPO7 + ","
 					   + QMMovimientosComunidades.CAMPO8 + ","
 					   + QMMovimientosComunidades.CAMPO12 + 
 
-					   "  FROM " + QMMovimientosComunidades.TABLA + 
+					   "  FROM " 
+					   + QMMovimientosComunidades.TABLA + 
 					   " WHERE ( "
 					   + QMMovimientosComunidades.CAMPO10 +" LIKE '%"+ sCOACES +"%' AND "
+					   
 					   + QMMovimientosComunidades.CAMPO1 +" IN (SELECT DISTINCT "
 					   +  CAMPO1 + 
-					   "  FROM " + TABLA + "))");
+					   "  FROM " 
+					   + TABLA + "))";
+		
+		logger.debug(sQuery);
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement(sQuery);
 					   
 
 			rs = pstmt.executeQuery();
@@ -384,16 +416,21 @@ public class QMListaErroresComunidades
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ CAMPO2 + 
+				" FROM "
+				+ TABLA + 
+				" WHERE "
+				+ CAMPO1 +" = '"+ sMovimiento +"'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT " +
-					   CAMPO2 + 
-					   " FROM " + TABLA + 
-					   " WHERE "
-					   + CAMPO1 +" = '"+ sMovimiento +"'");
+			pstmt = conn.prepareStatement(sQuery);
 			
 
 			rs = pstmt.executeQuery();

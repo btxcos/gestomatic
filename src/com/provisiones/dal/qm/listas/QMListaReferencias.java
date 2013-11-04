@@ -44,39 +44,44 @@ public class QMListaReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "INSERT INTO " 
+				   + TABLA + 
+				   " ("
+				   + CAMPO1  + "," 
+			       + CAMPO2  + ","              
+			       + CAMPO3  + ","              
+			       + CAMPO4  + ","              
+			       + CAMPO5  + ","              
+			       + CAMPO6  +    
+			       ") VALUES ('" 
+			       + sCodNURCAT + "','" 
+			       + sCodCOACES + "','"
+			       + sCodMovimiento + "','"
+			       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
+			       + sUsuario + "','"
+			       + Utils.timeStamp() +
+			       "')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
-					   + CAMPO1  + "," 
-				       + CAMPO2  + ","              
-				       + CAMPO3  + ","              
-				       + CAMPO4  + ","              
-				       + CAMPO5  + ","              
-				       + CAMPO6  +    
-				       ") VALUES ('" 
-				       + sCodNURCAT + "','" 
-				       + sCodCOACES + "','"
-				       + sCodMovimiento + "','"
-				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
-				       + sUsuario + "','"
-				       + Utils.timeStamp() +
-				       "' )");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
 
 			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 			
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally
 		{
@@ -97,13 +102,18 @@ public class QMListaReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "DELETE FROM " 
+				+ TABLA + 
+				" WHERE " 
+				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO3 + " = '" + sCodMovimiento	+ "')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
@@ -139,19 +149,24 @@ public class QMListaReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+				+ CAMPO4  +               
+			    " FROM " 
+				+ TABLA + 
+				" WHERE (" 
+				+ CAMPO1 + " = '" + sCodNURCAT + "' AND " 
+				+ CAMPO2 + " = '" + sCodCOACES + "' AND " 
+				+ CAMPO3 + " = '" + sCodMovimiento	+ 
+				"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-				       + CAMPO4  +               
-       
-			"  FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " 
-					+ CAMPO2 + " = '" + sCodCOACES + "' AND " 
-					+ CAMPO3 + " = '" + sCodMovimiento	+ "')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -208,18 +223,23 @@ public class QMListaReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+				+ CAMPO4  +               
+			    " FROM " 
+				+ TABLA + 
+				" WHERE (" 
+				+ CAMPO1 + " = '" + sCodNURCAT + "' AND " 
+				+ CAMPO2 + " = '" + sCodCOACES + 
+				"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-				       + CAMPO4  +               
-       
-			"  FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " 
-					+ CAMPO2 + " = '" + sCodCOACES + "')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -277,14 +297,22 @@ public class QMListaReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ CAMPO3 + 
+				" FROM " 
+				+ TABLA + 
+				" WHERE " 
+				+ CAMPO4 + " = '" + sEstado + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + CAMPO3+ "  FROM " + TABLA + 
-					" WHERE (" + CAMPO4 + " = '" + sEstado + "' )");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -343,15 +371,19 @@ public class QMListaReferencias
 		
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "UPDATE " 
+				+ TABLA + 
+				" SET " 
+				+ CAMPO4 + " = '"+ sValidado + "' "+
+				" WHERE "
+				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + TABLA + 
-					" SET " 
-					+ CAMPO4 + " = '"+ sValidado + 
-					"' "+
-					" WHERE "+
-					"(" + CAMPO3 + " = '" + sCodMovimiento	+ "')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 			
@@ -390,15 +422,22 @@ public class QMListaReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ CAMPO4 + 
+				" FROM " 
+				+ TABLA + 
+				" WHERE "
+				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + CAMPO4 + "  FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO3 + " = '" + sCodMovimiento	+ "')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -458,15 +497,20 @@ public class QMListaReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT COUNT(*) FROM " 
+				+ TABLA + 
+				" WHERE "
+				+ CAMPO4 + " = '" + sCodValidado + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO4 + " = '" + sCodValidado + "')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -536,31 +580,37 @@ public class QMListaReferencias
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+				   + QMReferencias.CAMPO1 + ","        
+				   + QMReferencias.CAMPO2 + ","
+				   + QMReferencias.CAMPO3 + ","
+				   + QMReferencias.CAMPO5 + 
+
+				   //Ampliacion de valor catastral
+				   ","
+				   + QMReferencias.CAMPO6 + ","
+				   + QMReferencias.CAMPO7 + ","
+				   + QMReferencias.CAMPO8 + 
+				   
+				   "  FROM " 
+				   + QMReferencias.TABLA + 
+				   " WHERE " 
+				   + QMReferencias.CAMPO9 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
+				   + QMReferencias.CAMPO1 + " IN " +
+				   "(SELECT " + CAMPO1 + 
+				   " FROM " 
+				   + TABLA +
+				   " WHERE "
+				   + CAMPO2 +  " = '" + sCodCOACES	+ "')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-					   + QMReferencias.CAMPO1 + ","        
-					   + QMReferencias.CAMPO2 + ","
-					   + QMReferencias.CAMPO3 + ","
-					   + QMReferencias.CAMPO5 + 
-
-					   //Ampliacion de valor catastral
-					   ","
-					   + QMReferencias.CAMPO6 + ","
-					   + QMReferencias.CAMPO7 + ","
-					   + QMReferencias.CAMPO8 + 
-					   
-					   "  FROM " + QMReferencias.TABLA + 
-					   " WHERE " 
-					   + QMReferencias.CAMPO9 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
-					   + QMReferencias.CAMPO1 + " IN " +
-					   "(SELECT " + CAMPO1 + 
-					   " FROM " + TABLA +
-					   " WHERE "
-					   + CAMPO2 +  " = '" + sCodCOACES	+ "')");
+			pstmt = conn.prepareStatement(sQuery);
 			
 
 			rs = pstmt.executeQuery();
@@ -660,7 +710,8 @@ public class QMListaReferencias
 					   + QMActivos.CAMPO10 + ","
 					   + QMActivos.CAMPO81 + 
 
-					   " FROM " + QMActivos.TABLA + 
+					   " FROM " 
+					   + QMActivos.TABLA + 
 					   " WHERE ("
 
 					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
@@ -673,15 +724,15 @@ public class QMListaReferencias
 
 					   + QMActivos.CAMPO1 +" NOT IN (SELECT "
 					   +  CAMPO2 + 
-					   " FROM " + TABLA + 
+					   " FROM " 
+					   + TABLA + 
 					   " WHERE "
 					   
 						+ CAMPO1 + " IN (SELECT "
 						+ QMReferencias.CAMPO1 +
-						"  FROM " + QMReferencias.TABLA + 
-						" WHERE " + QMReferencias.CAMPO9 + " = '" + ValoresDefecto.DEF_ALTA + "' ) " +
-
-						"))";
+						"  FROM " 
+						+ QMReferencias.TABLA + 
+						" WHERE " + QMReferencias.CAMPO9 + " = '" + ValoresDefecto.DEF_ALTA + "' )))";
 		
 		logger.debug(sQuery);
 		
@@ -689,40 +740,7 @@ public class QMListaReferencias
 		{
 			stmt = conn.createStatement();
 			
-			pstmt = conn.prepareStatement("SELECT "
-					
-					   + QMActivos.CAMPO1 + ","        
-					   + QMActivos.CAMPO14 + ","
-					   + QMActivos.CAMPO11 + ","
-					   + QMActivos.CAMPO13 + ","
-					   + QMActivos.CAMPO6 + ","
-					   + QMActivos.CAMPO9 + ","
-					   + QMActivos.CAMPO7 + ","
-					   + QMActivos.CAMPO10 + ","
-					   + QMActivos.CAMPO81 + 
-
-					   " FROM " + QMActivos.TABLA + 
-					   " WHERE ("
-
-					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
-
-					   + QMActivos.CAMPO1 +" NOT IN (SELECT "
-					   +  CAMPO2 + 
-					   " FROM " + TABLA + 
-					   " WHERE "
-					   
-						+ CAMPO1 + " IN (SELECT "
-						+ QMReferencias.CAMPO1 +
-						"  FROM " + QMReferencias.TABLA + 
-						" WHERE " + QMReferencias.CAMPO9 + " = '" + ValoresDefecto.DEF_ALTA + "' ) " +
-
-						"))");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -812,7 +830,8 @@ public class QMListaReferencias
 					   + QMActivos.CAMPO10 + ","
 					   + QMActivos.CAMPO81 + 
 
-					   " FROM " + QMActivos.TABLA + 
+					   " FROM " 
+					   + QMActivos.TABLA + 
 					   " WHERE ("
 
 					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
@@ -825,15 +844,16 @@ public class QMListaReferencias
 
 					   + QMActivos.CAMPO1 +" IN (SELECT "
 					   +  CAMPO2 + 
-					   " FROM " + TABLA +
+					   " FROM " 
+					   + TABLA +
 					   " WHERE " 
 					   
 					   + CAMPO1 + " IN (SELECT "
    					   + QMReferencias.CAMPO1 + 
-   					   " FROM " + QMReferencias.TABLA +
-   					   " WHERE " + QMReferencias.CAMPO9 + " = '"+ ValoresDefecto.DEF_ALTA + "') " +
-   					   					   
-					   "))";
+   					   " FROM " 
+   					   + QMReferencias.TABLA +
+   					   " WHERE " 
+   					   + QMReferencias.CAMPO9 + " = '"+ ValoresDefecto.DEF_ALTA + "')))";
 		
 		logger.debug(sQuery);
 		
@@ -841,39 +861,7 @@ public class QMListaReferencias
 		{
 			stmt = conn.createStatement();
 			
-			pstmt = conn.prepareStatement("SELECT "
-					
-					   + QMActivos.CAMPO1 + ","        
-					   + QMActivos.CAMPO14 + ","
-					   + QMActivos.CAMPO11 + ","
-					   + QMActivos.CAMPO13 + ","
-					   + QMActivos.CAMPO6 + ","
-					   + QMActivos.CAMPO9 + ","
-					   + QMActivos.CAMPO7 + ","
-					   + QMActivos.CAMPO10 + ","
-					   + QMActivos.CAMPO81 + 
-
-					   " FROM " + QMActivos.TABLA + 
-					   " WHERE ("
-
-					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
-
-					   + QMActivos.CAMPO1 +" IN (SELECT "
-					   +  CAMPO2 + 
-					   " FROM " + TABLA +
-					   " WHERE " 
-					   
-					   + CAMPO1 + " IN (SELECT "
-   					   + QMReferencias.CAMPO1 + 
-   					   " FROM " + QMReferencias.TABLA +
-   					   " WHERE " + QMReferencias.CAMPO9 + " = '"+ ValoresDefecto.DEF_ALTA + "') " +
-					   "))");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -963,7 +951,8 @@ public class QMListaReferencias
 					   + QMActivos.CAMPO10 + ","
 					   + QMActivos.CAMPO81 + 
 
-					   " FROM " + QMActivos.TABLA + 
+					   " FROM " 
+					   + QMActivos.TABLA + 
 					   " WHERE ("
 
 					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
@@ -980,28 +969,7 @@ public class QMListaReferencias
 		{
 			stmt = conn.createStatement();
 			
-			pstmt = conn.prepareStatement("SELECT "
-					
-					   + QMActivos.CAMPO1 + ","        
-					   + QMActivos.CAMPO14 + ","
-					   + QMActivos.CAMPO11 + ","
-					   + QMActivos.CAMPO13 + ","
-					   + QMActivos.CAMPO6 + ","
-					   + QMActivos.CAMPO9 + ","
-					   + QMActivos.CAMPO7 + ","
-					   + QMActivos.CAMPO10 + ","
-					   + QMActivos.CAMPO81 + 
-
-					   " FROM " + QMActivos.TABLA + 
-					   " WHERE ("
-
-					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' )");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -1069,7 +1037,12 @@ public class QMListaReferencias
 		
 		logger.debug("Ejecutando Query...");
 
-		String sQuery = "";
+		String sQuery = "SELECT "
+			    + CAMPO1  +
+			    "  FROM " 
+			    + TABLA + 
+			    " WHERE "
+			    + CAMPO2 + " = '" + sCodCOACES + "'";
 		
 		logger.debug(sQuery);
 		
@@ -1077,11 +1050,7 @@ public class QMListaReferencias
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-				    + CAMPO1  +
-				    "  FROM " + TABLA + 
-				    " WHERE "
-				    + CAMPO2 + " = '" + sCodCOACES + "'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -1140,7 +1109,8 @@ public class QMListaReferencias
 
 		String sQuery = "SELECT "
 			    + CAMPO1  +
-			    "  FROM " + TABLA + 
+			    " FROM " 
+			    + TABLA + 
 			    " WHERE "
 			    + CAMPO2 + " = '" + sCodCOACES + "'";
 		
@@ -1150,11 +1120,7 @@ public class QMListaReferencias
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-				    + CAMPO1  +
-				    "  FROM " + TABLA + 
-				    " WHERE "
-				    + CAMPO2 + " = '" + sCodCOACES + "'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -1211,6 +1177,18 @@ public class QMListaReferencias
 		ArrayList<String> result = new ArrayList<String>();
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ CAMPO3  + 
+				" FROM " 
+				+ TABLA + 
+				" WHERE (" 
+				+ CAMPO1 + " = '" + sCodNURCAT + "' AND "
+				+ CAMPO2 + " = '" + sCodCOACES + "' AND "
+				+ CAMPO3 + " >=  '" + sCodMovimiento + 
+				"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
@@ -1218,14 +1196,7 @@ public class QMListaReferencias
 			
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT " 
-					+ CAMPO3  + 
-					"  FROM " + TABLA + 
-					" WHERE " +
-					"(" 
-					+ CAMPO1 + " = '" + sCodNURCAT + "' AND "
-					+ CAMPO2 + " = '" + sCodCOACES + "' AND "
-					+ CAMPO3 + " >=  '" + sCodMovimiento + "')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			

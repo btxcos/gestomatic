@@ -37,28 +37,35 @@ public class QMListaErroresCuotas
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "INSERT INTO " 
+				+ TABLA + 
+				" ("
+				+ CAMPO1  + "," 
+			    + CAMPO2  +             
+			    ") VALUES ('"
+			    + sCodMovimiento + "','" 
+			    + sCodCOTDOR + 
+			    "')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
-					   + CAMPO1  + "," 
-				       + CAMPO2  +             
-				       ") VALUES ('"
-				       + sCodMovimiento + "','" 
-				       + sCodCOTDOR +  "' )");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR: Movimiento:|"+sCodMovimiento+"|");
 			logger.error("ERROR: COTDOR:|"+sCodCOTDOR+"|");
 			
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally
 		{
@@ -81,19 +88,19 @@ public class QMListaErroresCuotas
 		logger.debug("Ejecutando Query...");
 
 		
-		String sQuery = "DELETE FROM " + TABLA + 
-				" WHERE " +
-				"(" + CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
-					+ CAMPO2 + " = '" + sCodCOTDOR	+ "')";
+		String sQuery = "DELETE FROM " 
+				+ TABLA + 
+				" WHERE (" 
+				+ CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+				+ CAMPO2 + " = '" + sCodCOTDOR	+ 
+				"')";
 		
 		logger.debug(sQuery);
+
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
-						+ CAMPO2 + " = '" + sCodCOTDOR	+ "')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
@@ -132,15 +139,20 @@ public class QMListaErroresCuotas
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT COUNT(*) FROM " 
+				+ TABLA + 
+				" WHERE " 
+				+ CAMPO1 + " = '" + sMovimiento + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + TABLA + 
-					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimiento + "'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -211,12 +223,8 @@ public class QMListaErroresCuotas
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement("SELECT "
+		
+		String sQuery = "SELECT "
 					
 					   + QMMovimientosCuotas.CAMPO1 + ","
 					   + QMMovimientosCuotas.CAMPO6 + ","
@@ -224,7 +232,8 @@ public class QMListaErroresCuotas
 					   + QMMovimientosCuotas.CAMPO9 + ","
 					   + QMMovimientosCuotas.CAMPO12 + 
 
-					   "  FROM " + QMMovimientosCuotas.TABLA + 
+					   "  FROM " 
+					   + QMMovimientosCuotas.TABLA + 
 					   " WHERE ( "
 					   + QMMovimientosCuotas.CAMPO6 +" LIKE '%"+ filtro.getCOCLDO() +"%' AND "
 					   + QMMovimientosCuotas.CAMPO7 +" LIKE '%"+ filtro.getNUDCOM() +"%' AND "
@@ -232,7 +241,17 @@ public class QMListaErroresCuotas
 					   + QMMovimientosCuotas.CAMPO12 +" LIKE '%"+ filtro.getCOSBAC() +"%' AND "
 					   + QMMovimientosCuotas.CAMPO1 +" IN (SELECT DISTINCT "
 					   +  CAMPO1 + 
-					   "  FROM " + TABLA + "))");
+					   "  FROM " 
+					   + TABLA + 
+					   "))";
+		
+		logger.debug(sQuery);
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+			pstmt = conn.prepareStatement(sQuery);
 					   
 
 			rs = pstmt.executeQuery();
@@ -304,16 +323,21 @@ public class QMListaErroresCuotas
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ CAMPO2 + 
+				" FROM " 
+				+ TABLA + 
+				" WHERE "
+				+ CAMPO1 +" = '"+ sMovimiento +"'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT " +
-					   CAMPO2 + 
-					   " FROM " + TABLA + 
-					   " WHERE "
-					   + CAMPO1 +" = '"+ sMovimiento +"'");
+			pstmt = conn.prepareStatement(sQuery);
 			
 
 			rs = pstmt.executeQuery();
