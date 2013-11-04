@@ -17,41 +17,41 @@ public class QMMovimientosComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosComunidades.class.getName());
 
-	public static String sTable = "e1_movimientos_tbl";
+	public static String TABLA = "pp001_e1_movimientos_tbl";
 
-	public static String sField1 = "e1_movimiento_id";
+	public static String CAMPO1 = "e1_movimiento_id";
 	
-	static String sField2 = "cod_codtrn";
-	static String sField3 = "cod_cotdor";
-	static String sField4 = "idprov";
-	static String sField5 = "cod_coacci";
-	static String sField6 = "coengp";
-	public static String sField7 = "cod_cocldo";
-	public static String sField8 = "cod_nudcom";
-	static String sField9 = "cod_bitc10";
-	public static String sField10 = "cod_coaces";
-	static String sField11 = "cod_bitc01";
-	public static String sField12 = "nomcoc";
-	static String sField13 = "cod_bitc02";
-	static String sField14 = "nodcco";
-	static String sField15 = "cod_bitc03";
-	static String sField16 = "nomprc";
-	static String sField17 = "cod_bitc04";
-	static String sField18 = "nutprc";
-	static String sField19 = "cod_bitc05";
-	static String sField20 = "nomadc";
-	static String sField21 = "cod_bitc06";
-	static String sField22 = "nutadc";
-	static String sField23 = "cod_bitc07";
-	static String sField24 = "nodcad";
-	static String sField25 = "cod_bitc08";
-	static String sField26 = "nuccen";
-	static String sField27 = "nuccof";
-	static String sField28 = "nuccdi";
-	static String sField29 = "nuccnt";
-	static String sField30 = "cod_bitc09";
-	static String sField31 = "obtexc";
-	static String sField32 = "obdeer";         
+	static String CAMPO2 = "cod_codtrn";
+	static String CAMPO3 = "cod_cotdor";
+	static String CAMPO4 = "idprov";
+	static String CAMPO5 = "cod_coacci";
+	static String CAMPO6 = "coengp";
+	public static String CAMPO7 = "cod_cocldo";
+	public static String CAMPO8 = "cod_nudcom";
+	static String CAMPO9 = "cod_bitc10";
+	public static String CAMPO10 = "cod_coaces";
+	static String CAMPO11 = "cod_bitc01";
+	public static String CAMPO12 = "nomcoc";
+	static String CAMPO13 = "cod_bitc02";
+	static String CAMPO14 = "nodcco";
+	static String CAMPO15 = "cod_bitc03";
+	static String CAMPO16 = "nomprc";
+	static String CAMPO17 = "cod_bitc04";
+	static String CAMPO18 = "nutprc";
+	static String CAMPO19 = "cod_bitc05";
+	static String CAMPO20 = "nomadc";
+	static String CAMPO21 = "cod_bitc06";
+	static String CAMPO22 = "nutadc";
+	static String CAMPO23 = "cod_bitc07";
+	static String CAMPO24 = "nodcad";
+	static String CAMPO25 = "cod_bitc08";
+	static String CAMPO26 = "nuccen";
+	static String CAMPO27 = "nuccof";
+	static String CAMPO28 = "nuccdi";
+	static String CAMPO29 = "nuccnt";
+	static String CAMPO30 = "cod_bitc09";
+	static String CAMPO31 = "obtexc";
+	static String CAMPO32 = "obdeer";         
 
 	
 
@@ -71,38 +71,38 @@ public class QMMovimientosComunidades
 		try {
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-				       + sField2  + ","              
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 + ","              
-				       + sField15 + ","              
-				       + sField16 + ","              
-				       + sField17 + ","              
-				       + sField18 + ","              
-				       + sField19 + ","              
-				       + sField20 + ","              
-				       + sField21 + ","              
-				       + sField22 + ","              
-				       + sField23 + ","              
-				       + sField24 + ","              
-				       + sField25 + ","              
-				       + sField26 + ","              
-				       + sField27 + ","              
-				       + sField28 + ","              
-				       + sField29 + ","
-				       + sField30 + ","
-				       + sField31 + ","
-				       + sField32 +               
+			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","              
+				       + CAMPO14 + ","              
+				       + CAMPO15 + ","              
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","              
+				       + CAMPO24 + ","              
+				       + CAMPO25 + ","              
+				       + CAMPO26 + ","              
+				       + CAMPO27 + ","              
+				       + CAMPO28 + ","              
+				       + CAMPO29 + ","
+				       + CAMPO30 + ","
+				       + CAMPO31 + ","
+				       + CAMPO32 +               
 				       ") VALUES ('" 
 				       + NuevoMovimientoComunidad.getCODTRN() + "','" 
 				       + NuevoMovimientoComunidad.getCOTDOR() + "','"
@@ -149,13 +149,11 @@ public class QMMovimientosComunidades
 		{
 
 
-			logger.error("ERROR: COCLDO:|{}|",NuevoMovimientoComunidad.getCOCLDO());
-			logger.error("ERROR: NUDCOM:|{}|",NuevoMovimientoComunidad.getNUDCOM());
-			logger.error("ERROR: COACES:|{}|",NuevoMovimientoComunidad.getCOACES());
+			logger.error("ERROR COCLDO:|"+NuevoMovimientoComunidad.getCOCLDO()+"|");
+			logger.error("ERROR NUDCOM:|"+NuevoMovimientoComunidad.getNUDCOM()+"|");
+			logger.error("ERROR COACES:|"+NuevoMovimientoComunidad.getCOACES()+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 
 			//bSalida = false;
 			
@@ -185,53 +183,51 @@ public class QMMovimientosComunidades
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
+			stmt.executeUpdate("UPDATE " + TABLA + 
 					" SET " 
-					+ sField2  + " = '"+ NuevoMovimientoComunidad.getCODTRN() + "', " 
-					+ sField3  + " = '"+ NuevoMovimientoComunidad.getCOTDOR() + "', " 
-					+ sField4  + " = '"+ NuevoMovimientoComunidad.getIDPROV() + "', " 
-					+ sField5  + " = '"+ NuevoMovimientoComunidad.getCOACCI() + "', " 
-					+ sField6  + " = '"+ NuevoMovimientoComunidad.getCOENGP() + "', " 
-					+ sField7  + " = '"+ NuevoMovimientoComunidad.getCOCLDO() + "', " 
-					+ sField8  + " = '"+ NuevoMovimientoComunidad.getNUDCOM() + "', " 
-					+ sField9  + " = '"+ NuevoMovimientoComunidad.getBITC10() + "', " 
-					+ sField10 + " = '"+ NuevoMovimientoComunidad.getCOACES() + "', " 
-					+ sField11 + " = '"+ NuevoMovimientoComunidad.getBITC01() + "', " 
-					+ sField12 + " = '"+ NuevoMovimientoComunidad.getNOMCOC() + "', " 
-					+ sField13 + " = '"+ NuevoMovimientoComunidad.getBITC02() + "', " 
-					+ sField14 + " = '"+ NuevoMovimientoComunidad.getNODCCO() + "', " 
-					+ sField15 + " = '"+ NuevoMovimientoComunidad.getBITC03() + "', " 
-					+ sField16 + " = '"+ NuevoMovimientoComunidad.getNOMPRC() + "', " 
-					+ sField17 + " = '"+ NuevoMovimientoComunidad.getBITC04() + "', " 
-					+ sField18 + " = '"+ NuevoMovimientoComunidad.getNUTPRC() + "', " 
-					+ sField19 + " = '"+ NuevoMovimientoComunidad.getBITC05() + "', " 
-					+ sField20 + " = '"+ NuevoMovimientoComunidad.getNOMADC() + "', " 
-					+ sField21 + " = '"+ NuevoMovimientoComunidad.getBITC06() + "', " 
-					+ sField22 + " = '"+ NuevoMovimientoComunidad.getNUTADC() + "', " 
-					+ sField23 + " = '"+ NuevoMovimientoComunidad.getBITC07() + "', " 
-					+ sField24 + " = '"+ NuevoMovimientoComunidad.getNODCAD() + "', " 
-					+ sField25 + " = '"+ NuevoMovimientoComunidad.getBITC08() + "', " 
-					+ sField26 + " = '"+ NuevoMovimientoComunidad.getNUCCEN() + "', " 
-					+ sField27 + " = '"+ NuevoMovimientoComunidad.getNUCCOF() + "', " 
-					+ sField28 + " = '"+ NuevoMovimientoComunidad.getNUCCDI() + "', " 
-					+ sField29 + " = '"+ NuevoMovimientoComunidad.getNUCCNT() + "', " 
-					+ sField30 + " = '"+ NuevoMovimientoComunidad.getBITC09() + "', " 
-					+ sField31 + " = '"+ NuevoMovimientoComunidad.getOBTEXC() + "', " 
-					+ sField32 + " = '"+ NuevoMovimientoComunidad.getOBDEER() +
+					+ CAMPO2  + " = '"+ NuevoMovimientoComunidad.getCODTRN() + "', " 
+					+ CAMPO3  + " = '"+ NuevoMovimientoComunidad.getCOTDOR() + "', " 
+					+ CAMPO4  + " = '"+ NuevoMovimientoComunidad.getIDPROV() + "', " 
+					+ CAMPO5  + " = '"+ NuevoMovimientoComunidad.getCOACCI() + "', " 
+					+ CAMPO6  + " = '"+ NuevoMovimientoComunidad.getCOENGP() + "', " 
+					+ CAMPO7  + " = '"+ NuevoMovimientoComunidad.getCOCLDO() + "', " 
+					+ CAMPO8  + " = '"+ NuevoMovimientoComunidad.getNUDCOM() + "', " 
+					+ CAMPO9  + " = '"+ NuevoMovimientoComunidad.getBITC10() + "', " 
+					+ CAMPO10 + " = '"+ NuevoMovimientoComunidad.getCOACES() + "', " 
+					+ CAMPO11 + " = '"+ NuevoMovimientoComunidad.getBITC01() + "', " 
+					+ CAMPO12 + " = '"+ NuevoMovimientoComunidad.getNOMCOC() + "', " 
+					+ CAMPO13 + " = '"+ NuevoMovimientoComunidad.getBITC02() + "', " 
+					+ CAMPO14 + " = '"+ NuevoMovimientoComunidad.getNODCCO() + "', " 
+					+ CAMPO15 + " = '"+ NuevoMovimientoComunidad.getBITC03() + "', " 
+					+ CAMPO16 + " = '"+ NuevoMovimientoComunidad.getNOMPRC() + "', " 
+					+ CAMPO17 + " = '"+ NuevoMovimientoComunidad.getBITC04() + "', " 
+					+ CAMPO18 + " = '"+ NuevoMovimientoComunidad.getNUTPRC() + "', " 
+					+ CAMPO19 + " = '"+ NuevoMovimientoComunidad.getBITC05() + "', " 
+					+ CAMPO20 + " = '"+ NuevoMovimientoComunidad.getNOMADC() + "', " 
+					+ CAMPO21 + " = '"+ NuevoMovimientoComunidad.getBITC06() + "', " 
+					+ CAMPO22 + " = '"+ NuevoMovimientoComunidad.getNUTADC() + "', " 
+					+ CAMPO23 + " = '"+ NuevoMovimientoComunidad.getBITC07() + "', " 
+					+ CAMPO24 + " = '"+ NuevoMovimientoComunidad.getNODCAD() + "', " 
+					+ CAMPO25 + " = '"+ NuevoMovimientoComunidad.getBITC08() + "', " 
+					+ CAMPO26 + " = '"+ NuevoMovimientoComunidad.getNUCCEN() + "', " 
+					+ CAMPO27 + " = '"+ NuevoMovimientoComunidad.getNUCCOF() + "', " 
+					+ CAMPO28 + " = '"+ NuevoMovimientoComunidad.getNUCCDI() + "', " 
+					+ CAMPO29 + " = '"+ NuevoMovimientoComunidad.getNUCCNT() + "', " 
+					+ CAMPO30 + " = '"+ NuevoMovimientoComunidad.getBITC09() + "', " 
+					+ CAMPO31 + " = '"+ NuevoMovimientoComunidad.getOBTEXC() + "', " 
+					+ CAMPO32 + " = '"+ NuevoMovimientoComunidad.getOBDEER() +
 					"' "+
 					" WHERE "
-					+ sField1 + " = '"+ sMovimientoComunidadID +"'");
+					+ CAMPO1 + " = '"+ sMovimientoComunidadID +"'");
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoComunidadID:|{}|",sMovimientoComunidadID);
+			logger.error("ERROR MovimientoComunidadID:|"+sMovimientoComunidadID+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -258,18 +254,16 @@ public class QMMovimientosComunidades
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sMovimientoComunidadID + "' )");
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
+					" WHERE (" + CAMPO1 + " = '" + sMovimientoComunidadID + "' )");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoComunidadID:|{}|",sMovimientoComunidadID);
+			logger.error("ERROR MovimientoComunidadID:|"+sMovimientoComunidadID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -333,40 +327,40 @@ public class QMMovimientosComunidades
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  + ","
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 + ","              
-				       + sField15 + ","              
-				       + sField16 + ","              
-				       + sField17 + ","              
-				       + sField18 + ","              
-				       + sField19 + ","              
-				       + sField20 + ","              
-				       + sField21 + ","              
-				       + sField22 + ","              
-				       + sField23 + ","              
-				       + sField24 + ","              
-				       + sField25 + ","              
-				       + sField26 + ","              
-				       + sField27 + ","              
-				       + sField28 + ","              
-				       + sField29 + ","
-				       + sField30 + ","
-				       + sField31 + ","
-				       + sField32 +               
+				       + CAMPO2  + ","
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","              
+				       + CAMPO14 + ","              
+				       + CAMPO15 + ","              
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","              
+				       + CAMPO24 + ","              
+				       + CAMPO25 + ","              
+				       + CAMPO26 + ","              
+				       + CAMPO27 + ","              
+				       + CAMPO28 + ","              
+				       + CAMPO29 + ","
+				       + CAMPO30 + ","
+				       + CAMPO31 + ","
+				       + CAMPO32 +               
        
-			"  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sMovimientoComunidadID	+ "')");
+			"  FROM " + TABLA + 
+					" WHERE (" + CAMPO1 + " = '" + sMovimientoComunidadID	+ "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -379,41 +373,41 @@ public class QMMovimientosComunidades
 				{
 					found = true;
 
-					sCODTRN = rs.getString(sField2);  
-					sCOTDOR = rs.getString(sField3);  
-					sIDPROV = rs.getString(sField4);  
-					sCOACCI = rs.getString(sField5);  
-					sCOENGP = rs.getString(sField6);  
-					sCOCLDO = rs.getString(sField7);  
-					sNUDCOM = rs.getString(sField8);  
-					sBITC10 = rs.getString(sField9);  
-					sCOACES = rs.getString(sField10); 
-					sBITC01 = rs.getString(sField11); 
-					sNOMCOC = rs.getString(sField12); 
-					sBITC02 = rs.getString(sField13); 
-					sNODCCO = rs.getString(sField14); 
-					sBITC03 = rs.getString(sField15); 
-					sNOMPRC = rs.getString(sField16); 
-					sBITC04 = rs.getString(sField17); 
-					sNUTPRC = rs.getString(sField18); 
-					sBITC05 = rs.getString(sField19); 
-					sNOMADC = rs.getString(sField20); 
-					sBITC06 = rs.getString(sField21); 
-					sNUTADC = rs.getString(sField22); 
-					sBITC07 = rs.getString(sField23); 
-					sNODCAD = rs.getString(sField24); 
-					sBITC08 = rs.getString(sField25); 
-					sNUCCEN = rs.getString(sField26); 
-					sNUCCOF = rs.getString(sField27); 
-					sNUCCDI = rs.getString(sField28); 
-					sNUCCNT = rs.getString(sField29); 
-					sBITC09 = rs.getString(sField30); 
-					sOBTEXC = rs.getString(sField31); 
-					sOBDEER = rs.getString(sField32); 
+					sCODTRN = rs.getString(CAMPO2);  
+					sCOTDOR = rs.getString(CAMPO3);  
+					sIDPROV = rs.getString(CAMPO4);  
+					sCOACCI = rs.getString(CAMPO5);  
+					sCOENGP = rs.getString(CAMPO6);  
+					sCOCLDO = rs.getString(CAMPO7);  
+					sNUDCOM = rs.getString(CAMPO8);  
+					sBITC10 = rs.getString(CAMPO9);  
+					sCOACES = rs.getString(CAMPO10); 
+					sBITC01 = rs.getString(CAMPO11); 
+					sNOMCOC = rs.getString(CAMPO12); 
+					sBITC02 = rs.getString(CAMPO13); 
+					sNODCCO = rs.getString(CAMPO14); 
+					sBITC03 = rs.getString(CAMPO15); 
+					sNOMPRC = rs.getString(CAMPO16); 
+					sBITC04 = rs.getString(CAMPO17); 
+					sNUTPRC = rs.getString(CAMPO18); 
+					sBITC05 = rs.getString(CAMPO19); 
+					sNOMADC = rs.getString(CAMPO20); 
+					sBITC06 = rs.getString(CAMPO21); 
+					sNUTADC = rs.getString(CAMPO22); 
+					sBITC07 = rs.getString(CAMPO23); 
+					sNODCAD = rs.getString(CAMPO24); 
+					sBITC08 = rs.getString(CAMPO25); 
+					sNUCCEN = rs.getString(CAMPO26); 
+					sNUCCOF = rs.getString(CAMPO27); 
+					sNUCCDI = rs.getString(CAMPO28); 
+					sNUCCNT = rs.getString(CAMPO29); 
+					sBITC09 = rs.getString(CAMPO30); 
+					sOBTEXC = rs.getString(CAMPO31); 
+					sOBDEER = rs.getString(CAMPO32); 
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sMovimientoComunidadID);
+					logger.debug(CAMPO1+":|"+sMovimientoComunidadID+"|");
 
 
 				}
@@ -426,11 +420,9 @@ public class QMMovimientosComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoComunidadID:|{}|",sMovimientoComunidadID);
+			logger.error("ERROR MovimientoComunidadID:|"+sMovimientoComunidadID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -466,38 +458,38 @@ public class QMMovimientosComunidades
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-					+ sField1 + 
-					"  FROM " + sTable + 
+					+ CAMPO1 + 
+					"  FROM " + TABLA + 
 						" WHERE ("
-					       + sField2  +" = '" + comunidad.getCODTRN() + "' AND "
-					       + sField4  +" = '" + comunidad.getIDPROV() + "' AND "
-					       + sField5  +" = '" + comunidad.getCOACCI() + "' AND "
-					       + sField6  +" = '" + comunidad.getCOENGP() + "' AND "
-					       + sField7  +" = '" + comunidad.getCOCLDO() + "' AND "
-					       + sField8  +" = '" + comunidad.getNUDCOM() + "' AND "
-					       + sField9  +" = '" + comunidad.getBITC10() + "' AND "
-					       + sField10 +" = '" + comunidad.getCOACES() + "' AND "
-					       + sField11 +" = '" + comunidad.getBITC01() + "' AND "
-					       + sField12 +" = '" + comunidad.getNOMCOC() + "' AND "
-					       + sField13 +" = '" + comunidad.getBITC02() + "' AND "
-					       + sField14 +" = '" + comunidad.getNODCCO() + "' AND "
-					       + sField15 +" = '" + comunidad.getBITC03() + "' AND "
-					       + sField16 +" = '" + comunidad.getNOMPRC() + "' AND "
-					       + sField17 +" = '" + comunidad.getBITC04() + "' AND "
-					       + sField18 +" = '" + comunidad.getNUTPRC() + "' AND "
-					       + sField19 +" = '" + comunidad.getBITC05() + "' AND "
-					       + sField20 +" = '" + comunidad.getNOMADC() + "' AND "
-					       + sField21 +" = '" + comunidad.getBITC06() + "' AND "
-					       + sField22 +" = '" + comunidad.getNUTADC() + "' AND "
-					       + sField23 +" = '" + comunidad.getBITC07() + "' AND "
-					       + sField24 +" = '" + comunidad.getNODCAD() + "' AND "
-					       + sField25 +" = '" + comunidad.getBITC08() + "' AND "
-					       + sField26 +" = '" + comunidad.getNUCCEN() + "' AND "
-					       + sField27 +" = '" + comunidad.getNUCCOF() + "' AND "
-					       + sField28 +" = '" + comunidad.getNUCCDI() + "' AND "
-					       + sField29 +" = '" + comunidad.getNUCCNT() + "' AND "
-					       + sField30 +" = '" + comunidad.getBITC09() + "' AND "
-					       + sField31 +" = '" + comunidad.getOBTEXC() + "' )"); 
+					       + CAMPO2  +" = '" + comunidad.getCODTRN() + "' AND "
+					       + CAMPO4  +" = '" + comunidad.getIDPROV() + "' AND "
+					       + CAMPO5  +" = '" + comunidad.getCOACCI() + "' AND "
+					       + CAMPO6  +" = '" + comunidad.getCOENGP() + "' AND "
+					       + CAMPO7  +" = '" + comunidad.getCOCLDO() + "' AND "
+					       + CAMPO8  +" = '" + comunidad.getNUDCOM() + "' AND "
+					       + CAMPO9  +" = '" + comunidad.getBITC10() + "' AND "
+					       + CAMPO10 +" = '" + comunidad.getCOACES() + "' AND "
+					       + CAMPO11 +" = '" + comunidad.getBITC01() + "' AND "
+					       + CAMPO12 +" = '" + comunidad.getNOMCOC() + "' AND "
+					       + CAMPO13 +" = '" + comunidad.getBITC02() + "' AND "
+					       + CAMPO14 +" = '" + comunidad.getNODCCO() + "' AND "
+					       + CAMPO15 +" = '" + comunidad.getBITC03() + "' AND "
+					       + CAMPO16 +" = '" + comunidad.getNOMPRC() + "' AND "
+					       + CAMPO17 +" = '" + comunidad.getBITC04() + "' AND "
+					       + CAMPO18 +" = '" + comunidad.getNUTPRC() + "' AND "
+					       + CAMPO19 +" = '" + comunidad.getBITC05() + "' AND "
+					       + CAMPO20 +" = '" + comunidad.getNOMADC() + "' AND "
+					       + CAMPO21 +" = '" + comunidad.getBITC06() + "' AND "
+					       + CAMPO22 +" = '" + comunidad.getNUTADC() + "' AND "
+					       + CAMPO23 +" = '" + comunidad.getBITC07() + "' AND "
+					       + CAMPO24 +" = '" + comunidad.getNODCAD() + "' AND "
+					       + CAMPO25 +" = '" + comunidad.getBITC08() + "' AND "
+					       + CAMPO26 +" = '" + comunidad.getNUCCEN() + "' AND "
+					       + CAMPO27 +" = '" + comunidad.getNUCCOF() + "' AND "
+					       + CAMPO28 +" = '" + comunidad.getNUCCDI() + "' AND "
+					       + CAMPO29 +" = '" + comunidad.getNUCCNT() + "' AND "
+					       + CAMPO30 +" = '" + comunidad.getBITC09() + "' AND "
+					       + CAMPO31 +" = '" + comunidad.getOBTEXC() + "' )"); 
 
 
 			rs = pstmt.executeQuery();
@@ -512,12 +504,12 @@ public class QMMovimientosComunidades
 				{
 					found = true;
 
-					sMovimientoComunidadID = rs.getString(sField1);
+					sMovimientoComunidadID = rs.getString(CAMPO1);
 					
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sMovimientoComunidadID);
+					logger.debug(CAMPO1+":|"+sMovimientoComunidadID+"|");
 
 				}
 			}
@@ -529,13 +521,11 @@ public class QMMovimientosComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",comunidad.getCOCLDO());
-			logger.error("ERROR: NUDCOM:|{}|",comunidad.getNUDCOM());
-			logger.error("ERROR: COACES:|{}|",comunidad.getCOACES());
+			logger.error("ERROR COCLDO:|"+comunidad.getCOCLDO()+"|");
+			logger.error("ERROR NUDCOM:|"+comunidad.getNUDCOM()+"|");
+			logger.error("ERROR COACES:|"+comunidad.getCOACES()+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -566,10 +556,10 @@ public class QMMovimientosComunidades
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " 
-					+ sField1 + 
+					+ CAMPO1 + 
 					" FROM " 
-					+ sTable + 
-					" WHERE " + sField1 + " = '" + sMovimientoComunidadID + "'");
+					+ TABLA + 
+					" WHERE " + CAMPO1 + " = '" + sMovimientoComunidadID + "'");
 			
 			rs = pstmt.executeQuery();
 			
@@ -583,7 +573,7 @@ public class QMMovimientosComunidades
 					found = true;
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField1,rs.getString(sField1));
+					logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 				}
 			}
 			if (found == false) 
@@ -594,11 +584,9 @@ public class QMMovimientosComunidades
 		catch (SQLException ex) 
 		{
 			found = false;
-			logger.error("ERROR: MovimientoComunidadID:|{}|",sMovimientoComunidadID);
+			logger.error("ERROR MovimientoComunidadID:|"+sMovimientoComunidadID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			
 		} 

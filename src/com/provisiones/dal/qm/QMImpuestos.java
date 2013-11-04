@@ -18,19 +18,19 @@ public class QMImpuestos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMImpuestos.class.getName());
 	
-	public static final String sTable = "e4_impuestos_tbl";
+	public static final String TABLA = "pp001_e4_impuestos_tbl";
 
-	public static final String sField1  = "cod_nurcat";    
-	public static final String sField2 = "cod_cosbac";
-	public static final String sField3 = "feprre";    
-	public static final String sField4 = "ferere";    
-	public static final String sField5 = "fedein";    
-	public static final String sField6 = "cod_bisode";
-	public static final String sField7 = "cod_bireso";
-	public static final String sField8 = "cotexa";    
-	public static final String sField9 = "obtexc";
+	public static final String CAMPO1  = "cod_nurcat";    
+	public static final String CAMPO2 = "cod_cosbac";
+	public static final String CAMPO3 = "feprre";    
+	public static final String CAMPO4 = "ferere";    
+	public static final String CAMPO5 = "fedein";    
+	public static final String CAMPO6 = "cod_bisode";
+	public static final String CAMPO7 = "cod_bireso";
+	public static final String CAMPO8 = "cotexa";    
+	public static final String CAMPO9 = "obtexc";
 
-	public static final String sField10 = "cod_estado";
+	public static final String CAMPO10 = "cod_estado";
 
 	public static boolean addImpuesto(ImpuestoRecurso NuevoImpuestoRecurso)
 
@@ -47,17 +47,17 @@ public class QMImpuestos
 		try {
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-				       + sField1  + ","
-				       + sField2  + "," 
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","
-				       + sField9  + ","
-				       + sField10  +  
+			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
+				       + CAMPO1  + ","
+				       + CAMPO2  + "," 
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","
+				       + CAMPO9  + ","
+				       + CAMPO10  +  
 				       ") VALUES ('" 
 				       + NuevoImpuestoRecurso.getNURCAT() + "','"
 				       + NuevoImpuestoRecurso.getCOSBAC() + "','"
@@ -75,12 +75,10 @@ public class QMImpuestos
 		catch (SQLException ex) 
 		{
 		
-			logger.error("ERROR: NURCAT:|{}|",NuevoImpuestoRecurso.getNURCAT());
-			logger.error("ERROR: COSBAC:|{}|",NuevoImpuestoRecurso.getCOSBAC());
+			logger.error("ERROR NURCAT:|"+NuevoImpuestoRecurso.getNURCAT()+"|");
+			logger.error("ERROR COSBAC:|"+NuevoImpuestoRecurso.getCOSBAC()+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -107,33 +105,31 @@ public class QMImpuestos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
+			stmt.executeUpdate("UPDATE " + TABLA + 
 					" SET " 
-					+ sField1 + " = '"+ NuevoImpuestoRecurso.getNURCAT() + "', "
-					+ sField2 + " = '"+ NuevoImpuestoRecurso.getCOSBAC() + "', "
-					+ sField3 + " = '"+ NuevoImpuestoRecurso.getFEPRRE() + "', "
-					+ sField4 + " = '"+ NuevoImpuestoRecurso.getFERERE() + "', "
-					+ sField5 + " = '"+ NuevoImpuestoRecurso.getFEDEIN() + "', "
-					+ sField6 + " = '"+ NuevoImpuestoRecurso.getBISODE() + "', "
-					+ sField7 + " = '"+ NuevoImpuestoRecurso.getBIRESO() + "', "
-					+ sField8 + " = '"+ NuevoImpuestoRecurso.getCOTEXA() + "', "
-					+ sField9 + " = '"+ NuevoImpuestoRecurso.getOBTEXC() +
+					+ CAMPO1 + " = '"+ NuevoImpuestoRecurso.getNURCAT() + "', "
+					+ CAMPO2 + " = '"+ NuevoImpuestoRecurso.getCOSBAC() + "', "
+					+ CAMPO3 + " = '"+ NuevoImpuestoRecurso.getFEPRRE() + "', "
+					+ CAMPO4 + " = '"+ NuevoImpuestoRecurso.getFERERE() + "', "
+					+ CAMPO5 + " = '"+ NuevoImpuestoRecurso.getFEDEIN() + "', "
+					+ CAMPO6 + " = '"+ NuevoImpuestoRecurso.getBISODE() + "', "
+					+ CAMPO7 + " = '"+ NuevoImpuestoRecurso.getBIRESO() + "', "
+					+ CAMPO8 + " = '"+ NuevoImpuestoRecurso.getCOTEXA() + "', "
+					+ CAMPO9 + " = '"+ NuevoImpuestoRecurso.getOBTEXC() +
 					"' "+
 					" WHERE "+
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
-					 sField2 + " = '" + sCodCOSBAC + "' )");
+					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
+					 CAMPO2 + " = '" + sCodCOSBAC + "' )");
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NURCAT:|{}|",sCodNURCAT);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -160,21 +156,19 @@ public class QMImpuestos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
-							 sField2 + " = '" + sCodCOSBAC + "' )");
+					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
+							 CAMPO2 + " = '" + sCodCOSBAC + "' )");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NURCAT:|{}|",sCodNURCAT);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -216,20 +210,20 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField1  + ","
-				       + sField2  + ","
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  +              
+				       + CAMPO1  + ","
+				       + CAMPO2  + ","
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  +              
        
-			"  FROM " + sTable + 
+			"  FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
-					 sField2 + " = '" + sCodCOSBAC + "' )");
+					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
+					 CAMPO2 + " = '" + sCodCOSBAC + "' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -242,21 +236,21 @@ public class QMImpuestos
 				{
 					found = true;
 
-					sNURCAT = rs.getString(sField1); 
-					sCOSBAC = rs.getString(sField2);
-					sFEPRRE = rs.getString(sField3);
-					sFERERE = rs.getString(sField4);
-					sFEDEIN = rs.getString(sField5);
-					sBISODE = rs.getString(sField6);
-					sBIRESO = rs.getString(sField7);
-					sCOTEXA = rs.getString(sField8);
-					sOBTEXC = rs.getString(sField9);
+					sNURCAT = rs.getString(CAMPO1); 
+					sCOSBAC = rs.getString(CAMPO2);
+					sFEPRRE = rs.getString(CAMPO3);
+					sFERERE = rs.getString(CAMPO4);
+					sFEDEIN = rs.getString(CAMPO5);
+					sBISODE = rs.getString(CAMPO6);
+					sBIRESO = rs.getString(CAMPO7);
+					sCOTEXA = rs.getString(CAMPO8);
+					sOBTEXC = rs.getString(CAMPO9);
 
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sNURCAT);
-					logger.debug("{}:|{}|",sField2,sCOSBAC);
+					logger.debug(CAMPO1+":|"+sNURCAT+"|");
+					logger.debug(CAMPO2+":|"+sCOSBAC+"|");
 
 				}
 			}
@@ -268,12 +262,10 @@ public class QMImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NURCAT:|{}|",sCodNURCAT);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -303,12 +295,12 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  +       
-				       "  FROM " + sTable + 
+				       + CAMPO2  +       
+				       "  FROM " + TABLA + 
 				       " WHERE " +
 				       "(" + 
-				       sField1 + " = '" + sCodNURCAT + "' AND " +
-				       sField2 + " = '" + sCodCOSBAC + "' " +
+				       CAMPO1 + " = '" + sCodNURCAT + "' AND " +
+				       CAMPO2 + " = '" + sCodCOSBAC + "' " +
 						")");
 
 			rs = pstmt.executeQuery();
@@ -327,8 +319,8 @@ public class QMImpuestos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sCodNURCAT);
-					logger.debug("{}:|{}|",sField2,sCodCOSBAC);
+					logger.debug(CAMPO1+":|"+sCodNURCAT+"|");
+					logger.debug(CAMPO2+":|"+sCodCOSBAC+"|");
 				}
 			}
 			if (found == false) 
@@ -339,12 +331,10 @@ public class QMImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NURCAT:|{}|",sCodNURCAT);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -375,11 +365,11 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  + 
-			"  FROM " + sTable + 
+				       + CAMPO2  + 
+			"  FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
-					sField10  + " <> 'B' )");
+					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
+					CAMPO10  + " <> 'B' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -396,7 +386,7 @@ public class QMImpuestos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sCodNURCAT);
+					logger.debug(CAMPO1+":|"+sCodNURCAT+"|");
 
 				}
 			}
@@ -408,11 +398,9 @@ public class QMImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NURCAT:|{}|",sCodNURCAT);
+			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -445,38 +433,38 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-					+ sField1 + 
-					"  FROM " + sTable + 
+					+ CAMPO1 + 
+					"  FROM " + TABLA + 
 						" WHERE ("
-					       + sField2  +" = '" + impuesto.getCODTRN() + "' AND "
-					       + sField3  +" = '" + impuesto.getCOTDOR() + "' AND "
-					       + sField4  +" = '" + impuesto.getIDPROV() + "' AND "
-					       + sField5  +" = '" + impuesto.getCOACCI() + "' AND "
-					       + sField6  +" = '" + impuesto.getCOENGP() + "' AND "
-					       + sField7  +" = '" + impuesto.getCOACES() + "' AND "
-					       + sField8  +" = '" + impuesto.getNURCAT() + "' AND "
-					       + sField9  +" = '" + impuesto.getCOGRUC() + "' AND "
-					       + sField10 +" = '" + impuesto.getCOTACA() + "' AND "
-					       + sField11 +" = '" + impuesto.getCOSBAC() + "' AND "
-					       + sField12 +" = '" + impuesto.getBITC18() + "' AND "
-					       + sField13 +" = '" + impuesto.getFEPRRE() + "' AND "
-					       + sField14 +" = '" + impuesto.getBITC19() + "' AND "
-					       + sField15 +" = '" + impuesto.getFERERE() + "' AND "
-					       + sField16 +" = '" + impuesto.getBITC20() + "' AND "
-					       + sField17 +" = '" + impuesto.getFEDEIN() + "' AND "
-					       + sField18 +" = '" + impuesto.getBITC21() + "' AND "
-					       + sField19 +" = '" + impuesto.getBISODE() + "' AND "
-					       + sField20 +" = '" + impuesto.getBITC22() + "' AND "
-					       + sField21 +" = '" + impuesto.getBIRESO() + "' AND "
-					       + sField22 +" = '" + impuesto.getCOTEXA() + "' AND "
-					       + sField23 +" = '" + impuesto.getBITC09() + "' AND "
-					       + sField24 +" = '" + impuesto.getOBTEXC() + "' AND "
-					       + sField25 +" = '" + impuesto.getOBDEER() + "' )"); 
+					       + CAMPO2  +" = '" + impuesto.getCODTRN() + "' AND "
+					       + CAMPO3  +" = '" + impuesto.getCOTDOR() + "' AND "
+					       + CAMPO4  +" = '" + impuesto.getIDPROV() + "' AND "
+					       + CAMPO5  +" = '" + impuesto.getCOACCI() + "' AND "
+					       + CAMPO6  +" = '" + impuesto.getCOENGP() + "' AND "
+					       + CAMPO7  +" = '" + impuesto.getCOACES() + "' AND "
+					       + CAMPO8  +" = '" + impuesto.getNURCAT() + "' AND "
+					       + CAMPO9  +" = '" + impuesto.getCOGRUC() + "' AND "
+					       + CAMPO10 +" = '" + impuesto.getCOTACA() + "' AND "
+					       + CAMPO11 +" = '" + impuesto.getCOSBAC() + "' AND "
+					       + CAMPO12 +" = '" + impuesto.getBITC18() + "' AND "
+					       + CAMPO13 +" = '" + impuesto.getFEPRRE() + "' AND "
+					       + CAMPO14 +" = '" + impuesto.getBITC19() + "' AND "
+					       + CAMPO15 +" = '" + impuesto.getFERERE() + "' AND "
+					       + CAMPO16 +" = '" + impuesto.getBITC20() + "' AND "
+					       + CAMPO17 +" = '" + impuesto.getFEDEIN() + "' AND "
+					       + CAMPO18 +" = '" + impuesto.getBITC21() + "' AND "
+					       + CAMPO19 +" = '" + impuesto.getBISODE() + "' AND "
+					       + CAMPO20 +" = '" + impuesto.getBITC22() + "' AND "
+					       + CAMPO21 +" = '" + impuesto.getBIRESO() + "' AND "
+					       + CAMPO22 +" = '" + impuesto.getCOTEXA() + "' AND "
+					       + CAMPO23 +" = '" + impuesto.getBITC09() + "' AND "
+					       + CAMPO24 +" = '" + impuesto.getOBTEXC() + "' AND "
+					       + CAMPO25 +" = '" + impuesto.getOBDEER() + "' )"); 
 
 			rs = pstmt.executeQuery();
 
 			//System.out.println("===================================================");
-			//System.out.println(sField1 + ":|{}|",sCuotaID);
+			//System.out.println(CAMPO1 + ":|"+sCuotaID+"|");
 
 			if (rs != null) 
 			{
@@ -485,8 +473,8 @@ public class QMImpuestos
 				{
 					found = true;
 
-					sImpuestoID = rs.getString(sField1);
-					System.out.println(sField1 + ":|{}|",sImpuestoID);
+					sImpuestoID = rs.getString(CAMPO1);
+					System.out.println(CAMPO1 + ":|"+sImpuestoID+"|");
 				}
 			}
 			if (found == false) 
@@ -498,9 +486,7 @@ public class QMImpuestos
 		catch (SQLException ex) 
 		{
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -525,25 +511,23 @@ public class QMImpuestos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
+			stmt.executeUpdate("UPDATE " + TABLA + 
 					" SET " 
-					+ sField10 + " = '"+ sEstado + 
+					+ CAMPO10 + " = '"+ sEstado + 
 					"' "+
 					" WHERE "+
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
-						sField2 + " = '" + sCodCOSBAC + "' )");
+					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
+						CAMPO2 + " = '" + sCodCOSBAC + "' )");
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NURCAT:|{}|",sCodNURCAT);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -578,10 +562,10 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField10 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + CAMPO10 + "  FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodNURCAT + "' AND " +
-					sField2 + " = '" + sCodCOSBAC + "' )");
+					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
+					CAMPO2 + " = '" + sCodCOSBAC + "' )");
 			
 			logger.debug("Ejecutada con exito!");
 
@@ -595,11 +579,11 @@ public class QMImpuestos
 				{
 					found = true;
 
-					sEstado = rs.getString(sField10);
+					sEstado = rs.getString(CAMPO10);
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField10,sEstado);
+					logger.debug(CAMPO10+":|"+sEstado+"|");
 
 
 				}
@@ -613,12 +597,10 @@ public class QMImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NURCAT:|{}|",sCodNURCAT);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{

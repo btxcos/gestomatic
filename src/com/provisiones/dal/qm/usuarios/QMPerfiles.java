@@ -18,7 +18,7 @@ public class QMPerfiles
 {
 	private static Logger logger = LoggerFactory.getLogger(QMPerfiles.class.getName());
 	
-	public static final String TABLA = "perfiles_usuarios_tbl";
+	public static final String TABLA = "pp001_perfiles_usuarios_tbl";
 
 	public static final String CAMPO1  = "perfil_id";
 	public static final String CAMPO2  = "perfil";
@@ -36,12 +36,15 @@ public class QMPerfiles
 
 		logger.debug("Ejecutando Query...");
 		
-		String sQuery = "INSERT INTO " + TABLA + " ("
-			       + CAMPO2  + ","              
-			       + CAMPO3  + 
-			       ") VALUES ('"
-			       + sPerfil + "',"
-			       + ValoresDefecto.ACTIVO + " )";
+		String sQuery = "INSERT INTO " 
+					+ TABLA + 
+					" ("
+					+ CAMPO2  + ","              
+					+ CAMPO3  + 
+					") VALUES ('"
+					+ sPerfil + "',"
+					+ ValoresDefecto.ACTIVO + 
+					" )";
 
 		logger.debug(sQuery);
 		

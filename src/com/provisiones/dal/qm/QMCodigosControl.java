@@ -19,49 +19,49 @@ public class QMCodigosControl
 
 	public static final String DESCRIPCION = "descripcion";
 	
-	public static final String TCOCLDO = "cocldo_tbl";
+	public static final String TCOCLDO = "pp001_cocldo_tbl";
 	public static final String ICOCLDO = "cocldo_id";
 	
-	public static final String TCOSBGAT22 = "cosbga_t22_tbl";
+	public static final String TCOSBGAT22 = "pp001_cosbga_t22_tbl";
 	public static final String ICOSBGAT22 = "cosbga_id";
 	
-	public static final String TCOSBGAT21 = "cosbga_t21_tbl";
+	public static final String TCOSBGAT21 = "pp001_cosbga_t21_tbl";
 	public static final String ICOSBGAT21 = "cosbga_id";
 	
-	public static final String TCOSIGA = "cosiga_tbl";
+	public static final String TCOSIGA = "pp001_cosiga_tbl";
 	public static final String ICOSIGA = "cosiga_id";
 	
-	public static final String TPTPAGO = "ptpago_tbl";
+	public static final String TPTPAGO = "pp001_ptpago_tbl";
 	public static final String IPTPAGO = "ptpago_id";
 	
-	public static final String TSOCTIT = "sociedades_titulizadas_tbl";
+	public static final String TSOCTIT = "pp001_sociedades_titulizadas_tbl";
 	public static final String ISOCTIT = "cospat_id";	
 	
-	public static final String TTIACSA = "tipo_activo_sareb_tbl";
+	public static final String TTIACSA = "pp001_tipo_activo_sareb_tbl";
 	public static final String ITIACSA = "tipo_id";
 	
-	public static final String TBIRESO = "bireso_tbl";
+	public static final String TBIRESO = "pp001_bireso_tbl";
 	public static final String IBIRESO = "bireso_id";
 
-	public static final String TBINARIA = "binaria_tbl";
+	public static final String TBINARIA = "pp001_binaria_tbl";
 	public static final String IBINARIA = "binaria_id";
 	
-	public static final String TCOTDORE1 = "cotdor_e1_tbl";
+	public static final String TCOTDORE1 = "pp001_cotdor_e1_tbl";
 	public static final String ICOTDORE1 = "cotdor_id";
 	
-	public static final String TCOTDORE2 = "cotdor_e2_tbl";
+	public static final String TCOTDORE2 = "pp001_cotdor_e2_tbl";
 	public static final String ICOTDORE2 = "cotdor_id";
 	
-	public static final String TCOTDORE3 = "cotdor_e3_tbl";
+	public static final String TCOTDORE3 = "pp001_cotdor_e3_tbl";
 	public static final String ICOTDORE3 = "cotdor_id";
 	
-	public static final String TCOTDORE4 = "cotdor_e4_tbl";
+	public static final String TCOTDORE4 = "pp001_cotdor_e4_tbl";
 	public static final String ICOTDORE4 = "cotdor_id";
 
-	public static final String TCOTERR = "coterr_tbl";
+	public static final String TCOTERR = "pp001_coterr_tbl";
 	public static final String ICOTERR = "coterr_id";
 	
-	public static String getDesCampo(String sTable, String sField1, String sValor)
+	public static String getDesCampo(String sTabla, String sCampo, String sValor)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.OpenDBConnection();
@@ -76,15 +76,22 @@ public class QMCodigosControl
 		boolean found = false;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+				+ DESCRIPCION +
+				" FROM " 
+				+ sTabla + 
+				" WHERE "
+				+ sCampo + " = '" + sValor + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT "+DESCRIPCION+" FROM " + sTable + 
-					" WHERE "
-					+ sField1 + " = '" + sValor + "'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -102,7 +109,7 @@ public class QMCodigosControl
 
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",DESCRIPCION,sDescripcion);
+					logger.debug(DESCRIPCION+":|"+sDescripcion+"|");
 				}
 			}
 			if (found == false) 
@@ -114,11 +121,9 @@ public class QMCodigosControl
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: {}:|{}|",sField1.toUpperCase(),sValor);
+			logger.error("ERROR "+sCampo.toUpperCase()+":|"+sValor+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -140,8 +145,8 @@ public class QMCodigosControl
 		boolean found = false;
 	
 
-		String sTable = "";
-		String sField1  = "cosbga_id";    
+		String sTabla = "";
+		String sCampo  = "cosbga_id";    
 		
 		String sDescripcion = "";
 		
@@ -151,7 +156,7 @@ public class QMCodigosControl
 				switch (Integer.parseInt(sCodCOTPGA)) 
 				{
 					case 1:case 2:
-						sTable = "cosbga_t11_tbl";						
+						sTabla = "pp001_cosbga_t11_tbl";						
 						break;
 				}
 				break;
@@ -159,13 +164,13 @@ public class QMCodigosControl
 				switch (Integer.parseInt(sCodCOTPGA)) 
 				{
 					case 1:
-						sTable = "cosbga_t21_tbl";
+						sTabla = "pp001_cosbga_t21_tbl";
 						break;
 					case 2:
-						sTable = "cosbga_t22_tbl";
+						sTabla = "pp001_cosbga_t22_tbl";
 						break;
 					case 3:
-						sTable = "cosbga_t23_tbl";
+						sTabla = "pp001_cosbga_t23_tbl";
 						break;
 				}
 				break;
@@ -173,33 +178,40 @@ public class QMCodigosControl
 				switch (Integer.parseInt(sCodCOTPGA)) 
 				{
 					case 2:
-						sTable = "cosbga_32_tbl";
+						sTabla = "pp001_cosbga_32_tbl";
 						break;
 					case 3:
-						sTable = "";
-						sDescripcion = "Obtencion de Licencias";
+						sTabla = "";
+						sDescripcion = "Obtención de Licencias";
 						break;
 				}
 				break;
 		}
 		
 
-		if (!sTable.equals(""))
+		if (!sTabla.equals(""))
 		{
 			Connection conn = null;
 
 			conn = ConnectionManager.OpenDBConnection();
 			
 			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ DESCRIPCION + 
+					" FROM " 
+					+ sTabla + 
+					" WHERE "
+					+ sCampo + " = '" + sCodCOSBGA + "'";
+			
+			logger.debug(sQuery);
 
 			try 
 			{
 				stmt = conn.createStatement();
 
 
-				pstmt = conn.prepareStatement("SELECT " + DESCRIPCION + "  FROM " + sTable + 
-						" WHERE " +
-						"(" + sField1 + " = '" + sCodCOSBGA + "')");
+				pstmt = conn.prepareStatement(sQuery);
 
 				rs = pstmt.executeQuery();
 				
@@ -217,7 +229,7 @@ public class QMCodigosControl
 
 						logger.debug("Encontrado el registro!");
 
-						logger.debug("{}:|{}|",DESCRIPCION,sDescripcion);
+						logger.debug(DESCRIPCION+":|"+sDescripcion+"|");
 
 
 					}
@@ -231,13 +243,11 @@ public class QMCodigosControl
 			} 
 			catch (SQLException ex) 
 			{
-				logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
-				logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
-				logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
+				logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
+				logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
+				logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
 
-				logger.error("ERROR: SQLException:{}",ex.getMessage());
-				logger.error("ERROR: SQLState:{}",ex.getSQLState());
-				logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
 			finally 
 			{

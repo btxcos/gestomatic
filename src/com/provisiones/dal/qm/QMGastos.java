@@ -22,43 +22,43 @@ public class QMGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMGastos.class.getName());
 	
-	public static final String sTable = "ga_gastos_tbl";
+	public static final String TABLA = "pp001_ga_gastos_tbl";
 
-	public static final String sField1  = "ga_gasto_id";
-	public static final String sField2  = "cod_coaces"; 
-	public static final String sField3  = "cod_cogrug"; 
-	public static final String sField4  = "cotpga";     
-	public static final String sField5  = "cosbga";     
-	public static final String sField6  = "cod_ptpago"; 
-	public static final String sField7  = "fedeve";     
-	public static final String sField8  = "ffgtvp";     
-	public static final String sField9  = "fepaga";     
-	public static final String sField10 = "felipg";     
-	public static final String sField11 = "cod_cosiga"; 
-	public static final String sField12 = "feeesi";     
-	public static final String sField13 = "feecoi";     
-	public static final String sField14 = "feeaui";     
-	public static final String sField15 = "feepai";     
-	public static final String sField16 = "imngas";     
-	public static final String sField17 = "ycos02";     
-	public static final String sField18 = "imrgas";     
-	public static final String sField19 = "ycos04";     
-	public static final String sField20 = "imdgas";     
-	public static final String sField21 = "ycos06";     
-	public static final String sField22 = "imcost";     
-	public static final String sField23 = "ycos08";     
-	public static final String sField24 = "imogas";     
-	public static final String sField25 = "ycos10";     
-	public static final String sField26 = "imdtga";     
-	public static final String sField27 = "imimga";     
-	public static final String sField28 = "cod_coimpt"; 
-	public static final String sField29 = "cod_cotneg"; 
-	public static final String sField30 = "feagto";     
-	public static final String sField31 = "cod_comona"; 
-	public static final String sField32 = "cod_biauto"; 
-	public static final String sField33 = "feaufa";     
-	public static final String sField34 = "fepgpr";     
-	public static final String sField35 = "cod_estado"; 
+	public static final String CAMPO1  = "ga_gasto_id";
+	public static final String CAMPO2  = "cod_coaces"; 
+	public static final String CAMPO3  = "cod_cogrug"; 
+	public static final String CAMPO4  = "cotpga";     
+	public static final String CAMPO5  = "cosbga";     
+	public static final String CAMPO6  = "cod_ptpago"; 
+	public static final String CAMPO7  = "fedeve";     
+	public static final String CAMPO8  = "ffgtvp";     
+	public static final String CAMPO9  = "fepaga";     
+	public static final String CAMPO10 = "felipg";     
+	public static final String CAMPO11 = "cod_cosiga"; 
+	public static final String CAMPO12 = "feeesi";     
+	public static final String CAMPO13 = "feecoi";     
+	public static final String CAMPO14 = "feeaui";     
+	public static final String CAMPO15 = "feepai";     
+	public static final String CAMPO16 = "imngas";     
+	public static final String CAMPO17 = "ycos02";     
+	public static final String CAMPO18 = "imrgas";     
+	public static final String CAMPO19 = "ycos04";     
+	public static final String CAMPO20 = "imdgas";     
+	public static final String CAMPO21 = "ycos06";     
+	public static final String CAMPO22 = "imcost";     
+	public static final String CAMPO23 = "ycos08";     
+	public static final String CAMPO24 = "imogas";     
+	public static final String CAMPO25 = "ycos10";     
+	public static final String CAMPO26 = "imdtga";     
+	public static final String CAMPO27 = "imimga";     
+	public static final String CAMPO28 = "cod_coimpt"; 
+	public static final String CAMPO29 = "cod_cotneg"; 
+	public static final String CAMPO30 = "feagto";     
+	public static final String CAMPO31 = "cod_comona"; 
+	public static final String CAMPO32 = "cod_biauto"; 
+	public static final String CAMPO33 = "feaufa";     
+	public static final String CAMPO34 = "fepgpr";     
+	public static final String CAMPO35 = "cod_estado"; 
 
 	
 	public static int addGasto (Gasto NuevoGasto, String sEstado) 
@@ -75,41 +75,43 @@ public class QMGastos
 
 		logger.debug("Ejecutando Query...");
 		
-		String sQuery = "INSERT INTO " + sTable + " ("
-			       + sField2  + ","              
-			       + sField3  + ","              
-			       + sField4  + ","              
-			       + sField5  + ","              
-			       + sField6  + ","              
-			       + sField7  + ","              
-			       + sField8  + ","              
-			       + sField9  + ","              
-			       + sField10 + ","              
-			       + sField11 + ","              
-			       + sField12 + ","              
-			       + sField13 + ","              
-			       + sField14 + ","              
-			       + sField15 + ","              
-			       + sField16 + ","              
-			       + sField17 + ","              
-			       + sField18 + ","              
-			       + sField19 + ","              
-			       + sField20 + ","              
-			       + sField21 + ","              
-			       + sField22 + ","              
-			       + sField23 + ","              
-			       + sField24 + ","              
-			       + sField25 + ","              
-			       + sField26 + ","              
-			       + sField27 + ","              
-			       + sField28 + ","              
-			       + sField29 + ","              
-			       + sField30 + ","              
-			       + sField31 + ","              
-			       + sField32 + ","              
-			       + sField33 + ","
-			       + sField34  + ","    
-			       + sField35 +               
+		String sQuery = "INSERT INTO " 
+				   + TABLA + 
+				   " ("
+			       + CAMPO2  + ","              
+			       + CAMPO3  + ","              
+			       + CAMPO4  + ","              
+			       + CAMPO5  + ","              
+			       + CAMPO6  + ","              
+			       + CAMPO7  + ","              
+			       + CAMPO8  + ","              
+			       + CAMPO9  + ","              
+			       + CAMPO10 + ","              
+			       + CAMPO11 + ","              
+			       + CAMPO12 + ","              
+			       + CAMPO13 + ","              
+			       + CAMPO14 + ","              
+			       + CAMPO15 + ","              
+			       + CAMPO16 + ","              
+			       + CAMPO17 + ","              
+			       + CAMPO18 + ","              
+			       + CAMPO19 + ","              
+			       + CAMPO20 + ","              
+			       + CAMPO21 + ","              
+			       + CAMPO22 + ","              
+			       + CAMPO23 + ","              
+			       + CAMPO24 + ","              
+			       + CAMPO25 + ","              
+			       + CAMPO26 + ","              
+			       + CAMPO27 + ","              
+			       + CAMPO28 + ","              
+			       + CAMPO29 + ","              
+			       + CAMPO30 + ","              
+			       + CAMPO31 + ","              
+			       + CAMPO32 + ","              
+			       + CAMPO33 + ","
+			       + CAMPO34  + ","    
+			       + CAMPO35 +               
           
 			       ") VALUES ('"        
 			       + NuevoGasto.getCOACES() + "','"
@@ -167,15 +169,13 @@ public class QMGastos
 		catch (SQLException ex) 
 		{
 			
-			logger.error("ERROR: COACES:|{}|",NuevoGasto.getCOACES());
-			logger.error("ERROR: COGRUG:|{}|",NuevoGasto.getCOGRUG());
-			logger.error("ERROR: COTPGA:|{}|",NuevoGasto.getCOTPGA());
-			logger.error("ERROR: COSBGA:|{}|",NuevoGasto.getCOSBGA());
-			logger.error("ERROR: FEDEVE:|{}|",NuevoGasto.getFEDEVE());
+			logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
+			logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
+			logger.error("ERROR COTPGA:|"+NuevoGasto.getCOTPGA()+"|");
+			logger.error("ERROR COSBGA:|"+NuevoGasto.getCOSBGA()+"|");
+			logger.error("ERROR FEDEVE:|"+NuevoGasto.getFEDEVE()+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			iCodigo = 0;
 		} 
 		finally 
@@ -197,103 +197,65 @@ public class QMGastos
 
 		logger.debug("Ejecutando Query...");
 		
-		String sQuery = "UPDATE " + sTable + 
+		String sQuery = "UPDATE " 
+				+ TABLA + 
 				" SET " 
-				+ sField6  + " = '"+ NuevoGasto.getPTPAGO() + "', "
-				+ sField8  + " = '"+ NuevoGasto.getFFGTVP() + "', "
-				+ sField9  + " = '"+ NuevoGasto.getFEPAGA() + "', "
-				+ sField10  + " = '"+ NuevoGasto.getFELIPG() + "', "
-				+ sField11 + " = '"+ NuevoGasto.getCOSIGA() + "', "
-				+ sField12 + " = '"+ NuevoGasto.getFEEESI() + "', "
-				+ sField13 + " = '"+ NuevoGasto.getFEECOI() + "', "
-				+ sField14 + " = '"+ NuevoGasto.getFEEAUI() + "', "
-				+ sField15 + " = '"+ NuevoGasto.getFEEPAI() + "', "
-				+ sField16 + " = '"+ NuevoGasto.getIMNGAS() + "', "
-				+ sField17 + " = '"+ NuevoGasto.getYCOS02() + "', "
-				+ sField18 + " = '"+ NuevoGasto.getIMRGAS() + "', "
-				+ sField19 + " = '"+ NuevoGasto.getYCOS04() + "', "
-				+ sField20 + " = '"+ NuevoGasto.getIMDGAS() + "', "
-				+ sField21 + " = '"+ NuevoGasto.getYCOS06() + "', "
-				+ sField22 + " = '"+ NuevoGasto.getIMCOST() + "', "
-				+ sField23 + " = '"+ NuevoGasto.getYCOS08() + "', "
-				+ sField24 + " = '"+ NuevoGasto.getIMOGAS() + "', "
-				+ sField25 + " = '"+ NuevoGasto.getYCOS10() + "', "
-				+ sField26 + " = '"+ NuevoGasto.getIMDTGA() + "', "
-				+ sField27 + " = '"+ NuevoGasto.getIMIMGA() + "', "
-				+ sField28 + " = '"+ NuevoGasto.getCOIMPT() + "', "
-				+ sField29 + " = '"+ NuevoGasto.getCOTNEG() + "', "
-				+ sField30 + " = '"+ NuevoGasto.getFEAGTO() + "', "
-				+ sField31 + " = '"+ NuevoGasto.getCOMONA() + "', "
-				+ sField32 + " = '"+ NuevoGasto.getBIAUTO() + "', "
-				+ sField33 + " = '"+ NuevoGasto.getFEAUFA() + "', "
-				+ sField34 + " = '"+ NuevoGasto.getFEPGPR() + 
+				+ CAMPO6  + " = '"+ NuevoGasto.getPTPAGO() + "', "
+				+ CAMPO8  + " = '"+ NuevoGasto.getFFGTVP() + "', "
+				+ CAMPO9  + " = '"+ NuevoGasto.getFEPAGA() + "', "
+				+ CAMPO10  + " = '"+ NuevoGasto.getFELIPG() + "', "
+				+ CAMPO11 + " = '"+ NuevoGasto.getCOSIGA() + "', "
+				+ CAMPO12 + " = '"+ NuevoGasto.getFEEESI() + "', "
+				+ CAMPO13 + " = '"+ NuevoGasto.getFEECOI() + "', "
+				+ CAMPO14 + " = '"+ NuevoGasto.getFEEAUI() + "', "
+				+ CAMPO15 + " = '"+ NuevoGasto.getFEEPAI() + "', "
+				+ CAMPO16 + " = '"+ NuevoGasto.getIMNGAS() + "', "
+				+ CAMPO17 + " = '"+ NuevoGasto.getYCOS02() + "', "
+				+ CAMPO18 + " = '"+ NuevoGasto.getIMRGAS() + "', "
+				+ CAMPO19 + " = '"+ NuevoGasto.getYCOS04() + "', "
+				+ CAMPO20 + " = '"+ NuevoGasto.getIMDGAS() + "', "
+				+ CAMPO21 + " = '"+ NuevoGasto.getYCOS06() + "', "
+				+ CAMPO22 + " = '"+ NuevoGasto.getIMCOST() + "', "
+				+ CAMPO23 + " = '"+ NuevoGasto.getYCOS08() + "', "
+				+ CAMPO24 + " = '"+ NuevoGasto.getIMOGAS() + "', "
+				+ CAMPO25 + " = '"+ NuevoGasto.getYCOS10() + "', "
+				+ CAMPO26 + " = '"+ NuevoGasto.getIMDTGA() + "', "
+				+ CAMPO27 + " = '"+ NuevoGasto.getIMIMGA() + "', "
+				+ CAMPO28 + " = '"+ NuevoGasto.getCOIMPT() + "', "
+				+ CAMPO29 + " = '"+ NuevoGasto.getCOTNEG() + "', "
+				+ CAMPO30 + " = '"+ NuevoGasto.getFEAGTO() + "', "
+				+ CAMPO31 + " = '"+ NuevoGasto.getCOMONA() + "', "
+				+ CAMPO32 + " = '"+ NuevoGasto.getBIAUTO() + "', "
+				+ CAMPO33 + " = '"+ NuevoGasto.getFEAUFA() + "', "
+				+ CAMPO34 + " = '"+ NuevoGasto.getFEPGPR() + 
 				"' "+
 				" WHERE " +
 				"("	+ 
-					sField2  + " = '"+ NuevoGasto.getCOACES() +"' AND " +
-					sField3  + " = '"+ NuevoGasto.getCOGRUG() +"' AND " +
-					sField4  + " = '"+ NuevoGasto.getCOTPGA() +"' AND " +
-					sField5  + " = '"+ NuevoGasto.getCOSBGA() +"' AND " +
-				    sField7  + " = '"+ NuevoGasto.getFEDEVE() + "' )";
+				CAMPO2  + " = '"+ NuevoGasto.getCOACES() +"' AND " +
+				CAMPO3  + " = '"+ NuevoGasto.getCOGRUG() +"' AND " +
+				CAMPO4  + " = '"+ NuevoGasto.getCOTPGA() +"' AND " +
+				CAMPO5  + " = '"+ NuevoGasto.getCOSBGA() +"' AND " +
+				CAMPO7  + " = '"+ NuevoGasto.getFEDEVE() + "' )";
 		
 		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
-					" SET " 
-					+ sField6  + " = '"+ NuevoGasto.getPTPAGO() + "', "
-					+ sField8  + " = '"+ NuevoGasto.getFFGTVP() + "', "
-					+ sField9  + " = '"+ NuevoGasto.getFEPAGA() + "', "
-					+ sField10  + " = '"+ NuevoGasto.getFELIPG() + "', "
-					+ sField11 + " = '"+ NuevoGasto.getCOSIGA() + "', "
-					+ sField12 + " = '"+ NuevoGasto.getFEEESI() + "', "
-					+ sField13 + " = '"+ NuevoGasto.getFEECOI() + "', "
-					+ sField14 + " = '"+ NuevoGasto.getFEEAUI() + "', "
-					+ sField15 + " = '"+ NuevoGasto.getFEEPAI() + "', "
-					+ sField16 + " = '"+ NuevoGasto.getIMNGAS() + "', "
-					+ sField17 + " = '"+ NuevoGasto.getYCOS02() + "', "
-					+ sField18 + " = '"+ NuevoGasto.getIMRGAS() + "', "
-					+ sField19 + " = '"+ NuevoGasto.getYCOS04() + "', "
-					+ sField20 + " = '"+ NuevoGasto.getIMDGAS() + "', "
-					+ sField21 + " = '"+ NuevoGasto.getYCOS06() + "', "
-					+ sField22 + " = '"+ NuevoGasto.getIMCOST() + "', "
-					+ sField23 + " = '"+ NuevoGasto.getYCOS08() + "', "
-					+ sField24 + " = '"+ NuevoGasto.getIMOGAS() + "', "
-					+ sField25 + " = '"+ NuevoGasto.getYCOS10() + "', "
-					+ sField26 + " = '"+ NuevoGasto.getIMDTGA() + "', "
-					+ sField27 + " = '"+ NuevoGasto.getIMIMGA() + "', "
-					+ sField28 + " = '"+ NuevoGasto.getCOIMPT() + "', "
-					+ sField29 + " = '"+ NuevoGasto.getCOTNEG() + "', "
-					+ sField30 + " = '"+ NuevoGasto.getFEAGTO() + "', "
-					+ sField31 + " = '"+ NuevoGasto.getCOMONA() + "', "
-					+ sField32 + " = '"+ NuevoGasto.getBIAUTO() + "', "
-					+ sField33 + " = '"+ NuevoGasto.getFEAUFA() + "', "
-					+ sField34 + " = '"+ NuevoGasto.getFEPGPR() + 
-					"' "+
-					" WHERE " +
-					"("	+ 
-						sField2  + " = '"+ NuevoGasto.getCOACES() +"' AND " +
-						sField3  + " = '"+ NuevoGasto.getCOGRUG() +"' AND " +
-						sField4  + " = '"+ NuevoGasto.getCOTPGA() +"' AND " +
-						sField5  + " = '"+ NuevoGasto.getCOSBGA() +"' AND " +
-					    sField7  + " = '"+ NuevoGasto.getFEDEVE() + "' )");
+			stmt.executeUpdate(sQuery);
 
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",NuevoGasto.getCOACES());
-			logger.error("ERROR: COGRUG:|{}|",NuevoGasto.getCOGRUG());
-			logger.error("ERROR: COTPGA:|{}|",NuevoGasto.getCOTPGA());
-			logger.error("ERROR: COSBGA:|{}|",NuevoGasto.getCOSBGA());
-			logger.error("ERROR: FEDEVE:|{}|",NuevoGasto.getFEDEVE());
+			logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
+			logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
+			logger.error("ERROR COTPGA:|"+NuevoGasto.getCOTPGA()+"|");
+			logger.error("ERROR COSBGA:|"+NuevoGasto.getCOSBGA()+"|");
+			logger.error("ERROR FEDEVE:|"+NuevoGasto.getFEDEVE()+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -316,23 +278,26 @@ public class QMGastos
 		boolean bSalida = true; 
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "DELETE FROM " 
+				+ TABLA + 
+				" WHERE "
+				+ CAMPO1  + " = '"+ sGastoID +"'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE "
-					+ sField1  + " = '"+ sGastoID +"'");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sGastoID);
+			logger.error("ERROR GASTO:|"+sGastoID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -392,49 +357,53 @@ public class QMGastos
 		boolean found = false;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+				   + CAMPO2  + ","
+				   + CAMPO3  + ","
+				   + CAMPO4  + ","
+				   + CAMPO5  + ","
+			       + CAMPO6  + ","
+			       + CAMPO7  + ","
+			       + CAMPO8  + ","              
+			       + CAMPO9  + ","              
+			       + CAMPO10 + ","              
+			       + CAMPO11 + ","              
+			       + CAMPO12 + ","              
+			       + CAMPO13 + ","              
+			       + CAMPO14 + ","              
+			       + CAMPO15 + ","              
+			       + CAMPO16 + ","              
+			       + CAMPO17 + ","              
+			       + CAMPO18 + ","              
+			       + CAMPO19 + ","              
+			       + CAMPO20 + ","              
+			       + CAMPO21 + ","              
+			       + CAMPO22 + ","              
+			       + CAMPO23 + ","              
+			       + CAMPO24 + ","              
+			       + CAMPO25 + ","              
+			       + CAMPO26 + ","              
+			       + CAMPO27 + ","              
+			       + CAMPO28 + ","              
+			       + CAMPO29 + ","              
+			       + CAMPO30 + ","              
+			       + CAMPO31 + ","              
+			       + CAMPO32 + ","
+			       + CAMPO33  + ","
+			       + CAMPO34 +      
+			       "  FROM " 
+			       + TABLA + 
+			       " WHERE "
+			       + CAMPO1  + " = '"+ sGastoID +"'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-					   + sField2  + ","
-					   + sField3  + ","
-					   + sField4  + ","
-					   + sField5  + ","
-				       + sField6  + ","
-				       + sField7  + ","
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 + ","              
-				       + sField15 + ","              
-				       + sField16 + ","              
-				       + sField17 + ","              
-				       + sField18 + ","              
-				       + sField19 + ","              
-				       + sField20 + ","              
-				       + sField21 + ","              
-				       + sField22 + ","              
-				       + sField23 + ","              
-				       + sField24 + ","              
-				       + sField25 + ","              
-				       + sField26 + ","              
-				       + sField27 + ","              
-				       + sField28 + ","              
-				       + sField29 + ","              
-				       + sField30 + ","              
-				       + sField31 + ","              
-				       + sField32 + ","
-				       + sField33  + ","
-				       + sField34 +      
-				       "  FROM " 
-				       + sTable + 
-				       " WHERE "
-				       + sField1  + " = '"+ sGastoID +"'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -449,39 +418,39 @@ public class QMGastos
 				{
 					found = true;
 
-					sCOACES = rs.getString(sField2); 
-					sCOGRUG = rs.getString(sField3);
-					sCOTPGA = rs.getString(sField4);
-					sCOSBGA = rs.getString(sField5); 
-					sPTPAGO = rs.getString(sField6);  
-					sFEDEVE = rs.getString(sField7);
-					sFFGTVP = rs.getString(sField8);  
-					sFEPAGA = rs.getString(sField9);  
-					sFELIPG = rs.getString(sField10); 
-					sCOSIGA = rs.getString(sField11); 
-					sFEEESI = rs.getString(sField12); 
-					sFEECOI = rs.getString(sField13); 
-					sFEEAUI = rs.getString(sField14); 
-					sFEEPAI = rs.getString(sField15); 
-					sIMNGAS = rs.getString(sField16); 
-					sYCOS02 = rs.getString(sField17); 
-					sIMRGAS = rs.getString(sField18); 
-					sYCOS04 = rs.getString(sField19); 
-					sIMDGAS = rs.getString(sField20); 
-					sYCOS06 = rs.getString(sField21); 
-					sIMCOST = rs.getString(sField22); 
-					sYCOS08 = rs.getString(sField23); 
-					sIMOGAS = rs.getString(sField24); 
-					sYCOS10 = rs.getString(sField25); 
-					sIMDTGA = rs.getString(sField26); 
-					sIMIMGA = rs.getString(sField27); 
-					sCOIMPT = rs.getString(sField28); 
-					sCOTNEG = rs.getString(sField29); 
-					sFEAGTO = rs.getString(sField30); 
-					sCOMONA = rs.getString(sField31); 
-					sBIAUTO = rs.getString(sField32); 
-					sFEAUFA = rs.getString(sField33); 
-					sFEPGPR = rs.getString(sField34); 
+					sCOACES = rs.getString(CAMPO2); 
+					sCOGRUG = rs.getString(CAMPO3);
+					sCOTPGA = rs.getString(CAMPO4);
+					sCOSBGA = rs.getString(CAMPO5); 
+					sPTPAGO = rs.getString(CAMPO6);  
+					sFEDEVE = rs.getString(CAMPO7);
+					sFFGTVP = rs.getString(CAMPO8);  
+					sFEPAGA = rs.getString(CAMPO9);  
+					sFELIPG = rs.getString(CAMPO10); 
+					sCOSIGA = rs.getString(CAMPO11); 
+					sFEEESI = rs.getString(CAMPO12); 
+					sFEECOI = rs.getString(CAMPO13); 
+					sFEEAUI = rs.getString(CAMPO14); 
+					sFEEPAI = rs.getString(CAMPO15); 
+					sIMNGAS = rs.getString(CAMPO16); 
+					sYCOS02 = rs.getString(CAMPO17); 
+					sIMRGAS = rs.getString(CAMPO18); 
+					sYCOS04 = rs.getString(CAMPO19); 
+					sIMDGAS = rs.getString(CAMPO20); 
+					sYCOS06 = rs.getString(CAMPO21); 
+					sIMCOST = rs.getString(CAMPO22); 
+					sYCOS08 = rs.getString(CAMPO23); 
+					sIMOGAS = rs.getString(CAMPO24); 
+					sYCOS10 = rs.getString(CAMPO25); 
+					sIMDTGA = rs.getString(CAMPO26); 
+					sIMIMGA = rs.getString(CAMPO27); 
+					sCOIMPT = rs.getString(CAMPO28); 
+					sCOTNEG = rs.getString(CAMPO29); 
+					sFEAGTO = rs.getString(CAMPO30); 
+					sCOMONA = rs.getString(CAMPO31); 
+					sBIAUTO = rs.getString(CAMPO32); 
+					sFEAUFA = rs.getString(CAMPO33); 
+					sFEPGPR = rs.getString(CAMPO34); 
 					
 					logger.debug("Encontrado el registro!");
 
@@ -495,11 +464,9 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sGastoID);
+			logger.error("ERROR GASTO:|"+sGastoID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -534,16 +501,16 @@ public class QMGastos
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "
-			       + sField1 +      
+			       + CAMPO1 +      
 			       " FROM " 
-			       + sTable + 
+			       + TABLA + 
 			       " WHERE "+
 			       "("	
-			       + sField2  + " = '"+ sCodCOACES +"' AND " 
-			       + sField3  + " = '"+ sCodCOGRUG +"' AND "
-			       + sField4  + " = '"+ sCodCOTPGA +"' AND "
-			       + sField5  + " = '"+ sCodCOSBGA +"' AND "
-			       + sField7  + " = '"+ sFEDEVE + "' )";
+			       + CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+			       + CAMPO3  + " = '"+ sCodCOGRUG +"' AND "
+			       + CAMPO4  + " = '"+ sCodCOTPGA +"' AND "
+			       + CAMPO5  + " = '"+ sCodCOSBGA +"' AND "
+			       + CAMPO7  + " = '"+ sFEDEVE + "' )";
 
 		logger.debug(sQuery);
 		
@@ -566,7 +533,7 @@ public class QMGastos
 				{
 					found = true;
 
-					sGastoID = rs.getString(sField1);  
+					sGastoID = rs.getString(CAMPO1);  
 					
 					logger.debug("Encontrado el registro!");
 
@@ -580,15 +547,13 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
-			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
-			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
-			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
+			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
+			logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
+			logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
+			logger.error("ERROR FEDEVE:|"+sFEDEVE+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -613,19 +578,26 @@ public class QMGastos
 
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "SELECT "
+					+ CAMPO1  +       
+					" FROM " 
+					+ TABLA + 
+					" WHERE "+
+					"("	+
+					CAMPO2  + " = '"+ sCodCOACES +"' AND " +
+					CAMPO3  + " = '"+ sCodCOGRUG +"' AND " +
+					CAMPO4  + " = '"+ sCodCOTPGA +"' AND " +
+					CAMPO5  + " = '"+ sCodCOSBGA +"' AND " +
+					CAMPO7  + " = '"+ sFEDEVE + 
+					"' )";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-				       + sField1  +       
-			"  FROM " + sTable + 
-			" WHERE "+
-			"("	+ sField2  + " = '"+ sCodCOACES +"' AND " +
-			sField3  + " = '"+ sCodCOGRUG +"' AND " +
-			sField4  + " = '"+ sCodCOTPGA +"' AND " +
-			sField5  + " = '"+ sCodCOSBGA +"' AND " +
-		    sField7  + " = '"+ sFEDEVE + "' )");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -652,15 +624,13 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
-			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
-			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
-			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
+			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
+			logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
+			logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
+			logger.error("ERROR FEDEVE:|"+sFEDEVE+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -684,22 +654,29 @@ public class QMGastos
 		boolean found = false;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " +
+					"("	+ 
+					CAMPO2  + " = '"+ sCodCOACES +"' AND " +
+					CAMPO3  + " = '"+ sCodCOGRUG +"' AND " +
+					CAMPO4  + " = '"+ sCodCOTPGA +"' AND " +
+					CAMPO5  + " = '"+ sCodCOSBGA +"' AND " +
+					CAMPO7  + " = '"+ sFEDEVE +"' AND " +
+					CAMPO30 + " <> '"+  ValoresDefecto.CAMPO_SIN_INFORMAR +"' AND " +
+				    CAMPO35  + " = '"+ ValoresDefecto.DEF_GASTO_ANULADO + 
+				    "')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-					+ sField1 + 
-					"  FROM " + sTable + 
-						" WHERE " +
-						"("	+ sField2  + " = '"+ sCodCOACES +"' AND " +
-						sField3  + " = '"+ sCodCOGRUG +"' AND " +
-						sField4  + " = '"+ sCodCOTPGA +"' AND " +
-						sField5  + " = '"+ sCodCOSBGA +"' AND " +
-						sField7  + " = '"+ sFEDEVE +"' AND " +
-						sField30 + " <> '"+  ValoresDefecto.CAMPO_SIN_INFORMAR +"' AND " +
-					    sField35  + " = '"+ ValoresDefecto.DEF_GASTO_ANULADO + "' )");
+			pstmt = conn.prepareStatement(sQuery);
 
 
 			rs = pstmt.executeQuery();
@@ -714,7 +691,6 @@ public class QMGastos
 					found = true;
 
 					logger.debug("Encontrado el registro!");
-
 				}
 			}
 			if (found == false) 
@@ -725,15 +701,13 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COGRUG:|{}|",sCodCOGRUG);
-			logger.error("ERROR: COTPGA:|{}|",sCodCOTPGA);
-			logger.error("ERROR: COSBGA:|{}|",sCodCOSBGA);
-			logger.error("ERROR: FEDEVE:|{}|",sFEDEVE);
+			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
+			logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
+			logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
+			logger.error("ERROR FEDEVE:|"+sFEDEVE+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -755,25 +729,28 @@ public class QMGastos
 
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "UPDATE " 
+				+ TABLA + 
+				" SET " 
+				+ CAMPO30 + " = '"+ sFEAGTO + "' "+
+				" WHERE "
+				+ CAMPO1  + " = '"+ sCodGasto +"'";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
-					" SET " 
-					+ sField30 + " = '"+ sFEAGTO + "' "+
-					" WHERE "
-					+ sField1  + " = '"+ sCodGasto +"'");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -797,25 +774,28 @@ public class QMGastos
 
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "UPDATE " 
+				+ TABLA + 
+				" SET " 
+				+ CAMPO35 + " = '"+ sEstado + "' "+
+				" WHERE "
+				+ CAMPO1  + " = '"+ sCodGasto +"'";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
-					" SET " 
-					+ sField35 + " = '"+ sEstado + "' "+
-					" WHERE "
-					+ sField1  + " = '"+ sCodGasto +"'");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -843,17 +823,21 @@ public class QMGastos
 		boolean found = false;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+				+ CAMPO35 + 
+				" FROM "
+				+ TABLA + 
+				" WHERE "
+				+ CAMPO1  + " = '"+ sCodGasto +"'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-						+ sField35 + 
-						" FROM "
-						+ sTable + 
-						" WHERE "
-						+ sField1  + " = '"+ sCodGasto +"'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -866,12 +850,12 @@ public class QMGastos
 				{
 					found = true;
 
-					sEstado = rs.getString(sField35);
+					sEstado = rs.getString(CAMPO35);
 					
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField35,sEstado);
+					logger.debug("{}:|"+CAMPO35,sEstado);
 
 				}
 			}
@@ -883,11 +867,9 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+			logger.error("ERROR GASTO:|"+sCodGasto);
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -914,19 +896,22 @@ public class QMGastos
 		conn = ConnectionManager.OpenDBConnection();
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+				+ CAMPO1+ 
+				" FROM " 
+				+ TABLA + 
+				" WHERE " 
+				+ CAMPO2 + " = '" + sCodCOACES + "'";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement(
-					"SELECT " 
-					+ sField1+ 
-					" FROM " 
-					+ sTable + 
-					" WHERE " 
-					+ sField2 + " = '" + sCodCOACES + "'");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -942,12 +927,12 @@ public class QMGastos
 				{
 					found = true;
 
-					result.add(rs.getString(sField1));
+					result.add(rs.getString(CAMPO1));
 										
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField2,sCodCOACES);
-					logger.debug("{}:|{}|",sField1,result.get(i));
+					logger.debug("{}:|"+CAMPO2,sCodCOACES);
+					logger.debug("{}:|"+CAMPO1,result.get(i));
 				
 					i++;
 				}
@@ -961,11 +946,9 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
+			logger.error("ERROR COACES:|"+sCodCOACES);
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -1005,32 +988,32 @@ public class QMGastos
 
 		String sQuery = "SELECT "
 					
-					   + QMActivos.sField1 + ","        
-					   + QMActivos.sField14 + ","
-					   + QMActivos.sField11 + ","
-					   + QMActivos.sField13 + ","
-					   + QMActivos.sField6 + ","
-					   + QMActivos.sField9 + ","
-					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
+					   + QMActivos.CAMPO1 + ","        
+					   + QMActivos.CAMPO14 + ","
+					   + QMActivos.CAMPO11 + ","
+					   + QMActivos.CAMPO13 + ","
+					   + QMActivos.CAMPO6 + ","
+					   + QMActivos.CAMPO9 + ","
+					   + QMActivos.CAMPO7 + ","
+					   + QMActivos.CAMPO10 + 
 
-					   " FROM " + QMActivos.sTable + 
+					   " FROM " + QMActivos.TABLA + 
 					   " WHERE ("
 
-					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
 
-					   + QMActivos.sField1 +" IN (SELECT "
-					   +  sField2 + 
-					   " FROM " + sTable +
+					   + QMActivos.CAMPO1 +" IN (SELECT "
+					   +  CAMPO2 + 
+					   " FROM " + TABLA +
 					   " WHERE " 
-					   + sField35 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
-   					   + sField35 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) )";
+					   + CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
+   					   + CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) )";
 		
 		logger.debug(sQuery);
 		
@@ -1038,34 +1021,7 @@ public class QMGastos
 		{
 			stmt = conn.createStatement();
 			
-			pstmt = conn.prepareStatement("SELECT "
-					
-					   + QMActivos.sField1 + ","        
-					   + QMActivos.sField14 + ","
-					   + QMActivos.sField11 + ","
-					   + QMActivos.sField13 + ","
-					   + QMActivos.sField6 + ","
-					   + QMActivos.sField9 + ","
-					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
-
-					   " FROM " + QMActivos.sTable + 
-					   " WHERE ("
-
-					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
-
-					   + QMActivos.sField1 +" IN (SELECT "
-					   +  sField2 + 
-					   " FROM " + sTable +
-					   " WHERE " 
-					   + sField35 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
-   					   + sField35 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) )");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -1078,14 +1034,14 @@ public class QMGastos
 				{
 					found = true;
 					
-					sCOACES = rs.getString(QMActivos.sField1);
-					sCOPOIN = rs.getString(QMActivos.sField14);
-					sNOMUIN = rs.getString(QMActivos.sField11);
-					sNOPRAC = rs.getString(QMActivos.sField13);
-					sNOVIAS = rs.getString(QMActivos.sField6);
-					sNUPIAC = rs.getString(QMActivos.sField9);
-					sNUPOAC = rs.getString(QMActivos.sField7);
-					sNUPUAC = rs.getString(QMActivos.sField10);
+					sCOACES = rs.getString(QMActivos.CAMPO1);
+					sCOPOIN = rs.getString(QMActivos.CAMPO14);
+					sNOMUIN = rs.getString(QMActivos.CAMPO11);
+					sNOPRAC = rs.getString(QMActivos.CAMPO13);
+					sNOVIAS = rs.getString(QMActivos.CAMPO6);
+					sNUPIAC = rs.getString(QMActivos.CAMPO9);
+					sNUPOAC = rs.getString(QMActivos.CAMPO7);
+					sNUPUAC = rs.getString(QMActivos.CAMPO10);
 					
 					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
@@ -1093,7 +1049,7 @@ public class QMGastos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
+					logger.debug("{}:|"+QMActivos.CAMPO1,sCOACES);
 				}
 			}
 			if (found == false) 
@@ -1104,9 +1060,7 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -1149,24 +1103,24 @@ public class QMGastos
 
 		String sQuery = "SELECT "
 					
-					   + sField2 + ","        
-					   + sField3 + ","
-					   + sField4 + ","
-					   + sField5 + ","
-					   + sField6 + ","
-					   + sField7 + ","
-					   + sField11 + ","
-					   + sField16 + ","
-					   + sField17 +
+					   + CAMPO2 + ","        
+					   + CAMPO3 + ","
+					   + CAMPO4 + ","
+					   + CAMPO5 + ","
+					   + CAMPO6 + ","
+					   + CAMPO7 + ","
+					   + CAMPO11 + ","
+					   + CAMPO16 + ","
+					   + CAMPO17 +
 
-					   " FROM " + sTable + 
+					   " FROM " + TABLA + 
 					   " WHERE (" +
 					   "("
-					   + sField35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-					   + sField35 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + 					   
+					   + CAMPO35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
+					   + CAMPO35 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + 					   
 					   "') AND "					   
 					   
-					   + sField7 + " <= '"+Utils.fechaDeHoy(false)+"')";					   
+					   + CAMPO7 + " <= '"+Utils.fechaDeHoy(false)+"')";					   
 					   
 		
 		logger.debug(sQuery);
@@ -1175,26 +1129,7 @@ public class QMGastos
 		{
 			stmt = conn.createStatement();
 			
-			pstmt = conn.prepareStatement("SELECT "
-					
-					   + sField2 + ","        
-					   + sField3 + ","
-					   + sField4 + ","
-					   + sField5 + ","
-					   + sField6 + ","
-					   + sField7 + ","
-					   + sField11 + ","
-					   + sField16 + ","
-					   + sField17 +
-
-					   " FROM " + sTable + 
-					   " WHERE (" +
-					   "("
-					   + sField35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-					   + sField35 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + 					   
-					   "') AND "					   
-					   
-					   + sField7 + " <= '"+Utils.fechaDeHoy(false)+"')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -1210,17 +1145,17 @@ public class QMGastos
 					found = true;
 					   
 					
-					sCOACES  = rs.getString(QMGastos.sField2);
-					sCOGRUG  = rs.getString(QMGastos.sField3);
-					sCOTPGA  = rs.getString(QMGastos.sField4);
-					sCOSBGA  = rs.getString(QMGastos.sField5);
+					sCOACES  = rs.getString(QMGastos.CAMPO2);
+					sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+					sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+					sCOSBGA  = rs.getString(QMGastos.CAMPO5);
 					sDCOSBGA = QMCodigosControl.getDesCOSBGA(sCOGRUG,sCOTPGA,sCOSBGA);
-					sPTPAGO  = rs.getString(QMGastos.sField6);
+					sPTPAGO  = rs.getString(QMGastos.CAMPO6);
 					sDPTPAGO = QMCodigosControl.getDesCampo(QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.sField7));
-					sCOSIGA  = rs.getString(QMGastos.sField11);
+					sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+					sCOSIGA  = rs.getString(QMGastos.CAMPO11);
 					sDCOSIGA = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-					sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.sField17).equals("-"),rs.getString(QMGastos.sField16));
+					sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16));
 
  
 
@@ -1242,7 +1177,7 @@ public class QMGastos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField2,sCodCOACES);
+					logger.debug(CAMPO2+":|"+sCodCOACES+"|");
 				}
 			}
 			if (found == false) 
@@ -1253,9 +1188,7 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{

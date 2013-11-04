@@ -22,10 +22,10 @@ public class QMListaErroresImpuestos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresImpuestos.class.getName());
 
-	static String sTable = "lista_errores_impuestos_multi";
+	static String TABLA = "pp001_lista_errores_impuestos_multi";
 
-	static String sField1  = "cod_movimiento";
-	static String sField2  = "cod_cotdor";
+	static String CAMPO1  = "cod_movimiento";
+	static String CAMPO2  = "cod_cotdor";
 
 	public static boolean addErrorImpuesto(String sCodMovimiento, String sCodCOTDOR)
 	{
@@ -42,9 +42,9 @@ public class QMListaErroresImpuestos
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-					   + sField1  + "," 
-				       + sField2  +             
+			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
+					   + CAMPO1  + "," 
+				       + CAMPO2  +             
 				       ") VALUES ('"
 				       + sCodMovimiento + "','" 
 				       + sCodCOTDOR +  "' )");
@@ -53,12 +53,10 @@ public class QMListaErroresImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
-			logger.error("ERROR: COTDOR:|{}|",sCodCOTDOR);
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -85,21 +83,19 @@ public class QMListaErroresImpuestos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodMovimiento	+ "' AND "
-						+ sField2 + " = '" + sCodCOTDOR	+ "')");
+					"(" + CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+						+ CAMPO2 + " = '" + sCodCOTDOR	+ "')");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
-			logger.error("ERROR: COTDOR:|{}|",sCodCOTDOR);
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -135,9 +131,9 @@ public class QMListaErroresImpuestos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + TABLA + 
 					" WHERE " 
-					+ sField1 + " = '" + sMovimiento + "'");
+					+ CAMPO1 + " = '" + sMovimiento + "'");
 
 			rs = pstmt.executeQuery();
 			
@@ -154,7 +150,7 @@ public class QMListaErroresImpuestos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug( "Numero de registros:|{}|",liNumero);
+					logger.debug( "Numero de registros:|"+liNumero+"|");
 
 
 				}
@@ -168,11 +164,9 @@ public class QMListaErroresImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: sMovimiento:|{}|",sMovimiento);
+			logger.error("ERROR Movimiento:|"+sMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -215,19 +209,19 @@ public class QMListaErroresImpuestos
 
 			pstmt = conn.prepareStatement("SELECT "
 					
-					   + QMMovimientosImpuestos.sField1 + ","
-					   + QMMovimientosImpuestos.sField7 + ","
-					   + QMMovimientosImpuestos.sField8 + ","
-					   + QMMovimientosImpuestos.sField11 + 
+					   + QMMovimientosImpuestos.CAMPO1 + ","
+					   + QMMovimientosImpuestos.CAMPO7 + ","
+					   + QMMovimientosImpuestos.CAMPO8 + ","
+					   + QMMovimientosImpuestos.CAMPO11 + 
 
-					   "  FROM " + QMMovimientosImpuestos.sTable + 
+					   "  FROM " + QMMovimientosImpuestos.TABLA + 
 					   " WHERE ( "
-					   + QMMovimientosImpuestos.sField7 +" LIKE '%"+ filtro.getCOACES() +"%' AND "
-					   + QMMovimientosImpuestos.sField8 +" LIKE '%"+ filtro.getNURCAT() +"%' AND "
-					   + QMMovimientosImpuestos.sField11 +" LIKE '%"+ filtro.getCOSBAC() +"%' AND "
-					   + QMMovimientosImpuestos.sField1 +" IN (SELECT DISTINCT "
-					   +  sField1 + 
-					   "  FROM " + sTable + "))");
+					   + QMMovimientosImpuestos.CAMPO7 +" LIKE '%"+ filtro.getCOACES() +"%' AND "
+					   + QMMovimientosImpuestos.CAMPO8 +" LIKE '%"+ filtro.getNURCAT() +"%' AND "
+					   + QMMovimientosImpuestos.CAMPO11 +" LIKE '%"+ filtro.getCOSBAC() +"%' AND "
+					   + QMMovimientosImpuestos.CAMPO1 +" IN (SELECT DISTINCT "
+					   +  CAMPO1 + 
+					   "  FROM " + TABLA + "))");
 					   
 
 			rs = pstmt.executeQuery();
@@ -244,11 +238,11 @@ public class QMListaErroresImpuestos
 					found = true;
 					
 					
-					COACES = rs.getString(QMMovimientosImpuestos.sField7);
-					NURCAT = rs.getString(QMMovimientosImpuestos.sField8);
-					COSBAC = rs.getString(QMMovimientosImpuestos.sField11);
+					COACES = rs.getString(QMMovimientosImpuestos.CAMPO7);
+					NURCAT = rs.getString(QMMovimientosImpuestos.CAMPO8);
+					COSBAC = rs.getString(QMMovimientosImpuestos.CAMPO11);
 					DCOSBAC = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,COSBAC);
-					MOVIMIENTO = rs.getString(QMMovimientosImpuestos.sField1);
+					MOVIMIENTO = rs.getString(QMMovimientosImpuestos.CAMPO1);
 					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					
 					ErrorImpuestoTabla errorencontrado = new ErrorImpuestoTabla(COACES, NURCAT, COSBAC, DCOSBAC, MOVIMIENTO, ERRORES);
@@ -257,7 +251,7 @@ public class QMListaErroresImpuestos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",QMMovimientosImpuestos.sField1,MOVIMIENTO);
+					logger.debug(QMMovimientosImpuestos.CAMPO1+":|"+MOVIMIENTO+"|");
 				}
 			}
 			if (found == false) 
@@ -268,9 +262,7 @@ public class QMListaErroresImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -306,10 +298,10 @@ public class QMListaErroresImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " +
-					   sField2 + 
-					   " FROM " + sTable + 
+					   CAMPO2 + 
+					   " FROM " + TABLA + 
 					   " WHERE "
-					   + sField1 +" = '"+ sMovimiento +"'");
+					   + CAMPO1 +" = '"+ sMovimiento +"'");
 			
 
 			rs = pstmt.executeQuery();
@@ -325,7 +317,7 @@ public class QMListaErroresImpuestos
 				{
 					found = true;
 					
-					sCodError = rs.getString(sField2);
+					sCodError = rs.getString(CAMPO2);
 					sDescripcion = QMCodigosControl.getDesCampo(QMCodigosControl.TCOTDORE4, QMCodigosControl.ICOTDORE4, sCodError);
 
 					
@@ -335,7 +327,7 @@ public class QMListaErroresImpuestos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sCodError,sDescripcion);
+					logger.debug(sCodError+":|"+sDescripcion+"|");
 				}
 			}
 			if (found == false) 
@@ -346,11 +338,9 @@ public class QMListaErroresImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: sMovimiento:{}",sMovimiento);
+			logger.error("ERROR Movimiento:|"+sMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{

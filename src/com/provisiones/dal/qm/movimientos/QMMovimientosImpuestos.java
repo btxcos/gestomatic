@@ -18,34 +18,34 @@ public class QMMovimientosImpuestos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosImpuestos.class.getName());
 
-	public static String sTable = "e4_movimientos_tbl";
+	public static String TABLA = "pp001_e4_movimientos_tbl";
 
-	public static String sField1 = "e4_movimiento_id";
+	public static String CAMPO1 = "e4_movimiento_id";
 
-	static String sField2  = "cod_codtrn";
-	static String sField3  = "cod_cotdor";
-	static String sField4  = "idprov";    
-	static String sField5  = "cod_coacci";
-	static String sField6  = "coengp";    
-	public static String sField7  = "cod_coaces";
-	public static String sField8  = "cod_nurcat";    
-	static String sField9  = "cogruc";
-	static String sField10 = "cotaca";
-	public static String sField11 = "cod_cosbac";
-	static String sField12 = "cod_bitc18";
-	static String sField13 = "feprre";    
-	static String sField14 = "cod_bitc19";
-	static String sField15 = "ferere";    
-	static String sField16 = "cod_bitc20";
-	static String sField17 = "fedein";    
-	static String sField18 = "cod_bitc21";
-	static String sField19 = "cod_bisode";
-	static String sField20 = "cod_bitc22";
-	static String sField21 = "cod_bireso";
-	static String sField22 = "cotexa";    
-	static String sField23 = "cod_bitc09";
-	static String sField24 = "obtexc";    
-	static String sField25 = "obdeer";		
+	static String CAMPO2  = "cod_codtrn";
+	static String CAMPO3  = "cod_cotdor";
+	static String CAMPO4  = "idprov";    
+	static String CAMPO5  = "cod_coacci";
+	static String CAMPO6  = "coengp";    
+	public static String CAMPO7  = "cod_coaces";
+	public static String CAMPO8  = "cod_nurcat";    
+	static String CAMPO9  = "cogruc";
+	static String CAMPO10 = "cotaca";
+	public static String CAMPO11 = "cod_cosbac";
+	static String CAMPO12 = "cod_bitc18";
+	static String CAMPO13 = "feprre";    
+	static String CAMPO14 = "cod_bitc19";
+	static String CAMPO15 = "ferere";    
+	static String CAMPO16 = "cod_bitc20";
+	static String CAMPO17 = "fedein";    
+	static String CAMPO18 = "cod_bitc21";
+	static String CAMPO19 = "cod_bisode";
+	static String CAMPO20 = "cod_bitc22";
+	static String CAMPO21 = "cod_bireso";
+	static String CAMPO22 = "cotexa";    
+	static String CAMPO23 = "cod_bitc09";
+	static String CAMPO24 = "obtexc";    
+	static String CAMPO25 = "obdeer";		
 
 	public static int addMovimientoImpuestoRecurso(MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso)
 	{
@@ -62,31 +62,31 @@ public class QMMovimientosImpuestos
 		try {
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-				       + sField2  + ","              
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 + ","              
-				       + sField15 + ","              
-				       + sField16 + ","              
-				       + sField17 + ","              
-				       + sField18 + ","              
-				       + sField19 + ","              
-				       + sField20 + ","              
-				       + sField21 + ","              
-				       + sField22 + ","              
-				       + sField23 + ","
-				       + sField24 + "," 
-				       + sField25 +  
+			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","              
+				       + CAMPO14 + ","              
+				       + CAMPO15 + ","              
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","
+				       + CAMPO24 + "," 
+				       + CAMPO25 +  
 				       ") VALUES ('" 
 				       + NuevoMovimientoImpuestoRecurso.getCODTRN() + "','" 
 				       + NuevoMovimientoImpuestoRecurso.getCOTDOR() + "','"
@@ -124,13 +124,11 @@ public class QMMovimientosImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",NuevoMovimientoImpuestoRecurso.getCOACES());
-			logger.error("ERROR: NURCAT:|{}|",NuevoMovimientoImpuestoRecurso.getNURCAT());
-			logger.error("ERROR: COSBAC:|{}|",NuevoMovimientoImpuestoRecurso.getCOSBAC());
+			logger.error("ERROR COACES:|"+NuevoMovimientoImpuestoRecurso.getCOACES()+"|");
+			logger.error("ERROR NURCAT:|"+NuevoMovimientoImpuestoRecurso.getNURCAT()+"|");
+			logger.error("ERROR COSBAC:|"+NuevoMovimientoImpuestoRecurso.getCOSBAC()+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			//bSalida = false;
 		} 
@@ -156,46 +154,44 @@ public class QMMovimientosImpuestos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
+			stmt.executeUpdate("UPDATE " + TABLA + 
 					" SET " 
-					+ sField2  + " = '"+ NuevoMovimientoImpuestoRecurso.getCODTRN() + "', "
-					+ sField3  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTDOR() + "', "
-					+ sField4  + " = '"+ NuevoMovimientoImpuestoRecurso.getIDPROV() + "', "
-					+ sField5  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOACCI() + "', "
-					+ sField6  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOENGP() + "', "
-					+ sField7  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOACES() + "', "
-					+ sField8  + " = '"+ NuevoMovimientoImpuestoRecurso.getNURCAT() + "', "
-					+ sField9  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOGRUC() + "', "
-					+ sField10 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTACA() + "', "
-					+ sField11 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOSBAC() + "', "
-					+ sField12 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC18() + "', "
-					+ sField13 + " = '"+ NuevoMovimientoImpuestoRecurso.getFEPRRE() + "', "
-					+ sField14 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC19() + "', "
-					+ sField15 + " = '"+ NuevoMovimientoImpuestoRecurso.getFERERE() + "', "
-					+ sField16 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC20() + "', "
-					+ sField17 + " = '"+ NuevoMovimientoImpuestoRecurso.getFEDEIN() + "', "
-					+ sField18 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC21() + "', "
-					+ sField19 + " = '"+ NuevoMovimientoImpuestoRecurso.getBISODE() + "', "
-					+ sField20 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC22() + "', "
-					+ sField21 + " = '"+ NuevoMovimientoImpuestoRecurso.getBIRESO() + "', "
-					+ sField22 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTEXA() + "', "
-					+ sField23 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC09() + "', "
-					+ sField24 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBTEXC() + "', "
-					+ sField25 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBDEER() +
+					+ CAMPO2  + " = '"+ NuevoMovimientoImpuestoRecurso.getCODTRN() + "', "
+					+ CAMPO3  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTDOR() + "', "
+					+ CAMPO4  + " = '"+ NuevoMovimientoImpuestoRecurso.getIDPROV() + "', "
+					+ CAMPO5  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOACCI() + "', "
+					+ CAMPO6  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOENGP() + "', "
+					+ CAMPO7  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOACES() + "', "
+					+ CAMPO8  + " = '"+ NuevoMovimientoImpuestoRecurso.getNURCAT() + "', "
+					+ CAMPO9  + " = '"+ NuevoMovimientoImpuestoRecurso.getCOGRUC() + "', "
+					+ CAMPO10 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTACA() + "', "
+					+ CAMPO11 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOSBAC() + "', "
+					+ CAMPO12 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC18() + "', "
+					+ CAMPO13 + " = '"+ NuevoMovimientoImpuestoRecurso.getFEPRRE() + "', "
+					+ CAMPO14 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC19() + "', "
+					+ CAMPO15 + " = '"+ NuevoMovimientoImpuestoRecurso.getFERERE() + "', "
+					+ CAMPO16 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC20() + "', "
+					+ CAMPO17 + " = '"+ NuevoMovimientoImpuestoRecurso.getFEDEIN() + "', "
+					+ CAMPO18 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC21() + "', "
+					+ CAMPO19 + " = '"+ NuevoMovimientoImpuestoRecurso.getBISODE() + "', "
+					+ CAMPO20 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC22() + "', "
+					+ CAMPO21 + " = '"+ NuevoMovimientoImpuestoRecurso.getBIRESO() + "', "
+					+ CAMPO22 + " = '"+ NuevoMovimientoImpuestoRecurso.getCOTEXA() + "', "
+					+ CAMPO23 + " = '"+ NuevoMovimientoImpuestoRecurso.getBITC09() + "', "
+					+ CAMPO24 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBTEXC() + "', "
+					+ CAMPO25 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBDEER() +
 					"' "+
 					" WHERE "
-					+ sField1 + " = '"+ sMovimientoImpuestoRecursoID +"'");
+					+ CAMPO1 + " = '"+ sMovimientoImpuestoRecursoID +"'");
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoImpuestoRecursoID:|{}|",sMovimientoImpuestoRecursoID);
+			logger.error("ERROR MovimientoImpuestoRecursoID:|"+sMovimientoImpuestoRecursoID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -223,18 +219,16 @@ public class QMMovimientosImpuestos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sMovimientoImpuestoRecursoID + "' )");
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
+					" WHERE (" + CAMPO1 + " = '" + sMovimientoImpuestoRecursoID + "' )");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoImpuestoRecursoID:|{}|",sMovimientoImpuestoRecursoID);
+			logger.error("ERROR MovimientoImpuestoRecursoID:|"+sMovimientoImpuestoRecursoID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -293,33 +287,33 @@ public class QMMovimientosImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  + ","              
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 + ","              
-				       + sField15 + ","              
-				       + sField16 + ","              
-				       + sField17 + ","              
-				       + sField18 + ","              
-				       + sField19 + ","              
-				       + sField20 + ","              
-				       + sField21 + ","              
-				       + sField22 + ","              
-				       + sField23 + ","
-				       + sField24 + "," 
-				       + sField25 +             
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","              
+				       + CAMPO14 + ","              
+				       + CAMPO15 + ","              
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","
+				       + CAMPO24 + "," 
+				       + CAMPO25 +             
        
-			"  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sMovimientoImpuestoRecursoID	+ "')");
+			"  FROM " + TABLA + 
+					" WHERE (" + CAMPO1 + " = '" + sMovimientoImpuestoRecursoID	+ "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -332,34 +326,34 @@ public class QMMovimientosImpuestos
 				{
 					found = true;
 
-					sCODTRN = rs.getString(sField2); 
-					sCOTDOR = rs.getString(sField3); 
-					sIDPROV = rs.getString(sField4); 
-					sCOACCI = rs.getString(sField5); 
-					sCOENGP = rs.getString(sField6); 
-					sCOACES = rs.getString(sField7); 
-					sNURCAT = rs.getString(sField8); 
-					sCOGRUC = rs.getString(sField9); 
-					sCOTACA = rs.getString(sField10);
-					sCOSBAC = rs.getString(sField11);
-					sBITC18 = rs.getString(sField12);
-					sFEPRRE = rs.getString(sField13);
-					sBITC19 = rs.getString(sField14);
-					sFERERE = rs.getString(sField15);
-					sBITC20 = rs.getString(sField16);
-					sFEDEIN = rs.getString(sField17);
-					sBITC21 = rs.getString(sField18);
-					sBISODE = rs.getString(sField19);
-					sBITC22 = rs.getString(sField20);
-					sBIRESO = rs.getString(sField21);
-					sCOTEXA = rs.getString(sField22);
-					sBITC09 = rs.getString(sField23);
-					sOBTEXC = rs.getString(sField24);
-					sOBDEER = rs.getString(sField25);
+					sCODTRN = rs.getString(CAMPO2); 
+					sCOTDOR = rs.getString(CAMPO3); 
+					sIDPROV = rs.getString(CAMPO4); 
+					sCOACCI = rs.getString(CAMPO5); 
+					sCOENGP = rs.getString(CAMPO6); 
+					sCOACES = rs.getString(CAMPO7); 
+					sNURCAT = rs.getString(CAMPO8); 
+					sCOGRUC = rs.getString(CAMPO9); 
+					sCOTACA = rs.getString(CAMPO10);
+					sCOSBAC = rs.getString(CAMPO11);
+					sBITC18 = rs.getString(CAMPO12);
+					sFEPRRE = rs.getString(CAMPO13);
+					sBITC19 = rs.getString(CAMPO14);
+					sFERERE = rs.getString(CAMPO15);
+					sBITC20 = rs.getString(CAMPO16);
+					sFEDEIN = rs.getString(CAMPO17);
+					sBITC21 = rs.getString(CAMPO18);
+					sBISODE = rs.getString(CAMPO19);
+					sBITC22 = rs.getString(CAMPO20);
+					sBIRESO = rs.getString(CAMPO21);
+					sCOTEXA = rs.getString(CAMPO22);
+					sBITC09 = rs.getString(CAMPO23);
+					sOBTEXC = rs.getString(CAMPO24);
+					sOBDEER = rs.getString(CAMPO25);
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sMovimientoImpuestoRecursoID);
+					logger.debug(CAMPO1+":|"+sMovimientoImpuestoRecursoID+"|");
 
 				}
 			}
@@ -371,11 +365,9 @@ public class QMMovimientosImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoImpuestoRecursoID:|{}|",sMovimientoImpuestoRecursoID);
+			logger.error("ERROR MovimientoImpuestoRecursoID:|"+sMovimientoImpuestoRecursoID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -410,33 +402,33 @@ public class QMMovimientosImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-					+ sField1 + 
-					"  FROM " + sTable + 
+					+ CAMPO1 + 
+					"  FROM " + TABLA + 
 						" WHERE ("
-					       + sField2  +" = '" + impuesto.getCODTRN() + "' AND "
-					       + sField3  +" = '" + impuesto.getCOTDOR() + "' AND "
-					       + sField4  +" = '" + impuesto.getIDPROV() + "' AND "
-					       + sField5  +" = '" + impuesto.getCOACCI() + "' AND "
-					       + sField6  +" = '" + impuesto.getCOENGP() + "' AND "
-					       + sField7  +" = '" + impuesto.getCOACES() + "' AND "
-					       + sField8  +" = '" + impuesto.getNURCAT() + "' AND "
-					       + sField9  +" = '" + impuesto.getCOGRUC() + "' AND "
-					       + sField10 +" = '" + impuesto.getCOTACA() + "' AND "
-					       + sField11 +" = '" + impuesto.getCOSBAC() + "' AND "
-					       + sField12 +" = '" + impuesto.getBITC18() + "' AND "
-					       + sField13 +" = '" + impuesto.getFEPRRE() + "' AND "
-					       + sField14 +" = '" + impuesto.getBITC19() + "' AND "
-					       + sField15 +" = '" + impuesto.getFERERE() + "' AND "
-					       + sField16 +" = '" + impuesto.getBITC20() + "' AND "
-					       + sField17 +" = '" + impuesto.getFEDEIN() + "' AND "
-					       + sField18 +" = '" + impuesto.getBITC21() + "' AND "
-					       + sField19 +" = '" + impuesto.getBISODE() + "' AND "
-					       + sField20 +" = '" + impuesto.getBITC22() + "' AND "
-					       + sField21 +" = '" + impuesto.getBIRESO() + "' AND "
-					       + sField22 +" = '" + impuesto.getCOTEXA() + "' AND "
-					       + sField23 +" = '" + impuesto.getBITC09() + "' AND "
-					       + sField24 +" = '" + impuesto.getOBTEXC() + "' AND "
-					       + sField25 +" = '" + impuesto.getOBDEER() + "' )"); 
+					       + CAMPO2  +" = '" + impuesto.getCODTRN() + "' AND "
+					       + CAMPO3  +" = '" + impuesto.getCOTDOR() + "' AND "
+					       + CAMPO4  +" = '" + impuesto.getIDPROV() + "' AND "
+					       + CAMPO5  +" = '" + impuesto.getCOACCI() + "' AND "
+					       + CAMPO6  +" = '" + impuesto.getCOENGP() + "' AND "
+					       + CAMPO7  +" = '" + impuesto.getCOACES() + "' AND "
+					       + CAMPO8  +" = '" + impuesto.getNURCAT() + "' AND "
+					       + CAMPO9  +" = '" + impuesto.getCOGRUC() + "' AND "
+					       + CAMPO10 +" = '" + impuesto.getCOTACA() + "' AND "
+					       + CAMPO11 +" = '" + impuesto.getCOSBAC() + "' AND "
+					       + CAMPO12 +" = '" + impuesto.getBITC18() + "' AND "
+					       + CAMPO13 +" = '" + impuesto.getFEPRRE() + "' AND "
+					       + CAMPO14 +" = '" + impuesto.getBITC19() + "' AND "
+					       + CAMPO15 +" = '" + impuesto.getFERERE() + "' AND "
+					       + CAMPO16 +" = '" + impuesto.getBITC20() + "' AND "
+					       + CAMPO17 +" = '" + impuesto.getFEDEIN() + "' AND "
+					       + CAMPO18 +" = '" + impuesto.getBITC21() + "' AND "
+					       + CAMPO19 +" = '" + impuesto.getBISODE() + "' AND "
+					       + CAMPO20 +" = '" + impuesto.getBITC22() + "' AND "
+					       + CAMPO21 +" = '" + impuesto.getBIRESO() + "' AND "
+					       + CAMPO22 +" = '" + impuesto.getCOTEXA() + "' AND "
+					       + CAMPO23 +" = '" + impuesto.getBITC09() + "' AND "
+					       + CAMPO24 +" = '" + impuesto.getOBTEXC() + "' AND "
+					       + CAMPO25 +" = '" + impuesto.getOBDEER() + "' )"); 
 
 			rs = pstmt.executeQuery();
 			
@@ -449,11 +441,11 @@ public class QMMovimientosImpuestos
 				{
 					found = true;
 
-					sMovimientoImpuestoRecursoID = rs.getString(sField1);
+					sMovimientoImpuestoRecursoID = rs.getString(CAMPO1);
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sMovimientoImpuestoRecursoID);
+					logger.debug(CAMPO1+":|"+sMovimientoImpuestoRecursoID+"|");
 				}
 			}
 			if (found == false) 
@@ -464,14 +456,12 @@ public class QMMovimientosImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",impuesto.getCOACES());
-			logger.error("ERROR: NURCAT:|{}|",impuesto.getNURCAT());
-			logger.error("ERROR: COSBAC:|{}|",impuesto.getCOSBAC());
+			logger.error("ERROR COACES:|"+impuesto.getCOACES()+"|");
+			logger.error("ERROR NURCAT:|"+impuesto.getNURCAT()+"|");
+			logger.error("ERROR COSBAC:|"+impuesto.getCOSBAC()+"|");
 
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -502,10 +492,10 @@ public class QMMovimientosImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " 
-					+ sField1 + 
+					+ CAMPO1 + 
 					" FROM " 
-					+ sTable + 
-					" WHERE " + sField1 + " = '" + sMovimientoImpuestoID + "'");
+					+ TABLA + 
+					" WHERE " + CAMPO1 + " = '" + sMovimientoImpuestoID + "'");
 			
 			rs = pstmt.executeQuery();
 			
@@ -519,7 +509,7 @@ public class QMMovimientosImpuestos
 					found = true;
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField1,rs.getString(sField1));
+					logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 				}
 			}
 			if (found == false) 
@@ -530,11 +520,9 @@ public class QMMovimientosImpuestos
 		catch (SQLException ex) 
 		{
 			found = false;
-			logger.error("ERROR: sMovimientoImpuestoID:|{}|",sMovimientoImpuestoID);
+			logger.error("ERROR sMovimientoImpuestoID:|"+sMovimientoImpuestoID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			
 		} 

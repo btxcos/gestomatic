@@ -23,17 +23,17 @@ public class QMListaCuotas
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaCuotas.class.getName());
 	
-	static String sTable = "lista_cuotas_multi";
+	static String TABLA = "pp001_lista_cuotas_multi";
 
-	static String sField1 = "cod_coaces";
-	static String sField2 = "cod_cocldo";
-	static String sField3 = "cod_nudcom";
-	static String sField4 = "cod_cosbac";
-	static String sField5 = "cod_movimiento";
-	static String sField6 = "cod_validado";
+	static String CAMPO1 = "cod_coaces";
+	static String CAMPO2 = "cod_cocldo";
+	static String CAMPO3 = "cod_nudcom";
+	static String CAMPO4 = "cod_cosbac";
+	static String CAMPO5 = "cod_movimiento";
+	static String CAMPO6 = "cod_validado";
 	
-	static String sField7  = "usuario_movimiento";    
-	static String sField8  = "fecha_movimiento";
+	static String CAMPO7  = "usuario_movimiento";    
+	static String CAMPO8  = "fecha_movimiento";
 
 	public static boolean addRelacionCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento) 
 	{
@@ -51,15 +51,15 @@ public class QMListaCuotas
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " (" 
-			+ sField1 + ","
-			+ sField2 + ","
-			+ sField3 + "," 
-			+ sField4 + ","
-			+ sField5 + ","
-			+ sField6 + ","
-			+ sField7 + ","
-			+ sField8 +
+			stmt.executeUpdate("INSERT INTO " + TABLA + " (" 
+			+ CAMPO1 + ","
+			+ CAMPO2 + ","
+			+ CAMPO3 + "," 
+			+ CAMPO4 + ","
+			+ CAMPO5 + ","
+			+ CAMPO6 + ","
+			+ CAMPO7 + ","
+			+ CAMPO8 +
 			") " 
 			+ "VALUES ('" 
 			+ sCodCOACES + "','"
@@ -76,14 +76,12 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -110,18 +108,16 @@ public class QMListaCuotas
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField5 + " = '" + sCodMovimiento +"')");
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
+					" WHERE (" + CAMPO5 + " = '" + sCodMovimiento +"')");
 			
 			logger.debug("Ejecutada con éxito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: CodMovimiento:|{}|",sCodMovimiento);
+			logger.error("ERROR CodMovimiento:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -154,13 +150,13 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + CAMPO6 + "  FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					" AND " + sField2 + " = '" + sCodCOCLDO + "' " +
-					" AND " + sField3 + " = '" + sCodNUDCOM + "' " +
-					" AND " + sField4 + " = '" + sCodCOSBAC + "' " +
-					" AND " + sField5 + " = '" + sCodMovimiento + "' )");
+					"(" + CAMPO1 + " = '" + sCodCOACES + "' " +
+					" AND " + CAMPO2 + " = '" + sCodCOCLDO + "' " +
+					" AND " + CAMPO3 + " = '" + sCodNUDCOM + "' " +
+					" AND " + CAMPO4 + " = '" + sCodCOSBAC + "' " +
+					" AND " + CAMPO5 + " = '" + sCodMovimiento + "' )");
 
 
 			rs = pstmt.executeQuery();
@@ -186,15 +182,13 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -226,12 +220,12 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + CAMPO6 + "  FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOACES + "' " +
-					"AND" + sField2 + " = '" + sCodCOCLDO + "' " +
-					"AND" + sField3 + " = '" + sCodNUDCOM + "' " +
-					"AND" + sField4 + " = '" + sCodCOSBAC + "' )");
+					"(" + CAMPO1 + " = '" + sCodCOACES + "' " +
+					"AND" + CAMPO2 + " = '" + sCodCOCLDO + "' " +
+					"AND" + CAMPO3 + " = '" + sCodNUDCOM + "' " +
+					"AND" + CAMPO4 + " = '" + sCodCOSBAC + "' )");
 
 
 			rs = pstmt.executeQuery();
@@ -257,14 +251,12 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -298,8 +290,8 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField5+ "  FROM " + sTable + 
-					" WHERE (" + sField6 + " = '" + sEstado + "' )");
+			pstmt = conn.prepareStatement("SELECT " + CAMPO5+ "  FROM " + TABLA + 
+					" WHERE (" + CAMPO6 + " = '" + sEstado + "' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -315,12 +307,12 @@ public class QMListaCuotas
 				{
 					found = true;
 
-					result.add(rs.getString(sField5));
+					result.add(rs.getString(CAMPO5));
 										
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField6,sEstado);
-					logger.debug("{}:|{}|",sField5,result.get(i));
+					logger.debug(CAMPO6+":|"+sEstado+"|");
+					logger.debug(CAMPO5+":|"+result.get(i)+"|");
 					
 					i++;
 				}
@@ -334,11 +326,9 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Validado:|{}|",sEstado);
+			logger.error("ERROR Validado:|"+sEstado+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -372,11 +362,11 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND" + sField2 + " = '" + sCodCOCLDO + "'" +
-							"AND" + sField3 + " = '" + sCodNUDCOM + "'" +
-							"AND" + sField4 + " = '" + sCodCOSBAC + "' )");
+			pstmt = conn.prepareStatement("SELECT " + CAMPO3 + "  FROM " + TABLA + 
+					" WHERE (" + CAMPO1 + " = '" + sCodCOACES + "' " +
+							"AND" + CAMPO2 + " = '" + sCodCOCLDO + "'" +
+							"AND" + CAMPO3 + " = '" + sCodNUDCOM + "'" +
+							"AND" + CAMPO4 + " = '" + sCodCOSBAC + "' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -391,14 +381,14 @@ public class QMListaCuotas
 				{
 					found = true;
 
-					result.add(rs.getString(sField3));
+					result.add(rs.getString(CAMPO3));
 
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sCodCOACES);
-					logger.debug("{}:|{}|",sField2,sCodCOCLDO);
-					logger.debug("{}:|{}|",sField3,sCodNUDCOM);
-					logger.debug("{}:|{}|",sField4,sCodCOSBAC);
+					logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+					logger.debug(CAMPO2+":|"+sCodCOCLDO+"|");
+					logger.debug(CAMPO3+":|"+sCodNUDCOM+"|");
+					logger.debug(CAMPO4+":|"+sCodCOSBAC+"|");
 
 					
 					
@@ -416,14 +406,12 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -457,13 +445,13 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField5 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + CAMPO5 + "  FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodCOACES + "' " +
-							"AND" + sField2 + " = '" + sCodCOCLDO + "' " +
-							"AND" + sField3 + " = '" + sCodNUDCOM + "' " +
-							"AND" + sField4 + " = '" + sCodCOSBAC + "' " +
-							"AND" + sField6 + " = '" + "P" + "' )");
+					"(" + CAMPO1 + " = '" + sCodCOACES + "' " +
+							"AND" + CAMPO2 + " = '" + sCodCOCLDO + "' " +
+							"AND" + CAMPO3 + " = '" + sCodNUDCOM + "' " +
+							"AND" + CAMPO4 + " = '" + sCodCOSBAC + "' " +
+							"AND" + CAMPO6 + " = '" + "P" + "' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -478,16 +466,16 @@ public class QMListaCuotas
 				{
 					found = true;
 
-					result.add(rs.getString(sField5));
+					result.add(rs.getString(CAMPO5));
 
 					logger.debug("Encontrado el registro!");
 					
-					logger.debug("{}:|{}|",sField1,sCodCOACES);
-					logger.debug("{}:|{}|",sField2,sCodCOCLDO);
-					logger.debug("{}:|{}|",sField3,sCodNUDCOM);
-					logger.debug("{}:|{}|",sField4,sCodCOSBAC);
+					logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+					logger.debug(CAMPO2+":|"+sCodCOCLDO+"|");
+					logger.debug(CAMPO3+":|"+sCodNUDCOM+"|");
+					logger.debug(CAMPO4+":|"+sCodCOSBAC+"|");
 
-					logger.debug("{}:|{}|",sField5,result.get(i));
+					logger.debug(CAMPO5+":|"+result.get(i)+"|");
 
 					i++;
 				}
@@ -501,14 +489,12 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCodCOACES);
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
-			logger.error("ERROR: COSBAC:|{}|",sCodCOSBAC);
+			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -533,12 +519,12 @@ public class QMListaCuotas
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
+			stmt.executeUpdate("UPDATE " + TABLA + 
 					" SET " 
-					+ sField6 + " = '"+ sValidado + 
+					+ CAMPO6 + " = '"+ sValidado + 
 					"' "+
 					" WHERE " +
-					"(" + sField5 + " = '" + sCodMovimiento +"' )");
+					"(" + CAMPO5 + " = '" + sCodMovimiento +"' )");
 			
 			logger.debug("Ejecutada con éxito!");
 
@@ -546,11 +532,9 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -586,9 +570,9 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField6 + "  FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT " + CAMPO6 + "  FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField5 + " = '" + sCodMovimiento +"' )");
+					"(" + CAMPO5 + " = '" + sCodMovimiento +"' )");
 
 
 			rs = pstmt.executeQuery();
@@ -602,11 +586,11 @@ public class QMListaCuotas
 				{
 					found = true;
 
-					sValidado = rs.getString(sField6);
+					sValidado = rs.getString(CAMPO6);
 					
 					logger.debug("Encontrado el registro!");
 					
-					logger.debug("{}:|{}|",sField5,sCodMovimiento);
+					logger.debug(CAMPO5+":|"+sCodMovimiento+"|");
 				}
 			}
 			if (found == false) 
@@ -618,11 +602,9 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -657,9 +639,10 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " 
+					+ TABLA + 
 					" WHERE " +
-					"(" + sField6 + " = '" + sCodValidado + "')");
+					"(" + CAMPO6 + " = '" + sCodValidado + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -676,7 +659,7 @@ public class QMListaCuotas
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug( "Numero de registros:|{}|",liNumero);
+					logger.debug( "Numero de registros:|"+liNumero+"|");
 
 
 				}
@@ -690,11 +673,9 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: CodValidado:|{}|",sCodValidado);
+			logger.error("ERROR CodValidado:|"+sCodValidado+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -739,39 +720,39 @@ public class QMListaCuotas
 			
 			pstmt = conn.prepareStatement("SELECT "
 					
-					   + QMActivos.sField1 + ","        
-					   + QMActivos.sField14 + ","
-					   + QMActivos.sField11 + ","
-					   + QMActivos.sField13 + ","
-					   + QMActivos.sField6 + ","
-					   + QMActivos.sField9 + ","
-					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
+					   + QMActivos.CAMPO1 + ","        
+					   + QMActivos.CAMPO14 + ","
+					   + QMActivos.CAMPO11 + ","
+					   + QMActivos.CAMPO13 + ","
+					   + QMActivos.CAMPO6 + ","
+					   + QMActivos.CAMPO9 + ","
+					   + QMActivos.CAMPO7 + ","
+					   + QMActivos.CAMPO10 + 
 
-					   " FROM " + QMActivos.sTable + 
+					   " FROM " + QMActivos.TABLA + 
 					   " WHERE ("
 
-					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
 
-					   + QMActivos.sField1 +" IN (SELECT "
+					   + QMActivos.CAMPO1 +" IN (SELECT "
 
-					   +  QMListaComunidadesActivos.sField3 + 
-					   " FROM " + QMListaComunidadesActivos.sTable + 
+					   +  QMListaComunidadesActivos.CAMPO3 + 
+					   " FROM " + QMListaComunidadesActivos.TABLA + 
 					   " WHERE ("
 
-					   + QMListaComunidadesActivos.sField1 + " = '" + sCodCOCLDO	+ "' AND "  
-					   + QMListaComunidadesActivos.sField2 + " = '" + sCodNUDCOM	+ "' " +
+					   + QMListaComunidadesActivos.CAMPO1 + " = '" + sCodCOCLDO	+ "' AND "  
+					   + QMListaComunidadesActivos.CAMPO2 + " = '" + sCodNUDCOM	+ "' " +
 					   	//	"AND "
-					   //+ QMListaComunidadesActivos.sField3 + 
+					   //+ QMListaComunidadesActivos.CAMPO3 + 
 					   //" NOT IN  (SELECT "
-					   //+  sField1 + 
-					   //"  FROM " + sTable +  ")" +
+					   //+  CAMPO1 + 
+					   //"  FROM " + TABLA +  ")" +
 					   ")))");
 
 			
@@ -792,14 +773,14 @@ public class QMListaCuotas
 				{
 					found = true;
 					
-					sCOACES = rs.getString(QMActivos.sField1);
-					sCOPOIN = rs.getString(QMActivos.sField14);
-					sNOMUIN = rs.getString(QMActivos.sField11);
-					sNOPRAC = rs.getString(QMActivos.sField13);
-					sNOVIAS = rs.getString(QMActivos.sField6);
-					sNUPIAC = rs.getString(QMActivos.sField9);
-					sNUPOAC = rs.getString(QMActivos.sField7);
-					sNUPUAC = rs.getString(QMActivos.sField10);
+					sCOACES = rs.getString(QMActivos.CAMPO1);
+					sCOPOIN = rs.getString(QMActivos.CAMPO14);
+					sNOMUIN = rs.getString(QMActivos.CAMPO11);
+					sNOPRAC = rs.getString(QMActivos.CAMPO13);
+					sNOVIAS = rs.getString(QMActivos.CAMPO6);
+					sNUPIAC = rs.getString(QMActivos.CAMPO9);
+					sNUPOAC = rs.getString(QMActivos.CAMPO7);
+					sNUPUAC = rs.getString(QMActivos.CAMPO10);
 					
 					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
@@ -807,7 +788,7 @@ public class QMListaCuotas
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
+					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
 				}
 			}
 			if (found == false) 
@@ -818,9 +799,7 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -867,40 +846,40 @@ public class QMListaCuotas
 			
 			pstmt = conn.prepareStatement("SELECT "
 					
-					   + QMCuotas.sField1 + ","        
-					   + QMCuotas.sField2 + ","
-					   + QMCuotas.sField3 + ","
-					   + QMCuotas.sField4 + ","
-					   + QMCuotas.sField5 + ","
-					   + QMCuotas.sField6 + ","
-					   + QMCuotas.sField7 + ","
-					   + QMCuotas.sField8 + ","
-					   + QMCuotas.sField9 + ","
-					   + QMCuotas.sField10 +
+					   + QMCuotas.CAMPO1 + ","        
+					   + QMCuotas.CAMPO2 + ","
+					   + QMCuotas.CAMPO3 + ","
+					   + QMCuotas.CAMPO4 + ","
+					   + QMCuotas.CAMPO5 + ","
+					   + QMCuotas.CAMPO6 + ","
+					   + QMCuotas.CAMPO7 + ","
+					   + QMCuotas.CAMPO8 + ","
+					   + QMCuotas.CAMPO9 + ","
+					   + QMCuotas.CAMPO10 +
 					    
 
-					   " FROM " + QMCuotas.sTable + 
+					   " FROM " + QMCuotas.TABLA + 
 					   " WHERE ("
 
-					   + QMCuotas.sField11 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
+					   + QMCuotas.CAMPO11 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
 
-					   + QMCuotas.sField2 +" IN (SELECT "
-					   +  sField2 + 
-					   " FROM " + sTable + 
+					   + QMCuotas.CAMPO2 +" IN (SELECT "
+					   +  CAMPO2 + 
+					   " FROM " + TABLA + 
 					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
+					   + CAMPO1 + " = '" + sCodCOACES	+ "' ) ) AND "  
 
-					   + QMCuotas.sField3 +" IN (SELECT "
-					   +  sField3 + 
-					   " FROM " + sTable + 
+					   + QMCuotas.CAMPO3 +" IN (SELECT "
+					   +  CAMPO3 + 
+					   " FROM " + TABLA + 
 					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) AND "  
+					   + CAMPO1 + " = '" + sCodCOACES	+ "' ) ) AND "  
 
-					   + QMCuotas.sField4 +" IN (SELECT "
-					   +  sField4 + 
-					   " FROM " + sTable + 
+					   + QMCuotas.CAMPO4 +" IN (SELECT "
+					   +  CAMPO4 + 
+					   " FROM " + TABLA + 
 					   " WHERE (" 
-					   + sField1 + " = '" + sCodCOACES	+ "' ) ) )");
+					   + CAMPO1 + " = '" + sCodCOACES	+ "' ) ) )");
 
 			
 
@@ -920,18 +899,18 @@ public class QMListaCuotas
 				{
 					found = true;
 					
-					sCOCLDO     = rs.getString(QMCuotas.sField2);
+					sCOCLDO     = rs.getString(QMCuotas.CAMPO2);
 					sDesCOCLDO  = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
-					sNUDCOM     = rs.getString(QMCuotas.sField3);
-					sCOSBAC     = rs.getString(QMCuotas.sField4);
+					sNUDCOM     = rs.getString(QMCuotas.CAMPO3);
+					sCOSBAC     = rs.getString(QMCuotas.CAMPO4);
 					sDesCOSBAC  = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,sCOSBAC);
-					sFIPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField5));
-					sFFPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.sField6));
-					sIMCUCO     = Utils.recuperaImporte(false,rs.getString(QMCuotas.sField7));
-					sFAACTA     = Utils.recuperaFecha(rs.getString(QMCuotas.sField8));
-					sPTPAGO     = rs.getString(QMCuotas.sField9);
+					sFIPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.CAMPO5));
+					sFFPAGO     = Utils.recuperaFecha(rs.getString(QMCuotas.CAMPO6));
+					sIMCUCO     = Utils.recuperaImporte(false,rs.getString(QMCuotas.CAMPO7));
+					sFAACTA     = Utils.recuperaFecha(rs.getString(QMCuotas.CAMPO8));
+					sPTPAGO     = rs.getString(QMCuotas.CAMPO9);
 					sDesPTPAGO  = QMCodigosControl.getDesCampo(QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-					sOBTEXC     = rs.getString(QMCuotas.sField10);  
+					sOBTEXC     = rs.getString(QMCuotas.CAMPO10);  
 
 					
 					CuotaTabla cuotaencontrada = new CuotaTabla(
@@ -952,7 +931,7 @@ public class QMListaCuotas
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sCodCOACES);
+					logger.debug(CAMPO1+":|"+sCodCOACES+"|");
 				}
 			}
 			if (found == false) 
@@ -963,9 +942,7 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -1008,40 +985,40 @@ public class QMListaCuotas
 			
 			pstmt = conn.prepareStatement("SELECT "
 					
-					   + QMActivos.sField1 + ","        
-					   + QMActivos.sField14 + ","
-					   + QMActivos.sField11 + ","
-					   + QMActivos.sField13 + ","
-					   + QMActivos.sField6 + ","
-					   + QMActivos.sField9 + ","
-					   + QMActivos.sField7 + ","
-					   + QMActivos.sField10 + 
+					   + QMActivos.CAMPO1 + ","        
+					   + QMActivos.CAMPO14 + ","
+					   + QMActivos.CAMPO11 + ","
+					   + QMActivos.CAMPO13 + ","
+					   + QMActivos.CAMPO6 + ","
+					   + QMActivos.CAMPO9 + ","
+					   + QMActivos.CAMPO7 + ","
+					   + QMActivos.CAMPO10 + 
 
-					   " FROM " + QMActivos.sTable + 
+					   " FROM " + QMActivos.TABLA + 
 					   " WHERE ("
 
-					   + QMActivos.sField14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.sField11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.sField13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.sField6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.sField9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.sField7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.sField10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
 
-					   + QMActivos.sField1 +" IN (SELECT "
-					   +  sField1 + 
-					   " FROM " + sTable +
+					   + QMActivos.CAMPO1 +" IN (SELECT "
+					   +  CAMPO1 + 
+					   " FROM " + TABLA +
 					   " WHERE " 
 					   
-					   + sField2 + " IN (SELECT "
-   					   + QMCuotas.sField2 + 
-   					   " FROM " + QMCuotas.sTable +
-   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
+					   + CAMPO2 + " IN (SELECT "
+   					   + QMCuotas.CAMPO2 + 
+   					   " FROM " + QMCuotas.TABLA +
+   					   " WHERE " + QMCuotas.CAMPO11 + " = '"+ ValoresDefecto.DEF_ALTA + "') AND " 
 
-   					   + sField3 + " IN (SELECT "
-   					   + QMCuotas.sField3 + 
-   					   " FROM " + QMCuotas.sTable +
-   					   " WHERE " + QMCuotas.sField11 + " = '"+ ValoresDefecto.DEF_ALTA + "')))");
+   					   + CAMPO3 + " IN (SELECT "
+   					   + QMCuotas.CAMPO3 + 
+   					   " FROM " + QMCuotas.TABLA +
+   					   " WHERE " + QMCuotas.CAMPO11 + " = '"+ ValoresDefecto.DEF_ALTA + "')))");
 
 			rs = pstmt.executeQuery();
 			
@@ -1054,14 +1031,14 @@ public class QMListaCuotas
 				{
 					found = true;
 					
-					sCOACES = rs.getString(QMActivos.sField1);
-					sCOPOIN = rs.getString(QMActivos.sField14);
-					sNOMUIN = rs.getString(QMActivos.sField11);
-					sNOPRAC = rs.getString(QMActivos.sField13);
-					sNOVIAS = rs.getString(QMActivos.sField6);
-					sNUPIAC = rs.getString(QMActivos.sField9);
-					sNUPOAC = rs.getString(QMActivos.sField7);
-					sNUPUAC = rs.getString(QMActivos.sField10);
+					sCOACES = rs.getString(QMActivos.CAMPO1);
+					sCOPOIN = rs.getString(QMActivos.CAMPO14);
+					sNOMUIN = rs.getString(QMActivos.CAMPO11);
+					sNOPRAC = rs.getString(QMActivos.CAMPO13);
+					sNOVIAS = rs.getString(QMActivos.CAMPO6);
+					sNUPIAC = rs.getString(QMActivos.CAMPO9);
+					sNUPOAC = rs.getString(QMActivos.CAMPO7);
+					sNUPUAC = rs.getString(QMActivos.CAMPO10);
 					
 					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
 					
@@ -1069,7 +1046,7 @@ public class QMListaCuotas
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",QMActivos.sField1,sCOACES);
+					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
 				}
 			}
 			if (found == false) 
@@ -1080,9 +1057,7 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -1117,15 +1092,15 @@ public class QMListaCuotas
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " 
-					+ sField5  + 
-					"  FROM " + sTable + 
+					+ CAMPO5  + 
+					"  FROM " + TABLA + 
 					" WHERE " +
 					"(" 
-					+ sField1 + " = '" + sCodCOACES + "' AND "
-					+ sField2 + " = '" + sCodCOCLDO + "' AND "
-					+ sField3 + " = '" + sCodNUDCOM + "' AND "
-					+ sField4 + " = '" + sCodCOSBAC + "' AND "
-					+ sField5 + " >=  '" + sCodMovimiento + "')");
+					+ CAMPO1 + " = '" + sCodCOACES + "' AND "
+					+ CAMPO2 + " = '" + sCodCOCLDO + "' AND "
+					+ CAMPO3 + " = '" + sCodNUDCOM + "' AND "
+					+ CAMPO4 + " = '" + sCodCOSBAC + "' AND "
+					+ CAMPO5 + " >=  '" + sCodMovimiento + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -1138,7 +1113,7 @@ public class QMListaCuotas
 				{
 					found = true;
 					
-					result.add(rs.getString(sField5));
+					result.add(rs.getString(CAMPO5));
 
 					logger.debug("Encontrado el registro!");
 
@@ -1152,13 +1127,12 @@ public class QMListaCuotas
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
 			found = false;
 		} 
 		finally 

@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
-import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.errores.ErrorGastoTabla;
@@ -22,10 +21,10 @@ public class QMListaErroresGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresGastos.class.getName());
 	
-	static String sTable = "lista_errores_gastos_multi";
+	static String TABLA = "pp001_lista_errores_gastos_multi";
 
-	static String sField1  = "cod_movimiento";
-	static String sField2  = "cod_coterr";
+	static String CAMPO1  = "cod_movimiento";
+	static String CAMPO2  = "cod_coterr";
 
 	public static boolean addErrorGasto(String sCodMovimiento, String sCodCOTDOR)
 	{
@@ -42,9 +41,9 @@ public class QMListaErroresGastos
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-					   + sField1  + "," 
-				       + sField2  +             
+			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
+					   + CAMPO1  + "," 
+				       + CAMPO2  +             
 				       ") VALUES ('"
 				       + sCodMovimiento + "','" 
 				       + sCodCOTDOR +  "' )");
@@ -53,12 +52,10 @@ public class QMListaErroresGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
-			logger.error("ERROR: COTDOR:|{}|",sCodCOTDOR);
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -85,21 +82,19 @@ public class QMListaErroresGastos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodMovimiento	+ "' AND "
-						+ sField2 + " = '" + sCodCOTDOR	+ "')");
+					"(" + CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+						+ CAMPO2 + " = '" + sCodCOTDOR	+ "')");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
-			logger.error("ERROR: COTDOR:|{}|",sCodCOTDOR);
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -135,9 +130,9 @@ public class QMListaErroresGastos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + TABLA + 
 					" WHERE " 
-					+ sField1 + " = '" + sMovimiento + "'");
+					+ CAMPO1 + " = '" + sMovimiento + "'");
 
 			rs = pstmt.executeQuery();
 			
@@ -154,7 +149,7 @@ public class QMListaErroresGastos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug( "Numero de registros:|{}|",liNumero);
+					logger.debug( "Numero de registros:|"+liNumero+"|");
 
 
 				}
@@ -168,11 +163,9 @@ public class QMListaErroresGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: sMovimiento:|{}|",sMovimiento);
+			logger.error("ERROR sMovimiento:|"+sMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -218,26 +211,26 @@ public class QMListaErroresGastos
 
 			pstmt = conn.prepareStatement("SELECT "
 					
-					   + QMMovimientosGastos.sField1 + ","
-					   + QMMovimientosGastos.sField2 + ","
-					   + QMMovimientosGastos.sField3 + ","
-					   + QMMovimientosGastos.sField4 + ","
-					   + QMMovimientosGastos.sField5 + ","
-					   + QMMovimientosGastos.sField7 + ","
-					   + QMMovimientosGastos.sField16 + ","
-					   + QMMovimientosGastos.sField17 + 
+					   + QMMovimientosGastos.CAMPO1 + ","
+					   + QMMovimientosGastos.CAMPO2 + ","
+					   + QMMovimientosGastos.CAMPO3 + ","
+					   + QMMovimientosGastos.CAMPO4 + ","
+					   + QMMovimientosGastos.CAMPO5 + ","
+					   + QMMovimientosGastos.CAMPO7 + ","
+					   + QMMovimientosGastos.CAMPO16 + ","
+					   + QMMovimientosGastos.CAMPO17 + 
 
-					   "  FROM " + QMMovimientosGastos.sTable + 
+					   "  FROM " + QMMovimientosGastos.TABLA + 
 					   " WHERE ( "
-					   + QMMovimientosGastos.sField2 +" LIKE '%"+ filtro.getCOACES() +"%' AND "
-					   + QMMovimientosGastos.sField3 +" LIKE '%"+ filtro.getCOGRUG() +"%' AND "
-					   + QMMovimientosGastos.sField4 +" LIKE '%"+ filtro.getCOTPGA() +"%' AND "
-					   + QMMovimientosGastos.sField5 +" LIKE '%"+ filtro.getCOSBGA() +"%' AND "
-					   + QMMovimientosGastos.sField7 +" LIKE '%"+ filtro.getFEDEVE() +"%' AND "
-					   + QMMovimientosGastos.sField16 +" LIKE '%"+ filtro.getIMNGAS() +"%' AND "
-					   + QMMovimientosGastos.sField1 +" IN (SELECT DISTINCT "
-					   +  sField1 + 
-					   "  FROM " + sTable + "))");
+					   + QMMovimientosGastos.CAMPO2 +" LIKE '%"+ filtro.getCOACES() +"%' AND "
+					   + QMMovimientosGastos.CAMPO3 +" LIKE '%"+ filtro.getCOGRUG() +"%' AND "
+					   + QMMovimientosGastos.CAMPO4 +" LIKE '%"+ filtro.getCOTPGA() +"%' AND "
+					   + QMMovimientosGastos.CAMPO5 +" LIKE '%"+ filtro.getCOSBGA() +"%' AND "
+					   + QMMovimientosGastos.CAMPO7 +" LIKE '%"+ filtro.getFEDEVE() +"%' AND "
+					   + QMMovimientosGastos.CAMPO16 +" LIKE '%"+ filtro.getIMNGAS() +"%' AND "
+					   + QMMovimientosGastos.CAMPO1 +" IN (SELECT DISTINCT "
+					   +  CAMPO1 + 
+					   "  FROM " + TABLA + "))");
 					   
 
 			rs = pstmt.executeQuery();
@@ -253,15 +246,15 @@ public class QMListaErroresGastos
 				{
 					found = true;
 					
-					COACES = rs.getString(QMMovimientosGastos.sField2);
-					COGRUG = rs.getString(QMMovimientosGastos.sField3);
-					COTPGA = rs.getString(QMMovimientosGastos.sField4);
-					COSBGA = rs.getString(QMMovimientosGastos.sField5);
+					COACES = rs.getString(QMMovimientosGastos.CAMPO2);
+					COGRUG = rs.getString(QMMovimientosGastos.CAMPO3);
+					COTPGA = rs.getString(QMMovimientosGastos.CAMPO4);
+					COSBGA = rs.getString(QMMovimientosGastos.CAMPO5);
 					DCOSBGA = QMCodigosControl.getDesCOSBGA(COGRUG,COTPGA,COSBGA);
-					IMNGAS = Utils.recuperaImporte(rs.getString(QMMovimientosGastos.sField17).equals("-"),rs.getString(QMMovimientosGastos.sField16));
-					FEDEVE = Utils.recuperaFecha(rs.getString(QMMovimientosGastos.sField7));
-					logger.debug("{}:|{}|",QMMovimientosGastos.sField7,FEDEVE);
-					MOVIMIENTO = rs.getString(QMMovimientosGastos.sField1);
+					IMNGAS = Utils.recuperaImporte(rs.getString(QMMovimientosGastos.CAMPO17).equals("-"),rs.getString(QMMovimientosGastos.CAMPO16));
+					FEDEVE = Utils.recuperaFecha(rs.getString(QMMovimientosGastos.CAMPO7));
+					logger.debug(QMMovimientosGastos.CAMPO7+":|"+FEDEVE+"|");
+					MOVIMIENTO = rs.getString(QMMovimientosGastos.CAMPO1);
 					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					
 					ErrorGastoTabla errorencontrado = new ErrorGastoTabla(COACES, COGRUG, COTPGA, COSBGA, DCOSBGA, IMNGAS, FEDEVE,MOVIMIENTO, ERRORES);
@@ -270,7 +263,7 @@ public class QMListaErroresGastos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",QMMovimientosGastos.sField1,MOVIMIENTO);
+					logger.debug(QMMovimientosGastos.CAMPO1+":|"+MOVIMIENTO+"|");
 				}
 			}
 			if (found == false) 
@@ -281,9 +274,7 @@ public class QMListaErroresGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -319,10 +310,10 @@ public class QMListaErroresGastos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " +
-					   sField2 + 
-					   " FROM " + sTable + 
+					   CAMPO2 + 
+					   " FROM " + TABLA + 
 					   " WHERE "
-					   + sField1 +" = '"+ sMovimiento +"'");
+					   + CAMPO1 +" = '"+ sMovimiento +"'");
 			
 
 			rs = pstmt.executeQuery();
@@ -338,7 +329,7 @@ public class QMListaErroresGastos
 				{
 					found = true;
 					
-					sCodError = rs.getString(sField2);
+					sCodError = rs.getString(CAMPO2);
 					sDescripcion = QMCodigosControl.getDesCampo(QMCodigosControl.TCOTERR, QMCodigosControl.ICOTERR, sCodError);
 
 					
@@ -348,7 +339,7 @@ public class QMListaErroresGastos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sCodError,sDescripcion);
+					logger.debug(sCodError+":|"+sDescripcion+"|");
 				}
 			}
 			if (found == false) 
@@ -359,11 +350,9 @@ public class QMListaErroresGastos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: sMovimiento:{}",sMovimiento);
+			logger.error("ERROR Movimiento:|"+sMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{

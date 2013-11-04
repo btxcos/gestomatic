@@ -18,26 +18,26 @@ public class QMComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMComunidades.class.getName());
 	
-	public static final String sTable = "e1_comunidades_tbl";
+	public static final String TABLA = "pp001_e1_comunidades_tbl";
 
-	public static final String sField1  = "cod_cocldo";
+	public static final String CAMPO1  = "cod_cocldo";
 	
-	public static final String sField2  = "nudcom_id"; 
+	public static final String CAMPO2  = "nudcom_id"; 
 	
-	public static final String sField3  = "nomcoc";    
-	public static final String sField4  = "nodcco";    
-	public static final String sField5  = "nomprc";    
-	public static final String sField6  = "nutprc";    
-	public static final String sField7  = "nomadc";    
-	public static final String sField8  = "nutadc";    
-	public static final String sField9  = "nodcad";    
-	public static final String sField10 = "nuccen";    
-	public static final String sField11 = "nuccof";    
-	public static final String sField12 = "nuccdi";    
-	public static final String sField13 = "nuccnt";    
-	public static final String sField14 = "obtexc";
+	public static final String CAMPO3  = "nomcoc";    
+	public static final String CAMPO4  = "nodcco";    
+	public static final String CAMPO5  = "nomprc";    
+	public static final String CAMPO6  = "nutprc";    
+	public static final String CAMPO7  = "nomadc";    
+	public static final String CAMPO8  = "nutadc";    
+	public static final String CAMPO9  = "nodcad";    
+	public static final String CAMPO10 = "nuccen";    
+	public static final String CAMPO11 = "nuccof";    
+	public static final String CAMPO12 = "nuccdi";    
+	public static final String CAMPO13 = "nuccnt";    
+	public static final String CAMPO14 = "obtexc";
 
-	public static final String sField15 = "cod_estado";
+	public static final String CAMPO15 = "cod_estado";
 	
 
 	public static boolean addComunidad(Comunidad NuevaComunidad)
@@ -51,43 +51,49 @@ public class QMComunidades
 		boolean bSalida = true;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "INSERT INTO " 
+				   + TABLA + 
+				   " ("
+				   + CAMPO1  + "," 
+			       + CAMPO2  + ","              
+			       + CAMPO3  + ","              
+			       + CAMPO4  + ","              
+			       + CAMPO5  + ","              
+			       + CAMPO6  + ","              
+			       + CAMPO7  + ","              
+			       + CAMPO8  + ","              
+			       + CAMPO9  + ","              
+			       + CAMPO10 + ","              
+			       + CAMPO11 + ","              
+			       + CAMPO12 + ","              
+			       + CAMPO13 + ","
+			       + CAMPO14 + "," 
+			       + CAMPO15 +               
+			       ") VALUES ('" 
+			       + NuevaComunidad.getsCOCLDO() + "','" 
+			       + NuevaComunidad.getsNUDCOM() + "','"
+			       + NuevaComunidad.getsNOMCOC() + "','"
+			       + NuevaComunidad.getsNODCCO() + "','"
+			       + NuevaComunidad.getsNOMPRC() + "','"
+			       + NuevaComunidad.getsNUTPRC() + "','"
+			       + NuevaComunidad.getsNOMADC() + "','"
+			       + NuevaComunidad.getsNUTADC() + "','"
+			       + NuevaComunidad.getsNODCAD() + "','"
+			       + NuevaComunidad.getsNUCCEN() + "','"
+			       + NuevaComunidad.getsNUCCOF() + "','"
+			       + NuevaComunidad.getsNUCCDI() + "','"
+			       + NuevaComunidad.getsNUCCNT() + "','"
+			       + NuevaComunidad.getsOBTEXC() + "','" 
+			       + ValoresDefecto.DEF_ALTA + "' )";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-					   + sField1  + "," 
-				       + sField2  + ","              
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","
-				       + sField14 + "," 
-				       + sField15 +               
-				       ") VALUES ('" 
-				       + NuevaComunidad.getsCOCLDO() + "','" 
-				       + NuevaComunidad.getsNUDCOM() + "','"
-				       + NuevaComunidad.getsNOMCOC() + "','"
-				       + NuevaComunidad.getsNODCCO() + "','"
-				       + NuevaComunidad.getsNOMPRC() + "','"
-				       + NuevaComunidad.getsNUTPRC() + "','"
-				       + NuevaComunidad.getsNOMADC() + "','"
-				       + NuevaComunidad.getsNUTADC() + "','"
-				       + NuevaComunidad.getsNODCAD() + "','"
-				       + NuevaComunidad.getsNUCCEN() + "','"
-				       + NuevaComunidad.getsNUCCOF() + "','"
-				       + NuevaComunidad.getsNUCCDI() + "','"
-				       + NuevaComunidad.getsNUCCNT() + "','"
-				       + NuevaComunidad.getsOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "' )");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
@@ -96,12 +102,12 @@ public class QMComunidades
 
 
 			
-			logger.error("ERROR: COCLDO:|{}|",NuevaComunidad.getsCOCLDO());
-			logger.error("ERROR: NUDCOM:|{}|",NuevaComunidad.getsNUDCOM());
+			logger.error("ERROR COCLDO:|"+NuevaComunidad.getsCOCLDO()+"|");
+			logger.error("ERROR NUDCOM:|"+NuevaComunidad.getsNUDCOM()+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR SQLException:",ex.getMessage());
+			logger.error("ERROR SQLState:",ex.getSQLState());
+			logger.error("ERROR VendorError:",ex.getErrorCode());
 			
 			bSalida = false;
 		} 
@@ -124,41 +130,44 @@ public class QMComunidades
 		
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "UPDATE " 
+				+ TABLA + 
+				" SET " 
+				//+ CAMPO1  + " = '"+ NuevaComunidad.getsCOCLDO() + "', "
+				//+ CAMPO2  + " = '"+ NuevaComunidad.getsNUDCOM() + "', "
+				+ CAMPO3  + " = '"+ NuevaComunidad.getsNOMCOC() + "', "
+				+ CAMPO4  + " = '"+ NuevaComunidad.getsNODCCO() + "', "
+				+ CAMPO5  + " = '"+ NuevaComunidad.getsNOMPRC() + "', "
+				+ CAMPO6  + " = '"+ NuevaComunidad.getsNUTPRC() + "', "
+				+ CAMPO7  + " = '"+ NuevaComunidad.getsNOMADC() + "', "
+				+ CAMPO8  + " = '"+ NuevaComunidad.getsNUTADC() + "', "
+				+ CAMPO9  + " = '"+ NuevaComunidad.getsNODCAD() + "', "
+				+ CAMPO10 + " = '"+ NuevaComunidad.getsNUCCEN() + "', "
+				+ CAMPO11 + " = '"+ NuevaComunidad.getsNUCCOF() + "', "
+				+ CAMPO12 + " = '"+ NuevaComunidad.getsNUCCDI() + "', "
+				+ CAMPO13 + " = '"+ NuevaComunidad.getsNUCCNT() + "', "
+				+ CAMPO14 + " = '"+ NuevaComunidad.getsOBTEXC() +
+				"' "+
+				" WHERE " +
+				"("+ CAMPO1 + " = '"+ sCodCOCLDO +"' AND "+
+					CAMPO2 + " = '"+ sCodNUDCOM +"')";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
-					" SET " 
-					//+ sField1  + " = '"+ NuevaComunidad.getsCOCLDO() + "', "
-					//+ sField2  + " = '"+ NuevaComunidad.getsNUDCOM() + "', "
-					+ sField3  + " = '"+ NuevaComunidad.getsNOMCOC() + "', "
-					+ sField4  + " = '"+ NuevaComunidad.getsNODCCO() + "', "
-					+ sField5  + " = '"+ NuevaComunidad.getsNOMPRC() + "', "
-					+ sField6  + " = '"+ NuevaComunidad.getsNUTPRC() + "', "
-					+ sField7  + " = '"+ NuevaComunidad.getsNOMADC() + "', "
-					+ sField8  + " = '"+ NuevaComunidad.getsNUTADC() + "', "
-					+ sField9  + " = '"+ NuevaComunidad.getsNODCAD() + "', "
-					+ sField10 + " = '"+ NuevaComunidad.getsNUCCEN() + "', "
-					+ sField11 + " = '"+ NuevaComunidad.getsNUCCOF() + "', "
-					+ sField12 + " = '"+ NuevaComunidad.getsNUCCDI() + "', "
-					+ sField13 + " = '"+ NuevaComunidad.getsNUCCNT() + "', "
-					+ sField14 + " = '"+ NuevaComunidad.getsOBTEXC() +
-					"' "+
-					" WHERE " +
-					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
-						sField2 + " = '"+ sCodNUDCOM +"')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",NuevaComunidad.getsCOCLDO());
-			logger.error("ERROR: NUDCOM:|{}|",NuevaComunidad.getsNUDCOM());
+			logger.error("ERROR COCLDO:|"+NuevaComunidad.getsCOCLDO()+"|");
+			logger.error("ERROR NUDCOM:|"+NuevaComunidad.getsNUDCOM()+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -181,25 +190,28 @@ public class QMComunidades
 		boolean bSalida = true;
 		
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "DELETE FROM " 
+				+ TABLA + 
+				" WHERE " +
+				"("+ CAMPO1 + " = '"+ sCodCOCLDO +"' AND "+
+				CAMPO2 + " = '"+ sCodNUDCOM +"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE " +
-					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
-					sField2 + " = '"+ sCodNUDCOM +"')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -240,39 +252,43 @@ public class QMComunidades
 		boolean found = false;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+			       + CAMPO1  + ","              
+			       + CAMPO2  + ","
+			       + CAMPO3  + ","              
+			       + CAMPO4  + ","              
+			       + CAMPO5  + ","              
+			       + CAMPO6  + ","              
+			       + CAMPO7  + ","              
+			       + CAMPO8  + ","              
+			       + CAMPO9  + ","              
+			       + CAMPO10 + ","              
+			       + CAMPO11 + ","              
+			       + CAMPO12 + ","              
+			       + CAMPO13 + ","              
+			       + CAMPO14 +               
+			       " FROM " 
+			       + TABLA + 
+			       " WHERE " +
+			       "("+ CAMPO1 + " = '"+ sCodCOCLDO +"' AND "+
+			       CAMPO2 + " = '"+ sCodNUDCOM +"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-				       + sField1  + ","              
-				       + sField2  + ","
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","              
-				       + sField14 +               
-       
-			"  FROM " + sTable + 
-					" WHERE " +
-					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
-					sField2 + " = '"+ sCodNUDCOM +"')");
+			pstmt = conn.prepareStatement(sQuery);
 			
 
 			rs = pstmt.executeQuery();
 			
 			logger.debug("Ejecutada con exito!");
 
-			logger.debug(sField1 + ":|{}|",sCodCOCLDO);
-			logger.debug(sField2 + ":|{}|",sCodNUDCOM);
+			logger.debug(CAMPO1 + ":|"+sCodCOCLDO+"|");
+			logger.debug(CAMPO2 + ":|"+sCodNUDCOM+"|");
 
 			if (rs != null) 
 			{
@@ -281,20 +297,20 @@ public class QMComunidades
 				{
 					found = true;
 
-					sCOCLDO = rs.getString(sField1);  
-					sNUDCOM = rs.getString(sField2);  
-					sNOMCOC = rs.getString(sField3);  
-					sNODCCO = rs.getString(sField4);  
-					sNOMPRC = rs.getString(sField5);  
-					sNUTPRC = rs.getString(sField6);  
-					sNOMADC = rs.getString(sField7);  
-					sNUTADC = rs.getString(sField8);  
-					sNODCAD = rs.getString(sField9);  
-					sNUCCEN = rs.getString(sField10); 
-					sNUCCOF = rs.getString(sField11); 
-					sNUCCDI = rs.getString(sField12); 
-					sNUCCNT = rs.getString(sField13); 
-					sOBTEXC = rs.getString(sField14); 
+					sCOCLDO = rs.getString(CAMPO1);  
+					sNUDCOM = rs.getString(CAMPO2);  
+					sNOMCOC = rs.getString(CAMPO3);  
+					sNODCCO = rs.getString(CAMPO4);  
+					sNOMPRC = rs.getString(CAMPO5);  
+					sNUTPRC = rs.getString(CAMPO6);  
+					sNOMADC = rs.getString(CAMPO7);  
+					sNUTADC = rs.getString(CAMPO8);  
+					sNODCAD = rs.getString(CAMPO9);  
+					sNUCCEN = rs.getString(CAMPO10); 
+					sNUCCOF = rs.getString(CAMPO11); 
+					sNUCCDI = rs.getString(CAMPO12); 
+					sNUCCNT = rs.getString(CAMPO13); 
+					sOBTEXC = rs.getString(CAMPO14); 
 
 					logger.debug("Encontrado el registro!");
 				}
@@ -308,12 +324,10 @@ public class QMComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -351,25 +365,30 @@ public class QMComunidades
 		boolean found = false;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT "
+			       	+ CAMPO2  +                
+			       	" FROM " 
+			       	+ TABLA + 
+			       	" WHERE " +
+			       	"("+ CAMPO1 + " = '"+ sCodCOCLDO +"' AND "+
+			       	CAMPO2 + " = '"+ sCodNUDCOM +"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
-			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  +                
-       			"  FROM " + sTable + 
-					" WHERE " +
-					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
-					sField2 + " = '"+ sCodNUDCOM +"')");
+			pstmt = conn.prepareStatement(sQuery);
 			
 
 			rs = pstmt.executeQuery();
 			
 			logger.debug("Ejecutada con exito!");
 
-			logger.debug(sField1 + ":|{}|",sCodCOCLDO);
-			logger.debug(sField2 + ":|{}|",sCodNUDCOM);
+			logger.debug(CAMPO1 + ":|"+sCodCOCLDO+"|");
+			logger.debug(CAMPO2 + ":|"+sCodNUDCOM+"|");
 
 			if (rs != null) 
 			{
@@ -389,12 +408,10 @@ public class QMComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -416,28 +433,31 @@ public class QMComunidades
 
 		logger.debug("Ejecutando Query...");
 		
+		String sQuery = "UPDATE " 
+				+ TABLA + 
+				" SET " 
+				+ CAMPO15 + " = '"+ sEstado + 
+				"' "+
+				" WHERE "+
+				"("+ CAMPO1 + " = '"+ sCodCOCLDO +"' AND "+
+				CAMPO2 + " = '"+ sCodNUDCOM +"')";
+		
+		logger.debug(sQuery);
+		
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
-					" SET " 
-					+ sField15 + " = '"+ sEstado + 
-					"' "+
-					" WHERE "+
-					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
-					sField2 + " = '"+ sCodNUDCOM +"')");
+			stmt.executeUpdate(sQuery);
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 
 			bSalida = false;
 		} 
@@ -465,16 +485,23 @@ public class QMComunidades
 		boolean found = false;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "SELECT " 
+					+ CAMPO15 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " +
+					"("+ CAMPO1 + " = '"+ sCodCOCLDO +"' AND "+
+					CAMPO2 + " = '"+ sCodNUDCOM +"')";
+		
+		logger.debug(sQuery);
 
 		try 
 		{
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField15 + "  FROM " + sTable + 
-					" WHERE " +
-					"("+ sField1 + " = '"+ sCodCOCLDO +"' AND "+
-					sField2 + " = '"+ sCodNUDCOM +"')");
+			pstmt = conn.prepareStatement(sQuery);
 
 			rs = pstmt.executeQuery();
 			
@@ -488,13 +515,13 @@ public class QMComunidades
 				{
 					found = true;
 
-					sEstado = rs.getString(sField15);
+					sEstado = rs.getString(CAMPO15);
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField15,sEstado);
-					logger.debug("{}:|{}|",sField1,sCodCOCLDO);
-					logger.debug("{}:|{}|",sField2,sCodNUDCOM);
+					logger.debug(CAMPO15+":|"+sEstado+"|");
+					logger.debug(CAMPO1+":|"+sCodCOCLDO+"|");
+					logger.debug(CAMPO2+":|"+sCodNUDCOM+"|");
 				}
 			}
 			if (found == false) 
@@ -506,12 +533,10 @@ public class QMComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COCLDO:|{}|",sCodCOCLDO);
-			logger.error("ERROR: NUDCOM:|{}|",sCodNUDCOM);
+			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{

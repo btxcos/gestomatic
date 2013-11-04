@@ -19,13 +19,13 @@ public class QMListaGastosProvisiones
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaGastosProvisiones.class.getName());
 	
-	static String sTable = "lista_gastos_provisiones_multi";
+	static String TABLA = "pp001_lista_gastos_provisiones_multi";
 
-	static String sField1 = "cod_gasto";
-	static String sField2 = "cod_nuprof";
-	static String sField3 = "cod_revisado";
-	static String sField4 = "usuario_alta";    
-	static String sField5 = "fecha_alta";
+	static String CAMPO1 = "cod_gasto";
+	static String CAMPO2 = "cod_nuprof";
+	static String CAMPO3 = "cod_revisado";
+	static String CAMPO4 = "usuario_alta";    
+	static String CAMPO5 = "fecha_alta";
 
 
 	public static boolean addRelacionGastoProvision(String sCodGasto, String sCodNUPROF) 
@@ -44,12 +44,12 @@ public class QMListaGastosProvisiones
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + 
-					" (" + sField1 + "," 
-						+ sField2 + "," 
-						+ sField3 + "," 
-						+ sField4 + "," 
-						+ sField5 +						
+			stmt.executeUpdate("INSERT INTO " + TABLA + 
+					" (" + CAMPO1 + "," 
+						+ CAMPO2 + "," 
+						+ CAMPO3 + "," 
+						+ CAMPO4 + "," 
+						+ CAMPO5 +						
 						") " +
 					"VALUES ('" 
 						+ sCodGasto + "','"
@@ -63,12 +63,10 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sCodGasto);
-			logger.error("ERROR: PROVISION:|{}|",sCodNUPROF);
+			logger.error("ERROR GASTO:|"+sCodGasto+"|");
+			logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -95,18 +93,16 @@ public class QMListaGastosProvisiones
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sCodGasto +"')");
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
+					" WHERE (" + CAMPO1 + " = '" + sCodGasto +"')");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -138,12 +134,12 @@ public class QMListaGastosProvisiones
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-						+ sField1 + 
+						+ CAMPO1 + 
 						" FROM " 
-						+ sTable + 
+						+ TABLA + 
 						" WHERE ("	
-						+ sField1  + " = '"+ sCodGasto +"' AND " +
-					    sField2  + " = '"+ sCodNUPROF + "' )");
+						+ CAMPO1  + " = '"+ sCodGasto +"' AND " +
+					    CAMPO2  + " = '"+ sCodNUPROF + "' )");
 
 
 			rs = pstmt.executeQuery();
@@ -166,12 +162,10 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sCodGasto);
-			logger.error("ERROR: PROVISION:|{}|",sCodNUPROF);
+			logger.error("ERROR GASTO:|"+sCodGasto+"|");
+			logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -193,11 +187,11 @@ public class QMListaGastosProvisiones
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "UPDATE " 
-				+ sTable + 
+				+ TABLA + 
 				" SET " 
-				+ sField3 + " = '"+ sRevisado + "' "+
+				+ CAMPO3 + " = '"+ sRevisado + "' "+
 				" WHERE "
-				+ sField2 + " = '"+ sCodGasto +"'";
+				+ CAMPO2 + " = '"+ sCodGasto +"'";
 		
 		logger.debug(sQuery);
 		
@@ -211,11 +205,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Gasto:|{}|",sCodGasto);
+			logger.error("ERROR Gasto:|"+sCodGasto+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -251,8 +243,8 @@ public class QMListaGastosProvisiones
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + sField3 + "  FROM " + sTable + 
-					" WHERE (" + sField2 + " = '" + sCodMovimiento + "')");
+			pstmt = conn.prepareStatement("SELECT " + CAMPO3 + "  FROM " + TABLA + 
+					" WHERE (" + CAMPO2 + " = '" + sCodMovimiento + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -266,11 +258,11 @@ public class QMListaGastosProvisiones
 				{
 					found = true;
 
-					sRevisado = rs.getString(sField3);
+					sRevisado = rs.getString(CAMPO3);
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField2,sCodMovimiento);
-					logger.debug("{}:|{}|",sField3,sRevisado);
+					logger.debug(CAMPO2+":|"+sCodMovimiento+"|");
+					logger.debug(CAMPO3+":|"+sRevisado+"|");
 				}
 			}
 			if (found == false) 
@@ -282,11 +274,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
+			logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -316,11 +306,11 @@ public class QMListaGastosProvisiones
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "
-				+ sField2 + 
+				+ CAMPO2 + 
 				" FROM " 
-				+ sTable + 
+				+ TABLA + 
 				" WHERE "
-				+ sField1  + " = '"+ sCodGasto +"'";
+				+ CAMPO1  + " = '"+ sCodGasto +"'";
 		
 		logger.debug(sQuery);
 
@@ -329,11 +319,11 @@ public class QMListaGastosProvisiones
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-					+ sField2 + 
+					+ CAMPO2 + 
 					" FROM " 
-					+ sTable + 
+					+ TABLA + 
 					" WHERE "
-					+ sField1  + " = '"+ sCodGasto +"'");
+					+ CAMPO1  + " = '"+ sCodGasto +"'");
 
 
 			rs = pstmt.executeQuery();
@@ -347,11 +337,11 @@ public class QMListaGastosProvisiones
 				{
 					found = true;
 
-					sCodNUPROF = rs.getString(sField2);
+					sCodNUPROF = rs.getString(CAMPO2);
 					
 					
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField2,sCodNUPROF);
+					logger.debug(CAMPO2+":|"+sCodNUPROF+"|");
 
 				}
 			}
@@ -363,11 +353,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: GASTO:|{}|",sCodGasto);
+			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -402,17 +390,17 @@ public class QMListaGastosProvisiones
 
 
 			pstmt = conn.prepareStatement("SELECT " 
-					+ sField2 + 
+					+ CAMPO2 + 
 					" FROM " 
-					+ sTable + 
+					+ TABLA + 
 					" WHERE "
-					+ sField1 +
+					+ CAMPO1 +
 					"IN (SELECT "
-					+ QMListaGastos.sField1 +
+					+ QMListaGastos.CAMPO1 +
 					" FROM " 
-					+ QMListaGastos.sTable +
+					+ QMListaGastos.TABLA +
 					" WHERE "
-					+ QMListaGastos.sField2  + " = '"+ sCodMovimiento +"' )");
+					+ QMListaGastos.CAMPO2  + " = '"+ sCodMovimiento +"' )");
 
 			rs = pstmt.executeQuery();
 			
@@ -426,11 +414,11 @@ public class QMListaGastosProvisiones
 				{
 					found = true;
 
-					sProvision = rs.getString(sField2);
+					sProvision = rs.getString(CAMPO2);
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",QMListaGastos.sField2,sCodMovimiento);
-					logger.debug("{}:|{}|",sField2,sProvision);
+					logger.debug(QMListaGastos.CAMPO2+":|"+sCodMovimiento+"|");
+					logger.debug(CAMPO2+":|"+sProvision+"|");
 				}
 			}
 			if (found == false) 
@@ -442,11 +430,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Gasto:|{}|",sCodMovimiento);
+			logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -478,11 +464,11 @@ public class QMListaGastosProvisiones
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT " 
-				+ sField1 + 
+				+ CAMPO1 + 
 				" FROM " 
-				+ sTable + 
+				+ TABLA + 
 				" WHERE " 
-				+ sField2 + " = '" + sCodNUPROF + "'";
+				+ CAMPO2 + " = '" + sCodNUPROF + "'";
 
 		logger.debug(sQuery);
 		
@@ -506,11 +492,11 @@ public class QMListaGastosProvisiones
 				{
 					found = true;
 
-					result.add(rs.getString(sField1));
+					result.add(rs.getString(CAMPO1));
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField2,sCodNUPROF);
-					logger.debug("{}:|{}|",sField1,result.get(i));
+					logger.debug(CAMPO2+":|"+sCodNUPROF+"|");
+					logger.debug(CAMPO1+":|"+result.get(i)+"|");
 					
 					i++;
 				}
@@ -524,11 +510,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: NUPROF:|{}|",sCodNUPROF);
+			logger.error("ERROR NUPROF:|"+sCodNUPROF+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -558,16 +542,16 @@ public class QMListaGastosProvisiones
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT " 
-				+ sField1 + 
-				" FROM " + sTable + 
+				+ CAMPO1 + 
+				" FROM " + TABLA + 
 				" WHERE ( " 
-				+ sField2 + " = '"+ sNUPROF + "' AND "
-				+ sField1+ 
+				+ CAMPO2 + " = '"+ sNUPROF + "' AND "
+				+ CAMPO1+ 
 				" IN (SELECT "
-				+ QMListaGastos.sField1 +
-				" FROM " + QMListaGastos.sTable +
+				+ QMListaGastos.CAMPO1 +
+				" FROM " + QMListaGastos.TABLA +
 				" WHERE " 
-				+ QMListaGastos.sField3 + " NOT IN ('"
+				+ QMListaGastos.CAMPO3 + " NOT IN ('"
 				+ValoresDefecto.DEF_MOVIMIENTO_VALIDADO+"','"
 				+ValoresDefecto.DEF_MOVIMIENTO_RESUELTO+
 				"')))";
@@ -595,13 +579,13 @@ public class QMListaGastosProvisiones
 				{
 					found = true;
 
-					sGastoID =  rs.getString(sField1);
+					sGastoID =  rs.getString(CAMPO1);
 					
 					result.add(sGastoID);
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sField1,sGastoID);
+					logger.debug(CAMPO1+":|"+sGastoID+"|");
 
 				}
 			}
@@ -613,11 +597,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: PROVISION:{}",sNUPROF);
+			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -641,11 +623,11 @@ public class QMListaGastosProvisiones
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "UPDATE " 
-				+ sTable + 
+				+ TABLA + 
 				" SET " 
-				+ sField3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "' "+
+				+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "' "+
 				" WHERE "
-				+ sField2 + " = '"+ sNUPROF +"'";
+				+ CAMPO2 + " = '"+ sNUPROF +"'";
 		
 		logger.debug(sQuery);
 		
@@ -659,7 +641,7 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: PROVISIÓN:|{}|",sNUPROF);
+			logger.error("ERROR PROVISIÓN:|"+sNUPROF+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
@@ -697,9 +679,9 @@ public class QMListaGastosProvisiones
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField2 + " = '" + sNUPROF + "')");
+					"(" + CAMPO2 + " = '" + sNUPROF + "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -716,7 +698,7 @@ public class QMListaGastosProvisiones
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug( "Numero de registros:|{}|",liNumero);
+					logger.debug( "Numero de registros:|"+liNumero+"|");
 
 
 				}
@@ -730,11 +712,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: PROVISION:|{}|",sNUPROF);
+			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -765,22 +745,22 @@ public class QMListaGastosProvisiones
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "
-				+ QMGastos.sField16 + ","
-				+ QMGastos.sField17 +
+				+ QMGastos.CAMPO16 + ","
+				+ QMGastos.CAMPO17 +
 				" FROM "
-				+ QMGastos.sTable + 
+				+ QMGastos.TABLA + 
 				" WHERE (" 
-				+ QMGastos.sField35 + " NOT IN ('" 
+				+ QMGastos.CAMPO35 + " NOT IN ('" 
 				+ ValoresDefecto.DEF_GASTO_ANULADO + "','"
 				+ ValoresDefecto.DEF_GASTO_ABONADO +
 				"') AND "
-				+ QMGastos.sField1 + " IN ( SELECT "
-				+ sField1 +
+				+ QMGastos.CAMPO1 + " IN ( SELECT "
+				+ CAMPO1 +
 				" FROM " 
-				+ sTable + 
+				+ TABLA + 
 				" WHERE (" 
-				+ sField2 +	" = '" + sNUPROF + "' AND "
-				+ sField3 +	" <> '" + ValoresDefecto.DEF_MOVIMIENTO_ERRONEO +
+				+ CAMPO2 +	" = '" + sNUPROF + "' AND "
+				+ CAMPO3 +	" <> '" + ValoresDefecto.DEF_MOVIMIENTO_ERRONEO +
 				"')))";
 		
 		logger.debug(sQuery);
@@ -803,11 +783,11 @@ public class QMListaGastosProvisiones
 				{
 					found = true;
 
-					dValor = dValor + Double.parseDouble(Utils.recuperaImporte(rs.getString(QMGastos.sField17).equals("-"),rs.getString(QMGastos.sField16)));
+					dValor = dValor + Double.parseDouble(Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16)));
 					
 					logger.debug("Encontrado el registro!");
 				}
-				logger.debug("Valor de Provisión:|{}|",dValor);
+				logger.debug("Valor de Provisión:|"+dValor+"|");
 			}
 			if (found == false) 
 			{
@@ -818,11 +798,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: PROVISION:|{}|",sNUPROF);
+			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{

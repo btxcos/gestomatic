@@ -18,32 +18,32 @@ public class QMMovimientosReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosReferencias.class.getName());
 
-	public static String sTable = "e3_movimientos_tbl";
+	public static String TABLA = "pp001_e3_movimientos_tbl";
 
-	public static String sField1  = "e3_movimiento_id";
-	static String sField2  = "cod_codtrn";  
-	static String sField3  = "cod_cotdor";  
-	static String sField4  = "idprov";      
-	static String sField5  = "cod_coacci";  
-	static String sField6  = "coengp";       
-	public static String sField7  = "cod_coaces";
-	public static String sField8  = "nurcat_id";   
-	static String sField9  = "cod_bitc16";  
-	static String sField10 = "tircat";      
-	static String sField11 = "cod_bitc17";  
-	static String sField12 = "enemis";      
-	static String sField13 = "cotexa";      
-	static String sField14 = "cod_bitc09";  
-	static String sField15 = "obtexc";    
-	static String sField16 = "obdeer";
+	public static String CAMPO1  = "e3_movimiento_id";
+	static String CAMPO2  = "cod_codtrn";  
+	static String CAMPO3  = "cod_cotdor";  
+	static String CAMPO4  = "idprov";      
+	static String CAMPO5  = "cod_coacci";  
+	static String CAMPO6  = "coengp";       
+	public static String CAMPO7  = "cod_coaces";
+	public static String CAMPO8  = "nurcat_id";   
+	static String CAMPO9  = "cod_bitc16";  
+	static String CAMPO10 = "tircat";      
+	static String CAMPO11 = "cod_bitc17";  
+	static String CAMPO12 = "enemis";      
+	static String CAMPO13 = "cotexa";      
+	static String CAMPO14 = "cod_bitc09";  
+	static String CAMPO15 = "obtexc";    
+	static String CAMPO16 = "obdeer";
 
 	//Ampliacion de valor catastral
-	static String sField17 = "cod_bitc23";  
-	static String sField18 = "imvsue";      
-	static String sField19 = "cod_bitc24";      
-	static String sField20 = "imcata";  
-	static String sField21 = "cod_bitc25";    
-	static String sField22 = "fereca";
+	static String CAMPO17 = "cod_bitc23";  
+	static String CAMPO18 = "imvsue";      
+	static String CAMPO19 = "cod_bitc24";      
+	static String CAMPO20 = "imcata";  
+	static String CAMPO21 = "cod_bitc25";    
+	static String CAMPO22 = "fereca";
 
 
 	public static int addMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
@@ -61,30 +61,30 @@ public class QMMovimientosReferencias
 		try {
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-				       + sField2  + ","              
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","
-				       + sField14 + ","
-				       + sField15 + ","
-				       + sField16 +
+			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","
+				       + CAMPO14 + ","
+				       + CAMPO15 + ","
+				       + CAMPO16 +
 				       //Ampliacion de valor catastral
 				       ","
-				       + sField17 + ","              
-				       + sField18 + ","              
-				       + sField19 + ","
-				       + sField20 + ","
-				       + sField21 + ","
-				       + sField22 +
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","
+				       + CAMPO20 + ","
+				       + CAMPO21 + ","
+				       + CAMPO22 +
 				       
 				       ") VALUES ('" 
 				       + NuevoMovimientoReferenciaCatastral.getCODTRN() + "','" 
@@ -127,15 +127,13 @@ public class QMMovimientosReferencias
 		{
 
 
-			//logger.error("ERROR: COGRAP:|{}|",NuevaComunidad.getCOGRAP());
+			//logger.error("ERROR COGRAP:|"+NuevaComunidad.getCOGRAP()+"|");
 			
-			logger.error("ERROR: NURCAT:|{}|",NuevoMovimientoReferenciaCatastral.getNURCAT());
-			logger.error("ERROR: COACES:|{}|",NuevoMovimientoReferenciaCatastral.getCOACES());
+			logger.error("ERROR NURCAT:|"+NuevoMovimientoReferenciaCatastral.getNURCAT()+"|");
+			logger.error("ERROR COACES:|"+NuevoMovimientoReferenciaCatastral.getCOACES()+"|");
 			
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			//bSalida = false;
 		} 
@@ -161,47 +159,45 @@ public class QMMovimientosReferencias
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " + sTable + 
+			stmt.executeUpdate("UPDATE " + TABLA + 
 					" SET " 
-					+ sField2  + " = '"+ NuevoMovimientoReferenciaCatastral.getCODTRN() + "', "
-					+ sField3  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTDOR() + "', "
-					+ sField4  + " = '"+ NuevoMovimientoReferenciaCatastral.getIDPROV() + "', "
-					+ sField5  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACCI() + "', "
-					+ sField6  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOENGP() + "', "
-					+ sField7  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACES() + "', "
-					+ sField8  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "', "
-					+ sField9  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "', "
-					+ sField10 + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
-					+ sField11 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "', "
-					+ sField12 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
-					+ sField13 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "', "
-					+ sField14 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
-					+ sField15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
-					+ sField16 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBDEER() + 
+					+ CAMPO2  + " = '"+ NuevoMovimientoReferenciaCatastral.getCODTRN() + "', "
+					+ CAMPO3  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTDOR() + "', "
+					+ CAMPO4  + " = '"+ NuevoMovimientoReferenciaCatastral.getIDPROV() + "', "
+					+ CAMPO5  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACCI() + "', "
+					+ CAMPO6  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOENGP() + "', "
+					+ CAMPO7  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACES() + "', "
+					+ CAMPO8  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "', "
+					+ CAMPO9  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "', "
+					+ CAMPO10 + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
+					+ CAMPO11 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "', "
+					+ CAMPO12 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
+					+ CAMPO13 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "', "
+					+ CAMPO14 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
+					+ CAMPO15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
+					+ CAMPO16 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBDEER() + 
 
 					//Ampliacion de valor catastral
 					"', "
-					+ sField17 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC23() + "', "
-					+ sField18 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMVSUE() + "', "
-					+ sField19 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC24() + "', "
-					+ sField20 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMCATA() + "', "
-					+ sField21 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC25() + "', "
-					+ sField22 + " = '"+ NuevoMovimientoReferenciaCatastral.getFERECA() + 
+					+ CAMPO17 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC23() + "', "
+					+ CAMPO18 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMVSUE() + "', "
+					+ CAMPO19 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC24() + "', "
+					+ CAMPO20 + " = '"+ NuevoMovimientoReferenciaCatastral.getIMCATA() + "', "
+					+ CAMPO21 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC25() + "', "
+					+ CAMPO22 + " = '"+ NuevoMovimientoReferenciaCatastral.getFERECA() + 
 					
 					"' "+
 					" WHERE "
-					+ sField1 + " = '"+ sMovimientoReferenciaCatastralID +"'");
+					+ CAMPO1 + " = '"+ sMovimientoReferenciaCatastralID +"'");
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoReferenciaCatastralID:|{}|",sMovimientoReferenciaCatastralID);
+			logger.error("ERROR MovimientoReferenciaCatastralID:|"+sMovimientoReferenciaCatastralID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 
 			bSalida = false;
 		} 
@@ -229,18 +225,16 @@ public class QMMovimientosReferencias
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sMovimientoReferenciaCatastralID + "' )");
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
+					" WHERE (" + CAMPO1 + " = '" + sMovimientoReferenciaCatastralID + "' )");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoReferenciaCatastralID:|{}|",sMovimientoReferenciaCatastralID);
+			logger.error("ERROR MovimientoReferenciaCatastralID:|"+sMovimientoReferenciaCatastralID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -275,34 +269,34 @@ public class QMMovimientosReferencias
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-					+ sField1  +               
-					" FROM " + sTable + 
+					+ CAMPO1  +               
+					" FROM " + TABLA + 
 					" WHERE ("
-					+ sField2  + " = '" + referencia.getCODTRN()	+ "' AND "
-					+ sField3  + " = '" + referencia.getCOTDOR()	+ "' AND "
-					+ sField4  + " = '" + referencia.getIDPROV()	+ "' AND "
-					+ sField5  + " = '" + referencia.getCOACCI()	+ "' AND "
-					+ sField6  + " = '" + referencia.getCOENGP()	+ "' AND "
-					+ sField7  + " = '" + referencia.getCOACES()	+ "' AND "
-					+ sField8  + " = '" + referencia.getNURCAT()	+ "' AND "
-					+ sField9  + " = '" + referencia.getBITC16()	+ "' AND "
-					+ sField10 + " = '" + referencia.getTIRCAT()	+ "' AND "
-					+ sField11 + " = '" + referencia.getBITC17()	+ "' AND "
-					+ sField12 + " = '" + referencia.getENEMIS()	+ "' AND "
-					+ sField13 + " = '" + referencia.getCOTEXA()	+ "' AND "
-					+ sField14 + " = '" + referencia.getBITC09()	+ "' AND "
-					+ sField15 + " = '" + referencia.getOBTEXC()	+ "' AND "
-					+ sField16 + " = '" + referencia.getOBDEER()	+ "'" +
+					+ CAMPO2  + " = '" + referencia.getCODTRN()	+ "' AND "
+					+ CAMPO3  + " = '" + referencia.getCOTDOR()	+ "' AND "
+					+ CAMPO4  + " = '" + referencia.getIDPROV()	+ "' AND "
+					+ CAMPO5  + " = '" + referencia.getCOACCI()	+ "' AND "
+					+ CAMPO6  + " = '" + referencia.getCOENGP()	+ "' AND "
+					+ CAMPO7  + " = '" + referencia.getCOACES()	+ "' AND "
+					+ CAMPO8  + " = '" + referencia.getNURCAT()	+ "' AND "
+					+ CAMPO9  + " = '" + referencia.getBITC16()	+ "' AND "
+					+ CAMPO10 + " = '" + referencia.getTIRCAT()	+ "' AND "
+					+ CAMPO11 + " = '" + referencia.getBITC17()	+ "' AND "
+					+ CAMPO12 + " = '" + referencia.getENEMIS()	+ "' AND "
+					+ CAMPO13 + " = '" + referencia.getCOTEXA()	+ "' AND "
+					+ CAMPO14 + " = '" + referencia.getBITC09()	+ "' AND "
+					+ CAMPO15 + " = '" + referencia.getOBTEXC()	+ "' AND "
+					+ CAMPO16 + " = '" + referencia.getOBDEER()	+ "'" +
 
 
 					//Ampliacion de valor catastral
 					" AND "
-					+ sField17 + " = '" + referencia.getBITC23()	+ "' AND "
-					+ sField18 + " = '" + referencia.getIMVSUE()	+ "' AND "
-					+ sField19 + " = '" + referencia.getBITC24()	+ "' AND "
-					+ sField20 + " = '" + referencia.getIMCATA()	+ "' AND "
-					+ sField21 + " = '" + referencia.getBITC25()	+ "' AND "
-					+ sField22 + " = '" + referencia.getFERECA()	+ "'" +
+					+ CAMPO17 + " = '" + referencia.getBITC23()	+ "' AND "
+					+ CAMPO18 + " = '" + referencia.getIMVSUE()	+ "' AND "
+					+ CAMPO19 + " = '" + referencia.getBITC24()	+ "' AND "
+					+ CAMPO20 + " = '" + referencia.getIMCATA()	+ "' AND "
+					+ CAMPO21 + " = '" + referencia.getBITC25()	+ "' AND "
+					+ CAMPO22 + " = '" + referencia.getFERECA()	+ "'" +
 
 					")"); 
 
@@ -317,12 +311,12 @@ public class QMMovimientosReferencias
 				{
 					found = true;
 
-					sMovimientoReferenciaCatastralID = rs.getString(sField1); 
+					sMovimientoReferenciaCatastralID = rs.getString(CAMPO1); 
 
   					
   					logger.debug("Encontrado el registro!");
 
-  					logger.debug("{}:|{}|",sField1,sMovimientoReferenciaCatastralID);
+  					logger.debug(CAMPO1+":|"+sMovimientoReferenciaCatastralID+"|");
 
 				}
 			}
@@ -334,9 +328,7 @@ public class QMMovimientosReferencias
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -391,33 +383,33 @@ public class QMMovimientosReferencias
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + sField2  + ","              
-				       + sField3  + ","              
-				       + sField4  + ","              
-				       + sField5  + ","              
-				       + sField6  + ","              
-				       + sField7  + ","              
-				       + sField8  + ","              
-				       + sField9  + ","              
-				       + sField10 + ","              
-				       + sField11 + ","              
-				       + sField12 + ","              
-				       + sField13 + ","
-				       + sField14 + ","
-				       + sField15 + ","
-				       + sField16 +             
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","
+				       + CAMPO14 + ","
+				       + CAMPO15 + ","
+				       + CAMPO16 +             
 
 				       //Ampliacion de valor catastral
 				       ","
-				       + sField17 + ","              
-				       + sField18 + ","              
-				       + sField19 + ","
-				       + sField20 + ","
-				       + sField21 + ","
-				       + sField22 + 
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","
+				       + CAMPO20 + ","
+				       + CAMPO21 + ","
+				       + CAMPO22 + 
        
-			"  FROM " + sTable + 
-					" WHERE (" + sField1 + " = '" + sMovimientoReferenciaCatastralID	+ "')");
+			"  FROM " + TABLA + 
+					" WHERE (" + CAMPO1 + " = '" + sMovimientoReferenciaCatastralID	+ "')");
 
 			rs = pstmt.executeQuery();
 			
@@ -430,32 +422,32 @@ public class QMMovimientosReferencias
 				{
 					found = true;
 
-  					sCODTRN = rs.getString(sField2); 
-  					sCOTDOR = rs.getString(sField3); 
-  					sIDPROV = rs.getString(sField4); 
-  					sCOACCI = rs.getString(sField5); 
-  					sCOENGP = rs.getString(sField6); 
-  					sCOACES = rs.getString(sField7); 
-  					sNURCAT = rs.getString(sField8); 
-  					sBITC16 = rs.getString(sField9); 
-  					sTIRCAT = rs.getString(sField10);
-  					sBITC17 = rs.getString(sField11);
-  					sENEMIS = rs.getString(sField12);
-  					sCOTEXA = rs.getString(sField13);
-  					sBITC09 = rs.getString(sField14);
-  					sOBTEXC = rs.getString(sField15);
-  					sOBDEER = rs.getString(sField16);
+  					sCODTRN = rs.getString(CAMPO2); 
+  					sCOTDOR = rs.getString(CAMPO3); 
+  					sIDPROV = rs.getString(CAMPO4); 
+  					sCOACCI = rs.getString(CAMPO5); 
+  					sCOENGP = rs.getString(CAMPO6); 
+  					sCOACES = rs.getString(CAMPO7); 
+  					sNURCAT = rs.getString(CAMPO8); 
+  					sBITC16 = rs.getString(CAMPO9); 
+  					sTIRCAT = rs.getString(CAMPO10);
+  					sBITC17 = rs.getString(CAMPO11);
+  					sENEMIS = rs.getString(CAMPO12);
+  					sCOTEXA = rs.getString(CAMPO13);
+  					sBITC09 = rs.getString(CAMPO14);
+  					sOBTEXC = rs.getString(CAMPO15);
+  					sOBDEER = rs.getString(CAMPO16);
 
-  					sBITC23 = rs.getString(sField17);
-  					sIMVSUE = rs.getString(sField18);
-  					sBITC24 = rs.getString(sField19);
-  					sIMCATA = rs.getString(sField20);
-  					sBITC25 = rs.getString(sField21);
-  					sFERECA = rs.getString(sField22);
+  					sBITC23 = rs.getString(CAMPO17);
+  					sIMVSUE = rs.getString(CAMPO18);
+  					sBITC24 = rs.getString(CAMPO19);
+  					sIMCATA = rs.getString(CAMPO20);
+  					sBITC25 = rs.getString(CAMPO21);
+  					sFERECA = rs.getString(CAMPO22);
   					
   					logger.debug("Encontrado el registro!");
 
-  					logger.debug("{}:|{}|",sField1,sMovimientoReferenciaCatastralID);
+  					logger.debug(CAMPO1+":|"+sMovimientoReferenciaCatastralID+"|");
 
 				}
 			}
@@ -467,11 +459,9 @@ public class QMMovimientosReferencias
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: MovimientoReferenciaCatastralID:|{}|",sMovimientoReferenciaCatastralID);
+			logger.error("ERROR MovimientoReferenciaCatastralID:|"+sMovimientoReferenciaCatastralID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -509,10 +499,10 @@ public class QMMovimientosReferencias
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " 
-					+ sField1 + 
+					+ CAMPO1 + 
 					" FROM " 
-					+ sTable + 
-					" WHERE " + sField1 + " = '" + sMovimientoReferenciaID + "'");
+					+ TABLA + 
+					" WHERE " + CAMPO1 + " = '" + sMovimientoReferenciaID + "'");
 			
 			rs = pstmt.executeQuery();
 			
@@ -526,7 +516,7 @@ public class QMMovimientosReferencias
 					found = true;
 
 					logger.debug("Encontrado el registro!");
-					logger.debug("{}:|{}|",sField1,rs.getString(sField1));
+					logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 				}
 			}
 			if (found == false) 
@@ -537,11 +527,9 @@ public class QMMovimientosReferencias
 		catch (SQLException ex) 
 		{
 			found = false;
-			logger.error("ERROR: sMovimientoReferenciaID:|{}|",sMovimientoReferenciaID);
+			logger.error("ERROR sMovimientoReferenciaID:|"+sMovimientoReferenciaID+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			
 		} 

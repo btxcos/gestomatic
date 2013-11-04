@@ -23,10 +23,10 @@ public class QMListaErroresComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresComunidades.class.getName());
 	
-	static String sTable = "lista_errores_comunidades_multi";
+	static String TABLA = "pp001_lista_errores_comunidades_multi";
 
-	static String sField1  = "cod_movimiento";
-	static String sField2  = "cod_cotdor";
+	static String CAMPO1  = "cod_movimiento";
+	static String CAMPO2  = "cod_cotdor";
 
 	public static boolean addErrorComunidad(String sCodMovimiento, String sCodCOTDOR)
 	{
@@ -43,9 +43,9 @@ public class QMListaErroresComunidades
 		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + sTable + " ("
-					   + sField1  + "," 
-				       + sField2  +             
+			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
+					   + CAMPO1  + "," 
+				       + CAMPO2  +             
 				       ") VALUES ('"
 				       + sCodMovimiento + "','" 
 				       + sCodCOTDOR +  "' )");
@@ -54,12 +54,10 @@ public class QMListaErroresComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
-			logger.error("ERROR: COTDOR:|{}|",sCodCOTDOR);
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -86,21 +84,19 @@ public class QMListaErroresComunidades
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + sTable + 
+			stmt.executeUpdate("DELETE FROM " + TABLA + 
 					" WHERE " +
-					"(" + sField1 + " = '" + sCodMovimiento	+ "' AND "
-						+ sField2 + " = '" + sCodCOTDOR	+ "')");
+					"(" + CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+						+ CAMPO2 + " = '" + sCodCOTDOR	+ "')");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: Movimiento:|{}|",sCodMovimiento);
-			logger.error("ERROR: COTDOR:|{}|",sCodCOTDOR);
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
 			bSalida = false;
 		} 
@@ -136,9 +132,9 @@ public class QMListaErroresComunidades
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + sTable + 
+			pstmt = conn.prepareStatement("SELECT COUNT(*) FROM " + TABLA + 
 					" WHERE " 
-					+ sField1 + " = '" + sMovimiento + "'");
+					+ CAMPO1 + " = '" + sMovimiento + "'");
 
 			rs = pstmt.executeQuery();
 			
@@ -155,7 +151,7 @@ public class QMListaErroresComunidades
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug( "Numero de registros:|{}|",liNumero);
+					logger.debug( "Numero de registros:|"+liNumero+"|");
 
 
 				}
@@ -169,11 +165,9 @@ public class QMListaErroresComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: sMovimiento:|{}|",sMovimiento);
+			logger.error("ERROR sMovimiento:|"+sMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -215,19 +209,19 @@ public class QMListaErroresComunidades
 
 			pstmt = conn.prepareStatement("SELECT "
 					
-					   + QMMovimientosComunidades.sField1 + ","
-					   + QMMovimientosComunidades.sField7 + ","
-					   + QMMovimientosComunidades.sField8 + ","
-					   + QMMovimientosComunidades.sField12 + 
+					   + QMMovimientosComunidades.CAMPO1 + ","
+					   + QMMovimientosComunidades.CAMPO7 + ","
+					   + QMMovimientosComunidades.CAMPO8 + ","
+					   + QMMovimientosComunidades.CAMPO12 + 
 
-					   "  FROM " + QMMovimientosComunidades.sTable + 
+					   "  FROM " + QMMovimientosComunidades.TABLA + 
 					   " WHERE ( "
-					   + QMMovimientosComunidades.sField7 +" LIKE '%"+ filtro.getCOCLDO() +"%' AND "
-					   + QMMovimientosComunidades.sField8 +" LIKE '%"+ filtro.getNUDCOM() +"%' AND "
-					   + QMMovimientosComunidades.sField7 +" LIKE '%"+ filtro.getNOMCOC() +"%' AND "
-					   + QMMovimientosComunidades.sField1 +" IN (SELECT DISTINCT "
-					   +  sField1 + 
-					   "  FROM " + sTable + "))");
+					   + QMMovimientosComunidades.CAMPO7 +" LIKE '%"+ filtro.getCOCLDO() +"%' AND "
+					   + QMMovimientosComunidades.CAMPO8 +" LIKE '%"+ filtro.getNUDCOM() +"%' AND "
+					   + QMMovimientosComunidades.CAMPO7 +" LIKE '%"+ filtro.getNOMCOC() +"%' AND "
+					   + QMMovimientosComunidades.CAMPO1 +" IN (SELECT DISTINCT "
+					   +  CAMPO1 + 
+					   "  FROM " + TABLA + "))");
 					   
 
 			rs = pstmt.executeQuery();
@@ -243,11 +237,11 @@ public class QMListaErroresComunidades
 				{
 					found = true;
 					
-					COCLDO = rs.getString(QMMovimientosComunidades.sField7);
+					COCLDO = rs.getString(QMMovimientosComunidades.CAMPO7);
 					DCOCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, COCLDO);
-					NUDCOM = rs.getString(QMMovimientosComunidades.sField8);
-					NOMCOC = rs.getString(QMMovimientosComunidades.sField12);
-					MOVIMIENTO = rs.getString(QMMovimientosComunidades.sField1);
+					NUDCOM = rs.getString(QMMovimientosComunidades.CAMPO8);
+					NOMCOC = rs.getString(QMMovimientosComunidades.CAMPO12);
+					MOVIMIENTO = rs.getString(QMMovimientosComunidades.CAMPO1);
 					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					
 					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, DCOCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
@@ -256,7 +250,7 @@ public class QMListaErroresComunidades
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",QMMovimientosComunidades.sField1,MOVIMIENTO);
+					logger.debug(QMMovimientosComunidades.CAMPO1+":|"+MOVIMIENTO+"|");
 				}
 			}
 			if (found == false) 
@@ -267,9 +261,7 @@ public class QMListaErroresComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -310,17 +302,17 @@ public class QMListaErroresComunidades
 
 			pstmt = conn.prepareStatement("SELECT "
 					
-					   + QMMovimientosComunidades.sField1 + ","
-					   + QMMovimientosComunidades.sField7 + ","
-					   + QMMovimientosComunidades.sField8 + ","
-					   + QMMovimientosComunidades.sField12 + 
+					   + QMMovimientosComunidades.CAMPO1 + ","
+					   + QMMovimientosComunidades.CAMPO7 + ","
+					   + QMMovimientosComunidades.CAMPO8 + ","
+					   + QMMovimientosComunidades.CAMPO12 + 
 
-					   "  FROM " + QMMovimientosComunidades.sTable + 
+					   "  FROM " + QMMovimientosComunidades.TABLA + 
 					   " WHERE ( "
-					   + QMMovimientosComunidades.sField10 +" LIKE '%"+ sCOACES +"%' AND "
-					   + QMMovimientosComunidades.sField1 +" IN (SELECT DISTINCT "
-					   +  sField1 + 
-					   "  FROM " + sTable + "))");
+					   + QMMovimientosComunidades.CAMPO10 +" LIKE '%"+ sCOACES +"%' AND "
+					   + QMMovimientosComunidades.CAMPO1 +" IN (SELECT DISTINCT "
+					   +  CAMPO1 + 
+					   "  FROM " + TABLA + "))");
 					   
 
 			rs = pstmt.executeQuery();
@@ -336,11 +328,11 @@ public class QMListaErroresComunidades
 				{
 					found = true;
 					
-					COCLDO = rs.getString(QMMovimientosComunidades.sField7);
+					COCLDO = rs.getString(QMMovimientosComunidades.CAMPO7);
 					DCOCLDO = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, COCLDO);
-					NUDCOM = rs.getString(QMMovimientosComunidades.sField8);
-					NOMCOC = rs.getString(QMMovimientosComunidades.sField12);
-					MOVIMIENTO = rs.getString(QMMovimientosComunidades.sField1);
+					NUDCOM = rs.getString(QMMovimientosComunidades.CAMPO8);
+					NOMCOC = rs.getString(QMMovimientosComunidades.CAMPO12);
+					MOVIMIENTO = rs.getString(QMMovimientosComunidades.CAMPO1);
 					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
 					
 					ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, DCOCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
@@ -349,7 +341,7 @@ public class QMListaErroresComunidades
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",QMMovimientosComunidades.sField1,MOVIMIENTO);
+					logger.debug(QMMovimientosComunidades.CAMPO1+":|"+MOVIMIENTO+"|");
 				}
 			}
 			if (found == false) 
@@ -360,11 +352,9 @@ public class QMListaErroresComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: COACES:|{}|",sCOACES);
+			logger.error("ERROR COACES:|"+sCOACES+"|");
 			
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
@@ -400,10 +390,10 @@ public class QMListaErroresComunidades
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT " +
-					   sField2 + 
-					   " FROM " + sTable + 
+					   CAMPO2 + 
+					   " FROM " + TABLA + 
 					   " WHERE "
-					   + sField1 +" = '"+ sMovimiento +"'");
+					   + CAMPO1 +" = '"+ sMovimiento +"'");
 			
 
 			rs = pstmt.executeQuery();
@@ -419,7 +409,7 @@ public class QMListaErroresComunidades
 				{
 					found = true;
 					
-					sCodError = rs.getString(sField2);
+					sCodError = rs.getString(CAMPO2);
 					sDescripcion = QMCodigosControl.getDesCampo(QMCodigosControl.TCOTDORE1, QMCodigosControl.ICOTDORE1, sCodError);
 
 					
@@ -429,7 +419,7 @@ public class QMListaErroresComunidades
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|{}|",sCodError,sDescripcion);
+					logger.debug(sCodError+":|"+sDescripcion+"|");
 				}
 			}
 			if (found == false) 
@@ -440,11 +430,9 @@ public class QMListaErroresComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR: sMovimiento:{}",sMovimiento);
+			logger.error("ERROR Movimiento:|",sMovimiento+"|");
 
-			logger.error("ERROR: SQLException:{}",ex.getMessage());
-			logger.error("ERROR: SQLState:{}",ex.getSQLState());
-			logger.error("ERROR: VendorError:{}",ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
 		{
