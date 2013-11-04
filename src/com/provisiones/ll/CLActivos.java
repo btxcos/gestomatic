@@ -9,7 +9,7 @@ import com.provisiones.dal.qm.QMActivos;
 
 import com.provisiones.misc.Parser;
 import com.provisiones.types.Activo;
-import com.provisiones.types.ActivoTabla;
+import com.provisiones.types.tablas.ActivoTabla;
 
 
 public class CLActivos 

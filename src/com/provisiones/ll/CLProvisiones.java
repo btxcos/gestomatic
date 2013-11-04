@@ -15,9 +15,9 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.MovimientoGasto;
 import com.provisiones.types.Provision;
-import com.provisiones.types.ProvisionTabla;
+import com.provisiones.types.movimientos.MovimientoGasto;
+import com.provisiones.types.tablas.ProvisionTabla;
 
 public class CLProvisiones
 {

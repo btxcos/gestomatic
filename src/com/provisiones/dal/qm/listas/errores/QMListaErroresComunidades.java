@@ -15,8 +15,8 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.ErrorComunidadTabla;
-import com.provisiones.types.ErrorTabla;
+import com.provisiones.types.errores.ErrorComunidadTabla;
+import com.provisiones.types.errores.ErrorTabla;
 
 
 public class QMListaErroresComunidades 

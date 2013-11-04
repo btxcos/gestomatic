@@ -3,7 +3,7 @@ package com.provisiones.dal.qm;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.Activo;
-import com.provisiones.types.ActivoTabla;
+import com.provisiones.types.tablas.ActivoTabla;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

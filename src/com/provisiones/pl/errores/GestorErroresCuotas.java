@@ -18,11 +18,11 @@ import com.provisiones.ll.CLErrores;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.CuotaTabla;
-import com.provisiones.types.ErrorCuotaTabla;
-import com.provisiones.types.ErrorTabla;
-import com.provisiones.types.MovimientoCuota;
+import com.provisiones.types.errores.ErrorCuotaTabla;
+import com.provisiones.types.errores.ErrorTabla;
+import com.provisiones.types.movimientos.MovimientoCuota;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.CuotaTabla;
 
 public class GestorErroresCuotas implements Serializable 
 {

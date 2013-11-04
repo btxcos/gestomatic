@@ -20,10 +20,10 @@ import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.CuotaTabla;
-import com.provisiones.types.ImpuestoRecursoTabla;
-import com.provisiones.types.MovimientoGasto;
+import com.provisiones.types.movimientos.MovimientoGasto;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.CuotaTabla;
+import com.provisiones.types.tablas.ImpuestoRecursoTabla;
 
 public class GestorGastos implements Serializable 
 {

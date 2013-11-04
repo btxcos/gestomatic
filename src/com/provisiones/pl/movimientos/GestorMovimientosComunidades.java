@@ -14,9 +14,9 @@ import javax.faces.event.ActionEvent;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
-import com.provisiones.types.MovimientoComunidad;
+import com.provisiones.types.movimientos.MovimientoComunidad;
+import com.provisiones.types.tablas.ActivoTabla;
 
 public class GestorMovimientosComunidades implements Serializable 
 {

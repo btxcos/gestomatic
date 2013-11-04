@@ -14,10 +14,10 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 
-import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.ImpuestoRecurso;
-import com.provisiones.types.ImpuestoRecursoTabla;
-import com.provisiones.types.MovimientoImpuestoRecurso;
+import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.ImpuestoRecursoTabla;
 
 public class CLImpuestos 
 {

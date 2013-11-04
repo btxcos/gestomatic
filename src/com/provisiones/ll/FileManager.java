@@ -41,8 +41,8 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Resultados;
-import com.provisiones.types.ResultadosTabla;
 import com.provisiones.types.Provision;
+import com.provisiones.types.tablas.ResultadosTabla;
 
 public class FileManager 
 {

@@ -2,7 +2,7 @@ package com.provisiones.dal.qm.movimientos;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.MovimientoCuota;
+import com.provisiones.types.movimientos.MovimientoCuota;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

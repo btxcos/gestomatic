@@ -15,10 +15,10 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 
-import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Cuota;
-import com.provisiones.types.CuotaTabla;
-import com.provisiones.types.MovimientoCuota;
+import com.provisiones.types.movimientos.MovimientoCuota;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.CuotaTabla;
 
 public class CLCuotas 
 {

@@ -3,7 +3,7 @@ package com.provisiones.dal.qm.movimientos;
 import com.provisiones.dal.ConnectionManager;
 
 import com.provisiones.misc.Utils;
-import com.provisiones.types.MovimientoReferenciaCatastral;
+import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

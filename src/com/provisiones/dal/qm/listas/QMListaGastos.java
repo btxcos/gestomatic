@@ -16,8 +16,8 @@ import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.GastoTabla;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.GastoTabla;
 
 public class QMListaGastos 
 {

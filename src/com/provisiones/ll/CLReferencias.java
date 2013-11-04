@@ -15,10 +15,10 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.MovimientoReferenciaCatastral;
 import com.provisiones.types.ReferenciaCatastral;
-import com.provisiones.types.ReferenciaTabla;
+import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.ReferenciaTabla;
 
 
 public class CLReferencias 

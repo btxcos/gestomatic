@@ -16,10 +16,10 @@ import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Gasto;
-import com.provisiones.types.GastoTabla;
-import com.provisiones.types.MovimientoGasto;
+import com.provisiones.types.movimientos.MovimientoGasto;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.GastoTabla;
 
 public class GestorPagosConexion implements Serializable 
 {

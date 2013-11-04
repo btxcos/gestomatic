@@ -5,8 +5,8 @@ import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.ReferenciaTabla;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.ReferenciaTabla;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

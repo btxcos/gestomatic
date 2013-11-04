@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:layout fullPage="true">
+<style type="text/css">
+.slot {
+background:#FF9900;
+width:64px;
+height:96px;
+display:block;
+}
+
+.panelGridCenter td,
+.panelGridCenter tr {
+    text-align: center;
+}
+
+.ui-panel-title{
+             vertical-align: middle !important;
+}
+.centered {
+position: absolute;
+top: 0;
+bottom: 0;
+margin:auto;
+left:50%;
+margin-left:-155px;
+
+}
+</style>
+
+				<p:layoutUnit position="center" header="Portal Provisiones" style="text-align: center">
+
+					<h:panelGrid columns="1" cellpadding="5" >
+						<p:panel header="Login" style="height:200px;text-align: center" styleClass="centered">
+							<h:panelGrid columns="2" cellpadding="5" styleClass="panelGridCenter">
+
+								<h:outputLabel for="username" value="Usuario:" />
+								<p:inputText value="#{loginBean.nombre}" id="username" required="true" label="username" />
+
+								<h:outputLabel for="password" value="Clave:" />
+								<p:password value="#{loginBean.clave}" id="password" required="true" label="password" />
+								<f:facet name="footer">
+									<p:commandButton id="loginButton" value="Login" actionListener="#{loginBean.login}"	oncomplete="manejarLogin(xhr, status, args)" />
+								</f:facet>
+
+							</h:panelGrid>
+						</p:panel>
+
+					</h:panelGrid>
+				</p:layoutUnit>
+
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

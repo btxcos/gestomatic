@@ -16,7 +16,7 @@ import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
 
 import com.provisiones.types.Resultados;
-import com.provisiones.types.ResultadosTabla;
+import com.provisiones.types.tablas.ResultadosTabla;
 
 
 public class GestorCargas implements Serializable

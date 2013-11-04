@@ -16,11 +16,11 @@ import com.provisiones.ll.CLErrores;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
-import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
-import com.provisiones.types.ErrorComunidadTabla;
-import com.provisiones.types.ErrorTabla;
-import com.provisiones.types.MovimientoComunidad;
+import com.provisiones.types.errores.ErrorComunidadTabla;
+import com.provisiones.types.errores.ErrorTabla;
+import com.provisiones.types.movimientos.MovimientoComunidad;
+import com.provisiones.types.tablas.ActivoTabla;
 
 public class GestorErroresComunidades implements Serializable 
 {

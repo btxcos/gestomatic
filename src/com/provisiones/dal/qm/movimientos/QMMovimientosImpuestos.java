@@ -3,7 +3,7 @@ package com.provisiones.dal.qm.movimientos;
 import com.provisiones.dal.ConnectionManager;
 
 import com.provisiones.misc.Utils;
-import com.provisiones.types.MovimientoImpuestoRecurso;
+import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

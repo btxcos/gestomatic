@@ -16,8 +16,8 @@ import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.CuotaTabla;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.CuotaTabla;
 
 public class QMListaCuotas 
 {

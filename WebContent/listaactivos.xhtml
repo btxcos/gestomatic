@@ -32,19 +32,24 @@
 
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-													<p:commandButton value="Buscar" update="msgs, popup, activos" actionListener="#{GestorActivos.buscaActivos}"/>	
-													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar" actionListener="#{GestorActivos.limpiarPlantilla}" />	
+													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar" actionListener="#{GestorActivos.limpiarPlantilla}" />
+													<p:commandButton value="Buscar" update="msgs, popup, activos" actionListener="#{GestorActivos.buscaActivos}"/>
+													<p:commandButton value="Detalles" update="form:popup" action="#{GestorActivos.cargarDetalles}" />
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
-											<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
-											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top">  
-												<p:messages id="msgs"/>
-											</p:notificationBar>  
-											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-											<p:growl id="popup" />
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
 										</h:panelGrid>
 									</p:fieldset>
 								</h:panelGrid>
@@ -120,7 +125,7 @@
 														    #{activo.COACES}  
 														</p:column>  
 														
-														<p:column sortBy="#{activo.NOPRAC}" headerText="Comunidad Autonoma">  
+														<p:column sortBy="#{activo.NOPRAC}" headerText="Provinicia">  
 														    #{activo.NOPRAC}  
 														</p:column>  
             							

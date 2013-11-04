@@ -1,4 +1,4 @@
-package com.provisiones.types;
+package com.provisiones.types.tablas;
 
 public class ImpuestoRecursoTabla 
 {

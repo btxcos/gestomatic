@@ -18,11 +18,11 @@ import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.ErrorReferenciaTabla;
-import com.provisiones.types.ErrorTabla;
-import com.provisiones.types.MovimientoReferenciaCatastral;
-import com.provisiones.types.ReferenciaTabla;
+import com.provisiones.types.errores.ErrorReferenciaTabla;
+import com.provisiones.types.errores.ErrorTabla;
+import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.ReferenciaTabla;
 
 public class GestorErroresReferenciasCatastrales implements Serializable 
 {

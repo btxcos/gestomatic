@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.ll.CLActivos;
 
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
+import com.provisiones.types.tablas.ActivoTabla;
 
 public class GestorActivos implements Serializable 
 {

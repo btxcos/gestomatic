@@ -16,7 +16,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Provision;
-import com.provisiones.types.ProvisionTabla;
+import com.provisiones.types.tablas.ProvisionTabla;
 
 public class GestorProvisiones implements Serializable 
 {

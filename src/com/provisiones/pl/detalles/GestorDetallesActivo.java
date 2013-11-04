@@ -214,7 +214,7 @@ public class GestorDetallesActivo implements Serializable
 		this.sYNOLEC = activo.getYNOLEC();
 		this.sNOLOJZ = activo.getNOLOJZ();
 		this.sFEREDE = Utils.recuperaFecha(activo.getFEREDE());
-		this.sPOPROP = activo.getPOPROP();
+		this.sPOPROP = Utils.recuperaImporte(false,activo.getPOPROP().substring(0,5));
 		this.sCOGRAP = activo.getCOGRAP();
 		this.sFEPREG = Utils.recuperaFecha(activo.getFEPREG());
 		this.sFEPHAC = Utils.recuperaFecha(activo.getFEPHAC());
@@ -240,7 +240,7 @@ public class GestorDetallesActivo implements Serializable
 		this.sCOSPAS = activo.getCOSPAS();
 		this.sIDCOL3 = activo.getIDCOL3();
 		this.sBIOBNU = activo.getBIOBNU();
-		this.sPOBRAR = Utils.recuperaImporte(false,activo.getPOBRAR());
+		this.sPOBRAR = Utils.recuperaImporte(false,activo.getPOBRAR().substring(0,5));
 		}
 		
 	}

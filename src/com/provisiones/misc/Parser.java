@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.types.Cierre;
 import com.provisiones.types.Activo;
-import com.provisiones.types.MovimientoComunidad;
-import com.provisiones.types.MovimientoCuota;
-import com.provisiones.types.MovimientoGasto;
-import com.provisiones.types.MovimientoImpuestoRecurso;
-import com.provisiones.types.MovimientoReferenciaCatastral;
+import com.provisiones.types.movimientos.MovimientoComunidad;
+import com.provisiones.types.movimientos.MovimientoCuota;
+import com.provisiones.types.movimientos.MovimientoGasto;
+import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
+import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 
 public class Parser {
 

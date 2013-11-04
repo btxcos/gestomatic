@@ -15,8 +15,8 @@ import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 import com.provisiones.misc.Utils;
 
-import com.provisiones.types.ErrorCuotaTabla;
-import com.provisiones.types.ErrorTabla;
+import com.provisiones.types.errores.ErrorCuotaTabla;
+import com.provisiones.types.errores.ErrorTabla;
 
 public class QMListaErroresCuotas 
 {

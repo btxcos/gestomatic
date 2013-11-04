@@ -14,8 +14,8 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.ErrorReferenciaTabla;
-import com.provisiones.types.ErrorTabla;
+import com.provisiones.types.errores.ErrorReferenciaTabla;
+import com.provisiones.types.errores.ErrorTabla;
 
 public class QMListaErroresReferencias 
 {

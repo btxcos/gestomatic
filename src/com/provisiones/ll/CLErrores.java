@@ -27,17 +27,17 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ErrorComunidadTabla;
-import com.provisiones.types.ErrorCuotaTabla;
-import com.provisiones.types.ErrorGastoTabla;
-import com.provisiones.types.ErrorImpuestoTabla;
-import com.provisiones.types.ErrorReferenciaTabla;
-import com.provisiones.types.ErrorTabla;
-import com.provisiones.types.MovimientoComunidad;
-import com.provisiones.types.MovimientoCuota;
-import com.provisiones.types.MovimientoGasto;
-import com.provisiones.types.MovimientoImpuestoRecurso;
-import com.provisiones.types.MovimientoReferenciaCatastral;
+import com.provisiones.types.errores.ErrorComunidadTabla;
+import com.provisiones.types.errores.ErrorCuotaTabla;
+import com.provisiones.types.errores.ErrorGastoTabla;
+import com.provisiones.types.errores.ErrorImpuestoTabla;
+import com.provisiones.types.errores.ErrorReferenciaTabla;
+import com.provisiones.types.errores.ErrorTabla;
+import com.provisiones.types.movimientos.MovimientoComunidad;
+import com.provisiones.types.movimientos.MovimientoCuota;
+import com.provisiones.types.movimientos.MovimientoGasto;
+import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
+import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 
 public class CLErrores 
 {

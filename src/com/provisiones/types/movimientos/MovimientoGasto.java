@@ -1,4 +1,4 @@
-package com.provisiones.types;
+package com.provisiones.types.movimientos;
 
 public class MovimientoGasto 
 {

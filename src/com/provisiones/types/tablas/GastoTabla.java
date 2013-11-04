@@ -1,37 +1,38 @@
-package com.provisiones.types;
+package com.provisiones.types.tablas;
 
-public class ErrorGastoTabla 
+public class GastoTabla 
 {
-	
 	private String COACES = "";
-	
 	private String COGRUG = "";
 	private String COTPGA = "";
 	private String COSBGA = "";
 	private String DCOSBGA = "";
-	private String IMNGAS = "";
+	private String PTPAGO = "";
+	private String DPTPAGO = "";
 	private String FEDEVE = "";
-
-	private String MOVIMIENTO = "";
-	private String ERRORES = "";
+	private String COSIGA = "";
+	private String DCOSIGA = "";
+	private String IMNGAS = "";
 
 	//Constructor de clase
-
-	public ErrorGastoTabla(String cOACES, String cOGRUG, String cOTPGA,
-			String cOSBGA, String dCOSBGA, String iMNGAS, String fEDEVE,
-			String mOVIMIENTO, String eRRORES) {
+	
+	public GastoTabla(String cOACES, String cOGRUG, String cOTPGA,
+			String cOSBGA, String dCOSBGA, String pTPAGO, String dPTPAGO,
+			String fEDEVE, String cOSIGA, String dCOSIGA, String iMNGAS) {
 		super();
 		COACES = cOACES;
 		COGRUG = cOGRUG;
 		COTPGA = cOTPGA;
 		COSBGA = cOSBGA;
 		DCOSBGA = dCOSBGA;
-		setIMNGAS(iMNGAS);
+		PTPAGO = pTPAGO;
+		DPTPAGO = dPTPAGO;
 		FEDEVE = fEDEVE;
-		MOVIMIENTO = mOVIMIENTO;
-		ERRORES = eRRORES;
+		COSIGA = cOSIGA;
+		DCOSIGA = dCOSIGA;
+		IMNGAS = iMNGAS;
 	}
-
+	
 	//Métodos de acceso
 
 	public String getCOACES() {
@@ -74,12 +75,20 @@ public class ErrorGastoTabla
 		DCOSBGA = dCOSBGA;
 	}
 
-	public String getIMNGAS() {
-		return IMNGAS;
+	public String getPTPAGO() {
+		return PTPAGO;
 	}
 
-	public void setIMNGAS(String iMNGAS) {
-		IMNGAS = iMNGAS;
+	public void setPTPAGO(String pTPAGO) {
+		PTPAGO = pTPAGO;
+	}
+
+	public String getDPTPAGO() {
+		return DPTPAGO;
+	}
+
+	public void setDPTPAGO(String dPTPAGO) {
+		DPTPAGO = dPTPAGO;
 	}
 
 	public String getFEDEVE() {
@@ -90,19 +99,27 @@ public class ErrorGastoTabla
 		FEDEVE = fEDEVE;
 	}
 
-	public String getMOVIMIENTO() {
-		return MOVIMIENTO;
+	public String getCOSIGA() {
+		return COSIGA;
 	}
 
-	public void setMOVIMIENTO(String mOVIMIENTO) {
-		MOVIMIENTO = mOVIMIENTO;
+	public void setCOSIGA(String cOSIGA) {
+		COSIGA = cOSIGA;
 	}
 
-	public String getERRORES() {
-		return ERRORES;
+	public String getDCOSIGA() {
+		return DCOSIGA;
 	}
 
-	public void setERRORES(String eRRORES) {
-		ERRORES = eRRORES;
+	public void setDCOSIGA(String dCOSIGA) {
+		DCOSIGA = dCOSIGA;
+	}
+
+	public String getIMNGAS() {
+		return IMNGAS;
+	}
+
+	public void setIMNGAS(String iMNGAS) {
+		IMNGAS = iMNGAS;
 	}
 }

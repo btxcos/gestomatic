@@ -15,8 +15,8 @@ import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.ErrorGastoTabla;
-import com.provisiones.types.ErrorTabla;
+import com.provisiones.types.errores.ErrorGastoTabla;
+import com.provisiones.types.errores.ErrorTabla;
 
 public class QMListaErroresGastos 
 {

@@ -4,9 +4,9 @@ package com.provisiones.dal.qm;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Gasto;
-import com.provisiones.types.GastoTabla;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.GastoTabla;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

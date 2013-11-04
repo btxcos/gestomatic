@@ -5,9 +5,9 @@ import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
 import com.provisiones.types.Comunidad;
-import com.provisiones.types.ComunidadTabla;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.ComunidadTabla;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

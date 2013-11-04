@@ -14,9 +14,9 @@ import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.types.ActivoTabla;
-import com.provisiones.types.ImpuestoRecursoTabla;
-import com.provisiones.types.MovimientoImpuestoRecurso;
+import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
+import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.ImpuestoRecursoTabla;
 
 public class GestorMovimientosImpuestosRecursos implements Serializable 
 {
