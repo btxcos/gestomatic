@@ -41,7 +41,7 @@ public class CLActivos
 		{
 			logger.warn("El siguiente registro ya se encuentre en el sistema:");
 			logger.warn("|{}|",linea);
-			iCodigo = -2;
+			iCodigo = -1;
 		}
 				
 		return iCodigo;

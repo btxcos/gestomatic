@@ -20,6 +20,12 @@ public class ConnectionManager
 	
 	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class.getName());
 	
+	public static Connection getDBConnection() 
+	{
+		Connection conn = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
+
+		return conn;
+	}	
 
 	public static Connection openDBConnection() 
 	{
@@ -52,18 +58,6 @@ public class ConnectionManager
 		}
 
 		//logger.debug("Conexión realizada.");
-		return conn;
-
-	}
-	
-	public static Connection getDBConnection() 
-	{
-
-
-
-		Connection conn = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
-		
-
 		return conn;
 
 	}

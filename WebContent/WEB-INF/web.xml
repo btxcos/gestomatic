@@ -50,16 +50,8 @@
 		<url-pattern>/faces/*</url-pattern>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-	<servlet>
-		<servlet-name>ServletPruebas</servlet-name>
-		<servlet-class>com.provisiones.test.ServletCliente</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ServletPruebas</servlet-name>
-		<url-pattern>/com/provisiones/test/ServletPruebas</url-pattern>
-	</servlet-mapping>
 	<welcome-file-list>
-		<welcome-file>index.xhtml</welcome-file>
+		<welcome-file>login.xhtml</welcome-file>
 	</welcome-file-list>
 
 

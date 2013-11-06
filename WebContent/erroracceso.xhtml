@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:layout fullPage="true">
+<style type="text/css">
+.slot {
+background:#FF9900;
+width:64px;
+height:96px;
+display:block;
+}
+
+.panelGridCenter td,
+.panelGridCenter tr {
+    text-align: center;
+}
+
+.ui-panel-title{
+             vertical-align: middle !important;
+}
+.centered {
+height: 50%;
+width: auto;
+margin: 0 auto;
+}
+</style>
+
+				<p:layoutUnit position="center" header="Portal Provisiones" style="text-align: center">
+
+					<h:panelGrid columns="1" cellpadding="5" style="text-align: center" styleClass="centered">
+						<p:panel>
+						<h:panelGrid columns="1" cellpadding="5" styleClass="panelGridCenter">
+						<h:outputText id="mensaje" value="Se ha intentado acceder a un recurso al que sus actuales credenciales no tienen acceso." />
+						<h:outputText id="mensaje2" value="Por favor, vuelva a iniciar sesión." />
+						<f:facet name="footer">
+							<p:commandButton id="loginButton" value="Continuar" update="mensaje" action="#{GestorSesion.cerrarSesion}"/>
+						</f:facet>
+						</h:panelGrid>
+						</p:panel>
+
+					</h:panelGrid>
+
+				</p:layoutUnit>
+
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

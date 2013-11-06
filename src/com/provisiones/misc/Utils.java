@@ -26,7 +26,7 @@ import com.provisiones.types.ImporteDevolucion;
 public class Utils 
 {
 	private static Logger logger = LoggerFactory.getLogger(Utils.class.getName());
-	
+
 
 	public static String cifra (String sMsg)
 	{

@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
@@ -54,7 +56,7 @@ public class TestActivos
 		System.out.println("|"+QMUsuarios.getUsuario(sUsuarioID).getsPassword().length()+"|");*/
 		
 		
-		Connection conn = null;
+		/*Connection conn = null;
 		
 		conn = ConnectionManager.openDBConnection();
 		
@@ -73,7 +75,7 @@ public class TestActivos
 		String sConexion2 = conn2.toString();
 
 		
-		System.out.println("|"+sConexion2+"|");
+		System.out.println("|"+sConexion2+"|");*/
 		
 		/*try 
 		{
@@ -89,8 +91,12 @@ public class TestActivos
 		//ConnectionManager.closeDBConnection(conn);
 		//ConnectionManager.closeDBConnection(conn2);
 		
+		String sRespuesta = "NULACO";
 		
-		
+		if (((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion").equals(null))
+		{
+			System.out.println("|"+sRespuesta+"|");
+		}
 		
 
 

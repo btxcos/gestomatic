@@ -573,7 +573,7 @@ public class FileManager
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			int iCodigo = CLActivos.actualizaActivoLeido(linea);
 	    			String sMensaje = "";
 	    			
 	    			switch (iCodigo)
