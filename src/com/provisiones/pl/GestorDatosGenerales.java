@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.faces.event.ActionEvent;
+
 public class GestorDatosGenerales implements Serializable 
 {
 	private static final long serialVersionUID = -669897445986653574L;
@@ -117,6 +119,11 @@ public class GestorDatosGenerales implements Serializable
 		tiposcotnegHM.put("CLIENTE",        "1");  
 		tiposcotnegHM.put("CAJA",           "2");
 	
+	}
+	
+	public void compruebaLogin (ActionEvent actionEvent)
+	{
+		
 	}
 
 	public Map<String, String> getTiposcocldoHM() {

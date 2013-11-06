@@ -168,6 +168,7 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			iCodigo = 0;
 			
 			logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
 			logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
@@ -176,7 +177,6 @@ public class QMGastos
 			logger.error("ERROR FEDEVE:|"+NuevoGasto.getFEDEVE()+"|");
 			
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			iCodigo = 0;
 		} 
 		finally 
 		{
@@ -186,6 +186,7 @@ public class QMGastos
 		
 		return iCodigo;
 	}
+
 	public static boolean modGasto(Gasto NuevoGasto)
 	{
 		Connection conn = null;

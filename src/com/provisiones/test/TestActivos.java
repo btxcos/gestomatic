@@ -6,6 +6,7 @@ import java.util.ArrayList;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
+import com.provisiones.misc.Utils;
 import com.provisiones.types.tablas.ResultadosTabla;
 
 
@@ -23,6 +24,25 @@ public class TestActivos
 		
 		
 		//Utils.debugTrace(true, "TEST", "TEST", "|"+getTabla().size()+"|");
+		
+		String sMsg = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
+		System.out.println(sMsg);
+		System.out.println(sMsg.length());
+		
+		System.out.println("|"+Utils.timeStamp()+"|");
+		sMsg = Utils.cifra(sMsg);
+		
+		System.out.println("|"+Utils.timeStamp()+"|");
+		System.out.println("|"+sMsg+"|");
+		System.out.println(sMsg.length());
+		
+		
+		
+		
+
+		System.out.println("|"+Utils.timeStamp()+"|");
+		System.out.println(Utils.descifra(sMsg));
+		System.out.println("|"+Utils.timeStamp()+"|");
 
 	}
 
