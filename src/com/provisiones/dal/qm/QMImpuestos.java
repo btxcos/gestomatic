@@ -36,7 +36,7 @@ public class QMImpuestos
 
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -87,14 +87,14 @@ public class QMImpuestos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static boolean modImpuestoRecurso(ImpuestoRecurso NuevoImpuestoRecurso, String sCodNURCAT, String sCodCOSBAC)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -138,14 +138,14 @@ public class QMImpuestos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static boolean delImpuestoRecurso(String sCodNURCAT, String sCodCOSBAC)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -177,14 +177,14 @@ public class QMImpuestos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static ImpuestoRecurso getImpuestoRecurso(String sCodNURCAT, String sCodCOSBAC)
 	{	
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -272,14 +272,14 @@ public class QMImpuestos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return new ImpuestoRecurso(sNURCAT, sCOSBAC, sFEPRRE, sFERERE, sFEDEIN, sBISODE, sBIRESO, sCOTEXA, sOBTEXC);
 	}
 
 	public static boolean existeImpuestoRecurso(String sCodNURCAT, String sCodCOSBAC)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -341,7 +341,7 @@ public class QMImpuestos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	
@@ -349,7 +349,7 @@ public class QMImpuestos
 	public static boolean tieneImpuestoRecurso(String sCodNURCAT)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -407,7 +407,7 @@ public class QMImpuestos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 
@@ -426,7 +426,7 @@ public class QMImpuestos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		try 
 		{
@@ -493,14 +493,14 @@ public class QMImpuestos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sImpuestoID;
 	}*/
 
 	public static boolean setEstado(String sCodNURCAT, String sCodCOSBAC, String sEstado)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -537,14 +537,14 @@ public class QMImpuestos
 			Utils.closeStatement(stmt);
 
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
 	public static String getEstado(String sCodNURCAT, String sCodCOSBAC)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -608,7 +608,7 @@ public class QMImpuestos
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sEstado;
 	}
 

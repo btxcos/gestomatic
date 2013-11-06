@@ -44,7 +44,7 @@ public class QMListaComunidadesActivos
 		
 		String sUsuario = ValoresDefecto.DEF_USUARIO;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -94,7 +94,7 @@ public class QMListaComunidadesActivos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -105,7 +105,7 @@ public class QMListaComunidadesActivos
 		
 		boolean bSalida = true;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -136,7 +136,7 @@ public class QMListaComunidadesActivos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -152,7 +152,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -213,7 +213,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return (found && bSalida);
 	}
 
@@ -229,7 +229,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 
@@ -303,7 +303,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return (found && bSalida);
 	}
 
@@ -317,7 +317,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 
@@ -384,7 +384,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return (found);
 	}
 	
@@ -400,7 +400,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 
@@ -458,7 +458,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sID;
 	}
 	
@@ -468,7 +468,7 @@ public class QMListaComunidadesActivos
 		boolean bSalida = true;
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -503,7 +503,7 @@ public class QMListaComunidadesActivos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
@@ -521,7 +521,7 @@ public class QMListaComunidadesActivos
 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -578,7 +578,7 @@ public class QMListaComunidadesActivos
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sValidado;
 	}
 	
@@ -596,7 +596,7 @@ public class QMListaComunidadesActivos
 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -653,7 +653,7 @@ public class QMListaComunidadesActivos
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return liNumero;
 	}
 	
@@ -680,7 +680,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -764,7 +764,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	
@@ -790,7 +790,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -891,7 +891,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	
@@ -917,7 +917,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -1018,7 +1018,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	
@@ -1035,7 +1035,7 @@ public class QMListaComunidadesActivos
 		ArrayList<String> result = new ArrayList<String>(); 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -1097,7 +1097,7 @@ public class QMListaComunidadesActivos
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 
@@ -1121,7 +1121,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -1203,7 +1203,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	
@@ -1232,7 +1232,7 @@ public class QMListaComunidadesActivos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -1328,7 +1328,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return new Comunidad(
 				sCOCLDO,
 				sNUDCOM,
@@ -1349,7 +1349,7 @@ public class QMListaComunidadesActivos
 	public static ArrayList<String> buscarDependencias(String sCodCOCLDO, String sCodNUDCOM, String sCodMovimiento)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -1418,7 +1418,7 @@ public class QMListaComunidadesActivos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	

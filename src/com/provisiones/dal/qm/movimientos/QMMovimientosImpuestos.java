@@ -55,7 +55,7 @@ public class QMMovimientosImpuestos
 		
 		int iCodigo = 0;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -146,7 +146,7 @@ public class QMMovimientosImpuestos
 			Utils.closeStatement(stmt);
 			Utils.closeResultSet(resulset);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return iCodigo;
 	}
 	public static boolean modMovimientoImpuestoRecurso(MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso, String sMovimientoImpuestoRecursoID)
@@ -155,7 +155,7 @@ public class QMMovimientosImpuestos
 		boolean bSalida = true;
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -213,7 +213,7 @@ public class QMMovimientosImpuestos
 			Utils.closeStatement(stmt);
 
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -224,7 +224,7 @@ public class QMMovimientosImpuestos
 		
 		boolean bSalida = true;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -255,7 +255,7 @@ public class QMMovimientosImpuestos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -296,7 +296,7 @@ public class QMMovimientosImpuestos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -397,7 +397,7 @@ public class QMMovimientosImpuestos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return new MovimientoImpuestoRecurso(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOENGP,
 				sCOACES, sNURCAT, sCOGRUC, sCOTACA, sCOSBAC, sBITC18, sFEPRRE,
 				sBITC19, sFERERE, sBITC20, sFEDEIN, sBITC21, sBISODE, sBITC22,
@@ -416,7 +416,7 @@ public class QMMovimientosImpuestos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -497,7 +497,7 @@ public class QMMovimientosImpuestos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sMovimientoImpuestoRecursoID;
 	}
 	
@@ -512,7 +512,7 @@ public class QMMovimientosImpuestos
 		
 		boolean found = false;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -565,7 +565,7 @@ public class QMMovimientosImpuestos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 }

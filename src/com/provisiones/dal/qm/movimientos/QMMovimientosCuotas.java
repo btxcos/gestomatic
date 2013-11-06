@@ -54,7 +54,7 @@ public class QMMovimientosCuotas
 		
 		int iCodigo = 0;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -145,7 +145,7 @@ public class QMMovimientosCuotas
 			Utils.closeStatement(stmt);
 			Utils.closeResultSet(resulset);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return iCodigo;
 	}
 	public static boolean modMovimientoCuota(MovimientoCuota NuevoMovimientoCuota, String sMovimientoCuotaID)
@@ -154,7 +154,7 @@ public class QMMovimientosCuotas
 		boolean bSalida = true;
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -215,7 +215,7 @@ public class QMMovimientosCuotas
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -226,7 +226,7 @@ public class QMMovimientosCuotas
 		
 		boolean bSalida = true;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -257,7 +257,7 @@ public class QMMovimientosCuotas
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
@@ -296,7 +296,7 @@ public class QMMovimientosCuotas
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -397,7 +397,7 @@ public class QMMovimientosCuotas
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return new MovimientoCuota(sCODTRN, sCOTDOR, sIDPROV, sCOACCI, sCOCLDO, sNUDCOM,
 				sCOENGP, sCOACES, sCOGRUG, sCOTACA, sCOSBAC, sBITC11, sFIPAGO,
 				sBITC12, sFFPAGO, sBITC13, sIMCUCO, sBITC14, sFAACTA, sBITC15,
@@ -416,7 +416,7 @@ public class QMMovimientosCuotas
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -497,7 +497,7 @@ public class QMMovimientosCuotas
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sMovimientoCuotaID;
 	}
 	
@@ -512,7 +512,7 @@ public class QMMovimientosCuotas
 		
 		boolean found = false;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -563,7 +563,7 @@ public class QMMovimientosCuotas
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 

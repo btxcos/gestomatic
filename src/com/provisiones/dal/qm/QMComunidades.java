@@ -44,7 +44,7 @@ public class QMComunidades
 
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -116,13 +116,13 @@ public class QMComunidades
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	public static boolean modComunidad(Comunidad NuevaComunidad, String sCodCOCLDO, String sCodNUDCOM)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -176,14 +176,14 @@ public class QMComunidades
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static boolean delComunidad(String sCodCOCLDO, String sCodNUDCOM)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -220,14 +220,14 @@ public class QMComunidades
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static Comunidad getComunidad(String sCodCOCLDO, String sCodNUDCOM)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		Statement stmt = null;
 
@@ -334,7 +334,7 @@ public class QMComunidades
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return new Comunidad(
 				sCOCLDO,
 				sNUDCOM,
@@ -355,7 +355,7 @@ public class QMComunidades
 	public static boolean existeComunidad(String sCodCOCLDO, String sCodNUDCOM)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		Statement stmt = null;
 
@@ -418,14 +418,14 @@ public class QMComunidades
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	
 	public static boolean setEstado(String sCodCOCLDO, String sCodNUDCOM, String sEstado)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -466,14 +466,14 @@ public class QMComunidades
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
 	public static String getEstado(String sCodCOCLDO, String sCodNUDCOM)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -544,7 +544,7 @@ public class QMComunidades
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sEstado;
 	}
 }

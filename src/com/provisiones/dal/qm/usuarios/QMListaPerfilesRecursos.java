@@ -25,7 +25,7 @@ public class QMListaPerfilesRecursos
 
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -68,7 +68,7 @@ public class QMListaPerfilesRecursos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -76,7 +76,7 @@ public class QMListaPerfilesRecursos
 	public static boolean delRelacionPerfil(String sCodPerfil, String sCodRecurso)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -114,7 +114,7 @@ public class QMListaPerfilesRecursos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 
 		return bSalida;
 	}

@@ -69,7 +69,7 @@ public class QMGastos
 		Statement stmt = null;
 		ResultSet resulset = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		int iCodigo = 0;
 
@@ -182,7 +182,7 @@ public class QMGastos
 		{
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		
 		return iCodigo;
 	}
@@ -190,7 +190,7 @@ public class QMGastos
 	public static boolean modGasto(Gasto NuevoGasto)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -265,14 +265,14 @@ public class QMGastos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static boolean delGasto(String sGastoID)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -307,14 +307,14 @@ public class QMGastos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static Gasto getGasto(String sGastoID)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -474,7 +474,7 @@ public class QMGastos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		
 		return new Gasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA,
 				sPTPAGO, sFEDEVE, sFFGTVP, sFEPAGA, sFELIPG, sCOSIGA, sFEEESI,
@@ -487,7 +487,7 @@ public class QMGastos
 	public static String getGastoID(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -561,14 +561,14 @@ public class QMGastos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sGastoID;
 	}
 	
 	public static boolean existeGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -638,14 +638,14 @@ public class QMGastos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	
 	public static boolean gastoAnulado(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -715,14 +715,14 @@ public class QMGastos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	
 	public static boolean setFechaAnulado(String sCodGasto, String sFEAGTO)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -760,14 +760,14 @@ public class QMGastos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static boolean setEstado(String sCodGasto, String sEstado)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -805,14 +805,14 @@ public class QMGastos
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
 	public static String getEstado(String sCodGasto)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -877,7 +877,7 @@ public class QMGastos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sEstado;
 	}
 	
@@ -894,7 +894,7 @@ public class QMGastos
 		ArrayList<String> result = new ArrayList<String>(); 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -957,7 +957,7 @@ public class QMGastos
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	
@@ -983,7 +983,7 @@ public class QMGastos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 
@@ -1068,7 +1068,7 @@ public class QMGastos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 
 	}
@@ -1098,7 +1098,7 @@ public class QMGastos
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 
@@ -1196,7 +1196,7 @@ public class QMGastos
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 }

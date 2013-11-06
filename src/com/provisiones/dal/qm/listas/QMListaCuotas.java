@@ -44,7 +44,7 @@ public class QMListaCuotas
 		
 		String sUsuario = ValoresDefecto.DEF_USUARIO;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -95,7 +95,7 @@ public class QMListaCuotas
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -106,7 +106,7 @@ public class QMListaCuotas
 		
 		boolean bSalida = true;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -137,7 +137,7 @@ public class QMListaCuotas
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
@@ -152,7 +152,7 @@ public class QMListaCuotas
 	
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -213,7 +213,7 @@ public class QMListaCuotas
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	
@@ -228,7 +228,7 @@ public class QMListaCuotas
 	
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -289,7 +289,7 @@ public class QMListaCuotas
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	
@@ -306,7 +306,7 @@ public class QMListaCuotas
 		ArrayList<String> result = new ArrayList<String>(); 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -369,7 +369,7 @@ public class QMListaCuotas
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 
@@ -386,7 +386,7 @@ public class QMListaCuotas
 		ArrayList<String> result = new ArrayList<String>(); 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -460,7 +460,7 @@ public class QMListaCuotas
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	
@@ -477,7 +477,7 @@ public class QMListaCuotas
 		ArrayList<String> result = new ArrayList<String>(); 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -551,7 +551,7 @@ public class QMListaCuotas
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 
@@ -561,7 +561,7 @@ public class QMListaCuotas
 		boolean bSalida = true;
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -597,7 +597,7 @@ public class QMListaCuotas
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
@@ -615,7 +615,7 @@ public class QMListaCuotas
 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -673,7 +673,7 @@ public class QMListaCuotas
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sValidado;
 	}
 	
@@ -691,7 +691,7 @@ public class QMListaCuotas
 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -748,7 +748,7 @@ public class QMListaCuotas
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return liNumero;
 	}
 	
@@ -775,7 +775,7 @@ public class QMListaCuotas
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -872,7 +872,7 @@ public class QMListaCuotas
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	
@@ -902,7 +902,7 @@ public class QMListaCuotas
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -1023,7 +1023,7 @@ public class QMListaCuotas
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 	
@@ -1049,7 +1049,7 @@ public class QMListaCuotas
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -1146,7 +1146,7 @@ public class QMListaCuotas
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 
 	}
@@ -1154,7 +1154,7 @@ public class QMListaCuotas
 	public static ArrayList<String> buscarDependencias(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodMovimiento)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -1227,7 +1227,7 @@ public class QMListaCuotas
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 }

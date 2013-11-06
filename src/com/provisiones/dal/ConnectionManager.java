@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.provisiones.pl.GestorSesion;
 
 public class ConnectionManager 
 {
@@ -17,7 +21,7 @@ public class ConnectionManager
 	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class.getName());
 	
 
-	public static Connection OpenDBConnection() 
+	public static Connection openDBConnection() 
 	{
 
 		try 
@@ -51,7 +55,20 @@ public class ConnectionManager
 		return conn;
 
 	}
-	public static boolean CloseDBConnection (Connection conn)
+	
+	public static Connection getDBConnection() 
+	{
+
+
+
+		Connection conn = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
+		
+
+		return conn;
+
+	}
+	
+	public static boolean closeDBConnection (Connection conn)
 	{
 		if (conn != null)
 		{

@@ -45,19 +45,32 @@ margin-left:-155px;
 						<p:panel header="Login" style="height:200px;text-align: center" styleClass="centered">
 							<h:panelGrid columns="2" cellpadding="5" styleClass="panelGridCenter">
 
-								<h:outputLabel for="username" value="Usuario:" />
-								<p:inputText value="#{loginBean.nombre}" id="username" required="true" label="username" />
+								<h:outputLabel for="usuario" value="Usuario:" />
+								<p:inputText value="#{GestorSesion.sUsuario}" id="usuario" label="usuario" />
 
-								<h:outputLabel for="password" value="Clave:" />
-								<p:password value="#{loginBean.clave}" id="password" required="true" label="password" />
+								<h:outputLabel for="clave" value="Contraseña" />
+								<p:password value="#{GestorSesion.sClave}" id="clave" label="clave" />
 								<f:facet name="footer">
-									<p:commandButton id="loginButton" value="Login" actionListener="#{loginBean.login}"	oncomplete="manejarLogin(xhr, status, args)" />
+									<p:commandButton id="loginButton" value="Login" update="mensaje" actionListener="#{GestorSesion.login}" oncomplete="dlgLogin.show()"/>
 								</f:facet>
 
 							</h:panelGrid>
 						</p:panel>
 
 					</h:panelGrid>
+
+					<p:dialog header="Resultado Login" widgetVar="dlgLogin" resizable="false">
+						<h:panelGrid columns="1" cellpadding="5"  styleClass="panelGridCenter">
+							<p:panel>
+								<h:panelGrid columns="1">
+								<h:outputText id="mensaje" value="#{GestorSesion.sMensaje}" />
+								</h:panelGrid>
+							</p:panel>
+							<f:facet name="footer">
+								<p:commandButton value="Continuar" update="usuario, clave"  action="#{GestorSesion.cargarPortal}" oncomplete="dlgLogin.hide()"/>  
+							</f:facet>	
+						</h:panelGrid>
+					</p:dialog>
 				</p:layoutUnit>
 
 			</p:layout>

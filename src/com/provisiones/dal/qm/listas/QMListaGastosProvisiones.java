@@ -37,7 +37,7 @@ public class QMListaGastosProvisiones
 
 		String sUsuario = ValoresDefecto.DEF_USUARIO;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -80,7 +80,7 @@ public class QMListaGastosProvisiones
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
@@ -91,7 +91,7 @@ public class QMListaGastosProvisiones
 		
 		boolean bSalida = true;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -122,7 +122,7 @@ public class QMListaGastosProvisiones
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
@@ -136,7 +136,7 @@ public class QMListaGastosProvisiones
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -188,7 +188,7 @@ public class QMListaGastosProvisiones
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	
@@ -198,7 +198,7 @@ public class QMListaGastosProvisiones
 		boolean bSalida = true;
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -232,7 +232,7 @@ public class QMListaGastosProvisiones
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
@@ -250,7 +250,7 @@ public class QMListaGastosProvisiones
 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -308,7 +308,7 @@ public class QMListaGastosProvisiones
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sRevisado;
 	}
 	
@@ -325,7 +325,7 @@ public class QMListaGastosProvisiones
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -381,7 +381,7 @@ public class QMListaGastosProvisiones
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sCodNUPROF;
 	}
 	
@@ -399,7 +399,7 @@ public class QMListaGastosProvisiones
 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -463,7 +463,7 @@ public class QMListaGastosProvisiones
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sProvision;
 	}
 
@@ -482,7 +482,7 @@ public class QMListaGastosProvisiones
 		ArrayList<String> result = new ArrayList<String>(); 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -543,14 +543,14 @@ public class QMListaGastosProvisiones
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return result;
 	}
 
 	public static ArrayList<String> buscaGastosSinValidarEnProvision(String sNUPROF) 
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -629,7 +629,7 @@ public class QMListaGastosProvisiones
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 
 		return result;
 	}
@@ -637,7 +637,7 @@ public class QMListaGastosProvisiones
 	public static boolean resuelveGastos(String sNUPROF) 
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 		
@@ -675,7 +675,7 @@ public class QMListaGastosProvisiones
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
@@ -693,7 +693,7 @@ public class QMListaGastosProvisiones
 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -748,7 +748,7 @@ public class QMListaGastosProvisiones
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return liNumero;
 	}
 	
@@ -766,7 +766,7 @@ public class QMListaGastosProvisiones
 
 		Connection conn = null;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -834,7 +834,7 @@ public class QMListaGastosProvisiones
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return dValor;
 	}
 }

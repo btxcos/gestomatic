@@ -19,7 +19,11 @@ public class ValoresDefecto
 	public static final String DEF_COUNMO = "281";
 	
 	//Eliminar tras soporte a usuarios
-	public static final String DEF_USUARIO = "GLSLUSUP"; 
+	public static final String DEF_USUARIO = "GLSLUSUP";
+	
+	public static final String CIFRADO_LLAVE_SIMETRICA = "glsl1234glsl1234";
+	public static final String CIFRADO_LONGITUD = "512";
+	public static final String CIFRADO_ALGORITMO = "AES";
 	
 	
 	public static final String DEF_COSPII_GA = "GA";
@@ -107,6 +111,7 @@ public class ValoresDefecto
 	}
 	
 
+	public static final String CODIFICACION = "ISO-8859-15";
 	public static final String DEF_FIN_FICHERO = new Character((char) iNumChar).toString();
 
 	public static final String DEF_PATH = "GLSL-portales"+File.separator+"provisiones"+File.separator;

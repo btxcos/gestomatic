@@ -64,7 +64,7 @@ public class QMCodigosControl
 	public static String getDesCampo(String sTabla, String sCampo, String sValor)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		Statement stmt = null;
 
@@ -131,7 +131,7 @@ public class QMCodigosControl
 			Utils.closeStatement(stmt);
 		}
 
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sDescripcion;
 	}
 	
@@ -193,7 +193,7 @@ public class QMCodigosControl
 		{
 			Connection conn = null;
 
-			conn = ConnectionManager.OpenDBConnection();
+			conn = ConnectionManager.getDBConnection();
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -255,7 +255,7 @@ public class QMCodigosControl
 				Utils.closeStatement(stmt);
 			}
 
-			ConnectionManager.CloseDBConnection(conn);
+			//ConnectionManager.CloseDBConnection(conn);
 		}
 		return sDescripcion;
 	}

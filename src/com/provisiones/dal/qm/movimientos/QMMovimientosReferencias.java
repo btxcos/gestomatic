@@ -54,7 +54,7 @@ public class QMMovimientosReferencias
 		
 		int iCodigo = 0;
 
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -149,7 +149,7 @@ public class QMMovimientosReferencias
 			Utils.closeStatement(stmt);
 			Utils.closeResultSet(resulset);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return iCodigo;
 	}
 	public static boolean modMovimientoReferenciaCatastral(MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral, String sMovimientoReferenciaCatastralID)
@@ -158,7 +158,7 @@ public class QMMovimientosReferencias
 		boolean bSalida = true;
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -218,7 +218,7 @@ public class QMMovimientosReferencias
 			Utils.closeStatement(stmt);
 
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -229,7 +229,7 @@ public class QMMovimientosReferencias
 		
 		boolean bSalida = true;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -260,7 +260,7 @@ public class QMMovimientosReferencias
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
@@ -277,7 +277,7 @@ public class QMMovimientosReferencias
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		logger.debug("Ejecutando Query...");
 		
@@ -357,7 +357,7 @@ public class QMMovimientosReferencias
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sMovimientoReferenciaCatastralID;
 	}
 	
@@ -396,7 +396,7 @@ public class QMMovimientosReferencias
 		
 		Connection conn = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		logger.debug("Ejecutando Query...");
 		
@@ -496,7 +496,7 @@ public class QMMovimientosReferencias
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return new MovimientoReferenciaCatastral(sCODTRN, sCOTDOR, sIDPROV, sCOACCI,
 				sCOENGP, sCOACES, sNURCAT, sBITC16, sTIRCAT, sBITC17, sENEMIS,
 				sCOTEXA, sBITC09, sOBTEXC, sOBDEER
@@ -518,7 +518,7 @@ public class QMMovimientosReferencias
 		
 		boolean found = false;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -571,7 +571,7 @@ public class QMMovimientosReferencias
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return found;
 	}
 	

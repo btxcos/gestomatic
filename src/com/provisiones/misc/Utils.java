@@ -31,17 +31,15 @@ public class Utils
 	public static String cifra (String sMsg)
 	{
 
-		  String llaveSimetrica = "glsl1234glsl1234";
-		  
 		  byte[] campoCifrado = null;
    
-		  SecretKeySpec key = new SecretKeySpec(llaveSimetrica.getBytes(), "AES");
+		  SecretKeySpec key = new SecretKeySpec(ValoresDefecto.CIFRADO_LLAVE_SIMETRICA.getBytes(), ValoresDefecto.CIFRADO_ALGORITMO);
 		  Cipher cipher;
 		  try 
 		  {
-		   cipher = Cipher.getInstance("AES");
+		   cipher = Cipher.getInstance(ValoresDefecto.CIFRADO_ALGORITMO);
 		   cipher.init(Cipher.ENCRYPT_MODE, key);
-		   campoCifrado = cipher.doFinal(sMsg.getBytes("ISO-8859-15"));
+		   campoCifrado = cipher.doFinal(sMsg.getBytes(ValoresDefecto.CODIFICACION));
 		  } 
 		  catch (Exception e) 
 		  {
@@ -54,28 +52,25 @@ public class Utils
 
 	public static String descifra (String sMsg)
 	{
-		  String llaveSimetrica = "glsl1234glsl1234";
-		  
-		  String sDescifrado = "";
-		   
-		  SecretKeySpec key = null;
-
-		  Cipher cipher;
-		  try 
-		  {
-			  key = new SecretKeySpec(llaveSimetrica.getBytes(), "AES");
-			  cipher = Cipher.getInstance("AES");
-			  cipher.init(Cipher.DECRYPT_MODE, key);
-			  byte[] datosDecifrados = cipher.doFinal(sMsg.getBytes("ISO-8859-15"));
-			  sDescifrado = new String(datosDecifrados);
-		  } 
-		  catch (Exception e) 
-		  {
-		   e.printStackTrace();
-		  }
-		  
-		  return sDescifrado;
+		String sDescifrado = "";
 		
+		SecretKeySpec key = null;
+
+		Cipher cipher;
+		try 
+		{
+			key = new SecretKeySpec(ValoresDefecto.CIFRADO_LLAVE_SIMETRICA.getBytes(), ValoresDefecto.CIFRADO_ALGORITMO);
+			cipher = Cipher.getInstance(ValoresDefecto.CIFRADO_ALGORITMO);
+			cipher.init(Cipher.DECRYPT_MODE, key);
+			byte[] datosDecifrados = cipher.doFinal(sMsg.getBytes(ValoresDefecto.CODIFICACION));
+			sDescifrado = new String(datosDecifrados);
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		  
+		return sDescifrado;
 	}
 	
 	public static void debugTrace(boolean bEnable, String sClass, String sMethod, String sMsg)

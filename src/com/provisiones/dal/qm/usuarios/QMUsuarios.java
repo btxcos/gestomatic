@@ -40,7 +40,7 @@ public class QMUsuarios
 		Statement stmt = null;
 		ResultSet resulset = null;
 		
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		long iCodigo = 0;
 		
@@ -63,15 +63,15 @@ public class QMUsuarios
 			       + CAMPO11 +               
           
 			       ") VALUES ('"        
-			       + NuevoUsuario.getsLogin() + "','"
-			       + NuevoUsuario.getsPassword() + "','"
+			       + NuevoUsuario.getsLogin() + "'," +
+			       	"AES_ENCRYPT('"+ NuevoUsuario.getsPassword()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
 			       + NuevoUsuario.getsNombre() + "','"  
 			       + NuevoUsuario.getsApellido1() + "','"  
 			       + NuevoUsuario.getsApellido2() + "','"  
 			       + NuevoUsuario.getsContacto() + "','"  
 			       + sFecha + "','"  
 			       + sFecha + "','"  
-			       + NuevoUsuario.getsTipoUsuario() + "','"  
+			       + NuevoUsuario.getsTipoUsuario() + "',b'"  
 			       + ValoresDefecto.ACTIVO + "' )";
 		
 		logger.debug(sQuery);
@@ -106,7 +106,7 @@ public class QMUsuarios
 		{
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		
 		return iCodigo;
 	}
@@ -114,7 +114,7 @@ public class QMUsuarios
 	public static boolean modUsuario(Usuario NuevoUsuario, String sUsuarioID)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -166,14 +166,14 @@ public class QMUsuarios
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
 	public static boolean delUsuario(String sUsuarioID)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -208,14 +208,14 @@ public class QMUsuarios
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
 	public static Usuario getUsuario(String sUsuarioID)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -239,7 +239,8 @@ public class QMUsuarios
 		
 		String sQuery = "SELECT "
 				   + CAMPO2  + ","
-				   + CAMPO3  + ","
+				   + "AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				   //+ CAMPO3  + ","
 				   + CAMPO4  + ","
 				   + CAMPO5  + ","
 			       + CAMPO6  + ","
@@ -276,7 +277,8 @@ public class QMUsuarios
 
 					
 					sLogin = rs.getString(CAMPO2); 
-					sPassword = rs.getString(CAMPO3);
+					sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					//sPassword = rs.getString(CAMPO3);
 					sNombre = rs.getString(CAMPO4);
 					sApellido1 = rs.getString(CAMPO5); 
 					sApellido2 = rs.getString(CAMPO6);  
@@ -307,7 +309,7 @@ public class QMUsuarios
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		
 		
 		return new Usuario(sLogin, sPassword, sNombre, sApellido1,
@@ -317,7 +319,7 @@ public class QMUsuarios
 	public static String getUsuarioID(String sLogin)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -384,14 +386,14 @@ public class QMUsuarios
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sUsuarioID;
 	}
 	
 	public static boolean existeUsuario(String sLogin)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.openDBConnection();
 
 		Statement stmt = null;
 
@@ -453,14 +455,14 @@ public class QMUsuarios
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		ConnectionManager.closeDBConnection(conn);
 		return found;
 	}
 	
 	public static boolean setEstado(String sUsuarioID, String sEstado)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -473,7 +475,7 @@ public class QMUsuarios
 				" SET " 
 				+ CAMPO11 + " = '"+ sEstado + "' "+
 				" WHERE "
-				+ CAMPO1  + " = '"+ sUsuarioID +"'";
+				+ CAMPO1  + " = b'"+ sUsuarioID +"'";
 		
 		logger.debug(sQuery);
 		
@@ -498,14 +500,14 @@ public class QMUsuarios
 
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
 	public static String getEstado(String sUsuarioID)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
 
@@ -570,14 +572,14 @@ public class QMUsuarios
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		//ConnectionManager.CloseDBConnection(conn);
 		return sEstado;
 	}
 	
-	public static String getPassword(String sUsuarioID)
+	public static String getPassword(String sUsuario)
 	{
 		Connection conn = null;
-		conn = ConnectionManager.OpenDBConnection();
+		conn = ConnectionManager.openDBConnection();
 
 		Statement stmt = null;
 
@@ -591,11 +593,12 @@ public class QMUsuarios
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "
-				+ CAMPO3 + 
+				+ "AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+				//+ CAMPO3 + 
 				" FROM "
 				+ TABLA + 
 				" WHERE "
-				+ CAMPO1  + " = '"+ sUsuarioID +"'";
+				+ CAMPO2  + " = '"+ sUsuario +"'";
 		
 		logger.debug(sQuery);
 
@@ -616,7 +619,9 @@ public class QMUsuarios
 				{
 					found = true;
 
-					sPassword = rs.getString(CAMPO3);
+					
+					sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					//sPassword = rs.getString(CAMPO3);
 					
 					
 					logger.debug("Encontrado el registro!");
@@ -633,7 +638,9 @@ public class QMUsuarios
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR USUARIO_ID:|"+sUsuarioID);
+			found = false;
+
+			logger.error("ERROR USUARIO:|"+sUsuario);
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
@@ -642,7 +649,7 @@ public class QMUsuarios
 			Utils.closeResultSet(rs);
 			Utils.closeStatement(stmt);
 		}
-		ConnectionManager.CloseDBConnection(conn);
+		ConnectionManager.closeDBConnection(conn);
 		return sPassword;
 	}
 }
