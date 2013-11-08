@@ -62,7 +62,9 @@ public class CLErrores
 	{
 		int iCodigo = 0;
 		
-		MovimientoComunidad movimiento_revisado = CLComunidades.revisaCodigosControl(movimiento);
+		String sCodComunidad = CLComunidades.buscarCodigoComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM());
+		
+		MovimientoComunidad movimiento_revisado = CLComunidades.revisaCodigosControl(movimiento,sCodComunidad);
 		
 		if (movimiento_revisado.getCOACCI().equals("#"))
 		{	
@@ -83,13 +85,13 @@ public class CLErrores
 				if(QMListaErroresComunidades.delErrorComunidad(sCodMovimiento, sCodError))
 				{	
 					
-					if (QMComunidades.modComunidad(CLComunidades.convierteMovimientoenComunidad(movimiento), movimiento.getCOCLDO(), movimiento.getNUDCOM()))	
+					if (QMComunidades.modComunidad(CLComunidades.convierteMovimientoenComunidad(movimiento), sCodComunidad))	
 					{
 						//OK 
 						iCodigo = 0;
 						
-						ArrayList<String> dependenciascomunidades = QMListaComunidades.buscarDependencias(movimiento.getCOCLDO(), movimiento.getNUDCOM(), sCodMovimiento);
-						ArrayList<String> dependenciasactivoscomunidades = QMListaComunidadesActivos.buscarDependencias(movimiento.getCOCLDO(), movimiento.getNUDCOM(), sCodMovimiento);
+						ArrayList<String> dependenciascomunidades = QMListaComunidades.buscarDependencias(sCodComunidad, sCodMovimiento);
+						ArrayList<String> dependenciasactivoscomunidades = QMListaComunidadesActivos.buscarDependencias(sCodComunidad, sCodMovimiento);
 
 						for (int i = 0; i < dependenciascomunidades.size() ; i++)
 			            {

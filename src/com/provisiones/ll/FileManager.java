@@ -93,7 +93,7 @@ public class FileManager
 		//Los movimientos de las comunidades estan repartidos entre las comunidades y los activos incluidos
 		
 		ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado("P");
-		ArrayList<String> resultactivos = QMListaComunidadesActivos.getComunidadesActivoPorEstado("P");
+		ArrayList<String> resultactivos = QMListaComunidadesActivos.getMovimientosComunidadesActivoPorEstado("P");
 
 		ArrayList<String> resultcomunidadesactivos = new ArrayList<String>(resultcomunidades);
 		
@@ -580,18 +580,18 @@ public class FileManager
 	    			{
 	    			case 0:
 	    				sMensaje = "Activo registrado.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
+	    				logger.info("Línea "+contador+": "+sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -1:
-	    				sMensaje = "Registro ya se enconcuentra en el sistema.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
+	    				sMensaje = "El registro ya se encuentra en el sistema.";
+	    				logger.error("Línea "+contador+": "+sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -2:
 	    				sMensaje = "[FATAL] Error al registrar el Activo.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error("(X) Línea "+contador+": "+sMensaje);
+	    				sMensaje = "(X) Línea "+contador+": "+sMensaje;
 	    				break;
 	    			}
 	    			if ( iCodigo >= 0 )

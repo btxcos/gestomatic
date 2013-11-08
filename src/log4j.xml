@@ -21,8 +21,8 @@
         </layout>
     </appender>
     <appender name="loggerSinLinea" class="org.apache.log4j.RollingFileAppender">
-        <param name="MaxFileSize" value="1024KB" />
-        <param name="MaxBackupIndex" value="20" />
+        <param name="MaxFileSize" value="10240KB" />
+        <param name="MaxBackupIndex" value="40" />
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="GLSL-portales/provisiones/logs/provisiones.log" />
         <layout class="org.apache.log4j.PatternLayout">

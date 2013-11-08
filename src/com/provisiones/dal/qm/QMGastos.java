@@ -250,6 +250,8 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
 			logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
 			logger.error("ERROR COTPGA:|"+NuevoGasto.getCOTPGA()+"|");
@@ -257,8 +259,6 @@ public class QMGastos
 			logger.error("ERROR FEDEVE:|"+NuevoGasto.getFEDEVE()+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -296,15 +296,14 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR GASTO:|"+sGastoID+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
-
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
@@ -355,7 +354,7 @@ public class QMGastos
 		String sFEAUFA = "";
 		String sFEPGPR = "";
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -417,7 +416,7 @@ public class QMGastos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					sCOACES = rs.getString(CAMPO2); 
 					sCOGRUG = rs.getString(CAMPO3);
@@ -457,7 +456,7 @@ public class QMGastos
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -497,7 +496,7 @@ public class QMGastos
 		String sGastoID = "";
 
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -532,7 +531,7 @@ public class QMGastos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					sGastoID = rs.getString(CAMPO1);  
 					
@@ -540,7 +539,7 @@ public class QMGastos
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -548,6 +547,8 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			sGastoID = "";
+
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 			logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
 			logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
@@ -575,7 +576,7 @@ public class QMGastos
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -611,13 +612,13 @@ public class QMGastos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					logger.debug("Encontrado el registro!");
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -625,6 +626,8 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			bEncontrado = false;
+
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 			logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
 			logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
@@ -639,7 +642,7 @@ public class QMGastos
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+		return bEncontrado;
 	}
 	
 	public static boolean gastoAnulado(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
@@ -652,7 +655,7 @@ public class QMGastos
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -689,12 +692,12 @@ public class QMGastos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					logger.debug("Encontrado el registro!");
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -702,6 +705,8 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			bEncontrado = false;
+
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 			logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
 			logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
@@ -716,7 +721,7 @@ public class QMGastos
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+		return bEncontrado;
 	}
 	
 	public static boolean setFechaAnulado(String sCodGasto, String sFEAGTO)
@@ -749,11 +754,11 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -794,11 +799,11 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -821,7 +826,7 @@ public class QMGastos
 
 		String sEstado = "";
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -849,7 +854,7 @@ public class QMGastos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					sEstado = rs.getString(CAMPO35);
 					
@@ -860,7 +865,7 @@ public class QMGastos
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -868,6 +873,8 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			sEstado = "";
+
 			logger.error("ERROR GASTO:|"+sCodGasto);
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -888,7 +895,7 @@ public class QMGastos
 
 
 		PreparedStatement pstmt = null;
-		boolean found = false;
+		boolean bEncontrado = false;
 	
 		
 		ArrayList<String> result = new ArrayList<String>(); 
@@ -926,7 +933,7 @@ public class QMGastos
 				
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					result.add(rs.getString(CAMPO1));
 										
@@ -938,15 +945,16 @@ public class QMGastos
 					i++;
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
-				result = new ArrayList<String>(); 
 				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<String>(); 
+
 			logger.error("ERROR COACES:|"+sCodCOACES);
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -979,7 +987,7 @@ public class QMGastos
 		
 
 		PreparedStatement pstmt = null;
-		boolean found = false;
+		boolean bEncontrado = false;
 		
 		Connection conn = null;
 		
@@ -1033,7 +1041,7 @@ public class QMGastos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 					
 					sCOACES = rs.getString(QMActivos.CAMPO1);
 					sCOPOIN = rs.getString(QMActivos.CAMPO14);
@@ -1053,7 +1061,7 @@ public class QMGastos
 					logger.debug("{}:|"+QMActivos.CAMPO1,sCOACES);
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -1061,6 +1069,8 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<ActivoTabla>();
+
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
@@ -1094,7 +1104,7 @@ public class QMGastos
 		
 
 		PreparedStatement pstmt = null;
-		boolean found = false;
+		boolean bEncontrado = false;
 		
 		Connection conn = null;
 		
@@ -1143,7 +1153,7 @@ public class QMGastos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 					   
 					
 					sCOACES  = rs.getString(QMGastos.CAMPO2);
@@ -1181,7 +1191,7 @@ public class QMGastos
 					logger.debug(CAMPO2+":|"+sCodCOACES+"|");
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -1189,6 +1199,8 @@ public class QMGastos
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<GastoTabla>();
+
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 

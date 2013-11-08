@@ -22,15 +22,16 @@ public class QMListaComunidades
 
 	static String TABLA = "pp001_lista_comunidades_multi";
 
-	static String CAMPO1  = "cod_cocldo";
-	static String CAMPO2  = "cod_nudcom";
-	static String CAMPO3  = "cod_movimiento";    
-	static String CAMPO4  = "cod_validado";
-	
-	static String CAMPO5  = "usuario_movimiento";    
-	static String CAMPO6  = "fecha_movimiento";
+	//identificadores
+	static String CAMPO1  = "cod_comunidad";
+	static String CAMPO2  = "cod_movimiento";
 
-	public static boolean addRelacionComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodMovimiento)
+	//Campos de control
+	static String CAMPO3  = "cod_validado";    
+	static String CAMPO4  = "usuario_movimiento";
+	static String CAMPO5  = "fecha_movimiento";    
+
+	public static boolean addRelacionComunidad(String sCodComunidad, String sCodMovimiento)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -49,11 +50,9 @@ public class QMListaComunidades
 			       + CAMPO2  + ","              
 			       + CAMPO3  + ","
 			       + CAMPO4  + ","
-			       + CAMPO5  + ","
-			       + CAMPO6  +  
+			       + CAMPO5  +  
 			       ") VALUES ('"
-			       + sCodCOCLDO + "','" 
-			       + sCodNUDCOM + "','" 
+			       + sCodComunidad + "','" 
 			       + sCodMovimiento + "','"
 			       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 			       + sUsuario + "','"
@@ -72,17 +71,15 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
-			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			bSalida = false;
+
+			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 			
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally
 		{
-
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
@@ -116,11 +113,11 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -131,7 +128,7 @@ public class QMListaComunidades
 		return bSalida;
 	}
 	
-	public static boolean existeComunidad(String sCodCOCLDO, String sCodNUDCOM)
+	public static boolean existeComunidad(String sCodComunidad)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -140,10 +137,8 @@ public class QMListaComunidades
 
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
-
-		boolean bSalida = true;
 		
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -151,10 +146,8 @@ public class QMListaComunidades
 			       + CAMPO4  + 
 			       " FROM " 
 			       + TABLA + 
-			       " WHERE (" 
-			       + CAMPO1 + " = '" + sCodCOCLDO + "' AND "
-			       + CAMPO2 + " = '" + sCodNUDCOM + 
-			       "')";
+			       " WHERE " 
+			       + CAMPO1 + " = '" + sCodComunidad + "'";
 		
 		logger.debug(sQuery);
 
@@ -173,13 +166,13 @@ public class QMListaComunidades
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					logger.debug("Encontrado el registro!");
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}			
@@ -187,12 +180,11 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
-			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			bEncontrado = false;
+
+			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -200,10 +192,10 @@ public class QMListaComunidades
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
-		return (found && bSalida);
+		return bEncontrado;
 	}
 	
-	public static boolean existeRelacionComunidad(String sCodCOCLDO, String sCodNUDCOM, String sCodMovimiento)
+	public static boolean existeRelacionComunidad(String sCodComunidad, String sCodMovimiento)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -213,9 +205,7 @@ public class QMListaComunidades
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;		
 
-		boolean bSalida = true;
-		
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -224,9 +214,8 @@ public class QMListaComunidades
 			       " FROM "
 			       + TABLA + 
 			       " WHERE (" 
-			       + CAMPO1 + " = '" + sCodCOCLDO + "' AND "
-			       + CAMPO2 + " = '" + sCodNUDCOM + "' AND "
-			       + CAMPO3 + " = '" + sCodMovimiento + 
+			       + CAMPO1 + " = '" + sCodComunidad + "' AND "
+			       + CAMPO2 + " = '" + sCodMovimiento + 
 			       "')";
 		
 		logger.debug(sQuery);
@@ -246,13 +235,13 @@ public class QMListaComunidades
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					logger.debug("Encontrado el registro!");
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}			
@@ -260,13 +249,14 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
-			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			bEncontrado = false;
+
+			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
-			bSalida = false;
+			
 		} 
 		finally 
 		{
@@ -274,7 +264,7 @@ public class QMListaComunidades
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
-		return (found && bSalida);
+		return bEncontrado;
 	}
 
 	public static ArrayList<String>  getComunidadesPorEstado(String sEstado) 
@@ -289,16 +279,16 @@ public class QMListaComunidades
 
 		ArrayList<String> result = new ArrayList<String>(); 
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT " 
-					+ CAMPO3 + 
+					+ CAMPO2 + 
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO4 + " = '" + sEstado + "'";
+					+ CAMPO3 + " = '" + sEstado + "'";
 		
 		logger.debug(sQuery);
 
@@ -321,27 +311,28 @@ public class QMListaComunidades
 				
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
-					result.add(rs.getString(CAMPO3));
+					result.add(rs.getString(CAMPO2));
 										
 					logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO4+":|"+sEstado+"|");
-					logger.debug(CAMPO3+":|"+result.get(i)+"|");
+					logger.debug(CAMPO3+":|"+sEstado+"|");
+					logger.debug(CAMPO2+":|"+result.get(i)+"|");
 					
 					i++;
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
-				result = new ArrayList<String>(); 
 				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<String>();
+
 			logger.error("ERROR Validado:|"+sEstado+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -370,9 +361,9 @@ public class QMListaComunidades
 		String sQuery = "UPDATE " 
 				+ TABLA + 
 				" SET " 
-				+ CAMPO4 + " = '"+ sValidado + "' "+
+				+ CAMPO3 + " = '"+ sValidado + "' "+
 				" WHERE " 
-				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+				+ CAMPO2 + " = '" + sCodMovimiento	+ "'";
 		
 		logger.debug(sQuery);
 		
@@ -386,11 +377,11 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -413,16 +404,16 @@ public class QMListaComunidades
 
 		String sValidado = "";
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT " 
-				+ CAMPO4 + 
+				+ CAMPO3 + 
 				" FROM " 
 				+ TABLA + 
 				" WHERE "
-				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+				+ CAMPO2 + " = '" + sCodMovimiento	+ "'";
 		
 		logger.debug(sQuery);
 
@@ -442,24 +433,25 @@ public class QMListaComunidades
 				
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
-					sValidado = rs.getString(CAMPO4);
+					sValidado = rs.getString(CAMPO3);
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO4+":|"+sValidado+"|");
+					logger.debug(CAMPO3+":|"+sValidado+"|");
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
- 
 				logger.debug("No se encontró la información.");
 			}
 
 		} 
 		catch (SQLException ex) 
 		{
+			sValidado = "";
+
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -486,14 +478,14 @@ public class QMListaComunidades
 
 		long liNumero = 0;
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT COUNT(*) FROM " 
 				+ TABLA + 
 				" WHERE "
-				+ CAMPO4 + " = '" + sCodValidado + "'";
+				+ CAMPO3 + " = '" + sCodValidado + "'";
 		
 		logger.debug(sQuery);
 
@@ -513,7 +505,7 @@ public class QMListaComunidades
 				
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					liNumero = rs.getLong("COUNT(*)");
 					
@@ -522,7 +514,7 @@ public class QMListaComunidades
 					logger.debug( "Numero de registros:|"+liNumero+"|");
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
  
 				logger.debug("No se encontró la información.");
@@ -531,6 +523,8 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
+			liNumero = 0;
+
 			logger.error("ERROR CodValidado:|"+sCodValidado+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -545,7 +539,7 @@ public class QMListaComunidades
 		return liNumero;
 	}
 	
-	public static ArrayList<String> buscarDependencias(String sCodCOCLDO, String sCodNUDCOM, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(String sCodComunidad, String sCodMovimiento)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -555,20 +549,19 @@ public class QMListaComunidades
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;		
 
-		boolean found = false;
+		boolean bEncontrado = false;
 		
 		ArrayList<String> result = new ArrayList<String>();
 
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT " 
-				+ CAMPO3  + 
+				+ CAMPO2  + 
 				" FROM " 
 				+ TABLA + 
 				" WHERE (" 
-				+ CAMPO1 + " = '" + sCodCOCLDO + "' AND "
-				+ CAMPO2 + " = '" + sCodNUDCOM + "' AND "
-				+ CAMPO3 + " >=  '" + sCodMovimiento + 
+				+ CAMPO1 + " = '" + sCodComunidad + "' AND "
+				+ CAMPO2 + " >=  '" + sCodMovimiento + 
 				"')";
 		
 		logger.debug(sQuery);
@@ -588,15 +581,15 @@ public class QMListaComunidades
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 					
-					result.add(rs.getString(CAMPO3));
+					result.add(rs.getString(CAMPO2));
 
 					logger.debug("Encontrado el registro!");
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontró la información.");
 			}			
@@ -604,13 +597,12 @@ public class QMListaComunidades
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
-			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			result = new ArrayList<String>();
+
+			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-
-			found = false;
 		} 
 		finally 
 		{
