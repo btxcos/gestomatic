@@ -140,7 +140,9 @@ public class CLErrores
 	{
 		int iCodigo = 0;
 		
-		MovimientoCuota movimiento_revisado = CLCuotas.revisaCodigosControl(movimiento);
+		String sCodCuota = CLCuotas.buscarCodigoCuota(movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC());
+		
+		MovimientoCuota movimiento_revisado = CLCuotas.revisaCodigosControl(movimiento,sCodCuota);
 		
 		if (movimiento_revisado.getCOACCI().equals("#"))
 		{	
@@ -161,12 +163,12 @@ public class CLErrores
 				if(QMListaErroresCuotas.delErrorCuota(sCodMovimiento, sCodError))
 				{	
 
-					if (QMCuotas.modCuota(CLCuotas.convierteMovimientoenCuota(movimiento), movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC()))	
+					if (QMCuotas.modCuota(CLCuotas.convierteMovimientoenCuota(movimiento), sCodCuota))	
 					{
 						//OK 
 						iCodigo = 0;
 						
-						ArrayList<String> dependenciascuotas = QMListaCuotas.buscarDependencias(movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC(), sCodMovimiento);
+						ArrayList<String> dependenciascuotas = QMListaCuotas.buscarDependencias(sCodCuota, sCodMovimiento);
 
 
 						for (int i = 0; i < dependenciascuotas.size() ; i++)

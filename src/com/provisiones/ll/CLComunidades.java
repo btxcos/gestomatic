@@ -272,7 +272,7 @@ public class CLComunidades
 	public static boolean existeComunidad (String sCodCOCLDO, String sCodNUDCOM)
 	{
 
-		return QMComunidades.existeComunidad(sCodCOCLDO, sCodNUDCOM);
+		return QMComunidades.existeComunidad(buscarCodigoComunidad (sCodCOCLDO, sCodNUDCOM));
 	}
 	
 	public static boolean existeMovimientoComunidad (String sCodMovimiento)
@@ -758,7 +758,7 @@ public class CLComunidades
 			//Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
 			iCodigo = -8;
 		}	
-		else if ( movimiento.getCOACCI().equals("A") && QMComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+		else if ( movimiento.getCOACCI().equals("A") && QMComunidades.existeComunidad(sCodComunidad))
 		{
 			//Error 009 - YA EXISTE ESTA COMUNIDAD
 			iCodigo = -9;
@@ -768,17 +768,17 @@ public class CLComunidades
 			//Error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
 			iCodigo = -10;
 		}
-		else if (movimiento.getCOACCI().equals("X") && !QMComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+		else if (movimiento.getCOACCI().equals("X") && !QMComunidades.existeComunidad(sCodComunidad))
 		{
 			//Error 011 - LA COMUNIDAD NO EXISTE. ACTIVO NO SE PUEDE DAR DE ALTA
 			iCodigo = -11;
 		}
-		else if (movimiento.getCOACCI().equals("M") && !QMComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+		else if (movimiento.getCOACCI().equals("M") && !QMComunidades.existeComunidad(sCodComunidad))
 		{
 			//Error 012 - LA COMUNIDAD NO EXISTE. NO SE PUEDE MODIFICAR
 			iCodigo = -12;
 		}
-		else if (movimiento.getCOACCI().equals("B") && !QMComunidades.existeComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+		else if (movimiento.getCOACCI().equals("B") && !QMComunidades.existeComunidad(sCodComunidad))
 		{
 			//Error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
 			iCodigo = -26;

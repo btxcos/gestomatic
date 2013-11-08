@@ -626,7 +626,7 @@ public class QMActivos
 		String sBIOBNU = "";
 		String sPOBRAR = "";
 
-		boolean found = false;
+		boolean bEncontrado = false;
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -749,7 +749,7 @@ public class QMActivos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					sCOACES = rs.getString(CAMPO1);
 					sNUINMU = rs.getString(CAMPO2);
@@ -848,7 +848,7 @@ public class QMActivos
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontro la información.");
 			}
@@ -856,7 +856,7 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
-			found = false;
+			bEncontrado = false;
 			
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 
@@ -894,7 +894,7 @@ public class QMActivos
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -926,13 +926,13 @@ public class QMActivos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					logger.debug("Encontrado el registro!");
 					logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontro la información.");
 			}
@@ -940,7 +940,7 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
-			found = false;
+			bEncontrado = false;
 
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 
@@ -952,7 +952,7 @@ public class QMActivos
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+		return bEncontrado;
 	}
 
 	public static String getReferenciaCatastral(String sCodCOACES)
@@ -967,7 +967,7 @@ public class QMActivos
 		
 		String sReferencia = "";
 		
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -996,7 +996,7 @@ public class QMActivos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 					
 					sReferencia = rs.getString(CAMPO81);
 
@@ -1005,7 +1005,7 @@ public class QMActivos
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontro la información.");
 			}
@@ -1013,7 +1013,7 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
-			found = false;
+			bEncontrado = false;
 
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 
@@ -1040,7 +1040,7 @@ public class QMActivos
 
 		String sCOTSIN = "";
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -1072,7 +1072,7 @@ public class QMActivos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 					
 					sCOTSIN = rs.getString(CAMPO27);
 
@@ -1081,7 +1081,7 @@ public class QMActivos
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontro la información.");
 			}
@@ -1089,7 +1089,7 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
-			found = false;
+			bEncontrado = false;
 			
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 
@@ -1116,7 +1116,7 @@ public class QMActivos
 
 		String sBIARRE = "";
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -1144,7 +1144,7 @@ public class QMActivos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 					
 					sBIARRE = rs.getString(CAMPO45);
 
@@ -1152,7 +1152,7 @@ public class QMActivos
 					logger.debug(CAMPO45+":|"+sBIARRE+"|");
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontro la información.");
 			}
@@ -1160,7 +1160,7 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
-			found = false;
+			bEncontrado = false;
 
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 
@@ -1187,7 +1187,7 @@ public class QMActivos
 
 		String sCodCOSPAT = "0";
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -1217,7 +1217,7 @@ public class QMActivos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 					
 					sCodCOSPAT = rs.getString(CAMPO88);
 
@@ -1226,7 +1226,7 @@ public class QMActivos
 
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 				logger.debug("No se encontro la información.");
 			}
@@ -1234,7 +1234,7 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
-			found = false;
+			bEncontrado = false;
 
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
 
@@ -1270,7 +1270,7 @@ public class QMActivos
 		
 		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -1313,7 +1313,7 @@ public class QMActivos
 
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 					
 					sCOACES = rs.getString(CAMPO1);
 					sCOPOIN = rs.getString(CAMPO14);
@@ -1332,7 +1332,7 @@ public class QMActivos
 					logger.debug(CAMPO1+":|"+sCOACES+"|");
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
 
 				logger.info("No se encontro la información.");
@@ -1341,7 +1341,7 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
-			found = false;
+			bEncontrado = false;
 
 			logger.error("ERROR COPOIN:|"+activo.getCOPOIN()+"|");
 			logger.error("ERROR NOMUIN:|"+activo.getNOMUIN()+"|");

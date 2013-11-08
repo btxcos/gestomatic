@@ -73,7 +73,7 @@ public class QMCodigosControl
 		
 		String sDescripcion = "";
 
-		boolean found = false;
+		boolean bEncontrado = false;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -103,7 +103,7 @@ public class QMCodigosControl
 				
 				while (rs.next()) 
 				{
-					found = true;
+					bEncontrado = true;
 
 					sDescripcion = rs.getString(DESCRIPCION);
 
@@ -112,7 +112,7 @@ public class QMCodigosControl
 					logger.debug(DESCRIPCION+":|"+sDescripcion+"|");
 				}
 			}
-			if (found == false) 
+			if (bEncontrado == false) 
 			{
  
 				logger.debug("No se encontró la información.");
@@ -142,7 +142,7 @@ public class QMCodigosControl
 
 
 		PreparedStatement pstmt = null;
-		boolean found = false;
+		boolean bEncontrado = false;
 	
 
 		String sTabla = "";
@@ -223,7 +223,7 @@ public class QMCodigosControl
 					
 					while (rs.next()) 
 					{
-						found = true;
+						bEncontrado = true;
 
 						sDescripcion = rs.getString(DESCRIPCION);
 
@@ -234,7 +234,7 @@ public class QMCodigosControl
 
 					}
 				}
-				if (found == false) 
+				if (bEncontrado == false) 
 				{
 	 
 					logger.debug("No se encontró la información.");

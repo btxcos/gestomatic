@@ -55,7 +55,7 @@ public class QMComunidades
 		
 		conn = ConnectionManager.getDBConnection();
 
-		long iCodigo = 0;
+		long liCodigo = 0;
 
 		logger.debug("Ejecutando Query...");
 		
@@ -106,16 +106,16 @@ public class QMComunidades
 			
 			if (resulset.next()) 
 			{
-				iCodigo= resulset.getLong(1);
+				liCodigo= resulset.getLong(1);
 			} 
 
 			logger.debug("Ejecutada con exito!");
 			
 			logger.debug("Ejecutada con exito!");
-		} 
+		}
 		catch (SQLException ex) 
 		{
-			iCodigo = 0;
+			liCodigo = 0;
 			
 			logger.error("ERROR COCLDO:|"+NuevaComunidad.getsCOCLDO()+"|");
 			logger.error("ERROR NUDCOM:|"+NuevaComunidad.getsNUDCOM()+"|");
@@ -130,7 +130,7 @@ public class QMComunidades
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
-		return iCodigo;
+		return liCodigo;
 	}
 	public static boolean modComunidad(Comunidad NuevaComunidad, String sComunidadID)
 	{
@@ -436,7 +436,7 @@ public class QMComunidades
 		return sComunidadID;
 	}	
 	
-	public static boolean existeComunidad(String sCodCOCLDO, String sCodNUDCOM)
+	public static boolean existeComunidad(String sComunidadID)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -451,12 +451,11 @@ public class QMComunidades
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "
-			       	+ CAMPO2  +                
+			       	+ CAMPO1  +                
 			       	" FROM " 
 			       	+ TABLA + 
-			       	" WHERE ("
-			       	+ CAMPO2 + " = '"+ sCodCOCLDO +"' AND "
-			       	+ CAMPO3 + " = '"+ sCodNUDCOM +"')";
+			       	" WHERE "
+			       	+ CAMPO1 + " = '"+ sComunidadID +"'";
 		
 		logger.debug(sQuery);
 
@@ -470,9 +469,6 @@ public class QMComunidades
 			rs = pstmt.executeQuery();
 			
 			logger.debug("Ejecutada con exito!");
-			
-			logger.debug(CAMPO2 + ":|"+sCodCOCLDO+"|");
-			logger.debug(CAMPO3 + ":|"+sCodNUDCOM+"|");
 
 			if (rs != null) 
 			{
@@ -494,8 +490,7 @@ public class QMComunidades
 		{
 			bEncontrado = false;
 			
-			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
-			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+			logger.error("ERROR Comunidad:|"+sComunidadID+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
