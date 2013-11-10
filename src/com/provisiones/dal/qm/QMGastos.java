@@ -535,6 +535,8 @@ public class QMGastos
 
 					sGastoID = rs.getString(CAMPO1);  
 					
+					logger.debug(CAMPO1+":|"+sGastoID+"|");
+					
 					logger.debug("Encontrado el registro!");
 
 				}
@@ -861,7 +863,7 @@ public class QMGastos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug("{}:|"+CAMPO35,sEstado);
+					logger.debug(CAMPO35+":|"+sEstado+"|");
 
 				}
 			}

@@ -68,12 +68,13 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+			
 			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 			logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -111,11 +112,12 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -141,7 +143,7 @@ public class QMListaGastosProvisiones
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "
-				+ CAMPO1 + 
+				+ CAMPO3 + 
 				" FROM " 
 				+ TABLA + 
 				" WHERE ("	
@@ -178,6 +180,8 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			found = false;
+
 			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 			logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
 
@@ -207,7 +211,7 @@ public class QMListaGastosProvisiones
 				" SET " 
 				+ CAMPO3 + " = '"+ sRevisado + "' "+
 				" WHERE "
-				+ CAMPO2 + " = '"+ sCodGasto +"'";
+				+ CAMPO1 + " = '"+ sCodGasto +"'";
 		
 		logger.debug(sQuery);
 		
@@ -221,11 +225,11 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR Gasto:|"+sCodGasto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -236,7 +240,7 @@ public class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
-	public static String getRevisado(String sCodMovimiento)
+	public static String getRevisado(String sCodGasto)
 	{
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -259,7 +263,7 @@ public class QMListaGastosProvisiones
 				" FROM " 
 				+ TABLA + 
 				" WHERE " 
-				+ CAMPO2 + " = '" + sCodMovimiento + "'";
+				+ CAMPO1 + " = '" + sCodGasto + "'";
 		
 		logger.debug(sQuery);
 
@@ -285,7 +289,7 @@ public class QMListaGastosProvisiones
 					sRevisado = rs.getString(CAMPO3);
 
 					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO2+":|"+sCodMovimiento+"|");
+					logger.debug(CAMPO1+":|"+sCodGasto+"|");
 					logger.debug(CAMPO3+":|"+sRevisado+"|");
 				}
 			}
@@ -298,7 +302,9 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
+			sRevisado = "";
+
+			logger.error("ERROR Gasto:|"+sCodGasto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
@@ -372,6 +378,8 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			sCodNUPROF = "";
+
 			logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -453,6 +461,8 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			sProvision = "";
+
 			logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -533,6 +543,8 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<String>();
+
 			logger.error("ERROR NUPROF:|"+sCodNUPROF+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -569,8 +581,8 @@ public class QMListaGastosProvisiones
 				" FROM " + TABLA + 
 				" WHERE ( " 
 				+ CAMPO2 + " = '"+ sNUPROF + "' AND "
-				+ CAMPO1+ 
-				" IN (SELECT "
+				
+				+ CAMPO1+ " IN (SELECT "
 				+ QMListaGastos.CAMPO1 +
 				" FROM " + QMListaGastos.TABLA +
 				" WHERE " 
@@ -620,6 +632,8 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<String>();
+
 			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -664,11 +678,11 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR PROVISIÓN:|"+sNUPROF+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -738,6 +752,8 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			liNumero = 0;
+
 			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -824,6 +840,8 @@ public class QMListaGastosProvisiones
 		} 
 		catch (SQLException ex) 
 		{
+			found = false;
+
 			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());

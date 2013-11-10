@@ -420,7 +420,16 @@ public class QMListaImpuestos
 					   +  CAMPO1 + 
 					   " FROM " 
 					   + TABLA + 
-					   "))";
+					   " WHERE " 
+					   
+					   + CAMPO2 + " IN (SELECT "
+   					   + QMImpuestos.CAMPO1 + 
+   					   " FROM " 
+   					   + QMImpuestos.TABLA +
+   					   " WHERE " 
+   					   + QMImpuestos.CAMPO11 + " = '"+ ValoresDefecto.DEF_ALTA +
+   					   "')))";
+
 		
 		logger.debug(sQuery);
 		

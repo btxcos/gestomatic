@@ -125,8 +125,9 @@ public class QMProvisiones
 				+ CAMPO7 + " = '" + provision.getsFechaValidacion() + "', " 
 				+ CAMPO8 + " = '" + provision.getsCodEstado() + "', " 
 				+ CAMPO9 + " = '" + sUsuario + "', " 
-				+ CAMPO10 + " = '" + Utils.timeStamp() + "' " 					
-				+ " WHERE " + CAMPO1 + " = '" + provision.getsNUPROF() + "'";
+				+ CAMPO10 + " = '" + Utils.timeStamp() + "' " +					
+				" WHERE " 
+				+ CAMPO1 + " = '" + provision.getsNUPROF() + "'";
 		
 		logger.debug(sQuery);
 
@@ -303,8 +304,9 @@ public class QMProvisiones
 		String sQuery = "UPDATE " 
 				+ TABLA + 
 				" SET " 
-				+ CAMPO7 + " = '" + sFechaEnvio + "' " 
-				+ " WHERE " + CAMPO1 + " = '" + sNUPROF + "'";
+				+ CAMPO7 + " = '" + sFechaEnvio + "' " +
+				" WHERE " 
+				+ CAMPO1 + " = '" + sNUPROF + "'";
 		
 		logger.debug(sQuery);
 
@@ -569,8 +571,8 @@ public class QMProvisiones
 				"( " 
 				+ CAMPO8 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
 				+ CAMPO2 +" = '"+ sCodCOSPAT +"' AND "
-				+ CAMPO3 +" = '"+ sCodTAS +
-				"')";
+				+ CAMPO3 +" = '"+ sCodTAS + "' AND "
+				+ CAMPO1 +" <> 0)";
 		
 		logger.debug(sQuery);
 		

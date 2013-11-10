@@ -203,6 +203,11 @@ public class CLGastos
 		return QMGastos.getGasto(buscarCodigoGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE));
 	}
 	
+	/*public static Gasto buscarGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
+	{
+		return QMGastos.getGasto(buscarCodigoGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE));
+	}*/
+	
 	public static String buscarDescripcionGasto(String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA)
 	{
 		return QMCodigosControl.getDesCOSBGA(sCodCOGRUG, sCodCOTPGA, sCodCOSBGA);
@@ -363,6 +368,9 @@ public class CLGastos
 		}
 		else
 		{
+			logger.debug("IMNGAS:|"+movimiento.getIMNGAS()+"|");
+			logger.debug("COSBGA:|"+movimiento.getCOSBGA()+"|");
+
 			if (movimiento.getIMNGAS().startsWith("-") && (Integer.parseInt(movimiento.getCOSBGA()) > 49))
 			{
 				sAccion = "D"; //Devolucion
@@ -492,9 +500,6 @@ public class CLGastos
 			movimiento_revisado.setCOIMPT(movimiento.getCOIMPT());
 			movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
 			movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
-			
-
-
 		}
 		
 		
@@ -1064,8 +1069,11 @@ public class CLGastos
 			
 					ValoresDefecto.TIPOSACCIONESGASTO ACCION = ValoresDefecto.TIPOSACCIONESGASTO.valueOf(sAccion);
 					
+					logger.debug("sAccion:|"+sAccion+"|");
+					
 					switch (ACCION)
 					{
+						
 						case D:case G:
 							Gasto gastonuevo = convierteMovimientoenGasto(movimiento_revisado);
 

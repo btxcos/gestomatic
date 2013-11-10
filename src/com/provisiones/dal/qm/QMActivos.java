@@ -1392,27 +1392,27 @@ public class QMActivos
 
 		String sQuery = "SELECT "
 					
-					   + QMActivos.CAMPO1 + ","        
-					   + QMActivos.CAMPO14 + ","
-					   + QMActivos.CAMPO11 + ","
-					   + QMActivos.CAMPO13 + ","
-					   + QMActivos.CAMPO6 + ","
-					   + QMActivos.CAMPO9 + ","
-					   + QMActivos.CAMPO7 + ","
-					   + QMActivos.CAMPO10 + ","
-					   + QMActivos.CAMPO81 + 
+					   + CAMPO1 + ","        
+					   + CAMPO14 + ","
+					   + CAMPO11 + ","
+					   + CAMPO13 + ","
+					   + CAMPO6 + ","
+					   + CAMPO9 + ","
+					   + CAMPO7 + ","
+					   + CAMPO10 + ","
+					   + CAMPO81 + 
 
 					   " FROM " 
-					   + QMActivos.TABLA + 
+					   + TABLA + 
 					   " WHERE ("
 
-					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' )";
+					   + CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' )";
 		
 		logger.debug(sQuery);
 		
@@ -1433,22 +1433,22 @@ public class QMActivos
 				{
 					found = true;
 					
-					sCOACES = rs.getString(QMActivos.CAMPO1);
-					sCOPOIN = rs.getString(QMActivos.CAMPO14);
-					sNOMUIN = rs.getString(QMActivos.CAMPO11);
-					sNOPRAC = rs.getString(QMActivos.CAMPO13);
-					sNOVIAS = rs.getString(QMActivos.CAMPO6);
-					sNUPIAC = rs.getString(QMActivos.CAMPO9);
-					sNUPOAC = rs.getString(QMActivos.CAMPO7);
-					sNUPUAC = rs.getString(QMActivos.CAMPO10);
-					sNURCAT = rs.getString(QMActivos.CAMPO81);
+					sCOACES = rs.getString(CAMPO1);
+					sCOPOIN = rs.getString(CAMPO14);
+					sNOMUIN = rs.getString(CAMPO11);
+					sNOPRAC = rs.getString(CAMPO13);
+					sNOVIAS = rs.getString(CAMPO6);
+					sNUPIAC = rs.getString(CAMPO9);
+					sNUPOAC = rs.getString(CAMPO7);
+					sNUPUAC = rs.getString(CAMPO10);
+					sNURCAT = rs.getString(CAMPO81);
 					
 					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
 					
 					result.add(activoencontrado);
 					
 					logger.debug("Encontrado el registro!");
-					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					logger.debug(CAMPO1+":|"+sCOACES+"|");
 				}
 			}
 			if (found == false) 

@@ -224,6 +224,18 @@ public class CLProvisiones
 				        	movimiento.setFEAGTO("0");
 				        	movimiento.setFEDEVE(Utils.fechaDeHoy(false));
 				        	movimiento.setNUPROF(sNuevaProvision);
+				        	
+				        	//inicializamos los signos del gasto
+				        	movimiento.setIMNGAS(movimiento.getYCOS02()+movimiento.getIMNGAS());
+				        	movimiento.setYCOS02("");
+				        	movimiento.setIMRGAS(movimiento.getYCOS04()+movimiento.getIMRGAS());
+				        	movimiento.setYCOS04("");
+				        	movimiento.setIMDGAS(movimiento.getYCOS06()+movimiento.getIMDGAS());
+				        	movimiento.setYCOS06("");
+				        	movimiento.setIMCOST(movimiento.getYCOS08()+movimiento.getIMCOST());
+				        	movimiento.setYCOS08("");
+				        	movimiento.setIMOGAS(movimiento.getYCOS10()+movimiento.getIMOGAS());
+				        	movimiento.setYCOS10("");
 
 				        	bError = (CLGastos.registraMovimiento(movimiento,false) < 0);
 				        	if(!bError)

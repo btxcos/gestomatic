@@ -1017,7 +1017,7 @@ public class QMListaReferencias
 			    + QMReferencias.TABLA + 
 				" WHERE "
 				+ QMReferencias.CAMPO1 + " IN (SELECT "
-			    + CAMPO1  +
+			    + CAMPO2  +
 			    " FROM " 
 			    + TABLA + 
 			    " WHERE "
