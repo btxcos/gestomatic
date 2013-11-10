@@ -18,6 +18,7 @@ import com.provisiones.types.tablas.ResultadosTabla;
 import com.provisiones.types.usuarios.Usuario;
 
 
+@SuppressWarnings("unused")
 public class TestActivos 
 {
 	//private static Logger logger = LoggerFactory.getLogger(TestActivos.class.getName());

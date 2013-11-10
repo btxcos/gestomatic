@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
-import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.listas.QMListaComunidades;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresComunidades;
@@ -239,6 +237,12 @@ public class CLComunidades
 		return iCodigo;
 	}
 	
+	public static String buscarCodigoComunidad (String sCodCOCLDO, String sCodNUDCOM)
+	{
+
+		return QMComunidades.getComunidadID(sCodCOCLDO, sCodNUDCOM);
+	}
+	
 	public static ArrayList<ActivoTabla> buscarActivosComunidad (String sCodCOCLDO, String sCodNUDCOM)
 	{
 
@@ -249,12 +253,6 @@ public class CLComunidades
 	{
 
 		return QMListaComunidadesActivos.buscaComunidadPorActivo(sCodCOACES);
-	}
-	
-	public static String buscarCodigoComunidad (String sCodCOCLDO, String sCodNUDCOM)
-	{
-
-		return QMComunidades.getComunidadID(sCodCOCLDO, sCodNUDCOM);
 	}
 	
 	public static MovimientoComunidad buscarMovimientoComunidad (String sCodMovimiento)
@@ -303,7 +301,7 @@ public class CLComunidades
 	{
 		int iCodigo = 0;
 		
-		if (QMActivos.existeActivo(sCOACES))
+		if (CLActivos.existeActivo(sCOACES))
 		{
 			if (QMListaComunidadesActivos.activoVinculadoComunidad(sCOACES))
 			{
@@ -748,7 +746,7 @@ public class CLComunidades
 			//Error 022 - NO SE PUEDE DAR ALTA SI CONTROL DE ACTIVO NO ES S
 			iCodigo = -22;
 		}		
-		else if ( !movimiento.getCOACES().equals("") && !QMActivos.existeActivo(movimiento.getCOACES()))
+		else if ( !movimiento.getCOACES().equals("") && !CLActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
@@ -783,7 +781,7 @@ public class CLComunidades
 			//Error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
 			iCodigo = -26;
 		}
-		else if (movimiento.getCOACCI().equals("B") && QMCuotas.tieneCuotas(movimiento.getCOACES(),movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+		else if (movimiento.getCOACCI().equals("B") && CLCuotas.tieneCuotas(movimiento.getCOACES(),movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 		{
 			//Error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
 			iCodigo = -27;			

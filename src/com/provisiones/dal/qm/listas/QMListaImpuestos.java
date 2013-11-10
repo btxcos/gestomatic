@@ -25,16 +25,18 @@ public class QMListaImpuestos
 
 	static String TABLA = "pp001_lista_impuestos_multi";
 	
+	//identificadores
 	static String CAMPO1 = "cod_coaces";
-	static String CAMPO2 = "cod_nurcat";
-	static String CAMPO3 = "cod_cosbac";
-	static String CAMPO4 = "cod_movimiento";
-	static String CAMPO5 = "cod_validado";
-	
-	static String CAMPO6  = "usuario_movimiento";    
-	static String CAMPO7  = "fecha_movimiento";
+	static String CAMPO2 = "cod_impuesto";
+	static String CAMPO3 = "cod_movimiento";
 
-	public static boolean addRelacionImpuestos(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC, String sCodMovimiento) 
+	//Campos de control
+	static String CAMPO4 = "cod_validado";
+	static String CAMPO5 = "usuario_movimiento";
+	static String CAMPO6  = "fecha_movimiento";    
+
+
+	public static boolean addRelacionImpuestos(String sCodCOACES, String sCodImpuesto, String sCodMovimiento) 
 	{
 		Statement stmt = null;
 		Connection conn = null;
@@ -55,12 +57,10 @@ public class QMListaImpuestos
 				+ CAMPO3 + "," 
 				+ CAMPO4 + "," 
 				+ CAMPO5 + ","
-				+ CAMPO6 + "," 
-				+ CAMPO7 + 
+				+ CAMPO6 + 
 				") VALUES ('" 
 				+ sCodCOACES + "','"
-				+ sCodNURCAT + "','"
-				+ sCodCOSBAC + "','"
+				+ sCodImpuesto + "','"
 				+ sCodMovimiento + "','"
 				+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 			    + sUsuario + "','"
@@ -79,8 +79,8 @@ public class QMListaImpuestos
 		catch (SQLException ex) 
 		{
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
+			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
@@ -109,7 +109,7 @@ public class QMListaImpuestos
 		String sQuery = "DELETE FROM " 
 				+ TABLA + 
 				" WHERE " 
-				+ CAMPO4 + " = '" + sCodMovimiento +"'";
+				+ CAMPO3 + " = '" + sCodMovimiento +"'";
 		
 		logger.debug(sQuery);
 
@@ -137,7 +137,7 @@ public class QMListaImpuestos
 		return bSalida;
 	}
 	
-	public static boolean existeRelacionImpuesto(String sCodNURCAT, String sCodCOSBAC, String sCodCOACES, String sCodMovimiento)
+	public static boolean existeRelacionImpuesto(String sCodCOACES, String sCodImpuesto, String sCodMovimiento)
 	{
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -158,9 +158,8 @@ public class QMListaImpuestos
 				+ TABLA + 
 				" WHERE (" 
 				+ CAMPO1 + " = '" + sCodCOACES + "' AND "
-				+ CAMPO2 + " = '" + sCodNURCAT + "' AND " 
-				+ CAMPO3 + " = '" + sCodCOSBAC + "' AND " 
-				+ CAMPO4 + " = '" + sCodMovimiento +
+				+ CAMPO2 + " = '" + sCodImpuesto + "' AND " 
+				+ CAMPO3 + " = '" + sCodMovimiento +
 				"')";
 		
 		logger.debug(sQuery);
@@ -196,8 +195,7 @@ public class QMListaImpuestos
 		catch (SQLException ex) 
 		{
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 
@@ -213,7 +211,7 @@ public class QMListaImpuestos
 		return found;
 	}
 
-	public static boolean compruebaRelacionImpuestoActivo(String sCodNURCAT, String sCodCOSBAC, String sCodCOACES)
+	public static boolean compruebaRelacionImpuestoActivo(String sCodCOACES, String sCodImpuesto)
 	{
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -234,9 +232,8 @@ public class QMListaImpuestos
 				+ TABLA + 
 				" WHERE (" 
 				+ CAMPO1 + " = '" + sCodCOACES + "' AND " 
-				+ CAMPO2 + " = '" + sCodNURCAT + "' AND " 
-				+ CAMPO3 + " = '" + sCodCOSBAC + 
-				"' )";
+				+ CAMPO2 + " = '" + sCodImpuesto + 
+				"')";
 		
 		logger.debug(sQuery);
 
@@ -260,8 +257,7 @@ public class QMListaImpuestos
 
 					logger.debug("Encontrado el registro!");
 					logger.debug(CAMPO1+"|"+sCodCOACES+"|");
-					logger.debug(CAMPO2+":|"+sCodNURCAT+"|");
-					logger.debug(CAMPO3+":|"+sCodCOSBAC+"|");
+					logger.debug(CAMPO2+":|"+sCodImpuesto+"|");
 				}
 			}
 			if (found == false) 
@@ -274,9 +270,7 @@ public class QMListaImpuestos
 		catch (SQLException ex) 
 		{
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
-
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
@@ -308,11 +302,11 @@ public class QMListaImpuestos
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT " 
-				+ CAMPO4 + 
+				+ CAMPO3 + 
 				" FROM " 
 				+ TABLA + 
 				" WHERE "
-				+ CAMPO5 + " = '" + sEstado + "'";
+				+ CAMPO4 + " = '" + sEstado + "'";
 		
 		logger.debug(sQuery);
 
@@ -337,12 +331,12 @@ public class QMListaImpuestos
 				{
 					found = true;
 
-					result.add(rs.getString(CAMPO4));
+					result.add(rs.getString(CAMPO3));
 										
 					logger.debug("Encontrado el registro!");
 					
-					logger.debug(CAMPO5+":|"+sEstado+"|");
-					logger.debug(CAMPO4+":|"+result.get(i)+"|");
+					logger.debug(CAMPO4+":|"+sEstado+"|");
+					logger.debug(CAMPO3+":|"+result.get(i)+"|");
 
 					i++;
 				}
@@ -462,7 +456,7 @@ public class QMListaImpuestos
 					result.add(activoencontrado);
 					
 					logger.debug("Encontrado el registro!");
-					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					logger.debug(CAMPO1+":|"+sCOACES+"|");
 
 				}
 			}
@@ -474,6 +468,8 @@ public class QMListaImpuestos
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<ActivoTabla>();
+
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
@@ -550,24 +546,10 @@ public class QMListaImpuestos
 					   + QMImpuestos.TABLA +
 					   " WHERE " +
 					   "("
-		   			   + QMImpuestos.CAMPO7 + " = 'F' AND " 
-		   			   + QMImpuestos.CAMPO6 + " = 'S' AND "
-		   			   + QMImpuestos.CAMPO4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
-		   			   + QMImpuestos.CAMPO10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
-		   			   "))"+
-
-		   			   "AND "  
-
-		   			   +CAMPO3 +" IN (SELECT "
-					   + QMImpuestos.CAMPO2 + 
-					   " FROM " 
-					   + QMImpuestos.TABLA +
-					   " WHERE " +
-					   "("
-		   			   + QMImpuestos.CAMPO7 + " = 'F' AND " 
-		   			   + QMImpuestos.CAMPO6 + " = 'S' AND "
-		   			   + QMImpuestos.CAMPO4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
-		   			   + QMImpuestos.CAMPO10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
+		   			   + QMImpuestos.CAMPO8 + " = 'F' AND " 
+		   			   + QMImpuestos.CAMPO7 + " = 'S' AND "
+		   			   + QMImpuestos.CAMPO5 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+		   			   + QMImpuestos.CAMPO11 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
 		   			   ")))))";
 		
 		
@@ -608,7 +590,7 @@ public class QMListaImpuestos
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					logger.debug(CAMPO1+":|"+sCOACES+"|");
 
 				}
 			}
@@ -620,6 +602,8 @@ public class QMListaImpuestos
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<ActivoTabla>();
+
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
@@ -663,8 +647,7 @@ public class QMListaImpuestos
 		logger.debug("Ejecutando Query...");
 
 		String sQuery = "SELECT "
-					
-					   + QMImpuestos.CAMPO1 + ","        
+					      
 					   + QMImpuestos.CAMPO2 + ","
 					   + QMImpuestos.CAMPO3 + ","
 					   + QMImpuestos.CAMPO4 + ","
@@ -672,28 +655,22 @@ public class QMListaImpuestos
 					   + QMImpuestos.CAMPO6 + ","
 					   + QMImpuestos.CAMPO7 + ","
 					   + QMImpuestos.CAMPO8 + ","
-					   + QMImpuestos.CAMPO9 +
+					   + QMImpuestos.CAMPO9 + ","  
+					   + QMImpuestos.CAMPO10 +
 					    
 
 					   " FROM " 
 					   + QMImpuestos.TABLA + 
 					   " WHERE ("
 
-					   + QMImpuestos.CAMPO10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
+					   + QMImpuestos.CAMPO11 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "  
 
 					   + QMImpuestos.CAMPO1 +" IN (SELECT "
 					   +  CAMPO2 + 
 					   " FROM " 
 					   + TABLA + 
-					   " WHERE (" 
-					   + CAMPO1 + " = '" + sCodCOACES	+ "' )) AND "  
-
-					   + QMImpuestos.CAMPO2 +" IN (SELECT "
-					   +  CAMPO3 + 
-					   " FROM " 
-					   + TABLA + 
-					   " WHERE (" 
-					   + CAMPO1 + " = '" + sCodCOACES	+ "' )))";					   
+					   " WHERE " 
+					   + CAMPO1 + " = '" + sCodCOACES	+ "'))";					   
 					   
 		
 		logger.debug(sQuery);
@@ -719,16 +696,16 @@ public class QMListaImpuestos
 					
 
 					
-					sCOSBAC     = rs.getString(QMImpuestos.CAMPO2);
+					sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
 					sDesCOSBAC  = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
-					sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO3));
-					sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
-					sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
-					sBISODE     = rs.getString(QMImpuestos.CAMPO6);
+					sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
+					sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
+					sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO6));
+					sBISODE     = rs.getString(QMImpuestos.CAMPO7);
 					sDesBISODE  = QMCodigosControl.getDesCampo(QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
-					sBIRESO     = rs.getString(QMImpuestos.CAMPO7);
+					sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
 					sDesBIRESO  = QMCodigosControl.getDesCampo(QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
-					sOBTEXC     = rs.getString(QMImpuestos.CAMPO9);  
+					sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
 
 					
 					ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
@@ -759,6 +736,8 @@ public class QMListaImpuestos
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<ImpuestoRecursoTabla>();
+
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
@@ -799,7 +778,6 @@ public class QMListaImpuestos
 
 		String sQuery = "SELECT "
 					
-					   + QMImpuestos.CAMPO1 + ","        
 					   + QMImpuestos.CAMPO2 + ","
 					   + QMImpuestos.CAMPO3 + ","
 					   + QMImpuestos.CAMPO4 + ","
@@ -807,33 +785,27 @@ public class QMListaImpuestos
 					   + QMImpuestos.CAMPO6 + ","
 					   + QMImpuestos.CAMPO7 + ","
 					   + QMImpuestos.CAMPO8 + ","
-					   + QMImpuestos.CAMPO9 +
+					   + QMImpuestos.CAMPO9 + "," 
+					   + QMImpuestos.CAMPO10 +
 					    
 
 					   " FROM " 
 					   + QMImpuestos.TABLA + 
 					   " WHERE ("
 
-					   + QMImpuestos.CAMPO7 + " = 'F' AND " 
-					   + QMImpuestos.CAMPO6 + " = 'S' AND "
-					   + QMImpuestos.CAMPO4 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
-					   + QMImpuestos.CAMPO10 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
+					   + QMImpuestos.CAMPO8 + " = 'F' AND " 
+					   + QMImpuestos.CAMPO7 + " = 'S' AND "
+					   + QMImpuestos.CAMPO5 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
+					   + QMImpuestos.CAMPO11 + " = '" + ValoresDefecto.DEF_ALTA + "' " +
 
 					   "AND "  
 
 					   + QMImpuestos.CAMPO1 +" IN (SELECT "
-					   +  CAMPO2 + 
+					   + CAMPO2 + 
 					   " FROM " 
 					   + TABLA + 
-					   " WHERE (" 
-					   + CAMPO1 + " = '" + sCodCOACES	+ "' )) AND "  
-
-					   + QMImpuestos.CAMPO2 +" IN (SELECT "
-					   +  CAMPO3 + 
-					   " FROM " 
-					   + TABLA + 
-					   " WHERE (" 
-					   + CAMPO1 + " = '" + sCodCOACES + "' )))";				   
+					   " WHERE " 
+					   + CAMPO1 + " = '" + sCodCOACES	+ "'))";				   
 					   
 		
 		logger.debug(sQuery);
@@ -859,16 +831,16 @@ public class QMListaImpuestos
 					
 
 					
-					sCOSBAC     = rs.getString(QMImpuestos.CAMPO2);
+					sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
 					sDesCOSBAC  = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
-					sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO3));
-					sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
-					sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
-					sBISODE     = rs.getString(QMImpuestos.CAMPO6);
+					sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
+					sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
+					sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO6));
+					sBISODE     = rs.getString(QMImpuestos.CAMPO7);
 					sDesBISODE  = QMCodigosControl.getDesCampo(QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
-					sBIRESO     = rs.getString(QMImpuestos.CAMPO7);
+					sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
 					sDesBIRESO  = QMCodigosControl.getDesCampo(QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
-					sOBTEXC     = rs.getString(QMImpuestos.CAMPO9);  
+					sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
 
 					
 					ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
@@ -899,6 +871,8 @@ public class QMListaImpuestos
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<ImpuestoRecursoTabla>();
+
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 
@@ -923,9 +897,9 @@ public class QMListaImpuestos
 		String sQuery = "UPDATE " 
 				+ TABLA + 
 				" SET " 
-				+ CAMPO5 + " = '"+ sValidado + "' "+
+				+ CAMPO4 + " = '"+ sValidado + "' "+
 				" WHERE "
-				+ CAMPO4 + " = '" + sCodMovimiento +"'";
+				+ CAMPO3 + " = '" + sCodMovimiento +"'";
 		
 		logger.debug(sQuery);
 		
@@ -940,11 +914,11 @@ public class QMListaImpuestos
 		} 
 		catch (SQLException ex) 
 		{
+			bSalida = false;
+
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -974,11 +948,11 @@ public class QMListaImpuestos
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT " 
-				+ CAMPO5 + 
+				+ CAMPO4 + 
 				" FROM " 
 				+ TABLA + 
 				" WHERE " 
-				+ CAMPO4 + " = '" + sCodMovimiento +"'";
+				+ CAMPO3 + " = '" + sCodMovimiento +"'";
 		
 		logger.debug(sQuery);
 
@@ -1000,11 +974,11 @@ public class QMListaImpuestos
 				{
 					found = true;
 
-					sValidado = rs.getString(CAMPO5);
+					sValidado = rs.getString(CAMPO4);
 
 					logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO5+":|"+sValidado+"|");
+					logger.debug(CAMPO4+":|"+sValidado+"|");
 				}
 			}
 			if (found == false) 
@@ -1016,6 +990,8 @@ public class QMListaImpuestos
 		} 
 		catch (SQLException ex) 
 		{
+			sValidado = "";
+
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -1051,7 +1027,7 @@ public class QMListaImpuestos
 		String sQuery = "SELECT COUNT(*) FROM " 
 				+ TABLA + 
 				" WHERE "
-				+ CAMPO5 + " = '" + sCodValidado + "'";
+				+ CAMPO4 + " = '" + sCodValidado + "'";
 		
 		logger.debug(sQuery);
 
@@ -1091,6 +1067,8 @@ public class QMListaImpuestos
 		} 
 		catch (SQLException ex) 
 		{
+			liNumero = 0;
+
 			logger.error("ERROR CodValidado:|"+sCodValidado+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -1105,7 +1083,7 @@ public class QMListaImpuestos
 		return liNumero;
 	}
 	
-	public static ArrayList<String> buscarDependencias(String sCodCOACES, String sCodNURCAT, String sCodCOSBAC, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(String sCodCOACES, String sCodImpuesto, String sCodMovimiento)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -1122,14 +1100,13 @@ public class QMListaImpuestos
 		logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT " 
-				+ CAMPO4  + 
+				+ CAMPO3 + 
 				" FROM " 
 				+ TABLA + 
 				" WHERE (" 
 				+ CAMPO1 + " = '" + sCodCOACES + "' AND "
-				+ CAMPO2 + " = '" + sCodNURCAT + "' AND "
-				+ CAMPO3 + " = '" + sCodCOSBAC + "' AND "
-				+ CAMPO4 + " >=  '" + sCodMovimiento + 
+				+ CAMPO2 + " = '" + sCodImpuesto + "' AND "
+				+ CAMPO3 + " >=  '" + sCodMovimiento + 
 				"')";
 		
 		logger.debug(sQuery);
@@ -1153,7 +1130,7 @@ public class QMListaImpuestos
 				{
 					found = true;
 					
-					result.add(rs.getString(CAMPO4));
+					result.add(rs.getString(CAMPO3));
 
 					logger.debug("Encontrado el registro!");
 
@@ -1168,8 +1145,7 @@ public class QMListaImpuestos
 		catch (SQLException ex) 
 		{
 			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());

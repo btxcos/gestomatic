@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
@@ -181,7 +180,7 @@ public class CLCuotas
 	{
 		int iCodigo = 0;
 		
-		if (QMActivos.existeActivo(sCOACES))
+		if (CLActivos.existeActivo(sCOACES))
 		{
 			if (CLComunidades.comprobarRelacion(sCOCLDO, sNUDCOM, sCOACES))
 				iCodigo = 0;
@@ -194,12 +193,6 @@ public class CLCuotas
 		logger.debug("Código de salida:|{}|",iCodigo);
 		
 		return iCodigo;
-	}
-	
-	//Sin uso
-	public static boolean comprobarRelacion(String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC, String sCodCOACES)
-	{
-		return QMListaCuotas.compruebaRelacionCuotaActivo(buscarCodigoCuota(sCodCOCLDO, sCodNUDCOM, sCodCOSBAC, sCodCOACES),sCodCOACES);
 	}
 	
 	public static MovimientoCuota convierteCuotaenMovimiento(Cuota cuota, String sCodCOACES, String sCodCOACCI)
@@ -253,6 +246,11 @@ public class CLCuotas
 	public static boolean existeCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
 		return QMCuotas.existeCuota(buscarCodigoCuota(sCodCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC));
+	}
+	
+	public static boolean tieneCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM)
+	{
+		return QMCuotas.tieneCuotas(sCodCOACES,sCodCOCLDO, sCodNUDCOM);
 	}
 	
 	public static boolean existeMovimientoCuota (String sCodMovimiento)
@@ -488,7 +486,7 @@ public class CLCuotas
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
-		else if (movimiento.getCOACES().equals("") || !QMActivos.existeActivo(movimiento.getCOACES()))
+		else if (movimiento.getCOACES().equals("") || !CLActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;

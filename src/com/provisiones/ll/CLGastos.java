@@ -852,7 +852,7 @@ public class CLGastos
 			//Error 007 - Error en grupo / tipo / subtipo de acción     
 			iCodigo = -7;
 		}
-		else if (!CLActivos.compruebaActivo(movimiento_revisado.getCOACES()))
+		else if (!CLActivos.existeActivo(movimiento_revisado.getCOACES()))
 		{
 			//Error 008 - No existe el activo en la base corporativa
 			iCodigo = -8;

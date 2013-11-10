@@ -119,7 +119,7 @@ public class GestorReferenciasCatastrales implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		this.setTablaactivos(CLReferencias.buscarListaActivosReferencia(buscaactivos));
+		this.setTablaactivos(CLActivos.buscarListaActivosConReferencia(buscaactivos));
 		
 		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
@@ -161,7 +161,7 @@ public class GestorReferenciasCatastrales implements Serializable
     		FacesContext.getCurrentInstance().addMessage(null, msg);
     	}
 
-		if (CLActivos.compruebaActivo(sCOACES))
+		if (CLActivos.existeActivo(sCOACES))
 		{
 			msg = Utils.pfmsgInfo("El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
 			logger.info("El activo '{}' esta disponible.",sCOACES.toUpperCase());

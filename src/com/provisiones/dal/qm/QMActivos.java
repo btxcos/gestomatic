@@ -1249,7 +1249,7 @@ public class QMActivos
 		return sCodCOSPAT;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivos(ActivoTabla activo)
+	public static ArrayList<ActivoTabla> buscaListaActivos(ActivoTabla activo)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -1361,5 +1361,113 @@ public class QMActivos
 		}
 		//ConnectionManager.CloseDBConnection(conn);
 		return result;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaListaActivosReferencias(ActivoTabla activo)
+	{
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		String sCOACES = "";
+		String sCOPOIN = "";
+		String sNOMUIN = "";
+		String sNOPRAC = "";
+		String sNOVIAS = "";
+		String sNUPIAC = "";
+		String sNUPOAC = "";
+		String sNUPUAC = "";
+		String sNURCAT = "";
+		
+		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
+		
+
+		PreparedStatement pstmt = null;
+		boolean found = false;
+		
+		Connection conn = null;
+		
+		conn = ConnectionManager.getDBConnection();
+		
+		logger.debug("Ejecutando Query...");
+
+		String sQuery = "SELECT "
+					
+					   + QMActivos.CAMPO1 + ","        
+					   + QMActivos.CAMPO14 + ","
+					   + QMActivos.CAMPO11 + ","
+					   + QMActivos.CAMPO13 + ","
+					   + QMActivos.CAMPO6 + ","
+					   + QMActivos.CAMPO9 + ","
+					   + QMActivos.CAMPO7 + ","
+					   + QMActivos.CAMPO10 + ","
+					   + QMActivos.CAMPO81 + 
+
+					   " FROM " 
+					   + QMActivos.TABLA + 
+					   " WHERE ("
+
+					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
+					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
+					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
+					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
+					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
+					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
+					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' )";
+		
+		logger.debug(sQuery);
+		
+		try 
+		{
+			stmt = conn.createStatement();
+			
+			pstmt = conn.prepareStatement(sQuery);
+
+			rs = pstmt.executeQuery();
+			
+			logger.debug("Ejecutada con exito!");
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					found = true;
+					
+					sCOACES = rs.getString(QMActivos.CAMPO1);
+					sCOPOIN = rs.getString(QMActivos.CAMPO14);
+					sNOMUIN = rs.getString(QMActivos.CAMPO11);
+					sNOPRAC = rs.getString(QMActivos.CAMPO13);
+					sNOVIAS = rs.getString(QMActivos.CAMPO6);
+					sNUPIAC = rs.getString(QMActivos.CAMPO9);
+					sNUPOAC = rs.getString(QMActivos.CAMPO7);
+					sNUPUAC = rs.getString(QMActivos.CAMPO10);
+					sNURCAT = rs.getString(QMActivos.CAMPO81);
+					
+					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+					
+					result.add(activoencontrado);
+					
+					logger.debug("Encontrado el registro!");
+					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+				}
+			}
+			if (found == false) 
+			{
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+		//ConnectionManager.CloseDBConnection(conn);
+		return result;
+
 	}
 }

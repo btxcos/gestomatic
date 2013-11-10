@@ -25,7 +25,7 @@ public class QMCuotas
 	//Primary Key
 	public static final String CAMPO1  = "e2_cuota_id";
 	
-	//Unique Key - comunidad
+	//Unique Key - cuota
 	public static final String CAMPO2  = "cod_coaces";
 	public static final String CAMPO3  = "cod_cocldo";
 	public static final String CAMPO4  = "cod_nudcom";
@@ -554,7 +554,7 @@ public class QMCuotas
 					   + TABLA + 
 					   " WHERE ("
 					   + CAMPO12 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
-					   + CAMPO1 + " = '" + sCodCOACES	+ "'))";
+					   + CAMPO2 + " = '" + sCodCOACES	+ "')";
 		
 		logger.debug(sQuery);
 

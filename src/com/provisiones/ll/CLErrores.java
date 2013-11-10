@@ -213,7 +213,9 @@ public class CLErrores
 	{
 		int iCodigo = 0;
 		
-		MovimientoReferenciaCatastral movimiento_revisado = CLReferencias.revisaCodigosControl(movimiento);
+		String sCodReferencia = CLReferencias.buscarCodigoReferencia(movimiento.getNURCAT());
+		
+		MovimientoReferenciaCatastral movimiento_revisado = CLReferencias.revisaCodigosControl(movimiento,sCodReferencia);
 		
 		if (movimiento_revisado.getCOACCI().equals("#"))
 		{	
@@ -234,12 +236,12 @@ public class CLErrores
 				if(QMListaErroresReferencias.delErrorReferencia(sCodMovimiento, sCodError))
 				{	
 
-					if (QMReferencias.modReferenciaCatastral(CLReferencias.convierteMovimientoenReferencia(movimiento), movimiento.getNURCAT()))	
+					if (QMReferencias.modReferenciaCatastral(CLReferencias.convierteMovimientoenReferencia(movimiento), sCodReferencia))	
 					{
 						//OK 
 						iCodigo = 0;
 						
-						ArrayList<String> dependenciascuotas = QMListaReferencias.buscarDependencias(movimiento.getNURCAT(), movimiento.getCOACES(), sCodMovimiento);
+						ArrayList<String> dependenciascuotas = QMListaReferencias.buscarDependencias(movimiento.getCOACES(), sCodReferencia, sCodMovimiento);
 
 
 						for (int i = 0; i < dependenciascuotas.size() ; i++)
@@ -284,7 +286,9 @@ public class CLErrores
 	{
 		int iCodigo = 0;
 		
-		MovimientoImpuestoRecurso movimiento_revisado = CLImpuestos.revisaCodigosControl(movimiento);
+		String sCodImpuesto = CLImpuestos.buscarCodigoImpuesto(movimiento.getNURCAT(), movimiento.getCOSBAC());
+		
+		MovimientoImpuestoRecurso movimiento_revisado = CLImpuestos.revisaCodigosControl(movimiento,sCodImpuesto);
 		
 		if (movimiento_revisado.getCOACCI().equals("#"))
 		{	
@@ -305,12 +309,12 @@ public class CLErrores
 				if(QMListaErroresImpuestos.delErrorImpuesto(sCodMovimiento, sCodError))
 				{	
 
-					if (QMImpuestos.modImpuestoRecurso(CLImpuestos.convierteMovimientoenImpuesto(movimiento), movimiento.getNURCAT(), movimiento.getCOSBAC()))	
+					if (QMImpuestos.modImpuestoRecurso(CLImpuestos.convierteMovimientoenImpuesto(movimiento), sCodImpuesto))	
 					{
 						//OK 
 						iCodigo = 0;
 						
-						ArrayList<String> dependenciasimpuestos = QMListaImpuestos.buscarDependencias(movimiento.getCOACES(), movimiento.getNURCAT(), movimiento.getCOSBAC(), sCodMovimiento);
+						ArrayList<String> dependenciasimpuestos = QMListaImpuestos.buscarDependencias(movimiento.getCOACES(), sCodImpuesto, sCodMovimiento);
 
 
 						for (int i = 0; i < dependenciasimpuestos.size() ; i++)

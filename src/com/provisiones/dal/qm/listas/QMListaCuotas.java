@@ -12,12 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
-import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
-import com.provisiones.types.tablas.CuotaTabla;
 
 public class QMListaCuotas 
 {
@@ -206,79 +204,7 @@ public class QMListaCuotas
 		return found;
 	}
 	
-	public static boolean compruebaRelacionCuotaActivo(String sCodCuota, String sCodCOACES)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
 
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO1 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE (" 
-				+ CAMPO1 + " = '" + sCodCOACES + "' AND " 
-				+ CAMPO2 + " = '" + sCodCuota + 
-				"')";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement(sQuery);
-
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con éxito!");			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					logger.debug("Encontrado el registro!");
-				}
-			}
-			if (found == false) 
-			{
- 
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			found = false;
-
-			logger.error("ERROR Cuota:|"+sCodCuota+"|");
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-
-		//ConnectionManager.CloseDBConnection(conn);
-		return found;
-	}
 	
 	public static ArrayList<String>  getCuotasPorEstado(String sEstado) 
 	{
@@ -361,96 +287,7 @@ public class QMListaCuotas
 		return result;
 	}
 
-	public static ArrayList<String>  getCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC) 
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
 
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-		
-		ArrayList<String> result = new ArrayList<String>(); 
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO3 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE (" 
-				+ CAMPO1 + " = '" + sCodCOACES + "' AND " 
-				+ CAMPO2 + " = '" + sCodCOCLDO + "' AND " 
-				+ CAMPO3 + " = '" + sCodNUDCOM + "' AND " 
-				+ CAMPO4 + " = '" + sCodCOSBAC + "')";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con éxito!");
-			
-			int i = 0;
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					result.add(rs.getString(CAMPO3));
-
-					logger.debug("Encontrado el registro!");
-
-					logger.debug(CAMPO1+":|"+sCodCOACES+"|");
-					logger.debug(CAMPO2+":|"+sCodCOCLDO+"|");
-					logger.debug(CAMPO3+":|"+sCodNUDCOM+"|");
-					logger.debug(CAMPO4+":|"+sCodCOSBAC+"|");
-
-					
-					
-					logger.debug(result.get(i));
-					
-					i++;
-				}
-			}
-			if (found == false) 
-			{
-				result = new ArrayList<String>(); 
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
-			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
 	
 	public static ArrayList<String>  getCuotasPendientes(String sCodCuota) 
 	{

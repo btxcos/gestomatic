@@ -1,6 +1,5 @@
 package com.provisiones.pl;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import org.slf4j.Logger;
@@ -9,14 +8,11 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.servlet.http.HttpSession;
 
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuotas;
-import com.provisiones.ll.CLUsuarios;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
@@ -68,27 +64,6 @@ public class GestorCuotas implements Serializable
 	public GestorCuotas()
 	{
 		logger.debug("Iniciando GestorCuotas...");
-
-		if (!CLUsuarios.comprobarConexion())
-		{
-			ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-			try 
-			{
-				
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-				logger.debug("Destruyendo GestorCuotas...");
-				//session.removeAttribute("GestorCuotas");
-				
-				logger.debug("redigiendo...");
-				context.redirect("login.xhtml");
-				return;
-			} 
-			catch (Exception e) 
-			{
-				logger.error("[FATAL] ERROR: No se puede acceder a la página de login.");
-			}
-		}
-
 	}
 	
 	public void borrarCamposActivo()

@@ -50,10 +50,10 @@ public class CLActivos
 	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla activobuscado)
 	{
 			
-		return QMActivos.buscaActivos(activobuscado);
+		return QMActivos.buscaListaActivos(activobuscado);
 	}
 
-	public static boolean compruebaActivo (String sCodCOACES)
+	public static boolean existeActivo (String sCodCOACES)
 	{
 			
 		return QMActivos.existeActivo(sCodCOACES);
@@ -90,4 +90,16 @@ public class CLActivos
 			
 		return QMActivos.getSociedadPatrimonial(sCodCOACES);
 	}
+	
+	public static String referenciaCatastralAsociada (String sCodCOACES)
+	{
+			
+		return QMActivos.getReferenciaCatastral(sCodCOACES);
+	}
+	
+	public static ArrayList<ActivoTabla> buscarListaActivosConReferencia (ActivoTabla activo)
+	{
+		return QMActivos.buscaListaActivosReferencias(activo);
+	}
+
 }

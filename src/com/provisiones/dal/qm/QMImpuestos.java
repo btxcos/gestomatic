@@ -20,67 +20,86 @@ public class QMImpuestos
 	
 	public static final String TABLA = "pp001_e4_impuestos_tbl";
 
-	public static final String CAMPO1  = "cod_nurcat";    
-	public static final String CAMPO2 = "cod_cosbac";
-	public static final String CAMPO3 = "feprre";    
-	public static final String CAMPO4 = "ferere";    
-	public static final String CAMPO5 = "fedein";    
-	public static final String CAMPO6 = "cod_bisode";
-	public static final String CAMPO7 = "cod_bireso";
-	public static final String CAMPO8 = "cotexa";    
-	public static final String CAMPO9 = "obtexc";
+	//Primary Key
+	public static final String CAMPO1  = "e4_impuesto_id";
+	
+	//Unique Key - impuesto
+	public static final String CAMPO2  = "cod_nurcat";
+	public static final String CAMPO3  = "cod_cosbac";
+	
+	//Campos secundarios
+	public static final String CAMPO4  = "feprre";    
+	public static final String CAMPO5  = "ferere";    
+	public static final String CAMPO6  = "fedein";    
+	public static final String CAMPO7  = "cod_bisode";
+	public static final String CAMPO8  = "cod_bireso";
+	public static final String CAMPO9  = "cotexa";    
+	public static final String CAMPO10 = "obtexc";
+	
+	//Campos de control
+	public static final String CAMPO11 = "cod_estado";
 
-	public static final String CAMPO10 = "cod_estado";
-
-	public static boolean addImpuesto(ImpuestoRecurso NuevoImpuestoRecurso)
+	public static long addImpuesto(ImpuestoRecurso NuevoImpuestoRecurso)
 
 	{
 		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
 
 		Statement stmt = null;
+		ResultSet resulset = null;
+		
+		conn = ConnectionManager.getDBConnection();
 
-		boolean bSalida = true;
+		long liCodigo = 0;
 
 		logger.debug("Ejecutando Query...");
+		
+		String sQuery = "INSERT INTO " + TABLA + " ("
+			       + CAMPO2  + "," 
+			       + CAMPO3  + ","              
+			       + CAMPO4  + ","              
+			       + CAMPO5  + ","              
+			       + CAMPO6  + ","              
+			       + CAMPO7  + ","              
+			       + CAMPO8  + ","
+			       + CAMPO9  + ","
+			       + CAMPO10 + ","
+			       + CAMPO11 +  
+			       ") VALUES ('" 
+			       + NuevoImpuestoRecurso.getNURCAT() + "','"
+			       + NuevoImpuestoRecurso.getCOSBAC() + "','"
+			       + NuevoImpuestoRecurso.getFEPRRE() + "','"
+			       + NuevoImpuestoRecurso.getFERERE() + "','"
+			       + NuevoImpuestoRecurso.getFEDEIN() + "','"
+			       + NuevoImpuestoRecurso.getBISODE() + "','"
+			       + NuevoImpuestoRecurso.getBIRESO() + "','"
+			       + NuevoImpuestoRecurso.getCOTEXA() + "','"
+			       + NuevoImpuestoRecurso.getOBTEXC() + "','" 
+			       + ValoresDefecto.DEF_ALTA + "' )";
 
-		try {
+		try 
+		{
 
 			stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO " + TABLA + " ("
-				       + CAMPO1  + ","
-				       + CAMPO2  + "," 
-				       + CAMPO3  + ","              
-				       + CAMPO4  + ","              
-				       + CAMPO5  + ","              
-				       + CAMPO6  + ","              
-				       + CAMPO7  + ","              
-				       + CAMPO8  + ","
-				       + CAMPO9  + ","
-				       + CAMPO10  +  
-				       ") VALUES ('" 
-				       + NuevoImpuestoRecurso.getNURCAT() + "','"
-				       + NuevoImpuestoRecurso.getCOSBAC() + "','"
-				       + NuevoImpuestoRecurso.getFEPRRE() + "','"
-				       + NuevoImpuestoRecurso.getFERERE() + "','"
-				       + NuevoImpuestoRecurso.getFEDEIN() + "','"
-				       + NuevoImpuestoRecurso.getBISODE() + "','"
-				       + NuevoImpuestoRecurso.getBIRESO() + "','"
-				       + NuevoImpuestoRecurso.getCOTEXA() + "','"
-				       + NuevoImpuestoRecurso.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "' )");
+			stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
 			
+			resulset = stmt.getGeneratedKeys();
+			
+			if (resulset.next()) 
+			{
+				liCodigo= resulset.getLong(1);
+			} 
+
 			logger.debug("Ejecutada con exito!");
-		} 
+			
+		}
 		catch (SQLException ex) 
 		{
-		
+			liCodigo = 0;		
+
 			logger.error("ERROR NURCAT:|"+NuevoImpuestoRecurso.getNURCAT()+"|");
 			logger.error("ERROR COSBAC:|"+NuevoImpuestoRecurso.getCOSBAC()+"|");
 			
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally
 		{
@@ -88,10 +107,10 @@ public class QMImpuestos
 			Utils.closeStatement(stmt);
 		}
 		//ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
+		return liCodigo;
 	}
 
-	public static boolean modImpuestoRecurso(ImpuestoRecurso NuevoImpuestoRecurso, String sCodNURCAT, String sCodCOSBAC)
+	public static boolean modImpuestoRecurso(ImpuestoRecurso NuevoImpuestoRecurso, String sCodImpuesto)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -107,31 +126,29 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + TABLA + 
 					" SET " 
-					+ CAMPO1 + " = '"+ NuevoImpuestoRecurso.getNURCAT() + "', "
-					+ CAMPO2 + " = '"+ NuevoImpuestoRecurso.getCOSBAC() + "', "
-					+ CAMPO3 + " = '"+ NuevoImpuestoRecurso.getFEPRRE() + "', "
-					+ CAMPO4 + " = '"+ NuevoImpuestoRecurso.getFERERE() + "', "
-					+ CAMPO5 + " = '"+ NuevoImpuestoRecurso.getFEDEIN() + "', "
-					+ CAMPO6 + " = '"+ NuevoImpuestoRecurso.getBISODE() + "', "
-					+ CAMPO7 + " = '"+ NuevoImpuestoRecurso.getBIRESO() + "', "
-					+ CAMPO8 + " = '"+ NuevoImpuestoRecurso.getCOTEXA() + "', "
-					+ CAMPO9 + " = '"+ NuevoImpuestoRecurso.getOBTEXC() +
+					+ CAMPO2 + " = '"+ NuevoImpuestoRecurso.getNURCAT() + "', "
+					+ CAMPO3 + " = '"+ NuevoImpuestoRecurso.getCOSBAC() + "', "
+					+ CAMPO4 + " = '"+ NuevoImpuestoRecurso.getFEPRRE() + "', "
+					+ CAMPO5 + " = '"+ NuevoImpuestoRecurso.getFERERE() + "', "
+					+ CAMPO6 + " = '"+ NuevoImpuestoRecurso.getFEDEIN() + "', "
+					+ CAMPO7 + " = '"+ NuevoImpuestoRecurso.getBISODE() + "', "
+					+ CAMPO8 + " = '"+ NuevoImpuestoRecurso.getBIRESO() + "', "
+					+ CAMPO9 + " = '"+ NuevoImpuestoRecurso.getCOTEXA() + "', "
+					+ CAMPO10 + " = '"+ NuevoImpuestoRecurso.getOBTEXC() +
 					"' "+
-					" WHERE "+
-					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
-					 CAMPO2 + " = '" + sCodCOSBAC + "' )");
+					" WHERE "
+					+ CAMPO1 + " = '" + sCodImpuesto + "'");
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			bSalida = false;
+
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -142,7 +159,7 @@ public class QMImpuestos
 		return bSalida;
 	}
 
-	public static boolean delImpuestoRecurso(String sCodNURCAT, String sCodCOSBAC)
+	public static boolean delImpuestoRecurso(String sCodImpuesto)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -156,21 +173,20 @@ public class QMImpuestos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
-							 CAMPO2 + " = '" + sCodCOSBAC + "' )");
+			stmt.executeUpdate("DELETE FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + sCodImpuesto + "'");
 			
 			logger.debug("Ejecutada con exito!");
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			bSalida = false;
+
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
 		} 
 		finally 
 		{
@@ -181,7 +197,7 @@ public class QMImpuestos
 		return bSalida;
 	}
 
-	public static ImpuestoRecurso getImpuestoRecurso(String sCodNURCAT, String sCodCOSBAC)
+	public static ImpuestoRecurso getImpuestoRecurso(String sCodImpuesto)
 	{	
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -210,20 +226,19 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + CAMPO1  + ","
 				       + CAMPO2  + ","
 				       + CAMPO3  + ","              
 				       + CAMPO4  + ","              
 				       + CAMPO5  + ","              
 				       + CAMPO6  + ","              
 				       + CAMPO7  + ","              
-				       + CAMPO8  + ","              
-				       + CAMPO9  +              
+				       + CAMPO8  + ","
+				       + CAMPO9  + ","
+				       + CAMPO10  +              
        
 			"  FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
-					 CAMPO2 + " = '" + sCodCOSBAC + "' )");
+					" WHERE "
+					+ CAMPO1 + " = '" + sCodImpuesto + "'");
 
 			rs = pstmt.executeQuery();
 			
@@ -236,21 +251,21 @@ public class QMImpuestos
 				{
 					found = true;
 
-					sNURCAT = rs.getString(CAMPO1); 
-					sCOSBAC = rs.getString(CAMPO2);
-					sFEPRRE = rs.getString(CAMPO3);
-					sFERERE = rs.getString(CAMPO4);
-					sFEDEIN = rs.getString(CAMPO5);
-					sBISODE = rs.getString(CAMPO6);
-					sBIRESO = rs.getString(CAMPO7);
-					sCOTEXA = rs.getString(CAMPO8);
-					sOBTEXC = rs.getString(CAMPO9);
+					sNURCAT = rs.getString(CAMPO2); 
+					sCOSBAC = rs.getString(CAMPO3);
+					sFEPRRE = rs.getString(CAMPO4);
+					sFERERE = rs.getString(CAMPO5);
+					sFEDEIN = rs.getString(CAMPO6);
+					sBISODE = rs.getString(CAMPO7);
+					sBIRESO = rs.getString(CAMPO8);
+					sCOTEXA = rs.getString(CAMPO9);
+					sOBTEXC = rs.getString(CAMPO10);
 
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO1+":|"+sNURCAT+"|");
-					logger.debug(CAMPO2+":|"+sCOSBAC+"|");
+					logger.debug(CAMPO2+":|"+sNURCAT+"|");
+					logger.debug(CAMPO3+":|"+sCOSBAC+"|");
 
 				}
 			}
@@ -262,8 +277,7 @@ public class QMImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
@@ -276,7 +290,83 @@ public class QMImpuestos
 		return new ImpuestoRecurso(sNURCAT, sCOSBAC, sFEPRRE, sFERERE, sFEDEIN, sBISODE, sBIRESO, sCOTEXA, sOBTEXC);
 	}
 
-	public static boolean existeImpuestoRecurso(String sCodNURCAT, String sCodCOSBAC)
+	public static String getImpuestoRecursoID(String sCodNURCAT,String sCodCOSBAC)
+	{
+		Connection conn = null;
+		conn = ConnectionManager.getDBConnection();
+
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+
+		String sImpuestoRecursoID = "";
+
+		boolean found = false;
+
+		logger.debug("Ejecutando Query...");
+
+		try 
+		{
+			stmt = conn.createStatement();
+
+
+			pstmt = conn.prepareStatement("SELECT " 
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE ("
+					+ CAMPO2 + " = '" + sCodNURCAT + "' AND "
+					+ CAMPO3 + " = '" + sCodCOSBAC + "')");
+			
+			logger.debug("Ejecutada con exito!");
+
+			rs = pstmt.executeQuery();
+			
+			
+			if (rs != null) 
+			{
+				
+				while (rs.next()) 
+				{
+					found = true;
+
+					sImpuestoRecursoID = rs.getString(CAMPO1);
+					
+					logger.debug("Encontrado el registro!");
+
+					logger.debug(CAMPO11+":|"+sImpuestoRecursoID+"|");
+
+
+				}
+			}
+			if (found == false) 
+			{
+ 
+				logger.debug("No se encontró la información.");
+			}
+
+		} 
+		catch (SQLException ex) 
+		{
+			sImpuestoRecursoID = "";
+			
+			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
+			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+		} 
+		finally 
+		{
+			Utils.closeResultSet(rs);
+			Utils.closeStatement(stmt);
+		}
+
+		//ConnectionManager.CloseDBConnection(conn);
+		return sImpuestoRecursoID;
+	}
+	
+	public static boolean existeImpuestoRecurso(String sCodImpuesto)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -295,13 +385,11 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 
 			pstmt = conn.prepareStatement("SELECT "
-				       + CAMPO2  +       
-				       "  FROM " + TABLA + 
-				       " WHERE " +
-				       "(" + 
-				       CAMPO1 + " = '" + sCodNURCAT + "' AND " +
-				       CAMPO2 + " = '" + sCodCOSBAC + "' " +
-						")");
+				       + CAMPO11  +       
+				       " FROM "
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1 + " = '" + sCodImpuesto + "'");
 
 			rs = pstmt.executeQuery();
 			
@@ -314,13 +402,7 @@ public class QMImpuestos
 				{
 					found = true;
 
-
-
-					
 					logger.debug("Encontrado el registro!");
-
-					logger.debug(CAMPO1+":|"+sCodNURCAT+"|");
-					logger.debug(CAMPO2+":|"+sCodCOSBAC+"|");
 				}
 			}
 			if (found == false) 
@@ -331,8 +413,9 @@ public class QMImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			found = false;
+
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
@@ -497,7 +580,7 @@ public class QMImpuestos
 		return sImpuestoID;
 	}*/
 
-	public static boolean setEstado(String sCodNURCAT, String sCodCOSBAC, String sEstado)
+	public static boolean setEstado(String sCodImpuesto, String sEstado)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -513,19 +596,16 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 			stmt.executeUpdate("UPDATE " + TABLA + 
 					" SET " 
-					+ CAMPO10 + " = '"+ sEstado + 
-					"' "+
-					" WHERE "+
-					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
-						CAMPO2 + " = '" + sCodCOSBAC + "' )");
+					+ CAMPO11 + " = '"+ sEstado + "' "+
+					" WHERE "
+					+ CAMPO1 + " = '" + sCodImpuesto + "'");
 			
 			logger.debug("Ejecutada con exito!");
 			
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			
@@ -541,7 +621,7 @@ public class QMImpuestos
 		return bSalida;
 	}
 	
-	public static String getEstado(String sCodNURCAT, String sCodCOSBAC)
+	public static String getEstado(String sCodImpuesto)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
@@ -562,10 +642,12 @@ public class QMImpuestos
 			stmt = conn.createStatement();
 
 
-			pstmt = conn.prepareStatement("SELECT " + CAMPO10 + "  FROM " + TABLA + 
-					" WHERE " +
-					"(" + CAMPO1 + " = '" + sCodNURCAT + "' AND " +
-					CAMPO2 + " = '" + sCodCOSBAC + "' )");
+			pstmt = conn.prepareStatement("SELECT " 
+					+ CAMPO11 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1 + " = '" + sCodImpuesto + "'");
 			
 			logger.debug("Ejecutada con exito!");
 
@@ -579,11 +661,11 @@ public class QMImpuestos
 				{
 					found = true;
 
-					sEstado = rs.getString(CAMPO10);
+					sEstado = rs.getString(CAMPO11);
 					
 					logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO10+":|"+sEstado+"|");
+					logger.debug(CAMPO11+":|"+sEstado+"|");
 
 
 				}
@@ -597,8 +679,7 @@ public class QMImpuestos
 		} 
 		catch (SQLException ex) 
 		{
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+			logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 

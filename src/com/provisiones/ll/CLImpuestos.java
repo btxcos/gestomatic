@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresImpuestos;
@@ -74,7 +73,7 @@ public class CLImpuestos
 				switch (COACCI)
 				{
 				case A: case M: case B:
-					if (QMListaImpuestos.existeRelacionImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC(), impuesto.getCOACES(), sCodMovimiento))
+					if (QMListaImpuestos.existeRelacionImpuesto(impuesto.getCOACES(), buscarCodigoImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC()), sCodMovimiento))
 					{
 						if(QMListaImpuestos.setValidado(sCodMovimiento, sValidado))
 						{
@@ -135,6 +134,12 @@ public class CLImpuestos
 		logger.error("iCodigo:|{}|",iCodigo);
 		
 		return iCodigo;
+	}
+	
+	public static String buscarCodigoImpuesto (String sCodNURCAT,String sCodCOSBAC)
+	{
+
+		return QMImpuestos.getImpuestoRecursoID(sCodNURCAT, sCodCOSBAC);
 	}
 	
 	public static MovimientoImpuestoRecurso convierteImpuestoenMovimiento(ImpuestoRecurso impuesto, String sCodCOACES, String sCodCOACCI)
@@ -223,22 +228,22 @@ public class CLImpuestos
 	
 	public static boolean comprobarRelacion (String sCodNURCAT,String sCodCOSBAC, String sCodCOACES)
 	{
-		return QMListaImpuestos.compruebaRelacionImpuestoActivo(sCodNURCAT, sCodCOSBAC, sCodCOACES);
+		return QMListaImpuestos.compruebaRelacionImpuestoActivo(sCodCOACES, buscarCodigoImpuesto(sCodNURCAT, sCodCOSBAC));
 	}	
 	
 	public static boolean existeImpuestoRecurso (String sCodNURCAT,String sCodCOSBAC)
 	{
-		return QMImpuestos.existeImpuestoRecurso(sCodNURCAT, sCodCOSBAC);
+		return QMImpuestos.existeImpuestoRecurso(buscarCodigoImpuesto(sCodNURCAT, sCodCOSBAC));
 	}
 	
 	public static boolean estaDeBaja (String sCodNURCAT,String sCodCOSBAC)
 	{
-		return QMImpuestos.getEstado(sCodNURCAT, sCodCOSBAC).equals(ValoresDefecto.DEF_BAJA);
+		return QMImpuestos.getEstado(buscarCodigoImpuesto(sCodNURCAT, sCodCOSBAC)).equals(ValoresDefecto.DEF_BAJA);
 	}
 	
-	public static MovimientoImpuestoRecurso revisaCodigosControl(MovimientoImpuestoRecurso movimiento)
+	public static MovimientoImpuestoRecurso revisaCodigosControl(MovimientoImpuestoRecurso movimiento, String sCodImpuesto)
 	{
-		ImpuestoRecurso impuesto = QMImpuestos.getImpuestoRecurso(movimiento.getNURCAT(),movimiento.getCOSBAC());
+		ImpuestoRecurso impuesto = QMImpuestos.getImpuestoRecurso(sCodImpuesto);
 		
 		
 		logger.debug(impuesto.logImpuestoRecurso());
@@ -422,13 +427,13 @@ public class CLImpuestos
 
 	}
 	
-	public static int revisaMovimiento(MovimientoImpuestoRecurso movimiento)
+	public static int validaMovimiento(MovimientoImpuestoRecurso movimiento, String sCodImpuesto)
 	{
 		int iCodigo = 0;
 		
 		logger.debug("Comprobando estado...");
 		
-		String sEstado = QMImpuestos.getEstado(movimiento.getNURCAT(),movimiento.getCOSBAC());
+		String sEstado = QMImpuestos.getEstado(sCodImpuesto);
 		
 		logger.debug(movimiento.logMovimientoImpuestoRecurso());
 		
@@ -440,7 +445,7 @@ public class CLImpuestos
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
-		else if (movimiento.getCOACES().equals("") || !QMActivos.existeActivo(movimiento.getCOACES()))
+		else if (movimiento.getCOACES().equals("") || !CLActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
@@ -598,12 +603,16 @@ public class CLImpuestos
 	
 	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento)
 	{
-		int iCodigo = revisaMovimiento(movimiento);
+		
+		
+		String sCodImpuesto = buscarCodigoImpuesto(movimiento.getNURCAT(), movimiento.getCOSBAC());
+		
+		int iCodigo = validaMovimiento(movimiento, sCodImpuesto);
 		
 
 		if (iCodigo == 0)
 		{
-			MovimientoImpuestoRecurso movimiento_revisado = revisaCodigosControl(movimiento);
+			MovimientoImpuestoRecurso movimiento_revisado = revisaCodigosControl(movimiento,sCodImpuesto);
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
 				//error modificacion sin cambios
@@ -633,11 +642,11 @@ public class CLImpuestos
 
 							if (estaDeBaja (movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC())) //Alta de baja
 							{
-								if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
+								if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
 								{
-									if (QMImpuestos.setEstado(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(),ValoresDefecto.DEF_ALTA))
+									if (QMImpuestos.setEstado(sCodImpuesto,ValoresDefecto.DEF_ALTA))
 									{
-										if(QMImpuestos.modImpuestoRecurso(convierteMovimientoenImpuesto(movimiento), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC()))
+										if(QMImpuestos.modImpuestoRecurso(convierteMovimientoenImpuesto(movimiento),sCodImpuesto))
 										{
 											//OK 
 											iCodigo = 0;
@@ -645,7 +654,7 @@ public class CLImpuestos
 										else
 										{
 											//error modificacion impuesto - Rollback
-											QMImpuestos.setEstado(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(),ValoresDefecto.DEF_BAJA);
+											QMImpuestos.setEstado(sCodImpuesto,ValoresDefecto.DEF_BAJA);
 											QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
 											QMListaImpuestos.delRelacionImpuestos(Integer.toString(indice));
 											iCodigo = -904;						
@@ -669,11 +678,12 @@ public class CLImpuestos
 							}
 							else //Alta nueva
 							{
-								if (QMImpuestos.addImpuesto(impuestodealta))
+								sCodImpuesto = Long.toString(QMImpuestos.addImpuesto(impuestodealta));
+								if (!sCodImpuesto.equals("0"))
 								{
 									//OK - impuesto creado
 									logger.debug("Hecho!");
-									if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
+									if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
 									{
 										//OK 
 										iCodigo = 0;
@@ -681,7 +691,7 @@ public class CLImpuestos
 									else
 									{
 										//error relacion impuesto no creada - Rollback
-										QMImpuestos.delImpuestoRecurso(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC());
+										QMImpuestos.delImpuestoRecurso(sCodImpuesto);
 										QMMovimientosImpuestos.delMovimientoImpuestoRecurso(Integer.toString(indice));
 										iCodigo = -902;
 									}
@@ -697,10 +707,10 @@ public class CLImpuestos
 						
 							break;
 						case B:
-							if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
+							if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
 							{
 							
-								if (QMImpuestos.setEstado(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(),ValoresDefecto.DEF_BAJA))
+								if (QMImpuestos.setEstado(sCodImpuesto,ValoresDefecto.DEF_BAJA))
 								{
 									//OK 
 									iCodigo = 0; 
@@ -722,10 +732,10 @@ public class CLImpuestos
 							}
 							break;
 						case M:
-							if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC(), Integer.toString(indice)))
+							if (QMListaImpuestos.addRelacionImpuestos(movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
 							{
 								//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
-								if(QMImpuestos.modImpuestoRecurso(convierteMovimientoenImpuesto(movimiento), movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC()))
+								if(QMImpuestos.modImpuestoRecurso(convierteMovimientoenImpuesto(movimiento), sCodImpuesto))
 								{
 									//OK 
 									iCodigo = 0;

@@ -315,7 +315,7 @@ public class GestorMovimientosGastos implements Serializable
 	{
 		FacesMessage msg;
 		
-		if (CLActivos.compruebaActivo(sCOACES))
+		if (CLActivos.existeActivo(sCOACES))
 		{
 			this.tablagastos = CLGastos.buscarGastosActivo(sCOACES);
 		

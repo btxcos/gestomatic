@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.QMReferencias;
 import com.provisiones.dal.qm.listas.QMListaReferencias;
@@ -76,7 +75,7 @@ public class CLReferencias
 				switch (COACCI)
 				{
 				case A: case M: case B:
-					if (QMListaReferencias.existeRelacionReferencia(referencia.getNURCAT(),referencia.getCOACES(), sCodMovimiento))
+					if (QMListaReferencias.existeRelacionReferencia(referencia.getCOACES(), buscarCodigoReferencia(referencia.getNURCAT()), sCodMovimiento))
 					{
 						if(QMListaReferencias.setValidado(sCodMovimiento, sValidado))
 						{
@@ -139,6 +138,11 @@ public class CLReferencias
 		return iCodigo;
 	}
 	
+	public static String buscarCodigoReferencia (String sCodNURCAT)
+	{
+		return QMReferencias.getReferenciaCatastralID(sCodNURCAT);
+	}
+	
 	public static MovimientoReferenciaCatastral convierteCuotaenMovimiento(ReferenciaCatastral referencia, String sCodCOACES, String sCodCOACCI)
 	{
 		logger.debug("Convirtiendo...");
@@ -188,20 +192,20 @@ public class CLReferencias
 	public static boolean existeReferenciaCatastral (String sCodNURCAT)
 	{
 
-		return QMReferencias.existeReferenciaCatastral(sCodNURCAT);
+		return QMReferencias.existeReferenciaCatastral(buscarCodigoReferencia(sCodNURCAT));
 	}
 	
 	public static boolean comprobarRelacion(String sCodNURCAT, String sCodCOACES)
 	{
-		return QMListaReferencias.compruebaRelacionReferenciaActivo(sCodNURCAT, sCodCOACES);
+		return QMListaReferencias.compruebaRelacionReferenciaActivo(sCodCOACES, buscarCodigoReferencia(sCodNURCAT));
 	}
 	
 	
 	public static String referenciaCatastralActivo(String sCodCOACES)
 	{
-		String sReferencia = QMActivos.getReferenciaCatastral(sCodCOACES);
+		String sReferencia = CLActivos.referenciaCatastralAsociada(sCodCOACES);
 		
-		if (!sReferencia.equals("") && QMReferencias.getEstado(sReferencia).equals(ValoresDefecto.DEF_ALTA))
+		if (!sReferencia.equals("") && QMReferencias.getEstado(buscarCodigoReferencia(sReferencia)).equals(ValoresDefecto.DEF_ALTA))
 		{
 			sReferencia = "";
 		}
@@ -216,11 +220,6 @@ public class CLReferencias
 	public static ArrayList<ActivoTabla> buscarActivosSinReferencias (ActivoTabla activo)
 	{
 		return QMListaReferencias.buscaActivosNoAsociados(activo);
-	}
-	
-	public static ArrayList<ActivoTabla> buscarListaActivosReferencia (ActivoTabla activo)
-	{
-		return QMListaReferencias.buscaListaActivosReferencias(activo);
 	}
 	
 	public static ArrayList<ActivoTabla> buscarActivosConReferencias (ActivoTabla activo)
@@ -252,12 +251,12 @@ public class CLReferencias
 
 	public static String estadoReferencia(String sCodNURCAT)
 	{
-		return QMReferencias.getEstado(sCodNURCAT);
+		return QMReferencias.getEstado(buscarCodigoReferencia(sCodNURCAT));
 	}
 	
 	public static ReferenciaCatastral buscaReferencia (String sCodNURCAT)
 	{
-		return QMReferencias.getReferenciaCatastral(sCodNURCAT);
+		return QMReferencias.getReferenciaCatastral(buscarCodigoReferencia(sCodNURCAT));
 	}
 	
 	public static ArrayList<ReferenciaTabla> buscarReferenciasActivo(String sCodCOACES)
@@ -267,12 +266,12 @@ public class CLReferencias
 	
 	public static boolean estaDeBaja(String sCodNURCAT)
 	{
-		return QMReferencias.getEstado(sCodNURCAT).equals(ValoresDefecto.DEF_BAJA);
+		return QMReferencias.getEstado(buscarCodigoReferencia(sCodNURCAT)).equals(ValoresDefecto.DEF_BAJA);
 	}
 	
-	public static MovimientoReferenciaCatastral revisaCodigosControl(MovimientoReferenciaCatastral movimiento)
+	public static MovimientoReferenciaCatastral revisaCodigosControl(MovimientoReferenciaCatastral movimiento, String sCodReferencia)
 	{
-		ReferenciaCatastral referencia = QMReferencias.getReferenciaCatastral(movimiento.getNURCAT());
+		ReferenciaCatastral referencia = QMReferencias.getReferenciaCatastral(sCodReferencia);
 		
 		
 		logger.debug(referencia.logReferenciaCatastral());
@@ -477,13 +476,13 @@ public class CLReferencias
 
 	}
 	
-	public static int revisaMovimiento(MovimientoReferenciaCatastral movimiento)
+	public static int validaMovimiento(MovimientoReferenciaCatastral movimiento, String sCodReferencia)
 	{
 		int iCodigo = 0;
 		
 		logger.debug("Comprobando estado...");
 		
-		String sEstado = QMReferencias.getEstado(movimiento.getNURCAT());
+		String sEstado = QMReferencias.getEstado(sCodReferencia);
 		
 		logger.debug("Estado:|{}|",sEstado);
 		logger.debug("Acción:|{}|",movimiento.getCOACCI());
@@ -493,7 +492,7 @@ public class CLReferencias
 			//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 			iCodigo = -1;
 		}
-		else if (movimiento.getCOACES().equals("") || !QMActivos.existeActivo(movimiento.getCOACES()))
+		else if (movimiento.getCOACES().equals("") || !CLActivos.existeActivo(movimiento.getCOACES()))
 		{
 			//Error 003 - NO EXISTE EL ACTIVO
 			iCodigo = -3;
@@ -542,17 +541,17 @@ public class CLReferencias
 			//error no existe relaccion con ese activo
 			iCodigo = -700;
 		}
-		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && QMReferencias.existeReferenciaCatastral(movimiento.getNURCAT()) && !estaDeBaja(movimiento.getNURCAT()))
+		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && QMReferencias.existeReferenciaCatastral(sCodReferencia) && !estaDeBaja(movimiento.getNURCAT()))
 		{
 			//Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
 			iCodigo = -49;
 		}
-		else if (movimiento.getCOACCI().equals("M") && !QMReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
+		else if (movimiento.getCOACCI().equals("M") && !QMReferencias.existeReferenciaCatastral(sCodReferencia))
 		{
 			//Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
 			iCodigo = -50;
 		}
-		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA) && !QMReferencias.existeReferenciaCatastral(movimiento.getNURCAT()))
+		else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA) && !QMReferencias.existeReferenciaCatastral(sCodReferencia))
 		{
 			//Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
 			iCodigo = -51;
@@ -584,11 +583,13 @@ public class CLReferencias
 	
 	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento)
 	{
-		int iCodigo = revisaMovimiento(movimiento);
+		String sCodReferencia = buscarCodigoReferencia(movimiento.getNURCAT());
+		
+		int iCodigo = validaMovimiento(movimiento, sCodReferencia);
 
 		if (iCodigo == 0)
 		{
-			MovimientoReferenciaCatastral movimiento_revisado = revisaCodigosControl(movimiento);
+			MovimientoReferenciaCatastral movimiento_revisado = revisaCodigosControl(movimiento, sCodReferencia);
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
 				//error modificacion sin cambios
@@ -618,13 +619,13 @@ public class CLReferencias
 						
 							if (estaDeBaja(movimiento_revisado.getNURCAT()))
 							{
-								if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+								if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getCOACES(),sCodReferencia, Integer.toString(indice)))
 								{
 									//OK 
-									if (QMReferencias.setEstado(movimiento_revisado.getNURCAT(), ValoresDefecto.DEF_ALTA))
+									if (QMReferencias.setEstado(sCodReferencia, ValoresDefecto.DEF_ALTA))
 									{
 										//Se cambian los valores de la antigua referencia
-										if(QMReferencias.modReferenciaCatastral(convierteMovimientoenReferencia(movimiento), movimiento_revisado.getNURCAT()))
+										if(QMReferencias.modReferenciaCatastral(convierteMovimientoenReferencia(movimiento), sCodReferencia))
 										{
 											//OK 
 											iCodigo = 0;
@@ -633,7 +634,7 @@ public class CLReferencias
 										{
 											QMMovimientosReferencias.delMovimientoReferenciaCatastral(Integer.toString(indice));
 											QMListaReferencias.delRelacionReferencia(Integer.toString(indice));
-											QMReferencias.setEstado(movimiento_revisado.getNURCAT(), ValoresDefecto.DEF_BAJA);
+											QMReferencias.setEstado(sCodReferencia, ValoresDefecto.DEF_BAJA);
 											iCodigo = -904;						
 										}
 									}
@@ -656,11 +657,12 @@ public class CLReferencias
 							}
 							else
 							{
-								if (QMReferencias.addReferenciaCatastral(referenciadealta))
+								sCodReferencia = Long.toString(QMReferencias.addReferenciaCatastral(referenciadealta));
+								if (!sCodReferencia.equals("0"))
 								{
 									//OK - referencia creada
 									logger.debug("Hecho!");
-									if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+									if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
 									{
 										//OK 
 										iCodigo = 0;
@@ -668,7 +670,7 @@ public class CLReferencias
 									else
 									{
 										//error relacion referencia no creada - Rollback
-										QMReferencias.delReferenciaCatastral(movimiento_revisado.getNURCAT());
+										QMReferencias.delReferenciaCatastral(sCodReferencia);
 										QMMovimientosReferencias.delMovimientoReferenciaCatastral(Integer.toString(indice));
 										iCodigo = -902;
 									}
@@ -683,10 +685,10 @@ public class CLReferencias
 							
 							break;
 						case B:
-							if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+							if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
 							{
 							
-								if (QMReferencias.setEstado(movimiento_revisado.getNURCAT(), ValoresDefecto.DEF_BAJA))
+								if (QMReferencias.setEstado(sCodReferencia, ValoresDefecto.DEF_BAJA))
 								{
 									//OK 
 									iCodigo = 0; 
@@ -710,10 +712,10 @@ public class CLReferencias
 							}
 							break;
 						case M:
-							if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getNURCAT(), movimiento_revisado.getCOACES(), Integer.toString(indice)))
+							if (QMListaReferencias.addRelacionReferencia(movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
 							{
 								//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
-								if(QMReferencias.modReferenciaCatastral(convierteMovimientoenReferencia(movimiento), movimiento_revisado.getNURCAT()))
+								if(QMReferencias.modReferenciaCatastral(convierteMovimientoenReferencia(movimiento), sCodReferencia))
 								{
 									//OK 
 									iCodigo = 0;

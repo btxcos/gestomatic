@@ -334,7 +334,7 @@ public class GestorGastos implements Serializable
 	{
 		FacesMessage msg;
 		
-		if (CLActivos.compruebaActivo(sCOACES))
+		if (CLActivos.existeActivo(sCOACES))
 		{
 			this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
 		
