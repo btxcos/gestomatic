@@ -1328,8 +1328,8 @@ public class QMActivos
 					
 					result.add(activoencontrado);
 					
-					logger.debug( "Encontrado el registro!");
-					logger.debug(CAMPO1+":|"+sCOACES+"|");
+					//logger.debug( "Encontrado el registro!");
+					//logger.debug(CAMPO1+":|"+sCOACES+"|");
 				}
 			}
 			if (bEncontrado == false) 
@@ -1447,8 +1447,8 @@ public class QMActivos
 					
 					result.add(activoencontrado);
 					
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO1+":|"+sCOACES+"|");
+					//logger.debug("Encontrado el registro!");
+					//logger.debug(CAMPO1+":|"+sCOACES+"|");
 				}
 			}
 			if (found == false) 
@@ -1459,6 +1459,8 @@ public class QMActivos
 		} 
 		catch (SQLException ex) 
 		{
+			result = new ArrayList<ActivoTabla>();
+
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
 		finally 

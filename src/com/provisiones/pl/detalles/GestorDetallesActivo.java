@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.pl.GestorActivos;
 
@@ -214,7 +215,10 @@ public class GestorDetallesActivo implements Serializable
 		this.sYNOLEC = activo.getYNOLEC();
 		this.sNOLOJZ = activo.getNOLOJZ();
 		this.sFEREDE = Utils.recuperaFecha(activo.getFEREDE());
-		this.sPOPROP = Utils.recuperaImporte(false,activo.getPOPROP().substring(0,5));
+		
+		this.sPOPROP = Parser.formateaCampoNumerico(activo.getPOPROP(), 6);
+		
+		this.sPOPROP = Utils.recuperaImporte(false,sPOPROP.substring(0,5));
 		this.sCOGRAP = activo.getCOGRAP();
 		this.sFEPREG = Utils.recuperaFecha(activo.getFEPREG());
 		this.sFEPHAC = Utils.recuperaFecha(activo.getFEPHAC());
@@ -240,7 +244,10 @@ public class GestorDetallesActivo implements Serializable
 		this.sCOSPAS = activo.getCOSPAS();
 		this.sIDCOL3 = activo.getIDCOL3();
 		this.sBIOBNU = activo.getBIOBNU();
-		this.sPOBRAR = Utils.recuperaImporte(false,activo.getPOBRAR().substring(0,5));
+		
+		this.sPOBRAR = Parser.formateaCampoNumerico(activo.getPOBRAR(), 6);
+		
+		this.sPOBRAR = Utils.recuperaImporte(false,sPOBRAR.substring(0,5));
 		}
 		
 	}

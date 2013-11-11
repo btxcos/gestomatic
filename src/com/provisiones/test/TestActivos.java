@@ -34,9 +34,9 @@ public class TestActivos
 		
 		//Utils.debugTrace(true, "TEST", "TEST", "|"+getTabla().size()+"|");
 		
-		String sMsg = "1234";
+		/*String sMsg = "1234";
 		System.out.println(sMsg);
-		System.out.println(sMsg.length());
+		System.out.println(sMsg.length());*/
 		
 		/*System.out.println("|"+Utils.timeStamp()+"|");
 		sMsg = Utils.cifra(sMsg);
@@ -92,15 +92,18 @@ public class TestActivos
 		//ConnectionManager.closeDBConnection(conn);
 		//ConnectionManager.closeDBConnection(conn2);
 		
-		String sRespuesta = "NULACO";
+		/*String sRespuesta = "NULACO";
 		
 		if (((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion").equals(null))
 		{
 			System.out.println("|"+sRespuesta+"|");
-		}
+		}*/
 		
+		
+		String sInicio = "20131111212403967";
+		String sFin    = "20131112213334404";
 
-
+		System.out.println("|"+Utils.duracion(sInicio, sFin)+"|");
 
 	}
 

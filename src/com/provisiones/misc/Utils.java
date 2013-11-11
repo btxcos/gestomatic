@@ -43,7 +43,9 @@ public class Utils
 		  } 
 		  catch (Exception e) 
 		  {
-		   e.printStackTrace();
+			  logger.error("ERROR: ocurrió un error al cifrar la cadena.");
+			  //e.printStackTrace();
+			  
 		  }
 		  
 		  return new String(campoCifrado);
@@ -67,7 +69,8 @@ public class Utils
 		} 
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.error("ERROR: ocurrió un error al descifrar la cadena.");
 		}
 		  
 		return sDescifrado;
@@ -137,7 +140,7 @@ public class Utils
 		}
 		
 		
-		logger.debug(sHoy);
+		//logger.debug(sHoy);
 		
 		return sHoy;
 	}
@@ -151,9 +154,84 @@ public class Utils
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		sAhora = format.format(fechaHoy);
 		
-		logger.debug("sAhora:|{}|",sAhora);
+		//logger.debug("sAhora:|{}|",sAhora);
 		
 		return sAhora;
+	}
+	
+	public static String duracion(String sInicio, String sFin)
+	{
+	
+		String sTemporal = Long.toString(Long.parseLong(sFin) - Long.parseLong(sInicio));
+		
+		String sDuracion = "";
+		
+		
+		if (sTemporal.length()>3)
+		{
+			sDuracion = sTemporal.substring(sTemporal.length()-3, sTemporal.length())+"ms";
+					
+			sTemporal = sTemporal.substring(0, sTemporal.length()-3);
+			
+			if (sTemporal.length()>2)
+			{
+				sDuracion = sTemporal.substring(sTemporal.length()-2, sTemporal.length())+"s"+sDuracion;
+				
+				sTemporal = sTemporal.substring(0, sTemporal.length()-2);
+				
+				if (sTemporal.length()>2)
+				{
+					sDuracion = sTemporal.substring(sTemporal.length()-2, sTemporal.length())+"m"+sDuracion;
+					
+					sTemporal = sTemporal.substring(0, sTemporal.length()-2);
+					
+					if (sTemporal.length()>2)
+					{
+						sDuracion = sTemporal.substring(sTemporal.length()-2, sTemporal.length())+"h"+sDuracion;
+						
+						sTemporal = sTemporal.substring(0, sTemporal.length()-2);
+						
+						if (sTemporal.length()>2)
+						{
+							sDuracion = sTemporal.substring(sTemporal.length()-2, sTemporal.length())+"d"+sDuracion;
+							
+							sTemporal = sTemporal.substring(0, sTemporal.length()-2);
+						}
+						else
+						{
+							sDuracion = sTemporal+"d"+sDuracion;
+						}
+					}
+					else
+					{
+						sDuracion = sTemporal+"H"+sDuracion;
+					}
+						
+						
+						
+				}
+				else
+				{
+					sDuracion = sTemporal+"m"+sDuracion;
+				}
+			}
+			else
+			{
+				sDuracion = sTemporal+"s"+sDuracion;
+			}
+			
+			
+		}
+		else
+		{
+			sDuracion = sTemporal+"ms";
+		}
+		
+		
+	
+		//logger.debug("sAhora:|{}|",sAhora);
+		
+		return sDuracion;
 	}
 
 	public static boolean closeResultSet ( ResultSet rs)
@@ -267,7 +345,7 @@ public class Utils
 	{
 		String sTipo = bCodDevolucion ? "5"+ sTipoPago : sTipoPago;
 		
-		logger.debug("Codigo de pago:|{}|",sTipo);
+		//logger.debug("Codigo de pago:|{}|",sTipo);
 		
 		
 		return sTipo;
@@ -283,7 +361,7 @@ public class Utils
 			sCodigoRevisado = "#";
 		}
 		
-		logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
+		//logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
 		
 		return sCodigoRevisado;
 	}
@@ -297,7 +375,7 @@ public class Utils
 			sCodigoRevisado = "0";
 		}
 		
-		logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
+		//logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
 		
 		return sCodigoRevisado;
 	}
@@ -309,7 +387,7 @@ public class Utils
 		
 		String sSeparador = "";
 		
-		logger.debug("sImporte:|{}|",sImporte);
+		//logger.debug("sImporte:|{}|",sImporte);
 		
 		if (sImporte.matches("-?[\\d]+([\\.|,][\\d][\\d]?)?$"))
 		{
@@ -333,8 +411,8 @@ public class Utils
 					sCentimos = sCentimos +"0";
 				}
 				
-				logger.debug("sEuros:|{}|",sEuros);
-				logger.debug("sCentimos:|{}|",sCentimos);
+				//logger.debug("sEuros:|{}|",sEuros);
+				//logger.debug("sCentimos:|{}|",sCentimos);
 			
 				sImporteReal = sEuros + sCentimos;
 			}
@@ -348,7 +426,7 @@ public class Utils
 			sImporteReal= "0";
 		}
 		
-		logger.debug("sImporteReal:|{}|",sImporteReal);
+		//logger.debug("sImporteReal:|{}|",sImporteReal);
 		
 		return sImporteReal;
 	}
@@ -356,7 +434,7 @@ public class Utils
 	public static ImporteDevolucion separaImporteDevolucion(String sImporte)
 	{
 		
-		logger.debug("sImporte:|{}|",sImporte);
+		//logger.debug("sImporte:|{}|",sImporte);
 	
 		return new ImporteDevolucion(sImporte.startsWith("-"),sImporte.replaceFirst("-", ""));
 	}
@@ -376,8 +454,8 @@ public class Utils
 				String sEuros = sImporteReal.substring(0, sImporte.length()-3);
 				String sCentimos = sImporteReal.substring(sImporte.length()-2,sImporte.length());
 		
-				logger.debug("sEuros:|{}|",sEuros);
-				logger.debug("sCentimos:|{}|",sCentimos);
+				//logger.debug("sEuros:|{}|",sEuros);
+				//logger.debug("sCentimos:|{}|",sCentimos);
 			
 				sImporteReal = bNegativo ? "-"+ sEuros + sCentimos : sEuros + sCentimos;
 			}
@@ -386,7 +464,7 @@ public class Utils
 				sImporteReal= "0";
 			}
 		
-			logger.debug("sImporteReal:|{}|",sImporteReal);
+			//logger.debug("sImporteReal:|{}|",sImporteReal);
 		}
 
 		
@@ -396,7 +474,7 @@ public class Utils
 	public static String compruebaFecha(String sFecha)
 	{
 
-		logger.debug("sFecha:|{}|",sFecha);
+		//logger.debug("sFecha:|{}|",sFecha);
 		
 		String sFechaFormateada = "";
 		
@@ -408,14 +486,14 @@ public class Utils
 			String sMes = arrayfecha[1];
 			String sAño = arrayfecha[2];
 
-			logger.debug("sDia:|{}|",sDia);
-			logger.debug("sMes:|{}|",sMes);
-			logger.debug("sAño:|{}|",sAño);
+			//logger.debug("sDia:|{}|",sDia);
+			//logger.debug("sMes:|{}|",sMes);
+			//logger.debug("sAño:|{}|",sAño);
 	
 			
 			sFechaFormateada = sAño+sMes+sDia;
 		
-			logger.debug("sFechaFormateada:|{}|",sFechaFormateada);
+			//logger.debug("sFechaFormateada:|{}|",sFechaFormateada);
 		
 			try 
 			{
@@ -423,7 +501,7 @@ public class Utils
 				formatter.setLenient(false);
 				Date myDate = formatter.parse(sFechaFormateada);
 				
-				logger.debug("myDate:|{}|",myDate);
+				logger.debug("Fecha reibida:|{}|",myDate);
 			} 
 			catch (ParseException e) 
 			{
@@ -449,10 +527,10 @@ public class Utils
         
         boolean bResultado = false;
         
-        logger.debug("sNUCCEN:|{}|",sNUCCEN);
-        logger.debug("sNUCCOF:|{}|",sNUCCOF);
-        logger.debug("sNUCCDI:|{}|",sNUCCDI);
-        logger.debug("sNUCCNT:|{}|",sNUCCNT);
+        //logger.debug("sNUCCEN:|{}|",sNUCCEN);
+        //logger.debug("sNUCCOF:|{}|",sNUCCOF);
+        //logger.debug("sNUCCDI:|{}|",sNUCCDI);
+        //logger.debug("sNUCCNT:|{}|",sNUCCNT);
 
         
         if ((sNUCCEN.length() == 4)
@@ -688,20 +766,20 @@ public class Utils
 			String sEuros = sImporte.substring(0, sImporte.length()-2);
 			String sCentimos = sImporte.substring(sImporte.length()-2,sImporte.length());
 
-			logger.debug("sEuros:|{}|",sEuros);
-			logger.debug("sCentimos:|{}|",sCentimos);
+			//logger.debug("sEuros:|{}|",sEuros);
+			//logger.debug("sCentimos:|{}|",sCentimos);
 	
 			sImporteReal = bNegativo ? "-"+ sEuros + "." + sCentimos : sEuros + "." + sCentimos;
 		}
 
-		logger.debug("sImporteReal:|{}|",sImporteReal);
+		//logger.debug("sImporteReal:|{}|",sImporteReal);
 
 		return sImporteReal;
 	}
 	
 	public static String recuperaFecha(String sFecha)
 	{
-		logger.debug("sFecha:|{}|",sFecha);		
+		//logger.debug("sFecha:|{}|",sFecha);		
 		
 		String sFechaFormateada = "";
 		
@@ -712,13 +790,13 @@ public class Utils
 			String sDia = sFecha.substring(6, 8);
 			
 		
-			logger.debug("sDia:|{}|",sDia);
-			logger.debug("sMes:|{}|",sMes);
-			logger.debug("sAño:|{}|",sAño);
+			//logger.debug("sDia:|{}|",sDia);
+			//logger.debug("sMes:|{}|",sMes);
+			//logger.debug("sAño:|{}|",sAño);
 			
 			sFechaFormateada = sDia+"/"+sMes+"/"+sAño;
 		
-			logger.debug("sFechaFormateada:|{}|",sFechaFormateada);
+			//logger.debug("sFechaFormateada:|{}|",sFechaFormateada);
 		}
 		
 		return sFechaFormateada;
@@ -733,7 +811,7 @@ public class Utils
 			sCodigoRevisado = "";
 		}
 		
-		logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
+		//logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
 		
 		return sCodigoRevisado;
 	}

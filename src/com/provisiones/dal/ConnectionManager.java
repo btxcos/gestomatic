@@ -16,14 +16,28 @@ public class ConnectionManager
 	private static String sConnector = "org.mariadb.jdbc.Driver";
 	private static String sConnectorType = "jdbc:mariadb:";
 	private static String sHostResource = "//localhost/glsl";
-	private static String sLogin = "?user=root&password=glsl1234";
+	//private static String sLogin = "?user=root&password=glsl1234";
+	
+	private static String sURL = sConnectorType+sHostResource;
+	private static String sUser = "root";
+	private static String sPass = "glsl1234";
+	
 	
 	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class.getName());
 	
 	public static Connection getDBConnection() 
 	{
-
-		return ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
+		Connection  conn = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
+		
+		if (conn == null)
+		{
+			conn = openDBConnection();
+			
+			((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).setConn(conn);
+			
+		}
+		
+		return conn;
 	}
 	
 	public static String getUser() 
@@ -36,23 +50,24 @@ public class ConnectionManager
 
 		try 
 		{
-			Class.forName(sConnector);
+			Class.forName(sConnector).newInstance();
 		} 
 		catch (Exception ex) 
 		{
-			logger.error("ErrorMessage: "+ ex.getMessage());
+			logger.error("Error Message: "+ ex.getMessage());
 			return null;
 		}
 
 		Connection conn = null;
 		
-		String sConnectionData = sConnectorType+sHostResource+sLogin;
+		//String sConnectionData = sConnectorType+sHostResource+sLogin;
 
 		try 
 		{
 			
 			//logger.debug("tiempo INI:|{}|", Utils.timeStamp());
-			conn = DriverManager.getConnection(sConnectionData);
+			//conn = DriverManager.getConnection(sConnectionData);
+			conn = DriverManager.getConnection(sURL,sUser,sPass);
 			//logger.debug("tiempo FIN:|{}|", Utils.timeStamp());
 
 		} 

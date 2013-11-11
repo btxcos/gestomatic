@@ -154,6 +154,10 @@ public class GestorSesion implements Serializable
 		return conn;
 	}
 
+	public void setConn(Connection conn) {
+		this.conn = conn;
+	}
+
 	public boolean isbComprobado() {
 		return bComprobado;
 	}
