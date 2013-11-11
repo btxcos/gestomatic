@@ -5,9 +5,9 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
-import com.provisiones.misc.ValoresDefecto;
 
 public class GestorIndice implements Serializable 
 {
@@ -15,11 +15,11 @@ public class GestorIndice implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorIndice.class.getName());
 	
-	private String sUsuario = ValoresDefecto.DEF_USUARIO;
+	private String sUsuario = ConnectionManager.getUser();
 	
 	public GestorIndice()
 	{
-		logger.info("Inicializando aplicacion.");
+		logger.info("Inicializando aplicación.");
 		Utils.inicializarDirectorios();
 		CLProvisiones.inicializaProvisiones();
 	}

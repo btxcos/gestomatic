@@ -79,8 +79,8 @@ public class QMComunidades
 			       + CAMPO16 +               
 			       ") VALUES ('" 
 			       + NuevaComunidad.getsCOCLDO() + "','" 
-			       + NuevaComunidad.getsNUDCOM() + "','"
-			       + NuevaComunidad.getsNOMCOC() + "','"
+			       + NuevaComunidad.getsNUDCOM() + "',"
+			       /*+ NuevaComunidad.getsNOMCOC() + "','"
 			       + NuevaComunidad.getsNODCCO() + "','"
 			       + NuevaComunidad.getsNOMPRC() + "','"
 			       + NuevaComunidad.getsNUTPRC() + "','"
@@ -90,7 +90,21 @@ public class QMComunidades
 			       + NuevaComunidad.getsNUCCEN() + "','"
 			       + NuevaComunidad.getsNUCCOF() + "','"
 			       + NuevaComunidad.getsNUCCDI() + "','"
-			       + NuevaComunidad.getsNUCCNT() + "','"
+			       + NuevaComunidad.getsNUCCNT() + "','"*/
+
+			       //cifrado de datos personales
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNOMCOC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNODCCO()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNOMPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNUTPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNOMADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNUTADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNODCAD()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+			       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+			       
 			       + NuevaComunidad.getsOBTEXC() + "','" 
 			       + ValoresDefecto.DEF_ALTA + "' )";
 		
@@ -148,7 +162,7 @@ public class QMComunidades
 				" SET " 
 				//+ CAMPO2    + " = '"+ NuevaComunidad.getsCOCLDO() + "', "
 				//+ CAMPO3    + " = '"+ NuevaComunidad.getsNUDCOM() + "', "
-				+ CAMPO4    + " = '"+ NuevaComunidad.getsNOMCOC() + "', "
+				/*+ CAMPO4    + " = '"+ NuevaComunidad.getsNOMCOC() + "', "
 				+ CAMPO5    + " = '"+ NuevaComunidad.getsNODCCO() + "', "
 				+ CAMPO6    + " = '"+ NuevaComunidad.getsNOMPRC() + "', "
 				+ CAMPO7    + " = '"+ NuevaComunidad.getsNUTPRC() + "', "
@@ -158,7 +172,22 @@ public class QMComunidades
 				+ CAMPO11   + " = '"+ NuevaComunidad.getsNUCCEN() + "', "
 				+ CAMPO12   + " = '"+ NuevaComunidad.getsNUCCOF() + "', "
 				+ CAMPO13   + " = '"+ NuevaComunidad.getsNUCCDI() + "', "
-				+ CAMPO14   + " = '"+ NuevaComunidad.getsNUCCNT() + "', "
+				+ CAMPO14   + " = '"+ NuevaComunidad.getsNUCCNT() + "', "*/
+				
+				//cifrado de datos personales
+				+ CAMPO4    + " = AES_ENCRYPT('"+NuevaComunidad.getsNOMCOC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO5    + " = AES_ENCRYPT('"+NuevaComunidad.getsNODCCO()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO6    + " = AES_ENCRYPT('"+NuevaComunidad.getsNOMPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO7    + " = AES_ENCRYPT('"+NuevaComunidad.getsNUTPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO8    + " = AES_ENCRYPT('"+NuevaComunidad.getsNOMADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO9    + " = AES_ENCRYPT('"+NuevaComunidad.getsNUTADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO10   + " = AES_ENCRYPT('"+NuevaComunidad.getsNODCAD()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO11   + " = AES_ENCRYPT('"+NuevaComunidad.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO12   + " = AES_ENCRYPT('"+NuevaComunidad.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO13   + " = AES_ENCRYPT('"+NuevaComunidad.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+				+ CAMPO14   + " = AES_ENCRYPT('"+NuevaComunidad.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+
+				
 				+ CAMPO15 + " = '"+ NuevaComunidad.getsOBTEXC() +
 				"' "+
 				" WHERE "
@@ -265,7 +294,7 @@ public class QMComunidades
 		String sQuery = "SELECT "
 			       + CAMPO2  + ","
 			       + CAMPO3  + ","              
-			       + CAMPO4  + ","              
+			       /*+ CAMPO4  + ","              
 			       + CAMPO5  + ","              
 			       + CAMPO6  + ","              
 			       + CAMPO7  + ","              
@@ -275,7 +304,23 @@ public class QMComunidades
 			       + CAMPO11 + ","              
 			       + CAMPO12 + ","              
 			       + CAMPO13 + ","
-			       + CAMPO14  + ","  
+			       + CAMPO14  + "," */
+			       
+			       + "AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+
+
+			       
+			       
 			       + CAMPO15 +               
 			       " FROM " 
 			       + TABLA + 
@@ -306,7 +351,7 @@ public class QMComunidades
 
 					sCOCLDO = rs.getString(CAMPO2);  
 					sNUDCOM = rs.getString(CAMPO3);  
-					sNOMCOC = rs.getString(CAMPO4);  
+					/*sNOMCOC = rs.getString(CAMPO4);  
 					sNODCCO = rs.getString(CAMPO5);  
 					sNOMPRC = rs.getString(CAMPO6);  
 					sNUTPRC = rs.getString(CAMPO7);  
@@ -316,7 +361,19 @@ public class QMComunidades
 					sNUCCEN = rs.getString(CAMPO11); 
 					sNUCCOF = rs.getString(CAMPO12); 
 					sNUCCDI = rs.getString(CAMPO13); 
-					sNUCCNT = rs.getString(CAMPO14); 
+					sNUCCNT = rs.getString(CAMPO14);*/
+					sNOMCOC = rs.getString("AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNODCCO = rs.getString("AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNOMPRC = rs.getString("AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNUTPRC = rs.getString("AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNOMADC = rs.getString("AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNUTADC = rs.getString("AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNODCAD = rs.getString("AES_DECRYPT("+CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNUCCEN = rs.getString("AES_DECRYPT("+CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNUCCOF = rs.getString("AES_DECRYPT("+CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNUCCDI = rs.getString("AES_DECRYPT("+CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+					sNUCCNT = rs.getString("AES_DECRYPT("+CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+
 					sOBTEXC = rs.getString(CAMPO15); 
 
 					logger.debug("Encontrado el registro!");

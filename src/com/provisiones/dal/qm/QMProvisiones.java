@@ -40,7 +40,7 @@ public class QMProvisiones
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
-		String sUsuario = ValoresDefecto.DEF_USUARIO;
+		String sUsuario = ConnectionManager.getUser();
 
 		Statement stmt = null;
 
@@ -106,7 +106,7 @@ public class QMProvisiones
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
-		String sUsuario = ValoresDefecto.DEF_USUARIO;
+		String sUsuario = ConnectionManager.getUser();
 
 		Statement stmt = null;
 

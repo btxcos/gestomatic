@@ -29,13 +29,14 @@ public class QMListaComunidades
 	//Campos de control
 	static String CAMPO3  = "cod_validado";    
 	static String CAMPO4  = "usuario_movimiento";
-	static String CAMPO5  = "fecha_movimiento";    
-
+	static String CAMPO5  = "fecha_movimiento";
+	
 	public static boolean addRelacionComunidad(String sCodComunidad, String sCodMovimiento)
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
-		String sUsuario = ValoresDefecto.DEF_USUARIO;
+		
+		String sUsuario = ConnectionManager.getUser();
 
 		Statement stmt = null;
 

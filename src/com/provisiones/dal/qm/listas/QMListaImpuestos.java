@@ -43,7 +43,7 @@ public class QMListaImpuestos
 		
 		boolean bSalida = true;
 		
-		String sUsuario = ValoresDefecto.DEF_USUARIO;
+		String sUsuario = ConnectionManager.getUser();
 
 		conn = ConnectionManager.getDBConnection();
 		

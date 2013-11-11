@@ -63,8 +63,8 @@ public class QMUsuarios
 			       + CAMPO11 +               
           
 			       ") VALUES ('"        
-			       + NuevoUsuario.getsLogin() + "'," +
-			       	"AES_ENCRYPT('"+ NuevoUsuario.getsPassword()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+			       + NuevoUsuario.getsLogin() + "'," 
+			       + "AES_ENCRYPT('"+ NuevoUsuario.getsPassword()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
 			       + NuevoUsuario.getsNombre() + "','"  
 			       + NuevoUsuario.getsApellido1() + "','"  
 			       + NuevoUsuario.getsApellido2() + "','"  

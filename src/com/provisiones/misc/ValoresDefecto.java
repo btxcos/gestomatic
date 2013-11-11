@@ -19,7 +19,7 @@ public class ValoresDefecto
 	public static final String DEF_COUNMO = "281";
 	
 	//Eliminar tras soporte a usuarios
-	public static final String DEF_USUARIO = "GLSLUSUP";
+	//public static final String DEF_USUARIO = "GLSLUSUP";
 	
 	public static final String CIFRADO_LLAVE_SIMETRICA = "glsl1234glsl1234";
 	public static final String CIFRADO_LONGITUD = "512";

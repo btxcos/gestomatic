@@ -3,6 +3,7 @@ package com.provisiones.dal.qm.listas;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
+//import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
@@ -44,7 +45,7 @@ public class QMListaComunidadesActivos
 		
 		boolean bSalida = true;
 		
-		String sUsuario = ValoresDefecto.DEF_USUARIO;
+		String sUsuario = ConnectionManager.getUser();
 
 		conn = ConnectionManager.getDBConnection();
 		
@@ -1195,6 +1196,8 @@ public class QMListaComunidadesActivos
 	
 	public static ArrayList<ComunidadTabla> buscaComunidadActivo(String sCodCOACES)
 	{
+		//Sin uso
+		
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -1326,7 +1329,7 @@ public class QMListaComunidadesActivos
 		String sQuery = "SELECT "
 			       + QMComunidades.CAMPO2  + ","
 			       + QMComunidades.CAMPO3  + ","              
-			       + QMComunidades.CAMPO4  + ","              
+			       /*+ QMComunidades.CAMPO4  + ","              
 			       + QMComunidades.CAMPO5  + ","              
 			       + QMComunidades.CAMPO6  + ","              
 			       + QMComunidades.CAMPO7  + ","              
@@ -1336,7 +1339,19 @@ public class QMListaComunidadesActivos
 			       + QMComunidades.CAMPO11 + ","              
 			       + QMComunidades.CAMPO12 + ","              
 			       + QMComunidades.CAMPO13 + "," 
-			       + QMComunidades.CAMPO14 + ","
+			       + QMComunidades.CAMPO14 + ","*/
+			       + "AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+			       + "AES_DECRYPT("+QMComunidades.CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+
 			       + QMComunidades.CAMPO15 +     
 				   
 				   " FROM " 
@@ -1371,8 +1386,9 @@ public class QMListaComunidadesActivos
 					found = true;
 					
 					sCOCLDO = rs.getString(QMComunidades.CAMPO2); 
-					sNUDCOM = rs.getString(QMComunidades.CAMPO3); 
-					sNOMCOC = rs.getString(QMComunidades.CAMPO4); 
+					sNUDCOM = rs.getString(QMComunidades.CAMPO3);
+					
+					/*sNOMCOC = rs.getString(QMComunidades.CAMPO4); 
 					sNODCCO = rs.getString(QMComunidades.CAMPO5); 
 					sNOMPRC = rs.getString(QMComunidades.CAMPO6); 
 					sNUTPRC = rs.getString(QMComunidades.CAMPO7); 
@@ -1382,7 +1398,21 @@ public class QMListaComunidadesActivos
 					sNUCCEN = rs.getString(QMComunidades.CAMPO11);
 					sNUCCOF = rs.getString(QMComunidades.CAMPO12);
 					sNUCCDI = rs.getString(QMComunidades.CAMPO13);
-					sNUCCNT = rs.getString(QMComunidades.CAMPO14);
+					sNUCCNT = rs.getString(QMComunidades.CAMPO14);*/
+					
+					sNOMCOC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNODCCO = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNOMPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNUTPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNOMADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNUTADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNODCAD = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNUCCEN = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNUCCOF = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNUCCDI = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					sNUCCNT = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+
+					
 					sOBTEXC = rs.getString(QMComunidades.CAMPO15);
 
 					

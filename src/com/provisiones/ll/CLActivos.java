@@ -39,9 +39,19 @@ public class CLActivos
 		}
 		else
 		{
-			logger.warn("El siguiente registro ya se encuentre en el sistema:");
-			logger.warn("|{}|",linea);
-			iCodigo = -1;
+			if (QMActivos.modActivo(activo,sCodActivo))
+			{
+				logger.info("Activo actualizado.");
+			}
+			else
+			{
+				//logger.warn("El siguiente registro ya se encuentre en el sistema:");
+				//logger.warn("|{}|",linea);
+				iCodigo = -1;
+			}
+			
+			
+			
 		}
 				
 		return iCodigo;

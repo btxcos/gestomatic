@@ -22,10 +22,14 @@ public class ConnectionManager
 	
 	public static Connection getDBConnection() 
 	{
-		Connection conn = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
 
-		return conn;
-	}	
+		return ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
+	}
+	
+	public static String getUser() 
+	{
+		return ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getsUsuario();
+	}
 
 	public static Connection openDBConnection() 
 	{

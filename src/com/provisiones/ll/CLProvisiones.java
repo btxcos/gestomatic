@@ -205,18 +205,46 @@ public class CLProvisiones
 			        	String sRevisadoAnterior = QMListaGastosProvisiones.getRevisado(listagastos.get(i));
 			        	
 			        	
-			        	
-			        	
 			        	//anulamos el gasto antiguo
 			        	movimiento.setFEAGTO(Utils.fechaDeHoy(false));
 			        	
+			        	
+
+			        	//inicializamos los signos del gasto
+			        	String sYCOS02 = movimiento.getYCOS02();
+			        	String sYCOS04 = movimiento.getYCOS04();
+			        	String sYCOS06 = movimiento.getYCOS06();
+			        	String sYCOS08 = movimiento.getYCOS08();
+			        	String sYCOS10 = movimiento.getYCOS10();
+			        	
+			        	movimiento.setIMNGAS(movimiento.getYCOS02()+movimiento.getIMNGAS());
+			        	movimiento.setYCOS02("");
+			        	movimiento.setIMRGAS(movimiento.getYCOS04()+movimiento.getIMRGAS());
+			        	movimiento.setYCOS04("");
+			        	movimiento.setIMDGAS(movimiento.getYCOS06()+movimiento.getIMDGAS());
+			        	movimiento.setYCOS06("");
+			        	movimiento.setIMCOST(movimiento.getYCOS08()+movimiento.getIMCOST());
+			        	movimiento.setYCOS08("");
+			        	movimiento.setIMOGAS(movimiento.getYCOS10()+movimiento.getIMOGAS());
+			        	movimiento.setYCOS10("");	
+     	
 			        	bError = (CLGastos.registraMovimiento(movimiento,false) < 0);
-			        	
-			        	
 			        	
 			        	
 				        if(!bError)
 				        {
+				        	
+				        	//restablecemos los signos
+				        	movimiento.setIMNGAS(movimiento.getIMNGAS().replaceFirst("-", ""));
+				        	movimiento.setYCOS02(sYCOS02);
+				        	movimiento.setIMRGAS(movimiento.getIMRGAS().replaceFirst("-", ""));
+				        	movimiento.setYCOS04(sYCOS04);
+				        	movimiento.setIMDGAS(movimiento.getIMDGAS().replaceFirst("-", ""));
+				        	movimiento.setYCOS06(sYCOS06);
+				        	movimiento.setIMCOST(movimiento.getIMCOST().replaceFirst("-", ""));
+				        	movimiento.setYCOS08(sYCOS08);
+				        	movimiento.setIMOGAS(movimiento.getIMOGAS().replaceFirst("-", ""));
+				        	movimiento.setYCOS10(sYCOS10);
 				        	
 				        	String sCodMovimiento = QMMovimientosGastos.getMovimientoGastoID(movimiento);
 
@@ -225,7 +253,8 @@ public class CLProvisiones
 				        	movimiento.setFEDEVE(Utils.fechaDeHoy(false));
 				        	movimiento.setNUPROF(sNuevaProvision);
 				        	
-				        	//inicializamos los signos del gasto
+				        	
+				        	//Volvemos a inicializar los signos
 				        	movimiento.setIMNGAS(movimiento.getYCOS02()+movimiento.getIMNGAS());
 				        	movimiento.setYCOS02("");
 				        	movimiento.setIMRGAS(movimiento.getYCOS04()+movimiento.getIMRGAS());
@@ -235,7 +264,8 @@ public class CLProvisiones
 				        	movimiento.setIMCOST(movimiento.getYCOS08()+movimiento.getIMCOST());
 				        	movimiento.setYCOS08("");
 				        	movimiento.setIMOGAS(movimiento.getYCOS10()+movimiento.getIMOGAS());
-				        	movimiento.setYCOS10("");
+				        	movimiento.setYCOS10("");	
+				        	
 
 				        	bError = (CLGastos.registraMovimiento(movimiento,false) < 0);
 				        	if(!bError)

@@ -96,7 +96,7 @@ public class GestorSesion implements Serializable
 				}
 				else
 				{
-					sMensaje = "La sesión se ha registrado correctamente.";
+					sMensaje = "Acceso permitido. Pulse 'Continuar'.";
 				}
 				
 				conn = ConnectionManager.openDBConnection();

@@ -584,9 +584,12 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -1:
-	    				sMensaje = "El registro ya se encuentra en el sistema.";
-	    				logger.error("Línea "+contador+": "+sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				//sMensaje = "El registro ya se encuentra en el sistema.";
+	    				//logger.error("Línea "+contador+": "+sMensaje);
+	    				//sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = "[FATAL] Error al actualizar el Activo.";
+	    				logger.error("(X) Línea "+contador+": "+sMensaje);
+	    				sMensaje = "(X) Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -2:
 	    				sMensaje = "[FATAL] Error al registrar el Activo.";
@@ -607,7 +610,7 @@ public class FileManager
 			br.close();
 		
 			logger.debug("Contador:|{}|",contador);
-			logger.debug("Registros:|{}|",registros);
+			logger.debug("Registros correctos:|{}|",registros);
 
 			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
 			
@@ -692,7 +695,7 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case 1:
-	    				sMensaje = "Movimento de Gasto pendiente de revisión.";
+	    				sMensaje = "Movimiento de Gasto pendiente de revisión.";
 	    				logger.info("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
@@ -702,7 +705,7 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No Existe relación con la Gasto.";
+	    				sMensaje = "No existe relación con la Gasto.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
@@ -750,7 +753,7 @@ public class FileManager
 			br.close();
 		
 			logger.debug("Contador:|{}|",contador);
-			logger.debug("Registros:|{}|",registros);
+			logger.debug("Registros correctos:|{}|",registros);
 
 			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
 			
@@ -846,12 +849,12 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No Existe relación con la Comunidad.";
+	    				sMensaje = "No existe relación con la Comunidad.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -3:
-	    				sMensaje = "No Existe relación Activo-Comunidad.";
+	    				sMensaje = "No existe relación Activo-Comunidad.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
@@ -904,7 +907,7 @@ public class FileManager
 			br.close();
 		
 			logger.debug("Contador:|{}|",contador);
-			logger.debug("Registros:|{}|",registros);
+			logger.debug("Registros correctos:|{}|",registros);
 
 			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
 			
@@ -997,7 +1000,7 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No Existe relación con la Cuota.";
+	    				sMensaje = "No existe relación con la Cuota.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
@@ -1045,7 +1048,7 @@ public class FileManager
 			br.close();
 		
 			logger.debug("Contador:|{}|",contador);
-			logger.debug("Registros:|{}|",registros);
+			logger.debug("Registros correctos:|{}|",registros);
 
 			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
 			
@@ -1139,7 +1142,7 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No Existe relación con la Referencia Catastral.";
+	    				sMensaje = "No existe relación con la Referencia Catastral.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
@@ -1187,7 +1190,7 @@ public class FileManager
 			br.close();
 		
 			logger.debug("Contador:|{}|",contador);
-			logger.debug("Registros:|{}|",registros);
+			logger.debug("Registros correctos:|{}|",registros);
 
 			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
 			
@@ -1283,7 +1286,7 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No Existe relación con el Impuesto.";
+	    				sMensaje = "No existe relación con el Impuesto.";
 	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
@@ -1331,7 +1334,7 @@ public class FileManager
 			br.close();
 		
 			logger.debug("Contador:|{}|",contador);
-			logger.debug("Registros:|{}|",registros);
+			logger.debug("Registros correctos:|{}|",registros);
 
 			logger.debug("Fin:|{}|",new Timestamp(date.getTime()));
 			
