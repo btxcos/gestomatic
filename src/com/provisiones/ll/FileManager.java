@@ -588,9 +588,6 @@ public class FileManager
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -1:
-	    				//sMensaje = "El registro ya se encuentra en el sistema.";
-	    				//logger.error("Línea "+contador+": "+sMensaje);
-	    				//sMensaje = "Línea "+contador+": "+sMensaje;
 	    				sMensaje = "[FATAL] Error al actualizar el Activo.";
 	    				logger.error("(X) Línea "+contador+": "+sMensaje);
 	    				sMensaje = "(X) Línea "+contador+": "+sMensaje;
@@ -599,6 +596,16 @@ public class FileManager
 	    				sMensaje = "[FATAL] Error al registrar el Activo.";
 	    				logger.error("(X) Línea "+contador+": "+sMensaje);
 	    				sMensaje = "(X) Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case 1:
+	    				sMensaje = "Activo actualizado.";
+	    				logger.info("Línea "+contador+": "+sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				break;
+	    			case 2:
+	    				sMensaje = "El registro ya se encuentra en el sistema.";
+	    				logger.warn("Línea "+contador+": "+sMensaje);
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				break;
 	    			}
 	    			if ( iCodigo >= 0 )
@@ -1487,6 +1494,16 @@ public class FileManager
 				logger.debug("Operativa completa.");
 
 			} 
+			/*else if (sNombre.toUpperCase().matches("(LIB_)[0-9]{8}(_)[0-9]+(\\.TXT)$"))
+			{
+				logger.debug("Activos");
+				tabla = leerActivos(sNombre);
+
+				if (tabla.size() == 0)	
+				{
+					iCodigo = 1;
+				}			
+			}*/
 			else
 			{
 				iCodigo = -1;

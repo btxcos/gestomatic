@@ -1,26 +1,28 @@
 package com.provisiones.test;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
 public class TestConstantes 
 {
 	
-	private static Logger logger = LoggerFactory.getLogger(TestConstantes.class.getName());
+	//private static Logger logger = LoggerFactory.getLogger(TestConstantes.class.getName());
 
 
 	public static void main(String[] args) 
 	{
 
+
 		
-		//Parser.escribirActivo(activo);
+		String sPrueba = "LIB_20131107_1.txt";
 		
+		if (sPrueba.toUpperCase().matches("(LIB_)[0-9]{8}(_)[0-9]+(\\.TXT)$"))
+		{
 		
-		logger.debug("Generando ficheros...");
-		
-		String sPrueba = "XXXXXXXXXXXXXXXXX%sXXXXXXXXXXX";
-		
-		logger.debug("|"+String.format(sPrueba,"Hola")+"|");
+			System.out.println("|"+sPrueba+"|");
+		}
+		else
+			System.out.println("|KK|");
 
 	}
 
