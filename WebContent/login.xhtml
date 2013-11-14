@@ -40,7 +40,7 @@ margin-left:-155px;
 </style>
 
 				<p:layoutUnit position="center" header="Portal Provisiones" style="text-align: center">
-
+					<p:growl id="popup"/>
 					<h:panelGrid columns="1" cellpadding="5" >
 						<p:panel header="Login" style="height:200px;text-align: center" styleClass="centered">
 							<h:panelGrid columns="2" cellpadding="5" styleClass="panelGridCenter">
@@ -51,7 +51,7 @@ margin-left:-155px;
 								<h:outputLabel for="clave" value="Contraseña" />
 								<p:password value="#{GestorSesion.sClave}" id="clave" label="clave" />
 								<f:facet name="footer">
-									<p:commandButton id="loginButton" value="Login" update="mensaje" actionListener="#{GestorSesion.login}" oncomplete="dlgLogin.show()"/>
+									<p:commandButton id="loginButton" value="Login" update="mensaje, popup" actionListener="#{GestorSesion.login}" oncomplete="dlgLogin.show()"/>
 								</f:facet>
 
 							</h:panelGrid>

@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.misc.Utils;
 import com.provisiones.pl.GestorSesion;
 
 public class ConnectionManager 
@@ -27,14 +30,35 @@ public class ConnectionManager
 	
 	public static Connection getDBConnection() 
 	{
-		Connection  conn = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
-		
-		if (conn == null)
+		Connection conn = null; 
+		try
 		{
-			conn = openDBConnection();
+			conn = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
+		}
+		catch (NullPointerException e)
+		{
+			try 
+			{
+				if (!(conn == null) && conn.isValid(1))
+				{
+					logger.debug("Cerrando: "+conn.toString());
+					ConnectionManager.closeDBConnection(conn);
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
-			((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).setConn(conn);
+			FacesMessage msg;
+
+			String sMensaje = "ERROR: La sesión ha expirado.";
 			
+			msg = Utils.pfmsgError(sMensaje);
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			logger.error(sMensaje);
+
 		}
 		
 		return conn;
@@ -44,10 +68,10 @@ public class ConnectionManager
 	{
 		return ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getsUsuario();
 	}
-
-	public static Connection openDBConnection() 
+	
+	public static boolean initDBDriver()
 	{
-
+		boolean bSalida = true;
 		try 
 		{
 			Class.forName(sConnector).newInstance();
@@ -55,8 +79,19 @@ public class ConnectionManager
 		catch (Exception ex) 
 		{
 			logger.error("Error Message: "+ ex.getMessage());
-			return null;
+			
+			bSalida = false;
 		}
+		
+		return bSalida;
+	}
+	
+	
+
+	public static Connection openDBConnection() 
+	{
+
+
 
 		Connection conn = null;
 		

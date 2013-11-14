@@ -6,12 +6,14 @@ import java.sql.Connection;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLUsuarios;
+import com.provisiones.misc.Utils;
 
 public class GestorSesion implements Serializable 
 {
@@ -30,6 +32,7 @@ public class GestorSesion implements Serializable
 	
 	public GestorSesion()
 	{
+
 		borrarCamposLogin();
 	}
 	
@@ -39,6 +42,33 @@ public class GestorSesion implements Serializable
     	this.sClave = "";
     	this.sMensaje = "";
     	this.bComprobado = false;
+	}
+	
+	public void iniciaSesion()
+	{
+		if (!ConnectionManager.initDBDriver())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "ERROR FATAL: No se ha podido iniciar una sesión con el servidor de base de datos. Por favor avise a soporte.";
+			
+			msg = Utils.pfmsgError(sMsg);
+			logger.error(sMsg);
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			anulaSesion();
+			
+		}
+	}
+	
+	public String anulaSesion()
+	{
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		
+		session.invalidate();
+		
+		return "login.xhtml";
 	}
 	
 	public String cargarPortal() 
@@ -79,10 +109,14 @@ public class GestorSesion implements Serializable
 		if (sUsuario.equals(""))
 		{
 			sMensaje = "No se ha informado el campo 'Usuario'.";
+			msg = Utils.pfmsgError(sMensaje);
+			sMensaje = "Pulse 'Continuar' y revise los datos.";
 		}
 		else if (sClave.equals(""))
 		{
 			sMensaje = "No se ha informado el campo 'Clave'.";
+			msg = Utils.pfmsgError(sMensaje);
+			sMensaje = "Pulse 'Continuar' y revise los datos.";
 		}
 		else if (CLUsuarios.usuarioValido(sUsuario))
 		{
@@ -93,11 +127,14 @@ public class GestorSesion implements Serializable
 				if (CLUsuarios.estaConectado(sUsuario))
 				{
 					sMensaje = "Tiene una sesión abierta. Se cerrará para abrir una nueva. ";
+					msg = Utils.pfmsgWarning(sMensaje);
 				}
 				else
 				{
-					sMensaje = "Acceso permitido. Pulse 'Continuar'.";
+					sMensaje = "Acceso permitido.";
+					msg = Utils.pfmsgInfo(sMensaje);
 				}
+				sMensaje = "Para entrarar al portal, pulse 'Continuar'.";
 				
 				conn = ConnectionManager.openDBConnection();
 				logger.debug("Conexión:|"+conn.toString()+"|");
@@ -106,17 +143,17 @@ public class GestorSesion implements Serializable
 			else
 			{
 				sMensaje = "La contraseña no es correcta.";
+				msg = Utils.pfmsgError(sMensaje);
+				sMensaje = "Pulse 'Continuar' y revise los datos.";
 			}
 		}
 		else
 		{
 			sMensaje = "El usuario '"+sUsuario+"' no está registrado en el sistema.";
+			msg = Utils.pfmsgError(sMensaje);
+			sMensaje = "Pulse 'Continuar' y revise los datos.";
 		}
 		
-
-
-
-		msg = new FacesMessage(sMensaje);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		

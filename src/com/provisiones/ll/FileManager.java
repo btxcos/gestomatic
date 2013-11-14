@@ -553,7 +553,7 @@ public class FileManager
 			
 			logger.debug("Leyendo fichero..");
 
-			String sTiempo = Utils.timeStamp();
+			long liTiempo = System.currentTimeMillis();
 
 			int contador= 0 ;
 			int registros = 0;
@@ -622,12 +622,11 @@ public class FileManager
 
 			logger.info( "Lectura de "+sNombre+" finalizada.\n");
 
-			logger.debug("Duración de la carga: "+Utils.duracion(sTiempo,Utils.timeStamp()));
+			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
 			
 			logger.debug("Registros procesados:|"+contador+"|");
 			logger.debug("Registros correctos:|"+registros+"|");
 
-			//logger.info( "Actualizados "+registros+" registros.");
 			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
 		}
 		catch (FileNotFoundException e)
@@ -670,7 +669,7 @@ public class FileManager
 			
 			logger.debug("Leyendo fichero..");
 
-			String sTiempo = Utils.timeStamp();
+			long liTiempo = System.currentTimeMillis();
 
 			int contador= 0 ;
 			int registros = 0;
@@ -763,14 +762,13 @@ public class FileManager
 		
 			br.close();
 		
-			logger.debug("Inicio:|"+sTiempo+"|");
-			logger.debug("Fin:|"+Utils.timeStamp()+"|");
+			logger.info( "Lectura de "+sNombre+" finalizada.\n");
+
+			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
 			
 			logger.debug("Registros procesados:|"+contador+"|");
 			logger.debug("Registros correctos:|"+registros+"|");
 
-			logger.info( "Lectura de "+sNombre+" finalizada.");
-			logger.info( "Actualizados "+registros+" registros.");
 			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
 		}
 		catch (FileNotFoundException e)
@@ -815,7 +813,7 @@ public class FileManager
 			
 			logger.debug("Leyendo fichero..");
 
-			String sTiempo = Utils.timeStamp();
+			long liTiempo = System.currentTimeMillis();
 
 			int contador= 0 ;
 			int registros = 0;
@@ -917,14 +915,13 @@ public class FileManager
 		
 			br.close();
 		
-			logger.debug("Inicio:|"+sTiempo+"|");
-			logger.debug("Fin:|"+Utils.timeStamp()+"|");
+			logger.info( "Lectura de "+sNombre+" finalizada.\n");
+
+			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
 			
 			logger.debug("Registros procesados:|"+contador+"|");
 			logger.debug("Registros correctos:|"+registros+"|");
 
-			logger.info( "Lectura de "+sNombre+" finalizada.");
-			logger.info( "Actualizados "+registros+" registros.");
 			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
 		}
 		catch (FileNotFoundException e)
@@ -966,7 +963,7 @@ public class FileManager
 			
 			logger.debug("Leyendo fichero..");
 
-			String sTiempo = Utils.timeStamp();
+			long liTiempo = System.currentTimeMillis();
 
 			int contador= 0 ;
 			int registros = 0;
@@ -1058,14 +1055,13 @@ public class FileManager
 		
 			br.close();
 		
-			logger.debug("Inicio:|"+sTiempo+"|");
-			logger.debug("Fin:|"+Utils.timeStamp()+"|");
+			logger.info( "Lectura de "+sNombre+" finalizada.\n");
+
+			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
 			
 			logger.debug("Registros procesados:|"+contador+"|");
 			logger.debug("Registros correctos:|"+registros+"|");
 
-			logger.info( "Lectura de "+sNombre+" finalizada.");
-			logger.info( "Actualizados "+registros+" registros.");
 			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
 		}
 		catch (FileNotFoundException e)
@@ -1107,7 +1103,7 @@ public class FileManager
 			
 			logger.debug("Leyendo fichero..");
 
-			String sTiempo = Utils.timeStamp();
+			long liTiempo = System.currentTimeMillis();
 
 			int contador= 0 ;
 			int registros = 0;
@@ -1200,14 +1196,13 @@ public class FileManager
 		
 			br.close();
 		
-			logger.debug("Inicio:|"+sTiempo+"|");
-			logger.debug("Fin:|"+Utils.timeStamp()+"|");
+			logger.info( "Lectura de "+sNombre+" finalizada.\n");
+
+			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
 			
 			logger.debug("Registros procesados:|"+contador+"|");
 			logger.debug("Registros correctos:|"+registros+"|");
 
-			logger.info( "Lectura de "+sNombre+" finalizada.");
-			logger.info( "Actualizados "+registros+" registros.");
 			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
 		}
 		catch (FileNotFoundException e)
@@ -1251,7 +1246,7 @@ public class FileManager
 			
 			logger.debug("Leyendo fichero..");
 
-			String sTiempo = Utils.timeStamp();
+			long liTiempo = System.currentTimeMillis();
 
 			int contador= 0 ;
 			int registros = 0;
@@ -1344,14 +1339,13 @@ public class FileManager
 		
 			br.close();
 		
-			logger.debug("Inicio:|"+sTiempo+"|");
-			logger.debug("Fin:|"+Utils.timeStamp()+"|");
+			logger.info( "Lectura de "+sNombre+" finalizada.\n");
+
+			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
 			
 			logger.debug("Registros procesados:|"+contador+"|");
 			logger.debug("Registros correctos:|"+registros+"|");
 
-			logger.info( "Lectura de "+sNombre+" finalizada.");
-			logger.info( "Actualizados "+registros+" registros.");
 			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
 		}
 		catch (FileNotFoundException e)

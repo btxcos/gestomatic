@@ -154,57 +154,60 @@ public class Utils
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		sAhora = format.format(fechaHoy);
 		
-		//logger.debug("sAhora:|{}|",sAhora);
-		
 		return sAhora;
 	}
 	
-	public static String duracion(String sInicio, String sFin)
+	
+	public static String duracion(long liInicio, long liFin)
 	{
 	
-		String sTemporal = Long.toString(Long.parseLong(sFin) - Long.parseLong(sInicio));
+		logger.debug("liInicio:"+liInicio);
+		logger.debug("liFin:"+liFin);
+		long liTemporal = liFin - liInicio;
+		
+		logger.debug("liTemporal:"+liTemporal);
 		
 		String sDuracion = "";
 		
 		
-		if (sTemporal.length()>3)
+		if (liTemporal > 999)
 		{
-			sDuracion = sTemporal.substring(sTemporal.length()-3, sTemporal.length())+"ms";
+			sDuracion = (liTemporal%1000)+"ms";
 					
-			sTemporal = sTemporal.substring(0, sTemporal.length()-3);
+			liTemporal = (liTemporal/1000);
 			
-			if (sTemporal.length()>2)
+			if (liTemporal > 59)
 			{
-				sDuracion = sTemporal.substring(sTemporal.length()-2, sTemporal.length())+"s"+sDuracion;
+				sDuracion = (liTemporal%60)+"s"+sDuracion;
 				
-				sTemporal = sTemporal.substring(0, sTemporal.length()-2);
+				liTemporal = (liTemporal/60);
 				
-				if (sTemporal.length()>2)
+				if (liTemporal > 59)
 				{
-					sDuracion = sTemporal.substring(sTemporal.length()-2, sTemporal.length())+"m"+sDuracion;
+					sDuracion = (liTemporal%60)+"m"+sDuracion;
 					
-					sTemporal = sTemporal.substring(0, sTemporal.length()-2);
+					liTemporal = (liTemporal/60);
 					
-					if (sTemporal.length()>2)
+					if (liTemporal>23)
 					{
-						sDuracion = sTemporal.substring(sTemporal.length()-2, sTemporal.length())+"h"+sDuracion;
+						sDuracion = (liTemporal%24)+"h"+sDuracion;
 						
-						sTemporal = sTemporal.substring(0, sTemporal.length()-2);
+						liTemporal = (liTemporal/24);
 						
-						if (sTemporal.length()>2)
+						if (liTemporal>364)
 						{
-							sDuracion = sTemporal.substring(sTemporal.length()-2, sTemporal.length())+"d"+sDuracion;
+							sDuracion = (liTemporal%365)+"d"+sDuracion;
 							
-							sTemporal = sTemporal.substring(0, sTemporal.length()-2);
+							liTemporal = (liTemporal/365);
 						}
 						else
 						{
-							sDuracion = sTemporal+"d"+sDuracion;
+							sDuracion = liTemporal+"d"+sDuracion;
 						}
 					}
 					else
 					{
-						sDuracion = sTemporal+"H"+sDuracion;
+						sDuracion = liTemporal+"h"+sDuracion;
 					}
 						
 						
@@ -212,19 +215,19 @@ public class Utils
 				}
 				else
 				{
-					sDuracion = sTemporal+"m"+sDuracion;
+					sDuracion = liTemporal+"m"+sDuracion;
 				}
 			}
 			else
 			{
-				sDuracion = sTemporal+"s"+sDuracion;
+				sDuracion = liTemporal+"s"+sDuracion;
 			}
 			
 			
 		}
 		else
 		{
-			sDuracion = sTemporal+"ms";
+			sDuracion = liTemporal+"ms";
 		}
 		
 		
