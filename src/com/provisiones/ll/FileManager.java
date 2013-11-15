@@ -583,9 +583,9 @@ public class FileManager
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Activo registrado.";
-	    				logger.info("Línea "+contador+": "+sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = "Nuevo Activo registrado.";
+	    				logger.info("(N) Línea "+contador+": "+sMensaje);
+	    				sMensaje = "(N) Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case -1:
 	    				sMensaje = "[FATAL] Error al actualizar el Activo.";
@@ -599,8 +599,8 @@ public class FileManager
 	    				break;
 	    			case 1:
 	    				sMensaje = "Activo actualizado.";
-	    				logger.info("Línea "+contador+": "+sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.info("(A) Línea "+contador+": "+sMensaje);
+	    				sMensaje = "(A) Línea "+contador+": "+sMensaje;
 	    				break;
 	    			case 2:
 	    				sMensaje = "El registro ya se encuentra en el sistema.";

@@ -896,7 +896,7 @@ public class QMActivos
 
 		boolean bEncontrado = false;
 
-		logger.debug("Ejecutando Query...");
+		//logger.debug("Ejecutando Query...");
 		
 		String sQuery = "SELECT "
 				   + CAMPO1  +        
@@ -905,7 +905,7 @@ public class QMActivos
 				   " WHERE " 
 				   + CAMPO1 + " = '" + sCodCOACES	+ "'";
 		
-		logger.debug(sQuery);
+		//logger.debug(sQuery);
 
 		try 
 		{
@@ -917,7 +917,7 @@ public class QMActivos
 
 			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con éxito!");
+			//logger.debug("Ejecutada con éxito!");
 
 			
 
@@ -929,7 +929,7 @@ public class QMActivos
 					bEncontrado = true;
 
 					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+					//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 				}
 			}
 			if (bEncontrado == false) 
@@ -959,10 +959,13 @@ public class QMActivos
 	{
 		Connection conn = null;
 		conn = ConnectionManager.getDBConnection();
-		
+
 		Statement stmt = null;
-				
-		boolean bSalida = true;
+
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+
+		boolean bEncontrado = false;
 		
 		logger.debug("Ejecutando Query...");
 		
@@ -1069,14 +1072,37 @@ public class QMActivos
 		try 
 		{
 			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+
+			pstmt = conn.prepareStatement(sQuery);
 			
-			logger.debug("Ejecutada con éxito!");
+			
+
+			rs = pstmt.executeQuery();
+			
+			//logger.debug("Ejecutada con éxito!");
+
+			
+
+			if (rs != null) 
+			{
+
+				while (rs.next()) 
+				{
+					bEncontrado = true;
+
+					logger.debug("Encontrado el registro!");
+					//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+				}
+			}
+			if (bEncontrado == false) 
+			{
+				logger.debug("No se encontro la información.");
+			}
 					
 		} 
 		catch (SQLException ex) 
 		{
-			bSalida = false;
+			bEncontrado = false;
 
 			logger.error("ERROR COACES:|"+NuevoActivo.getCOACES()+"|");
 
@@ -1090,7 +1116,7 @@ public class QMActivos
 			
 		}
 		//ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
+		return bEncontrado;
 	}
 
 	public static String getReferenciaCatastral(String sCodCOACES)
