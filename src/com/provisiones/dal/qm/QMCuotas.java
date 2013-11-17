@@ -1,6 +1,5 @@
 package com.provisiones.dal.qm;
 
-import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuota;
@@ -42,246 +41,243 @@ public class QMCuotas
 	//Campos de control
 	public static final String CAMPO12 = "cod_estado";
 
-	public static long addCuota(Cuota NuevaCuota)
-
+	public static long addCuota(Connection conexion, Cuota NuevaCuota)
 	{
-		Connection conn = null;
-
-		Statement stmt = null;
-		ResultSet resulset = null;
-		
-		conn = ConnectionManager.getDBConnection();
-
 		long liCodigo = 0;
 
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " + TABLA + " ("
-			       + CAMPO2  + ","              
-			       + CAMPO3  + ","              
-			       + CAMPO4  + ","              
-			       + CAMPO5  + ","              
-			       + CAMPO6  + ","              
-			       + CAMPO7  + ","              
-			       + CAMPO8  + ","
-			       + CAMPO9  + ","
-			       + CAMPO10  + ","
-				   + CAMPO11  + ","  
-			       + CAMPO12  + 
-			       ") VALUES ('"
-			       + NuevaCuota.getCOACES() + "','"
-			       + NuevaCuota.getCOCLDO() + "','"
-			       + NuevaCuota.getNUDCOM() + "','"
-			       + NuevaCuota.getCOSBAC() + "','"
-			       + NuevaCuota.getFIPAGO() + "','"
-			       + NuevaCuota.getFFPAGO() + "','"
-			       + NuevaCuota.getIMCUCO() + "','"
-			       + NuevaCuota.getFAACTA() + "','"
-			       + NuevaCuota.getPTPAGO() + "','"
-			       + NuevaCuota.getOBTEXC() + "','" 
-			       + ValoresDefecto.DEF_ALTA + "' )";
-
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
+			Statement stmt = null;
+			ResultSet resulset = null;
+			
 
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
+
+			logger.debug("Ejecutando Query...");
 			
-			resulset = stmt.getGeneratedKeys();
-			
-			if (resulset.next()) 
+			String sQuery = "INSERT INTO " + TABLA + " ("
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","
+				       + CAMPO9  + ","
+				       + CAMPO10  + ","
+					   + CAMPO11  + ","  
+				       + CAMPO12  + 
+				       ") VALUES ('"
+				       + NuevaCuota.getCOACES() + "','"
+				       + NuevaCuota.getCOCLDO() + "','"
+				       + NuevaCuota.getNUDCOM() + "','"
+				       + NuevaCuota.getCOSBAC() + "','"
+				       + NuevaCuota.getFIPAGO() + "','"
+				       + NuevaCuota.getFFPAGO() + "','"
+				       + NuevaCuota.getIMCUCO() + "','"
+				       + NuevaCuota.getFAACTA() + "','"
+				       + NuevaCuota.getPTPAGO() + "','"
+				       + NuevaCuota.getOBTEXC() + "','" 
+				       + ValoresDefecto.DEF_ALTA + "' )";
+
+			logger.debug(sQuery);
+
+			try 
 			{
-				liCodigo= resulset.getLong(1);
+
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
+				
+				resulset = stmt.getGeneratedKeys();
+				
+				if (resulset.next()) 
+				{
+					liCodigo= resulset.getLong(1);
+				} 
+
+				logger.debug("Ejecutada con exito!");
+				
+				logger.debug("Ejecutada con exito!");
+			}
+			catch (SQLException ex)
+			{
+				liCodigo = 0;
+
+				logger.error("ERROR COACES:|"+NuevaCuota.getCOACES()+"|");
+				logger.error("ERROR COCLDO:|"+NuevaCuota.getCOCLDO()+"|");
+				logger.error("ERROR NUDCOM:|"+NuevaCuota.getNUDCOM()+"|");
+				logger.error("ERROR COSBAC:|"+NuevaCuota.getCOSBAC()+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
+			finally
+			{
 
-			logger.debug("Ejecutada con exito!");
-			
-			logger.debug("Ejecutada con exito!");
+				Utils.closeStatement(stmt);
+			}
 		}
-		catch (SQLException ex)
-		{
-			liCodigo = 0;
 
-			logger.error("ERROR COACES:|"+NuevaCuota.getCOACES()+"|");
-			logger.error("ERROR COCLDO:|"+NuevaCuota.getCOCLDO()+"|");
-			logger.error("ERROR NUDCOM:|"+NuevaCuota.getNUDCOM()+"|");
-			logger.error("ERROR COSBAC:|"+NuevaCuota.getCOSBAC()+"|");
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally
-		{
-
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
 		return liCodigo;
 	}
-	public static boolean modCuota(Cuota NuevaCuota, String sCodCuota)
+	public static boolean modCuota(Connection conexion, Cuota NuevaCuota, String sCodCuota)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
+		boolean bSalida = false;
 
-		Statement stmt = null;
-
-		boolean bSalida = true;
-		
-		logger.debug("Ejecutando Query...");
-		
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE " 
-					+ TABLA + 
-					" SET " 
-					+ CAMPO6  + " = '"+ NuevaCuota.getFIPAGO() + "', "
-					+ CAMPO7  + " = '"+ NuevaCuota.getFFPAGO() + "', "
-					+ CAMPO8  + " = '"+ NuevaCuota.getIMCUCO() + "', "
-					+ CAMPO9  + " = '"+ NuevaCuota.getFAACTA() + "', "
-					+ CAMPO10  + " = '"+ NuevaCuota.getPTPAGO() + "', "
-					+ CAMPO11 + " = '"+ NuevaCuota.getOBTEXC() + "' "+
-					" WHERE " 
-					+ CAMPO1  + " = '"+ sCodCuota +"'");
+			Statement stmt = null;
+
+
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate("UPDATE " 
+						+ TABLA + 
+						" SET " 
+						+ CAMPO6  + " = '"+ NuevaCuota.getFIPAGO() + "', "
+						+ CAMPO7  + " = '"+ NuevaCuota.getFFPAGO() + "', "
+						+ CAMPO8  + " = '"+ NuevaCuota.getIMCUCO() + "', "
+						+ CAMPO9  + " = '"+ NuevaCuota.getFAACTA() + "', "
+						+ CAMPO10  + " = '"+ NuevaCuota.getPTPAGO() + "', "
+						+ CAMPO11 + " = '"+ NuevaCuota.getOBTEXC() + "' "+
+						" WHERE " 
+						+ CAMPO1  + " = '"+ sCodCuota +"'");
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR COACES:|"+NuevaCuota.getCOACES()+"|");
-			logger.error("ERROR COCLDO:|"+NuevaCuota.getCOCLDO()+"|");
-			logger.error("ERROR NUDCOM:|"+NuevaCuota.getNUDCOM()+"|");
-			logger.error("ERROR COSBAC:|"+NuevaCuota.getCOSBAC()+"|");
+				logger.error("ERROR COACES:|"+NuevaCuota.getCOACES()+"|");
+				logger.error("ERROR COCLDO:|"+NuevaCuota.getCOCLDO()+"|");
+				logger.error("ERROR NUDCOM:|"+NuevaCuota.getNUDCOM()+"|");
+				logger.error("ERROR COSBAC:|"+NuevaCuota.getCOSBAC()+"|");
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}			
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 
-	public static boolean delCuota(String sCodCuota)
+	public static boolean delCuota(Connection conexion, String sCodCuota)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
+		boolean bSalida = false;
 
-		Statement stmt = null;
-
-		boolean bSalida = true;
-		
-		logger.debug("Ejecutando Query...");
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE FROM " 
-					+ TABLA + 
-					" WHERE "
-					+ CAMPO1  + " = '"+ sCodCuota +"'");
-			
-			logger.debug("Ejecutada con exito!");
-			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			Statement stmt = null;
 
-			logger.error("ERROR Cuota:|"+sCodCuota+"|");
+			logger.debug("Ejecutando Query...");
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate("DELETE FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1  + " = '"+ sCodCuota +"'");
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			Utils.closeStatement(stmt);
+				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 	
-	public static boolean existeCuota(String sCodCuota)
+	public static boolean existeCuota(Connection conexion, String sCodCuota)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-		
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-
-		try 
+		
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
+
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
 
-			pstmt = conn.prepareStatement("SELECT " 
-					+ CAMPO1 + 
-					" FROM " 
-					+ TABLA + 
-					" WHERE " 
-					+ CAMPO1  + " = '"+ sCodCuota +"'");
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			
-			if (rs != null) 
+			logger.debug("Ejecutando Query...");
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+
+				pstmt = conexion.prepareStatement("SELECT " 
+						+ CAMPO1 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE " 
+						+ CAMPO1  + " = '"+ sCodCuota +"'");
+
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				
+				if (rs != null) 
 				{
-					bEncontrado = true;
+					
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
-			}
+				bEncontrado = false;
 
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
+				logger.error("ERROR Cuota:|"+sCodCuota+"|");
 
-			logger.error("ERROR Cuota:|"+sCodCuota+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}	
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return bEncontrado;
 	}
 
-	public static Cuota getCuota(String sCodCuota)
+	public static Cuota getCuota(Connection conexion, String sCodCuota)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sCOACES = "";
 		String sCOCLDO = "";
 		String sNUDCOM = "";
@@ -293,461 +289,480 @@ public class QMCuotas
 		String sPTPAGO = "";
 		String sOBTEXC = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement("SELECT "
-					   + CAMPO2  + ","              
-				       + CAMPO3  + ","              
-				       + CAMPO4  + ","              
-				       + CAMPO5  + ","              
-				       + CAMPO6  + ","              
-				       + CAMPO7  + ","              
-				       + CAMPO8  + ","
-				       + CAMPO9  + ","
-					   + CAMPO10  + ","
-				       + CAMPO11  +       
-				       " FROM " 
-				       + TABLA + 
-				       " WHERE " 
-				       + CAMPO1  + " = '"+ sCodCuota +"'");
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
 
-			if (rs != null) 
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement("SELECT "
+						   + CAMPO2  + ","              
+					       + CAMPO3  + ","              
+					       + CAMPO4  + ","              
+					       + CAMPO5  + ","              
+					       + CAMPO6  + ","              
+					       + CAMPO7  + ","              
+					       + CAMPO8  + ","
+					       + CAMPO9  + ","
+						   + CAMPO10  + ","
+					       + CAMPO11  +       
+					       " FROM " 
+					       + TABLA + 
+					       " WHERE " 
+					       + CAMPO1  + " = '"+ sCodCuota +"'");
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
 
-					sCOACES = rs.getString(CAMPO2); 
-					sCOCLDO = rs.getString(CAMPO3); 
-					sNUDCOM = rs.getString(CAMPO4); 
-					sCOSBAC = rs.getString(CAMPO5); 
-					sFIPAGO = rs.getString(CAMPO6); 
-					sFFPAGO = rs.getString(CAMPO7); 
-					sIMCUCO = rs.getString(CAMPO8); 
-					sFAACTA = rs.getString(CAMPO9); 
-					sPTPAGO = rs.getString(CAMPO10);
-					sOBTEXC = rs.getString(CAMPO11);
-					
-					logger.debug("Encontrado el registro!");
-					
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sCOACES = rs.getString(CAMPO2); 
+						sCOCLDO = rs.getString(CAMPO3); 
+						sNUDCOM = rs.getString(CAMPO4); 
+						sCOSBAC = rs.getString(CAMPO5); 
+						sFIPAGO = rs.getString(CAMPO6); 
+						sFFPAGO = rs.getString(CAMPO7); 
+						sIMCUCO = rs.getString(CAMPO8); 
+						sFAACTA = rs.getString(CAMPO9); 
+						sPTPAGO = rs.getString(CAMPO10);
+						sOBTEXC = rs.getString(CAMPO11);
+						
+						logger.debug("Encontrado el registro!");
+						
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sCOACES = "";
+				sCOCLDO = "";
+				sNUDCOM = "";
+				sCOSBAC = "";
+				sFIPAGO = "";
+				sFFPAGO = "";
+				sIMCUCO = "";
+				sFAACTA = "";
+				sPTPAGO = "";
+				sOBTEXC = "";
+
+				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Cuota:|"+sCodCuota+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return new Cuota(sCOACES, sCOCLDO, sNUDCOM, sCOSBAC, sFIPAGO, sFFPAGO, sIMCUCO, sFAACTA, sPTPAGO, sOBTEXC);
 	}
 	
-	public static String getCuotaID(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static String getCuotaID(Connection conexion, String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sCuotaID = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement("SELECT "
-					   + CAMPO1 +       
-				       " FROM " 
-					   + TABLA + 
-					   " WHERE ("	
-					   + CAMPO2  + " = '"+ sCodCOACES +"' AND " 
-					   + CAMPO3  + " = '"+ sCodCOCLDO +"' AND " 
-					   + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
-					   + CAMPO5  + " = '"+ sCodCOSBAC + "')");
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
+			boolean bEncontrado = false;
 
-			if (rs != null) 
+			logger.debug("Ejecutando Query...");
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement("SELECT "
+						   + CAMPO1 +       
+					       " FROM " 
+						   + TABLA + 
+						   " WHERE ("	
+						   + CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+						   + CAMPO3  + " = '"+ sCodCOCLDO +"' AND " 
+						   + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
+						   + CAMPO5  + " = '"+ sCodCOSBAC + "')");
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
 
-					sCuotaID = rs.getString(CAMPO1);
-					
-					logger.debug("Encontrado el registro!");
-					
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sCuotaID = rs.getString(CAMPO1);
+						
+						logger.debug("Encontrado el registro!");
+						
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sCuotaID = "";
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+				logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
+				logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
-			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
-			logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return sCuotaID;
 	}
 	
-	public static boolean tieneCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM)
+	public static boolean tieneCuotas(Connection conexion, String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		boolean bEncontrado = false;
 
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "              
-			       + CAMPO3  +       
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE ("
-			       + CAMPO2  + " = '"+ sCodCOACES +"' AND "
-			       + CAMPO3  + " = '"+ sCodCOCLDO +"' AND "
-			       + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
-			       + CAMPO12  + " <> 'B')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT "              
+				       + CAMPO3  +       
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE ("
+				       + CAMPO2  + " = '"+ sCodCOACES +"' AND "
+				       + CAMPO3  + " = '"+ sCodCOCLDO +"' AND "
+				       + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
+				       + CAMPO12  + " <> 'B')";
+			
+			logger.debug(sQuery);
 
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
+						logger.debug("Encontrado el registro!");
+
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
-			}
+				bEncontrado = false;
 
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
+				logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
-			logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}			
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bEncontrado;
 	}
 	
-	public static ArrayList<CuotaTabla> buscaCuotasActivo(String sCodCOACES)
+	public static ArrayList<CuotaTabla> buscaCuotasActivo(Connection conexion, String sCodCOACES)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
+		ArrayList<CuotaTabla> resultado = new ArrayList<CuotaTabla>();
 
-		String sCOCLDO = "";
-		String sDesCOCLDO = "";
-		String sNUDCOM = "";
-		String sCOSBAC = "";
-		String sDesCOSBAC = "";
-		String sFIPAGO = "";
-		String sFFPAGO = "";
-		String sIMCUCO = "";
-		String sFAACTA = "";
-		String sPTPAGO = "";
-		String sDesPTPAGO = "";
-		String sOBTEXC = "";
-		
-		ArrayList<CuotaTabla> result = new ArrayList<CuotaTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-					   + CAMPO3 + ","
-					   + CAMPO4 + ","
-					   + CAMPO5 + ","
-					   + CAMPO6 + ","
-					   + CAMPO7 + ","
-					   + CAMPO8 + ","
-					   + CAMPO9 + ","
-					   + CAMPO10 + "," 
-					   + CAMPO11 + ","
-					   + CAMPO12 +
-					   " FROM " 
-					   + TABLA + 
-					   " WHERE ("
-					   + CAMPO12 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
-					   + CAMPO2 + " = '" + sCodCOACES	+ "')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
+			ResultSet rs = null;
+
+			String sCOCLDO = "";
+			String sDesCOCLDO = "";
+			String sNUDCOM = "";
+			String sCOSBAC = "";
+			String sDesCOSBAC = "";
+			String sFIPAGO = "";
+			String sFFPAGO = "";
+			String sIMCUCO = "";
+			String sFAACTA = "";
+			String sPTPAGO = "";
+			String sDesPTPAGO = "";
+			String sOBTEXC = "";
 			
-			pstmt = conn.prepareStatement(sQuery);
-
+			PreparedStatement pstmt = null;
+			boolean found = false;
 			
-
-
+			logger.debug("Ejecutando Query...");
 			
-
-			rs = pstmt.executeQuery();
+			String sQuery = "SELECT "
+						   + CAMPO3 + ","
+						   + CAMPO4 + ","
+						   + CAMPO5 + ","
+						   + CAMPO6 + ","
+						   + CAMPO7 + ","
+						   + CAMPO8 + ","
+						   + CAMPO9 + ","
+						   + CAMPO10 + "," 
+						   + CAMPO11 + ","
+						   + CAMPO12 +
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE ("
+						   + CAMPO12 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
+						   + CAMPO2 + " = '" + sCodCOACES	+ "')";
 			
-			logger.debug("Ejecutada con éxito!");
+			logger.debug(sQuery);
 
-			
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
 
-				while (rs.next()) 
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
 				{
-					found = true;
-					
-					sCOCLDO     = rs.getString(CAMPO3);
-					sDesCOCLDO  = QMCodigosControl.getDesCampo(QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
-					sNUDCOM     = rs.getString(CAMPO4);
-					sCOSBAC     = rs.getString(CAMPO5);
-					sDesCOSBAC  = QMCodigosControl.getDesCampo(QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,sCOSBAC);
-					sFIPAGO     = Utils.recuperaFecha(rs.getString(CAMPO6));
-					sFFPAGO     = Utils.recuperaFecha(rs.getString(CAMPO7));
-					sIMCUCO     = Utils.recuperaImporte(false,rs.getString(CAMPO8));
-					sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
-					sPTPAGO     = rs.getString(CAMPO10);
-					sDesPTPAGO  = QMCodigosControl.getDesCampo(QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-					sOBTEXC     = rs.getString(CAMPO11);  
 
-					
-					CuotaTabla cuotaencontrada = new CuotaTabla(
-							sCOCLDO,
-							sDesCOCLDO,
-							sNUDCOM,
-							sCOSBAC,
-							sDesCOSBAC,
-							sFIPAGO,
-							sFFPAGO,
-							sIMCUCO,
-							sFAACTA,
-							sPTPAGO,
-							sDesPTPAGO,
-							sOBTEXC);
-					
-					result.add(cuotaencontrada);
-					
-					logger.debug("Encontrado el registro!");
+					while (rs.next()) 
+					{
+						found = true;
+						
+						sCOCLDO     = rs.getString(CAMPO3);
+						sDesCOCLDO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
+						sNUDCOM     = rs.getString(CAMPO4);
+						sCOSBAC     = rs.getString(CAMPO5);
+						sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,sCOSBAC);
+						sFIPAGO     = Utils.recuperaFecha(rs.getString(CAMPO6));
+						sFFPAGO     = Utils.recuperaFecha(rs.getString(CAMPO7));
+						sIMCUCO     = Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
+						sPTPAGO     = rs.getString(CAMPO10);
+						sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						sOBTEXC     = rs.getString(CAMPO11);  
 
-					logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+						
+						CuotaTabla cuotaencontrada = new CuotaTabla(
+								sCOCLDO,
+								sDesCOCLDO,
+								sNUDCOM,
+								sCOSBAC,
+								sDesCOSBAC,
+								sFIPAGO,
+								sFFPAGO,
+								sIMCUCO,
+								sFAACTA,
+								sPTPAGO,
+								sDesPTPAGO,
+								sOBTEXC);
+						
+						resultado.add(cuotaencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+					}
 				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
+				if (found == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
 
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<CuotaTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+
+		return resultado;
 	}
 	
-	public static boolean setEstado(String sCodCuota, String sEstado)
+	public static boolean setEstado(Connection conexion, String sCodCuota, String sEstado)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-		
-		Statement stmt = null;
+		boolean bSalida = false;
 
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO12 + " = '"+ sEstado +"' "+
-				" WHERE "
-				+ CAMPO1  + " = '"+ sCodCuota +"'";
-		
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO12 + " = '"+ sEstado +"' "+
+					" WHERE "
+					+ CAMPO1  + " = '"+ sCodCuota +"'";
 			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+		
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR Cuota:|"+sCodCuota+"|");
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 	
-	public static String getEstado(String sCodCuota)
+	public static String getEstado(Connection conexion, String sCodCuota)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sEstado = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
+
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
 
-			pstmt = conn.prepareStatement("SELECT " 
-					+ CAMPO12 + 
-					" FROM " 
-					+ TABLA + 
-					" WHERE "
-					+ CAMPO1  + " = '"+ sCodCuota +"'");
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			
-			if (rs != null) 
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+
+				pstmt = conexion.prepareStatement("SELECT " 
+						+ CAMPO12 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1  + " = '"+ sCodCuota +"'");
+
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				
+				if (rs != null) 
 				{
-					bEncontrado = true;
-
-					sEstado = rs.getString(CAMPO12);
 					
-					logger.debug("Encontrado el registro!");
-					
-					logger.debug(CAMPO12+":|"+sEstado+"|");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sEstado = rs.getString(CAMPO12);
+						
+						logger.debug("Encontrado el registro!");
+						
+						logger.debug(CAMPO12+":|"+sEstado+"|");
 
 
+					}
 				}
-			}
-			if (bEncontrado == false) 
-			{
- 
-				logger.debug("No se encontró la información.");
-			}
+				if (bEncontrado == false) 
+				{
+	 
+					logger.debug("No se encontró la información.");
+				}
 
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Cuota:|"+sCodCuota+"|");
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+			} 
+			catch (SQLException ex) 
+			{
+				sEstado = "";
+
+				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return sEstado;
 	}
 	

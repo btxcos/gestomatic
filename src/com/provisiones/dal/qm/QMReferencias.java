@@ -1,6 +1,5 @@
 package com.provisiones.dal.qm;
 
-import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ReferenciaCatastral;
@@ -38,187 +37,177 @@ public class QMReferencias
 	//Campos de control
 	public static final String CAMPO10 = "cod_estado";	
 
-	public static long addReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral)
-
+	public static long addReferenciaCatastral(Connection conexion, ReferenciaCatastral NuevaReferenciaCatastral)
 	{
-		Connection conn = null;
-
-		Statement stmt = null;
-		ResultSet resulset = null;
-		
-		conn = ConnectionManager.getDBConnection();
-
 		long liCodigo = 0;
 
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " 
-				   + TABLA + 
-				   " ("
-			       + CAMPO2  + ","              
-			       + CAMPO3  + ","              
-			       + CAMPO4  + ","
-			       + CAMPO5  + ","
-			       + CAMPO6  + ","              
-			       + CAMPO7  + ","
-			       + CAMPO8  + ","
-			       + CAMPO9  + ","
-			       + CAMPO10 +              
-			       ") VALUES ('" 
-			       + NuevaReferenciaCatastral.getNURCAT() + "','"
-			       + NuevaReferenciaCatastral.getTIRCAT() + "','"
-			       + NuevaReferenciaCatastral.getENEMIS() + "','"
-			       + NuevaReferenciaCatastral.getCOTEXA() + "','"
-			       + NuevaReferenciaCatastral.getOBTEXC() + "','"
-			       
-			       //Ampliacion de valor catastral
-			       + NuevaReferenciaCatastral.getIMVSUE() + "','"
-			       + NuevaReferenciaCatastral.getIMCATA() + "','"
-			       + NuevaReferenciaCatastral.getFERECA() + "','"
-
-			       + ValoresDefecto.DEF_ALTA + "' )";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
+			Statement stmt = null;
+			ResultSet resulset = null;
 
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
+			logger.debug("Ejecutando Query...");
 			
-			resulset = stmt.getGeneratedKeys();
+			String sQuery = "INSERT INTO " 
+					   + TABLA + 
+					   " ("
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","
+				       + CAMPO5  + ","
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","
+				       + CAMPO8  + ","
+				       + CAMPO9  + ","
+				       + CAMPO10 +              
+				       ") VALUES ('" 
+				       + NuevaReferenciaCatastral.getNURCAT() + "','"
+				       + NuevaReferenciaCatastral.getTIRCAT() + "','"
+				       + NuevaReferenciaCatastral.getENEMIS() + "','"
+				       + NuevaReferenciaCatastral.getCOTEXA() + "','"
+				       + NuevaReferenciaCatastral.getOBTEXC() + "','"
+				       
+				       //Ampliacion de valor catastral
+				       + NuevaReferenciaCatastral.getIMVSUE() + "','"
+				       + NuevaReferenciaCatastral.getIMCATA() + "','"
+				       + NuevaReferenciaCatastral.getFERECA() + "','"
+
+				       + ValoresDefecto.DEF_ALTA + "' )";
 			
-			if (resulset.next()) 
+			logger.debug(sQuery);
+
+			try 
 			{
-				liCodigo= resulset.getLong(1);
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
+				
+				resulset = stmt.getGeneratedKeys();
+				
+				if (resulset.next()) 
+				{
+					liCodigo= resulset.getLong(1);
+				} 
+
+				logger.debug("Ejecutada con exito!");
+				
+			}
+			catch (SQLException ex) 
+			{
+				liCodigo = 0;
+
+				logger.error("ERROR NURCAT:|"+NuevaReferenciaCatastral.getNURCAT()+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
-
-			logger.debug("Ejecutada con exito!");
-			
+			finally
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		catch (SQLException ex) 
-		{
-			liCodigo = 0;
 
-			logger.error("ERROR NURCAT:|"+NuevaReferenciaCatastral.getNURCAT()+"|");
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally
-		{
-
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
 		return liCodigo;
 	}
-	public static boolean modReferenciaCatastral(ReferenciaCatastral NuevaReferenciaCatastral, String sCodReferencia)
+	public static boolean modReferenciaCatastral(Connection conexion, ReferenciaCatastral NuevaReferenciaCatastral, String sCodReferencia)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		boolean bSalida = true;
+		boolean bSalida = false;
 		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				//+ CAMPO2  + " = '"+ NuevaReferenciaCatastral.getNURCAT() + "', "
-				+ CAMPO3  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "', "
-				+ CAMPO4  + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "', "
-				+ CAMPO5  + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "', "
-				+ CAMPO6  + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "', "
+		if (!(conexion == null))
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					//+ CAMPO2  + " = '"+ NuevaReferenciaCatastral.getNURCAT() + "', "
+					+ CAMPO3  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "', "
+					+ CAMPO4  + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "', "
+					+ CAMPO5  + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "', "
+					+ CAMPO6  + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "', "
+					
+					//Ampliacion de valor catastral
+					+ CAMPO7  + " = '"+ NuevaReferenciaCatastral.getIMVSUE() + "', "
+					+ CAMPO8  + " = '"+ NuevaReferenciaCatastral.getIMCATA() + "', "
+					+ CAMPO9  + " = '"+ NuevaReferenciaCatastral.getFERECA() +
+					"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ sCodReferencia +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
 				
-				//Ampliacion de valor catastral
-				+ CAMPO7  + " = '"+ NuevaReferenciaCatastral.getIMVSUE() + "', "
-				+ CAMPO8  + " = '"+ NuevaReferenciaCatastral.getIMCATA() + "', "
-				+ CAMPO9  + " = '"+ NuevaReferenciaCatastral.getFERECA() +
-				"' "+
-				" WHERE "
-				+ CAMPO1 + " = '"+ sCodReferencia +"'";
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
-			
-			logger.debug("Ejecutada con exito!");
-			
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
 
-			bSalida = false;
-		} 
-		finally 
-		{
+				Utils.closeStatement(stmt);
+			}
+		}		
 
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 
-	public static boolean delReferenciaCatastral(String sCodReferencia)
+	public static boolean delReferenciaCatastral(Connection conexion, String sCodReferencia)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
+		boolean bSalida = false;
 
-		Statement stmt = null;
-
-		boolean bSalida = true;
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "DELETE FROM " 
-				+ TABLA + 
-				" WHERE " 
-				+ CAMPO1 + " = '" + sCodReferencia + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Referencia:|"+sCodReferencia+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + sCodReferencia + "'";
 			
-			bSalida = false;
-		} 
-		finally 
-		{
+			logger.debug(sQuery);
 
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}		
+
 		return bSalida;
 	}
 
-	public static ReferenciaCatastral getReferenciaCatastral(String sCodReferencia)
+	public static ReferenciaCatastral getReferenciaCatastral(Connection conexion, String sCodReferencia)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();		
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sNURCAT = "";
 		String sTIRCAT = "";
 		String sENEMIS = "";
@@ -229,345 +218,355 @@ public class QMReferencias
 		String sIMVSUE = "";
 		String sIMCATA = "";
 		String sFERECA = "";
-
-		boolean found = false;
-
-		logger.debug("Ejecutando Query...");
 		
-		String sQuery = "SELECT "
-			       + CAMPO2  + ","
-			       + CAMPO3  + ","              
-			       + CAMPO4  + ","              
-			       + CAMPO5  + ","              
-			       + CAMPO6  +  
-
-			       //Ampliacion de valor catastral
-			       ","              
-			       + CAMPO7  + ","              
-			       + CAMPO8  + ","              
-			       + CAMPO9  +
-
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE " + CAMPO1 + " = '" + sCodReferencia	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT "
+				       + CAMPO2  + ","
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  +  
 
-			if (rs != null) 
+				       //Ampliacion de valor catastral
+				       ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  +
+
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " + CAMPO1 + " = '" + sCodReferencia	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
 
-  					sNURCAT = rs.getString(CAMPO2); 
-  					sTIRCAT = rs.getString(CAMPO3); 
-  					sENEMIS = rs.getString(CAMPO4);
-  					sCOTEXA = rs.getString(CAMPO5);
-  					sOBTEXC = rs.getString(CAMPO6);
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-  					//Ampliacion de valor catastral
-  					sIMVSUE = rs.getString(CAMPO7);
-  					sIMCATA = rs.getString(CAMPO8);
-  					sFERECA = rs.getString(CAMPO9);
-  					
-  					logger.debug("Encontrado el registro!");
+	  					sNURCAT = rs.getString(CAMPO2); 
+	  					sTIRCAT = rs.getString(CAMPO3); 
+	  					sENEMIS = rs.getString(CAMPO4);
+	  					sCOTEXA = rs.getString(CAMPO5);
+	  					sOBTEXC = rs.getString(CAMPO6);
 
-  					logger.debug(CAMPO2+":|"+sNURCAT+"|");
+	  					//Ampliacion de valor catastral
+	  					sIMVSUE = rs.getString(CAMPO7);
+	  					sIMCATA = rs.getString(CAMPO8);
+	  					sFERECA = rs.getString(CAMPO9);
+	  					
+	  					logger.debug("Encontrado el registro!");
+
+	  					logger.debug(CAMPO2+":|"+sNURCAT+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sNURCAT = "";
+				sTIRCAT = "";
+				sENEMIS = "";
+				sCOTEXA = "";
+				sOBTEXC = "";
+				
+				//Ampliacion de valor catastral
+				sIMVSUE = "";
+				sIMCATA = "";
+				sFERECA = "";
+				
+				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Referencia:|"+sCodReferencia+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return new ReferenciaCatastral(sNURCAT, sTIRCAT, sENEMIS, sCOTEXA, sOBTEXC, sIMVSUE, sIMCATA, sFERECA);
 	}
 	
-	public static String getReferenciaCatastralID(String sCodNURCAT)
+	public static String getReferenciaCatastralID(Connection conexion, String sCodNURCAT)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sReferenciaID = "";
-
-		boolean found = false;
-
-		logger.debug("Ejecutando Query...");
 		
-		String sQuery = "SELECT " 
-				+ CAMPO1 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE " 
-				+ CAMPO2 + " = '" + sCodNURCAT + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			boolean bEncontrado = false;
 
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT " 
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO2 + " = '" + sCodNURCAT + "'";
 			
-			
-			if (rs != null) 
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sReferenciaID = rs.getString(CAMPO1);
+						sReferenciaID = rs.getString(CAMPO1);
 
-					logger.debug("Encontrado el registro!");
+						logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO1+":|"+sReferenciaID+"|");
-
-
+						logger.debug(CAMPO1+":|"+sReferenciaID+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				sReferenciaID = "";
+
+				logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return sReferenciaID;
 	}
 	
-	public static boolean existeReferenciaCatastral(String sCodReferencia)
+	public static boolean existeReferenciaCatastral(Connection conexion, String sCodReferencia)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
-		boolean found = false;
-
-		logger.debug("Ejecutando Query...");
+		boolean bEncontrado = false;
 		
-		String sQuery = "SELECT "
-			       + CAMPO4  +              
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE " 
-			       + CAMPO1 + " = '" + sCodReferencia	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT "
+				       + CAMPO4  +              
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1 + " = '" + sCodReferencia	+ "'";
+			
+			logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
 
-  					logger.debug("Encontrado el registro!");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-  					logger.debug(CAMPO1+":|"+sCodReferencia+"|");
+	  					logger.debug("Encontrado el registro!");
+
+	  					logger.debug(CAMPO1+":|"+sCodReferencia+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Referencia:|"+sCodReferencia+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+		
+		return bEncontrado;
 	}
 
-	public static boolean setEstado(String sCodReferencia, String sEstado)
+	public static boolean setEstado(Connection conexion, String sCodReferencia, String sEstado)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
+		boolean bSalida = false;
 		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO10 + " = '"+ sEstado + 
-				"' "+
-				" WHERE "
-				+ CAMPO1 + " = '" + sCodReferencia + "'";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO10 + " = '"+ sEstado + 
+					"' "+
+					" WHERE "
+					+ CAMPO1 + " = '" + sCodReferencia + "'";
 			
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
 
-			bSalida = false;
-		} 
-		finally 
-		{
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}		
 
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
 		return bSalida;
 	}
 	
-	public static String getEstado(String sCodReferencia)
+	public static String getEstado(Connection conexion, String sCodReferencia)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sEstado = "";
 
-		boolean found = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO10 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE " 
-				+ CAMPO1 + " = '" + sCodReferencia + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			boolean bEncontrado = false;
 
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT " 
+					+ CAMPO10 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + sCodReferencia + "'";
 			
-			
-			if (rs != null) 
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sEstado = rs.getString(CAMPO10);
+						sEstado = rs.getString(CAMPO10);
 
-					logger.debug("Encontrado el registro!");
+						logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO10+":|"+sEstado+"|");
-
-
+						logger.debug(CAMPO10+":|"+sEstado+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				sEstado = "";
+
+				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Referencia:|"+sCodReferencia+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return sEstado;
 	}
 }

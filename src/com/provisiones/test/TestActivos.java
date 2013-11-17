@@ -27,10 +27,15 @@ public class TestActivos
 	
 	public static void main(String[] args) throws IOException 
 	{
-		
-	
-
-
+		System.out.println("INICIO:            "+Utils.timeStamp());
+		ConnectionManager.initDBDriver();
+		System.out.println("DRIVER INICIADO:   "+Utils.timeStamp());
+		Connection conn = ConnectionManager.openDBConnection();
+		System.out.println("CONEXION ABIERTA:  "+Utils.timeStamp());
+		//conn = ConnectionManager.getDBConnection();
+		//System.out.println("CONEXION RECIBIDA: "+Utils.timeStamp());
+		ConnectionManager.closeDBConnection(conn);
+		System.out.println("CONEXION CERRADA:  "+Utils.timeStamp());
 	}
 
 	public ArrayList<ResultadosTabla> getTabla() {

@@ -1,6 +1,5 @@
 package com.provisiones.dal.qm;
 
-import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.Activo;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -115,424 +114,420 @@ public class QMActivos
 	public static final String CAMPO91 = "cod_biobnu";
 	public static final String CAMPO92 = "pobrar";
 
-	public static boolean addActivo (Activo NuevoActivo) 
+	public static boolean addActivo(Connection conexion, Activo NuevoActivo) 
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
+		boolean bSalida = false;
 		
-		Statement stmt = null;
+		if (!(conexion == null))
+		{
+			Statement stmt = null;
+			
+
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "INSERT INTO " 
+					   + TABLA + 
+					   " ("
+				       + CAMPO1  + ","
+				       + CAMPO2  + ","
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","              
+				       + CAMPO14 + ","              
+				       + CAMPO15 + ","              
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","              
+				       + CAMPO24 + ","              
+				       + CAMPO25 + ","              
+				       + CAMPO26 + ","              
+				       + CAMPO27 + ","              
+				       + CAMPO28 + ","              
+				       + CAMPO29 + ","              
+				       + CAMPO30 + ","              
+				       + CAMPO31 + ","              
+				       + CAMPO32 + ","              
+				       + CAMPO33 + ","              
+				       + CAMPO34 + ","              
+				       + CAMPO35 + ","              
+				       + CAMPO36 + ","              
+				       + CAMPO37 + ","              
+				       + CAMPO38 + ","              
+				       + CAMPO39 + ","              
+				       + CAMPO40 + ","              
+				       + CAMPO41 + ","              
+				       + CAMPO42 + ","              
+				       + CAMPO43 + ","              
+				       + CAMPO44 + ","              
+				       + CAMPO45 + ","              
+				       + CAMPO46 + ","              
+				       + CAMPO47 + ","              
+				       + CAMPO48 + ","              
+				       + CAMPO49 + ","              
+				       + CAMPO50 + ","              
+				       + CAMPO51 + ","              
+				       + CAMPO52 + ","              
+				       + CAMPO53 + ","              
+				       + CAMPO54 + ","              
+				       + CAMPO55 + ","              
+				       + CAMPO56 + ","              
+				       + CAMPO57 + ","              
+				       + CAMPO58 + ","              
+				       + CAMPO59 + ","              
+				       + CAMPO60 + ","              
+				       + CAMPO61 + ","              
+				       + CAMPO62 + ","              
+				       + CAMPO63 + ","              
+				       + CAMPO64 + ","              
+				       + CAMPO65 + ","              
+				       + CAMPO66 + ","              
+				       + CAMPO67 + ","              
+				       + CAMPO68 + ","              
+				       + CAMPO69 + ","              
+				       + CAMPO70 + ","              
+				       + CAMPO71 + ","              
+				       + CAMPO72 + ","              
+				       + CAMPO73 + ","              
+				       + CAMPO74 + ","              
+				       + CAMPO75 + ","              
+				       + CAMPO76 + ","              
+				       + CAMPO77 + ","              
+				       + CAMPO78 + ","              
+				       + CAMPO79 + ","              
+				       + CAMPO80 + ","              
+				       + CAMPO81 + ","              
+				       + CAMPO82 + ","              
+				       + CAMPO83 + ","              
+				       + CAMPO84 + ","              
+				       + CAMPO85 + ","              
+				       + CAMPO86 + ","              
+				       + CAMPO87 + ","              
+				       + CAMPO88 + ","              
+				       + CAMPO89 + ","              
+				       + CAMPO90 + ","              
+				       + CAMPO91 + ","              
+				       + CAMPO92 +                  
+				       ") VALUES ('"   
+				       + NuevoActivo.getCOACES() + "','"
+				       + NuevoActivo.getNUINMU() + "','"  
+				       + NuevoActivo.getCOSOPA() + "','"  
+				       + NuevoActivo.getCOENAE() + "','"  
+				       + NuevoActivo.getCOESEN() + "','"  
+				       + NuevoActivo.getNOVIAS() + "','"  
+				       + NuevoActivo.getNUPOAC() + "','"  
+				       + NuevoActivo.getNUESAC() + "','"  
+				       + NuevoActivo.getNUPIAC() + "','"  
+				       + NuevoActivo.getNUPUAC() + "','"  
+				       + NuevoActivo.getNOMUIN() + "','"  
+				       + NuevoActivo.getCOPRAE() + "','"  
+				       + NuevoActivo.getNOPRAC() + "','"  
+				       + NuevoActivo.getCOPOIN() + "','"  
+				       + NuevoActivo.getFEREAP() + "','"  
+				       + NuevoActivo.getCOREAE() + "','"  
+				       + NuevoActivo.getFEINAU() + "','"  
+				       + NuevoActivo.getFESOPO() + "','"  
+				       + NuevoActivo.getFESEPO() + "','"  
+				       + NuevoActivo.getFEREPO() + "','"  
+				       + NuevoActivo.getFEADAC() + "','"  
+				       + NuevoActivo.getCODIJU() + "','"  
+				       + NuevoActivo.getCOSJUP() + "','"  
+				       + NuevoActivo.getCOSTLI() + "','"  
+				       + NuevoActivo.getCOSCAR() + "','"  
+				       + NuevoActivo.getCOESVE() + "','"  
+				       + NuevoActivo.getCOTSIN() + "','"  
+				       + NuevoActivo.getNUFIRE() + "','"  
+				       + NuevoActivo.getNUREGP() + "','"  
+				       + NuevoActivo.getNOMUI0() + "','"  
+				       + NuevoActivo.getNULIBE() + "','"  
+				       + NuevoActivo.getNUTOME() + "','"  
+				       + NuevoActivo.getNUFOLE() + "','"  
+				       + NuevoActivo.getNUINSR() + "','"  
+				       + NuevoActivo.getCOSOCU() + "','"  
+				       + NuevoActivo.getCOXPRO() + "','"  
+				       + NuevoActivo.getFESOLA() + "','"  
+				       + NuevoActivo.getFESELA() + "','"  
+				       + NuevoActivo.getFERELA() + "','"  
+				       + NuevoActivo.getFERLLA() + "','"  
+				       + NuevoActivo.getCASPRE() + "','"  
+				       + NuevoActivo.getCASUTR() + "','"  
+				       + NuevoActivo.getCASUTC() + "','"  
+				       + NuevoActivo.getCASUTG() + "','"  
+				       + NuevoActivo.getBIARRE() + "','"  
+				       + NuevoActivo.getCADORM() + "','"  
+				       + NuevoActivo.getCABANO() + "','"  
+				       + NuevoActivo.getBIGAPA() + "','"  
+				       + NuevoActivo.getCAGAPA() + "','"  
+				       + NuevoActivo.getCASUTE() + "','"  
+				       + NuevoActivo.getBILIPO() + "','"  
+				       + NuevoActivo.getBILIAC() + "','"  
+				       + NuevoActivo.getBILIUS() + "','"  
+				       + NuevoActivo.getBIBOIN() + "','"  
+				       + NuevoActivo.getBICEFI() + "','"  
+				       + NuevoActivo.getCASUCB() + "','"  
+				       + NuevoActivo.getCASUCS() + "','"  
+				       + NuevoActivo.getFEACON() + "','"  
+				       + NuevoActivo.getIDAUTO() + "','"  
+				       + NuevoActivo.getFEDEMA() + "','"  
+				       + NuevoActivo.getYNOCUR() + "','"  
+				       + NuevoActivo.getOBRECO() + "','"  
+				       + NuevoActivo.getYNOLEC() + "','"  
+				       + NuevoActivo.getNOLOJZ() + "','"  
+				       + NuevoActivo.getFEREDE() + "','"  
+				       + NuevoActivo.getPOPROP() + "','"  
+				       + NuevoActivo.getCOGRAP() + "','"  
+				       + NuevoActivo.getFEPREG() + "','"  
+				       + NuevoActivo.getFEPHAC() + "','"  
+				       + NuevoActivo.getFEFOAC() + "','"  
+				       + NuevoActivo.getFEVACT() + "','"  
+				       + NuevoActivo.getIMVACT() + "','"  
+				       + NuevoActivo.getNUFIPR() + "','"  
+				       + NuevoActivo.getCOTPET() + "','"  
+				       + NuevoActivo.getFEEMPT() + "','"  
+				       + NuevoActivo.getFESORC() + "','"  
+				       + NuevoActivo.getFESODE() + "','"  
+				       + NuevoActivo.getFEREAC() + "','"  
+				       + NuevoActivo.getCOXSIA() + "','"  
+				       + NuevoActivo.getNUJUZD() + "','"  
+				       + NuevoActivo.getNURCAT() + "','"  
+				       + NuevoActivo.getNOMPRC() + "','"  
+				       + NuevoActivo.getNUTPRC() + "','"  
+				       + NuevoActivo.getNOMADC() + "','"  
+				       + NuevoActivo.getNUTADC() + "','"  
+				       + NuevoActivo.getIMPCOO() + "','"  
+				       + NuevoActivo.getCOENOR() + "','"  
+				       + NuevoActivo.getCOSPAT() + "','"  
+				       + NuevoActivo.getCOSPAS() + "','"  
+				       + NuevoActivo.getIDCOL3() + "','"  
+				       + NuevoActivo.getBIOBNU() + "','"  
+				       + NuevoActivo.getPOBRAR() + "' )";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
 				
-		boolean bSalida = true;
+				logger.debug("Ejecutada con éxito!");
 
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " 
-				   + TABLA + 
-				   " ("
-			       + CAMPO1  + ","
-			       + CAMPO2  + ","
-			       + CAMPO3  + ","              
-			       + CAMPO4  + ","              
-			       + CAMPO5  + ","              
-			       + CAMPO6  + ","              
-			       + CAMPO7  + ","              
-			       + CAMPO8  + ","              
-			       + CAMPO9  + ","              
-			       + CAMPO10 + ","              
-			       + CAMPO11 + ","              
-			       + CAMPO12 + ","              
-			       + CAMPO13 + ","              
-			       + CAMPO14 + ","              
-			       + CAMPO15 + ","              
-			       + CAMPO16 + ","              
-			       + CAMPO17 + ","              
-			       + CAMPO18 + ","              
-			       + CAMPO19 + ","              
-			       + CAMPO20 + ","              
-			       + CAMPO21 + ","              
-			       + CAMPO22 + ","              
-			       + CAMPO23 + ","              
-			       + CAMPO24 + ","              
-			       + CAMPO25 + ","              
-			       + CAMPO26 + ","              
-			       + CAMPO27 + ","              
-			       + CAMPO28 + ","              
-			       + CAMPO29 + ","              
-			       + CAMPO30 + ","              
-			       + CAMPO31 + ","              
-			       + CAMPO32 + ","              
-			       + CAMPO33 + ","              
-			       + CAMPO34 + ","              
-			       + CAMPO35 + ","              
-			       + CAMPO36 + ","              
-			       + CAMPO37 + ","              
-			       + CAMPO38 + ","              
-			       + CAMPO39 + ","              
-			       + CAMPO40 + ","              
-			       + CAMPO41 + ","              
-			       + CAMPO42 + ","              
-			       + CAMPO43 + ","              
-			       + CAMPO44 + ","              
-			       + CAMPO45 + ","              
-			       + CAMPO46 + ","              
-			       + CAMPO47 + ","              
-			       + CAMPO48 + ","              
-			       + CAMPO49 + ","              
-			       + CAMPO50 + ","              
-			       + CAMPO51 + ","              
-			       + CAMPO52 + ","              
-			       + CAMPO53 + ","              
-			       + CAMPO54 + ","              
-			       + CAMPO55 + ","              
-			       + CAMPO56 + ","              
-			       + CAMPO57 + ","              
-			       + CAMPO58 + ","              
-			       + CAMPO59 + ","              
-			       + CAMPO60 + ","              
-			       + CAMPO61 + ","              
-			       + CAMPO62 + ","              
-			       + CAMPO63 + ","              
-			       + CAMPO64 + ","              
-			       + CAMPO65 + ","              
-			       + CAMPO66 + ","              
-			       + CAMPO67 + ","              
-			       + CAMPO68 + ","              
-			       + CAMPO69 + ","              
-			       + CAMPO70 + ","              
-			       + CAMPO71 + ","              
-			       + CAMPO72 + ","              
-			       + CAMPO73 + ","              
-			       + CAMPO74 + ","              
-			       + CAMPO75 + ","              
-			       + CAMPO76 + ","              
-			       + CAMPO77 + ","              
-			       + CAMPO78 + ","              
-			       + CAMPO79 + ","              
-			       + CAMPO80 + ","              
-			       + CAMPO81 + ","              
-			       + CAMPO82 + ","              
-			       + CAMPO83 + ","              
-			       + CAMPO84 + ","              
-			       + CAMPO85 + ","              
-			       + CAMPO86 + ","              
-			       + CAMPO87 + ","              
-			       + CAMPO88 + ","              
-			       + CAMPO89 + ","              
-			       + CAMPO90 + ","              
-			       + CAMPO91 + ","              
-			       + CAMPO92 +                  
-			       ") VALUES ('"   
-			       + NuevoActivo.getCOACES() + "','"
-			       + NuevoActivo.getNUINMU() + "','"  
-			       + NuevoActivo.getCOSOPA() + "','"  
-			       + NuevoActivo.getCOENAE() + "','"  
-			       + NuevoActivo.getCOESEN() + "','"  
-			       + NuevoActivo.getNOVIAS() + "','"  
-			       + NuevoActivo.getNUPOAC() + "','"  
-			       + NuevoActivo.getNUESAC() + "','"  
-			       + NuevoActivo.getNUPIAC() + "','"  
-			       + NuevoActivo.getNUPUAC() + "','"  
-			       + NuevoActivo.getNOMUIN() + "','"  
-			       + NuevoActivo.getCOPRAE() + "','"  
-			       + NuevoActivo.getNOPRAC() + "','"  
-			       + NuevoActivo.getCOPOIN() + "','"  
-			       + NuevoActivo.getFEREAP() + "','"  
-			       + NuevoActivo.getCOREAE() + "','"  
-			       + NuevoActivo.getFEINAU() + "','"  
-			       + NuevoActivo.getFESOPO() + "','"  
-			       + NuevoActivo.getFESEPO() + "','"  
-			       + NuevoActivo.getFEREPO() + "','"  
-			       + NuevoActivo.getFEADAC() + "','"  
-			       + NuevoActivo.getCODIJU() + "','"  
-			       + NuevoActivo.getCOSJUP() + "','"  
-			       + NuevoActivo.getCOSTLI() + "','"  
-			       + NuevoActivo.getCOSCAR() + "','"  
-			       + NuevoActivo.getCOESVE() + "','"  
-			       + NuevoActivo.getCOTSIN() + "','"  
-			       + NuevoActivo.getNUFIRE() + "','"  
-			       + NuevoActivo.getNUREGP() + "','"  
-			       + NuevoActivo.getNOMUI0() + "','"  
-			       + NuevoActivo.getNULIBE() + "','"  
-			       + NuevoActivo.getNUTOME() + "','"  
-			       + NuevoActivo.getNUFOLE() + "','"  
-			       + NuevoActivo.getNUINSR() + "','"  
-			       + NuevoActivo.getCOSOCU() + "','"  
-			       + NuevoActivo.getCOXPRO() + "','"  
-			       + NuevoActivo.getFESOLA() + "','"  
-			       + NuevoActivo.getFESELA() + "','"  
-			       + NuevoActivo.getFERELA() + "','"  
-			       + NuevoActivo.getFERLLA() + "','"  
-			       + NuevoActivo.getCASPRE() + "','"  
-			       + NuevoActivo.getCASUTR() + "','"  
-			       + NuevoActivo.getCASUTC() + "','"  
-			       + NuevoActivo.getCASUTG() + "','"  
-			       + NuevoActivo.getBIARRE() + "','"  
-			       + NuevoActivo.getCADORM() + "','"  
-			       + NuevoActivo.getCABANO() + "','"  
-			       + NuevoActivo.getBIGAPA() + "','"  
-			       + NuevoActivo.getCAGAPA() + "','"  
-			       + NuevoActivo.getCASUTE() + "','"  
-			       + NuevoActivo.getBILIPO() + "','"  
-			       + NuevoActivo.getBILIAC() + "','"  
-			       + NuevoActivo.getBILIUS() + "','"  
-			       + NuevoActivo.getBIBOIN() + "','"  
-			       + NuevoActivo.getBICEFI() + "','"  
-			       + NuevoActivo.getCASUCB() + "','"  
-			       + NuevoActivo.getCASUCS() + "','"  
-			       + NuevoActivo.getFEACON() + "','"  
-			       + NuevoActivo.getIDAUTO() + "','"  
-			       + NuevoActivo.getFEDEMA() + "','"  
-			       + NuevoActivo.getYNOCUR() + "','"  
-			       + NuevoActivo.getOBRECO() + "','"  
-			       + NuevoActivo.getYNOLEC() + "','"  
-			       + NuevoActivo.getNOLOJZ() + "','"  
-			       + NuevoActivo.getFEREDE() + "','"  
-			       + NuevoActivo.getPOPROP() + "','"  
-			       + NuevoActivo.getCOGRAP() + "','"  
-			       + NuevoActivo.getFEPREG() + "','"  
-			       + NuevoActivo.getFEPHAC() + "','"  
-			       + NuevoActivo.getFEFOAC() + "','"  
-			       + NuevoActivo.getFEVACT() + "','"  
-			       + NuevoActivo.getIMVACT() + "','"  
-			       + NuevoActivo.getNUFIPR() + "','"  
-			       + NuevoActivo.getCOTPET() + "','"  
-			       + NuevoActivo.getFEEMPT() + "','"  
-			       + NuevoActivo.getFESORC() + "','"  
-			       + NuevoActivo.getFESODE() + "','"  
-			       + NuevoActivo.getFEREAC() + "','"  
-			       + NuevoActivo.getCOXSIA() + "','"  
-			       + NuevoActivo.getNUJUZD() + "','"  
-			       + NuevoActivo.getNURCAT() + "','"  
-			       + NuevoActivo.getNOMPRC() + "','"  
-			       + NuevoActivo.getNUTPRC() + "','"  
-			       + NuevoActivo.getNOMADC() + "','"  
-			       + NuevoActivo.getNUTADC() + "','"  
-			       + NuevoActivo.getIMPCOO() + "','"  
-			       + NuevoActivo.getCOENOR() + "','"  
-			       + NuevoActivo.getCOSPAT() + "','"  
-			       + NuevoActivo.getCOSPAS() + "','"  
-			       + NuevoActivo.getIDCOL3() + "','"  
-			       + NuevoActivo.getBIOBNU() + "','"  
-			       + NuevoActivo.getPOBRAR() + "' )";
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
-			
-			logger.debug("Ejecutada con éxito!");
-			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR COACES:|"+NuevoActivo.getCOACES()+"|");
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-
-			Utils.closeStatement(stmt);
+				logger.error("ERROR COACES:|"+NuevoActivo.getCOACES()+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-
-		//ConnectionManager.CloseDBConnection(conn);
 
 		return bSalida;
 	}
-	public static boolean modActivo(Activo NuevoActivo, String sCodCOACES)
+	public static boolean modActivo(Connection conexion, Activo NuevoActivo, String sCodCOACES)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-		
-		Statement stmt = null;
+		boolean bSalida = false;
+
+		if (!(conexion == null))
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO2  + " = '"+ NuevoActivo.getNUINMU() + "', "
+					+ CAMPO3  + " = '"+ NuevoActivo.getCOSOPA() + "', "
+					+ CAMPO4  + " = '"+ NuevoActivo.getCOENAE() + "', "
+					+ CAMPO5  + " = '"+ NuevoActivo.getCOESEN() + "', "
+					+ CAMPO6  + " = '"+ NuevoActivo.getNOVIAS() + "', "
+					+ CAMPO7  + " = '"+ NuevoActivo.getNUPOAC() + "', "
+					+ CAMPO8  + " = '"+ NuevoActivo.getNUESAC() + "', "
+					+ CAMPO9  + " = '"+ NuevoActivo.getNUPIAC() + "', "
+					+ CAMPO10 + " = '"+ NuevoActivo.getNUPUAC() + "', "
+					+ CAMPO11 + " = '"+ NuevoActivo.getNOMUIN() + "', "
+					+ CAMPO12 + " = '"+ NuevoActivo.getCOPRAE() + "', "
+					+ CAMPO13 + " = '"+ NuevoActivo.getNOPRAC() + "', "
+					+ CAMPO14 + " = '"+ NuevoActivo.getCOPOIN() + "', "
+					+ CAMPO15 + " = '"+ NuevoActivo.getFEREAP() + "', "
+					+ CAMPO16 + " = '"+ NuevoActivo.getCOREAE() + "', "
+					+ CAMPO17 + " = '"+ NuevoActivo.getFEINAU() + "', "
+					+ CAMPO18 + " = '"+ NuevoActivo.getFESOPO() + "', "
+					+ CAMPO19 + " = '"+ NuevoActivo.getFESEPO() + "', "
+					+ CAMPO20 + " = '"+ NuevoActivo.getFEREPO() + "', "
+					+ CAMPO21 + " = '"+ NuevoActivo.getFEADAC() + "', "
+					+ CAMPO22 + " = '"+ NuevoActivo.getCODIJU() + "', "
+					+ CAMPO23 + " = '"+ NuevoActivo.getCOSJUP() + "', "
+					+ CAMPO24 + " = '"+ NuevoActivo.getCOSTLI() + "', "
+					+ CAMPO25 + " = '"+ NuevoActivo.getCOSCAR() + "', "
+					+ CAMPO26 + " = '"+ NuevoActivo.getCOESVE() + "', "
+					+ CAMPO27 + " = '"+ NuevoActivo.getCOTSIN() + "', "
+					+ CAMPO28 + " = '"+ NuevoActivo.getNUFIRE() + "', "
+					+ CAMPO29 + " = '"+ NuevoActivo.getNUREGP() + "', "
+					+ CAMPO30 + " = '"+ NuevoActivo.getNOMUI0() + "', "
+					+ CAMPO31 + " = '"+ NuevoActivo.getNULIBE() + "', "
+					+ CAMPO32 + " = '"+ NuevoActivo.getNUTOME() + "', "
+					+ CAMPO33 + " = '"+ NuevoActivo.getNUFOLE() + "', "
+					+ CAMPO34 + " = '"+ NuevoActivo.getNUINSR() + "', "
+					+ CAMPO35 + " = '"+ NuevoActivo.getCOSOCU() + "', "
+					+ CAMPO36 + " = '"+ NuevoActivo.getCOXPRO() + "', "
+					+ CAMPO37 + " = '"+ NuevoActivo.getFESOLA() + "', "
+					+ CAMPO38 + " = '"+ NuevoActivo.getFESELA() + "', "
+					+ CAMPO39 + " = '"+ NuevoActivo.getFERELA() + "', "
+					+ CAMPO40 + " = '"+ NuevoActivo.getFERLLA() + "', "
+					+ CAMPO41 + " = '"+ NuevoActivo.getCASPRE() + "', "
+					+ CAMPO42 + " = '"+ NuevoActivo.getCASUTR() + "', "
+					+ CAMPO43 + " = '"+ NuevoActivo.getCASUTC() + "', "
+					+ CAMPO44 + " = '"+ NuevoActivo.getCASUTG() + "', "
+					+ CAMPO45 + " = '"+ NuevoActivo.getBIARRE() + "', "
+					+ CAMPO46 + " = '"+ NuevoActivo.getCADORM() + "', "
+					+ CAMPO47 + " = '"+ NuevoActivo.getCABANO() + "', "
+					+ CAMPO48 + " = '"+ NuevoActivo.getBIGAPA() + "', "
+					+ CAMPO49 + " = '"+ NuevoActivo.getCAGAPA() + "', "
+					+ CAMPO50 + " = '"+ NuevoActivo.getCASUTE() + "', "
+					+ CAMPO51 + " = '"+ NuevoActivo.getBILIPO() + "', "
+					+ CAMPO52 + " = '"+ NuevoActivo.getBILIAC() + "', "
+					+ CAMPO53 + " = '"+ NuevoActivo.getBILIUS() + "', "
+					+ CAMPO54 + " = '"+ NuevoActivo.getBIBOIN() + "', "
+					+ CAMPO55 + " = '"+ NuevoActivo.getBICEFI() + "', "
+					+ CAMPO56 + " = '"+ NuevoActivo.getCASUCB() + "', "
+					+ CAMPO57 + " = '"+ NuevoActivo.getCASUCS() + "', "
+					+ CAMPO58 + " = '"+ NuevoActivo.getFEACON() + "', "
+					+ CAMPO59 + " = '"+ NuevoActivo.getIDAUTO() + "', "
+					+ CAMPO60 + " = '"+ NuevoActivo.getFEDEMA() + "', "
+					+ CAMPO61 + " = '"+ NuevoActivo.getYNOCUR() + "', "
+					+ CAMPO62 + " = '"+ NuevoActivo.getOBRECO() + "', "
+					+ CAMPO63 + " = '"+ NuevoActivo.getYNOLEC() + "', "
+					+ CAMPO64 + " = '"+ NuevoActivo.getNOLOJZ() + "', "
+					+ CAMPO65 + " = '"+ NuevoActivo.getFEREDE() + "', "
+					+ CAMPO66 + " = '"+ NuevoActivo.getPOPROP() + "', "
+					+ CAMPO67 + " = '"+ NuevoActivo.getCOGRAP() + "', "
+					+ CAMPO68 + " = '"+ NuevoActivo.getFEPREG() + "', "
+					+ CAMPO69 + " = '"+ NuevoActivo.getFEPHAC() + "', "
+					+ CAMPO70 + " = '"+ NuevoActivo.getFEFOAC() + "', "
+					+ CAMPO71 + " = '"+ NuevoActivo.getFEVACT() + "', "
+					+ CAMPO72 + " = '"+ NuevoActivo.getIMVACT() + "', "
+					+ CAMPO73 + " = '"+ NuevoActivo.getNUFIPR() + "', "
+					+ CAMPO74 + " = '"+ NuevoActivo.getCOTPET() + "', "
+					+ CAMPO75 + " = '"+ NuevoActivo.getFEEMPT() + "', "
+					+ CAMPO76 + " = '"+ NuevoActivo.getFESORC() + "', "
+					+ CAMPO77 + " = '"+ NuevoActivo.getFESODE() + "', "
+					+ CAMPO78 + " = '"+ NuevoActivo.getFEREAC() + "', "
+					+ CAMPO79 + " = '"+ NuevoActivo.getCOXSIA() + "', "
+					+ CAMPO80 + " = '"+ NuevoActivo.getNUJUZD() + "', "
+					+ CAMPO81 + " = '"+ NuevoActivo.getNURCAT() + "', "
+					+ CAMPO82 + " = '"+ NuevoActivo.getNOMPRC() + "', "
+					+ CAMPO83 + " = '"+ NuevoActivo.getNUTPRC() + "', "
+					+ CAMPO84 + " = '"+ NuevoActivo.getNOMADC() + "', "
+					+ CAMPO85 + " = '"+ NuevoActivo.getNUTADC() + "', "
+					+ CAMPO86 + " = '"+ NuevoActivo.getIMPCOO() + "', "
+					+ CAMPO87 + " = '"+ NuevoActivo.getCOENOR() + "', "
+					+ CAMPO88 + " = '"+ NuevoActivo.getCOSPAT() + "', "
+					+ CAMPO89 + " = '"+ NuevoActivo.getCOSPAS() + "', "
+					+ CAMPO90 + " = '"+ NuevoActivo.getIDCOL3() + "', "
+					+ CAMPO91 + " = '"+ NuevoActivo.getBIOBNU() + "', "
+					+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ sCodCOACES +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
 				
-		boolean bSalida = true;
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO2  + " = '"+ NuevoActivo.getNUINMU() + "', "
-				+ CAMPO3  + " = '"+ NuevoActivo.getCOSOPA() + "', "
-				+ CAMPO4  + " = '"+ NuevoActivo.getCOENAE() + "', "
-				+ CAMPO5  + " = '"+ NuevoActivo.getCOESEN() + "', "
-				+ CAMPO6  + " = '"+ NuevoActivo.getNOVIAS() + "', "
-				+ CAMPO7  + " = '"+ NuevoActivo.getNUPOAC() + "', "
-				+ CAMPO8  + " = '"+ NuevoActivo.getNUESAC() + "', "
-				+ CAMPO9  + " = '"+ NuevoActivo.getNUPIAC() + "', "
-				+ CAMPO10 + " = '"+ NuevoActivo.getNUPUAC() + "', "
-				+ CAMPO11 + " = '"+ NuevoActivo.getNOMUIN() + "', "
-				+ CAMPO12 + " = '"+ NuevoActivo.getCOPRAE() + "', "
-				+ CAMPO13 + " = '"+ NuevoActivo.getNOPRAC() + "', "
-				+ CAMPO14 + " = '"+ NuevoActivo.getCOPOIN() + "', "
-				+ CAMPO15 + " = '"+ NuevoActivo.getFEREAP() + "', "
-				+ CAMPO16 + " = '"+ NuevoActivo.getCOREAE() + "', "
-				+ CAMPO17 + " = '"+ NuevoActivo.getFEINAU() + "', "
-				+ CAMPO18 + " = '"+ NuevoActivo.getFESOPO() + "', "
-				+ CAMPO19 + " = '"+ NuevoActivo.getFESEPO() + "', "
-				+ CAMPO20 + " = '"+ NuevoActivo.getFEREPO() + "', "
-				+ CAMPO21 + " = '"+ NuevoActivo.getFEADAC() + "', "
-				+ CAMPO22 + " = '"+ NuevoActivo.getCODIJU() + "', "
-				+ CAMPO23 + " = '"+ NuevoActivo.getCOSJUP() + "', "
-				+ CAMPO24 + " = '"+ NuevoActivo.getCOSTLI() + "', "
-				+ CAMPO25 + " = '"+ NuevoActivo.getCOSCAR() + "', "
-				+ CAMPO26 + " = '"+ NuevoActivo.getCOESVE() + "', "
-				+ CAMPO27 + " = '"+ NuevoActivo.getCOTSIN() + "', "
-				+ CAMPO28 + " = '"+ NuevoActivo.getNUFIRE() + "', "
-				+ CAMPO29 + " = '"+ NuevoActivo.getNUREGP() + "', "
-				+ CAMPO30 + " = '"+ NuevoActivo.getNOMUI0() + "', "
-				+ CAMPO31 + " = '"+ NuevoActivo.getNULIBE() + "', "
-				+ CAMPO32 + " = '"+ NuevoActivo.getNUTOME() + "', "
-				+ CAMPO33 + " = '"+ NuevoActivo.getNUFOLE() + "', "
-				+ CAMPO34 + " = '"+ NuevoActivo.getNUINSR() + "', "
-				+ CAMPO35 + " = '"+ NuevoActivo.getCOSOCU() + "', "
-				+ CAMPO36 + " = '"+ NuevoActivo.getCOXPRO() + "', "
-				+ CAMPO37 + " = '"+ NuevoActivo.getFESOLA() + "', "
-				+ CAMPO38 + " = '"+ NuevoActivo.getFESELA() + "', "
-				+ CAMPO39 + " = '"+ NuevoActivo.getFERELA() + "', "
-				+ CAMPO40 + " = '"+ NuevoActivo.getFERLLA() + "', "
-				+ CAMPO41 + " = '"+ NuevoActivo.getCASPRE() + "', "
-				+ CAMPO42 + " = '"+ NuevoActivo.getCASUTR() + "', "
-				+ CAMPO43 + " = '"+ NuevoActivo.getCASUTC() + "', "
-				+ CAMPO44 + " = '"+ NuevoActivo.getCASUTG() + "', "
-				+ CAMPO45 + " = '"+ NuevoActivo.getBIARRE() + "', "
-				+ CAMPO46 + " = '"+ NuevoActivo.getCADORM() + "', "
-				+ CAMPO47 + " = '"+ NuevoActivo.getCABANO() + "', "
-				+ CAMPO48 + " = '"+ NuevoActivo.getBIGAPA() + "', "
-				+ CAMPO49 + " = '"+ NuevoActivo.getCAGAPA() + "', "
-				+ CAMPO50 + " = '"+ NuevoActivo.getCASUTE() + "', "
-				+ CAMPO51 + " = '"+ NuevoActivo.getBILIPO() + "', "
-				+ CAMPO52 + " = '"+ NuevoActivo.getBILIAC() + "', "
-				+ CAMPO53 + " = '"+ NuevoActivo.getBILIUS() + "', "
-				+ CAMPO54 + " = '"+ NuevoActivo.getBIBOIN() + "', "
-				+ CAMPO55 + " = '"+ NuevoActivo.getBICEFI() + "', "
-				+ CAMPO56 + " = '"+ NuevoActivo.getCASUCB() + "', "
-				+ CAMPO57 + " = '"+ NuevoActivo.getCASUCS() + "', "
-				+ CAMPO58 + " = '"+ NuevoActivo.getFEACON() + "', "
-				+ CAMPO59 + " = '"+ NuevoActivo.getIDAUTO() + "', "
-				+ CAMPO60 + " = '"+ NuevoActivo.getFEDEMA() + "', "
-				+ CAMPO61 + " = '"+ NuevoActivo.getYNOCUR() + "', "
-				+ CAMPO62 + " = '"+ NuevoActivo.getOBRECO() + "', "
-				+ CAMPO63 + " = '"+ NuevoActivo.getYNOLEC() + "', "
-				+ CAMPO64 + " = '"+ NuevoActivo.getNOLOJZ() + "', "
-				+ CAMPO65 + " = '"+ NuevoActivo.getFEREDE() + "', "
-				+ CAMPO66 + " = '"+ NuevoActivo.getPOPROP() + "', "
-				+ CAMPO67 + " = '"+ NuevoActivo.getCOGRAP() + "', "
-				+ CAMPO68 + " = '"+ NuevoActivo.getFEPREG() + "', "
-				+ CAMPO69 + " = '"+ NuevoActivo.getFEPHAC() + "', "
-				+ CAMPO70 + " = '"+ NuevoActivo.getFEFOAC() + "', "
-				+ CAMPO71 + " = '"+ NuevoActivo.getFEVACT() + "', "
-				+ CAMPO72 + " = '"+ NuevoActivo.getIMVACT() + "', "
-				+ CAMPO73 + " = '"+ NuevoActivo.getNUFIPR() + "', "
-				+ CAMPO74 + " = '"+ NuevoActivo.getCOTPET() + "', "
-				+ CAMPO75 + " = '"+ NuevoActivo.getFEEMPT() + "', "
-				+ CAMPO76 + " = '"+ NuevoActivo.getFESORC() + "', "
-				+ CAMPO77 + " = '"+ NuevoActivo.getFESODE() + "', "
-				+ CAMPO78 + " = '"+ NuevoActivo.getFEREAC() + "', "
-				+ CAMPO79 + " = '"+ NuevoActivo.getCOXSIA() + "', "
-				+ CAMPO80 + " = '"+ NuevoActivo.getNUJUZD() + "', "
-				+ CAMPO81 + " = '"+ NuevoActivo.getNURCAT() + "', "
-				+ CAMPO82 + " = '"+ NuevoActivo.getNOMPRC() + "', "
-				+ CAMPO83 + " = '"+ NuevoActivo.getNUTPRC() + "', "
-				+ CAMPO84 + " = '"+ NuevoActivo.getNOMADC() + "', "
-				+ CAMPO85 + " = '"+ NuevoActivo.getNUTADC() + "', "
-				+ CAMPO86 + " = '"+ NuevoActivo.getIMPCOO() + "', "
-				+ CAMPO87 + " = '"+ NuevoActivo.getCOENOR() + "', "
-				+ CAMPO88 + " = '"+ NuevoActivo.getCOSPAT() + "', "
-				+ CAMPO89 + " = '"+ NuevoActivo.getCOSPAS() + "', "
-				+ CAMPO90 + " = '"+ NuevoActivo.getIDCOL3() + "', "
-				+ CAMPO91 + " = '"+ NuevoActivo.getBIOBNU() + "', "
-				+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' "+
-				" WHERE "
-				+ CAMPO1 + " = '"+ sCodCOACES +"'";
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
-			
-			logger.debug("Ejecutada con éxito!");
-					
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+				logger.debug("Ejecutada con éxito!");
 
-			logger.error("ERROR COACES:|"+NuevoActivo.getCOACES()+"|");
+				bSalida = true;
+						
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				logger.error("ERROR COACES:|"+NuevoActivo.getCOACES()+"|");
 
-		} 
-		finally 
-		{
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 
-			Utils.closeStatement(stmt);
-			
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+				
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 
-	public static boolean delActivo(String sCodCOACES)
+	public static boolean delActivo(Connection conexion, String sCodCOACES)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
+		boolean bSalida = false;
 
-		Statement stmt = null;
-
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "DELETE FROM " 
-						+ TABLA + 
-						" WHERE " 
-						+ CAMPO1 + " = '" + sCodCOACES + "'";
-
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con éxito!");
-			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			String sQuery = "DELETE FROM " 
+							+ TABLA + 
+							" WHERE " 
+							+ CAMPO1 + " = '" + sCodCOACES + "'";
 
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
+			logger.debug(sQuery);
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con éxito!");
 
-			Utils.closeStatement(stmt);
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 
-	public static Activo getActivo(String sCodCOACES)
+	public static Activo getActivo(Connection conexion, String sCodCOACES)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-		
-		Statement stmt = null;
-				
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-		
 		String sCOACES = "";
 		String sNUINMU = "";
 		String sCOSOPA = "";
@@ -626,248 +621,350 @@ public class QMActivos
 		String sBIOBNU = "";
 		String sPOBRAR = "";
 
-		boolean bEncontrado = false;
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + CAMPO1  + ","
-				   + CAMPO2  + ","              
-			       + CAMPO3  + ","              
-			       + CAMPO4  + ","              
-			       + CAMPO5  + ","              
-			       + CAMPO6  + ","              
-			       + CAMPO7  + ","              
-			       + CAMPO8  + ","              
-			       + CAMPO9  + ","              
-			       + CAMPO10 + ","              
-			       + CAMPO11 + ","              
-			       + CAMPO12 + ","              
-			       + CAMPO13 + ","              
-			       + CAMPO14 + ","              
-			       + CAMPO15 + ","              
-			       + CAMPO16 + ","              
-			       + CAMPO17 + ","              
-			       + CAMPO18 + ","              
-			       + CAMPO19 + ","              
-			       + CAMPO20 + ","              
-			       + CAMPO21 + ","              
-			       + CAMPO22 + ","              
-			       + CAMPO23 + ","              
-			       + CAMPO24 + ","              
-			       + CAMPO25 + ","              
-			       + CAMPO26 + ","              
-			       + CAMPO27 + ","              
-			       + CAMPO28 + ","              
-			       + CAMPO29 + ","              
-			       + CAMPO30 + ","              
-			       + CAMPO31 + ","              
-			       + CAMPO32 + ","              
-			       + CAMPO33 + ","              
-			       + CAMPO34 + ","              
-			       + CAMPO35 + ","              
-			       + CAMPO36 + ","              
-			       + CAMPO37 + ","              
-			       + CAMPO38 + ","              
-			       + CAMPO39 + ","              
-			       + CAMPO40 + ","              
-			       + CAMPO41 + ","              
-			       + CAMPO42 + ","              
-			       + CAMPO43 + ","              
-			       + CAMPO44 + ","              
-			       + CAMPO45 + ","              
-			       + CAMPO46 + ","              
-			       + CAMPO47 + ","              
-			       + CAMPO48 + ","              
-			       + CAMPO49 + ","              
-			       + CAMPO50 + ","              
-			       + CAMPO51 + ","              
-			       + CAMPO52 + ","              
-			       + CAMPO53 + ","              
-			       + CAMPO54 + ","              
-			       + CAMPO55 + ","              
-			       + CAMPO56 + ","              
-			       + CAMPO57 + ","              
-			       + CAMPO58 + ","              
-			       + CAMPO59 + ","              
-			       + CAMPO60 + ","              
-			       + CAMPO61 + ","              
-			       + CAMPO62 + ","              
-			       + CAMPO63 + ","              
-			       + CAMPO64 + ","              
-			       + CAMPO65 + ","              
-			       + CAMPO66 + ","              
-			       + CAMPO67 + ","              
-			       + CAMPO68 + ","              
-			       + CAMPO69 + ","              
-			       + CAMPO70 + ","              
-			       + CAMPO71 + ","              
-			       + CAMPO72 + ","              
-			       + CAMPO73 + ","              
-			       + CAMPO74 + ","              
-			       + CAMPO75 + ","              
-			       + CAMPO76 + ","              
-			       + CAMPO77 + ","              
-			       + CAMPO78 + ","              
-			       + CAMPO79 + ","              
-			       + CAMPO80 + ","              
-			       + CAMPO81 + ","              
-			       + CAMPO82 + ","              
-			       + CAMPO83 + ","              
-			       + CAMPO84 + ","              
-			       + CAMPO85 + ","              
-			       + CAMPO86 + ","              
-			       + CAMPO87 + ","              
-			       + CAMPO88 + ","              
-			       + CAMPO89 + ","              
-			       + CAMPO90 + ","              
-			       + CAMPO91 + ","              
-			       + CAMPO92 +        
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE "
-			       + CAMPO1 + " = '" + sCodCOACES	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement(sQuery);
+			Statement stmt = null;
 			
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 			
 
-			rs = pstmt.executeQuery();
+
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con éxito!");
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO1  + ","
+					   + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","              
+				       + CAMPO14 + ","              
+				       + CAMPO15 + ","              
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","              
+				       + CAMPO24 + ","              
+				       + CAMPO25 + ","              
+				       + CAMPO26 + ","              
+				       + CAMPO27 + ","              
+				       + CAMPO28 + ","              
+				       + CAMPO29 + ","              
+				       + CAMPO30 + ","              
+				       + CAMPO31 + ","              
+				       + CAMPO32 + ","              
+				       + CAMPO33 + ","              
+				       + CAMPO34 + ","              
+				       + CAMPO35 + ","              
+				       + CAMPO36 + ","              
+				       + CAMPO37 + ","              
+				       + CAMPO38 + ","              
+				       + CAMPO39 + ","              
+				       + CAMPO40 + ","              
+				       + CAMPO41 + ","              
+				       + CAMPO42 + ","              
+				       + CAMPO43 + ","              
+				       + CAMPO44 + ","              
+				       + CAMPO45 + ","              
+				       + CAMPO46 + ","              
+				       + CAMPO47 + ","              
+				       + CAMPO48 + ","              
+				       + CAMPO49 + ","              
+				       + CAMPO50 + ","              
+				       + CAMPO51 + ","              
+				       + CAMPO52 + ","              
+				       + CAMPO53 + ","              
+				       + CAMPO54 + ","              
+				       + CAMPO55 + ","              
+				       + CAMPO56 + ","              
+				       + CAMPO57 + ","              
+				       + CAMPO58 + ","              
+				       + CAMPO59 + ","              
+				       + CAMPO60 + ","              
+				       + CAMPO61 + ","              
+				       + CAMPO62 + ","              
+				       + CAMPO63 + ","              
+				       + CAMPO64 + ","              
+				       + CAMPO65 + ","              
+				       + CAMPO66 + ","              
+				       + CAMPO67 + ","              
+				       + CAMPO68 + ","              
+				       + CAMPO69 + ","              
+				       + CAMPO70 + ","              
+				       + CAMPO71 + ","              
+				       + CAMPO72 + ","              
+				       + CAMPO73 + ","              
+				       + CAMPO74 + ","              
+				       + CAMPO75 + ","              
+				       + CAMPO76 + ","              
+				       + CAMPO77 + ","              
+				       + CAMPO78 + ","              
+				       + CAMPO79 + ","              
+				       + CAMPO80 + ","              
+				       + CAMPO81 + ","              
+				       + CAMPO82 + ","              
+				       + CAMPO83 + ","              
+				       + CAMPO84 + ","              
+				       + CAMPO85 + ","              
+				       + CAMPO86 + ","              
+				       + CAMPO87 + ","              
+				       + CAMPO88 + ","              
+				       + CAMPO89 + ","              
+				       + CAMPO90 + ","              
+				       + CAMPO91 + ","              
+				       + CAMPO92 +        
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE "
+				       + CAMPO1 + " = '" + sCodCOACES	+ "'";
+			
+			logger.debug(sQuery);
 
-			logger.debug(CAMPO1+":|"+sCodCOACES+"|");
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				
+				
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
 
-					sCOACES = rs.getString(CAMPO1);
-					sNUINMU = rs.getString(CAMPO2);
-					sCOSOPA = rs.getString(CAMPO3);
-					sCOENAE = rs.getString(CAMPO4);
-					sCOESEN = rs.getString(CAMPO5);
-					sNOVIAS = rs.getString(CAMPO6);
-					sNUPOAC = rs.getString(CAMPO7);
-					sNUESAC = rs.getString(CAMPO8);
-					sNUPIAC = rs.getString(CAMPO9);
-					sNUPUAC = rs.getString(CAMPO10);
-					sNOMUIN = rs.getString(CAMPO11);
-					sCOPRAE = rs.getString(CAMPO12);
-					sNOPRAC = rs.getString(CAMPO13);
-					sCOPOIN = rs.getString(CAMPO14);
-					sFEREAP = rs.getString(CAMPO15);
-					sCOREAE = rs.getString(CAMPO16);
-					sFEINAU = rs.getString(CAMPO17);
-					sFESOPO = rs.getString(CAMPO18);
-					sFESEPO = rs.getString(CAMPO19);
-					sFEREPO = rs.getString(CAMPO20);
-					sFEADAC = rs.getString(CAMPO21);
-					sCODIJU = rs.getString(CAMPO22);
-					sCOSJUP = rs.getString(CAMPO23);
-					sCOSTLI = rs.getString(CAMPO24);
-					sCOSCAR = rs.getString(CAMPO25);
-					sCOESVE = rs.getString(CAMPO26);
-					sCOTSIN = rs.getString(CAMPO27);
-					sNUFIRE = rs.getString(CAMPO28);
-					sNUREGP = rs.getString(CAMPO29);
-					sNOMUI0 = rs.getString(CAMPO30);
-					sNULIBE = rs.getString(CAMPO31);
-					sNUTOME = rs.getString(CAMPO32);
-					sNUFOLE = rs.getString(CAMPO33);
-					sNUINSR = rs.getString(CAMPO34);
-					sCOSOCU = rs.getString(CAMPO35);
-					sCOXPRO = rs.getString(CAMPO36);
-					sFESOLA = rs.getString(CAMPO37);
-					sFESELA = rs.getString(CAMPO38);
-					sFERELA = rs.getString(CAMPO39);
-					sFERLLA = rs.getString(CAMPO40);
-					sCASPRE = rs.getString(CAMPO41);
-					sCASUTR = rs.getString(CAMPO42);
-					sCASUTC = rs.getString(CAMPO43);
-					sCASUTG = rs.getString(CAMPO44);
-					sBIARRE = rs.getString(CAMPO45);
-					sCADORM = rs.getString(CAMPO46);
-					sCABANO = rs.getString(CAMPO47);
-					sBIGAPA = rs.getString(CAMPO48);
-					sCAGAPA = rs.getString(CAMPO49);
-					sCASUTE = rs.getString(CAMPO50);
-					sBILIPO = rs.getString(CAMPO51);
-					sBILIAC = rs.getString(CAMPO52);
-					sBILIUS = rs.getString(CAMPO53);
-					sBIBOIN = rs.getString(CAMPO54);
-					sBICEFI = rs.getString(CAMPO55);
-					sCASUCB = rs.getString(CAMPO56);
-					sCASUCS = rs.getString(CAMPO57);
-					sFEACON = rs.getString(CAMPO58);
-					sIDAUTO = rs.getString(CAMPO59);
-					sFEDEMA = rs.getString(CAMPO60);
-					sYNOCUR = rs.getString(CAMPO61);
-					sOBRECO = rs.getString(CAMPO62);
-					sYNOLEC = rs.getString(CAMPO63);
-					sNOLOJZ = rs.getString(CAMPO64);
-					sFEREDE = rs.getString(CAMPO65);
-					sPOPROP = rs.getString(CAMPO66);
-					sCOGRAP = rs.getString(CAMPO67);
-					sFEPREG = rs.getString(CAMPO68);
-					sFEPHAC = rs.getString(CAMPO69);
-					sFEFOAC = rs.getString(CAMPO70);
-					sFEVACT = rs.getString(CAMPO71);
-					sIMVACT = rs.getString(CAMPO72);
-					sNUFIPR = rs.getString(CAMPO73);
-					sCOTPET = rs.getString(CAMPO74);
-					sFEEMPT = rs.getString(CAMPO75);
-					sFESORC = rs.getString(CAMPO76);
-					sFESODE = rs.getString(CAMPO77);
-					sFEREAC = rs.getString(CAMPO78);
-					sCOXSIA = rs.getString(CAMPO79);
-					sNUJUZD = rs.getString(CAMPO80);
-					sNURCAT = rs.getString(CAMPO81);
-					sNOMPRC = rs.getString(CAMPO82);
-					sNUTPRC = rs.getString(CAMPO83);
-					sNOMADC = rs.getString(CAMPO84);
-					sNUTADC = rs.getString(CAMPO85);
-					sIMPCOO = rs.getString(CAMPO86);
-					sCOENOR = rs.getString(CAMPO87);
-					sCOSPAT = rs.getString(CAMPO88);
-					sCOSPAS = rs.getString(CAMPO89);
-					sIDCOL3 = rs.getString(CAMPO90);
-					sBIOBNU = rs.getString(CAMPO91);
-					sPOBRAR = rs.getString(CAMPO92);
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
+						sCOACES = rs.getString(CAMPO1);
+						sNUINMU = rs.getString(CAMPO2);
+						sCOSOPA = rs.getString(CAMPO3);
+						sCOENAE = rs.getString(CAMPO4);
+						sCOESEN = rs.getString(CAMPO5);
+						sNOVIAS = rs.getString(CAMPO6);
+						sNUPOAC = rs.getString(CAMPO7);
+						sNUESAC = rs.getString(CAMPO8);
+						sNUPIAC = rs.getString(CAMPO9);
+						sNUPUAC = rs.getString(CAMPO10);
+						sNOMUIN = rs.getString(CAMPO11);
+						sCOPRAE = rs.getString(CAMPO12);
+						sNOPRAC = rs.getString(CAMPO13);
+						sCOPOIN = rs.getString(CAMPO14);
+						sFEREAP = rs.getString(CAMPO15);
+						sCOREAE = rs.getString(CAMPO16);
+						sFEINAU = rs.getString(CAMPO17);
+						sFESOPO = rs.getString(CAMPO18);
+						sFESEPO = rs.getString(CAMPO19);
+						sFEREPO = rs.getString(CAMPO20);
+						sFEADAC = rs.getString(CAMPO21);
+						sCODIJU = rs.getString(CAMPO22);
+						sCOSJUP = rs.getString(CAMPO23);
+						sCOSTLI = rs.getString(CAMPO24);
+						sCOSCAR = rs.getString(CAMPO25);
+						sCOESVE = rs.getString(CAMPO26);
+						sCOTSIN = rs.getString(CAMPO27);
+						sNUFIRE = rs.getString(CAMPO28);
+						sNUREGP = rs.getString(CAMPO29);
+						sNOMUI0 = rs.getString(CAMPO30);
+						sNULIBE = rs.getString(CAMPO31);
+						sNUTOME = rs.getString(CAMPO32);
+						sNUFOLE = rs.getString(CAMPO33);
+						sNUINSR = rs.getString(CAMPO34);
+						sCOSOCU = rs.getString(CAMPO35);
+						sCOXPRO = rs.getString(CAMPO36);
+						sFESOLA = rs.getString(CAMPO37);
+						sFESELA = rs.getString(CAMPO38);
+						sFERELA = rs.getString(CAMPO39);
+						sFERLLA = rs.getString(CAMPO40);
+						sCASPRE = rs.getString(CAMPO41);
+						sCASUTR = rs.getString(CAMPO42);
+						sCASUTC = rs.getString(CAMPO43);
+						sCASUTG = rs.getString(CAMPO44);
+						sBIARRE = rs.getString(CAMPO45);
+						sCADORM = rs.getString(CAMPO46);
+						sCABANO = rs.getString(CAMPO47);
+						sBIGAPA = rs.getString(CAMPO48);
+						sCAGAPA = rs.getString(CAMPO49);
+						sCASUTE = rs.getString(CAMPO50);
+						sBILIPO = rs.getString(CAMPO51);
+						sBILIAC = rs.getString(CAMPO52);
+						sBILIUS = rs.getString(CAMPO53);
+						sBIBOIN = rs.getString(CAMPO54);
+						sBICEFI = rs.getString(CAMPO55);
+						sCASUCB = rs.getString(CAMPO56);
+						sCASUCS = rs.getString(CAMPO57);
+						sFEACON = rs.getString(CAMPO58);
+						sIDAUTO = rs.getString(CAMPO59);
+						sFEDEMA = rs.getString(CAMPO60);
+						sYNOCUR = rs.getString(CAMPO61);
+						sOBRECO = rs.getString(CAMPO62);
+						sYNOLEC = rs.getString(CAMPO63);
+						sNOLOJZ = rs.getString(CAMPO64);
+						sFEREDE = rs.getString(CAMPO65);
+						sPOPROP = rs.getString(CAMPO66);
+						sCOGRAP = rs.getString(CAMPO67);
+						sFEPREG = rs.getString(CAMPO68);
+						sFEPHAC = rs.getString(CAMPO69);
+						sFEFOAC = rs.getString(CAMPO70);
+						sFEVACT = rs.getString(CAMPO71);
+						sIMVACT = rs.getString(CAMPO72);
+						sNUFIPR = rs.getString(CAMPO73);
+						sCOTPET = rs.getString(CAMPO74);
+						sFEEMPT = rs.getString(CAMPO75);
+						sFESORC = rs.getString(CAMPO76);
+						sFESODE = rs.getString(CAMPO77);
+						sFEREAC = rs.getString(CAMPO78);
+						sCOXSIA = rs.getString(CAMPO79);
+						sNUJUZD = rs.getString(CAMPO80);
+						sNURCAT = rs.getString(CAMPO81);
+						sNOMPRC = rs.getString(CAMPO82);
+						sNUTPRC = rs.getString(CAMPO83);
+						sNOMADC = rs.getString(CAMPO84);
+						sNUTADC = rs.getString(CAMPO85);
+						sIMPCOO = rs.getString(CAMPO86);
+						sCOENOR = rs.getString(CAMPO87);
+						sCOSPAT = rs.getString(CAMPO88);
+						sCOSPAS = rs.getString(CAMPO89);
+						sIDCOL3 = rs.getString(CAMPO90);
+						sBIOBNU = rs.getString(CAMPO91);
+						sPOBRAR = rs.getString(CAMPO92);
 
+						logger.debug("Encontrado el registro!");
+
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontro la información.");
+				sCOACES = "";
+				sNUINMU = "";
+				sCOSOPA = "";
+				sCOENAE = "";
+				sCOESEN = "";
+				sNOVIAS = "";
+				sNUPOAC = "";
+				sNUESAC = "";
+				sNUPIAC = "";
+				sNUPUAC = "";
+				sNOMUIN = "";
+				sCOPRAE = "";
+				sNOPRAC = "";
+				sCOPOIN = "";
+				sFEREAP = "";
+				sCOREAE = "";
+				sFEINAU = "";
+				sFESOPO = "";
+				sFESEPO = "";
+				sFEREPO = "";
+				sFEADAC = "";
+				sCODIJU = "";
+				sCOSJUP = "";
+				sCOSTLI = "";
+				sCOSCAR = "";
+				sCOESVE = "";
+				sCOTSIN = "";
+				sNUFIRE = "";
+				sNUREGP = "";
+				sNOMUI0 = "";
+				sNULIBE = "";
+				sNUTOME = "";
+				sNUFOLE = "";
+				sNUINSR = "";
+				sCOSOCU = "";
+				sCOXPRO = "";
+				sFESOLA = "";
+				sFESELA = "";
+				sFERELA = "";
+				sFERLLA = "";
+				sCASPRE = "";
+				sCASUTR = "";
+				sCASUTC = "";
+				sCASUTG = "";
+				sBIARRE = "";
+				sCADORM = "";
+				sCABANO = "";
+				sBIGAPA = "";
+				sCAGAPA = "";
+				sCASUTE = "";
+				sBILIPO = "";
+				sBILIAC = "";
+				sBILIUS = "";
+				sBIBOIN = "";
+				sBICEFI = "";
+				sCASUCB = "";
+				sCASUCS = "";
+				sFEACON = "";
+				sIDAUTO = "";
+				sFEDEMA = "";
+				sYNOCUR = "";
+				sOBRECO = "";
+				sYNOLEC = "";
+				sNOLOJZ = "";
+				sFEREDE = "";
+				sPOPROP = "";
+				sCOGRAP = "";
+				sFEPREG = "";
+				sFEPHAC = "";
+				sFEFOAC = "";
+				sFEVACT = "";
+				sIMVACT = "";
+				sNUFIPR = "";
+				sCOTPET = "";
+				sFEEMPT = "";
+				sFESORC = "";
+				sFESODE = "";
+				sFEREAC = "";
+				sCOXSIA = "";
+				sNUJUZD = "";
+				sNURCAT = "";
+				sNOMPRC = "";
+				sNUTPRC = "";
+				sNOMADC = "";
+				sNUTADC = "";
+				sIMPCOO = "";
+				sCOENOR = "";
+				sCOSPAT = "";
+				sCOSPAS = "";
+				sIDCOL3 = "";
+				sBIOBNU = "";
+				sPOBRAR = "";
+				
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-			
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+		
+
 		return new Activo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
 				sNUPOAC, sNUESAC, sNUPIAC, sNUPUAC, sNOMUIN, sCOPRAE, sNOPRAC,
 				sCOPOIN, sFEREAP, sCOREAE, sFEINAU, sFESOPO, sFESEPO, sFEREPO,
@@ -884,678 +981,569 @@ public class QMActivos
 				sBIOBNU, sPOBRAR);
 	}
 
-	public static boolean existeActivo(String sCodCOACES)
+	public static boolean existeActivo(Connection conexion, String sCodCOACES)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		boolean bEncontrado = false;
 
-		//logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + CAMPO1  +        
-				   " FROM " 
-				   + TABLA + 
-				   " WHERE " 
-				   + CAMPO1 + " = '" + sCodCOACES	+ "'";
-		
-		//logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-			
-			
-
-			rs = pstmt.executeQuery();
-			
-			//logger.debug("Ejecutada con éxito!");
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
 			
 
-			if (rs != null) 
+			//logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO1  +        
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE " 
+					   + CAMPO1 + " = '" + sCodCOACES	+ "'";
+			
+			//logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				
+				
+
+				rs = pstmt.executeQuery();
+				
+				//logger.debug("Ejecutada con éxito!");
+
+				
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
-					//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+						//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontro la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+	
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bEncontrado;
 	}
 	
-	public static boolean compruebaActivo(Activo NuevoActivo)
+	public static boolean compruebaActivo(Connection conexion, Activo NuevoActivo)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		boolean bEncontrado = false;
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO1  +
-				" FROM " 
-				+ TABLA + 
-				" WHERE (" 
-				+ CAMPO1  + " = '"+ NuevoActivo.getCOACES() + "' AND "
-				+ CAMPO2  + " = '"+ NuevoActivo.getNUINMU() + "' AND "
-				+ CAMPO3  + " = '"+ NuevoActivo.getCOSOPA() + "' AND "
-				+ CAMPO4  + " = '"+ NuevoActivo.getCOENAE() + "' AND "
-				+ CAMPO5  + " = '"+ NuevoActivo.getCOESEN() + "' AND "
-				+ CAMPO6  + " = '"+ NuevoActivo.getNOVIAS() + "' AND "
-				+ CAMPO7  + " = '"+ NuevoActivo.getNUPOAC() + "' AND "
-				+ CAMPO8  + " = '"+ NuevoActivo.getNUESAC() + "' AND "
-				+ CAMPO9  + " = '"+ NuevoActivo.getNUPIAC() + "' AND "
-				+ CAMPO10 + " = '"+ NuevoActivo.getNUPUAC() + "' AND "
-				+ CAMPO11 + " = '"+ NuevoActivo.getNOMUIN() + "' AND "
-				+ CAMPO12 + " = '"+ NuevoActivo.getCOPRAE() + "' AND "
-				+ CAMPO13 + " = '"+ NuevoActivo.getNOPRAC() + "' AND "
-				+ CAMPO14 + " = '"+ NuevoActivo.getCOPOIN() + "' AND "
-				+ CAMPO15 + " = '"+ NuevoActivo.getFEREAP() + "' AND "
-				+ CAMPO16 + " = '"+ NuevoActivo.getCOREAE() + "' AND "
-				+ CAMPO17 + " = '"+ NuevoActivo.getFEINAU() + "' AND "
-				+ CAMPO18 + " = '"+ NuevoActivo.getFESOPO() + "' AND "
-				+ CAMPO19 + " = '"+ NuevoActivo.getFESEPO() + "' AND "
-				+ CAMPO20 + " = '"+ NuevoActivo.getFEREPO() + "' AND "
-				+ CAMPO21 + " = '"+ NuevoActivo.getFEADAC() + "' AND "
-				+ CAMPO22 + " = '"+ NuevoActivo.getCODIJU() + "' AND "
-				+ CAMPO23 + " = '"+ NuevoActivo.getCOSJUP() + "' AND "
-				+ CAMPO24 + " = '"+ NuevoActivo.getCOSTLI() + "' AND "
-				+ CAMPO25 + " = '"+ NuevoActivo.getCOSCAR() + "' AND "
-				+ CAMPO26 + " = '"+ NuevoActivo.getCOESVE() + "' AND "
-				+ CAMPO27 + " = '"+ NuevoActivo.getCOTSIN() + "' AND "
-				+ CAMPO28 + " = '"+ NuevoActivo.getNUFIRE() + "' AND "
-				+ CAMPO29 + " = '"+ NuevoActivo.getNUREGP() + "' AND "
-				+ CAMPO30 + " = '"+ NuevoActivo.getNOMUI0() + "' AND "
-				+ CAMPO31 + " = '"+ NuevoActivo.getNULIBE() + "' AND "
-				+ CAMPO32 + " = '"+ NuevoActivo.getNUTOME() + "' AND "
-				+ CAMPO33 + " = '"+ NuevoActivo.getNUFOLE() + "' AND "
-				+ CAMPO34 + " = '"+ NuevoActivo.getNUINSR() + "' AND "
-				+ CAMPO35 + " = '"+ NuevoActivo.getCOSOCU() + "' AND "
-				+ CAMPO36 + " = '"+ NuevoActivo.getCOXPRO() + "' AND "
-				+ CAMPO37 + " = '"+ NuevoActivo.getFESOLA() + "' AND "
-				+ CAMPO38 + " = '"+ NuevoActivo.getFESELA() + "' AND "
-				+ CAMPO39 + " = '"+ NuevoActivo.getFERELA() + "' AND "
-				+ CAMPO40 + " = '"+ NuevoActivo.getFERLLA() + "' AND "
-				+ CAMPO41 + " = '"+ NuevoActivo.getCASPRE() + "' AND "
-				+ CAMPO42 + " = '"+ NuevoActivo.getCASUTR() + "' AND "
-				+ CAMPO43 + " = '"+ NuevoActivo.getCASUTC() + "' AND "
-				+ CAMPO44 + " = '"+ NuevoActivo.getCASUTG() + "' AND "
-				+ CAMPO45 + " = '"+ NuevoActivo.getBIARRE() + "' AND "
-				+ CAMPO46 + " = '"+ NuevoActivo.getCADORM() + "' AND "
-				+ CAMPO47 + " = '"+ NuevoActivo.getCABANO() + "' AND "
-				+ CAMPO48 + " = '"+ NuevoActivo.getBIGAPA() + "' AND "
-				+ CAMPO49 + " = '"+ NuevoActivo.getCAGAPA() + "' AND "
-				+ CAMPO50 + " = '"+ NuevoActivo.getCASUTE() + "' AND "
-				+ CAMPO51 + " = '"+ NuevoActivo.getBILIPO() + "' AND "
-				+ CAMPO52 + " = '"+ NuevoActivo.getBILIAC() + "' AND "
-				+ CAMPO53 + " = '"+ NuevoActivo.getBILIUS() + "' AND "
-				+ CAMPO54 + " = '"+ NuevoActivo.getBIBOIN() + "' AND "
-				+ CAMPO55 + " = '"+ NuevoActivo.getBICEFI() + "' AND "
-				+ CAMPO56 + " = '"+ NuevoActivo.getCASUCB() + "' AND "
-				+ CAMPO57 + " = '"+ NuevoActivo.getCASUCS() + "' AND "
-				+ CAMPO58 + " = '"+ NuevoActivo.getFEACON() + "' AND "
-				+ CAMPO59 + " = '"+ NuevoActivo.getIDAUTO() + "' AND "
-				+ CAMPO60 + " = '"+ NuevoActivo.getFEDEMA() + "' AND "
-				+ CAMPO61 + " = '"+ NuevoActivo.getYNOCUR() + "' AND "
-				+ CAMPO62 + " = '"+ NuevoActivo.getOBRECO() + "' AND "
-				+ CAMPO63 + " = '"+ NuevoActivo.getYNOLEC() + "' AND "
-				+ CAMPO64 + " = '"+ NuevoActivo.getNOLOJZ() + "' AND "
-				+ CAMPO65 + " = '"+ NuevoActivo.getFEREDE() + "' AND "
-				+ CAMPO66 + " = '"+ NuevoActivo.getPOPROP() + "' AND "
-				+ CAMPO67 + " = '"+ NuevoActivo.getCOGRAP() + "' AND "
-				+ CAMPO68 + " = '"+ NuevoActivo.getFEPREG() + "' AND "
-				+ CAMPO69 + " = '"+ NuevoActivo.getFEPHAC() + "' AND "
-				+ CAMPO70 + " = '"+ NuevoActivo.getFEFOAC() + "' AND "
-				+ CAMPO71 + " = '"+ NuevoActivo.getFEVACT() + "' AND "
-				+ CAMPO72 + " = '"+ NuevoActivo.getIMVACT() + "' AND "
-				+ CAMPO73 + " = '"+ NuevoActivo.getNUFIPR() + "' AND "
-				+ CAMPO74 + " = '"+ NuevoActivo.getCOTPET() + "' AND "
-				+ CAMPO75 + " = '"+ NuevoActivo.getFEEMPT() + "' AND "
-				+ CAMPO76 + " = '"+ NuevoActivo.getFESORC() + "' AND "
-				+ CAMPO77 + " = '"+ NuevoActivo.getFESODE() + "' AND "
-				+ CAMPO78 + " = '"+ NuevoActivo.getFEREAC() + "' AND "
-				+ CAMPO79 + " = '"+ NuevoActivo.getCOXSIA() + "' AND "
-				+ CAMPO80 + " = '"+ NuevoActivo.getNUJUZD() + "' AND "
-				+ CAMPO81 + " = '"+ NuevoActivo.getNURCAT() + "' AND "
-				+ CAMPO82 + " = '"+ NuevoActivo.getNOMPRC() + "' AND "
-				+ CAMPO83 + " = '"+ NuevoActivo.getNUTPRC() + "' AND "
-				+ CAMPO84 + " = '"+ NuevoActivo.getNOMADC() + "' AND "
-				+ CAMPO85 + " = '"+ NuevoActivo.getNUTADC() + "' AND "
-				+ CAMPO86 + " = '"+ NuevoActivo.getIMPCOO() + "' AND "
-				+ CAMPO87 + " = '"+ NuevoActivo.getCOENOR() + "' AND "
-				+ CAMPO88 + " = '"+ NuevoActivo.getCOSPAT() + "' AND "
-				+ CAMPO89 + " = '"+ NuevoActivo.getCOSPAS() + "' AND "
-				+ CAMPO90 + " = '"+ NuevoActivo.getIDCOL3() + "' AND "
-				+ CAMPO91 + " = '"+ NuevoActivo.getBIOBNU() + "' AND "
-				+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' )";
-		
-		logger.debug(sQuery);
-		
-		try 
+
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-			
-			
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			//logger.debug("Ejecutada con éxito!");
-
+			String sQuery = "SELECT " 
+					+ CAMPO1  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO1  + " = '"+ NuevoActivo.getCOACES() + "' AND "
+					+ CAMPO2  + " = '"+ NuevoActivo.getNUINMU() + "' AND "
+					+ CAMPO3  + " = '"+ NuevoActivo.getCOSOPA() + "' AND "
+					+ CAMPO4  + " = '"+ NuevoActivo.getCOENAE() + "' AND "
+					+ CAMPO5  + " = '"+ NuevoActivo.getCOESEN() + "' AND "
+					+ CAMPO6  + " = '"+ NuevoActivo.getNOVIAS() + "' AND "
+					+ CAMPO7  + " = '"+ NuevoActivo.getNUPOAC() + "' AND "
+					+ CAMPO8  + " = '"+ NuevoActivo.getNUESAC() + "' AND "
+					+ CAMPO9  + " = '"+ NuevoActivo.getNUPIAC() + "' AND "
+					+ CAMPO10 + " = '"+ NuevoActivo.getNUPUAC() + "' AND "
+					+ CAMPO11 + " = '"+ NuevoActivo.getNOMUIN() + "' AND "
+					+ CAMPO12 + " = '"+ NuevoActivo.getCOPRAE() + "' AND "
+					+ CAMPO13 + " = '"+ NuevoActivo.getNOPRAC() + "' AND "
+					+ CAMPO14 + " = '"+ NuevoActivo.getCOPOIN() + "' AND "
+					+ CAMPO15 + " = '"+ NuevoActivo.getFEREAP() + "' AND "
+					+ CAMPO16 + " = '"+ NuevoActivo.getCOREAE() + "' AND "
+					+ CAMPO17 + " = '"+ NuevoActivo.getFEINAU() + "' AND "
+					+ CAMPO18 + " = '"+ NuevoActivo.getFESOPO() + "' AND "
+					+ CAMPO19 + " = '"+ NuevoActivo.getFESEPO() + "' AND "
+					+ CAMPO20 + " = '"+ NuevoActivo.getFEREPO() + "' AND "
+					+ CAMPO21 + " = '"+ NuevoActivo.getFEADAC() + "' AND "
+					+ CAMPO22 + " = '"+ NuevoActivo.getCODIJU() + "' AND "
+					+ CAMPO23 + " = '"+ NuevoActivo.getCOSJUP() + "' AND "
+					+ CAMPO24 + " = '"+ NuevoActivo.getCOSTLI() + "' AND "
+					+ CAMPO25 + " = '"+ NuevoActivo.getCOSCAR() + "' AND "
+					+ CAMPO26 + " = '"+ NuevoActivo.getCOESVE() + "' AND "
+					+ CAMPO27 + " = '"+ NuevoActivo.getCOTSIN() + "' AND "
+					+ CAMPO28 + " = '"+ NuevoActivo.getNUFIRE() + "' AND "
+					+ CAMPO29 + " = '"+ NuevoActivo.getNUREGP() + "' AND "
+					+ CAMPO30 + " = '"+ NuevoActivo.getNOMUI0() + "' AND "
+					+ CAMPO31 + " = '"+ NuevoActivo.getNULIBE() + "' AND "
+					+ CAMPO32 + " = '"+ NuevoActivo.getNUTOME() + "' AND "
+					+ CAMPO33 + " = '"+ NuevoActivo.getNUFOLE() + "' AND "
+					+ CAMPO34 + " = '"+ NuevoActivo.getNUINSR() + "' AND "
+					+ CAMPO35 + " = '"+ NuevoActivo.getCOSOCU() + "' AND "
+					+ CAMPO36 + " = '"+ NuevoActivo.getCOXPRO() + "' AND "
+					+ CAMPO37 + " = '"+ NuevoActivo.getFESOLA() + "' AND "
+					+ CAMPO38 + " = '"+ NuevoActivo.getFESELA() + "' AND "
+					+ CAMPO39 + " = '"+ NuevoActivo.getFERELA() + "' AND "
+					+ CAMPO40 + " = '"+ NuevoActivo.getFERLLA() + "' AND "
+					+ CAMPO41 + " = '"+ NuevoActivo.getCASPRE() + "' AND "
+					+ CAMPO42 + " = '"+ NuevoActivo.getCASUTR() + "' AND "
+					+ CAMPO43 + " = '"+ NuevoActivo.getCASUTC() + "' AND "
+					+ CAMPO44 + " = '"+ NuevoActivo.getCASUTG() + "' AND "
+					+ CAMPO45 + " = '"+ NuevoActivo.getBIARRE() + "' AND "
+					+ CAMPO46 + " = '"+ NuevoActivo.getCADORM() + "' AND "
+					+ CAMPO47 + " = '"+ NuevoActivo.getCABANO() + "' AND "
+					+ CAMPO48 + " = '"+ NuevoActivo.getBIGAPA() + "' AND "
+					+ CAMPO49 + " = '"+ NuevoActivo.getCAGAPA() + "' AND "
+					+ CAMPO50 + " = '"+ NuevoActivo.getCASUTE() + "' AND "
+					+ CAMPO51 + " = '"+ NuevoActivo.getBILIPO() + "' AND "
+					+ CAMPO52 + " = '"+ NuevoActivo.getBILIAC() + "' AND "
+					+ CAMPO53 + " = '"+ NuevoActivo.getBILIUS() + "' AND "
+					+ CAMPO54 + " = '"+ NuevoActivo.getBIBOIN() + "' AND "
+					+ CAMPO55 + " = '"+ NuevoActivo.getBICEFI() + "' AND "
+					+ CAMPO56 + " = '"+ NuevoActivo.getCASUCB() + "' AND "
+					+ CAMPO57 + " = '"+ NuevoActivo.getCASUCS() + "' AND "
+					+ CAMPO58 + " = '"+ NuevoActivo.getFEACON() + "' AND "
+					+ CAMPO59 + " = '"+ NuevoActivo.getIDAUTO() + "' AND "
+					+ CAMPO60 + " = '"+ NuevoActivo.getFEDEMA() + "' AND "
+					+ CAMPO61 + " = '"+ NuevoActivo.getYNOCUR() + "' AND "
+					+ CAMPO62 + " = '"+ NuevoActivo.getOBRECO() + "' AND "
+					+ CAMPO63 + " = '"+ NuevoActivo.getYNOLEC() + "' AND "
+					+ CAMPO64 + " = '"+ NuevoActivo.getNOLOJZ() + "' AND "
+					+ CAMPO65 + " = '"+ NuevoActivo.getFEREDE() + "' AND "
+					+ CAMPO66 + " = '"+ NuevoActivo.getPOPROP() + "' AND "
+					+ CAMPO67 + " = '"+ NuevoActivo.getCOGRAP() + "' AND "
+					+ CAMPO68 + " = '"+ NuevoActivo.getFEPREG() + "' AND "
+					+ CAMPO69 + " = '"+ NuevoActivo.getFEPHAC() + "' AND "
+					+ CAMPO70 + " = '"+ NuevoActivo.getFEFOAC() + "' AND "
+					+ CAMPO71 + " = '"+ NuevoActivo.getFEVACT() + "' AND "
+					+ CAMPO72 + " = '"+ NuevoActivo.getIMVACT() + "' AND "
+					+ CAMPO73 + " = '"+ NuevoActivo.getNUFIPR() + "' AND "
+					+ CAMPO74 + " = '"+ NuevoActivo.getCOTPET() + "' AND "
+					+ CAMPO75 + " = '"+ NuevoActivo.getFEEMPT() + "' AND "
+					+ CAMPO76 + " = '"+ NuevoActivo.getFESORC() + "' AND "
+					+ CAMPO77 + " = '"+ NuevoActivo.getFESODE() + "' AND "
+					+ CAMPO78 + " = '"+ NuevoActivo.getFEREAC() + "' AND "
+					+ CAMPO79 + " = '"+ NuevoActivo.getCOXSIA() + "' AND "
+					+ CAMPO80 + " = '"+ NuevoActivo.getNUJUZD() + "' AND "
+					+ CAMPO81 + " = '"+ NuevoActivo.getNURCAT() + "' AND "
+					+ CAMPO82 + " = '"+ NuevoActivo.getNOMPRC() + "' AND "
+					+ CAMPO83 + " = '"+ NuevoActivo.getNUTPRC() + "' AND "
+					+ CAMPO84 + " = '"+ NuevoActivo.getNOMADC() + "' AND "
+					+ CAMPO85 + " = '"+ NuevoActivo.getNUTADC() + "' AND "
+					+ CAMPO86 + " = '"+ NuevoActivo.getIMPCOO() + "' AND "
+					+ CAMPO87 + " = '"+ NuevoActivo.getCOENOR() + "' AND "
+					+ CAMPO88 + " = '"+ NuevoActivo.getCOSPAT() + "' AND "
+					+ CAMPO89 + " = '"+ NuevoActivo.getCOSPAS() + "' AND "
+					+ CAMPO90 + " = '"+ NuevoActivo.getIDCOL3() + "' AND "
+					+ CAMPO91 + " = '"+ NuevoActivo.getBIOBNU() + "' AND "
+					+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' )";
 			
-
-			if (rs != null) 
+			logger.debug(sQuery);
+			
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				
+				
+
+				rs = pstmt.executeQuery();
+				
+				//logger.debug("Ejecutada con éxito!");
+
+				
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
-					//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+						//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+						
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontro la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR COACES:|"+NuevoActivo.getCOACES()+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
 			}
-					
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR COACES:|"+NuevoActivo.getCOACES()+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-
-		} 
-		finally 
-		{
-
-			Utils.closeStatement(stmt);
-			
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bEncontrado;
 	}
 
-	public static String getReferenciaCatastral(String sCodCOACES)
+	public static String getReferenciaCatastral(Connection conexion, String sCodCOACES)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-		
 		String sReferencia = "";
-		
-		boolean bEncontrado = false;
 
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + CAMPO81  +        
-				   " FROM " 
-				   + TABLA + 
-				   " WHERE " 
-				   + CAMPO1 + " = '" + sCodCOACES	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 			
 
-			rs = pstmt.executeQuery();
 			
-			logger.debug("Ejecutada con éxito!");
+			boolean bEncontrado = false;
 
-			if (rs != null) 
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO81  +        
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE " 
+					   + CAMPO1 + " = '" + sCodCOACES	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
-					
-					sReferencia = rs.getString(CAMPO81);
 
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO81+":|"+sReferencia+"|");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sReferencia = rs.getString(CAMPO81);
 
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO81+":|"+sReferencia+"|");
+
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontro la información.");
+				sReferencia = "";
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
+
 		return sReferencia;
 	}
 	
-	public static String getCOTSINActivo(String sCodCOACES)
+	public static String getCOTSINActivo(Connection conexion, String sCodCOACES)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sCOTSIN = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + CAMPO27  +        
-				   " FROM " 
-				   + TABLA + 
-				   " WHERE " 
-				   + CAMPO1 + " = '" + sCodCOACES	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-			
-			
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con éxito!");
+			boolean bEncontrado = false;
 
+			logger.debug("Ejecutando Query...");
 			
+			String sQuery = "SELECT "
+					   + CAMPO27  +        
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE " 
+					   + CAMPO1 + " = '" + sCodCOACES	+ "'";
+			
+			logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				
+				
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
-					
-					sCOTSIN = rs.getString(CAMPO27);
 
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO27+":|"+sCOTSIN+"|");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOTSIN = rs.getString(CAMPO27);
 
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO27+":|"+sCOTSIN+"|");
+
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontro la información.");
+				sCOTSIN = "";
+				
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-			
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return sCOTSIN;
 	}
 
-	public static String getBIARREActivo(String sCodCOACES)
+	public static String getBIARREActivo(Connection conexion, String sCodCOACES)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sBIARRE = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + CAMPO45  +        
-				   " FROM " 
-				   + TABLA + 
-				   " WHERE " 
-				   + CAMPO1 + " = '" + sCodCOACES + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-			
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con éxito!");
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			if (rs != null) 
+
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO45  +        
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE " 
+					   + CAMPO1 + " = '" + sCodCOACES + "'";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
-					
-					sBIARRE = rs.getString(CAMPO45);
 
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO45+":|"+sBIARRE+"|");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sBIARRE = rs.getString(CAMPO45);
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO45+":|"+sBIARRE+"|");
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontro la información.");
+				sBIARRE = "";
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return sBIARRE;
 	}
 	
-	public static String getSociedadPatrimonial(String sCodCOACES)
+	public static String getSociedadPatrimonial(Connection conexion, String sCodCOACES)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sCodCOSPAT = "0";
-
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
 		
-		String sQuery = "SELECT "
-				   + CAMPO88  +        
-				   " FROM " 
-				   + TABLA + 
-				   " WHERE " 
-				   + CAMPO1 + " = '" + sCodCOACES + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-		
-			rs = pstmt.executeQuery();
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con éxito!");
-
+			String sQuery = "SELECT "
+					   + CAMPO88  +        
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE " 
+					   + CAMPO1 + " = '" + sCodCOACES + "'";
 			
+			logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+			
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
-					
-					sCodCOSPAT = rs.getString(CAMPO88);
 
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO88+":|"+sCodCOSPAT+"|");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCodCOSPAT = rs.getString(CAMPO88);
 
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO88+":|"+sCodCOSPAT+"|");
+
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontro la información.");
+				sCodCOSPAT = "0";
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return sCodCOSPAT;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaListaActivos(ActivoTabla activo)
+	public static ArrayList<ActivoTabla> buscaListaActivos(Connection conexion, ActivoTabla filtro)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-		
-		Statement stmt = null;
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
-		String sCOACES = "";
-		String sCOPOIN = "";
-		String sNOMUIN = "";
-		String sNOPRAC = "";
-		String sNOVIAS = "";
-		String sNUPIAC = "";
-		String sNUPOAC = "";
-		String sNUPUAC = "";
-		
-		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
-
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + CAMPO1 + ","        
-				   + CAMPO14 + ","
-				   + CAMPO11 + ","
-				   + CAMPO13 + ","
-				   + CAMPO6 + ","
-				   + CAMPO9 + ","
-				   + CAMPO7 + ","
-				   + CAMPO10 + 
-				   " FROM " 
-				   + TABLA + 
-				   " WHERE ("
-				   + CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-				   + CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-				   + CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-				   + CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-				   + CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-				   + CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-				   + CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ 			   
-				   "%')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
+
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
 			
 
-			rs = pstmt.executeQuery();
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con éxito!");
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					bEncontrado = true;
-					
-					sCOACES = rs.getString(CAMPO1);
-					sCOPOIN = rs.getString(CAMPO14);
-					sNOMUIN = rs.getString(CAMPO11);
-					sNOPRAC = rs.getString(CAMPO13);
-					sNOVIAS = rs.getString(CAMPO6);
-					sNUPIAC = rs.getString(CAMPO9);
-					sNUPOAC = rs.getString(CAMPO7);
-					sNUPUAC = rs.getString(CAMPO10);
-					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
-					
-					result.add(activoencontrado);
-					
-					//logger.debug( "Encontrado el registro!");
-					//logger.debug(CAMPO1+":|"+sCOACES+"|");
-				}
-			}
-			if (bEncontrado == false) 
-			{
-
-				logger.info("No se encontro la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR COPOIN:|"+activo.getCOPOIN()+"|");
-			logger.error("ERROR NOMUIN:|"+activo.getNOMUIN()+"|");
-			logger.error("ERROR NOPRAC:|"+activo.getNOPRAC()+"|");
-			logger.error("ERROR NOVIAS:|"+activo.getNOVIAS()+"|");
-			logger.error("ERROR NUPIAC:|"+activo.getNUPIAC()+"|");
-			logger.error("ERROR NUPOAC:|"+activo.getNUPOAC()+"|");
-			logger.error("ERROR NUPUAC:|"+activo.getNUPUAC()+"|");
-			
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
-	
-	public static ArrayList<ActivoTabla> buscaListaActivosReferencias(ActivoTabla activo)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		String sCOACES = "";
-		String sCOPOIN = "";
-		String sNOMUIN = "";
-		String sNOPRAC = "";
-		String sNOVIAS = "";
-		String sNUPIAC = "";
-		String sNUPOAC = "";
-		String sNUPUAC = "";
-		String sNURCAT = "";
-		
-		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		String sQuery = "SELECT "
-					
+			String sQuery = "SELECT "
 					   + CAMPO1 + ","        
 					   + CAMPO14 + ","
 					   + CAMPO11 + ","
@@ -1563,77 +1551,196 @@ public class QMActivos
 					   + CAMPO6 + ","
 					   + CAMPO9 + ","
 					   + CAMPO7 + ","
-					   + CAMPO10 + ","
-					   + CAMPO81 + 
-
+					   + CAMPO10 + 
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE ("
-
-					   + CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' )";
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conn.createStatement();
+					   + CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+					   + CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+					   + CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+					   + CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+					   + CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+					   + CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+					   + CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ 			   
+					   "%')";
 			
-			pstmt = conn.prepareStatement(sQuery);
+			logger.debug(sQuery);
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
 				{
-					found = true;
-					
-					sCOACES = rs.getString(CAMPO1);
-					sCOPOIN = rs.getString(CAMPO14);
-					sNOMUIN = rs.getString(CAMPO11);
-					sNOPRAC = rs.getString(CAMPO13);
-					sNOVIAS = rs.getString(CAMPO6);
-					sNUPIAC = rs.getString(CAMPO9);
-					sNUPOAC = rs.getString(CAMPO7);
-					sNUPUAC = rs.getString(CAMPO10);
-					sNURCAT = rs.getString(CAMPO81);
-					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
-					
-					result.add(activoencontrado);
-					
-					//logger.debug("Encontrado el registro!");
-					//logger.debug(CAMPO1+":|"+sCOACES+"|");
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(CAMPO1);
+						sCOPOIN = rs.getString(CAMPO14);
+						sNOMUIN = rs.getString(CAMPO11);
+						sNOPRAC = rs.getString(CAMPO13);
+						sNOVIAS = rs.getString(CAMPO6);
+						sNUPIAC = rs.getString(CAMPO9);
+						sNUPOAC = rs.getString(CAMPO7);
+						sNUPUAC = rs.getString(CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						//logger.debug( "Encontrado el registro!");
+						//logger.debug(CAMPO1+":|"+sCOACES+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+
+					logger.info("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR COPOIN:|"+filtro.getCOPOIN()+"|");
+				logger.error("ERROR NOMUIN:|"+filtro.getNOMUIN()+"|");
+				logger.error("ERROR NOPRAC:|"+filtro.getNOPRAC()+"|");
+				logger.error("ERROR NOVIAS:|"+filtro.getNOVIAS()+"|");
+				logger.error("ERROR NUPIAC:|"+filtro.getNUPIAC()+"|");
+				logger.error("ERROR NUPOAC:|"+filtro.getNUPOAC()+"|");
+				logger.error("ERROR NUPUAC:|"+filtro.getNUPUAC()+"|");
+				
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<ActivoTabla>();
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaListaActivosReferencias(Connection conexion, ActivoTabla filtro)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (!(conexion == null))
+		{
+			Statement stmt = null;
+			ResultSet rs = null;
+
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+			String sNURCAT = "";
+			
+
+			
+
+			PreparedStatement pstmt = null;
+			boolean found = false;
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						
+						   + CAMPO1 + ","        
+						   + CAMPO14 + ","
+						   + CAMPO11 + ","
+						   + CAMPO13 + ","
+						   + CAMPO6 + ","
+						   + CAMPO9 + ","
+						   + CAMPO7 + ","
+						   + CAMPO10 + ","
+						   + CAMPO81 + 
+
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE ("
+
+						   + CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   + CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   + CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   + CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   + CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   + CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   + CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' )";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						found = true;
+						
+						sCOACES = rs.getString(CAMPO1);
+						sCOPOIN = rs.getString(CAMPO14);
+						sNOMUIN = rs.getString(CAMPO11);
+						sNOPRAC = rs.getString(CAMPO13);
+						sNOVIAS = rs.getString(CAMPO6);
+						sNUPIAC = rs.getString(CAMPO9);
+						sNUPOAC = rs.getString(CAMPO7);
+						sNUPUAC = rs.getString(CAMPO10);
+						sNURCAT = rs.getString(CAMPO81);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						
+						resultado.add(activoencontrado);
+						
+						//logger.debug("Encontrado el registro!");
+						//logger.debug(CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (found == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
 
 	}
 }

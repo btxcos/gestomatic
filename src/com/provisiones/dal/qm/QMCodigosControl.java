@@ -9,7 +9,6 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 
 public class QMCodigosControl 
@@ -61,157 +60,36 @@ public class QMCodigosControl
 	public static final String TCOTERR = "pp001_coterr_tbl";
 	public static final String ICOTERR = "coterr_id";
 	
-	public static String getDesCampo(String sTabla, String sCampo, String sValor)
+	public static String getDesCampo(Connection conexion, String sTabla, String sCampo, String sValor)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-		
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-		
 		String sDescripcion = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				+ DESCRIPCION +
-				" FROM " 
-				+ sTabla + 
-				" WHERE "
-				+ sCampo + " = '" + sValor + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (!(conexion == null))
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			boolean bEncontrado = false;
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					bEncontrado = true;
-
-					sDescripcion = rs.getString(DESCRIPCION);
-
-					logger.debug("Encontrado el registro!");
-
-					logger.debug(DESCRIPCION+":|"+sDescripcion+"|");
-				}
-			}
-			if (bEncontrado == false) 
-			{
- 
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR "+sCampo.toUpperCase()+":|"+sValor+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-
-		//ConnectionManager.CloseDBConnection(conn);
-		return sDescripcion;
-	}
-	
-	public static String getDesCOSBGA(String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean bEncontrado = false;
-	
-
-		String sTabla = "";
-		String sCampo  = "cosbga_id";    
-		
-		String sDescripcion = "";
-		
-		switch (Integer.parseInt(sCodCOGRUG)) 
-		{
-			case 1:
-				switch (Integer.parseInt(sCodCOTPGA)) 
-				{
-					case 1:case 2:
-						sTabla = "pp001_cosbga_t11_tbl";						
-						break;
-				}
-				break;
-			case 2:
-				switch (Integer.parseInt(sCodCOTPGA)) 
-				{
-					case 1:
-						sTabla = "pp001_cosbga_t21_tbl";
-						break;
-					case 2:
-						sTabla = "pp001_cosbga_t22_tbl";
-						break;
-					case 3:
-						sTabla = "pp001_cosbga_t23_tbl";
-						break;
-				}
-				break;
-			case 3:
-				switch (Integer.parseInt(sCodCOTPGA)) 
-				{
-					case 2:
-						sTabla = "pp001_cosbga_32_tbl";
-						break;
-					case 3:
-						sTabla = "";
-						sDescripcion = "Obtención de Licencias";
-						break;
-				}
-				break;
-		}
-		
-
-		if (!sTabla.equals(""))
-		{
-			Connection conn = null;
-
-			conn = ConnectionManager.getDBConnection();
-			
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "SELECT " 
-					+ DESCRIPCION + 
+			String sQuery = "SELECT "
+					+ DESCRIPCION +
 					" FROM " 
 					+ sTabla + 
 					" WHERE "
-					+ sCampo + " = '" + sCodCOSBGA + "'";
+					+ sCampo + " = '" + sValor + "'";
 			
 			logger.debug(sQuery);
 
 			try 
 			{
-				stmt = conn.createStatement();
+				stmt = conexion.createStatement();
 
 
-				pstmt = conn.prepareStatement(sQuery);
+				pstmt = conexion.prepareStatement(sQuery);
 
 				rs = pstmt.executeQuery();
 				
@@ -230,8 +108,6 @@ public class QMCodigosControl
 						logger.debug("Encontrado el registro!");
 
 						logger.debug(DESCRIPCION+":|"+sDescripcion+"|");
-
-
 					}
 				}
 				if (bEncontrado == false) 
@@ -243,9 +119,9 @@ public class QMCodigosControl
 			} 
 			catch (SQLException ex) 
 			{
-				logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
-				logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
-				logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
+				sDescripcion = "";
+
+				logger.error("ERROR "+sCampo.toUpperCase()+":|"+sValor+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -254,9 +130,136 @@ public class QMCodigosControl
 				Utils.closeResultSet(rs);
 				Utils.closeStatement(stmt);
 			}
-
-			//ConnectionManager.CloseDBConnection(conn);
 		}
+
+		return sDescripcion;
+	}
+	
+	public static String getDesCOSBGA(Connection conexion, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA)
+	{
+		String sDescripcion = "";
+
+		if (!(conexion == null))
+		{
+			Statement stmt = null;
+			ResultSet rs = null;
+
+
+			PreparedStatement pstmt = null;
+			boolean bEncontrado = false;
+		
+
+			String sTabla = "";
+			String sCampo  = "cosbga_id";    
+			
+
+			
+			switch (Integer.parseInt(sCodCOGRUG)) 
+			{
+				case 1:
+					switch (Integer.parseInt(sCodCOTPGA)) 
+					{
+						case 1:case 2:
+							sTabla = "pp001_cosbga_t11_tbl";						
+							break;
+					}
+					break;
+				case 2:
+					switch (Integer.parseInt(sCodCOTPGA)) 
+					{
+						case 1:
+							sTabla = "pp001_cosbga_t21_tbl";
+							break;
+						case 2:
+							sTabla = "pp001_cosbga_t22_tbl";
+							break;
+						case 3:
+							sTabla = "pp001_cosbga_t23_tbl";
+							break;
+					}
+					break;
+				case 3:
+					switch (Integer.parseInt(sCodCOTPGA)) 
+					{
+						case 2:
+							sTabla = "pp001_cosbga_32_tbl";
+							break;
+						case 3:
+							sTabla = "";
+							sDescripcion = "Obtención de Licencias";
+							break;
+					}
+					break;
+			}
+			
+
+			if (!sTabla.equals(""))
+			{
+				
+				logger.debug("Ejecutando Query...");
+				
+				String sQuery = "SELECT " 
+						+ DESCRIPCION + 
+						" FROM " 
+						+ sTabla + 
+						" WHERE "
+						+ sCampo + " = '" + sCodCOSBGA + "'";
+				
+				logger.debug(sQuery);
+
+				try 
+				{
+					stmt = conexion.createStatement();
+
+
+					pstmt = conexion.prepareStatement(sQuery);
+
+					rs = pstmt.executeQuery();
+					
+					logger.debug("Ejecutada con exito!");
+					
+					
+					if (rs != null) 
+					{
+						
+						while (rs.next()) 
+						{
+							bEncontrado = true;
+
+							sDescripcion = rs.getString(DESCRIPCION);
+
+							logger.debug("Encontrado el registro!");
+
+							logger.debug(DESCRIPCION+":|"+sDescripcion+"|");
+
+
+						}
+					}
+					if (bEncontrado == false) 
+					{
+		 
+						logger.debug("No se encontró la información.");
+					}
+
+				} 
+				catch (SQLException ex) 
+				{
+					sDescripcion = "";
+
+					logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
+					logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
+					logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
+
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				} 
+				finally 
+				{
+					Utils.closeResultSet(rs);
+					Utils.closeStatement(stmt);
+				}
+			}
+		}
+
 		return sDescripcion;
 	}
 }

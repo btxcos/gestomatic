@@ -4,14 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.misc.Utils;
 import com.provisiones.pl.GestorSesion;
 
 public class ConnectionManager 
@@ -44,20 +41,14 @@ public class ConnectionManager
 					logger.debug("Cerrando: "+conn.toString());
 					ConnectionManager.closeDBConnection(conn);
 				}
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} 
+			catch (SQLException e1) 
+			{
+				logger.warn("La conexión fue cerrada.");
 			}
 			
-			FacesMessage msg;
-
-			String sMensaje = "ERROR: La sesión ha expirado.";
 			
-			msg = Utils.pfmsgError(sMensaje);
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-			
-			logger.error(sMensaje);
+			logger.error("ERROR: La sesión ha expirado.");
 
 		}
 		
