@@ -1,7 +1,5 @@
 package com.provisiones.dal.qm.movimientos;
 
-import com.provisiones.dal.ConnectionManager;
-
 import com.provisiones.misc.Utils;
 import com.provisiones.types.movimientos.MovimientoGasto;
 
@@ -67,294 +65,285 @@ public class QMMovimientosGastos
 	public static final String CAMPO44 = "cospii";    
 	public static final String CAMPO45 = "nuclii";
 	
-	public static int addMovimientoGasto (MovimientoGasto NuevoGasto) 
+	public static int addMovimientoGasto(Connection conexion, MovimientoGasto NuevoGasto) 
 	{
-		Statement stmt = null;
-		Connection conn = null;
-		ResultSet resulset = null;
-		
 		int iCodigo = 0;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " 
-				 	+ TABLA + 
-				 	" ("
-				 	+ CAMPO2  + ","              
-				 	+ CAMPO3  + ","              
-				 	+ CAMPO4  + ","              
-				 	+ CAMPO5  + ","              
-				 	+ CAMPO6  + ","              
-				 	+ CAMPO7  + ","              
-				 	+ CAMPO8  + ","              
-				 	+ CAMPO9  + ","              
-				 	+ CAMPO10 + ","              
-				 	+ CAMPO11 + ","              
-				 	+ CAMPO12 + ","              
-				 	+ CAMPO13 + ","              
-				 	+ CAMPO14 + ","              
-				 	+ CAMPO15 + ","              
-				 	+ CAMPO16 + ","              
-				 	+ CAMPO17 + ","              
-				 	+ CAMPO18 + ","              
-				 	+ CAMPO19 + ","              
-				 	+ CAMPO20 + ","              
-				 	+ CAMPO21 + ","              
-				 	+ CAMPO22 + ","              
-				 	+ CAMPO23 + ","              
-				 	+ CAMPO24 + ","              
-				 	+ CAMPO25 + ","              
-				 	+ CAMPO26 + ","              
-				 	+ CAMPO27 + ","              
-				 	+ CAMPO28 + ","              
-				 	+ CAMPO29 + ","              
-				 	+ CAMPO30 + ","              
-				 	+ CAMPO31 + ","              
-				 	+ CAMPO32 + ","              
-				 	+ CAMPO33 + ","              
-				 	+ CAMPO34 + ","              
-				 	+ CAMPO35 + ","              
-				 	+ CAMPO36 + ","              
-				 	+ CAMPO37 + ","              
-				 	+ CAMPO38 + ","              
-				 	+ CAMPO39 + ","              
-				 	+ CAMPO40 + ","              
-				 	+ CAMPO41 + ","              
-				 	+ CAMPO42 + ","              
-				 	+ CAMPO43 + ","
-				 	+ CAMPO44 + ","
-				 	+ CAMPO45 +                 
-			       ") VALUES ('"        
-			 	    + NuevoGasto.getCOACES() + "','"
-			 		+ NuevoGasto.getCOGRUG() + "','"
-					+ NuevoGasto.getCOTPGA() + "','"  
-					+ NuevoGasto.getCOSBGA() + "','"  
-					+ NuevoGasto.getPTPAGO() + "','"  
-					+ NuevoGasto.getFEDEVE() + "','"  
-					+ NuevoGasto.getFFGTVP() + "','"  
-					+ NuevoGasto.getFEPAGA() + "','"  
-					+ NuevoGasto.getFELIPG() + "','"  
-					+ NuevoGasto.getCOSIGA() + "','"  
-					+ NuevoGasto.getFEEESI() + "','"  
-					+ NuevoGasto.getFEECOI() + "','"  
-					+ NuevoGasto.getFEEAUI() + "','"  
-					+ NuevoGasto.getFEEPAI() + "','"  
-					+ NuevoGasto.getIMNGAS() + "','"  
-					+ NuevoGasto.getYCOS02() + "','"  
-					+ NuevoGasto.getIMRGAS() + "','"  
-					+ NuevoGasto.getYCOS04() + "','"  
-					+ NuevoGasto.getIMDGAS() + "','"  
-					+ NuevoGasto.getYCOS06() + "','"  
-					+ NuevoGasto.getIMCOST() + "','"  
-					+ NuevoGasto.getYCOS08() + "','"  
-					+ NuevoGasto.getIMOGAS() + "','"  
-					+ NuevoGasto.getYCOS10() + "','"  
-					+ NuevoGasto.getIMDTGA() + "','"  
-					+ NuevoGasto.getCOUNMO() + "','"  
-					+ NuevoGasto.getIMIMGA() + "','"  
-					+ NuevoGasto.getCOIMPT() + "','"  
-					+ NuevoGasto.getCOTNEG() + "','"  
-					+ NuevoGasto.getCOENCX() + "','"  
-					+ NuevoGasto.getCOOFCX() + "','"  
-					+ NuevoGasto.getNUCONE() + "','"  
-					+ NuevoGasto.getNUPROF() + "','"  
-					+ NuevoGasto.getFEAGTO() + "','"  
-					+ NuevoGasto.getCOMONA() + "','"  
-					+ NuevoGasto.getBIAUTO() + "','"  
-					+ NuevoGasto.getFEAUFA() + "','"  
-					+ NuevoGasto.getCOTERR() + "','"  
-					+ NuevoGasto.getFMPAGN() + "','"  
-					+ NuevoGasto.getFEPGPR() + "','"  
-					+ NuevoGasto.getFEAPLI() + "','"  
-					+ NuevoGasto.getCOAPII() + "','"  
-					+ NuevoGasto.getCOSPII() + "','"
-					+ NuevoGasto.getNUCLII() + 
-					"')";
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
-
-			resulset = stmt.getGeneratedKeys();
-			
-			if (resulset.next()) 
-			{
-				iCodigo= resulset.getInt(1);
-			} 
-			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
 	
-			logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
-			logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
-			logger.error("ERROR COTPGA:|"+NuevoGasto.getCOTPGA()+"|");
-			logger.error("ERROR COSBGA:|"+NuevoGasto.getCOSBGA()+"|");
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			//bSalida = false;
-		} 
-		finally 
+		if (conexion != null)
 		{
+			Statement stmt = null;
+			ResultSet resulset = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "INSERT INTO " 
+					 	+ TABLA + 
+					 	" ("
+					 	+ CAMPO2  + ","              
+					 	+ CAMPO3  + ","              
+					 	+ CAMPO4  + ","              
+					 	+ CAMPO5  + ","              
+					 	+ CAMPO6  + ","              
+					 	+ CAMPO7  + ","              
+					 	+ CAMPO8  + ","              
+					 	+ CAMPO9  + ","              
+					 	+ CAMPO10 + ","              
+					 	+ CAMPO11 + ","              
+					 	+ CAMPO12 + ","              
+					 	+ CAMPO13 + ","              
+					 	+ CAMPO14 + ","              
+					 	+ CAMPO15 + ","              
+					 	+ CAMPO16 + ","              
+					 	+ CAMPO17 + ","              
+					 	+ CAMPO18 + ","              
+					 	+ CAMPO19 + ","              
+					 	+ CAMPO20 + ","              
+					 	+ CAMPO21 + ","              
+					 	+ CAMPO22 + ","              
+					 	+ CAMPO23 + ","              
+					 	+ CAMPO24 + ","              
+					 	+ CAMPO25 + ","              
+					 	+ CAMPO26 + ","              
+					 	+ CAMPO27 + ","              
+					 	+ CAMPO28 + ","              
+					 	+ CAMPO29 + ","              
+					 	+ CAMPO30 + ","              
+					 	+ CAMPO31 + ","              
+					 	+ CAMPO32 + ","              
+					 	+ CAMPO33 + ","              
+					 	+ CAMPO34 + ","              
+					 	+ CAMPO35 + ","              
+					 	+ CAMPO36 + ","              
+					 	+ CAMPO37 + ","              
+					 	+ CAMPO38 + ","              
+					 	+ CAMPO39 + ","              
+					 	+ CAMPO40 + ","              
+					 	+ CAMPO41 + ","              
+					 	+ CAMPO42 + ","              
+					 	+ CAMPO43 + ","
+					 	+ CAMPO44 + ","
+					 	+ CAMPO45 +                 
+				       ") VALUES ('"        
+				 	    + NuevoGasto.getCOACES() + "','"
+				 		+ NuevoGasto.getCOGRUG() + "','"
+						+ NuevoGasto.getCOTPGA() + "','"  
+						+ NuevoGasto.getCOSBGA() + "','"  
+						+ NuevoGasto.getPTPAGO() + "','"  
+						+ NuevoGasto.getFEDEVE() + "','"  
+						+ NuevoGasto.getFFGTVP() + "','"  
+						+ NuevoGasto.getFEPAGA() + "','"  
+						+ NuevoGasto.getFELIPG() + "','"  
+						+ NuevoGasto.getCOSIGA() + "','"  
+						+ NuevoGasto.getFEEESI() + "','"  
+						+ NuevoGasto.getFEECOI() + "','"  
+						+ NuevoGasto.getFEEAUI() + "','"  
+						+ NuevoGasto.getFEEPAI() + "','"  
+						+ NuevoGasto.getIMNGAS() + "','"  
+						+ NuevoGasto.getYCOS02() + "','"  
+						+ NuevoGasto.getIMRGAS() + "','"  
+						+ NuevoGasto.getYCOS04() + "','"  
+						+ NuevoGasto.getIMDGAS() + "','"  
+						+ NuevoGasto.getYCOS06() + "','"  
+						+ NuevoGasto.getIMCOST() + "','"  
+						+ NuevoGasto.getYCOS08() + "','"  
+						+ NuevoGasto.getIMOGAS() + "','"  
+						+ NuevoGasto.getYCOS10() + "','"  
+						+ NuevoGasto.getIMDTGA() + "','"  
+						+ NuevoGasto.getCOUNMO() + "','"  
+						+ NuevoGasto.getIMIMGA() + "','"  
+						+ NuevoGasto.getCOIMPT() + "','"  
+						+ NuevoGasto.getCOTNEG() + "','"  
+						+ NuevoGasto.getCOENCX() + "','"  
+						+ NuevoGasto.getCOOFCX() + "','"  
+						+ NuevoGasto.getNUCONE() + "','"  
+						+ NuevoGasto.getNUPROF() + "','"  
+						+ NuevoGasto.getFEAGTO() + "','"  
+						+ NuevoGasto.getCOMONA() + "','"  
+						+ NuevoGasto.getBIAUTO() + "','"  
+						+ NuevoGasto.getFEAUFA() + "','"  
+						+ NuevoGasto.getCOTERR() + "','"  
+						+ NuevoGasto.getFMPAGN() + "','"  
+						+ NuevoGasto.getFEPGPR() + "','"  
+						+ NuevoGasto.getFEAPLI() + "','"  
+						+ NuevoGasto.getCOAPII() + "','"  
+						+ NuevoGasto.getCOSPII() + "','"
+						+ NuevoGasto.getNUCLII() + 
+						"')";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
 
-			Utils.closeStatement(stmt);
-			Utils.closeResultSet(resulset);
+				resulset = stmt.getGeneratedKeys();
+				
+				if (resulset.next()) 
+				{
+					iCodigo= resulset.getInt(1);
+				} 
+				
+				logger.debug("Ejecutada con exito!");
+			} 
+			catch (SQLException ex) 
+			{
+				iCodigo = 0;
+				
+				logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
+				logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
+				logger.error("ERROR COTPGA:|"+NuevoGasto.getCOTPGA()+"|");
+				logger.error("ERROR COSBGA:|"+NuevoGasto.getCOSBGA()+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+				Utils.closeResultSet(resulset);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
 		
 		return iCodigo;
 	}
-	public static boolean modMovimientoGasto(MovimientoGasto NuevoGasto, String sGastoID)
+	public static boolean modMovimientoGasto(Connection conexion, MovimientoGasto NuevoGasto, String sGastoID)
 	{
-		Statement stmt = null;
+		boolean bSalida = false;
 
-		boolean bSalida = true;
-		
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO2  + " = '"+ NuevoGasto.getCOACES() + "', "
-				+ CAMPO3  + " = '"+ NuevoGasto.getCOGRUG() + "', "
-				+ CAMPO4  + " = '"+ NuevoGasto.getCOTPGA() + "', "
-				+ CAMPO5  + " = '"+ NuevoGasto.getCOSBGA() + "', "
-				+ CAMPO6  + " = '"+ NuevoGasto.getPTPAGO() + "', "
-				+ CAMPO7  + " = '"+ NuevoGasto.getFEDEVE() + "', "
-				+ CAMPO8  + " = '"+ NuevoGasto.getFFGTVP() + "', "
-				+ CAMPO9  + " = '"+ NuevoGasto.getFEPAGA() + "', "
-				+ CAMPO10 + " = '"+ NuevoGasto.getFELIPG() + "', "
-				+ CAMPO11 + " = '"+ NuevoGasto.getCOSIGA() + "', "
-				+ CAMPO12 + " = '"+ NuevoGasto.getFEEESI() + "', "
-				+ CAMPO13 + " = '"+ NuevoGasto.getFEECOI() + "', "
-				+ CAMPO14 + " = '"+ NuevoGasto.getFEEAUI() + "', "
-				+ CAMPO15 + " = '"+ NuevoGasto.getFEEPAI() + "', "
-				+ CAMPO16 + " = '"+ NuevoGasto.getIMNGAS() + "', "
-				+ CAMPO17 + " = '"+ NuevoGasto.getYCOS02() + "', "
-				+ CAMPO18 + " = '"+ NuevoGasto.getIMRGAS() + "', "
-				+ CAMPO19 + " = '"+ NuevoGasto.getYCOS04() + "', "
-				+ CAMPO20 + " = '"+ NuevoGasto.getIMDGAS() + "', "
-				+ CAMPO21 + " = '"+ NuevoGasto.getYCOS06() + "', "
-				+ CAMPO22 + " = '"+ NuevoGasto.getIMCOST() + "', "
-				+ CAMPO23 + " = '"+ NuevoGasto.getYCOS08() + "', "
-				+ CAMPO24 + " = '"+ NuevoGasto.getIMOGAS() + "', "
-				+ CAMPO25 + " = '"+ NuevoGasto.getYCOS10() + "', "
-				+ CAMPO26 + " = '"+ NuevoGasto.getIMDTGA() + "', "
-				+ CAMPO27 + " = '"+ NuevoGasto.getCOUNMO() + "', "
-				+ CAMPO28 + " = '"+ NuevoGasto.getIMIMGA() + "', "
-				+ CAMPO29 + " = '"+ NuevoGasto.getCOIMPT() + "', "
-				+ CAMPO30 + " = '"+ NuevoGasto.getCOTNEG() + "', "
-				+ CAMPO31 + " = '"+ NuevoGasto.getCOENCX() + "', "
-				+ CAMPO32 + " = '"+ NuevoGasto.getCOOFCX() + "', "
-				+ CAMPO33 + " = '"+ NuevoGasto.getNUCONE() + "', "
-				+ CAMPO34 + " = '"+ NuevoGasto.getNUPROF() + "', "
-				+ CAMPO35 + " = '"+ NuevoGasto.getFEAGTO() + "', "
-				+ CAMPO36 + " = '"+ NuevoGasto.getCOMONA() + "', "
-				+ CAMPO37 + " = '"+ NuevoGasto.getBIAUTO() + "', "
-				+ CAMPO38 + " = '"+ NuevoGasto.getFEAUFA() + "', "
-				+ CAMPO39 + " = '"+ NuevoGasto.getCOTERR() + "', "
-				+ CAMPO40 + " = '"+ NuevoGasto.getFMPAGN() + "', "
-				+ CAMPO41 + " = '"+ NuevoGasto.getFEPGPR() + "', "
-				+ CAMPO42 + " = '"+ NuevoGasto.getFEAPLI() + "', "
-				+ CAMPO43 + " = '"+ NuevoGasto.getCOAPII() + "', "
-				+ CAMPO44 + " = '"+ NuevoGasto.getCOSPII() + "', "
-				+ CAMPO45 + " = '"+ NuevoGasto.getNUCLII() + 
-				"' "+
-				" WHERE "
-				+ CAMPO1 + " = '"+ sGastoID +"'";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR GastoID:|"+sGastoID+"|");
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO2  + " = '"+ NuevoGasto.getCOACES() + "', "
+					+ CAMPO3  + " = '"+ NuevoGasto.getCOGRUG() + "', "
+					+ CAMPO4  + " = '"+ NuevoGasto.getCOTPGA() + "', "
+					+ CAMPO5  + " = '"+ NuevoGasto.getCOSBGA() + "', "
+					+ CAMPO6  + " = '"+ NuevoGasto.getPTPAGO() + "', "
+					+ CAMPO7  + " = '"+ NuevoGasto.getFEDEVE() + "', "
+					+ CAMPO8  + " = '"+ NuevoGasto.getFFGTVP() + "', "
+					+ CAMPO9  + " = '"+ NuevoGasto.getFEPAGA() + "', "
+					+ CAMPO10 + " = '"+ NuevoGasto.getFELIPG() + "', "
+					+ CAMPO11 + " = '"+ NuevoGasto.getCOSIGA() + "', "
+					+ CAMPO12 + " = '"+ NuevoGasto.getFEEESI() + "', "
+					+ CAMPO13 + " = '"+ NuevoGasto.getFEECOI() + "', "
+					+ CAMPO14 + " = '"+ NuevoGasto.getFEEAUI() + "', "
+					+ CAMPO15 + " = '"+ NuevoGasto.getFEEPAI() + "', "
+					+ CAMPO16 + " = '"+ NuevoGasto.getIMNGAS() + "', "
+					+ CAMPO17 + " = '"+ NuevoGasto.getYCOS02() + "', "
+					+ CAMPO18 + " = '"+ NuevoGasto.getIMRGAS() + "', "
+					+ CAMPO19 + " = '"+ NuevoGasto.getYCOS04() + "', "
+					+ CAMPO20 + " = '"+ NuevoGasto.getIMDGAS() + "', "
+					+ CAMPO21 + " = '"+ NuevoGasto.getYCOS06() + "', "
+					+ CAMPO22 + " = '"+ NuevoGasto.getIMCOST() + "', "
+					+ CAMPO23 + " = '"+ NuevoGasto.getYCOS08() + "', "
+					+ CAMPO24 + " = '"+ NuevoGasto.getIMOGAS() + "', "
+					+ CAMPO25 + " = '"+ NuevoGasto.getYCOS10() + "', "
+					+ CAMPO26 + " = '"+ NuevoGasto.getIMDTGA() + "', "
+					+ CAMPO27 + " = '"+ NuevoGasto.getCOUNMO() + "', "
+					+ CAMPO28 + " = '"+ NuevoGasto.getIMIMGA() + "', "
+					+ CAMPO29 + " = '"+ NuevoGasto.getCOIMPT() + "', "
+					+ CAMPO30 + " = '"+ NuevoGasto.getCOTNEG() + "', "
+					+ CAMPO31 + " = '"+ NuevoGasto.getCOENCX() + "', "
+					+ CAMPO32 + " = '"+ NuevoGasto.getCOOFCX() + "', "
+					+ CAMPO33 + " = '"+ NuevoGasto.getNUCONE() + "', "
+					+ CAMPO34 + " = '"+ NuevoGasto.getNUPROF() + "', "
+					+ CAMPO35 + " = '"+ NuevoGasto.getFEAGTO() + "', "
+					+ CAMPO36 + " = '"+ NuevoGasto.getCOMONA() + "', "
+					+ CAMPO37 + " = '"+ NuevoGasto.getBIAUTO() + "', "
+					+ CAMPO38 + " = '"+ NuevoGasto.getFEAUFA() + "', "
+					+ CAMPO39 + " = '"+ NuevoGasto.getCOTERR() + "', "
+					+ CAMPO40 + " = '"+ NuevoGasto.getFMPAGN() + "', "
+					+ CAMPO41 + " = '"+ NuevoGasto.getFEPGPR() + "', "
+					+ CAMPO42 + " = '"+ NuevoGasto.getFEAPLI() + "', "
+					+ CAMPO43 + " = '"+ NuevoGasto.getCOAPII() + "', "
+					+ CAMPO44 + " = '"+ NuevoGasto.getCOSPII() + "', "
+					+ CAMPO45 + " = '"+ NuevoGasto.getNUCLII() + "' " +
+					"WHERE "
+					+ CAMPO1 + " = '"+ sGastoID +"'";
 			
-			logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
-			logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
-			logger.error("ERROR COTPGA:|"+NuevoGasto.getCOTPGA()+"|");
-			logger.error("ERROR COSBGA:|"+NuevoGasto.getCOSBGA()+"|");
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
-		} 
-		finally 
-		{
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR GastoID:|"+sGastoID+"|");
+				
+				logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
+				logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
+				logger.error("ERROR COTPGA:|"+NuevoGasto.getCOTPGA()+"|");
+				logger.error("ERROR COSBGA:|"+NuevoGasto.getCOSBGA()+"|");
 
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 
-	public static boolean delMovimientoGasto(String sGastoID)
+	public static boolean delMovimientoGasto(Connection conexion, String sGastoID)
 	{
-		Statement stmt = null;
-		Connection conn = null;
-		
-		boolean bSalida = true; 
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "DELETE FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO1 + " = '" + sGastoID + "'";
-		
-		logger.debug(sQuery);
+		boolean bSalida = false;
 
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR GastoID:|"+sGastoID+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1 + " = '" + sGastoID + "'";
 			
-			bSalida = false;
-		} 
-		finally 
-		{
+			logger.debug(sQuery);
 
-			Utils.closeStatement(stmt);
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR GastoID:|"+sGastoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 	
-	public static MovimientoGasto getMovimientoGasto(String sGastoID)
+	public static MovimientoGasto getMovimientoGasto(Connection conexion, String sGastoID)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
 		String sCOACES = "";
 		String sCOGRUG = "";
 		String sCOTPGA = "";
@@ -398,157 +387,199 @@ public class QMMovimientosGastos
 		String sFEAPLI = "";
 		String sCOAPII = "";
 		String sCOSPII = "";
-		String sNUCLII = "";
+		String sNUCLII = "";		
 
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-			       + CAMPO2  + ","              
-			       + CAMPO3  + ","              
-			       + CAMPO4  + ","              
-			       + CAMPO5  + ","              
-			       + CAMPO6  + ","              
-			       + CAMPO7  + ","              
-			       + CAMPO8  + ","              
-			       + CAMPO9  + ","              
-			       + CAMPO10 + ","              
-			       + CAMPO11 + ","              
-			       + CAMPO12 + ","              
-			       + CAMPO13 + ","              
-			       + CAMPO14 + ","              
-			       + CAMPO15 + ","              
-			       + CAMPO16 + ","              
-			       + CAMPO17 + ","              
-			       + CAMPO18 + ","              
-			       + CAMPO19 + ","              
-			       + CAMPO20 + ","              
-			       + CAMPO21 + ","              
-			       + CAMPO22 + ","              
-			       + CAMPO23 + ","              
-			       + CAMPO24 + ","              
-			       + CAMPO25 + ","              
-			       + CAMPO26 + ","              
-			       + CAMPO27 + ","              
-			       + CAMPO28 + ","              
-			       + CAMPO29 + ","              
-			       + CAMPO30 + ","              
-			       + CAMPO31 + ","              
-			       + CAMPO32 + ","              
-			       + CAMPO33 + ","              
-			       + CAMPO34 + ","              
-			       + CAMPO35 + ","              
-			       + CAMPO36 + ","              
-			       + CAMPO37 + ","              
-			       + CAMPO38 + ","              
-			       + CAMPO39 + ","              
-			       + CAMPO40 + ","              
-			       + CAMPO41 + ","              
-			       + CAMPO42 + ","              
-			       + CAMPO43 + ","
-			       + CAMPO44 + ","  
-			       + CAMPO45 +       
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE " 
-			       + CAMPO1 + " = '" + sGastoID	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
+			String sQuery = "SELECT "
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","              
+				       + CAMPO14 + ","              
+				       + CAMPO15 + ","              
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","              
+				       + CAMPO24 + ","              
+				       + CAMPO25 + ","              
+				       + CAMPO26 + ","              
+				       + CAMPO27 + ","              
+				       + CAMPO28 + ","              
+				       + CAMPO29 + ","              
+				       + CAMPO30 + ","              
+				       + CAMPO31 + ","              
+				       + CAMPO32 + ","              
+				       + CAMPO33 + ","              
+				       + CAMPO34 + ","              
+				       + CAMPO35 + ","              
+				       + CAMPO36 + ","              
+				       + CAMPO37 + ","              
+				       + CAMPO38 + ","              
+				       + CAMPO39 + ","              
+				       + CAMPO40 + ","              
+				       + CAMPO41 + ","              
+				       + CAMPO42 + ","              
+				       + CAMPO43 + ","
+				       + CAMPO44 + ","  
+				       + CAMPO45 +       
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1 + " = '" + sGastoID	+ "'";
+			
+			logger.debug(sQuery);
 
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sCOACES = rs.getString(CAMPO2); 
-					sCOGRUG = rs.getString(CAMPO3); 
-					sCOTPGA = rs.getString(CAMPO4); 
-					sCOSBGA = rs.getString(CAMPO5); 
-					sPTPAGO = rs.getString(CAMPO6); 
-					sFEDEVE = rs.getString(CAMPO7); 
-					sFFGTVP = rs.getString(CAMPO8); 
-					sFEPAGA = rs.getString(CAMPO9); 
-					sFELIPG = rs.getString(CAMPO10);
-					sCOSIGA = rs.getString(CAMPO11);
-					sFEEESI = rs.getString(CAMPO12);
-					sFEECOI = rs.getString(CAMPO13);
-					sFEEAUI = rs.getString(CAMPO14);
-					sFEEPAI = rs.getString(CAMPO15);
-					sIMNGAS = rs.getString(CAMPO16);
-					sYCOS02 = rs.getString(CAMPO17);
-					sIMRGAS = rs.getString(CAMPO18);
-					sYCOS04 = rs.getString(CAMPO19);
-					sIMDGAS = rs.getString(CAMPO20);
-					sYCOS06 = rs.getString(CAMPO21);
-					sIMCOST = rs.getString(CAMPO22);
-					sYCOS08 = rs.getString(CAMPO23);
-					sIMOGAS = rs.getString(CAMPO24);
-					sYCOS10 = rs.getString(CAMPO25);
-					sIMDTGA = rs.getString(CAMPO26);
-					sCOUNMO = rs.getString(CAMPO27);
-					sIMIMGA = rs.getString(CAMPO28);
-					sCOIMPT = rs.getString(CAMPO29);
-					sCOTNEG = rs.getString(CAMPO30);
-					sCOENCX = rs.getString(CAMPO31);
-					sCOOFCX = rs.getString(CAMPO32);
-					sNUCONE = rs.getString(CAMPO33);
-					sNUPROF = rs.getString(CAMPO34);
-					sFEAGTO = rs.getString(CAMPO35);
-					sCOMONA = rs.getString(CAMPO36);
-					sBIAUTO = rs.getString(CAMPO37);
-					sFEAUFA = rs.getString(CAMPO38);
-					sCOTERR = rs.getString(CAMPO39);
-					sFMPAGN = rs.getString(CAMPO40);
-					sFEPGPR = rs.getString(CAMPO41);
-					sFEAPLI = rs.getString(CAMPO42);
-					sCOAPII = rs.getString(CAMPO43);
-					sCOSPII = rs.getString(CAMPO44);
-					sNUCLII = rs.getString(CAMPO45);
-					
-					logger.debug("Encontrado el registro!");
+						sCOACES = rs.getString(CAMPO2); 
+						sCOGRUG = rs.getString(CAMPO3); 
+						sCOTPGA = rs.getString(CAMPO4); 
+						sCOSBGA = rs.getString(CAMPO5); 
+						sPTPAGO = rs.getString(CAMPO6); 
+						sFEDEVE = rs.getString(CAMPO7); 
+						sFFGTVP = rs.getString(CAMPO8); 
+						sFEPAGA = rs.getString(CAMPO9); 
+						sFELIPG = rs.getString(CAMPO10);
+						sCOSIGA = rs.getString(CAMPO11);
+						sFEEESI = rs.getString(CAMPO12);
+						sFEECOI = rs.getString(CAMPO13);
+						sFEEAUI = rs.getString(CAMPO14);
+						sFEEPAI = rs.getString(CAMPO15);
+						sIMNGAS = rs.getString(CAMPO16);
+						sYCOS02 = rs.getString(CAMPO17);
+						sIMRGAS = rs.getString(CAMPO18);
+						sYCOS04 = rs.getString(CAMPO19);
+						sIMDGAS = rs.getString(CAMPO20);
+						sYCOS06 = rs.getString(CAMPO21);
+						sIMCOST = rs.getString(CAMPO22);
+						sYCOS08 = rs.getString(CAMPO23);
+						sIMOGAS = rs.getString(CAMPO24);
+						sYCOS10 = rs.getString(CAMPO25);
+						sIMDTGA = rs.getString(CAMPO26);
+						sCOUNMO = rs.getString(CAMPO27);
+						sIMIMGA = rs.getString(CAMPO28);
+						sCOIMPT = rs.getString(CAMPO29);
+						sCOTNEG = rs.getString(CAMPO30);
+						sCOENCX = rs.getString(CAMPO31);
+						sCOOFCX = rs.getString(CAMPO32);
+						sNUCONE = rs.getString(CAMPO33);
+						sNUPROF = rs.getString(CAMPO34);
+						sFEAGTO = rs.getString(CAMPO35);
+						sCOMONA = rs.getString(CAMPO36);
+						sBIAUTO = rs.getString(CAMPO37);
+						sFEAUFA = rs.getString(CAMPO38);
+						sCOTERR = rs.getString(CAMPO39);
+						sFMPAGN = rs.getString(CAMPO40);
+						sFEPGPR = rs.getString(CAMPO41);
+						sFEAPLI = rs.getString(CAMPO42);
+						sCOAPII = rs.getString(CAMPO43);
+						sCOSPII = rs.getString(CAMPO44);
+						sNUCLII = rs.getString(CAMPO45);
+						
+						logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO1+":|"+sGastoID+"|");
-
+						logger.debug(CAMPO1+":|"+sGastoID+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sCOACES = "";
+				sCOGRUG = "";
+				sCOTPGA = "";
+				sCOSBGA = "";
+				sPTPAGO = "";
+				sFEDEVE = "";
+				sFFGTVP = "";
+				sFEPAGA = "";
+				sFELIPG = "";
+				sCOSIGA = "";
+				sFEEESI = "";
+				sFEECOI = "";
+				sFEEAUI = "";
+				sFEEPAI = "";
+				sIMNGAS = "";
+				sYCOS02 = "";
+				sIMRGAS = "";
+				sYCOS04 = "";
+				sIMDGAS = "";
+				sYCOS06 = "";
+				sIMCOST = "";
+				sYCOS08 = "";
+				sIMOGAS = "";
+				sYCOS10 = "";
+				sIMDTGA = "";
+				sCOUNMO = "";
+				sIMIMGA = "";
+				sCOIMPT = "";
+				sCOTNEG = "";
+				sCOENCX = "";
+				sCOOFCX = "";
+				sNUCONE = "";
+				sNUPROF = "";
+				sFEAGTO = "";
+				sCOMONA = "";
+				sBIAUTO = "";
+				sFEAUFA = "";
+				sCOTERR = "";
+				sFMPAGN = "";
+				sFEPGPR = "";
+				sFEAPLI = "";
+				sCOAPII = "";
+				sCOSPII = "";
+				sNUCLII = "";
+				
+				logger.error("ERROR GastoID:|"+sGastoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR GastoID:|"+sGastoID+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return new MovimientoGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sPTPAGO, sFEDEVE,
 				sFFGTVP, sFEPAGA, sFELIPG, sCOSIGA, sFEEESI, sFEECOI, sFEEAUI,
 				sFEEPAI, sIMNGAS, sYCOS02, sIMRGAS, sYCOS04, sIMDGAS, sYCOS06,
@@ -558,188 +589,181 @@ public class QMMovimientosGastos
 				sCOAPII, sCOSPII, sNUCLII);
 	}
 
-	public static String getMovimientoGastoID(MovimientoGasto gasto)
+	public static String getMovimientoGastoID(Connection conexion, MovimientoGasto gasto)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
 		String sGastoID = "";
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
 		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-					   + CAMPO1 + 
-					   " FROM " 
-					   + TABLA + 
-					   " WHERE ("
-				       + CAMPO2  +" = '" + gasto.getCOACES() + "' AND "
-				       + CAMPO3  +" = '" + gasto.getCOGRUG() + "' AND "
-				       + CAMPO4  +" = '" + gasto.getCOTPGA() + "' AND "
-				       + CAMPO5  +" = '" + gasto.getCOSBGA() + "' AND "
-				       + CAMPO6  +" = '" + gasto.getPTPAGO() + "' AND "
-				       + CAMPO7  +" = '" + gasto.getFEDEVE() + "' AND "
-				       + CAMPO8  +" = '" + gasto.getFFGTVP() + "' AND "
-				       + CAMPO9  +" = '" + gasto.getFEPAGA() + "' AND "
-				       + CAMPO10 +" = '" + gasto.getFELIPG() + "' AND "
-				       + CAMPO11 +" = '" + gasto.getCOSIGA() + "' AND "
-				       + CAMPO12 +" = '" + gasto.getFEEESI() + "' AND "
-				       + CAMPO13 +" = '" + gasto.getFEECOI() + "' AND "
-				       + CAMPO14 +" = '" + gasto.getFEEAUI() + "' AND "
-				       + CAMPO15 +" = '" + gasto.getFEEPAI() + "' AND "
-				       + CAMPO16 +" = '" + gasto.getIMNGAS() + "' AND "
-				       + CAMPO17 +" = '" + gasto.getYCOS02() + "' AND "
-				       + CAMPO18 +" = '" + gasto.getIMRGAS() + "' AND "
-				       + CAMPO19 +" = '" + gasto.getYCOS04() + "' AND "
-				       + CAMPO20 +" = '" + gasto.getIMDGAS() + "' AND "
-				       + CAMPO21 +" = '" + gasto.getYCOS06() + "' AND "
-				       + CAMPO22 +" = '" + gasto.getIMCOST() + "' AND "
-				       + CAMPO23 +" = '" + gasto.getYCOS08() + "' AND "
-				       + CAMPO24 +" = '" + gasto.getIMOGAS() + "' AND "
-				       + CAMPO25 +" = '" + gasto.getYCOS10() + "' AND "
-				       + CAMPO26 +" = '" + gasto.getIMDTGA() + "' AND "
-				       + CAMPO27 +" = '" + gasto.getCOUNMO() + "' AND "
-				       + CAMPO28 +" = '" + gasto.getIMIMGA() + "' AND "
-				       + CAMPO29 +" = '" + gasto.getCOIMPT() + "' AND "
-				       + CAMPO30 +" = '" + gasto.getCOTNEG() + "' AND "
-				       + CAMPO31 +" = '" + gasto.getCOENCX() + "' AND "
-				       + CAMPO32 +" = '" + gasto.getCOOFCX() + "' AND "
-				       + CAMPO33 +" = '" + gasto.getNUCONE() + "' AND "
-				       + CAMPO34 +" = '" + gasto.getNUPROF() + "' AND "
-				       + CAMPO35 +" = '" + gasto.getFEAGTO() + "' AND "
-				       + CAMPO37 +" = '" + gasto.getBIAUTO() + "' AND "
-				       + CAMPO38 +" = '" + gasto.getFEAUFA() + "' AND "
-				       + CAMPO40 +" = '" + gasto.getFMPAGN() + "' AND "
-				       + CAMPO41 +" = '" + gasto.getFEPGPR() + "' AND "
-				       + CAMPO42 +" = '" + gasto.getFEAPLI() + "' AND "
-				       + CAMPO43 +" = '" + gasto.getCOAPII() + "' AND "
-				       + CAMPO44 +" = '" + gasto.getCOSPII() + "' AND "
-				       + CAMPO45 +" = '" + gasto.getNUCLII() + 
-				       "')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery); 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+						   + CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE ("
+					       + CAMPO2  +" = '" + gasto.getCOACES() + "' AND "
+					       + CAMPO3  +" = '" + gasto.getCOGRUG() + "' AND "
+					       + CAMPO4  +" = '" + gasto.getCOTPGA() + "' AND "
+					       + CAMPO5  +" = '" + gasto.getCOSBGA() + "' AND "
+					       + CAMPO6  +" = '" + gasto.getPTPAGO() + "' AND "
+					       + CAMPO7  +" = '" + gasto.getFEDEVE() + "' AND "
+					       + CAMPO8  +" = '" + gasto.getFFGTVP() + "' AND "
+					       + CAMPO9  +" = '" + gasto.getFEPAGA() + "' AND "
+					       + CAMPO10 +" = '" + gasto.getFELIPG() + "' AND "
+					       + CAMPO11 +" = '" + gasto.getCOSIGA() + "' AND "
+					       + CAMPO12 +" = '" + gasto.getFEEESI() + "' AND "
+					       + CAMPO13 +" = '" + gasto.getFEECOI() + "' AND "
+					       + CAMPO14 +" = '" + gasto.getFEEAUI() + "' AND "
+					       + CAMPO15 +" = '" + gasto.getFEEPAI() + "' AND "
+					       + CAMPO16 +" = '" + gasto.getIMNGAS() + "' AND "
+					       + CAMPO17 +" = '" + gasto.getYCOS02() + "' AND "
+					       + CAMPO18 +" = '" + gasto.getIMRGAS() + "' AND "
+					       + CAMPO19 +" = '" + gasto.getYCOS04() + "' AND "
+					       + CAMPO20 +" = '" + gasto.getIMDGAS() + "' AND "
+					       + CAMPO21 +" = '" + gasto.getYCOS06() + "' AND "
+					       + CAMPO22 +" = '" + gasto.getIMCOST() + "' AND "
+					       + CAMPO23 +" = '" + gasto.getYCOS08() + "' AND "
+					       + CAMPO24 +" = '" + gasto.getIMOGAS() + "' AND "
+					       + CAMPO25 +" = '" + gasto.getYCOS10() + "' AND "
+					       + CAMPO26 +" = '" + gasto.getIMDTGA() + "' AND "
+					       + CAMPO27 +" = '" + gasto.getCOUNMO() + "' AND "
+					       + CAMPO28 +" = '" + gasto.getIMIMGA() + "' AND "
+					       + CAMPO29 +" = '" + gasto.getCOIMPT() + "' AND "
+					       + CAMPO30 +" = '" + gasto.getCOTNEG() + "' AND "
+					       + CAMPO31 +" = '" + gasto.getCOENCX() + "' AND "
+					       + CAMPO32 +" = '" + gasto.getCOOFCX() + "' AND "
+					       + CAMPO33 +" = '" + gasto.getNUCONE() + "' AND "
+					       + CAMPO34 +" = '" + gasto.getNUPROF() + "' AND "
+					       + CAMPO35 +" = '" + gasto.getFEAGTO() + "' AND "
+					       + CAMPO37 +" = '" + gasto.getBIAUTO() + "' AND "
+					       + CAMPO38 +" = '" + gasto.getFEAUFA() + "' AND "
+					       + CAMPO40 +" = '" + gasto.getFMPAGN() + "' AND "
+					       + CAMPO41 +" = '" + gasto.getFEPGPR() + "' AND "
+					       + CAMPO42 +" = '" + gasto.getFEAPLI() + "' AND "
+					       + CAMPO43 +" = '" + gasto.getCOAPII() + "' AND "
+					       + CAMPO44 +" = '" + gasto.getCOSPII() + "' AND "
+					       + CAMPO45 +" = '" + gasto.getNUCLII() + 
+					       "')";
+			
+			logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery); 
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sGastoID = rs.getString(CAMPO1);
-					
-					
-					logger.debug("Encontrado el registro!");
+						sGastoID = rs.getString(CAMPO1);
+						
+						logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO1+":|"+sGastoID+"|");
-
+						logger.debug(CAMPO1+":|"+sGastoID+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sGastoID = "";
+				
+				logger.error("ERROR COACES:|"+gasto.getCOACES()+"|");
+				logger.error("ERROR COGRUG:|"+gasto.getCOGRUG()+"|");
+				logger.error("ERROR COTPGA:|"+gasto.getCOTPGA()+"|");
+				logger.error("ERROR COSBGA:|"+gasto.getCOSBGA()+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR COACES:|"+gasto.getCOACES()+"|");
-			logger.error("ERROR COGRUG:|"+gasto.getCOGRUG()+"|");
-			logger.error("ERROR COTPGA:|"+gasto.getCOTPGA()+"|");
-			logger.error("ERROR COSBGA:|"+gasto.getCOSBGA()+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return sGastoID;
 	}
 
-	public static boolean existeMovimientoGasto(String sMovimientoGastoID)
+	public static boolean existeMovimientoGasto(Connection conexion, String sMovimientoGastoID)
 	{
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
+		boolean bEncontrado = false;
 		
-		Connection conn = null;
-		
-		boolean found = false;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO1 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE " 
-				+ CAMPO1 + " = '" + sMovimientoGastoID + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 			
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT " 
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + sMovimientoGastoID + "'";
 			
-			if (rs != null) 
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontro la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR sMovimientoGastoID:|"+sMovimientoGastoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
 			}
-		} 
-		catch (SQLException ex) 
-		{
-			found = false;
-			logger.error("ERROR sMovimientoGastoID:|"+sMovimientoGastoID+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+
+		return bEncontrado;
 	}
 	
 }
