@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Utils;
@@ -26,349 +25,331 @@ public class QMListaErroresReferencias
 	static String CAMPO1  = "cod_movimiento";
 	static String CAMPO2  = "cod_cotdor";
 
-	public static boolean addErrorReferencia(String sCodMovimiento, String sCodCOTDOR)
+	public static boolean addErrorReferencia(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
 	{
-		Statement stmt = null;
-		Connection conn = null;
-		
-		boolean bSalida = true;
+		boolean bSalida = false;
 
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " 
-				+ TABLA + 
-				" ("
-				+ CAMPO1  + "," 
-			    + CAMPO2  +             
-			    ") VALUES ('"
-			    + sCodMovimiento + "','" 
-			    + sCodCOTDOR +  
-			    "')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
+			Statement stmt = null;
 
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
+			String sQuery = "INSERT INTO " 
+					+ TABLA + 
+					" ("
+					+ CAMPO1  + "," 
+				    + CAMPO2  +             
+				    ") VALUES ('"
+				    + sCodMovimiento + "','" 
+				    + sCodCOTDOR +  
+				    "')";
 			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
-		} 
-		finally
-		{
+			logger.debug(sQuery);
 
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
-	}
-
-	public static boolean delErrorReferencia(String sCodMovimiento, String sCodCOTDOR)
-	{
-		Statement stmt = null;
-		Connection conn = null;
-		
-		boolean bSalida = true;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "DELETE FROM " 
-				+ TABLA + 
-				" WHERE (" 
-				+ CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
-				+ CAMPO2 + " = '" + sCodCOTDOR	+ 
-				"')";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
-			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-			logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			bSalida = false;
-		} 
-		finally 
-		{
-
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
-	}
-	
-	public static long buscaCantidadErrores(String sMovimiento)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		long liNumero = 0;
-
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT COUNT(*) FROM " 
-				+ TABLA + 
-				" WHERE " 
-				+ CAMPO1 + " = '" + sMovimiento + "'";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
 				
-				while (rs.next()) 
-				{
-					found = true;
-
-					liNumero = rs.getLong("COUNT(*)");
-					
-					logger.debug("Encontrado el registro!");
-
-					logger.debug( "Numero de registros:|"+liNumero+"|");
-
-
-				}
-			}
-			if (found == false) 
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				bSalida = false;
+				
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally
+			{
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Movimiento:|"+sMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
+		return bSalida;
+	}
+
+	public static boolean delErrorReferencia(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+					+ CAMPO2 + " = '" + sCodCOTDOR	+ 
+					"')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static long buscaCantidadErrores(Connection conexion, String sMovimiento)
+	{
+		long liNumero = 0;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT(*) FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + sMovimiento + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liNumero = rs.getLong("COUNT(*)");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug( "Numero de registros:|"+liNumero+"|");
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liNumero = 0;
+
+				logger.error("ERROR Movimiento:|"+sMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
 		return liNumero;
 	}
 	
-	public static ArrayList<ErrorReferenciaTabla> buscaReferenciasConError(ErrorReferenciaTabla filtro)
+	public static ArrayList<ErrorReferenciaTabla> buscaReferenciasConError(Connection conexion, ErrorReferenciaTabla filtro)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
+		ArrayList<ErrorReferenciaTabla> resultado = new ArrayList<ErrorReferenciaTabla>();
 
-		String COACES = "";
-		String NURCAT = "";
-
-		String MOVIMIENTO = "";
-		String ERRORES = "";
-		
-		ArrayList<ErrorReferenciaTabla> result = new ArrayList<ErrorReferenciaTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-					
-					   + QMMovimientosReferencias.CAMPO1 + ","
-					   + QMMovimientosReferencias.CAMPO7 + ","
-					   + QMMovimientosReferencias.CAMPO8 + 
-					   " FROM " 
-					   + QMMovimientosReferencias.TABLA + 
-					   " WHERE ( "
-					   + QMMovimientosReferencias.CAMPO7 +" LIKE '%"+ filtro.getCOACES() +"%' AND "
-					   + QMMovimientosReferencias.CAMPO8 +" LIKE '%"+ filtro.getNURCAT() +"%' AND "
-					   + QMMovimientosReferencias.CAMPO1 +" IN (SELECT DISTINCT "
-					   +  CAMPO1 + 
-					   " FROM " 
-					   + TABLA + 
-					   "))";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-					   
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			String COACES = "";
+			String NURCAT = "";
 
+			String MOVIMIENTO = "";
+			String ERRORES = "";
 			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+						
+						   + QMMovimientosReferencias.CAMPO1 + ","
+						   + QMMovimientosReferencias.CAMPO7 + ","
+						   + QMMovimientosReferencias.CAMPO8 + 
+						   " FROM " 
+						   + QMMovimientosReferencias.TABLA + 
+						   " WHERE ( "
+						   + QMMovimientosReferencias.CAMPO7 +" LIKE '%"+ filtro.getCOACES() +"%' AND "
+						   + QMMovimientosReferencias.CAMPO8 +" LIKE '%"+ filtro.getNURCAT() +"%' AND "
+						   + QMMovimientosReferencias.CAMPO1 +" IN (SELECT DISTINCT "
+						   +  CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   "))";
+			
+			logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
-					
-					COACES = rs.getString(QMMovimientosReferencias.CAMPO7);
-					NURCAT = rs.getString(QMMovimientosReferencias.CAMPO8);
-					MOVIMIENTO = rs.getString(QMMovimientosReferencias.CAMPO1);
-					ERRORES = Long.toString(buscaCantidadErrores(MOVIMIENTO));
-					
-					ErrorReferenciaTabla errorencontrado = new ErrorReferenciaTabla(COACES, NURCAT, MOVIMIENTO, ERRORES);
-					
-					result.add(errorencontrado);
-					
-					logger.debug("Encontrado el registro!");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						COACES = rs.getString(QMMovimientosReferencias.CAMPO7);
+						NURCAT = rs.getString(QMMovimientosReferencias.CAMPO8);
+						MOVIMIENTO = rs.getString(QMMovimientosReferencias.CAMPO1);
+						ERRORES = Long.toString(buscaCantidadErrores(conexion,MOVIMIENTO));
+						
+						ErrorReferenciaTabla errorencontrado = new ErrorReferenciaTabla(COACES, NURCAT, MOVIMIENTO, ERRORES);
+						
+						resultado.add(errorencontrado);
+						
+						logger.debug("Encontrado el registro!");
 
-					logger.debug(QMMovimientosReferencias.CAMPO1+":|"+MOVIMIENTO+"|");
+						logger.debug(QMMovimientosReferencias.CAMPO1+":|"+MOVIMIENTO+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				resultado = new ArrayList<ErrorReferenciaTabla>();
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+
+		return resultado;
 	}
 	
-	public static ArrayList<ErrorTabla> buscaErrores(String sMovimiento)
+	public static ArrayList<ErrorTabla> buscaErrores(Connection conexion, String sMovimiento)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
+		ArrayList<ErrorTabla> resultado = new ArrayList<ErrorTabla>();
 
-		String sCodError = "";
-		String sDescripcion = "";
-		
-		ArrayList<ErrorTabla> result = new ArrayList<ErrorTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				+ CAMPO2 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO1 +" = '"+ sMovimiento +"'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
 			
-
-			rs = pstmt.executeQuery();
+			String sCodError = "";
+			String sDescripcion = "";
 			
-			logger.debug("Ejecutada con exito!");
-
+			logger.debug("Ejecutando Query...");
 			
+			String sQuery = "SELECT "
+					+ CAMPO2 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1 +" = '"+ sMovimiento +"'";
+			
+			logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
-					
-					sCodError = rs.getString(CAMPO2);
-					sDescripcion = QMCodigosControl.getDesCampo(QMCodigosControl.TCOTDORE3, QMCodigosControl.ICOTDORE3, sCodError);
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCodError = rs.getString(CAMPO2);
+						sDescripcion = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOTDORE3, QMCodigosControl.ICOTDORE3, sCodError);
+						
+						ErrorTabla errorencontrado = new ErrorTabla(sCodError, sDescripcion);
+						
+						resultado.add(errorencontrado);
+						
+						logger.debug("Encontrado el registro!");
 
-					
-					ErrorTabla errorencontrado = new ErrorTabla(sCodError, sDescripcion);
-					
-					result.add(errorencontrado);
-					
-					logger.debug("Encontrado el registro!");
-
-					logger.debug(sCodError+":|"+sDescripcion+"|");
+						logger.debug(sCodError+":|"+sDescripcion+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				resultado = new ArrayList<ErrorTabla>();
+				
+				logger.error("ERROR Movimiento:|"+sMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR Movimiento:|"+sMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+
+		return resultado;
 	}
 }
