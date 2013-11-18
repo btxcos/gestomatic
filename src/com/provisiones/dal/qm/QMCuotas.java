@@ -45,12 +45,10 @@ public class QMCuotas
 	{
 		long liCodigo = 0;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
-			
-
 
 			logger.debug("Ejecutando Query...");
 			
@@ -111,7 +109,6 @@ public class QMCuotas
 			} 
 			finally
 			{
-
 				Utils.closeStatement(stmt);
 			}
 		}
@@ -122,33 +119,34 @@ public class QMCuotas
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-
-			
 			logger.debug("Ejecutando Query...");
 			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO6  + " = '"+ NuevaCuota.getFIPAGO() + "', "
+					+ CAMPO7  + " = '"+ NuevaCuota.getFFPAGO() + "', "
+					+ CAMPO8  + " = '"+ NuevaCuota.getIMCUCO() + "', "
+					+ CAMPO9  + " = '"+ NuevaCuota.getFAACTA() + "', "
+					+ CAMPO10  + " = '"+ NuevaCuota.getPTPAGO() + "', "
+					+ CAMPO11 + " = '"+ NuevaCuota.getOBTEXC() + "' "+
+					" WHERE " 
+					+ CAMPO1  + " = '"+ sCodCuota +"'";
+			
+			logger.debug(sQuery);
+
 			try 
 			{
 				stmt = conexion.createStatement();
-				stmt.executeUpdate("UPDATE " 
-						+ TABLA + 
-						" SET " 
-						+ CAMPO6  + " = '"+ NuevaCuota.getFIPAGO() + "', "
-						+ CAMPO7  + " = '"+ NuevaCuota.getFFPAGO() + "', "
-						+ CAMPO8  + " = '"+ NuevaCuota.getIMCUCO() + "', "
-						+ CAMPO9  + " = '"+ NuevaCuota.getFAACTA() + "', "
-						+ CAMPO10  + " = '"+ NuevaCuota.getPTPAGO() + "', "
-						+ CAMPO11 + " = '"+ NuevaCuota.getOBTEXC() + "' "+
-						" WHERE " 
-						+ CAMPO1  + " = '"+ sCodCuota +"'");
+				stmt.executeUpdate(sQuery);
 				
 				logger.debug("Ejecutada con exito!");
 				
 				bSalida = true;
-				
 			} 
 			catch (SQLException ex) 
 			{
@@ -174,19 +172,23 @@ public class QMCuotas
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
 			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1  + " = '"+ sCodCuota +"'";
 
+			logger.debug(sQuery);
+			
 			try 
 			{
 				stmt = conexion.createStatement();
-				stmt.executeUpdate("DELETE FROM " 
-						+ TABLA + 
-						" WHERE "
-						+ CAMPO1  + " = '"+ sCodCuota +"'");
+				stmt.executeUpdate(sQuery);
 				
 				logger.debug("Ejecutada con exito!");
 				
@@ -214,37 +216,35 @@ public class QMCuotas
 	{
 		boolean bEncontrado = false;
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-
-
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1  + " = '"+ sCodCuota +"'";
 
+			logger.debug(sQuery);
+			
 			try 
 			{
 				stmt = conexion.createStatement();
 
-
-				pstmt = conexion.prepareStatement("SELECT " 
-						+ CAMPO1 + 
-						" FROM " 
-						+ TABLA + 
-						" WHERE " 
-						+ CAMPO1  + " = '"+ sCodCuota +"'");
-
+				pstmt = conexion.prepareStatement(sQuery);
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
-				
-				
+
 				if (rs != null) 
 				{
-					
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -256,7 +256,6 @@ public class QMCuotas
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -289,46 +288,46 @@ public class QMCuotas
 		String sPTPAGO = "";
 		String sOBTEXC = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-
-
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
 			logger.debug("Ejecutando Query...");
 
+			String sQuery = "SELECT "
+					   + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","
+				       + CAMPO9  + ","
+					   + CAMPO10  + ","
+				       + CAMPO11  +       
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1  + " = '"+ sCodCuota +"'";
+
+			logger.debug(sQuery);
+
 			try 
 			{
 				stmt = conexion.createStatement();
 
-				pstmt = conexion.prepareStatement("SELECT "
-						   + CAMPO2  + ","              
-					       + CAMPO3  + ","              
-					       + CAMPO4  + ","              
-					       + CAMPO5  + ","              
-					       + CAMPO6  + ","              
-					       + CAMPO7  + ","              
-					       + CAMPO8  + ","
-					       + CAMPO9  + ","
-						   + CAMPO10  + ","
-					       + CAMPO11  +       
-					       " FROM " 
-					       + TABLA + 
-					       " WHERE " 
-					       + CAMPO1  + " = '"+ sCodCuota +"'");
-
+				pstmt = conexion.prepareStatement(sQuery);
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -345,7 +344,6 @@ public class QMCuotas
 						sOBTEXC = rs.getString(CAMPO11);
 						
 						logger.debug("Encontrado el registro!");
-						
 					}
 				}
 				if (bEncontrado == false) 
@@ -385,38 +383,40 @@ public class QMCuotas
 	{
 		String sCuotaID = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
 			logger.debug("Ejecutando Query...");
 
+			String sQuery = "SELECT "
+					   + CAMPO1 +       
+				       " FROM " 
+					   + TABLA + 
+					   " WHERE ("	
+					   + CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+					   + CAMPO3  + " = '"+ sCodCOCLDO +"' AND " 
+					   + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
+					   + CAMPO5  + " = '"+ sCodCOSBAC + "')";
+
+			logger.debug(sQuery);
+			
 			try 
 			{
 				stmt = conexion.createStatement();
 
-				pstmt = conexion.prepareStatement("SELECT "
-						   + CAMPO1 +       
-					       " FROM " 
-						   + TABLA + 
-						   " WHERE ("	
-						   + CAMPO2  + " = '"+ sCodCOACES +"' AND " 
-						   + CAMPO3  + " = '"+ sCodCOCLDO +"' AND " 
-						   + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
-						   + CAMPO5  + " = '"+ sCodCOSBAC + "')");
-
+				pstmt = conexion.prepareStatement(sQuery);
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -424,14 +424,12 @@ public class QMCuotas
 						sCuotaID = rs.getString(CAMPO1);
 						
 						logger.debug("Encontrado el registro!");
-						
 					}
 				}
 				if (bEncontrado == false) 
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -458,12 +456,12 @@ public class QMCuotas
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -484,21 +482,17 @@ public class QMCuotas
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
-
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
 
 						logger.debug("Encontrado el registro!");
-
 					}
 				}
 				if (bEncontrado == false) 
@@ -531,11 +525,15 @@ public class QMCuotas
 	{
 		ArrayList<CuotaTabla> resultado = new ArrayList<CuotaTabla>();
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 
+			boolean found = false;
+			
 			String sCOCLDO = "";
 			String sDesCOCLDO = "";
 			String sNUDCOM = "";
@@ -548,9 +546,6 @@ public class QMCuotas
 			String sPTPAGO = "";
 			String sDesPTPAGO = "";
 			String sOBTEXC = "";
-			
-			PreparedStatement pstmt = null;
-			boolean found = false;
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -578,7 +573,6 @@ public class QMCuotas
 				stmt = conexion.createStatement();
 				
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con éxito!");
@@ -651,7 +645,7 @@ public class QMCuotas
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -695,39 +689,37 @@ public class QMCuotas
 	{
 		String sEstado = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-
-
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
 			logger.debug("Ejecutando Query...");
 
+			String sQuery = "SELECT " 
+					+ CAMPO12 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1  + " = '"+ sCodCuota +"'"; 
+
+			logger.debug(sQuery);
+
 			try 
 			{
 				stmt = conexion.createStatement();
 
-
-				pstmt = conexion.prepareStatement("SELECT " 
-						+ CAMPO12 + 
-						" FROM " 
-						+ TABLA + 
-						" WHERE "
-						+ CAMPO1  + " = '"+ sCodCuota +"'");
-
+				pstmt = conexion.prepareStatement(sQuery);
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 				
-				
 				if (rs != null) 
 				{
-					
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -737,16 +729,12 @@ public class QMCuotas
 						logger.debug("Encontrado el registro!");
 						
 						logger.debug(CAMPO12+":|"+sEstado+"|");
-
-
 					}
 				}
 				if (bEncontrado == false) 
 				{
-	 
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{

@@ -64,7 +64,7 @@ public class QMGastos
 	{
 		int iCodigo = 0;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
@@ -187,7 +187,7 @@ public class QMGastos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -270,7 +270,7 @@ public class QMGastos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -345,13 +345,12 @@ public class QMGastos
 		String sFEAUFA = "";
 		String sFEPGPR = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -403,7 +402,6 @@ public class QMGastos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -518,12 +516,12 @@ public class QMGastos
 	{
 		String sGastoID = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -548,13 +546,10 @@ public class QMGastos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 				
-
-
 				if (rs != null) 
 				{
 
@@ -602,12 +597,12 @@ public class QMGastos
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -615,13 +610,12 @@ public class QMGastos
 						+ CAMPO1  +       
 						" FROM " 
 						+ TABLA + 
-						" WHERE "+
-						"("	+
-						CAMPO2  + " = '"+ sCodCOACES +"' AND " +
-						CAMPO3  + " = '"+ sCodCOGRUG +"' AND " +
-						CAMPO4  + " = '"+ sCodCOTPGA +"' AND " +
-						CAMPO5  + " = '"+ sCodCOSBGA +"' AND " +
-						CAMPO7  + " = '"+ sFEDEVE + 
+						" WHERE ("	
+						+ CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+						+ CAMPO3  + " = '"+ sCodCOGRUG +"' AND " 
+						+ CAMPO4  + " = '"+ sCodCOTPGA +"' AND " 
+						+ CAMPO5  + " = '"+ sCodCOSBGA +"' AND " 
+						+ CAMPO7  + " = '"+ sFEDEVE + 
 						"' )";
 			
 			logger.debug(sQuery);
@@ -631,29 +625,23 @@ public class QMGastos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
-				
-
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
 
 						logger.debug("Encontrado el registro!");
-
 					}
 				}
 				if (bEncontrado == false) 
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -681,12 +669,12 @@ public class QMGastos
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -694,15 +682,14 @@ public class QMGastos
 						+ CAMPO1 + 
 						" FROM " 
 						+ TABLA + 
-						" WHERE " +
-						"("	+ 
-						CAMPO2  + " = '"+ sCodCOACES +"' AND " +
-						CAMPO3  + " = '"+ sCodCOGRUG +"' AND " +
-						CAMPO4  + " = '"+ sCodCOTPGA +"' AND " +
-						CAMPO5  + " = '"+ sCodCOSBGA +"' AND " +
-						CAMPO7  + " = '"+ sFEDEVE +"' AND " +
-						CAMPO30 + " <> '"+  ValoresDefecto.CAMPO_SIN_INFORMAR +"' AND " +
-					    CAMPO35  + " = '"+ ValoresDefecto.DEF_GASTO_ANULADO + 
+						" WHERE ("	
+						+ CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+						+ CAMPO3  + " = '"+ sCodCOGRUG +"' AND " 
+						+ CAMPO4  + " = '"+ sCodCOTPGA +"' AND " 
+						+ CAMPO5  + " = '"+ sCodCOSBGA +"' AND " 
+						+ CAMPO7  + " = '"+ sFEDEVE +"' AND " 
+						+ CAMPO30 + " <> '"+  ValoresDefecto.CAMPO_SIN_INFORMAR +"' AND " 
+						+ CAMPO35  + " = '"+ ValoresDefecto.DEF_GASTO_ANULADO + 
 					    "')";
 			
 			logger.debug(sQuery);
@@ -712,15 +699,12 @@ public class QMGastos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -732,7 +716,6 @@ public class QMGastos
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -760,7 +743,7 @@ public class QMGastos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -806,7 +789,7 @@ public class QMGastos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -851,7 +834,7 @@ public class QMGastos
 	{
 		String sEstado = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -876,7 +859,6 @@ public class QMGastos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -924,13 +906,13 @@ public class QMGastos
 	{
 		ArrayList<String> resultado = new ArrayList<String>(); 
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-			ResultSet rs = null;
-
 
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
 			boolean bEncontrado = false;
 		
 			logger.debug("Ejecutando Query...");
@@ -949,11 +931,9 @@ public class QMGastos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
-				
 			
 				int i = 0;
 				
@@ -998,14 +978,18 @@ public class QMGastos
 		return resultado;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosConGastos(Connection conexion, ActivoTabla activo)
+	public static ArrayList<ActivoTabla> buscaActivosConGastos(Connection conexion, ActivoTabla filtro)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
 			ResultSet rs = null;
+
+			boolean bEncontrado = false;
 
 			String sCOACES = "";
 			String sCOPOIN = "";
@@ -1015,10 +999,6 @@ public class QMGastos
 			String sNUPIAC = "";
 			String sNUPOAC = "";
 			String sNUPUAC = "";
-			
-
-			PreparedStatement pstmt = null;
-			boolean bEncontrado = false;
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1036,16 +1016,16 @@ public class QMGastos
 						   " FROM " + QMActivos.TABLA + 
 						   " WHERE ("
 
-						   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-						   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-						   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-						   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-						   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-						   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-						   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
 
 						   + QMActivos.CAMPO1 +" IN (SELECT "
-						   +  CAMPO2 + 
+						   + CAMPO2 + 
 						   " FROM " + TABLA +
 						   " WHERE " 
 						   + CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
@@ -1058,7 +1038,6 @@ public class QMGastos
 				stmt = conexion.createStatement();
 				
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -1115,11 +1094,15 @@ public class QMGastos
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 
+			boolean bEncontrado = false;
+			
 			String sCOACES = "";
 			String sCOGRUG = "";
 			String sCOTPGA = "";
@@ -1132,10 +1115,6 @@ public class QMGastos
 			String sDCOSIGA = "";
 			String sIMNGAS = "";
 			
-
-			PreparedStatement pstmt = null;
-			boolean bEncontrado = false;
-
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
@@ -1150,7 +1129,8 @@ public class QMGastos
 						   + CAMPO16 + ","
 						   + CAMPO17 +
 
-						   " FROM " + TABLA + 
+						   " FROM " 
+						   + TABLA + 
 						   " WHERE (" +
 						   "("
 						   + CAMPO35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
@@ -1167,12 +1147,9 @@ public class QMGastos
 				stmt = conexion.createStatement();
 				
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
-
-				
 
 				if (rs != null) 
 				{
@@ -1180,7 +1157,6 @@ public class QMGastos
 					while (rs.next()) 
 					{
 						bEncontrado = true;
-						   
 						
 						sCOACES  = rs.getString(QMGastos.CAMPO2);
 						sCOGRUG  = rs.getString(QMGastos.CAMPO3);

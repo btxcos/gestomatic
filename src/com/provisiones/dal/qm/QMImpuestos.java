@@ -42,7 +42,7 @@ public class QMImpuestos
 	{
 		long liCodigo = 0;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
@@ -111,10 +111,9 @@ public class QMImpuestos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -165,19 +164,23 @@ public class QMImpuestos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
 			logger.debug("Ejecutando Query...");
 
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + sCodImpuesto + "'";
+
+			logger.debug(sQuery);
+
 			try 
 			{
 				stmt = conexion.createStatement();
-				stmt.executeUpdate("DELETE FROM " 
-						+ TABLA + 
-						" WHERE " 
-						+ CAMPO1 + " = '" + sCodImpuesto + "'");
+				stmt.executeUpdate(sQuery);
 				
 				logger.debug("Ejecutada con exito!");
 				
@@ -212,12 +215,12 @@ public class QMImpuestos
 		String sCOTEXA = "";
 		String sOBTEXC = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -244,7 +247,6 @@ public class QMImpuestos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -310,12 +312,12 @@ public class QMImpuestos
 	{
 		String sImpuestoRecursoID = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -336,14 +338,12 @@ public class QMImpuestos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-				logger.debug("Ejecutada con exito!");
-
 				rs = pstmt.executeQuery();
+
+				logger.debug("Ejecutada con exito!");
 				
 				if (rs != null) 
 				{
-					
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -353,16 +353,12 @@ public class QMImpuestos
 						logger.debug("Encontrado el registro!");
 
 						logger.debug(CAMPO11+":|"+sImpuestoRecursoID+"|");
-
-
 					}
 				}
 				if (bEncontrado == false) 
 				{
-	 
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -387,12 +383,12 @@ public class QMImpuestos
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -410,14 +406,12 @@ public class QMImpuestos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -429,7 +423,6 @@ public class QMImpuestos
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -454,12 +447,12 @@ public class QMImpuestos
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -477,14 +470,12 @@ public class QMImpuestos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -498,7 +489,6 @@ public class QMImpuestos
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -521,7 +511,7 @@ public class QMImpuestos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -566,12 +556,12 @@ public class QMImpuestos
 	{
 		String sEstado = "";
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -591,15 +581,12 @@ public class QMImpuestos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-				logger.debug("Ejecutada con exito!");
-
 				rs = pstmt.executeQuery();
-				
+
+				logger.debug("Ejecutada con exito!");
 				
 				if (rs != null) 
 				{
-					
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -613,10 +600,8 @@ public class QMImpuestos
 				}
 				if (bEncontrado == false) 
 				{
-	 
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{

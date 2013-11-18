@@ -28,831 +28,776 @@ public class QMListaGastosProvisiones
 	static String CAMPO5 = "fecha_alta";
 
 
-	public static boolean addRelacionGastoProvision(String sCodGasto, String sCodNUPROF) 
+	public static boolean addRelacionGastoProvision(Connection conexion, String sCodGasto, String sCodNUPROF) 
 	{
-		Statement stmt = null;
-		Connection conn = null;
+		boolean bSalida = false;
 		
-		boolean bSalida = true;
-
 		String sUsuario = ConnectionManager.getUser();
 
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " 
-				+ TABLA + 
-				" (" 
-				+ CAMPO1 + "," 
-				+ CAMPO2 + "," 
-				+ CAMPO3 + "," 
-				+ CAMPO4 + "," 
-				+ CAMPO5 +						
-				") VALUES ('" 
-				+ sCodGasto + "','"
-				+ sCodNUPROF + "','"
-				+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
-			    + sUsuario + "','"
-			    + Utils.timeStamp() +
-				"')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			logger.debug("Ejecutando Query...");
 			
-			logger.error("ERROR GASTO:|"+sCodGasto+"|");
-			logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
+			String sQuery = "INSERT INTO " 
+					+ TABLA + 
+					" (" 
+					+ CAMPO1 + "," 
+					+ CAMPO2 + "," 
+					+ CAMPO3 + "," 
+					+ CAMPO4 + "," 
+					+ CAMPO5 +						
+					") VALUES ('" 
+					+ sCodGasto + "','"
+					+ sCodNUPROF + "','"
+					+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
+				    + sUsuario + "','"
+				    + Utils.timeStamp() +
+					"')";
+			
+			logger.debug(sQuery);
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-		} 
-		finally 
-		{
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
 
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 	
-	public static boolean delRelacionGastoProvision(String sCodGasto) 
+	public static boolean delRelacionGastoProvision(Connection conexion, String sCodGasto) 
 	{
-		Statement stmt = null;
-		Connection conn = null;
-		
-		boolean bSalida = true;
+		boolean bSalida = false;
 
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "DELETE FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO1 + " = '" + sCodGasto +"'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
-
-			logger.error("ERROR GASTO:|"+sCodGasto+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1 + " = '" + sCodGasto +"'";
 			
-		} 
-		finally 
-		{
+			logger.debug(sQuery);
 
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
-	}
-	
-	public static boolean existeRelacionGastoProvision(String sCodGasto, String sCodNUPROF)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				+ CAMPO3 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE ("	
-				+ CAMPO1  + " = '"+ sCodGasto +"' AND "
-				+ CAMPO2  + " = '"+ sCodNUPROF + 
-				"' )";
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conn.createStatement();
+				logger.error("ERROR GASTO:|"+sCodGasto+"|");
 
-			pstmt = conn.prepareStatement(sQuery);
-
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-
-			if (rs != null) 
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				
+			} 
+			finally 
 			{
 
-				while (rs.next()) 
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean existeRelacionGastoProvision(Connection conexion, String sCodGasto, String sCodNUPROF)
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO3 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE ("	
+					+ CAMPO1  + " = '"+ sCodGasto +"' AND "
+					+ CAMPO2  + " = '"+ sCodNUPROF + 
+					"' )";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			found = false;
-
-			logger.error("ERROR GASTO:|"+sCodGasto+"|");
-			logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+
+		return bEncontrado;
 	}
 	
-	public static boolean setRevisado(String sCodGasto, String sRevisado)
+	public static boolean setRevisado(Connection conexion, String sCodGasto, String sRevisado)
 	{
-		Statement stmt = null;
-		boolean bSalida = true;
-		Connection conn = null;
+		boolean bSalida = false;
 		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO3 + " = '"+ sRevisado + "' "+
-				" WHERE "
-				+ CAMPO1 + " = '"+ sCodGasto +"'";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ sRevisado + "' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ sCodGasto +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR Gasto:|"+sCodGasto+"|");
+				logger.error("ERROR Gasto:|"+sCodGasto+"|");
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 	
-	public static String getRevisado(String sCodGasto)
+	public static String getRevisado(Connection conexion, String sCodGasto)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
 		String sRevisado = "";
 
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO3 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE " 
-				+ CAMPO1 + " = '" + sCodGasto + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO3 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + sCodGasto + "'";
+			
+			logger.debug(sQuery);
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sRevisado = rs.getString(CAMPO3);
+						sRevisado = rs.getString(CAMPO3);
 
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO1+":|"+sCodGasto+"|");
-					logger.debug(CAMPO3+":|"+sRevisado+"|");
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sCodGasto+"|");
+						logger.debug(CAMPO3+":|"+sRevisado+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+	 
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				sRevisado = "";
+
+				logger.error("ERROR Gasto:|"+sCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			sRevisado = "";
-
-			logger.error("ERROR Gasto:|"+sCodGasto+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return sRevisado;
 	}
 	
 	
-	public static String getProvisionDeGasto(String sCodGasto)
+	public static String getProvisionDeGasto(Connection conexion, String sCodGasto)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
+		String sNUPROF = "";
 
-		String sCodNUPROF = "";
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				+ CAMPO2 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO1  + " = '"+ sCodGasto +"'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO2 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1  + " = '"+ sCodGasto +"'";
+			
+			logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
-				{
-					found = true;
-
-					sCodNUPROF = rs.getString(CAMPO2);
-					
-					
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO2+":|"+sCodNUPROF+"|");
-
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			sCodNUPROF = "";
-
-			logger.error("ERROR GASTO:|"+sCodGasto+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return sCodNUPROF;
-	}
-	
-	public static String getProvisionDeMovimiento(String sCodMovimiento)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
-		String sProvision = "";
-
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO2 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO1 +
-				"IN (SELECT "
-				+ QMListaGastos.CAMPO1 +
-				" FROM " 
-				+ QMListaGastos.TABLA +
-				" WHERE "
-				+ QMListaGastos.CAMPO2  + " = '"+ sCodMovimiento +"' )";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			
-			if (rs != null) 
-			{
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
 
-					sProvision = rs.getString(CAMPO2);
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
-					logger.debug(QMListaGastos.CAMPO2+":|"+sCodMovimiento+"|");
-					logger.debug(CAMPO2+":|"+sProvision+"|");
+						sNUPROF = rs.getString(CAMPO2);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO2+":|"+sNUPROF+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				sNUPROF = "";
+
+				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			sProvision = "";
-
-			logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
-		return sProvision;
-	}
-
-
-
-	public static ArrayList<String>  buscaGastosPorProvision(String sCodNUPROF) 
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-		
-		ArrayList<String> result = new ArrayList<String>(); 
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO1 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE " 
-				+ CAMPO2 + " = '" + sCodNUPROF + "'";
-
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			int i = 0;
-			
-			if (rs != null) 
-			{
-				
-				while (rs.next()) 
-				{
-					found = true;
-
-					result.add(rs.getString(CAMPO1));
-
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO2+":|"+sCodNUPROF+"|");
-					logger.debug(CAMPO1+":|"+result.get(i)+"|");
-					
-					i++;
-				}
-			}
-			if (found == false) 
-			{
-				result = new ArrayList<String>(); 
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<String>();
-
-			logger.error("ERROR NUPROF:|"+sCodNUPROF+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
-
-	public static ArrayList<String> buscaGastosSinValidarEnProvision(String sNUPROF) 
-	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-		
-		String sGastoID = "0";
-
-		ArrayList<String> result = new ArrayList<String>();
-
-		boolean found = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO1 + 
-				" FROM " + TABLA + 
-				" WHERE ( " 
-				+ CAMPO2 + " = '"+ sNUPROF + "' AND "
-				
-				+ CAMPO1+ " IN (SELECT "
-				+ QMListaGastos.CAMPO1 +
-				" FROM " + QMListaGastos.TABLA +
-				" WHERE " 
-				+ QMListaGastos.CAMPO3 + " NOT IN ('"
-				+ValoresDefecto.DEF_MOVIMIENTO_VALIDADO+"','"
-				+ValoresDefecto.DEF_MOVIMIENTO_RESUELTO+
-				"')))";
-		
-		logger.debug(sQuery);
-		
-		
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-
-
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					found = true;
-
-					sGastoID =  rs.getString(CAMPO1);
-					
-					result.add(sGastoID);
-					
-					logger.debug("Encontrado el registro!");
-
-					logger.debug(CAMPO1+":|"+sGastoID+"|");
-
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<String>();
-
-			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-
-		return result;
+		return sNUPROF;
 	}
 	
-	public static boolean resuelveGastos(String sNUPROF) 
+	public static String getProvisionDeMovimiento(Connection conexion, String sCodMovimiento)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
+		String sNUPROF = "";
 		
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "' "+
-				" WHERE "
-				+ CAMPO2 + " = '"+ sNUPROF +"'";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			String sQuery = "SELECT " 
+					+ CAMPO2 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1 +
+					"IN (SELECT "
+					+ QMListaGastos.CAMPO1 +
+					" FROM " 
+					+ QMListaGastos.TABLA +
+					" WHERE "
+					+ QMListaGastos.CAMPO2  + " = '"+ sCodMovimiento +"' )";
+			
+			logger.debug(sQuery);
 
-			logger.error("ERROR PROVISIÓN:|"+sNUPROF+"|");
+			try 
+			{
+				stmt = conexion.createStatement();
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-			Utils.closeStatement(stmt);
+						sNUPROF = rs.getString(CAMPO2);
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(QMListaGastos.CAMPO2+":|"+sCodMovimiento+"|");
+						logger.debug(CAMPO2+":|"+sNUPROF+"|");
+					}
+				}
+				if (bEncontrado == false) 
+				{
+	 
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNUPROF = "";
+
+				logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}			
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
+		return sNUPROF;
+	}
+
+	public static ArrayList<String>  buscaGastosPorProvision(Connection conexion, String sCodNUPROF) 
+	{
+		ArrayList<String> resultado = new ArrayList<String>(); 
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO2 + " = '" + sCodNUPROF + "'";
+
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				int i = 0;
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						resultado.add(rs.getString(CAMPO1));
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO2+":|"+sCodNUPROF+"|");
+						logger.debug(CAMPO1+":|"+resultado.get(i)+"|");
+						
+						i++;
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					resultado = new ArrayList<String>(); 
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<String>();
+
+				logger.error("ERROR NUPROF:|"+sCodNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+
+	public static ArrayList<String> buscaGastosSinValidarEnProvision(Connection conexion, String sNUPROF) 
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			String sGastoID = "0";
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + 
+					" FROM " + TABLA + 
+					" WHERE ( " 
+					+ CAMPO2 + " = '"+ sNUPROF + "' AND "
+					
+					+ CAMPO1+ " IN (SELECT "
+					+ QMListaGastos.CAMPO1 +
+					" FROM " + QMListaGastos.TABLA +
+					" WHERE " 
+					+ QMListaGastos.CAMPO3 + " NOT IN ('"
+					+ValoresDefecto.DEF_MOVIMIENTO_VALIDADO+"','"
+					+ValoresDefecto.DEF_MOVIMIENTO_RESUELTO+
+					"')))";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sGastoID =  rs.getString(CAMPO1);
+						
+						resultado.add(sGastoID);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sGastoID+"|");
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<String>();
+
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static boolean resuelveGastos(Connection conexion, String sNUPROF) 
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "' "+
+					" WHERE "
+					+ CAMPO2 + " = '"+ sNUPROF +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR PROVISIÓN:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
 		return bSalida;
 	}
 	
-	public static long buscaCantidadGastos(String sNUPROF)
+	public static long buscaCantidadGastos(Connection conexion, String sNUPROF)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
 		long liNumero = 0;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT COUNT(*) FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO2 + " = '" + sNUPROF + "'";
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
+		
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-			
-			if (rs != null) 
+			String sQuery = "SELECT COUNT(*) FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO2 + " = '" + sNUPROF + "'";
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					liNumero = rs.getLong("COUNT(*)");
-					
-					logger.debug("Encontrado el registro!");
+						liNumero = rs.getLong("COUNT(*)");
+						
+						logger.debug("Encontrado el registro!");
 
-					logger.debug( "Numero de registros:|"+liNumero+"|");
-
-
+						logger.debug( "Numero de registros:|"+liNumero+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				liNumero = 0;
+
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			liNumero = 0;
-
-			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return liNumero;
 	}
 	
-	public static double calculaValorProvision(String sNUPROF)
+	public static double calculaValorProvision(Connection conexion, String sNUPROF)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
 		double dValor = 0;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				+ QMGastos.CAMPO16 + ","
-				+ QMGastos.CAMPO17 +
-				" FROM "
-				+ QMGastos.TABLA + 
-				" WHERE (" 
-				+ QMGastos.CAMPO35 + " NOT IN ('" 
-				+ ValoresDefecto.DEF_GASTO_ANULADO + "','"
-				+ ValoresDefecto.DEF_GASTO_ABONADO +
-				"') AND "
-				+ QMGastos.CAMPO1 + " IN ( SELECT "
-				+ CAMPO1 +
-				" FROM " 
-				+ TABLA + 
-				" WHERE (" 
-				+ CAMPO2 +	" = '" + sNUPROF + "' AND "
-				+ CAMPO3 +	" <> '" + ValoresDefecto.DEF_MOVIMIENTO_ERRONEO +
-				"')))";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-			if (rs != null) 
+			String sQuery = "SELECT "
+					+ QMGastos.CAMPO16 + ","
+					+ QMGastos.CAMPO17 +
+					" FROM "
+					+ QMGastos.TABLA + 
+					" WHERE (" 
+					+ QMGastos.CAMPO35 + " NOT IN ('" 
+					+ ValoresDefecto.DEF_GASTO_ANULADO + "','"
+					+ ValoresDefecto.DEF_GASTO_ABONADO +
+					"') AND "
+					+ QMGastos.CAMPO1 + " IN ( SELECT "
+					+ CAMPO1 +
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO2 +	" = '" + sNUPROF + "' AND "
+					+ CAMPO3 +	" <> '" + ValoresDefecto.DEF_MOVIMIENTO_ERRONEO +
+					"')))";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					dValor = dValor + Double.parseDouble(Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16)));
-					
-					logger.debug("Encontrado el registro!");
+						dValor = dValor + Double.parseDouble(Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16)));
+						
+						logger.debug("Encontrado el registro!");
+					}
+					logger.debug("Valor de Provisión:|"+dValor+"|");
 				}
-				logger.debug("Valor de Provisión:|"+dValor+"|");
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			found = false;
-
-			logger.error("ERROR PROVISION:|"+sNUPROF+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return dValor;
 	}
 }

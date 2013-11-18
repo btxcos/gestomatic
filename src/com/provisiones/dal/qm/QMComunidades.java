@@ -49,9 +49,10 @@ public class QMComunidades
 	{
 		long liCodigo = 0;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
+
 			ResultSet resulset = null;
 			
 			logger.debug("Ejecutando Query...");
@@ -148,7 +149,7 @@ public class QMComunidades
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -226,11 +227,9 @@ public class QMComunidades
 	{
 		boolean bSalida = true;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-
-			
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -284,14 +283,12 @@ public class QMComunidades
 		String sNUCCNT = "";
 		String sOBTEXC = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-
-
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -326,9 +323,6 @@ public class QMComunidades
 				       + "AES_DECRYPT("+CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 				       + "AES_DECRYPT("+CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 
-
-				       
-				       
 				       + CAMPO15 +               
 				       " FROM " 
 				       + TABLA + 
@@ -342,8 +336,6 @@ public class QMComunidades
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -446,14 +438,12 @@ public class QMComunidades
 	{
 		String sComunidadID = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-			
-
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -474,8 +464,6 @@ public class QMComunidades
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -526,12 +514,12 @@ public class QMComunidades
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -549,15 +537,12 @@ public class QMComunidades
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -569,7 +554,6 @@ public class QMComunidades
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -593,11 +577,9 @@ public class QMComunidades
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-
-
 
 			logger.debug("Ejecutando Query...");
 			
@@ -643,12 +625,12 @@ public class QMComunidades
 	{
 		String sEstado = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 			
 			boolean bEncontrado = false;
 
@@ -667,17 +649,13 @@ public class QMComunidades
 			{
 				stmt = conexion.createStatement();
 
-
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 				
-				
 				if (rs != null) 
 				{
-					
 					while (rs.next()) 
 					{
 						bEncontrado = true;

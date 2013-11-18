@@ -37,747 +37,595 @@ public class QMListaComunidadesActivos
 	static String CAMPO6  = "fecha_movimiento";    
 
 
-	public static boolean addRelacionComunidad(String sCodCOACES, String sCodComunidad, String sCodMovimiento)
+	public static boolean addRelacionComunidad(Connection conexion, String sCodCOACES, String sCodComunidad, String sCodMovimiento)
 	{
-
-		Statement stmt = null;
-		Connection conn = null;
-		
-		boolean bSalida = true;
+		boolean bSalida = false;
 		
 		String sUsuario = ConnectionManager.getUser();
 
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " 
-				   + TABLA + 
-				   " ("
-				   + CAMPO1  + "," 
-			       + CAMPO2  + ","              
-			       + CAMPO3  + ","
-			       + CAMPO4  + ","
-			       + CAMPO5  + ","
-			       + CAMPO6  +    
-			       ") VALUES ('"
-			       + sCodCOACES + "','" 
-			       + sCodComunidad + "','"
-			       + sCodMovimiento + "','"
-			       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
-			       + sUsuario  + "','"
-			       + Utils.timeStamp() + 
-			       "' )";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			logger.debug("Ejecutando Query...");
 			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally
-		{
+			String sQuery = "INSERT INTO " 
+					   + TABLA + 
+					   " ("
+					   + CAMPO1  + "," 
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","
+				       + CAMPO4  + ","
+				       + CAMPO5  + ","
+				       + CAMPO6  +    
+				       ") VALUES ('"
+				       + sCodCOACES + "','" 
+				       + sCodComunidad + "','"
+				       + sCodMovimiento + "','"
+				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
+				       + sUsuario  + "','"
+				       + Utils.timeStamp() + 
+				       "' )";
+			
+			logger.debug(sQuery);
 
-			Utils.closeStatement(stmt);
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 
-	public static boolean delRelacionComunidad(String sCodMovimiento)
+	public static boolean delRelacionComunidad(Connection conexion, String sCodMovimiento)
 	{
-		Statement stmt = null;
-		Connection conn = null;
+		boolean bSalida = false;
 		
-		boolean bSalida = true;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "DELETE FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+			
+			logger.debug(sQuery);
 
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 
-	public static boolean existeRelacionComunidad(String sCodCOACES, String sCodComunidad, String sCodMovimiento)
+	public static boolean existeRelacionComunidad(Connection conexion, String sCodCOACES, String sCodComunidad, String sCodMovimiento)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
+		boolean bEncontrado = false;
 		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-			       + CAMPO5  +
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE (" 
-			       + CAMPO1 + " = '" + sCodCOACES + "' AND "
-			       + CAMPO2 + " = '" + sCodComunidad + "' AND "
-			       + CAMPO3 + " = '" + sCodMovimiento	+ 
-			       "')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 			
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT "
+				       + CAMPO5  +
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE (" 
+				       + CAMPO1 + " = '" + sCodCOACES + "' AND "
+				       + CAMPO2 + " = '" + sCodComunidad + "' AND "
+				       + CAMPO3 + " = '" + sCodMovimiento	+ 
+				       "')";
+			
+			logger.debug(sQuery);
 
-			
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-			
-
-		} 
-		catch (SQLException ex) 
-		{
-			found = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+
+		return bEncontrado;
 	}
 
-	public static boolean compruebaRelacionComunidadActivo(String sCodComunidad, String sCodCOACES)
+	public static boolean compruebaRelacionComunidadActivo(Connection conexion, String sCodComunidad, String sCodCOACES)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
+		boolean bEncontrado = false;
 
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		String sQuery = "SELECT "
-			       + CAMPO3  +               
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE ("
-			       + CAMPO1 + " = '" + sCodCOACES + 
-			       
-			       "' AND "
-
-	      		   + CAMPO2 + " IN (SELECT " 
-				   + QMComunidades.CAMPO1 + 
-				   " FROM " + QMComunidades.TABLA +
-				   " WHERE (" 
-				   + QMComunidades.CAMPO1 + " = '" + sCodComunidad + "' AND " 
-			       + QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "'))" +
-
-			       ")";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
 
-			rs = pstmt.executeQuery();
+			String sQuery = "SELECT "
+				       + CAMPO3  +               
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE ("
+				       + CAMPO1 + " = '" + sCodCOACES + 
+				       
+				       "' AND "
+
+		      		   + CAMPO2 + " IN (SELECT " 
+					   + QMComunidades.CAMPO1 + 
+					   " FROM " + QMComunidades.TABLA +
+					   " WHERE (" 
+					   + QMComunidades.CAMPO1 + " = '" + sCodComunidad + "' AND " 
+				       + QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "')))";
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug(sQuery);
 			
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
-
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-			
-
-		} 
-		catch (SQLException ex) 
-		{
-			found = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+
+		return bEncontrado;
 	}
 
-	public static boolean activoVinculadoComunidad(String sCodCOACES)
+	public static boolean activoVinculadoComunidad(Connection conexion, String sCodCOACES)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
+		boolean bEncontrado = false;
 
-		String sQuery = "SELECT "
-			       + CAMPO3  +               
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE ("
-			       + CAMPO1 + " = '" + sCodCOACES + "'" + " AND "
-
-			       + CAMPO2 + " IN (SELECT " 
-			       + QMComunidades.CAMPO1 + 
-			       " FROM " 
-			       + QMComunidades.TABLA +
-			       " WHERE " 
-			       + QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "'))";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
 
-			rs = pstmt.executeQuery();
+			String sQuery = "SELECT "
+				       + CAMPO3  +               
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE ("
+				       + CAMPO1 + " = '" + sCodCOACES + "'" + " AND "
+
+				       + CAMPO2 + " IN (SELECT " 
+				       + QMComunidades.CAMPO1 + 
+				       " FROM " 
+				       + QMComunidades.TABLA +
+				       " WHERE " 
+				       + QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "'))";
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug(sQuery);
 			
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
-
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-			
-
-		} 
-		catch (SQLException ex) 
-		{
-			found = false;
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return found;
+
+		return bEncontrado;
 	}
 	
-	public static String getMovimientoDeActivoVinculadoComunidad(String sCodComunidad, String sCodCOACES)
+	public static String getMovimientoDeActivoVinculadoComunidad(Connection conexion, String sCodComunidad, String sCodCOACES)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-		
 		String sMovimiento = "";
 
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-
-		String sQuery = "SELECT "
-			       + CAMPO3  +
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE (" 
-			       + CAMPO1 + " = '" + sCodCOACES + "' AND  "
-			       + CAMPO2 + " = '" + sCodComunidad +
-			       "')";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
 
-			rs = pstmt.executeQuery();
+			String sQuery = "SELECT "
+				       + CAMPO3  +
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE (" 
+				       + CAMPO1 + " = '" + sCodCOACES + "' AND  "
+				       + CAMPO2 + " = '" + sCodComunidad +
+				       "')";
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug(sQuery);
 			
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sMovimiento = rs.getString(CAMPO3);
-					
-					logger.debug("Encontrado el registro!");
-
+						sMovimiento = rs.getString(CAMPO3);
+						
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sMovimiento = "";
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-			
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return sMovimiento;
 	}
 	
-	public static boolean setValidado(String sCodMovimiento, String sValidado)
+	public static boolean setValidado(Connection conexion, String sCodMovimiento, String sValidado)
 	{
-		Statement stmt = null;
-		boolean bSalida = true;
-		Connection conn = null;
+		boolean bSalida = false;
 		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO4 + " = '"+ sValidado + "' "+
-				" WHERE " 
-				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			stmt.executeUpdate(sQuery);
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO4 + " = '"+ sValidado + "' "+
+					" WHERE " 
+					+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
 			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-		} 
-		finally 
-		{
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 	
-	public static String getValidado(String sCodMovimiento)
+	public static String getValidado(Connection conexion, String sCodMovimiento)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-
 		String sValidado = "";
 
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO4 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-			if (rs != null) 
+			String sQuery = "SELECT " 
+					+ CAMPO4 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sValidado = rs.getString(CAMPO5);
-					
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO5+":|"+sValidado+"|");
-
+						sValidado = rs.getString(CAMPO5);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO5+":|"+sValidado+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sValidado = "";
+
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			sValidado = "";
-
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return sValidado;
 	}
 	
-	public static long buscaCantidadValidado(String sCodValidado)
+	public static long buscaCantidadValidado(Connection conexion, String sCodValidado)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-
 		long liNumero = 0;
 
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT COUNT(*) FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO4 + " = '" + sCodValidado + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-			if (rs != null) 
+			String sQuery = "SELECT COUNT(*) FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO4 + " = '" + sCodValidado + "'";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					liNumero = rs.getLong("COUNT(*)");
-					
-					logger.debug("Encontrado el registro!");
+						liNumero = rs.getLong("COUNT(*)");
+						
+						logger.debug("Encontrado el registro!");
 
-					logger.debug( "Numero de registros:|"+liNumero+"|");
-
-
+						logger.debug( "Numero de registros:|"+liNumero+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				liNumero = 0;
+
+				logger.error("ERROR CodValidado:|"+sCodValidado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			liNumero = 0;
-
-			logger.error("ERROR CodValidado:|"+sCodValidado+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return liNumero;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosComunidad(String sCodComunidad)
+	public static ArrayList<ActivoTabla> buscaActivosComunidad(Connection conexion, String sCodComunidad)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		String sCOACES = "";
-		String sCOPOIN = "";
-		String sNOMUIN = "";
-		String sNOPRAC = "";
-		String sNOVIAS = "";
-		String sNUPIAC = "";
-		String sNUPOAC = "";
-		String sNUPUAC = "";
-		//String sNURCAT = "";
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 		
-		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + QMActivos.CAMPO1 + ","        
-				   + QMActivos.CAMPO14 + ","
-				   + QMActivos.CAMPO11 + ","
-				   + QMActivos.CAMPO13 + ","
-				   + QMActivos.CAMPO6 + ","
-				   + QMActivos.CAMPO9 + ","
-				   + QMActivos.CAMPO7 + ","
-				   + QMActivos.CAMPO10 +
-				   //+ QMActivos.CAMPO81 + 
-				   " FROM " 
-				   + QMActivos.TABLA + 
-				   " WHERE "
-				   + QMActivos.CAMPO1 +" IN (SELECT "
-				   + CAMPO1 + 
-				   " FROM " 
-				   + TABLA + 
-				   " WHERE "
-				   + CAMPO2 + " = '" + sCodComunidad	+ "')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+			//String sNURCAT = "";
 			
-
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-
-			
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					found = true;
-					
-					sCOACES = rs.getString(QMActivos.CAMPO1);
-					sCOPOIN = rs.getString(QMActivos.CAMPO14);
-					sNOMUIN = rs.getString(QMActivos.CAMPO11);
-					sNOPRAC = rs.getString(QMActivos.CAMPO13);
-					sNOVIAS = rs.getString(QMActivos.CAMPO6);
-					sNUPIAC = rs.getString(QMActivos.CAMPO9);
-					sNUPOAC = rs.getString(QMActivos.CAMPO7);
-					sNUPUAC = rs.getString(QMActivos.CAMPO10);
-					//sNURCAT = rs.getString(QMActivos.CAMPO81);
-					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
-					
-					result.add(activoencontrado);
-					
-					logger.debug("Encontrado el registro!");
-					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<ActivoTabla>();
-
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
-	
-	public static ArrayList<ActivoTabla> buscaActivosComunidadDisponibles(ActivoTabla activo, String sCodComunidad)
-	{
-		
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		String sCOACES = "";
-		String sCOPOIN = "";
-		String sNOMUIN = "";
-		String sNOPRAC = "";
-		String sNOVIAS = "";
-		String sNUPIAC = "";
-		String sNUPOAC = "";
-		String sNUPUAC = "";
-		
-		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-					
+			String sQuery = "SELECT "
 					   + QMActivos.CAMPO1 + ","        
 					   + QMActivos.CAMPO14 + ","
 					   + QMActivos.CAMPO11 + ","
@@ -785,522 +633,599 @@ public class QMListaComunidadesActivos
 					   + QMActivos.CAMPO6 + ","
 					   + QMActivos.CAMPO9 + ","
 					   + QMActivos.CAMPO7 + ","
-					   + QMActivos.CAMPO10 + 
-
+					   + QMActivos.CAMPO10 +
+					   //+ QMActivos.CAMPO81 + 
 					   " FROM " 
 					   + QMActivos.TABLA + 
-					   " WHERE ("
-
-					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
-
+					   " WHERE "
 					   + QMActivos.CAMPO1 +" IN (SELECT "
-
-					   + CAMPO1 + 
-					   " FROM " 
-					   + TABLA + 
-					   " WHERE (" 
-					   
-					   + CAMPO2 +" IN (SELECT "
-
-					   + QMComunidades.CAMPO1 + 
-					   " FROM " 
-					   + QMComunidades.TABLA + 
-					   " WHERE "
-					   + QMComunidades.CAMPO1 + " = '" + sCodComunidad	+ "'))))";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-			
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con éxito!");
-
-			
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					found = true;
-					
-					sCOACES = rs.getString(QMActivos.CAMPO1);
-					sCOPOIN = rs.getString(QMActivos.CAMPO14);
-					sNOMUIN = rs.getString(QMActivos.CAMPO11);
-					sNOPRAC = rs.getString(QMActivos.CAMPO13);
-					sNOVIAS = rs.getString(QMActivos.CAMPO6);
-					sNUPIAC = rs.getString(QMActivos.CAMPO9);
-					sNUPOAC = rs.getString(QMActivos.CAMPO7);
-					sNUPUAC = rs.getString(QMActivos.CAMPO10);
-					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
-					
-					result.add(activoencontrado);
-					
-					logger.debug("Encontrado el registro!");
-
-					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<ActivoTabla>();
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
-	
-	public static ArrayList<ActivoTabla> buscaActivosSinComunidad(ActivoTabla activo)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		String sCOACES = "";
-		String sCOPOIN = "";
-		String sNOMUIN = "";
-		String sNOPRAC = "";
-		String sNOVIAS = "";
-		String sNUPIAC = "";
-		String sNUPOAC = "";
-		String sNUPUAC = "";
-		
-		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-					
-					   + QMActivos.CAMPO1 + ","        
-					   + QMActivos.CAMPO14 + ","
-					   + QMActivos.CAMPO11 + ","
-					   + QMActivos.CAMPO13 + ","
-					   + QMActivos.CAMPO6 + ","
-					   + QMActivos.CAMPO9 + ","
-					   + QMActivos.CAMPO7 + ","
-					   + QMActivos.CAMPO10 + 
-
-					   " FROM " 
-					   + QMActivos.TABLA + 
-					   " WHERE ("
-
-					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
-
-					   + QMActivos.CAMPO1 +" NOT IN (SELECT "
-
 					   + CAMPO1 + 
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE "
-					   
-						+ CAMPO2 + " IN (SELECT "
-						+ QMComunidades.CAMPO1 +
-						" FROM " 
-						+ QMComunidades.TABLA + 
-						" WHERE " 
-						+ QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "' )))";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
+					   + CAMPO2 + " = '" + sCodComunidad	+ "')";
 			
-			pstmt = conn.prepareStatement(sQuery);
+			logger.debug(sQuery);
 
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
-				{
-					found = true;
-					
-					sCOACES = rs.getString(QMActivos.CAMPO1);
-					sCOPOIN = rs.getString(QMActivos.CAMPO14);
-					sNOMUIN = rs.getString(QMActivos.CAMPO11);
-					sNOPRAC = rs.getString(QMActivos.CAMPO13);
-					sNOVIAS = rs.getString(QMActivos.CAMPO6);
-					sNUPIAC = rs.getString(QMActivos.CAMPO9);
-					sNUPOAC = rs.getString(QMActivos.CAMPO7);
-					sNUPUAC = rs.getString(QMActivos.CAMPO10);
-					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
-					
-					result.add(activoencontrado);
-					
-					logger.debug("Encontrado el registro!");
-					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<ActivoTabla>();
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
-	
-	public static ArrayList<ActivoTabla> buscaActivosConComunidad(ActivoTabla activo)
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		String sCOACES = "";
-		String sCOPOIN = "";
-		String sNOMUIN = "";
-		String sNOPRAC = "";
-		String sNOVIAS = "";
-		String sNUPIAC = "";
-		String sNUPOAC = "";
-		String sNUPUAC = "";
-		
-		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
-		
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-					
-					   + QMActivos.CAMPO1 + ","        
-					   + QMActivos.CAMPO14 + ","
-					   + QMActivos.CAMPO11 + ","
-					   + QMActivos.CAMPO13 + ","
-					   + QMActivos.CAMPO6 + ","
-					   + QMActivos.CAMPO9 + ","
-					   + QMActivos.CAMPO7 + ","
-					   + QMActivos.CAMPO10 + 
-
-					   " FROM " 
-					   + QMActivos.TABLA + 
-					   " WHERE ("
-
-					   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-					   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-					   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-					   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-					   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-					   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-					   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
-
-					   + QMActivos.CAMPO1 +" IN (SELECT "
-
-					   + CAMPO1 + 
-					   " FROM " 
-					   + TABLA + 
-					   " WHERE "
-					   
-						+ CAMPO2 + " IN (SELECT "
-						+ QMComunidades.CAMPO1 +
-						" FROM " 
-						+ QMComunidades.TABLA + 
-						" WHERE " 
-						+ QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "' )))";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-			
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					found = true;
-					
-					sCOACES = rs.getString(QMActivos.CAMPO1);
-					sCOPOIN = rs.getString(QMActivos.CAMPO14);
-					sNOMUIN = rs.getString(QMActivos.CAMPO11);
-					sNOPRAC = rs.getString(QMActivos.CAMPO13);
-					sNOVIAS = rs.getString(QMActivos.CAMPO6);
-					sNUPIAC = rs.getString(QMActivos.CAMPO9);
-					sNUPOAC = rs.getString(QMActivos.CAMPO7);
-					sNUPUAC = rs.getString(QMActivos.CAMPO10);
-					
-					ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
-					
-					result.add(activoencontrado);
-					
-					logger.debug("Encontrado el registro!");
-					logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
-				}
-			}
-			if (found == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
-	}
-	
-	public static ArrayList<String>  getMovimientosComunidadesActivoPorEstado(String sEstado) 
-	{
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		PreparedStatement pstmt = null;
-		boolean found = false;
-	
-		
-		ArrayList<String> result = new ArrayList<String>(); 
-		Connection conn = null;
-
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO3+ 
-				" FROM " 
-				+ TABLA + 
-				" WHERE " 
-				+ CAMPO4 + " = '" + sEstado + "'";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-		
-			int i = 0;
-			
-			if (rs != null) 
-			{
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
-
-					result.add(rs.getString(CAMPO3));
-										
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO4+":|"+sEstado+"|");
-					logger.debug(CAMPO3+":|"+result.get(i)+"|");
-
-					i++;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(QMActivos.CAMPO1);
+						sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						//sNURCAT = rs.getString(QMActivos.CAMPO81);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				result = new ArrayList<String>(); 
-				logger.debug("No se encontró la información.");
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<String>(); 
-
-			logger.error("ERROR Validado:|"+sEstado+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaActivosComunidadDisponibles(Connection conexion, ActivoTabla filtro, String sCodComunidad)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+						
+						   + QMActivos.CAMPO1 + ","        
+						   + QMActivos.CAMPO14 + ","
+						   + QMActivos.CAMPO11 + ","
+						   + QMActivos.CAMPO13 + ","
+						   + QMActivos.CAMPO6 + ","
+						   + QMActivos.CAMPO9 + ","
+						   + QMActivos.CAMPO7 + ","
+						   + QMActivos.CAMPO10 + 
+
+						   " FROM " 
+						   + QMActivos.TABLA + 
+						   " WHERE ("
+
+						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
+
+						   + QMActivos.CAMPO1 +" IN (SELECT "
+
+						   + CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE (" 
+						   
+						   + CAMPO2 +" IN (SELECT "
+
+						   + QMComunidades.CAMPO1 + 
+						   " FROM " 
+						   + QMComunidades.TABLA + 
+						   " WHERE "
+						   + QMComunidades.CAMPO1 + " = '" + sCodComunidad	+ "'))))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(QMActivos.CAMPO1);
+						sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaActivosSinComunidad(Connection conexion, ActivoTabla filtro)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;			
+
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+						
+						   + QMActivos.CAMPO1 + ","        
+						   + QMActivos.CAMPO14 + ","
+						   + QMActivos.CAMPO11 + ","
+						   + QMActivos.CAMPO13 + ","
+						   + QMActivos.CAMPO6 + ","
+						   + QMActivos.CAMPO9 + ","
+						   + QMActivos.CAMPO7 + ","
+						   + QMActivos.CAMPO10 + 
+
+						   " FROM " 
+						   + QMActivos.TABLA + 
+						   " WHERE ("
+
+						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
+
+						   + QMActivos.CAMPO1 +" NOT IN (SELECT "
+
+						   + CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE "
+						   
+							+ CAMPO2 + " IN (SELECT "
+							+ QMComunidades.CAMPO1 +
+							" FROM " 
+							+ QMComunidades.TABLA + 
+							" WHERE " 
+							+ QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "' )))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(QMActivos.CAMPO1);
+						sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaActivosConComunidad(Connection conexion, ActivoTabla filtro)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+						
+						   + QMActivos.CAMPO1 + ","        
+						   + QMActivos.CAMPO14 + ","
+						   + QMActivos.CAMPO11 + ","
+						   + QMActivos.CAMPO13 + ","
+						   + QMActivos.CAMPO6 + ","
+						   + QMActivos.CAMPO9 + ","
+						   + QMActivos.CAMPO7 + ","
+						   + QMActivos.CAMPO10 + 
+
+						   " FROM " 
+						   + QMActivos.TABLA + 
+						   " WHERE ("
+
+						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
+
+						   + QMActivos.CAMPO1 +" IN (SELECT "
+
+						   + CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE "
+						   
+							+ CAMPO2 + " IN (SELECT "
+							+ QMComunidades.CAMPO1 +
+							" FROM " 
+							+ QMComunidades.TABLA + 
+							" WHERE " 
+							+ QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "')))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(QMActivos.CAMPO1);
+						sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<String>  getMovimientosComunidadesActivoPorEstado(Connection conexion, String sEstado) 
+	{
+		ArrayList<String> resultado = new ArrayList<String>(); 
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO3+ 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO4 + " = '" + sEstado + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				int i = 0;
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						resultado.add(rs.getString(CAMPO3));
+											
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO4+":|"+sEstado+"|");
+						logger.debug(CAMPO3+":|"+resultado.get(i)+"|");
+
+						i++;
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					resultado = new ArrayList<String>(); 
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<String>(); 
+
+				logger.error("ERROR Validado:|"+sEstado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
 	}
 
 	
-	public static ArrayList<ComunidadTabla> buscaComunidadActivo(String sCodCOACES)
+	public static ArrayList<ComunidadTabla> buscaComunidadActivo(Connection conexion, String sCodCOACES)
 	{
 		//Sin uso
-		
-		Statement stmt = null;
-		ResultSet rs = null;
 
-		String sCOCLDO = "";
-		String sNUDCOM = "";
-		String sNOMCOC = "";
-		String sNOMPRC = "";
-		String sNOMADC = "";
-		
-		ArrayList<ComunidadTabla> result = new ArrayList<ComunidadTabla>();
+		ArrayList<ComunidadTabla> resultado = new ArrayList<ComunidadTabla>();
 
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + QMComunidades.CAMPO2 + ","        
-				   + QMComunidades.CAMPO3 + ","
-				   + QMComunidades.CAMPO4 + ","
-				   + QMComunidades.CAMPO6 + ","
-				   + QMComunidades.CAMPO8 + 
-				   
-				   "  FROM " 
-				   + QMComunidades.TABLA + 
-				   " WHERE "
-				   
-				   + QMComunidades.CAMPO1 + " IN (SELECT " 
-				   + CAMPO2 +
-				   " FROM " 
-				   + TABLA +
-				   " WHERE "
-				   + CAMPO1 +  " = '" + sCodCOACES	+ "')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
-		
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			String sCOCLDO = "";
+			String sNUDCOM = "";
+			String sNOMCOC = "";
+			String sNOMPRC = "";
+			String sNOMADC = "";
+
+			logger.debug("Ejecutando Query...");
 			
-
-			rs = pstmt.executeQuery();
+			String sQuery = "SELECT "
+					   + QMComunidades.CAMPO2 + ","        
+					   + QMComunidades.CAMPO3 + ","
+					   + QMComunidades.CAMPO4 + ","
+					   + QMComunidades.CAMPO6 + ","
+					   + QMComunidades.CAMPO8 + 
+					   
+					   "  FROM " 
+					   + QMComunidades.TABLA + 
+					   " WHERE "
+					   
+					   + QMComunidades.CAMPO1 + " IN (SELECT " 
+					   + CAMPO2 +
+					   " FROM " 
+					   + TABLA +
+					   " WHERE "
+					   + CAMPO1 +  " = '" + sCodCOACES	+ "')";
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug(sQuery);
 
-			
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
-					
-					sCOCLDO = rs.getString(QMActivos.CAMPO2);
-					sNUDCOM = rs.getString(QMActivos.CAMPO3);
-					sNOMCOC = rs.getString(QMActivos.CAMPO4);
-					sNOMPRC = rs.getString(QMActivos.CAMPO6);
-					sNOMADC = rs.getString(QMActivos.CAMPO8);
-					
-					
-					ComunidadTabla comunidadencontrada = new ComunidadTabla(sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC);
-					
-					result.add(comunidadencontrada);
-					
-					logger.debug("Encontrado el registro!");
-					logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOCLDO = rs.getString(QMActivos.CAMPO2);
+						sNUDCOM = rs.getString(QMActivos.CAMPO3);
+						sNOMCOC = rs.getString(QMActivos.CAMPO4);
+						sNOMPRC = rs.getString(QMActivos.CAMPO6);
+						sNOMADC = rs.getString(QMActivos.CAMPO8);
+						
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC);
+						
+						resultado.add(comunidadencontrada);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				resultado = new ArrayList<ComunidadTabla>();
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<ComunidadTabla>();
-
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+
+		return resultado;
 	}
 	
-	public static Comunidad buscaComunidadPorActivo(String sCodCOACES)
+	public static Comunidad buscaComunidadPorActivo(Connection conexion, String sCodCOACES)
 	{
-		Statement stmt = null;
-		ResultSet rs = null;
+
 
 		String sCOCLDO = "";
 		String sNUDCOM = "";
@@ -1316,129 +1241,142 @@ public class QMListaComunidadesActivos
 		String sNUCCDI = "";
 		String sNUCCNT = "";
 		String sOBTEXC = "";
-		
-		PreparedStatement pstmt = null;
-		boolean found = false;
-		
-		Connection conn = null;
-		
-		conn = ConnectionManager.getDBConnection();
-		
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-			       + QMComunidades.CAMPO2  + ","
-			       + QMComunidades.CAMPO3  + ","              
-			       /*+ QMComunidades.CAMPO4  + ","              
-			       + QMComunidades.CAMPO5  + ","              
-			       + QMComunidades.CAMPO6  + ","              
-			       + QMComunidades.CAMPO7  + ","              
-			       + QMComunidades.CAMPO8  + ","              
-			       + QMComunidades.CAMPO9  + ","              
-			       + QMComunidades.CAMPO10 + ","              
-			       + QMComunidades.CAMPO11 + ","              
-			       + QMComunidades.CAMPO12 + ","              
-			       + QMComunidades.CAMPO13 + "," 
-			       + QMComunidades.CAMPO14 + ","*/
-			       + "AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-			       + "AES_DECRYPT("+QMComunidades.CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 
-			       + QMComunidades.CAMPO15 +     
-				   
-				   " FROM " 
-				   + QMComunidades.TABLA + 
-				   " WHERE "
-				   
-				   + QMComunidades.CAMPO1 + " IN (SELECT " + CAMPO2 +
-				   " FROM " 
-				   + TABLA +
-				   " WHERE "
-				   + CAMPO1 +  " = '" + sCodCOACES	+ "')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
-
+			logger.debug("Ejecutando Query...");
 			
+			String sQuery = "SELECT "
+				       + QMComunidades.CAMPO2  + ","
+				       + QMComunidades.CAMPO3  + ","              
+				       /*+ QMComunidades.CAMPO4  + ","              
+				       + QMComunidades.CAMPO5  + ","              
+				       + QMComunidades.CAMPO6  + ","              
+				       + QMComunidades.CAMPO7  + ","              
+				       + QMComunidades.CAMPO8  + ","              
+				       + QMComunidades.CAMPO9  + ","              
+				       + QMComunidades.CAMPO10 + ","              
+				       + QMComunidades.CAMPO11 + ","              
+				       + QMComunidades.CAMPO12 + ","              
+				       + QMComunidades.CAMPO13 + "," 
+				       + QMComunidades.CAMPO14 + ","*/
+				       + "AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 
-			if (rs != null) 
+				       + QMComunidades.CAMPO15 +     
+					   
+					   " FROM " 
+					   + QMComunidades.TABLA + 
+					   " WHERE "
+					   
+					   + QMComunidades.CAMPO1 + " IN (SELECT " + CAMPO2 +
+					   " FROM " 
+					   + TABLA +
+					   " WHERE "
+					   + CAMPO1 +  " = '" + sCodCOACES	+ "')";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					found = true;
-					
-					sCOCLDO = rs.getString(QMComunidades.CAMPO2); 
-					sNUDCOM = rs.getString(QMComunidades.CAMPO3);
-					
-					/*sNOMCOC = rs.getString(QMComunidades.CAMPO4); 
-					sNODCCO = rs.getString(QMComunidades.CAMPO5); 
-					sNOMPRC = rs.getString(QMComunidades.CAMPO6); 
-					sNUTPRC = rs.getString(QMComunidades.CAMPO7); 
-					sNOMADC = rs.getString(QMComunidades.CAMPO8); 
-					sNUTADC = rs.getString(QMComunidades.CAMPO9); 
-					sNODCAD = rs.getString(QMComunidades.CAMPO10);
-					sNUCCEN = rs.getString(QMComunidades.CAMPO11);
-					sNUCCOF = rs.getString(QMComunidades.CAMPO12);
-					sNUCCDI = rs.getString(QMComunidades.CAMPO13);
-					sNUCCNT = rs.getString(QMComunidades.CAMPO14);*/
-					
-					sNOMCOC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNODCCO = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNOMPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNUTPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNOMADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNUTADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNODCAD = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNUCCEN = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNUCCOF = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNUCCDI = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-					sNUCCNT = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOCLDO = rs.getString(QMComunidades.CAMPO2); 
+						sNUDCOM = rs.getString(QMComunidades.CAMPO3);
+						
+						/*sNOMCOC = rs.getString(QMComunidades.CAMPO4); 
+						sNODCCO = rs.getString(QMComunidades.CAMPO5); 
+						sNOMPRC = rs.getString(QMComunidades.CAMPO6); 
+						sNUTPRC = rs.getString(QMComunidades.CAMPO7); 
+						sNOMADC = rs.getString(QMComunidades.CAMPO8); 
+						sNUTADC = rs.getString(QMComunidades.CAMPO9); 
+						sNODCAD = rs.getString(QMComunidades.CAMPO10);
+						sNUCCEN = rs.getString(QMComunidades.CAMPO11);
+						sNUCCOF = rs.getString(QMComunidades.CAMPO12);
+						sNUCCDI = rs.getString(QMComunidades.CAMPO13);
+						sNUCCNT = rs.getString(QMComunidades.CAMPO14);*/
+						
+						sNOMCOC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNODCCO = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNOMPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUTPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNOMADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUTADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNODCAD = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUCCEN = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUCCOF = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUCCDI = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUCCNT = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						
+						sOBTEXC = rs.getString(QMComunidades.CAMPO15);
 
-					
-					sOBTEXC = rs.getString(QMComunidades.CAMPO15);
+						
+						logger.debug("Encontrado el registro!");
 
-					
-					logger.debug("Encontrado el registro!");
-
-					logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sCOCLDO = "";
+				sNUDCOM = "";
+				sNOMCOC = "";
+				sNODCCO = "";
+				sNOMPRC = "";
+				sNUTPRC = "";
+				sNOMADC = "";
+				sNUTADC = "";
+				sNODCAD = "";
+				sNUCCEN = "";
+				sNUCCOF = "";
+				sNUCCDI = "";
+				sNUCCNT = "";
+				sOBTEXC = "";
+
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR COACES:|"+sCodCOACES+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return new Comunidad(
 				sCOCLDO,
 				sNUDCOM,
@@ -1456,78 +1394,74 @@ public class QMListaComunidadesActivos
 				sOBTEXC);
 	}
 	
-	public static ArrayList<String> buscarDependencias(String sCodComunidad, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(Connection conexion, String sCodComunidad, String sCodMovimiento)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;		
-
-		boolean found = false;
+		ArrayList<String> resultado = new ArrayList<String>();
 		
-		ArrayList<String> result = new ArrayList<String>();
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO3  + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE (" 
-				+ CAMPO2 + " = '" + sCodComunidad + "' AND "
-				+ CAMPO3 + " >=  '" + sCodMovimiento + 
-				"')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;	
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
 			
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-			if (rs != null) 
+			String sQuery = "SELECT " 
+					+ CAMPO3  + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO2 + " = '" + sCodComunidad + "' AND "
+					+ CAMPO3 + " >=  '" + sCodMovimiento + 
+					"')";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					found = true;
-					
-					result.add(rs.getString(CAMPO3));
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						resultado.add(rs.getString(CAMPO3));
 
-					logger.debug("Encontrado el registro!");
-
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (found == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}			
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
-			}			
+				resultado = new ArrayList<String>();
 
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<String>();
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+
+		return resultado;
 	}
 	
 }

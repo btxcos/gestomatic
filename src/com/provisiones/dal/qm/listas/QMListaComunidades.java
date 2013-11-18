@@ -31,586 +31,559 @@ public class QMListaComunidades
 	static String CAMPO4  = "usuario_movimiento";
 	static String CAMPO5  = "fecha_movimiento";
 	
-	public static boolean addRelacionComunidad(String sCodComunidad, String sCodMovimiento)
+	public static boolean addRelacionComunidad(Connection conexion, String sCodComunidad, String sCodMovimiento)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-		
+		boolean bSalida = false;
+
 		String sUsuario = ConnectionManager.getUser();
 
-		Statement stmt = null;
-
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " 
-				   + TABLA + 
-				   " ("
-				   + CAMPO1  + "," 
-			       + CAMPO2  + ","              
-			       + CAMPO3  + ","
-			       + CAMPO4  + ","
-			       + CAMPO5  +  
-			       ") VALUES ('"
-			       + sCodComunidad + "','" 
-			       + sCodMovimiento + "','"
-			       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
-			       + sUsuario + "','"
-			       + Utils.timeStamp() +
-			       "' )";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
+			Statement stmt = null;
 
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
-
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			String sQuery = "INSERT INTO " 
+					   + TABLA + 
+					   " ("
+					   + CAMPO1  + "," 
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","
+				       + CAMPO4  + ","
+				       + CAMPO5  +  
+				       ") VALUES ('"
+				       + sCodComunidad + "','" 
+				       + sCodMovimiento + "','"
+				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
+				       + sUsuario + "','"
+				       + Utils.timeStamp() +
+				       "' )";
 			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally
-		{
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
-	}
+			logger.debug(sQuery);
 
-	public static boolean delRelacionComunidad(String sCodMovimiento)
-	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "DELETE FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
-			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
-
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return bSalida;
-	}
-	
-	public static boolean existeComunidad(String sCodComunidad)
-	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-		
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-			       + CAMPO4  + 
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE " 
-			       + CAMPO1 + " = '" + sCodComunidad + "'";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			if (rs != null) 
+			try 
 			{
-
-				while (rs.next()) 
-				{
-					bEncontrado = true;
-
-					logger.debug("Encontrado el registro!");
-
-				}
-			}
-			if (bEncontrado == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}			
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return bEncontrado;
-	}
-	
-	public static boolean existeRelacionComunidad(String sCodComunidad, String sCodMovimiento)
-	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;		
-
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-			       + CAMPO4  + 
-			       " FROM "
-			       + TABLA + 
-			       " WHERE (" 
-			       + CAMPO1 + " = '" + sCodComunidad + "' AND "
-			       + CAMPO2 + " = '" + sCodMovimiento + 
-			       "')";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-			if (rs != null) 
-			{
-
-				while (rs.next()) 
-				{
-					bEncontrado = true;
-
-					logger.debug("Encontrado el registro!");
-
-				}
-			}
-			if (bEncontrado == false) 
-			{
-				logger.debug("No se encontró la información.");
-			}			
-
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-			
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return bEncontrado;
-	}
-
-	public static ArrayList<String>  getComunidadesPorEstado(String sEstado) 
-	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
-		ArrayList<String> result = new ArrayList<String>(); 
-
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-					+ CAMPO2 + 
-					" FROM " 
-					+ TABLA + 
-					" WHERE " 
-					+ CAMPO3 + " = '" + sEstado + "'";
-		
-		logger.debug(sQuery);
-
-		try 
-		{
-			stmt = conn.createStatement();
-
-
-			pstmt = conn.prepareStatement(sQuery);
-
-			rs = pstmt.executeQuery();
-			
-			logger.debug("Ejecutada con exito!");
-			
-		
-			int i = 0;
-			
-			if (rs != null) 
-			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
 				
-				while (rs.next()) 
-				{
-					bEncontrado = true;
-
-					result.add(rs.getString(CAMPO2));
-										
-					logger.debug("Encontrado el registro!");
-
-					logger.debug(CAMPO3+":|"+sEstado+"|");
-					logger.debug(CAMPO2+":|"+result.get(i)+"|");
-					
-					i++;
-				}
-			}
-			if (bEncontrado == false) 
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				bSalida = false;
+
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally
+			{
+				Utils.closeStatement(stmt);
 			}
+		}	
 
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<String>();
-
-			logger.error("ERROR Validado:|"+sEstado+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
-		}
-
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+		return bSalida;
 	}
-	
-	public static boolean setValidado(String sCodMovimiento, String sValidado)
+
+	public static boolean delRelacionComunidad(Connection conexion, String sCodMovimiento)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
+		boolean bSalida = false;
 		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO3 + " = '"+ sValidado + "' "+
-				" WHERE " 
-				+ CAMPO2 + " = '" + sCodMovimiento	+ "'";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
 			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
+			logger.debug(sQuery);
 
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
+
 		return bSalida;
 	}
 	
-	public static String getValidado(String sCodMovimiento)
+	public static boolean existeComunidad(Connection conexion, String sCodComunidad)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
+		boolean bEncontrado = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
 
-		Statement stmt = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + CAMPO4  + 
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1 + " = '" + sCodComunidad + "'";
+			
+			logger.debug(sQuery);
 
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
+			try 
+			{
+				stmt = conexion.createStatement();
 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}			
+
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bEncontrado;
+	}
+	
+	public static boolean existeRelacionComunidad(Connection conexion, String sCodComunidad, String sCodMovimiento)
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;	
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + CAMPO4  + 
+				       " FROM "
+				       + TABLA + 
+				       " WHERE (" 
+				       + CAMPO1 + " = '" + sCodComunidad + "' AND "
+				       + CAMPO2 + " = '" + sCodMovimiento + 
+				       "')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}			
+
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}	
+
+		return bEncontrado;
+	}
+
+	public static ArrayList<String>  getComunidadesPorEstado(Connection conexion, String sEstado) 
+	{
+		ArrayList<String> resultado = new ArrayList<String>(); 
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO2 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE " 
+						+ CAMPO3 + " = '" + sEstado + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				int i = 0;
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						resultado.add(rs.getString(CAMPO2));
+											
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO3+":|"+sEstado+"|");
+						logger.debug(CAMPO2+":|"+resultado.get(i)+"|");
+						
+						i++;
+					}
+				}
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<String>();
+
+				logger.error("ERROR Validado:|"+sEstado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static boolean setValidado(Connection conexion, String sCodMovimiento, String sValidado)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ sValidado + "' "+
+					" WHERE " 
+					+ CAMPO2 + " = '" + sCodMovimiento	+ "'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}	
+
+		return bSalida;
+	}
+	
+	public static String getValidado(Connection conexion, String sCodMovimiento)
+	{
 		String sValidado = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO3 + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO2 + " = '" + sCodMovimiento	+ "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			boolean bEncontrado = false;
 
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT " 
+					+ CAMPO3 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO2 + " = '" + sCodMovimiento	+ "'";
 			
-			if (rs != null) 
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					bEncontrado = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sValidado = rs.getString(CAMPO3);
-					
-					logger.debug("Encontrado el registro!");
+						sValidado = rs.getString(CAMPO3);
+						
+						logger.debug("Encontrado el registro!");
 
-					logger.debug(CAMPO3+":|"+sValidado+"|");
+						logger.debug(CAMPO3+":|"+sValidado+"|");
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sValidado = "";
+
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			sValidado = "";
-
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return sValidado;
 	}
 	
-	public static long buscaCantidadValidado(String sCodValidado)
+	public static long buscaCantidadValidado(Connection conexion, String sCodValidado)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		long liNumero = 0;
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT COUNT(*) FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO3 + " = '" + sCodValidado + "'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			boolean bEncontrado = false;
 
-			rs = pstmt.executeQuery();
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT COUNT(*) FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO3 + " = '" + sCodValidado + "'";
 			
-			if (rs != null) 
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
-				while (rs.next()) 
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					bEncontrado = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					liNumero = rs.getLong("COUNT(*)");
-					
-					logger.debug("Encontrado el registro!");
+						liNumero = rs.getLong("COUNT(*)");
+						
+						logger.debug("Encontrado el registro!");
 
-					logger.debug( "Numero de registros:|"+liNumero+"|");
+						logger.debug( "Numero de registros:|"+liNumero+"|");
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
- 
-				logger.debug("No se encontró la información.");
+				liNumero = 0;
+
+				logger.error("ERROR CodValidado:|"+sCodValidado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			liNumero = 0;
-
-			logger.error("ERROR CodValidado:|"+sCodValidado+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
-		//ConnectionManager.CloseDBConnection(conn);
 		return liNumero;
 	}
 	
-	public static ArrayList<String> buscarDependencias(String sCodComunidad, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(Connection conexion, String sCodComunidad, String sCodMovimiento)
 	{
-		Connection conn = null;
-		conn = ConnectionManager.getDBConnection();
+		ArrayList<String> resultado = new ArrayList<String>();
 
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;		
-
-		boolean bEncontrado = false;
-		
-		ArrayList<String> result = new ArrayList<String>();
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT " 
-				+ CAMPO2  + 
-				" FROM " 
-				+ TABLA + 
-				" WHERE (" 
-				+ CAMPO1 + " = '" + sCodComunidad + "' AND "
-				+ CAMPO2 + " >=  '" + sCodMovimiento + 
-				"')";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conn.createStatement();
+			Statement stmt = null;
 
-			pstmt = conn.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;	
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT " 
+					+ CAMPO2  + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO1 + " = '" + sCodComunidad + "' AND "
+					+ CAMPO2 + " >=  '" + sCodMovimiento + 
+					"')";
 			
-			if (rs != null) 
+			logger.debug(sQuery);
+
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
 				{
-					bEncontrado = true;
-					
-					result.add(rs.getString(CAMPO2));
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						resultado.add(rs.getString(CAMPO2));
 
-					logger.debug("Encontrado el registro!");
-
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}			
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
-			}			
+				resultado = new ArrayList<String>();
 
-		} 
-		catch (SQLException ex) 
-		{
-			result = new ArrayList<String>();
+				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
-			logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
 		}
-		//ConnectionManager.CloseDBConnection(conn);
-		return result;
+
+		return resultado;
 	}
 }

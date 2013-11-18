@@ -41,7 +41,7 @@ public class QMProvisiones
 		
 		String sUsuario = ConnectionManager.getUser();
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -77,14 +77,12 @@ public class QMProvisiones
 
 			try 
 			{
-
 				stmt = conexion.createStatement();
 				stmt.executeUpdate(sQuery);
 				
 				logger.debug("Ejecutada con exito!");
 				
 				bSalida = true;
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -96,7 +94,6 @@ public class QMProvisiones
 			} 
 			finally 
 			{
-
 				Utils.closeStatement(stmt);
 			}
 		}		
@@ -110,7 +107,7 @@ public class QMProvisiones
 		
 		String sUsuario = ConnectionManager.getUser();
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 			
@@ -163,7 +160,7 @@ public class QMProvisiones
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -212,12 +209,12 @@ public class QMProvisiones
 		String sFechaValidacion = "";
 		String sValidado = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -243,14 +240,12 @@ public class QMProvisiones
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -267,7 +262,6 @@ public class QMProvisiones
 						logger.debug("Encontrado el registro!");
 
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
-
 					}
 				}
 				if (bEncontrado == false) 
@@ -303,10 +297,9 @@ public class QMProvisiones
 	{
 		boolean bSalida = false;
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-
 
 			logger.debug("Ejecutando Query...");
 			
@@ -349,12 +342,12 @@ public class QMProvisiones
 	{
 		long liNumero = 0;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -374,16 +367,13 @@ public class QMProvisiones
 			{
 				stmt = conexion.createStatement();
 
-
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 				
 				if (rs != null) 
 				{
-					
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -420,12 +410,12 @@ public class QMProvisiones
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -443,7 +433,6 @@ public class QMProvisiones
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -485,12 +474,12 @@ public class QMProvisiones
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -510,7 +499,6 @@ public class QMProvisiones
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -552,12 +540,12 @@ public class QMProvisiones
 	{
 		String sNUPROF = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -581,33 +569,27 @@ public class QMProvisiones
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
 
 						sNUPROF = rs.getString(CAMPO1);
 
-
-						
 						logger.debug("Encontrado el registro!");
 
 						logger.debug(CAMPO1 + ":|"+sNUPROF+"|");
-
 					}
 				}
 				if (bEncontrado == false) 
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -629,12 +611,12 @@ public class QMProvisiones
 	{
 		ArrayList<String> resultado = new ArrayList<String>();
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -644,8 +626,7 @@ public class QMProvisiones
 					+ CAMPO1+ 
 					" FROM " 
 					+ TABLA + 
-					" WHERE " +
-					"(" 
+					" WHERE (" 
 					+ CAMPO8 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
 					+ CAMPO7 + " = '0'"+
 					")";
@@ -656,19 +637,15 @@ public class QMProvisiones
 			{
 				stmt = conexion.createStatement();
 
-
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
-				
 			
 				int i = 0;
 				
 				if (rs != null) 
 				{
-					
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -686,7 +663,6 @@ public class QMProvisiones
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -708,11 +684,12 @@ public class QMProvisiones
 	{
 		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-			ResultSet rs = null;
+
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 			
 			String sNUPROF = "";
 			String sTAS = "";
@@ -745,14 +722,12 @@ public class QMProvisiones
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -778,7 +753,6 @@ public class QMProvisiones
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -802,12 +776,12 @@ public class QMProvisiones
 	{
 		String sNUPROF = "";
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -829,14 +803,12 @@ public class QMProvisiones
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -851,7 +823,6 @@ public class QMProvisiones
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -874,12 +845,12 @@ public class QMProvisiones
 	{
 		String sNUPROF = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -898,7 +869,6 @@ public class QMProvisiones
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");

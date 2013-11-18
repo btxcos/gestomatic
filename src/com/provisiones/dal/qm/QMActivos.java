@@ -118,11 +118,9 @@ public class QMActivos
 	{
 		boolean bSalida = false;
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-			
-
 
 			logger.debug("Ejecutando Query...");
 			
@@ -347,7 +345,7 @@ public class QMActivos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -486,7 +484,7 @@ public class QMActivos
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -621,15 +619,13 @@ public class QMActivos
 		String sBIOBNU = "";
 		String sPOBRAR = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 			
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 			
-
-
 			boolean bEncontrado = false;
 			
 			logger.debug("Ejecutando Query...");
@@ -739,9 +735,6 @@ public class QMActivos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-				
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con éxito!");
@@ -985,15 +978,13 @@ public class QMActivos
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-
-			
+			ResultSet rs = null;
 
 			//logger.debug("Ejecutando Query...");
 			
@@ -1011,9 +1002,6 @@ public class QMActivos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-				
-
 				rs = pstmt.executeQuery();
 				
 				//logger.debug("Ejecutada con éxito!");
@@ -1060,13 +1048,13 @@ public class QMActivos
 	{
 		boolean bEncontrado = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-
+			ResultSet rs = null;
+			
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
@@ -1174,14 +1162,9 @@ public class QMActivos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-				
-
 				rs = pstmt.executeQuery();
 				
 				//logger.debug("Ejecutada con éxito!");
-
-				
 
 				if (rs != null) 
 				{
@@ -1222,14 +1205,12 @@ public class QMActivos
 	{
 		String sReferencia = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-			
-
+			ResultSet rs = null;			
 			
 			boolean bEncontrado = false;
 
@@ -1249,8 +1230,6 @@ public class QMActivos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con éxito!");
@@ -1298,12 +1277,12 @@ public class QMActivos
 	{
 		String sCOTSIN = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
 
 			boolean bEncontrado = false;
 
@@ -1323,14 +1302,9 @@ public class QMActivos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-				
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con éxito!");
-
-				
 
 				if (rs != null) 
 				{
@@ -1374,14 +1348,12 @@ public class QMActivos
 	{
 		String sBIARRE = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
-
-
+			ResultSet rs = null;			
 
 			boolean bEncontrado = false;
 
@@ -1401,14 +1373,12 @@ public class QMActivos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con éxito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -1423,7 +1393,6 @@ public class QMActivos
 				{
 					logger.debug("No se encontro la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -1447,12 +1416,12 @@ public class QMActivos
 	{
 		String sCodCOSPAT = "0";
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
 
 			boolean bEncontrado = false;
 
@@ -1472,16 +1441,12 @@ public class QMActivos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-			
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con éxito!");
 
-				
-
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -1490,14 +1455,12 @@ public class QMActivos
 
 						logger.debug("Encontrado el registro!");
 						logger.debug(CAMPO88+":|"+sCodCOSPAT+"|");
-
 					}
 				}
 				if (bEncontrado == false) 
 				{
 					logger.debug("No se encontro la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -1521,12 +1484,14 @@ public class QMActivos
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
 
 			String sCOACES = "";
 			String sCOPOIN = "";
@@ -1536,10 +1501,6 @@ public class QMActivos
 			String sNUPIAC = "";
 			String sNUPOAC = "";
 			String sNUPUAC = "";
-			
-
-
-			boolean bEncontrado = false;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -1571,8 +1532,6 @@ public class QMActivos
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-				
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con éxito!");
@@ -1637,11 +1596,15 @@ public class QMActivos
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-			ResultSet rs = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+			
 			String sCOACES = "";
 			String sCOPOIN = "";
 			String sNOMUIN = "";
@@ -1651,12 +1614,6 @@ public class QMActivos
 			String sNUPOAC = "";
 			String sNUPUAC = "";
 			String sNURCAT = "";
-			
-
-			
-
-			PreparedStatement pstmt = null;
-			boolean found = false;
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1691,7 +1648,6 @@ public class QMActivos
 				stmt = conexion.createStatement();
 				
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -1701,7 +1657,7 @@ public class QMActivos
 
 					while (rs.next()) 
 					{
-						found = true;
+						bEncontrado = true;
 						
 						sCOACES = rs.getString(CAMPO1);
 						sCOPOIN = rs.getString(CAMPO14);
@@ -1721,7 +1677,7 @@ public class QMActivos
 						//logger.debug(CAMPO1+":|"+sCOACES+"|");
 					}
 				}
-				if (found == false) 
+				if (bEncontrado == false) 
 				{
 					logger.debug("No se encontró la información.");
 				}

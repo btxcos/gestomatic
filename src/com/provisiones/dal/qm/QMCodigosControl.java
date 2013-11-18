@@ -64,12 +64,12 @@ public class QMCodigosControl
 	{
 		String sDescripcion = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -88,9 +88,7 @@ public class QMCodigosControl
 			{
 				stmt = conexion.createStatement();
 
-
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -139,20 +137,17 @@ public class QMCodigosControl
 	{
 		String sDescripcion = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
-			ResultSet rs = null;
-
 
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
 			boolean bEncontrado = false;
 		
-
 			String sTabla = "";
 			String sCampo  = "cosbga_id";    
-			
-
 			
 			switch (Integer.parseInt(sCodCOGRUG)) 
 			{
@@ -191,7 +186,6 @@ public class QMCodigosControl
 					}
 					break;
 			}
-			
 
 			if (!sTabla.equals(""))
 			{
@@ -211,9 +205,7 @@ public class QMCodigosControl
 				{
 					stmt = conexion.createStatement();
 
-
 					pstmt = conexion.prepareStatement(sQuery);
-
 					rs = pstmt.executeQuery();
 					
 					logger.debug("Ejecutada con exito!");

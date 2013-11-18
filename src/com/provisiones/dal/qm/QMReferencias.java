@@ -41,7 +41,7 @@ public class QMReferencias
 	{
 		long liCodigo = 0;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
@@ -111,7 +111,7 @@ public class QMReferencias
 	{
 		boolean bSalida = false;
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -167,7 +167,7 @@ public class QMReferencias
 	{
 		boolean bSalida = false;
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -219,12 +219,12 @@ public class QMReferencias
 		String sIMCATA = "";
 		String sFERECA = "";
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -254,7 +254,6 @@ public class QMReferencias
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
@@ -286,7 +285,6 @@ public class QMReferencias
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -319,12 +317,12 @@ public class QMReferencias
 	{
 		String sReferenciaID = "";
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -344,14 +342,12 @@ public class QMReferencias
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 				
 				if (rs != null) 
 				{
-					
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -390,12 +386,12 @@ public class QMReferencias
 	{
 		boolean bEncontrado = false;
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			logger.debug("Ejecutando Query...");
 			
@@ -413,14 +409,12 @@ public class QMReferencias
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
 
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
@@ -434,7 +428,6 @@ public class QMReferencias
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
@@ -458,7 +451,7 @@ public class QMReferencias
 	{
 		boolean bSalida = false;
 		
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
@@ -504,12 +497,12 @@ public class QMReferencias
 	{
 		String sEstado = "";
 
-		if (!(conexion == null))
+		if (conexion != null)
 		{
 			Statement stmt = null;
 
-			ResultSet rs = null;
 			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
 			boolean bEncontrado = false;
 
@@ -529,7 +522,6 @@ public class QMReferencias
 				stmt = conexion.createStatement();
 
 				pstmt = conexion.prepareStatement(sQuery);
-
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
