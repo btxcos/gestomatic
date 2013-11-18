@@ -33,138 +33,126 @@ public class QMUsuarios
 	public static final String CAMPO11  = "activo";
 	
 	public static long addUsuario (Connection conexion, Usuario NuevoUsuario) 
-	 
 	{
-		Connection conexion = null;
-
-		Statement stmt = null;
-		ResultSet resulset = null;
-		
-		conexion = ConnectionManager.getDBConnection();
-
 		long iCodigo = 0;
 		
-		String sFecha = Utils.fechaDeHoy(false);
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "INSERT INTO " 
-				   + TABLA + 
-				   " ("
-			       + CAMPO2  + ","              
-			       + CAMPO3  + ","              
-			       + CAMPO4  + ","              
-			       + CAMPO5  + ","              
-			       + CAMPO6  + ","              
-			       + CAMPO7  + ","              
-			       + CAMPO8  + ","              
-			       + CAMPO9  + ","              
-			       + CAMPO10 + ","              
-			       + CAMPO11 +               
-          
-			       ") VALUES ('"        
-			       + NuevoUsuario.getsLogin() + "'," 
-			       + "AES_ENCRYPT('"+ NuevoUsuario.getsPassword()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
-			       + NuevoUsuario.getsNombre() + "','"  
-			       + NuevoUsuario.getsApellido1() + "','"  
-			       + NuevoUsuario.getsApellido2() + "','"  
-			       + NuevoUsuario.getsContacto() + "','"  
-			       + sFecha + "','"  
-			       + sFecha + "','"  
-			       + NuevoUsuario.getsTipoUsuario() + "',b'"  
-			       + ValoresDefecto.ACTIVO + "' )";
-		
-		logger.debug(sQuery);
-
-
-		try 
+		if (conexion != null)
 		{
+			Statement stmt = null;
+			ResultSet resulset = null;
 			
-			stmt = conexion.createStatement();
-			stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
+			String sFecha = Utils.fechaDeHoy(false);
 
-			resulset = stmt.getGeneratedKeys();
+			logger.debug("Ejecutando Query...");
 			
-			if (resulset.next()) 
+			String sQuery = "INSERT INTO " 
+					   + TABLA + 
+					   " ("
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 +               
+	          
+				       ") VALUES ('"        
+				       + NuevoUsuario.getsLogin() + "'," 
+				       + "AES_ENCRYPT('"+ NuevoUsuario.getsPassword()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoUsuario.getsNombre() + "','"  
+				       + NuevoUsuario.getsApellido1() + "','"  
+				       + NuevoUsuario.getsApellido2() + "','"  
+				       + NuevoUsuario.getsContacto() + "','"  
+				       + sFecha + "','"  
+				       + sFecha + "','"  
+				       + NuevoUsuario.getsTipoUsuario() + "',b'"  
+				       + ValoresDefecto.ACTIVO + "' )";
+			
+			logger.debug(sQuery);
+
+			try 
 			{
-				iCodigo= resulset.getLong(1);
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery, Statement.RETURN_GENERATED_KEYS);
+
+				resulset = stmt.getGeneratedKeys();
+				
+				if (resulset.next()) 
+				{
+					iCodigo= resulset.getLong(1);
+				} 
+
+				logger.debug("Ejecutada con exito!");
 			} 
-
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			iCodigo = 0;
-			
-			logger.error("ERROR USUARIO:|"+NuevoUsuario.getsLogin()+"|");
-
-			
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-			
-		} 
-		finally 
-		{
-			Utils.closeStatement(stmt);
+			catch (SQLException ex) 
+			{
+				iCodigo = 0;
+				
+				logger.error("ERROR USUARIO:|"+NuevoUsuario.getsLogin()+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
-
 		
 		return iCodigo;
 	}
 	
 	public static boolean modUsuario(Connection conexion, Usuario NuevoUsuario, String sUsuarioID)
 	{
-		Connection conexion = null;
-		conexion = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
+		boolean bSalida = false;
 		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				//+ CAMPO2 + " = '"+ NuevoUsuario.getsLogin() + "', "
-				+ CAMPO3 + " = '"+ NuevoUsuario.getsPassword() + "', "
-				+ CAMPO4 + " = '"+ NuevoUsuario.getsNombre() + "', "
-				+ CAMPO5 + " = '"+ NuevoUsuario.getsApellido1() + "', "
-				+ CAMPO6 + " = '"+ NuevoUsuario.getsApellido2() + "', "
-				+ CAMPO7 + " = '"+ NuevoUsuario.getsContacto() + "', "
-				//+ CAMPO8 + " = '"+ NuevoUsuario.getsFechaAlta() + "', "
-				+ CAMPO9 + " = '"+ Utils.fechaDeHoy(false) + "', "
-				+ CAMPO10 + " = '"+ NuevoUsuario.getsTipoUsuario() + "', "
-				+ CAMPO11 + " = '"+ NuevoUsuario.getsActivo() + "' "+
-				" WHERE " 
-				+ CAMPO1 + " = '"+ sUsuarioID + "'";
-
-		
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conexion.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
 
-			logger.debug("Ejecutada con exito!");
+			logger.debug("Ejecutando Query...");
 			
-		} 
-		catch (SQLException ex) 
-		{
-			bSalida = false;
-
-			logger.error("ERROR USUARIO:|"+NuevoUsuario.getsLogin()+"|");
-
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					//+ CAMPO2 + " = '"+ NuevoUsuario.getsLogin() + "', "
+					+ CAMPO3 + " = '"+ NuevoUsuario.getsPassword() + "', "
+					+ CAMPO4 + " = '"+ NuevoUsuario.getsNombre() + "', "
+					+ CAMPO5 + " = '"+ NuevoUsuario.getsApellido1() + "', "
+					+ CAMPO6 + " = '"+ NuevoUsuario.getsApellido2() + "', "
+					+ CAMPO7 + " = '"+ NuevoUsuario.getsContacto() + "', "
+					//+ CAMPO8 + " = '"+ NuevoUsuario.getsFechaAlta() + "', "
+					+ CAMPO9 + " = '"+ Utils.fechaDeHoy(false) + "', "
+					+ CAMPO10 + " = '"+ NuevoUsuario.getsTipoUsuario() + "', "
+					+ CAMPO11 + " = '"+ NuevoUsuario.getsActivo() + "' "+
+					" WHERE " 
+					+ CAMPO1 + " = '"+ sUsuarioID + "'";
 			
-			
-		} 
-		finally 
-		{
+			logger.debug(sQuery);
 
-			Utils.closeStatement(stmt);
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR USUARIO:|"+NuevoUsuario.getsLogin()+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
 
 		return bSalida;
@@ -172,41 +160,42 @@ public class QMUsuarios
 	
 	public static boolean delUsuario(Connection conexion, String sUsuarioID)
 	{
-		Connection conexion = null;
-		conexion = ConnectionManager.getDBConnection();
+		boolean bSalida = false; 
 
-		Statement stmt = null;
-
-		boolean bSalida = true; 
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "DELETE FROM " 
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO1  + " = '"+ sUsuarioID +"'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conexion.createStatement();
-			stmt.executeUpdate(sQuery);
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR USUARIO_ID:|"+sUsuarioID+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1  + " = '"+ sUsuarioID +"'";
 			
-			bSalida = false;
-		} 
-		finally 
-		{
+			logger.debug(sQuery);
 
-			Utils.closeStatement(stmt);
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR USUARIO_ID:|"+sUsuarioID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
 
 		return bSalida;
@@ -214,14 +203,6 @@ public class QMUsuarios
 
 	public static Usuario getUsuario(Connection conexion, String sUsuarioID)
 	{
-		Connection conexion = null;
-		conexion = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sLogin = "";
 		String sPassword = "";
 		String sNombre = "";
@@ -233,84 +214,95 @@ public class QMUsuarios
 		String sTipoUsuario = "";	
 		String sActivo = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				   + CAMPO2  + ","
-				   + "AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-				   //+ CAMPO3  + ","
-				   + CAMPO4  + ","
-				   + CAMPO5  + ","
-			       + CAMPO6  + ","
-			       + CAMPO7  + ","
-			       + CAMPO8  + ","              
-			       + CAMPO9  + ","              
-			       + CAMPO10 + ","              
-			       + CAMPO11 +      
-			       "  FROM " 
-			       + TABLA + 
-			       " WHERE "
-			       + CAMPO1  + " = '"+ sUsuarioID +"'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conexion.createStatement();
+			Statement stmt = null;
 
-			pstmt = conexion.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT "
+					   + CAMPO2  + ","
+					   + "AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+					   //+ CAMPO3  + ","
+					   + CAMPO4  + ","
+					   + CAMPO5  + ","
+				       + CAMPO6  + ","
+				       + CAMPO7  + ","
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 +      
+				       "  FROM " 
+				       + TABLA + 
+				       " WHERE "
+				       + CAMPO1  + " = '"+ sUsuarioID +"'";
 			
+			logger.debug(sQuery);
 
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
-
-					
-					sLogin = rs.getString(CAMPO2); 
-					sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-					//sPassword = rs.getString(CAMPO3);
-					sNombre = rs.getString(CAMPO4);
-					sApellido1 = rs.getString(CAMPO5); 
-					sApellido2 = rs.getString(CAMPO6);  
-					sContacto = rs.getString(CAMPO7);
-					sFechaAlta = rs.getString(CAMPO8);  
-					sFechaModificacion = rs.getString(CAMPO9);  
-					sTipoUsuario = rs.getString(CAMPO10); 
-					sActivo = rs.getString(CAMPO11); 
-					
-					logger.debug("Encontrado el registro!");
-
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sLogin = rs.getString(CAMPO2); 
+						sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						//sPassword = rs.getString(CAMPO3);
+						sNombre = rs.getString(CAMPO4);
+						sApellido1 = rs.getString(CAMPO5); 
+						sApellido2 = rs.getString(CAMPO6);  
+						sContacto = rs.getString(CAMPO7);
+						sFechaAlta = rs.getString(CAMPO8);  
+						sFechaModificacion = rs.getString(CAMPO9);  
+						sTipoUsuario = rs.getString(CAMPO10); 
+						sActivo = rs.getString(CAMPO11); 
+						
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sLogin = "";
+				sPassword = "";
+				sNombre = "";
+				sApellido1 = "";
+				sApellido2 = "";	
+				sContacto = "";
+				sFechaAlta = "";
+				sFechaModificacion = "";
+				sTipoUsuario = "";	
+				sActivo = "";
+				
+				logger.error("ERROR USUARIO_ID:|"+sUsuarioID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR USUARIO_ID:|"+sUsuarioID+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
-
-		
 		
 		return new Usuario(sLogin, sPassword, sNombre, sApellido1,
 				sApellido2, sContacto, sFechaAlta, sFechaModificacion, sTipoUsuario, sActivo);
@@ -318,73 +310,67 @@ public class QMUsuarios
 	
 	public static String getUsuarioID(Connection conexion, String sLogin)
 	{
-		Connection conexion = null;
-		conexion = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		String sUsuarioID = "";
 
-
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-			       + CAMPO1 +      
-			       " FROM " 
-			       + TABLA + 
-			       " WHERE "	
-			       + CAMPO2  + " = '"+ sLogin +"' )";
-
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conexion.createStatement();
+			Statement stmt = null;
 
-			pstmt = conexion.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT "
+				       + CAMPO1 +      
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE "	
+				       + CAMPO2  + " = '"+ sLogin +"' )";
+
+			logger.debug(sQuery);
 			
-
-
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					sUsuarioID = rs.getString(CAMPO1);  
-					
-					logger.debug("Encontrado el registro!");
+						sUsuarioID = rs.getString(CAMPO1);  
+						
+						logger.debug("Encontrado el registro!");
 
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sUsuarioID = "";
+
+				logger.error("ERROR USUARIO:|"+sLogin+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			sUsuarioID = "";
-
-			logger.error("ERROR USUARIO:|"+sLogin+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
 		return sUsuarioID;
@@ -394,44 +380,44 @@ public class QMUsuarios
 	
 	public static boolean setEstado(Connection conexion, String sUsuarioID, String sEstado)
 	{
-		Connection conexion = null;
-		conexion = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		boolean bSalida = true;
-
-		logger.debug("Ejecutando Query...");
+		boolean bSalida = false;
 		
-		String sQuery = "UPDATE " 
-				+ TABLA + 
-				" SET " 
-				+ CAMPO11 + " = '"+ sEstado + "' "+
-				" WHERE "
-				+ CAMPO1  + " = b'"+ sUsuarioID +"'";
-		
-		logger.debug(sQuery);
-		
-		try 
+		if (conexion != null)
 		{
-			stmt = conexion.createStatement();
-			stmt.executeUpdate(sQuery);
-			
-			logger.debug("Ejecutada con exito!");
-			
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR USUARIO_ID:|"+sUsuarioID+"|");
+			Statement stmt = null;
 
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			logger.debug("Ejecutando Query...");
 			
-			bSalida = false;
-		} 
-		finally 
-		{
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO11 + " = '"+ sEstado + "' "+
+					" WHERE "
+					+ CAMPO1  + " = b'"+ sUsuarioID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR USUARIO_ID:|"+sUsuarioID+"|");
 
-			Utils.closeStatement(stmt);
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
 		}
 
 		return bSalida;
@@ -439,71 +425,70 @@ public class QMUsuarios
 	
 	public static String getEstado(Connection conexion, String sUsuarioID)
 	{
-		Connection conexion = null;
-		conexion = ConnectionManager.getDBConnection();
-
-		Statement stmt = null;
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
 		String sEstado = "";
 
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				+ CAMPO11 + 
-				" FROM "
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO1  + " = '"+ sUsuarioID +"'";
-		
-		logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conexion.createStatement();
+			Statement stmt = null;
 
-			pstmt = conexion.prepareStatement(sQuery);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
 
-			rs = pstmt.executeQuery();
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT "
+					+ CAMPO11 + 
+					" FROM "
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1  + " = '"+ sUsuarioID +"'";
+			
+			logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
+				stmt = conexion.createStatement();
 
-				while (rs.next()) 
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
 
-					sEstado = rs.getString(CAMPO11);
-					
-					
-					logger.debug("Encontrado el registro!");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("{}:|"+CAMPO11,sEstado);
+						sEstado = rs.getString(CAMPO11);
+						
+						logger.debug("Encontrado el registro!");
 
+						logger.debug(CAMPO11+":|"+sEstado);
+
+					}
 				}
-			}
-			if (bEncontrado == false) 
+				if (bEncontrado == false) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				sEstado = "";
+				
+				logger.error("ERROR USUARIO_ID:|"+sUsuarioID);
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
-
-		} 
-		catch (SQLException ex) 
-		{
-			logger.error("ERROR USUARIO_ID:|"+sUsuarioID);
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
 		}
 
 		return sEstado;
@@ -544,13 +529,11 @@ public class QMUsuarios
 
 			if (rs != null) 
 			{
-
 				while (rs.next()) 
 				{
 					bEncontrado = true;
 
 					logger.debug("Encontrado el registro!");
-
 				}
 			}
 			if (bEncontrado == false) 
@@ -609,27 +592,22 @@ public class QMUsuarios
 			stmt = conexion.createStatement();
 
 			pstmt = conexion.prepareStatement(sQuery);
-
 			rs = pstmt.executeQuery();
 			
 			logger.debug("Ejecutada con exito!");
 
 			if (rs != null) 
 			{
-
 				while (rs.next()) 
 				{
 					bEncontrado = true;
-
 					
 					sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 					//sPassword = rs.getString(CAMPO3);
 					
-					
 					logger.debug("Encontrado el registro!");
 
-					//logger.debug("{}:|"+CAMPO3,sPassword);
-
+					//logger.debug(CAMPO3+":|"+sPassword);
 				}
 			}
 			if (bEncontrado == false) 

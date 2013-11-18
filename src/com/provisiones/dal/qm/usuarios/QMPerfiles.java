@@ -159,9 +159,9 @@ public class QMPerfiles
 		return bSalida;
 	}
 	
-	public boolean getEstado(Connection conexion, String sCodPerfil)
+	public String getEstado(Connection conexion, String sCodPerfil)
 	{
-		boolean bEstado = false;
+		String sEstado = "";
 		
 		if (conexion != null)
 		{
@@ -198,10 +198,10 @@ public class QMPerfiles
 					{
 						bEncontrado = true;
 
-						bEstado = rs.getBoolean(CAMPO3);
+						sEstado = rs.getString(CAMPO3);
 						
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO3+":|"+bEstado+"|");
+						logger.debug(CAMPO3+":|"+sEstado+"|");
 					}
 				}
 				if (bEncontrado == false) 
@@ -211,7 +211,7 @@ public class QMPerfiles
 			} 
 			catch (SQLException ex) 
 			{
-				bEstado = false;
+				sEstado = "";
 
 				logger.error("ERROR: sCodPerfil:|"+sCodPerfil+"|");
 
@@ -226,7 +226,7 @@ public class QMPerfiles
 			}
 		}
 
-		return bEstado;
+		return sEstado;
 	}
 	
 	public static boolean setEstado(Connection conexion, String sCodPerfil, String sEstado)
