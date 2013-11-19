@@ -94,7 +94,11 @@ public class ValoresDefecto
 	public static final String DEF_FEAGTO = "0";
 	public static final String DEF_FEPGPR = "0";
 
-	
+	public static final String DEF_CARGA_ACTUALIZADO = "(A) ";
+	public static final String DEF_CARGA_REVISAR     = "(E) ";
+	public static final String DEF_CARGA_NUEVO       = "(N) ";
+	public static final String DEF_CARGA_VALIDADO    = "(V) ";
+	public static final String DEF_CARGA_ERROR       = "(X) ";
 	
 	public enum TIPOSFICHERO 
 	{
@@ -111,7 +115,7 @@ public class ValoresDefecto
 	}
 	
 
-	public static final String CODIFICACION = "ISO-8859-15";
+	public static final String DEF_CODIFICACION = "ISO-8859-15";
 	public static final String DEF_FIN_FICHERO = new Character((char) iNumChar).toString();
 
 	public static final String DEF_PATH = "GLSL-portales"+File.separator+"provisiones"+File.separator;

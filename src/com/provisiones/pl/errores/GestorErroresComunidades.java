@@ -347,7 +347,7 @@ public class GestorErroresComunidades implements Serializable
 		
 		logger.debug("Buscando Activos...");
 		
-		this.setTablaactivos(CLComunidades.buscaActivosConComunidad(buscaactivos));
+		this.setTablaactivos(CLComunidades.buscarActivosConComunidad(buscaactivos));
 
 		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.debug("Encontrados {} activos relacionados.",getTablaactivos().size());
@@ -439,7 +439,7 @@ public class GestorErroresComunidades implements Serializable
 	{
 		FacesMessage msg;
 		
-		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
 		this.sCOCLDO = comunidad.getsCOCLDO();
 		this.sNUDCOM = comunidad.getsNUDCOM();

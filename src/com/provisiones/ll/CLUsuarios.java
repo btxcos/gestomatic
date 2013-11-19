@@ -16,7 +16,6 @@ public class CLUsuarios
 	{
 		boolean bConectado = true;
 		
-		
 		try
 		{
 			bConectado = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).isbComprobado();

@@ -1,10 +1,12 @@
 package com.provisiones.ll;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 
 import com.provisiones.misc.Parser;
@@ -16,107 +18,121 @@ public class CLActivos
 {
 	private static Logger logger = LoggerFactory.getLogger(CLActivos.class.getName());
 	
-	public static int actualizaActivoLeido(String linea)
+	//Interfaz básico
+	public static Activo buscarActivo (String sCodCOACES)
 	{
-		int iCodigo = 0;
-		
-		Activo activo = Parser.leerActivo(linea);
-		
-		String sCodActivo =  activo.getCOACES();
-		
-		logger.debug("sCodActivo:|{}|",sCodActivo);
-		
-		if (!QMActivos.existeActivo(sCodActivo))
-		{
-			if (QMActivos.addActivo(activo))
-			{
-				logger.info("Nuevo Activo registrado.");
-			}
-			else
-			{
-				iCodigo = -2;
-			}
-		}
-		else
-		{
-			if (!QMActivos.compruebaActivo(activo))
-			{
-				if (QMActivos.modActivo(activo,sCodActivo))
-				{
-					logger.info("Activo actualizado.");
-					iCodigo = 1;
-				}
-				else
-				{
-					iCodigo = -1;
-				}
-			}
-			else
-			{
-				logger.warn("El siguiente registro ya se encuentre en el sistema:");
-				logger.warn("|{}|",linea);
-				
-				iCodigo = 2;
-			}
-			
-		}
-				
-		return iCodigo;
-	}	
-
-	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla activobuscado)
-	{
-			
-		return QMActivos.buscaListaActivos(activobuscado);
-	}
-
-	public static boolean existeActivo (String sCodCOACES)
-	{
-			
-		return QMActivos.existeActivo(sCodCOACES);
+		return QMActivos.getActivo(ConnectionManager.getDBConnection(),sCodCOACES);
 	}
 	
-	public static String compruebaTipoActivoSAREB (String sCodCOACES)
+	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla activobuscado)
 	{
+		return QMActivos.buscaListaActivos(ConnectionManager.getDBConnection(),activobuscado);
+	}
 
-		String sTipo = "#";
-		
-		logger.debug("sCodCOACES:|{}|",sCodCOACES);
+	public static ArrayList<ActivoTabla> buscarListaActivosConReferencia (ActivoTabla activo)
+	{
+		return QMActivos.buscaListaActivosReferencias(ConnectionManager.getDBConnection(),activo);
+	}
+	
+	public static boolean existeActivo (String sCodCOACES)
+	{
+		return QMActivos.existeActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+	}
 
-		if (QMActivos.getSociedadPatrimonial(sCodCOACES).equals("9999"))
-		{
-			if (QMActivos.getCOTSINActivo(sCodCOACES).startsWith("SU"))
-			{
-				sTipo = "S"; //SUELOS Y OBRA EN CURSO 
-			}
-			else if (QMActivos.getBIARREActivo(sCodCOACES).equals("S"))
-			{
-				sTipo = "A"; //ARRENDAMIENTOS
-			}
-			else
-			{
-				sTipo = "T"; //PRODUCTO TERMINADO
-			}
-		}
-		logger.debug("sTipo:|{}|",sTipo);
-		return sTipo;
+	public static String referenciaCatastralAsociada (String sCodCOACES)
+	{
+		return QMActivos.getReferenciaCatastral(ConnectionManager.getDBConnection(),sCodCOACES);
 	}
 	
 	public static String sociedadPatrimonialAsociada (String sCodCOACES)
 	{
-			
-		return QMActivos.getSociedadPatrimonial(sCodCOACES);
+		return QMActivos.getSociedadPatrimonial(ConnectionManager.getDBConnection(),sCodCOACES);
 	}
 	
-	public static String referenciaCatastralAsociada (String sCodCOACES)
+	//Interfaz avanzado
+	public static int actualizaActivoLeido(String linea)
 	{
+		int iCodigo = 0;
+		
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			Activo activo = Parser.leerActivo(linea);
 			
-		return QMActivos.getReferenciaCatastral(sCodCOACES);
-	}
+			String sCodActivo =  activo.getCOACES();
+			
+			logger.debug("sCodActivo:|"+sCodActivo+"|");
+			
+			if (!QMActivos.existeActivo(conexion,sCodActivo))
+			{
+				if (QMActivos.addActivo(conexion,activo))
+				{
+					logger.info("Nuevo Activo registrado.");
+				}
+				else
+				{
+					iCodigo = -2;
+				}
+			}
+			else
+			{
+				if (!QMActivos.compruebaActivo(conexion,activo))
+				{
+					if (QMActivos.modActivo(conexion,activo,sCodActivo))
+					{
+						logger.info("Activo actualizado.");
+						iCodigo = 1;
+					}
+					else
+					{
+						iCodigo = -1;
+					}
+				}
+				else
+				{
+					logger.warn("El siguiente registro ya se encuentre en el sistema:");
+					logger.warn("|"+linea+"|");
+					
+					iCodigo = 2;
+				}
+			}
+		}
+				
+		return iCodigo;
+	}	
 	
-	public static ArrayList<ActivoTabla> buscarListaActivosConReferencia (ActivoTabla activo)
+	public static String compruebaTipoActivoSAREB (String sCodCOACES)
 	{
-		return QMActivos.buscaListaActivosReferencias(activo);
+		String sTipo = "";
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			sTipo = "#";
+			
+			logger.debug("sCodCOACES:|"+sCodCOACES+"|");
+
+			if (QMActivos.getSociedadPatrimonial(conexion,sCodCOACES).equals("9999"))
+			{
+				if (QMActivos.getCOTSINActivo(conexion,sCodCOACES).startsWith("SU"))
+				{
+					sTipo = "S"; //SUELOS Y OBRA EN CURSO 
+				}
+				else if (QMActivos.getBIARREActivo(conexion,sCodCOACES).equals("S"))
+				{
+					sTipo = "A"; //ARRENDAMIENTOS
+				}
+				else
+				{
+					sTipo = "T"; //PRODUCTO TERMINADO
+				}
+			}
+		}
+		
+		logger.debug("sTipo:|"+sTipo+"|");
+		return sTipo;
 	}
 
 }

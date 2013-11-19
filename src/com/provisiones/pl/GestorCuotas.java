@@ -131,14 +131,14 @@ public class GestorCuotas implements Serializable
 		
 		if (!sCOCLDO.equals("") && !sNUDCOM.equals(""))
 		{
-			this.setTablaactivos(CLCuotas.buscarActivosComunidadDisponibles(buscaactivos, sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()));
+			this.setTablaactivos(CLComunidades.buscarActivosComunidadDisponibles(buscaactivos, sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()));
 
 			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados con la comunidad '"+sNUDCOM.toUpperCase()+"'.");
 			logger.info("Encontrados {} activos relacionados con la comunidad '{}'.",getTablaactivos().size(),sNUDCOM.toUpperCase());
 		}
 		else
 		{
-			this.setTablaactivos(CLComunidades.buscaActivosConComunidad(buscaactivos));
+			this.setTablaactivos(CLComunidades.buscarActivosConComunidad(buscaactivos));
 			
 			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
@@ -169,9 +169,9 @@ public class GestorCuotas implements Serializable
 	{
 		FacesMessage msg;
 		
-		if (CLComunidades.consultaEstadoComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()))
+		if (CLComunidades.existeComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()))
 		{
-			Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
 			this.sCOCLDO = comunidad.getsCOCLDO();
 			this.sNUDCOM = comunidad.getsNUDCOM();
@@ -209,7 +209,7 @@ public class GestorCuotas implements Serializable
 	{
 		FacesMessage msg;
 		
-		int iSalida = CLCuotas.comprobarActivo(sCOCLDO.toUpperCase(),sNUDCOM.toUpperCase(),sCOACES.toUpperCase());
+		int iSalida = CLComunidades.comprobarActivo(sCOCLDO.toUpperCase(),sNUDCOM.toUpperCase(),sCOACES.toUpperCase());
 
 		switch (iSalida) 
 		{

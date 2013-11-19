@@ -39,7 +39,7 @@ public class Utils
 		  {
 		   cipher = Cipher.getInstance(ValoresDefecto.CIFRADO_ALGORITMO);
 		   cipher.init(Cipher.ENCRYPT_MODE, key);
-		   campoCifrado = cipher.doFinal(sMsg.getBytes(ValoresDefecto.CODIFICACION));
+		   campoCifrado = cipher.doFinal(sMsg.getBytes(ValoresDefecto.DEF_CODIFICACION));
 		  } 
 		  catch (Exception e) 
 		  {
@@ -64,7 +64,7 @@ public class Utils
 			key = new SecretKeySpec(ValoresDefecto.CIFRADO_LLAVE_SIMETRICA.getBytes(), ValoresDefecto.CIFRADO_ALGORITMO);
 			cipher = Cipher.getInstance(ValoresDefecto.CIFRADO_ALGORITMO);
 			cipher.init(Cipher.DECRYPT_MODE, key);
-			byte[] datosDecifrados = cipher.doFinal(sMsg.getBytes(ValoresDefecto.CODIFICACION));
+			byte[] datosDecifrados = cipher.doFinal(sMsg.getBytes(ValoresDefecto.DEF_CODIFICACION));
 			sDescifrado = new String(datosDecifrados);
 		} 
 		catch (Exception e) 

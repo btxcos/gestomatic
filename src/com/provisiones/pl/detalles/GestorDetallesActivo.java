@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.pl.GestorActivos;
@@ -146,108 +146,108 @@ public class GestorDetallesActivo implements Serializable
 		
 		if (!sValor.equals(""))
 		{
+		
+			Activo activo = CLActivos.buscarActivo(sValor);
+			
+			this.sCOACES = activo.getCOACES();
+			this.sNUINMU = activo.getNUINMU();
+			this.sCOSOPA = activo.getCOSOPA();
+			this.sCOENAE = activo.getCOENAE();
+			this.sCOESEN = activo.getCOESEN();
+			this.sNOVIAS = activo.getNOVIAS();
+			this.sNUPOAC = activo.getNUPOAC();
+			this.sNUESAC = activo.getNUESAC();
+			this.sNUPIAC = activo.getNUPIAC();
+			this.sNUPUAC = activo.getNUPUAC();
+			this.sNOMUIN = activo.getNOMUIN();
+			this.sCOPRAE = activo.getCOPRAE();
+			this.sNOPRAC = activo.getNOPRAC();
+			this.sCOPOIN = activo.getCOPOIN();
+			this.sFEREAP = Utils.recuperaFecha(activo.getFEREAP());
+			this.sCOREAE = activo.getCOREAE();
+			this.sFEINAU = Utils.recuperaFecha(activo.getFEINAU());
+			this.sFESOPO = Utils.recuperaFecha(activo.getFESOPO());
+			this.sFESEPO = Utils.recuperaFecha(activo.getFESEPO());
+			this.sFEREPO = Utils.recuperaFecha(activo.getFEREPO());
+			this.sFEADAC = Utils.recuperaFecha(activo.getFEADAC());
+			this.sCODIJU = activo.getCODIJU();
+			this.sCOSJUP = activo.getCOSJUP();
+			this.sCOSTLI = activo.getCOSTLI();
+			this.sCOSCAR = activo.getCOSCAR();
+			this.sCOESVE = activo.getCOESVE();
+			this.sCOTSIN = activo.getCOTSIN();
+			this.sNUFIRE = activo.getNUFIRE();
+			this.sNUREGP = activo.getNUREGP();
+			this.sNOMUI0 = activo.getNOMUI0();
+			this.sNULIBE = activo.getNULIBE();
+			this.sNUTOME = activo.getNUTOME();
+			this.sNUFOLE = activo.getNUFOLE();
+			this.sNUINSR = activo.getNUINSR();
+			this.sCOSOCU = activo.getCOSOCU();
+			this.sCOXPRO = activo.getCOXPRO();
+			this.sFESOLA = Utils.recuperaFecha(activo.getFESOLA());
+			this.sFESELA = Utils.recuperaFecha(activo.getFESELA());
+			this.sFERELA = Utils.recuperaFecha(activo.getFERELA());
+			this.sFERLLA = Utils.recuperaFecha(activo.getFERLLA());
+			this.sCASPRE = Utils.recuperaImporte(false,activo.getCASPRE());
+			this.sCASUTR = Utils.recuperaImporte(false,activo.getCASUTR());
+			this.sCASUTC = Utils.recuperaImporte(false,activo.getCASUTC());
+			this.sCASUTG = Utils.recuperaImporte(false,activo.getCASUTG());
+			this.sBIARRE = activo.getBIARRE();
+			this.sCADORM = activo.getCADORM();
+			this.sCABANO = activo.getCABANO();
+			this.sBIGAPA = activo.getBIGAPA();
+			this.sCAGAPA = activo.getCAGAPA();
+			this.sCASUTE = activo.getCASUTE();
+			this.sBILIPO = activo.getBILIPO();
+			this.sBILIAC = activo.getBILIAC();
+			this.sBILIUS = activo.getBILIUS();
+			this.sBIBOIN = activo.getBIBOIN();
+			this.sBICEFI = activo.getBICEFI();
+			this.sCASUCB = Utils.recuperaImporte(false,activo.getCASUCB());
+			this.sCASUCS = Utils.recuperaImporte(false,activo.getCASUCS());
+			this.sFEACON = activo.getFEACON();
+			this.sIDAUTO = activo.getIDAUTO();
+			this.sFEDEMA = Utils.recuperaFecha(activo.getFEDEMA());
+			this.sYNOCUR = activo.getYNOCUR();
+			this.sOBRECO = activo.getOBRECO();
+			this.sYNOLEC = activo.getYNOLEC();
+			this.sNOLOJZ = activo.getNOLOJZ();
+			this.sFEREDE = Utils.recuperaFecha(activo.getFEREDE());
+			
+			this.sPOPROP = Parser.formateaCampoNumerico(activo.getPOPROP(), 6);
+			
+			this.sPOPROP = Utils.recuperaImporte(false,sPOPROP.substring(0,5));
+			this.sCOGRAP = activo.getCOGRAP();
+			this.sFEPREG = Utils.recuperaFecha(activo.getFEPREG());
+			this.sFEPHAC = Utils.recuperaFecha(activo.getFEPHAC());
+			this.sFEFOAC = Utils.recuperaFecha(activo.getFEFOAC());
+			this.sFEVACT = Utils.recuperaFecha(activo.getFEVACT());
+			this.sIMVACT = Utils.recuperaImporte(false,activo.getIMVACT());
+			this.sNUFIPR = activo.getNUFIPR();
+			this.sCOTPET = activo.getCOTPET();
+			this.sFEEMPT = Utils.recuperaFecha(activo.getFEEMPT());
+			this.sFESORC = Utils.recuperaFecha(activo.getFESORC());
+			this.sFESODE = Utils.recuperaFecha(activo.getFESODE());
+			this.sFEREAC = Utils.recuperaFecha(activo.getFEREAC());
+			this.sCOXSIA = activo.getCOXSIA();
+			this.sNUJUZD = activo.getNUJUZD();
+			this.sNURCAT = activo.getNURCAT();
+			this.sNOMPRC = activo.getNOMPRC();
+			this.sNUTPRC = activo.getNUTPRC();
+			this.sNOMADC = activo.getNOMADC();
+			this.sNUTADC = activo.getNUTADC();
+			this.sIMPCOO = Utils.recuperaImporte(false,activo.getIMPCOO());
+			this.sCOENOR = activo.getCOENOR();
+			this.sCOSPAT = activo.getCOSPAT();
+			this.sCOSPAS = activo.getCOSPAS();
+			this.sIDCOL3 = activo.getIDCOL3();
+			this.sBIOBNU = activo.getBIOBNU();
+			
+			this.sPOBRAR = Parser.formateaCampoNumerico(activo.getPOBRAR(), 6);
+			
+			this.sPOBRAR = Utils.recuperaImporte(false,sPOBRAR.substring(0,5));
 
-		
-			Activo activo = QMActivos.getActivo(sValor);
-		
-		this.sCOACES = activo.getCOACES();
-		this.sNUINMU = activo.getNUINMU();
-		this.sCOSOPA = activo.getCOSOPA();
-		this.sCOENAE = activo.getCOENAE();
-		this.sCOESEN = activo.getCOESEN();
-		this.sNOVIAS = activo.getNOVIAS();
-		this.sNUPOAC = activo.getNUPOAC();
-		this.sNUESAC = activo.getNUESAC();
-		this.sNUPIAC = activo.getNUPIAC();
-		this.sNUPUAC = activo.getNUPUAC();
-		this.sNOMUIN = activo.getNOMUIN();
-		this.sCOPRAE = activo.getCOPRAE();
-		this.sNOPRAC = activo.getNOPRAC();
-		this.sCOPOIN = activo.getCOPOIN();
-		this.sFEREAP = Utils.recuperaFecha(activo.getFEREAP());
-		this.sCOREAE = activo.getCOREAE();
-		this.sFEINAU = Utils.recuperaFecha(activo.getFEINAU());
-		this.sFESOPO = Utils.recuperaFecha(activo.getFESOPO());
-		this.sFESEPO = Utils.recuperaFecha(activo.getFESEPO());
-		this.sFEREPO = Utils.recuperaFecha(activo.getFEREPO());
-		this.sFEADAC = Utils.recuperaFecha(activo.getFEADAC());
-		this.sCODIJU = activo.getCODIJU();
-		this.sCOSJUP = activo.getCOSJUP();
-		this.sCOSTLI = activo.getCOSTLI();
-		this.sCOSCAR = activo.getCOSCAR();
-		this.sCOESVE = activo.getCOESVE();
-		this.sCOTSIN = activo.getCOTSIN();
-		this.sNUFIRE = activo.getNUFIRE();
-		this.sNUREGP = activo.getNUREGP();
-		this.sNOMUI0 = activo.getNOMUI0();
-		this.sNULIBE = activo.getNULIBE();
-		this.sNUTOME = activo.getNUTOME();
-		this.sNUFOLE = activo.getNUFOLE();
-		this.sNUINSR = activo.getNUINSR();
-		this.sCOSOCU = activo.getCOSOCU();
-		this.sCOXPRO = activo.getCOXPRO();
-		this.sFESOLA = Utils.recuperaFecha(activo.getFESOLA());
-		this.sFESELA = Utils.recuperaFecha(activo.getFESELA());
-		this.sFERELA = Utils.recuperaFecha(activo.getFERELA());
-		this.sFERLLA = Utils.recuperaFecha(activo.getFERLLA());
-		this.sCASPRE = Utils.recuperaImporte(false,activo.getCASPRE());
-		this.sCASUTR = Utils.recuperaImporte(false,activo.getCASUTR());
-		this.sCASUTC = Utils.recuperaImporte(false,activo.getCASUTC());
-		this.sCASUTG = Utils.recuperaImporte(false,activo.getCASUTG());
-		this.sBIARRE = activo.getBIARRE();
-		this.sCADORM = activo.getCADORM();
-		this.sCABANO = activo.getCABANO();
-		this.sBIGAPA = activo.getBIGAPA();
-		this.sCAGAPA = activo.getCAGAPA();
-		this.sCASUTE = activo.getCASUTE();
-		this.sBILIPO = activo.getBILIPO();
-		this.sBILIAC = activo.getBILIAC();
-		this.sBILIUS = activo.getBILIUS();
-		this.sBIBOIN = activo.getBIBOIN();
-		this.sBICEFI = activo.getBICEFI();
-		this.sCASUCB = Utils.recuperaImporte(false,activo.getCASUCB());
-		this.sCASUCS = Utils.recuperaImporte(false,activo.getCASUCS());
-		this.sFEACON = activo.getFEACON();
-		this.sIDAUTO = activo.getIDAUTO();
-		this.sFEDEMA = Utils.recuperaFecha(activo.getFEDEMA());
-		this.sYNOCUR = activo.getYNOCUR();
-		this.sOBRECO = activo.getOBRECO();
-		this.sYNOLEC = activo.getYNOLEC();
-		this.sNOLOJZ = activo.getNOLOJZ();
-		this.sFEREDE = Utils.recuperaFecha(activo.getFEREDE());
-		
-		this.sPOPROP = Parser.formateaCampoNumerico(activo.getPOPROP(), 6);
-		
-		this.sPOPROP = Utils.recuperaImporte(false,sPOPROP.substring(0,5));
-		this.sCOGRAP = activo.getCOGRAP();
-		this.sFEPREG = Utils.recuperaFecha(activo.getFEPREG());
-		this.sFEPHAC = Utils.recuperaFecha(activo.getFEPHAC());
-		this.sFEFOAC = Utils.recuperaFecha(activo.getFEFOAC());
-		this.sFEVACT = Utils.recuperaFecha(activo.getFEVACT());
-		this.sIMVACT = Utils.recuperaImporte(false,activo.getIMVACT());
-		this.sNUFIPR = activo.getNUFIPR();
-		this.sCOTPET = activo.getCOTPET();
-		this.sFEEMPT = Utils.recuperaFecha(activo.getFEEMPT());
-		this.sFESORC = Utils.recuperaFecha(activo.getFESORC());
-		this.sFESODE = Utils.recuperaFecha(activo.getFESODE());
-		this.sFEREAC = Utils.recuperaFecha(activo.getFEREAC());
-		this.sCOXSIA = activo.getCOXSIA();
-		this.sNUJUZD = activo.getNUJUZD();
-		this.sNURCAT = activo.getNURCAT();
-		this.sNOMPRC = activo.getNOMPRC();
-		this.sNUTPRC = activo.getNUTPRC();
-		this.sNOMADC = activo.getNOMADC();
-		this.sNUTADC = activo.getNUTADC();
-		this.sIMPCOO = Utils.recuperaImporte(false,activo.getIMPCOO());
-		this.sCOENOR = activo.getCOENOR();
-		this.sCOSPAT = activo.getCOSPAT();
-		this.sCOSPAS = activo.getCOSPAS();
-		this.sIDCOL3 = activo.getIDCOL3();
-		this.sBIOBNU = activo.getBIOBNU();
-		
-		this.sPOBRAR = Parser.formateaCampoNumerico(activo.getPOBRAR(), 6);
-		
-		this.sPOBRAR = Utils.recuperaImporte(false,sPOBRAR.substring(0,5));
 		}
 		
 	}

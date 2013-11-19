@@ -125,7 +125,7 @@ public class GestorMovimientosComunidades implements Serializable
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 		
-		this.setTablaactivos(CLComunidades.buscaActivosConComunidad(buscaactivos));
+		this.setTablaactivos(CLComunidades.buscarActivosConComunidad(buscaactivos));
 
 		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
@@ -223,7 +223,7 @@ public class GestorMovimientosComunidades implements Serializable
 	{
 		FacesMessage msg;
 		
-		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
 		this.sCOCLDO = comunidad.getsCOCLDO();
 		this.sNUDCOM = comunidad.getsNUDCOM();

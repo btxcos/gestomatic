@@ -140,7 +140,7 @@ public class GestorTablaComunidadActivo implements Serializable
 	{
 		FacesMessage msg;
 		
-		Comunidad comunidad = CLComunidades.consultaComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
+		Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 		
 		this.sCOCLDO = comunidad.getsCOCLDO();
 		this.sNUDCOM = comunidad.getsNUDCOM();

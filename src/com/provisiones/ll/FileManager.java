@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import java.util.HashSet;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMProvisiones;
 
 import com.provisiones.dal.qm.listas.QMListaComunidades;
@@ -50,7 +52,7 @@ public class FileManager
 	
 	public static String guardarFichero(FileUploadEvent event)
 	{
-		logger.debug("ID:|{}|",event.getPhaseId().getOrdinal());
+		logger.debug("ID:|"+event.getPhaseId().getOrdinal()+"|");
 	
 		logger.debug("Guardando archivo...");
         UploadedFile file = event.getFile();
@@ -79,9 +81,9 @@ public class FileManager
 		} 
 		catch (IOException e) 
 		{
-			// TODO Auto-generated catch block
+			
 			logger.error("Error al guardar el fichero recibido.");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
         logger.debug("Completado con exito.");
         return sFichero;
@@ -89,449 +91,504 @@ public class FileManager
 
 	public static String escribirComunidades() 
 	{
-		//Los movimientos de las comunidades estan repartidos entre las comunidades y los activos incluidos
-		
-		ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado("P");
-		ArrayList<String> resultactivos = QMListaComunidadesActivos.getMovimientosComunidadesActivoPorEstado("P");
+		String sNombreFichero = "";
 
-		ArrayList<String> resultcomunidadesactivos = new ArrayList<String>(resultcomunidades);
-		
-		resultcomunidadesactivos.addAll(resultactivos);
-		
-		HashSet<String> hslimpia = new HashSet<String>(resultcomunidadesactivos);
+		Connection conexion = ConnectionManager.getDBConnection();
 
-	   resultcomunidadesactivos.clear();
-	   resultcomunidadesactivos.addAll(hslimpia);
-		
-		Collections.sort(resultcomunidadesactivos);
+		if (conexion != null)
+		{
+			//Los movimientos de las comunidades estan repartidos entre las comunidades y los activos incluidos
+			
+			ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<String> resultactivos = QMListaComunidadesActivos.getMovimientosComunidadesActivoPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 
-		String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E1+".txt";
-		
-		FileWriter ficheroE1 = null;
-		
-        PrintWriter pw = null;
-        try
-        {
-        	ficheroE1 = new FileWriter(sNombreFichero);
-        	
-            pw = new PrintWriter(ficheroE1);
+			ArrayList<String> resultcomunidadesactivos = new ArrayList<String>(resultcomunidades);
+			
+			resultcomunidadesactivos.addAll(resultactivos);
+			
+			HashSet<String> hslimpia = new HashSet<String>(resultcomunidadesactivos);
 
-            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
-            {
-                pw.println(Parser.escribirComunidad(CLComunidades.buscarMovimientoComunidad(resultcomunidadesactivos.get(i))));
-            }
+		   resultcomunidadesactivos.clear();
+		   resultcomunidadesactivos.addAll(hslimpia);
+			
+			Collections.sort(resultcomunidadesactivos);
 
-            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+			sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E1+".txt";
+			
+			FileWriter ficheroE1 = null;
+			
+	        PrintWriter pw = null;
+	        try
+	        {
+	        	
+	        	ficheroE1 = new FileWriter(sNombreFichero);
+	        	
+	            pw = new PrintWriter(ficheroE1);
 
-            for (int i = 0; i < resultcomunidades.size() ; i++)
-            {
-               QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-            }
-            
-            for (int i = 0; i < resultactivos.size() ; i++)
-            {
-         	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-            }
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-            
-            sNombreFichero = "";
-            
-            for (int i = 0; i < resultcomunidades.size() ; i++)
-            {
-               QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-            }
-            
-            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
-            {
-         	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-            }
-            
-            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-            
-        } 
-        finally 
-        {
-           try 
-           {
-        	   if (null != ficheroE1)
-        	   {
-        		   ficheroE1.close();
-        		   logger.debug("Generados!");
-        	   }
-        		   
-           } 
-           catch (Exception e2) 
-           {
-              e2.printStackTrace();
-              
-              sNombreFichero = "";
-              
-              for (int i = 0; i < resultcomunidades.size() ; i++)
-              {
-                 QMListaComunidades.setValidado(resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-              }
-              
-              for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
-              {
-           	   QMListaComunidadesActivos.setValidado(resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-              }
-              
-              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-           }
-        }
+	            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+	            {
+	                pw.println(Parser.escribirComunidad(CLComunidades.buscarMovimientoComunidad(resultcomunidadesactivos.get(i))));
+	            }
+
+	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+
+	            //TODO conexion.setAutoCommit(false);
+	            for (int i = 0; i < resultcomunidades.size() ; i++)
+	            {
+	               QMListaComunidades.setValidado(conexion,resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+	            }
+	            
+	            for (int i = 0; i < resultactivos.size() ; i++)
+	            {
+	         	   QMListaComunidadesActivos.setValidado(conexion,resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+	            }
+	        } 
+	        catch (IOException e) 
+	        {
+	            //e.printStackTrace();
+	            
+	            sNombreFichero = "";
+	            
+	            
+	            //TODO conexion.rollback();
+	            for (int i = 0; i < resultcomunidades.size() ; i++)
+	            {
+	               QMListaComunidades.setValidado(conexion,resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	            }
+	            
+	            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+	            {
+	         	   QMListaComunidadesActivos.setValidado(conexion,resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	            }
+	            
+	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+	            
+	        } 
+	        finally 
+	        {
+	           try 
+	           {
+	        	   if (null != ficheroE1)
+	        	   {
+	        		   ficheroE1.close();
+	        		   logger.debug("Generados!");
+	        	   }
+	        	   // distinguir con fich == null para hacer commit o rolback
+	        	   //TODO conexion.commit(); + conexion.setAutoCommit(true);
+	        		   
+	           } 
+	           catch (Exception e2) 
+	           {
+	              //e2.printStackTrace();
+	              
+	              sNombreFichero = "";
+	              
+	              for (int i = 0; i < resultcomunidades.size() ; i++)
+	              {
+	                 QMListaComunidades.setValidado(conexion,resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	              }
+	              
+	              for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+	              {
+	           	   QMListaComunidadesActivos.setValidado(conexion,resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	              }
+	              //TODO conexion.rollback();+ conexion.setAutoCommit(true);
+	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+	           }
+	        }
+		}
+
         return sNombreFichero;
 	}
 	
 	public static String escribirCuotas() 
 	{
-		ArrayList<String> resultcuotas =  QMListaCuotas.getCuotasPorEstado("P");
-		
-		FileWriter ficheroE2 = null;
-		
-        PrintWriter pw = null;
-        
-        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E2+".txt";
-        
-        try
-        {
-            ficheroE2 = new FileWriter(sNombreFichero);
-            pw = new PrintWriter(ficheroE2);
-            
-            for (int i = 0; i < resultcuotas.size() ; i++)
-            {
-                pw.println(Parser.escribirCuota(QMMovimientosCuotas.getMovimientoCuota(resultcuotas.get(i))));
-                QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-            }
-            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-            
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-            
-            //En caso de error se devuelven los registros a su estado anterior
-            sNombreFichero = "";
-            
-            for (int i = 0; i < resultcuotas.size() ; i++)
-            {
-            	QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-            }
-            
-            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-        } 
-        finally 
-        {
-           try 
-           {
-        	   if (null != ficheroE2)
-        	   {
-        		   ficheroE2.close();
-        		   logger.debug( "Generados!");
-        	   }
-            	   
-           } 
-           catch (Exception e2) 
-           {
-              e2.printStackTrace();
-              
-              //En caso de error se devuelven los registros a su estado anterior
-              sNombreFichero = "";
-              
-              for (int i = 0; i < resultcuotas.size() ; i++)
-              {
-            	  QMListaCuotas.setValidado(resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-              }
-              
-              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-              
-           }
-        }
+		String sNombreFichero = "";
+
+		Connection conexion = ConnectionManager.getDBConnection();
+
+		if (conexion != null)
+		{
+			ArrayList<String> resultcuotas =  QMListaCuotas.getCuotasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			
+			FileWriter ficheroE2 = null;
+			
+	        PrintWriter pw = null;
+	        
+	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E2+".txt";
+	        
+	        try
+	        {
+	            ficheroE2 = new FileWriter(sNombreFichero);
+	            pw = new PrintWriter(ficheroE2);
+	            
+	            // TODO conexion.setAutoCommit(false);
+	            for (int i = 0; i < resultcuotas.size() ; i++)
+	            {
+	                pw.println(Parser.escribirCuota(QMMovimientosCuotas.getMovimientoCuota(conexion,resultcuotas.get(i))));
+	                QMListaCuotas.setValidado(conexion,resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+	            }
+	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+	            
+	        } 
+	        catch (IOException e) 
+	        {
+	            //e.printStackTrace();
+	            
+	            //En caso de error se devuelven los registros a su estado anterior
+	            sNombreFichero = "";
+	            
+	            //TODO conexion.rollback();
+	            for (int i = 0; i < resultcuotas.size() ; i++)
+	            {
+	            	QMListaCuotas.setValidado(conexion,resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	            }
+	            
+	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+	        } 
+	        finally 
+	        {
+	           try 
+	           {
+	        	   if (null != ficheroE2)
+	        	   {
+	        		   ficheroE2.close();
+	        		   logger.debug( "Generados!");
+	        	   }
+	        	 //TODO conexion.commit(); + conexion.setAutoCommit(true);
+	            	   
+	           } 
+	           catch (Exception e2) 
+	           {
+	              //e2.printStackTrace();
+	              
+	              //En caso de error se devuelven los registros a su estado anterior
+	              sNombreFichero = "";
+	              
+	              //TODO conexion.rollback(); + conexion.setAutoCommit(true);
+	              for (int i = 0; i < resultcuotas.size() ; i++)
+	              {
+	            	  QMListaCuotas.setValidado(conexion,resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	              }
+	              
+	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+	              
+	           }
+	        }
+		}
  
         return sNombreFichero;
 	}
 	
 	public static String escribirReferencias() 
 	{
-		ArrayList<String> resultreferencias = QMListaReferencias.getReferenciasPorEstado("P");
-		
-		FileWriter ficheroE3 = null;
-		
-        PrintWriter pw = null;
-        
-        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E3+".txt";
-        try
-        {
-            ficheroE3 = new FileWriter(sNombreFichero);
-            pw = new PrintWriter(ficheroE3);
-            
-            for (int i = 0; i < resultreferencias.size() ; i++)
-            {
-                pw.println(Parser.escribirReferenciaCatastral(QMMovimientosReferencias.getMovimientoReferenciaCatastral(resultreferencias.get(i))));
-                QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-            }
-            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-            
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-            
-            //En caso de error se devuelven los registros a su estado anterior
-            sNombreFichero = "";
-            
-            for (int i = 0; i < resultreferencias.size() ; i++)
-            {
-            	QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-            }
-            
-            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-        } 
-        finally 
-        {
-           try 
-           {
-               if (null != ficheroE3)
-               {
-            	   ficheroE3.close();
-            	   logger.debug( "Generados!");
-               }
-           } 
-           catch (Exception e2) 
-           {
-              e2.printStackTrace();
+		String sNombreFichero = "";
 
-              //En caso de error se devuelven los registros a su estado anterior
-              sNombreFichero = "";
-              
-              for (int i = 0; i < resultreferencias.size() ; i++)
-              {
-              	QMListaReferencias.setValidado(resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-              }
-              
-              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-           }
-        }
+		Connection conexion = ConnectionManager.getDBConnection();
+
+		if (conexion != null)
+		{
+			ArrayList<String> resultreferencias = QMListaReferencias.getReferenciasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			
+			FileWriter ficheroE3 = null;
+			
+	        PrintWriter pw = null;
+	        
+	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E3+".txt";
+	        try
+	        {
+	            ficheroE3 = new FileWriter(sNombreFichero);
+	            pw = new PrintWriter(ficheroE3);
+	            
+	          //TODO conexion.setAutoCommit(false);
+	            for (int i = 0; i < resultreferencias.size() ; i++)
+	            {
+	                pw.println(Parser.escribirReferenciaCatastral(QMMovimientosReferencias.getMovimientoReferenciaCatastral(conexion,resultreferencias.get(i))));
+	                QMListaReferencias.setValidado(conexion,resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+	            }
+	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+	            
+	        } 
+	        catch (IOException e) 
+	        {
+	            //e.printStackTrace();
+	            
+	            //En caso de error se devuelven los registros a su estado anterior
+	            sNombreFichero = "";
+	          //TODO conexion.rollback();
+	            for (int i = 0; i < resultreferencias.size() ; i++)
+	            {
+	            	QMListaReferencias.setValidado(conexion,resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	            }
+	            
+	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+	        } 
+	        finally 
+	        {
+	           try 
+	           {
+	               if (null != ficheroE3)
+	               {
+	            	   ficheroE3.close();
+	            	   logger.debug( "Generados!");
+	            	 //TODO conexion.commit(); + conexion.setAutoCommit(true);
+	               }
+	           } 
+	           catch (Exception e2) 
+	           {
+	              e2.printStackTrace();
+
+	              //En caso de error se devuelven los registros a su estado anterior
+	              sNombreFichero = "";
+	              
+	              for (int i = 0; i < resultreferencias.size() ; i++)
+	              {
+	              	QMListaReferencias.setValidado(conexion,resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	              }
+	              
+	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+	           }
+	        }
+		}
         
         return sNombreFichero;
 	}
 	
 	public static String escribirImpuestos() 
 	{
-		ArrayList<String> resultimpuestos = QMListaImpuestos.getImpuestosPorEstado("P");
-		
-		FileWriter ficheroE4 = null;
-		
-        PrintWriter pw = null;
-        
-        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E4+".txt";
-        
-        try
-        {
-            ficheroE4 = new FileWriter(sNombreFichero);
-            pw = new PrintWriter(ficheroE4);
-            
-            for (int i = 0; i < resultimpuestos.size() ; i++)
-            {
-                pw.println(Parser.escribirImpuestoRecurso(QMMovimientosImpuestos.getMovimientoImpuestoRecurso(resultimpuestos.get(i))));
-                QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-            }
-            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-            
-            //En caso de error se devuelven los registros a su estado anterior
-            sNombreFichero = "";
-            
-            for (int i = 0; i < resultimpuestos.size() ; i++)
-            {
-            	QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-            }
-            
-            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-        } 
-        finally 
-        {
-           try 
-           {
-               if (null != ficheroE4)
-               {
-            	   ficheroE4.close();
-            	   logger.debug( "Generados!");
-               }
-           } 
-           catch (Exception e2) 
-           {
-              e2.printStackTrace();
-              
-              //En caso de error se devuelven los registros a su estado anterior
-              sNombreFichero = "";
-              
-              for (int i = 0; i < resultimpuestos.size() ; i++)
-              {
-              	QMListaImpuestos.setValidado(resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-              }
-              
-              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-              
-           }
-        }
+		String sNombreFichero = "";
+
+		Connection conexion = ConnectionManager.getDBConnection();
+
+		if (conexion != null)
+		{
+			ArrayList<String> resultimpuestos = QMListaImpuestos.getImpuestosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			
+			FileWriter ficheroE4 = null;
+			
+	        PrintWriter pw = null;
+	        
+	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E4+".txt";
+	        
+	        try
+	        {
+	            ficheroE4 = new FileWriter(sNombreFichero);
+	            pw = new PrintWriter(ficheroE4);
+	            
+	            for (int i = 0; i < resultimpuestos.size() ; i++)
+	            {
+	                pw.println(Parser.escribirImpuestoRecurso(QMMovimientosImpuestos.getMovimientoImpuestoRecurso(conexion,resultimpuestos.get(i))));
+	                QMListaImpuestos.setValidado(conexion,resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+	            }
+	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+	        } 
+	        catch (IOException e) 
+	        {
+	            e.printStackTrace();
+	            
+	            //En caso de error se devuelven los registros a su estado anterior
+	            sNombreFichero = "";
+	            
+	            for (int i = 0; i < resultimpuestos.size() ; i++)
+	            {
+	            	QMListaImpuestos.setValidado(conexion,resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	            }
+	            
+	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+	        } 
+	        finally 
+	        {
+	           try 
+	           {
+	               if (null != ficheroE4)
+	               {
+	            	   ficheroE4.close();
+	            	   logger.debug( "Generados!");
+	               }
+	           } 
+	           catch (Exception e2) 
+	           {
+	              e2.printStackTrace();
+	              
+	              //En caso de error se devuelven los registros a su estado anterior
+	              sNombreFichero = "";
+	              
+	              for (int i = 0; i < resultimpuestos.size() ; i++)
+	              {
+	              	QMListaImpuestos.setValidado(conexion,resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	              }
+	              
+	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+	              
+	           }
+	        }
+		}
         
         return sNombreFichero;
 	}
 	
 	public static String escribirGastos() 
 	{
-		ArrayList<String> resultgastos = QMListaGastos.getGastosPorEstado("P");
-        
-        FileWriter ficheroGA = null;
-        
-        PrintWriter pw = null;
-        
-        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_GA+".txt";
-        
-        try
-        {
+		String sNombreFichero = "";
 
-            ficheroGA = new FileWriter(sNombreFichero);
-            pw = new PrintWriter(ficheroGA);
-            
-            for (int i = 0; i < resultgastos.size(); i++)
-            {
-                pw.println(Parser.escribirGasto(QMMovimientosGastos.getMovimientoGasto(resultgastos.get(i))));
-                QMListaGastos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-            }
-            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
- 
-        } 
-        catch (IOException e) 
-        {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-            //En caso de error se devuelven los registros a su estado anterior
-            sNombreFichero = "";
-            
-            for (int i = 0; i < resultgastos.size() ; i++)
-            {
-            	QMListaImpuestos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-            }
-            
-            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-		} 
+		Connection conexion = ConnectionManager.getDBConnection();
 
-        finally 
-        {
-           try 
-           {
+		if (conexion != null)
+		{
+			ArrayList<String> resultgastos = QMListaGastos.getGastosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	        
+	        FileWriter ficheroGA = null;
+	        
+	        PrintWriter pw = null;
+	        
+	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_GA+".txt";
+	        
+	        try
+	        {
 
-        	   if (null != ficheroGA)
-        	   {
-        		   ficheroGA.close();
-        		   logger.debug("Generados!");
-        	   }
-              
-           } 
-           catch (Exception e2) 
-           {
-              e2.printStackTrace();
-              //En caso de error se devuelven los registros a su estado anterior
-              sNombreFichero = "";
-              
-              for (int i = 0; i < resultgastos.size() ; i++)
-              {
-              	QMListaImpuestos.setValidado(resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-              }
-              
-              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-           }
-        }
+	            ficheroGA = new FileWriter(sNombreFichero);
+	            pw = new PrintWriter(ficheroGA);
+	            
+	            for (int i = 0; i < resultgastos.size(); i++)
+	            {
+	                pw.println(Parser.escribirGasto(QMMovimientosGastos.getMovimientoGasto(conexion,resultgastos.get(i))));
+	                QMListaGastos.setValidado(conexion,resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+	            }
+	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+	 
+	        } 
+	        catch (IOException e) 
+	        {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+	            //En caso de error se devuelven los registros a su estado anterior
+	            sNombreFichero = "";
+	            
+	            for (int i = 0; i < resultgastos.size() ; i++)
+	            {
+	            	QMListaImpuestos.setValidado(conexion,resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	            }
+	            
+	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+			} 
+
+	        finally 
+	        {
+	           try 
+	           {
+
+	        	   if (null != ficheroGA)
+	        	   {
+	        		   ficheroGA.close();
+	        		   logger.debug("Generados!");
+	        	   }
+	              
+	           } 
+	           catch (Exception e2) 
+	           {
+	              e2.printStackTrace();
+	              //En caso de error se devuelven los registros a su estado anterior
+	              sNombreFichero = "";
+	              
+	              for (int i = 0; i < resultgastos.size() ; i++)
+	              {
+	              	QMListaImpuestos.setValidado(conexion,resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+	              }
+	              
+	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+	           }
+	        }
+		}
         
         return sNombreFichero;
 	}
 
 	public static String escribirCierres() 
 	{
-		ArrayList<String> resultcierres = QMProvisiones.getProvisionesCerradasPendientes();
-        
-        FileWriter ficheroPP = null;
-        
-        PrintWriter pw = null;
-        
-        String sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_PP+".txt";
-        
-        try
-        {
+		String sNombreFichero = "";
 
-        	ficheroPP = new FileWriter(sNombreFichero);
-            pw = new PrintWriter(ficheroPP);
-            
-            for (int i = 0; i < resultcierres.size(); i++)
-            {
-            	Provision provision = QMProvisiones.getProvision(resultcierres.get(i));
-                pw.println(Parser.escribirCierre(provision.getsNUPROF(),provision.getsFEPFON()));
-                QMProvisiones.setFechaEnvio(resultcierres.get(i),Utils.fechaDeHoy(false));
-            }
-            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
- 
-        } 
-        catch (IOException e) 
-        {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-            //En caso de error se devuelven los registros a su estado anterior
-            sNombreFichero = "";
-            
-            for (int i = 0; i < resultcierres.size() ; i++)
-            {
-            	QMProvisiones.setFechaEnvio(resultcierres.get(i),"0");
-            }
-            
-            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-		} 
+		Connection conexion = ConnectionManager.getDBConnection();
 
-        finally 
-        {
-           try 
-           {
+		if (conexion != null)
+		{
+			ArrayList<String> resultcierres = QMProvisiones.getProvisionesCerradasPendientes(conexion);
+	        
+	        FileWriter ficheroPP = null;
+	        
+	        PrintWriter pw = null;
+	        
+	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_PP+".txt";
+	        
+	        try
+	        {
 
-        	   if (null != ficheroPP)
-        	   {
-        		   ficheroPP.close();
-        		   logger.debug( "Generados!");
-        	   }
-              
-           } 
-           catch (Exception e2) 
-           {
-              e2.printStackTrace();
-              //En caso de error se devuelven los registros a su estado anterior
-              sNombreFichero = "";
-              
-              for (int i = 0; i < resultcierres.size() ; i++)
-              {
-            	  QMProvisiones.setFechaEnvio(resultcierres.get(i),"0");
-              }
-              
-              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-           }
-        }
+	        	ficheroPP = new FileWriter(sNombreFichero);
+	            pw = new PrintWriter(ficheroPP);
+	            
+	            for (int i = 0; i < resultcierres.size(); i++)
+	            {
+	            	Provision provision = QMProvisiones.getProvision(conexion,resultcierres.get(i));
+	                pw.println(Parser.escribirCierre(provision.getsNUPROF(),provision.getsFEPFON()));
+	                QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),Utils.fechaDeHoy(false));
+	            }
+	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+	 
+	        } 
+	        catch (IOException e) 
+	        {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+	            //En caso de error se devuelven los registros a su estado anterior
+	            sNombreFichero = "";
+	            
+	            for (int i = 0; i < resultcierres.size() ; i++)
+	            {
+	            	QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),"0");
+	            }
+	            
+	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+			} 
+
+	        finally 
+	        {
+	           try 
+	           {
+
+	        	   if (null != ficheroPP)
+	        	   {
+	        		   ficheroPP.close();
+	        		   logger.debug( "Generados!");
+	        	   }
+	              
+	           } 
+	           catch (Exception e2) 
+	           {
+	              e2.printStackTrace();
+	              //En caso de error se devuelven los registros a su estado anterior
+	              sNombreFichero = "";
+	              
+	              for (int i = 0; i < resultcierres.size() ; i++)
+	              {
+	            	  QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),"0");
+	              }
+	              
+	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+	           }
+	        }
+		}
         
         return sNombreFichero;
 	}
 	
 	public static ArrayList<ResultadosTabla> leerActivos(String sNombre)
 	{
-		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
-		
-		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 		try 
@@ -564,8 +621,8 @@ public class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|{}|",linea.length());
-				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -573,7 +630,7 @@ public class FileManager
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
 	    		}
 	    		else
 	    		{
@@ -584,28 +641,28 @@ public class FileManager
 	    			{
 	    			case 0:
 	    				sMensaje = "Nuevo Activo registrado.";
-	    				logger.info("(N) Línea "+contador+": "+sMensaje);
-	    				sMensaje = "(N) Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case -1:
 	    				sMensaje = "[FATAL] Error al actualizar el Activo.";
-	    				logger.error("(X) Línea "+contador+": "+sMensaje);
-	    				sMensaje = "(X) Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -2:
 	    				sMensaje = "[FATAL] Error al registrar el Activo.";
-	    				logger.error("(X) Línea "+contador+": "+sMensaje);
-	    				sMensaje = "(X) Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case 1:
 	    				sMensaje = "Activo actualizado.";
-	    				logger.info("(A) Línea "+contador+": "+sMensaje);
-	    				sMensaje = "(A) Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ACTUALIZADO+"Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case 2:
 	    				sMensaje = "El registro ya se encuentra en el sistema.";
-	    				logger.warn("Línea "+contador+": "+sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.warn(sMensaje);
 	    				break;
 	    			}
 	    			if ( iCodigo >= 0 )
@@ -641,18 +698,18 @@ public class FileManager
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-		logger.debug("tabla.size():|{}|",tabla.size());
+		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
         return tabla;
 	}
 
 	public static ArrayList<ResultadosTabla> leerGastosRevisados(String sNombre) 
 	{
-		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
-		
-		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 
@@ -680,8 +737,9 @@ public class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|{}|",linea.length());
-				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -689,11 +747,11 @@ public class FileManager
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLGastos.actualizaGastoLeido(linea);
+	    			int iCodigo = CLGastos.actualizarGastoLeido(linea);
 	    			
 	    			String sMensaje = "";
 	    			
@@ -701,55 +759,56 @@ public class FileManager
 	    			{
 	    			case 0:
 	    				sMensaje = "Movimiento validado.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_VALIDADO+"Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case 1:
 	    				sMensaje = "Movimiento de Gasto pendiente de revisión.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"(E) Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case -1:
 	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -2:
 	    				sMensaje = "No existe relación con la Gasto.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -3:
 	    				sMensaje = "[FATAL] Error al validar la relación con el Gasto.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -4:
 	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -5:
 	    				sMensaje = "[FATAL] Error al actualizar la revisión del gasto.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;	
 	    			case -10:
 	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -11:
 	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -12:
 	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				logger.warn("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.warn(sMensaje);
 	    				break;
 	    			}
+	    			
 	    			if ( iCodigo >= 0 )
 	    			{
 	    				registros++;
@@ -783,7 +842,7 @@ public class FileManager
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-		logger.debug("tabla.size():|{}|",tabla.size());
+		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
         return tabla;
 		
@@ -792,12 +851,11 @@ public class FileManager
 
 	public static ArrayList<ResultadosTabla> leerComunidadesRevisadas(String sNombre)
 	{
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
-		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
-		
-		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 		try 
@@ -824,8 +882,8 @@ public class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|{}|",linea.length());
-				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -833,74 +891,74 @@ public class FileManager
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLComunidades.actualizaComunidadLeida(linea);
+	    			int iCodigo = CLComunidades.actualizarComunidadLeida(linea);
 	    			String sMensaje = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
 	    				sMensaje = "Movimiento validado.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_VALIDADO+"Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case 1:
 	    				sMensaje = "Movimento de Comunidad pendiente de revisión.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case -1:
 	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -2:
 	    				sMensaje = "No existe relación con la Comunidad.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -3:
 	    				sMensaje = "No existe relación Activo-Comunidad.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -4:
 	    				sMensaje = "[FATAL] Error al validar la reclación con la Comunidad.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -5:
 	    				sMensaje = "[FATAL] Error al validar la relación Activo-Comunidad.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -6:
 	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -9:
 	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -10:
 	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -11:
 	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -12:
 	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				logger.warn("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.warn(sMensaje);
 	    				break;
 	    			}
 	    			if ( iCodigo >= 0 )
@@ -936,18 +994,18 @@ public class FileManager
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-		logger.debug("tabla.size():|{}|",tabla.size());
+		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
         return tabla;
 	}
 	
 	public static ArrayList<ResultadosTabla> leerCuotasRevisadas(String sNombre) 
 	{
-		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
-		
-		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 		try 
@@ -974,8 +1032,8 @@ public class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|{}|",linea.length());
-				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -983,64 +1041,64 @@ public class FileManager
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLCuotas.actualizaCuotaLeida(linea);
+	    			int iCodigo = CLCuotas.actualizarCuotaLeida(linea);
 	    			String sMensaje = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
 	    				sMensaje = "Movimiento validado.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case 1:
 	    				sMensaje = "Movimento de Cuota pendiente de revisión.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case -1:
 	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -2:
 	    				sMensaje = "No existe relación con la Cuota.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -3:
 	    				sMensaje = "[FATAL] Error al validar la reclación con la Cuota.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -4:
 	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;	    				
 	    			case -9:
 	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -10:
 	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -11:
 	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -12:
 	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				logger.warn("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.warn(sMensaje);
 	    				break;
 	    			}
 	    			if ( iCodigo >= 0 )
@@ -1076,18 +1134,18 @@ public class FileManager
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-		logger.debug("tabla.size():|{}|",tabla.size());
+		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
         return tabla;
 	}
 	
 	public static ArrayList<ResultadosTabla> leerReferenciasRevisadas(String sNombre) 
 	{
-		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
-		
-		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 		try 
@@ -1114,8 +1172,8 @@ public class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|{}|",linea.length());
-				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -1123,7 +1181,7 @@ public class FileManager
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
 	    		}
 	    		else
 	    		{
@@ -1135,55 +1193,56 @@ public class FileManager
 	    			{
 	    			case 0:
 	    				sMensaje = "Movimiento validado.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case 1:
 	    				sMensaje = "Movimento de Referencia Catastral pendiente de revisión.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case -1:
 	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -2:
 	    				sMensaje = "No existe relación con la Referencia Catastral.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -3:
 	    				sMensaje = "[FATAL] Error al validar la reclación con la Referencia Catastral.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -4:
 	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;	    				
 	    			case -9:
 	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -10:
 	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -11:
 	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -12:
 	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				logger.warn("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.warn(sMensaje);
 	    				break;
 	    			}
+	    			
 	    			if ( iCodigo >= 0 )
 	    			{
 	    				registros++;
@@ -1217,19 +1276,18 @@ public class FileManager
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-		logger.debug("tabla.size():|{}|",tabla.size());
+		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
         return tabla;
 	}
 
 	public static ArrayList<ResultadosTabla> leerImpuestosRevisadas(String sNombre) 
 	{
-
-		logger.debug( "Fichero:|{}{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS,sNombre);
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
-		
-		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
 		FileReader fr;
 
@@ -1257,8 +1315,9 @@ public class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|{}|",linea.length());
-				logger.debug("Longitud de línea válida:|{}|",iLongitudValida);
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+				
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -1266,11 +1325,11 @@ public class FileManager
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
-	    			logger.error("Error en línea {}, tamaño incorrecto.",contador);
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLImpuestos.actualizaImpuestoLeido(linea);
+	    			int iCodigo = CLImpuestos.actualizarImpuestoLeido(linea);
 
 	    			String sMensaje = "";
 	    			
@@ -1278,53 +1337,53 @@ public class FileManager
 	    			{
 	    			case 0:
 	    				sMensaje = "Movimiento validado.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case 1:
 	    				sMensaje = "Movimento de Impuesto pendiente de revisión.";
-	    				logger.info("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
 	    				break;
 	    			case -1:
 	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -2:
 	    				sMensaje = "No existe relación con el Impuesto.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -3:
 	    				sMensaje = "[FATAL] Error al validar la reclación con el Impuestos.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -4:
 	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;	    				
 	    			case -9:
 	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -10:
 	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -11:
 	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				logger.error("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
 	    				break;
 	    			case -12:
 	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				logger.warn("Línea {}: {}",contador,sMensaje);
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.warn(sMensaje);
 	    				break;
 	    			}
 	    			if ( iCodigo >= 0 )
@@ -1360,7 +1419,7 @@ public class FileManager
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
 			e.printStackTrace();
 		}
-		logger.debug("tabla.size():|{}|",tabla.size());
+		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
         return tabla;
 
@@ -1368,12 +1427,13 @@ public class FileManager
 	
 	public static Resultados splitter(String sNombre) 
 	{
+		Resultados carga = null;
+
 		int iCodigo = 0;
-		Resultados carga;
 		
 		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
-		logger.debug("|{}|{}|",sNombre,sNombre.substring(0, 3));
+		logger.debug("|"+sNombre+"|"+sNombre.substring(0, 3)+"|");
 		
 		
 		if (sNombre.length() < 9)
@@ -1392,7 +1452,7 @@ public class FileManager
 
 				logger.debug("Redirigiendo lectura...");
 
-				logger.debug("Tipo:|{}|",sTipo);
+				logger.debug("Tipo:|"+sTipo+"|");
 
 				ValoresDefecto.TIPOSFICHERO COSPII = ValoresDefecto.TIPOSFICHERO.valueOf(sTipo);
 
@@ -1484,20 +1544,10 @@ public class FileManager
 					iCodigo = -3;
 					break;
 				}
-				logger.debug("tabla.size():|{}|",tabla.size());
+				logger.debug("tabla.size():|"+tabla.size()+"|");
 				logger.debug("Operativa completa.");
 
 			} 
-			/*else if (sNombre.toUpperCase().matches("(LIB_)[0-9]{8}(_)[0-9]+(\\.TXT)$"))
-			{
-				logger.debug("Activos");
-				tabla = leerActivos(sNombre);
-
-				if (tabla.size() == 0)	
-				{
-					iCodigo = 1;
-				}			
-			}*/
 			else
 			{
 				iCodigo = -1;
