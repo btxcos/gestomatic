@@ -2,9 +2,16 @@ package com.provisiones.pl.detalles;
 
 import java.io.Serializable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.provisiones.dal.ConnectionManager;
+
 public class GestorDetallesProvision implements Serializable 
 {
 	private static final long serialVersionUID = 6585445551060014479L;
+	
+	private static Logger logger = LoggerFactory.getLogger(GestorDetallesProvision.class.getName());
 	
 	private String sNUPROF = "";
 	private String sFEPFON = "";
@@ -15,7 +22,10 @@ public class GestorDetallesProvision implements Serializable
 
 	public GestorDetallesProvision()
 	{
-		
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorDetallesProvision...");	
+		}
 	}
 
 	public String getsNUPROF() {

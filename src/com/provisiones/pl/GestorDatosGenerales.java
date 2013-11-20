@@ -4,13 +4,16 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.faces.event.ActionEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.provisiones.dal.ConnectionManager;
 
 public class GestorDatosGenerales implements Serializable 
 {
 	private static final long serialVersionUID = -669897445986653574L;
 
-	//private static Logger logger = LoggerFactory.getLogger(GestorDatosGenerales.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(GestorDatosGenerales.class.getName());
 
 	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposptpagoHM = new LinkedHashMap<String, String>();
@@ -39,93 +42,92 @@ public class GestorDatosGenerales implements Serializable
 	
 	public GestorDatosGenerales()
 	{
-		tiposcocldoHM.put("C.I.F.",                     "2");
-		tiposcocldoHM.put("C.I.F país extranjero.",     "5");
-		tiposcocldoHM.put("Otros persona jurídica.",    "J");
-		
-		tiposbiresoHM.put("FAVORABLE",   "F");
-		tiposbiresoHM.put("DESFAVORABLE","D");
-		
-		tiposbinariaHM.put("SI","S");
-		tiposbinariaHM.put("NO","N");
 
-		tiposptpagoHM.put("APERIODICO",      "1");
-		tiposptpagoHM.put("MENSUAL",         "2");
-		tiposptpagoHM.put("BIMENSUAL",       "3");
-		tiposptpagoHM.put("TRIMESTRAL",      "4");
-		tiposptpagoHM.put("CUATRIMESTRAL",   "5");
-		tiposptpagoHM.put("SEMESTRAL",       "6");
-		tiposptpagoHM.put("ANUAL",           "7");
-		tiposptpagoHM.put("VARIOS PERIODOS", "8");
-		
-		tiposcogrugHM.put("Compraventa",      "1");
-		tiposcogrugHM.put("Pendientes",       "2");
-		tiposcogrugHM.put("Acciones",         "3");
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorDatosGenerales()...");
+			tiposcocldoHM.put("C.I.F.",                     "2");
+			tiposcocldoHM.put("C.I.F país extranjero.",     "5");
+			tiposcocldoHM.put("Otros persona jurídica.",    "J");
+			
+			tiposbiresoHM.put("FAVORABLE",   "F");
+			tiposbiresoHM.put("DESFAVORABLE","D");
+			
+			tiposbinariaHM.put("SI","S");
+			tiposbinariaHM.put("NO","N");
 
-		tiposcotpga_g1HM.put("Plusvalia", "1");
-		tiposcotpga_g1HM.put("Notaria",   "2");
+			tiposptpagoHM.put("APERIODICO",      "1");
+			tiposptpagoHM.put("MENSUAL",         "2");
+			tiposptpagoHM.put("BIMENSUAL",       "3");
+			tiposptpagoHM.put("TRIMESTRAL",      "4");
+			tiposptpagoHM.put("CUATRIMESTRAL",   "5");
+			tiposptpagoHM.put("SEMESTRAL",       "6");
+			tiposptpagoHM.put("ANUAL",           "7");
+			tiposptpagoHM.put("VARIOS PERIODOS", "8");
+			
+			tiposcogrugHM.put("Compraventa",      "1");
+			tiposcogrugHM.put("Pendientes",       "2");
+			tiposcogrugHM.put("Acciones",         "3");
 
-		tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
-		tiposcotpga_g2HM.put("Comunidades",     "2");
-		tiposcotpga_g2HM.put("Suministros",     "3");
-		
-		tiposcotpga_g3HM.put("Honorarios","2");
-		tiposcotpga_g3HM.put("Licencias", "3");
-		
-		tiposcosbga_t11HM.put("Plusvalia", "0");
-		tiposcosbga_t11HM.put("Notaria",   "1");
+			tiposcotpga_g1HM.put("Plusvalia", "1");
+			tiposcotpga_g1HM.put("Notaria",   "2");
 
-		tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
-		tiposcosbga_t21HM.put("IBIS",                                 "1");
-		tiposcosbga_t21HM.put("Tasas basura",                         "2");
-		tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
-		tiposcosbga_t21HM.put("Tasas agua",                           "4");
-		tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
-		tiposcosbga_t21HM.put("Otras tasas",                          "6");
+			tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
+			tiposcotpga_g2HM.put("Comunidades",     "2");
+			tiposcotpga_g2HM.put("Suministros",     "3");
+			
+			tiposcotpga_g3HM.put("Honorarios","2");
+			tiposcotpga_g3HM.put("Licencias", "3");
+			
+			tiposcosbga_t11HM.put("Plusvalia", "0");
+			tiposcosbga_t11HM.put("Notaria",   "1");
+
+			tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
+			tiposcosbga_t21HM.put("IBIS",                                 "1");
+			tiposcosbga_t21HM.put("Tasas basura",                         "2");
+			tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
+			tiposcosbga_t21HM.put("Tasas agua",                           "4");
+			tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
+			tiposcosbga_t21HM.put("Otras tasas",                          "6");
+			
+			tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
+			tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
+			tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
+			tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
+			tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
+			tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
 		
-		tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
-		tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
-		tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
-		tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
-		tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
-		tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
-	
-		tiposcosbga_t23HM.put("Suministros",               "0");
-		tiposcosbga_t23HM.put("Suministro luz",            "1");
-		tiposcosbga_t23HM.put("Suministro agua",           "2");
-		tiposcosbga_t23HM.put("Suministro gas",            "3");
-		
-		tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
-		tiposcosbga_t32HM.put("Prescripcion",            "1");  
-		tiposcosbga_t32HM.put("Colaboracion",            "2");  
-		tiposcosbga_t32HM.put("Otros honorarios",        "3");  
-		tiposcosbga_t32HM.put("Servicios varios",        "4");
-		
-		tiposcosigaHM.put("ESTIMADO",            "1");
-		tiposcosigaHM.put("CONOCIDO",            "2");
-		tiposcosigaHM.put("AUTORIZADO",          "3");
-		tiposcosigaHM.put("PAGADO",              "4");
-		tiposcosigaHM.put("PAGADO PARCIALMENTE", "5");
-		tiposcosigaHM.put("ESPERA DE PAGO",		 "6");
-		tiposcosigaHM.put("PAGADO CONEXION",     "7");
-		
-		tiposcoimptHM.put("SIN IMPUESTO",	"0");  
-		tiposcoimptHM.put("IVA",            "1");  
-		tiposcoimptHM.put("IGIC",           "2");  
-		tiposcoimptHM.put("IPSI",           "3");  
-		tiposcoimptHM.put("IRPF",           "4");
-		
-		tiposcotnegHM.put("SIN INFORMAR",	"0");  
-		tiposcotnegHM.put("CLIENTE",        "1");  
-		tiposcotnegHM.put("CAJA",           "2");
-	
+			tiposcosbga_t23HM.put("Suministros",               "0");
+			tiposcosbga_t23HM.put("Suministro luz",            "1");
+			tiposcosbga_t23HM.put("Suministro agua",           "2");
+			tiposcosbga_t23HM.put("Suministro gas",            "3");
+			
+			tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
+			tiposcosbga_t32HM.put("Prescripcion",            "1");  
+			tiposcosbga_t32HM.put("Colaboracion",            "2");  
+			tiposcosbga_t32HM.put("Otros honorarios",        "3");  
+			tiposcosbga_t32HM.put("Servicios varios",        "4");
+			
+			tiposcosigaHM.put("ESTIMADO",            "1");
+			tiposcosigaHM.put("CONOCIDO",            "2");
+			tiposcosigaHM.put("AUTORIZADO",          "3");
+			tiposcosigaHM.put("PAGADO",              "4");
+			tiposcosigaHM.put("PAGADO PARCIALMENTE", "5");
+			tiposcosigaHM.put("ESPERA DE PAGO",		 "6");
+			tiposcosigaHM.put("PAGADO CONEXION",     "7");
+			
+			tiposcoimptHM.put("SIN IMPUESTO",	"0");  
+			tiposcoimptHM.put("IVA",            "1");  
+			tiposcoimptHM.put("IGIC",           "2");  
+			tiposcoimptHM.put("IPSI",           "3");  
+			tiposcoimptHM.put("IRPF",           "4");
+			
+			tiposcotnegHM.put("SIN INFORMAR",	"0");  
+			tiposcotnegHM.put("CLIENTE",        "1");  
+			tiposcotnegHM.put("CAJA",           "2");
+		}
 	}
 	
-	public void compruebaLogin (ActionEvent actionEvent)
-	{
-		
-	}
-
 	public Map<String, String> getTiposcocldoHM() {
 		return tiposcocldoHM;
 	}

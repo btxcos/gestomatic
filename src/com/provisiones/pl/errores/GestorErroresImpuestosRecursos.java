@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLErrores;
 import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLReferencias;
@@ -97,7 +98,10 @@ public class GestorErroresImpuestosRecursos implements Serializable
 
 	public GestorErroresImpuestosRecursos()
 	{
-
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorErroresImpuestosRecursos...");	
+		}
 	}
 	
     public void borrarPlantillaError() 
@@ -225,176 +229,191 @@ public class GestorErroresImpuestosRecursos implements Serializable
 	
 	public void buscaImpuestosError(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		logger.debug("Buscando Impuestos y Recursos con errores...");
-		
-		ErrorImpuestoTabla filtro = new ErrorImpuestoTabla(
-				sCOACESB.toUpperCase(), sNURCATB.toUpperCase(), sCOSBACB.toUpperCase(), "",
-				"", "");
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			logger.debug("Buscando Impuestos y Recursos con errores...");
+			
+			ErrorImpuestoTabla filtro = new ErrorImpuestoTabla(
+					sCOACESB.toUpperCase(), sNURCATB.toUpperCase(), sCOSBACB.toUpperCase(), "",
+					"", "");
 
 			this.setTablaimpuestoserror(CLErrores.buscarImpuestosConErrores(filtro));
-
-		
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaimpuestoserror().size()+" Impuestos y Recursos relacionados.");
-		logger.debug("Encontrados {} Impuestos y Recursos relacionados.",getTablaimpuestoserror().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaimpuestoserror().size()+" Impuestos y Recursos relacionados.");
+			logger.debug("Encontrados {} Impuestos y Recursos relacionados.",getTablaimpuestoserror().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarMovimiento(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-		
-		this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
-    	
-		this.setTablaerrores(CLErrores.buscarErroresImpuesto(sCodMovimiento));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
-		logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		MovimientoImpuestoRecurso movimiento = CLImpuestos.buscarMovimientoImpuestoRecurso(sCodMovimiento);
-		
-		this.sCOACCI = movimiento.getCOACCI();
-		this.sCOACES = movimiento.getCOACES();
-		
-		this.sNURCAT = movimiento.getNURCAT();
-    	this.sCOSBAC = movimiento.getCOSBAC();
-    	//this.sDesCOSBAC = movimiento.getDCOSBAC();
-    	this.sFEPRRE = Utils.recuperaFecha(movimiento.getFEPRRE());
-    	this.sFERERE = Utils.recuperaFecha(movimiento.getFERERE());
-    	this.sFEDEIN = Utils.recuperaFecha(movimiento.getFEDEIN());
-    	this.sBISODE = movimiento.getBISODE();
-    	//this.sDesBISODE = movimiento.getDBISODE();
-    	this.sBIRESO = movimiento.getBIRESO();
-    	this.sDesBIRESO = movimiento.getBIRESO();
-    	this.sOBTEXC = movimiento.getOBTEXC();
-		
-    	msg = Utils.pfmsgInfo("Errores de Impuestos y Recursos cargados.");
-    	logger.debug("Errores de Impuestos y Recursos cargados.");
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
+	    	
+			this.setTablaerrores(CLErrores.buscarErroresImpuesto(sCodMovimiento));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
+			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			MovimientoImpuestoRecurso movimiento = CLImpuestos.buscarMovimientoImpuestoRecurso(sCodMovimiento);
+			
+			this.sCOACCI = movimiento.getCOACCI();
+			this.sCOACES = movimiento.getCOACES();
+			
+			this.sNURCAT = movimiento.getNURCAT();
+	    	this.sCOSBAC = movimiento.getCOSBAC();
+	    	//this.sDesCOSBAC = movimiento.getDCOSBAC();
+	    	this.sFEPRRE = Utils.recuperaFecha(movimiento.getFEPRRE());
+	    	this.sFERERE = Utils.recuperaFecha(movimiento.getFERERE());
+	    	this.sFEDEIN = Utils.recuperaFecha(movimiento.getFEDEIN());
+	    	this.sBISODE = movimiento.getBISODE();
+	    	//this.sDesBISODE = movimiento.getDBISODE();
+	    	this.sBIRESO = movimiento.getBIRESO();
+	    	this.sDesBIRESO = movimiento.getBIRESO();
+	    	this.sOBTEXC = movimiento.getOBTEXC();
+			
+	    	msg = Utils.pfmsgInfo("Errores de Impuestos y Recursos cargados.");
+	    	logger.debug("Errores de Impuestos y Recursos cargados.");
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void seleccionarError(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-    	
-		this.sCodError = errorseleccionado.getsCodError(); 
-		
-    	int iCodError  = Integer.parseInt(sCodError);
-    	
-    	
-    	logger.debug("Error seleccionado:|{}|",iCodError);
-    	
-    	String sMsg ="";
-    	
-    	if (editarError(iCodError))
-    	{
-    		sMsg = "Error editado.";
-    		msg = Utils.pfmsgInfo(sMsg);
-    		logger.info(sMsg);
-    	}
-    	else
-    	{
-    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
-    		msg = Utils.pfmsgFatal(sMsg);
-    		logger.error(sMsg);
-    	}
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+			this.sCodError = errorseleccionado.getsCodError(); 
+			
+	    	int iCodError  = Integer.parseInt(sCodError);
+	    	
+	    	logger.debug("Error seleccionado:|{}|",iCodError);
+	    	
+	    	String sMsg ="";
+	    	
+	    	if (editarError(iCodError))
+	    	{
+	    		sMsg = "Error editado.";
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+	    	}
+	    	else
+	    	{
+	    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
+	    		msg = Utils.pfmsgFatal(sMsg);
+	    		logger.error(sMsg);
+	    	}
 
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 
 	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		ActivoTabla buscaactivos = new ActivoTabla(
-				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-		
-		this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(buscaactivos));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		logger.info("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			ActivoTabla buscaactivos = new ActivoTabla(
+					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			
+			this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(buscaactivos));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			logger.info("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
-    	FacesMessage msg;
-    	
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
 
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
-    	
-    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
-    	{
-    		msg = Utils.pfmsgError("La referencia catastral seleccionada no esta de alta.");
-    		logger.error("La referencia catastral seleccionada no esta de alta.");
+	    	this.sCOACES  = activoseleccionado.getCOACES();
+	    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
+	    	
+	    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
+	    	{
+	    		msg = Utils.pfmsgError("La referencia catastral seleccionada no esta de alta.");
+	    		logger.error("La referencia catastral seleccionada no esta de alta.");
 
-    		this.sNURCAT  = "";
-    	}
-    	else
-    	{
-    		msg = Utils.pfmsgInfo("Referencia "+ sNURCAT +" cargada.");
-    		logger.info("Referencia {} cargada.",sNURCAT);
-    	}
+	    		this.sNURCAT  = "";
+	    	}
+	    	else
+	    	{
+	    		msg = Utils.pfmsgInfo("Referencia "+ sNURCAT +" cargada.");
+	    		logger.info("Referencia {} cargada.",sNURCAT);
+	    	}
 
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
     
 	public void cargarImpuestos(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
-    	
-
-    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+		if (ConnectionManager.comprobarConexion())
 		{
-    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(sCOACES.toUpperCase());
-    		
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.");
-			logger.info("Encontrados {} impuestos relacionados.",getTablaimpuestos().size());
+			FacesMessage msg;
+			
+	    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
+	    	
+	    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+			{
+	    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(sCOACES.toUpperCase());
+	    		
+				msg = Utils.pfmsgInfo("Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.");
+				logger.info("Encontrados {} impuestos relacionados.",getTablaimpuestos().size());
+			}
+	    	else
+	    	{
+				msg = Utils.pfmsgError("ERROR: No existe referencia catastral de alta para el activo consultado.");
+				logger.error("ERROR: No existe referencia catastral de alta para el activo consultado.");
+	        }
+	    	
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+
 		}
-    	else
-    	{
-			msg = Utils.pfmsgError("ERROR: No existe referencia catastral de alta para el activo consultado.");
-			logger.error("ERROR: No existe referencia catastral de alta para el activo consultado.");
-        }
-    	
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
-				
 	}
 	
 	public void seleccionarImpuesto(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
-    	
-    	this.sCOSBAC = impuestoseleccionado.getCOSBAC();
-    	this.sDesCOSBAC = impuestoseleccionado.getDCOSBAC();
-    	this.sFEPRRE = impuestoseleccionado.getFEPRRE();
-    	this.sFERERE = impuestoseleccionado.getFERERE();
-    	this.sFEDEIN = impuestoseleccionado.getFEDEIN();
-    	this.sBISODE = impuestoseleccionado.getBISODE();
-    	this.sDesBISODE = impuestoseleccionado.getDBISODE();
-    	this.sBIRESO = impuestoseleccionado.getBIRESO();
-    	this.sDesBIRESO = impuestoseleccionado.getBIRESO();
-    	this.sOBTEXC = impuestoseleccionado.getOBTEXC();
-    	
-		msg = Utils.pfmsgInfo("Recurso de '"+sDesCOSBAC +"' Seleccionado.");
-		logger.info("Recurso de '{}' Seleccionado.",sDesCOSBAC);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	this.sCOSBAC = impuestoseleccionado.getCOSBAC();
+	    	this.sDesCOSBAC = impuestoseleccionado.getDCOSBAC();
+	    	this.sFEPRRE = impuestoseleccionado.getFEPRRE();
+	    	this.sFERERE = impuestoseleccionado.getFERERE();
+	    	this.sFEDEIN = impuestoseleccionado.getFEDEIN();
+	    	this.sBISODE = impuestoseleccionado.getBISODE();
+	    	this.sDesBISODE = impuestoseleccionado.getDBISODE();
+	    	this.sBIRESO = impuestoseleccionado.getBIRESO();
+	    	this.sDesBIRESO = impuestoseleccionado.getBIRESO();
+	    	this.sOBTEXC = impuestoseleccionado.getOBTEXC();
+	    	
+			msg = Utils.pfmsgInfo("Recurso de '"+sDesCOSBAC +"' Seleccionado.");
+			logger.info("Recurso de '{}' Seleccionado.",sDesCOSBAC);
 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void hoyFEPRRE (ActionEvent actionEvent)
@@ -417,87 +436,89 @@ public class GestorErroresImpuestosRecursos implements Serializable
     
 	public void registraDatos(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
-		if (!CLImpuestos.existeMovimientoImpuestoRecurso(sCodMovimiento))
+		if (ConnectionManager.comprobarConexion())
 		{
-			sMsg = "[FATAL] ERROR:911 - No se puede modificar el Impuesto, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
-			msg = Utils.pfmsgError(sMsg);
-			logger.error(sMsg);
-		}
-		else
-		{
-			MovimientoImpuestoRecurso movimiento = new MovimientoImpuestoRecurso (
-					sCODTRN.toUpperCase(), 
-					sCOTDOR.toUpperCase(), 
-					sIDPROV.toUpperCase(), 
-					sCOACCI.toUpperCase(), 
-					sCOENGP.toUpperCase(), 
-					sCOACES.toUpperCase(),
-					sNURCAT.toUpperCase(),
-					ValoresDefecto.DEF_COGRUG_E4, 
-					ValoresDefecto.DEF_COTACA_E4, 
-					sCOSBAC.toUpperCase(),
-					"", 
-					Utils.compruebaFecha(sFEPRRE.toUpperCase()),
-					"", 
-					Utils.compruebaFecha(sFERERE.toUpperCase()),
-					"", 
-					Utils.compruebaFecha(sFEDEIN.toUpperCase()),
-					"", 
-					Utils.compruebaCodigoAlfa(sBISODE.toUpperCase()),
-					"", 
-					Utils.compruebaCodigoAlfa(sBIRESO.toUpperCase()),
-					sCOTEXA.toUpperCase(),
-					"", 
-					sOBTEXC.toUpperCase(), 
-					sOBDEER.toUpperCase());
+			FacesMessage msg;
 			
-			logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
-			logger.debug("sCodError:|{}|",sCodError);			
-			int iSalida = CLErrores.reparaMovimientoImpuesto(movimiento,sCodMovimiento, sCodError);
+			String sMsg = "";
 			
-			logger.debug("Codigo de salida:"+iSalida);
-			
-			switch (iSalida) 
+			if (!CLImpuestos.existeMovimientoImpuestoRecurso(sCodMovimiento))
 			{
-			case 0: //Sin errores
-				tablaerrores.remove(errorseleccionado);
-				sMsg = "El movimiento se ha registrado correctamente.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-				break;
-
-			case -804: //Error 804 - modificacion sin cambios
-				sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+				sMsg = "[FATAL] ERROR:911 - No se puede modificar el Impuesto, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-				break;
-
-			case -900: //Error 900 - al crear un movimiento
-				sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -904: //Error 904 - error y rollback - error al modificar el impuesto/recurso
-				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el impuesto o recurso. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			default: //error generico
-				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.");
-				logger.error("[FATAL] ERROR{} - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.",iSalida);
-				break;
 			}
+			else
+			{
+				MovimientoImpuestoRecurso movimiento = new MovimientoImpuestoRecurso (
+						sCODTRN.toUpperCase(), 
+						sCOTDOR.toUpperCase(), 
+						sIDPROV.toUpperCase(), 
+						sCOACCI.toUpperCase(), 
+						sCOENGP.toUpperCase(), 
+						sCOACES.toUpperCase(),
+						sNURCAT.toUpperCase(),
+						ValoresDefecto.DEF_COGRUG_E4, 
+						ValoresDefecto.DEF_COTACA_E4, 
+						sCOSBAC.toUpperCase(),
+						"", 
+						Utils.compruebaFecha(sFEPRRE.toUpperCase()),
+						"", 
+						Utils.compruebaFecha(sFERERE.toUpperCase()),
+						"", 
+						Utils.compruebaFecha(sFEDEIN.toUpperCase()),
+						"", 
+						Utils.compruebaCodigoAlfa(sBISODE.toUpperCase()),
+						"", 
+						Utils.compruebaCodigoAlfa(sBIRESO.toUpperCase()),
+						sCOTEXA.toUpperCase(),
+						"", 
+						sOBTEXC.toUpperCase(), 
+						sOBDEER.toUpperCase());
+				
+				logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
+				logger.debug("sCodError:|{}|",sCodError);			
+				int iSalida = CLErrores.reparaMovimientoImpuesto(movimiento,sCodMovimiento, sCodError);
+				
+				logger.debug("Codigo de salida:"+iSalida);
+				
+				switch (iSalida) 
+				{
+				case 0: //Sin errores
+					tablaerrores.remove(errorseleccionado);
+					sMsg = "El movimiento se ha registrado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					break;
+
+				case -804: //Error 804 - modificacion sin cambios
+					sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -900: //Error 900 - al crear un movimiento
+					sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -904: //Error 904 - error y rollback - error al modificar el impuesto/recurso
+					sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el impuesto o recurso. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				default: //error generico
+					msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.");
+					logger.error("[FATAL] ERROR{} - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.",iSalida);
+					break;
+				}
+			}
+
+			logger.debug("Finalizadas las comprobaciones.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-
-		logger.debug("Finalizadas las comprobaciones.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-
 	}
 
 	public String getsCODTRN() {

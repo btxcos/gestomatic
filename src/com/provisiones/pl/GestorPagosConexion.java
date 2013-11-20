@@ -12,6 +12,7 @@ import javax.faces.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.misc.Utils;
@@ -123,51 +124,55 @@ public class GestorPagosConexion implements Serializable
 
 	public GestorPagosConexion()
 	{
-		tiposcotpga_g1HM.put("Plusvalia", "1");
-		tiposcotpga_g1HM.put("Notaria",   "2");
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorPagosConexion...");
 
-		tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
-		tiposcotpga_g2HM.put("Comunidades",     "2");
-		tiposcotpga_g2HM.put("Suministros",     "3");
-		
-		tiposcotpga_g3HM.put("Honorarios","2");
-		tiposcotpga_g3HM.put("Licencias", "3");
+			tiposcotpga_g1HM.put("Plusvalia", "1");
+			tiposcotpga_g1HM.put("Notaria",   "2");
 
-		tiposcosbga_t11HM.put("Plusvalia", "0");
-		tiposcosbga_t12HM.put("Notaria",   "1");
+			tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
+			tiposcotpga_g2HM.put("Comunidades",     "2");
+			tiposcotpga_g2HM.put("Suministros",     "3");
+			
+			tiposcotpga_g3HM.put("Honorarios","2");
+			tiposcotpga_g3HM.put("Licencias", "3");
 
-		tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
-		tiposcosbga_t21HM.put("IBIS",                                 "1");
-		tiposcosbga_t21HM.put("Tasas basura",                         "2");
-		tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
-		tiposcosbga_t21HM.put("Tasas agua",                           "4");
-		tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
-		tiposcosbga_t21HM.put("Otras tasas",                          "6");
-		
-		tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
-		tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
-		tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
-		tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
-		tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
-		tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
-		
-		tiposcosbga_t23HM.put("Suministros",               "0");
-		tiposcosbga_t23HM.put("Suministro luz",            "1");
-		tiposcosbga_t23HM.put("Suministro agua",           "2");
-		tiposcosbga_t23HM.put("Suministro gas",            "3");
-		
-		tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
-		tiposcosbga_t32HM.put("Prescripcion",            "1");  
-		tiposcosbga_t32HM.put("Colaboracion",            "2");  
-		tiposcosbga_t32HM.put("Otros honorarios",        "3");  
-		tiposcosbga_t32HM.put("Servicios varios",        "4");
-		
-		tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
-		
-		tiposcosigaHM.put("ESTIMADO",            "1");
-		tiposcosigaHM.put("CONOCIDO",            "2");
-		tiposcosigaHM.put("PAGADO CONEXION",     "7");
-		
+			tiposcosbga_t11HM.put("Plusvalia", "0");
+			tiposcosbga_t12HM.put("Notaria",   "1");
+
+			tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
+			tiposcosbga_t21HM.put("IBIS",                                 "1");
+			tiposcosbga_t21HM.put("Tasas basura",                         "2");
+			tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
+			tiposcosbga_t21HM.put("Tasas agua",                           "4");
+			tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
+			tiposcosbga_t21HM.put("Otras tasas",                          "6");
+			
+			tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
+			tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
+			tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
+			tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
+			tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
+			tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
+			
+			tiposcosbga_t23HM.put("Suministros",               "0");
+			tiposcosbga_t23HM.put("Suministro luz",            "1");
+			tiposcosbga_t23HM.put("Suministro agua",           "2");
+			tiposcosbga_t23HM.put("Suministro gas",            "3");
+			
+			tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
+			tiposcosbga_t32HM.put("Prescripcion",            "1");  
+			tiposcosbga_t32HM.put("Colaboracion",            "2");  
+			tiposcosbga_t32HM.put("Otros honorarios",        "3");  
+			tiposcosbga_t32HM.put("Servicios varios",        "4");
+			
+			tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
+			
+			tiposcosigaHM.put("ESTIMADO",            "1");
+			tiposcosigaHM.put("CONOCIDO",            "2");
+			tiposcosigaHM.put("PAGADO CONEXION",     "7");
+		}		
 	}
 	
 	public void borrarPlantillaActivo()
@@ -281,119 +286,130 @@ public class GestorPagosConexion implements Serializable
     
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		ActivoTabla buscaactivos = new ActivoTabla(
-				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-		
-		this.setTablaactivos(CLGastos.buscarActivosConGastosValidados(buscaactivos));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			ActivoTabla buscaactivos = new ActivoTabla(
+					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			
+			this.setTablaactivos(CLGastos.buscarActivosConGastosValidados(buscaactivos));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
- 
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	
-    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
-    	logger.info("Activo '{}' Seleccionado.",sCOACES);
-    	
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	 
+	    	this.sCOACES  = activoseleccionado.getCOACES();
+	    	
+	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
+	    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+	    	
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void cargarDatos(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		if (CLActivos.existeActivo(sCOACES))
+		if (ConnectionManager.comprobarConexion())
 		{
-			this.tablagastos = CLGastos.buscarGastosValidadosActivo(sCOACES);
-		
-			msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos validados.");
-			logger.info("Encontrados {} gastos validados.",getTablagastos().size());
+			FacesMessage msg;
+			
+			if (CLActivos.existeActivo(sCOACES))
+			{
+				this.tablagastos = CLGastos.buscarGastosValidadosActivo(sCOACES);
+			
+				msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos validados.");
+				logger.info("Encontrados {} gastos validados.",getTablagastos().size());
+			}
+			else
+			{
+				msg = Utils.pfmsgError("ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
+				logger.error("ERROR: No exite el activo '{}'. Por favor, revise los datos.",sCOACES);
+			}
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		else
-		{
-			msg = Utils.pfmsgError("ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
-			logger.error("ERROR: No exite el activo '{}'. Por favor, revise los datos.",sCOACES);
-		}
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
 	}
 	
 	public void seleccionarGasto(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
-    	
-    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
-    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
-    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
-    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
-    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
-    	
-    	
-	  	Gasto gasto = CLGastos.buscarGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
-    	
-    	logger.debug(gasto.logGasto());
- 
-    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
+	    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
+	    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
+	    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
+	    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
+	    	
+	    	
+		  	Gasto gasto = CLGastos.buscarGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+	    	
+	    	logger.debug(gasto.logGasto());
+	 
+	    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
 
-		this.sPTPAGO = gasto.getPTPAGO();
+			this.sPTPAGO = gasto.getPTPAGO();
 
-		this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
-		this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
-		this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
-		this.sCOSIGA = ValoresDefecto.DEF_GASTO_PAGADO_CONEXION;
-		this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
-		this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
-		this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
-		this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
-		this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
-		this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
-		this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
-		this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
-		this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
-		this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
-		this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
-		this.sCOIMPT = gasto.getCOIMPT();
-		
-		this.sCOTNEG = gasto.getCOTNEG();
-		this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
-		this.sCOMONA = gasto.getCOMONA();
-		this.sBIAUTO = gasto.getBIAUTO();
-		this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-		this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
-		
-		this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
-		
-		this.sCOENCX = "";
-		this.sCOOFCX = "";
-		this.sNUCONE = "";
-		this.sFMPAGN = "";
-		
-		this.sNUPROF = ValoresDefecto.DEF_GASTO_PROVISION_CONEXION;
+			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
+			this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
+			this.sCOSIGA = ValoresDefecto.DEF_GASTO_PAGADO_CONEXION;
+			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
+			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
+			this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
+			this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+			this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
+			this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
+			this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
+			this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
+			this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
+			this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
+			this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
+			this.sCOIMPT = gasto.getCOIMPT();
+			
+			this.sCOTNEG = gasto.getCOTNEG();
+			this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
+			this.sCOMONA = gasto.getCOMONA();
+			this.sBIAUTO = gasto.getBIAUTO();
+			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
+			this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+			
+			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
+			
+			this.sCOENCX = "";
+			this.sCOOFCX = "";
+			this.sNUCONE = "";
+			this.sFMPAGN = "";
+			
+			this.sNUPROF = ValoresDefecto.DEF_GASTO_PROVISION_CONEXION;
 
-		this.sCOTERR = ValoresDefecto.DEF_COTERR;
+			this.sCOTERR = ValoresDefecto.DEF_COTERR;
+			
 		
-	
-		this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
-		this.sCOAPII = ValoresDefecto.DEF_COAPII;
-		this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-		this.sNUCLII = ValoresDefecto.DEF_NUCLII;
-		
-		String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
-		
-		msg = Utils.pfmsgInfo(sTipo+" de '"+sDCOSBGA+"' se ha cargado.");
-		logger.info("{} de '{}' se ha cargado.",sTipo,sDCOSBGA);
+			this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+			this.sCOAPII = ValoresDefecto.DEF_COAPII;
+			this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+			this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+			
+			String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
+			
+			msg = Utils.pfmsgInfo(sTipo+" de '"+sDCOSBGA+"' se ha cargado.");
+			logger.info("{} de '{}' se ha cargado.",sTipo,sDCOSBGA);
 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
+		}
     }
 	
 	
@@ -588,347 +604,350 @@ public class GestorPagosConexion implements Serializable
 
 	public void registraGasto(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
-		if (!CLGastos.existeGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
+		if (ConnectionManager.comprobarConexion())
 		{
-			sMsg = "El pago informado no se puede tramitar, no existe en el sistema.";
-			msg = Utils.pfmsgError(sMsg);
-			logger.error(sMsg);
-		}
-		else
-		{
-			MovimientoGasto movimiento = new MovimientoGasto (
-					sCOACES.toUpperCase(),
-					sCOGRUG.toUpperCase(),
-					sCOTPGA.toUpperCase(),
-					Utils.compruebaCodigoPago(false, sCOSBGA.toUpperCase()),
-					sPTPAGO.toUpperCase(),
-					Utils.compruebaFecha(sFEDEVE),
-					Utils.compruebaFecha(sFFGTVP),
-					"0",
-					Utils.compruebaFecha(sFELIPG),
-					sCOSIGA.toUpperCase(),
-					Utils.compruebaFecha(sFEEESI),
-					Utils.compruebaFecha(sFEECOI),
-					"0",
-					"0",
-					Utils.compruebaImporte(sIMNGAS.toUpperCase()),
-					sYCOS02.toUpperCase(),
-					Utils.compruebaImporte(sIMRGAS.toUpperCase()),
-					sYCOS04.toUpperCase(),
-					Utils.compruebaImporte(sIMDGAS.toUpperCase()),
-					sYCOS06.toUpperCase(),
-					Utils.compruebaImporte(sIMCOST.toUpperCase()),
-					sYCOS08.toUpperCase(),
-					Utils.compruebaImporte(sIMOGAS.toUpperCase()),
-					sYCOS10.toUpperCase(),
-					Utils.compruebaImporte(sIMDTGA.toUpperCase()),
-					ValoresDefecto.DEF_COUNMO,
-					Utils.compruebaImporte(sIMIMGA.toUpperCase()),
-					Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
-					ValoresDefecto.DEF_COTNEG,
-					sCOENCX,
-					sCOOFCX,
-					sNUCONE,
-					"0",
-					Utils.compruebaFecha(sFEAGTO),
-					ValoresDefecto.DEF_COMONA,
-					ValoresDefecto.DEF_BIAUTO,
-					ValoresDefecto.DEF_FEAUFA,
-					ValoresDefecto.DEF_COTERR,
-					Utils.compruebaFecha(sFMPAGN),
-					Utils.compruebaFecha(sFEPGPR),
-					ValoresDefecto.DEF_FEAPLI,
-					ValoresDefecto.DEF_COAPII,
-					ValoresDefecto.DEF_COSPII_GA,
-					ValoresDefecto.DEF_NUCLII);
-
-			//movimiento.pintaMovimientoGasto();
+			FacesMessage msg;
 			
-			//movimiento.setIMNGAS("-"+movimiento.getIMNGAS());
-			int iSalida = CLGastos.registraPagoConexion(movimiento);
+			String sMsg = "";
 			
-			logger.debug("Codigo de salida:"+iSalida);
-			
-			switch (iSalida) 
+			if (!CLGastos.existeGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 			{
-			case 0: //Sin errores
-				sMsg = "El movimiento se ha registrado correctamente.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-				break;
-
-			case -2: //Error 002 - Llega fecha de anulación y no existe gasto en la tabla
-				sMsg = "ERROR:002 - El gasto que se anula no existe. Por favor, revise los datos.";
+				sMsg = "El pago informado no se puede tramitar, no existe en el sistema.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-				break;
-
-			case -3: //Error 003 - Llega un abono de un gasto que NO está pagado
-				sMsg = "ERROR:003 - El gasto a abonar no esta pagado. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -4: //Error 004 - Descuento mayor que importe nominal del gasto
-				sMsg = "ERROR:004 - El descuento informado es superior al gasto. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -6: //Error 006 - La provisión ya está cerrada
-				sMsg = "ERROR:006 - La provisión ya esta cerrada. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -7: //Error 007 - Error en grupo / tipo / subtipo de acción
-				sMsg = "ERROR:007 - El grupo, tipo y subtipo de gasto deben informarse. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -8: //Error 008 - No existe el activo en la base corporativa
-				sMsg = "ERROR:008 - El activo informado no se encuentra resistrado en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -12: //Error 012 - Llega un abono de un gasto que está anulado
-				sMsg = "ERROR:012 - El gasto a abonar esta anulado. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -13: //Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
-				sMsg = "ERROR:013 - El gasto a abonar ya esta abonado. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -19: //Error 019 - Periodicidad del gasto es cero o espacios.
-				sMsg = "ERROR:019 - El campo periodicidad del pago es obligatorio. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -23: //Error 023 - Llega anulación de un gasto que YA está pagado
-				sMsg = "ERROR:023 - El gasto a anular ya esta pagado. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -24: //Error 024 - Llega modificación de un gasto que YA está pagado
-				sMsg = "ERROR:024 - El gasto a modificar ya esta pagado. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -61: //Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
-				sMsg = "ERROR:061 - La provision esta cerrada, no se puede actualizar la fecha de pago a proveedor. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -62: //Error 062 - Llega una devolución con importe positivo. 
-				sMsg = "ERROR:062 - La devolucion debe incluir un importe del gasto con valor negativo. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -701: //Error 701 - Fecha de devengo incorrecta  
-				sMsg = "ERROR:701 - La fecha de devengo esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -702: //Error 702 - Fecha de fin de periodo incorrecta  
-				sMsg = "ERROR:702 - La fecha de fin de periodo esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -703: //Error 703 - Fecha de pago incorrecta
-				sMsg = "ERROR:703 - La fecha de pago esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -704: //Error 704 - Fecha de limite de pago incorrecta
-				sMsg = "ERROR:704 - La fecha de limite de pago esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -705: //Error 705 - Fecha de estado estimado incorrecta
-				sMsg = "ERROR:705 - La fecha de estado estimado esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -706: //Error 706 - Fecha de estado conocido incorrecta
-				sMsg = "ERROR:706 - La fecha de estado conocido esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -707: //Error 707 - Fecha de anulacion del gasto incorrecta  
-				sMsg = "ERROR:707 - La fecha de anulacion de gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -708: //Error 708 - Fecha de pago al proveedor incorrecta
-				sMsg = "ERROR:708 - La fecha de pago al proveedor esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;				
-				
-			case -709: //Error 709 - Importe del gasto incorrecto
-				sMsg = "ERROR:709 - El importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -710: //Error 710 - Recargo en el importe del gasto incorrecto
-				sMsg = "ERROR:710 - El recargo en el importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -711: //Error 711 - Importe de demora del gasto incorrecto
-				sMsg = "ERROR:711 - El importe de demora del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -712: //Error 712 - Importe de costas incorrecto
-				sMsg = "ERROR:712 - El importe de costas esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;				
-				
-			case -713: //Error 713 - Importe de otros incrementos incorrecto   
-				sMsg = "ERROR:713 - El importe de otros incrementos esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -714: //Error 714 - Importe de descuento incorrecto
-				sMsg = "ERROR:714 - El importe de descuento esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -715: //Error 715 - Importe de impuestos incorrecto
-				sMsg = "ERROR:715 - El importe de impuestos esta incorrectamente informada. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -800: //Error 800 - Gasto sin provision  
-				sMsg = "ERROR:801 - No se ha cargado una provision de gastos. Por favor, cargue los datos del activo.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -801: //Error 801 - No se ha informado la fecha de devengo
-				sMsg = "ERROR:801 - No se ha informado la fecha de devengo. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -802: //Error 802 - No se ha elegido una situacion del gasto
-				sMsg = "ERROR:802 - No se ha elegido una situacion del gasto. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -803: //Error 803 - No se ha informado el campo importe de gasto
-				sMsg = "ERROR:803 - No se ha informado el campo importe de gasto. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -804: //Error 804 - Accion no permitida
-				sMsg = "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -805: //Error 805 - estado no disponible
-				sMsg = "ERROR:805 - El estado del gasto no esta disponible. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -806: //Error 806 - modificacion sin cambios
-				sMsg = "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -807: //Error 807 - Fecha de estado sin informar
-				sMsg = "ERROR:807 - No se ha informado ninguna fecha de estado del gasto. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -808: //Error 808 - Importe de descuento negativo
-				sMsg = "ERROR:808 - El importe del descuento no puede ser negativo. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -809: //Error 809 - Importe de impuestos negativo
-				sMsg = "ERROR:809 - El importe de impuestos no puede ser negativo. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -900: //Error 900 - al crear un movimiento
-				sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -901: //Error 901 - error y rollback - error al crear el gasto
-				sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar el nuevo gasto. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-				
-			case -902: //Error 902 - error y rollback - error al registrar la relaccion
-				sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -903: //Error 903 - error y rollback - error al cambiar el estado
-				sMsg = "[FATAL] ERROR:903 - Se ha producido un error al cambiar el estado del gasto. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -904: //Error 904 - error y rollback - error al modificar el gasto
-				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			default: //error generico
-				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
-				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
-				break;
 			}
+			else
+			{
+				MovimientoGasto movimiento = new MovimientoGasto (
+						sCOACES.toUpperCase(),
+						sCOGRUG.toUpperCase(),
+						sCOTPGA.toUpperCase(),
+						Utils.compruebaCodigoPago(false, sCOSBGA.toUpperCase()),
+						sPTPAGO.toUpperCase(),
+						Utils.compruebaFecha(sFEDEVE),
+						Utils.compruebaFecha(sFFGTVP),
+						"0",
+						Utils.compruebaFecha(sFELIPG),
+						sCOSIGA.toUpperCase(),
+						Utils.compruebaFecha(sFEEESI),
+						Utils.compruebaFecha(sFEECOI),
+						"0",
+						"0",
+						Utils.compruebaImporte(sIMNGAS.toUpperCase()),
+						sYCOS02.toUpperCase(),
+						Utils.compruebaImporte(sIMRGAS.toUpperCase()),
+						sYCOS04.toUpperCase(),
+						Utils.compruebaImporte(sIMDGAS.toUpperCase()),
+						sYCOS06.toUpperCase(),
+						Utils.compruebaImporte(sIMCOST.toUpperCase()),
+						sYCOS08.toUpperCase(),
+						Utils.compruebaImporte(sIMOGAS.toUpperCase()),
+						sYCOS10.toUpperCase(),
+						Utils.compruebaImporte(sIMDTGA.toUpperCase()),
+						ValoresDefecto.DEF_COUNMO,
+						Utils.compruebaImporte(sIMIMGA.toUpperCase()),
+						Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
+						ValoresDefecto.DEF_COTNEG,
+						sCOENCX,
+						sCOOFCX,
+						sNUCONE,
+						"0",
+						Utils.compruebaFecha(sFEAGTO),
+						ValoresDefecto.DEF_COMONA,
+						ValoresDefecto.DEF_BIAUTO,
+						ValoresDefecto.DEF_FEAUFA,
+						ValoresDefecto.DEF_COTERR,
+						Utils.compruebaFecha(sFMPAGN),
+						Utils.compruebaFecha(sFEPGPR),
+						ValoresDefecto.DEF_FEAPLI,
+						ValoresDefecto.DEF_COAPII,
+						ValoresDefecto.DEF_COSPII_GA,
+						ValoresDefecto.DEF_NUCLII);
 
-		}
-		
-		logger.debug("Finalizadas las comprobaciones.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);		
+				//movimiento.pintaMovimientoGasto();
+				
+				//movimiento.setIMNGAS("-"+movimiento.getIMNGAS());
+				int iSalida = CLGastos.registraPagoConexion(movimiento);
+				
+				logger.debug("Codigo de salida:"+iSalida);
+				
+				switch (iSalida) 
+				{
+				case 0: //Sin errores
+					sMsg = "El movimiento se ha registrado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					break;
+
+				case -2: //Error 002 - Llega fecha de anulación y no existe gasto en la tabla
+					sMsg = "ERROR:002 - El gasto que se anula no existe. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -3: //Error 003 - Llega un abono de un gasto que NO está pagado
+					sMsg = "ERROR:003 - El gasto a abonar no esta pagado. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -4: //Error 004 - Descuento mayor que importe nominal del gasto
+					sMsg = "ERROR:004 - El descuento informado es superior al gasto. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -6: //Error 006 - La provisión ya está cerrada
+					sMsg = "ERROR:006 - La provisión ya esta cerrada. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -7: //Error 007 - Error en grupo / tipo / subtipo de acción
+					sMsg = "ERROR:007 - El grupo, tipo y subtipo de gasto deben informarse. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -8: //Error 008 - No existe el activo en la base corporativa
+					sMsg = "ERROR:008 - El activo informado no se encuentra resistrado en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -12: //Error 012 - Llega un abono de un gasto que está anulado
+					sMsg = "ERROR:012 - El gasto a abonar esta anulado. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -13: //Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
+					sMsg = "ERROR:013 - El gasto a abonar ya esta abonado. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -19: //Error 019 - Periodicidad del gasto es cero o espacios.
+					sMsg = "ERROR:019 - El campo periodicidad del pago es obligatorio. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -23: //Error 023 - Llega anulación de un gasto que YA está pagado
+					sMsg = "ERROR:023 - El gasto a anular ya esta pagado. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -24: //Error 024 - Llega modificación de un gasto que YA está pagado
+					sMsg = "ERROR:024 - El gasto a modificar ya esta pagado. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -61: //Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
+					sMsg = "ERROR:061 - La provision esta cerrada, no se puede actualizar la fecha de pago a proveedor. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -62: //Error 062 - Llega una devolución con importe positivo. 
+					sMsg = "ERROR:062 - La devolucion debe incluir un importe del gasto con valor negativo. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -701: //Error 701 - Fecha de devengo incorrecta  
+					sMsg = "ERROR:701 - La fecha de devengo esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -702: //Error 702 - Fecha de fin de periodo incorrecta  
+					sMsg = "ERROR:702 - La fecha de fin de periodo esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -703: //Error 703 - Fecha de pago incorrecta
+					sMsg = "ERROR:703 - La fecha de pago esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -704: //Error 704 - Fecha de limite de pago incorrecta
+					sMsg = "ERROR:704 - La fecha de limite de pago esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -705: //Error 705 - Fecha de estado estimado incorrecta
+					sMsg = "ERROR:705 - La fecha de estado estimado esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -706: //Error 706 - Fecha de estado conocido incorrecta
+					sMsg = "ERROR:706 - La fecha de estado conocido esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -707: //Error 707 - Fecha de anulacion del gasto incorrecta  
+					sMsg = "ERROR:707 - La fecha de anulacion de gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -708: //Error 708 - Fecha de pago al proveedor incorrecta
+					sMsg = "ERROR:708 - La fecha de pago al proveedor esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;				
+					
+				case -709: //Error 709 - Importe del gasto incorrecto
+					sMsg = "ERROR:709 - El importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -710: //Error 710 - Recargo en el importe del gasto incorrecto
+					sMsg = "ERROR:710 - El recargo en el importe del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -711: //Error 711 - Importe de demora del gasto incorrecto
+					sMsg = "ERROR:711 - El importe de demora del gasto esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -712: //Error 712 - Importe de costas incorrecto
+					sMsg = "ERROR:712 - El importe de costas esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;				
+					
+				case -713: //Error 713 - Importe de otros incrementos incorrecto   
+					sMsg = "ERROR:713 - El importe de otros incrementos esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -714: //Error 714 - Importe de descuento incorrecto
+					sMsg = "ERROR:714 - El importe de descuento esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -715: //Error 715 - Importe de impuestos incorrecto
+					sMsg = "ERROR:715 - El importe de impuestos esta incorrectamente informada. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -800: //Error 800 - Gasto sin provision  
+					sMsg = "ERROR:801 - No se ha cargado una provision de gastos. Por favor, cargue los datos del activo.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -801: //Error 801 - No se ha informado la fecha de devengo
+					sMsg = "ERROR:801 - No se ha informado la fecha de devengo. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -802: //Error 802 - No se ha elegido una situacion del gasto
+					sMsg = "ERROR:802 - No se ha elegido una situacion del gasto. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -803: //Error 803 - No se ha informado el campo importe de gasto
+					sMsg = "ERROR:803 - No se ha informado el campo importe de gasto. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -804: //Error 804 - Accion no permitida
+					sMsg = "ERROR:804 - No se pueden registrar los datos. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -805: //Error 805 - estado no disponible
+					sMsg = "ERROR:805 - El estado del gasto no esta disponible. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -806: //Error 806 - modificacion sin cambios
+					sMsg = "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -807: //Error 807 - Fecha de estado sin informar
+					sMsg = "ERROR:807 - No se ha informado ninguna fecha de estado del gasto. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -808: //Error 808 - Importe de descuento negativo
+					sMsg = "ERROR:808 - El importe del descuento no puede ser negativo. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -809: //Error 809 - Importe de impuestos negativo
+					sMsg = "ERROR:809 - El importe de impuestos no puede ser negativo. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -900: //Error 900 - al crear un movimiento
+					sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -901: //Error 901 - error y rollback - error al crear el gasto
+					sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar el nuevo gasto. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -902: //Error 902 - error y rollback - error al registrar la relaccion
+					sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -903: //Error 903 - error y rollback - error al cambiar el estado
+					sMsg = "[FATAL] ERROR:903 - Se ha producido un error al cambiar el estado del gasto. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -904: //Error 904 - error y rollback - error al modificar el gasto
+					sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				default: //error generico
+					msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
+					logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
+					break;
+				}
+
+			}
+			
+			logger.debug("Finalizadas las comprobaciones.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}		
 	}
 
 	public String getsCOACES() {

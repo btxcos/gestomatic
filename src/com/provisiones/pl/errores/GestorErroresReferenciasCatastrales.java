@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLErrores;
 import com.provisiones.ll.CLReferencias;
 
@@ -91,7 +92,10 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 	
 	public GestorErroresReferenciasCatastrales()
 	{
-
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorErroresReferenciasCatastrales...");	
+		}
 	}
 	
     public void borrarPlantillaError() 
@@ -212,152 +216,170 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 	
 	public void buscaReferenciasError(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		logger.debug("Buscando Referencias con errores...");
-		
-		ErrorReferenciaTabla filtro = new ErrorReferenciaTabla(
-					sCOACESB.toUpperCase(), sNURCATB.toUpperCase(),
-					"", "");
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			logger.debug("Buscando Referencias con errores...");
+			
+			ErrorReferenciaTabla filtro = new ErrorReferenciaTabla(
+						sCOACESB.toUpperCase(), sNURCATB.toUpperCase(),
+						"", "");
 
-			this.setTablareferenciaserror(CLErrores.buscarReferenciasConErrores(filtro));
+				this.setTablareferenciaserror(CLErrores.buscarReferenciasConErrores(filtro));
 
-		
-		
-		msg = Utils.pfmsgInfo("Encontradas "+getTablareferenciaserror().size()+" Referencias relacionadas.");
-		logger.debug("Encontradas {} Referencias relacionadas.",getTablareferenciaserror().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			
+			msg = Utils.pfmsgInfo("Encontradas "+getTablareferenciaserror().size()+" Referencias relacionadas.");
+			logger.debug("Encontradas {} Referencias relacionadas.",getTablareferenciaserror().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarMovimiento(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-		
-		this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
-    	
-		this.setTablaerrores(CLErrores.buscarErroresReferencia(sCodMovimiento));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
-		logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		MovimientoReferenciaCatastral movimiento = CLReferencias.buscarMovimientoReferenciaCatastral(sCodMovimiento);
-		
-		this.sCOACCI = movimiento.getCOACCI();
-		this.sCOACES = movimiento.getCOACES();
-		
-    	this.sNURCAT = movimiento.getNURCAT(); 
-    	this.sTIRCAT = movimiento.getTIRCAT();
-    	this.sENEMIS = movimiento.getENEMIS();
-    	this.sOBTEXC = movimiento.getOBTEXC();
-    	
-    	//Ampliacion de valor catastral
-    	this.sIMVSUE = Utils.recuperaImporte(false,movimiento.getIMVSUE());
-    	this.sIMCATA = Utils.recuperaImporte(false,movimiento.getIMCATA());
-    	this.sFERECA = Utils.recuperaFecha(movimiento.getFERECA());
-    	
-				
-        	
-    	msg = Utils.pfmsgInfo("Errores de Referencia Catastral cargados.");
-    	logger.debug("Errores de Referencia Catastral cargados.");
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
+	    	
+			this.setTablaerrores(CLErrores.buscarErroresReferencia(sCodMovimiento));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
+			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			MovimientoReferenciaCatastral movimiento = CLReferencias.buscarMovimientoReferenciaCatastral(sCodMovimiento);
+			
+			this.sCOACCI = movimiento.getCOACCI();
+			this.sCOACES = movimiento.getCOACES();
+			
+	    	this.sNURCAT = movimiento.getNURCAT(); 
+	    	this.sTIRCAT = movimiento.getTIRCAT();
+	    	this.sENEMIS = movimiento.getENEMIS();
+	    	this.sOBTEXC = movimiento.getOBTEXC();
+	    	
+	    	//Ampliacion de valor catastral
+	    	this.sIMVSUE = Utils.recuperaImporte(false,movimiento.getIMVSUE());
+	    	this.sIMCATA = Utils.recuperaImporte(false,movimiento.getIMCATA());
+	    	this.sFERECA = Utils.recuperaFecha(movimiento.getFERECA());
+	    	
+					
+	        	
+	    	msg = Utils.pfmsgInfo("Errores de Referencia Catastral cargados.");
+	    	logger.debug("Errores de Referencia Catastral cargados.");
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void seleccionarError(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-    	
-		this.sCodError = errorseleccionado.getsCodError(); 
-		
-    	int iCodError  = Integer.parseInt(sCodError);
-    	
-    	
-    	logger.debug("Error seleccionado:|{}|",iCodError);
-    	
-    	String sMsg ="";
-    	
-    	if (editarError(iCodError))
-    	{
-    		sMsg = "Error editado.";
-    		msg = Utils.pfmsgInfo(sMsg);
-    		logger.info(sMsg);
-    	}
-    	else
-    	{
-    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
-    		msg = Utils.pfmsgFatal(sMsg);
-    		logger.error(sMsg);
-    	}
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+			this.sCodError = errorseleccionado.getsCodError(); 
+			
+	    	int iCodError  = Integer.parseInt(sCodError);
+	    	
+	    	
+	    	logger.debug("Error seleccionado:|{}|",iCodError);
+	    	
+	    	String sMsg ="";
+	    	
+	    	if (editarError(iCodError))
+	    	{
+	    		sMsg = "Error editado.";
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+	    	}
+	    	else
+	    	{
+	    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
+	    		msg = Utils.pfmsgFatal(sMsg);
+	    		logger.error(sMsg);
+	    	}
 
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		ActivoTabla buscaactivos = new ActivoTabla(
-				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(),"");
-		
-		this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		logger.info("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			ActivoTabla buscaactivos = new ActivoTabla(
+					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(),"");
+			
+			this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			logger.info("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
-    	
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	
-    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' cargado.");
-    	logger.info("Activo '{}' cargado.",sCOACES);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	this.sCOACES  = activoseleccionado.getCOACES();
+	    	
+	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' cargado.");
+	    	logger.info("Activo '{}' cargado.",sCOACES);
 
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
-		
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void cargarReferencias (ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
-		
-		msg = Utils.pfmsgInfo("Encontradas "+getTablareferencias().size()+" referencias relacionadas.");
-		logger.info("Encontradas {} referencias relacionadas.",getTablareferencias().size());
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
+			
+			msg = Utils.pfmsgInfo("Encontradas "+getTablareferencias().size()+" referencias relacionadas.");
+			logger.info("Encontradas {} referencias relacionadas.",getTablareferencias().size());
 
-		FacesContext.getCurrentInstance().addMessage(null, msg);		
+			FacesContext.getCurrentInstance().addMessage(null, msg);	
+		}
 	}
 	
     
 	public void seleccionarReferencia(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
-    	
-    	this.sNURCAT = referenciaseleccionada.getNURCAT(); 
-    	this.sTIRCAT = referenciaseleccionada.getTIRCAT();
-    	this.sENEMIS = referenciaseleccionada.getENEMIS();
-    	this.sOBTEXC = referenciaseleccionada.getOBTEXC();
-    	
-    	//Ampliacion de valor catastral
-    	this.sIMVSUE = referenciaseleccionada.getIMVSUE();
-    	this.sIMCATA = referenciaseleccionada.getIMCATA();
-    	this.sFERECA = referenciaseleccionada.getFERECA();
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	this.sNURCAT = referenciaseleccionada.getNURCAT(); 
+	    	this.sTIRCAT = referenciaseleccionada.getTIRCAT();
+	    	this.sENEMIS = referenciaseleccionada.getENEMIS();
+	    	this.sOBTEXC = referenciaseleccionada.getOBTEXC();
+	    	
+	    	//Ampliacion de valor catastral
+	    	this.sIMVSUE = referenciaseleccionada.getIMVSUE();
+	    	this.sIMCATA = referenciaseleccionada.getIMCATA();
+	    	this.sFERECA = referenciaseleccionada.getFERECA();
 
-    	msg = Utils.pfmsgInfo("Referencia '"+ sNURCAT +"' Seleccionada.");
-    	logger.info("Referencia '{}' Seleccionada.",sNURCAT);
+	    	msg = Utils.pfmsgInfo("Referencia '"+ sNURCAT +"' Seleccionada.");
+	    	logger.info("Referencia '{}' Seleccionada.",sNURCAT);
 
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
-
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 
 	public void hoyFERECA (ActionEvent actionEvent)
@@ -368,86 +390,88 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 	
 	public void registraDatos(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
-		if (!CLReferencias.existeMovimientoReferenciaCatastral(sCodMovimiento))
+		if (ConnectionManager.comprobarConexion())
 		{
-			sMsg = "[FATAL] ERROR:911 - No se puede modificar la Referencia, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
-			msg = Utils.pfmsgError(sMsg);
-			logger.error(sMsg);
-		}
-		else
-		{
-			MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
-					sCODTRN.toUpperCase(), 
-					sCOTDOR.toUpperCase(), 
-					sIDPROV.toUpperCase(), 
-					sCOACCI.toUpperCase(), 
-					sCOENGP.toUpperCase(), 
-					sCOACES.toUpperCase(), 
-					sNURCAT.toUpperCase(),
-					"", 
-					sTIRCAT.toUpperCase(),
-					"", 
-					sENEMIS.toUpperCase(),
-					ValoresDefecto.DEF_COTEXA,
-					"", 
-					sOBTEXC.toUpperCase(), 
-					sOBDEER.toUpperCase(),
-					"", 
-					Utils.compruebaImporte(sIMVSUE.toUpperCase()),
-					"", 
-					Utils.compruebaImporte(sIMCATA.toUpperCase()),
-					"", 
-					Utils.compruebaFecha(sFERECA.toUpperCase()));
-
-			logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
-			logger.debug("sCodError:|{}|",sCodError);			
-			int iSalida = CLErrores.reparaMovimientoReferencia(movimiento,sCodMovimiento, sCodError);
+			FacesMessage msg;
 			
-			logger.debug("Codigo de salida:"+iSalida);
+			String sMsg = "";
 			
-			switch (iSalida) 
+			if (!CLReferencias.existeMovimientoReferenciaCatastral(sCodMovimiento))
 			{
-			case 0: //Sin errores
-				tablaerrores.remove(errorseleccionado);
-				sMsg = "El movimiento se ha modificado correctamente.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-				break;
-
-			case -804: //Error 804 - modificacion sin cambios
-				sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+				sMsg = "[FATAL] ERROR:911 - No se puede modificar la Referencia, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-				break;
+			}
+			else
+			{
+				MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
+						sCODTRN.toUpperCase(), 
+						sCOTDOR.toUpperCase(), 
+						sIDPROV.toUpperCase(), 
+						sCOACCI.toUpperCase(), 
+						sCOENGP.toUpperCase(), 
+						sCOACES.toUpperCase(), 
+						sNURCAT.toUpperCase(),
+						"", 
+						sTIRCAT.toUpperCase(),
+						"", 
+						sENEMIS.toUpperCase(),
+						ValoresDefecto.DEF_COTEXA,
+						"", 
+						sOBTEXC.toUpperCase(), 
+						sOBDEER.toUpperCase(),
+						"", 
+						Utils.compruebaImporte(sIMVSUE.toUpperCase()),
+						"", 
+						Utils.compruebaImporte(sIMCATA.toUpperCase()),
+						"", 
+						Utils.compruebaFecha(sFERECA.toUpperCase()));
 
-			case -900: //Error 900 - al crear un movimiento
-				sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
+				logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
+				logger.debug("sCodError:|{}|",sCodError);			
+				int iSalida = CLErrores.reparaMovimientoReferencia(movimiento,sCodMovimiento, sCodError);
+				
+				logger.debug("Codigo de salida:"+iSalida);
+				
+				switch (iSalida) 
+				{
+				case 0: //Sin errores
+					tablaerrores.remove(errorseleccionado);
+					sMsg = "El movimiento se ha modificado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					break;
 
-			case -904: //Error 904 - error y rollback - error al modificar la cuota
-				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
+				case -804: //Error 804 - modificacion sin cambios
+					sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
 
-			default: //error generico
-				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.");
-				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.",iSalida);
-				break;
-			}			
+				case -900: //Error 900 - al crear un movimiento
+					sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -904: //Error 904 - error y rollback - error al modificar la cuota
+					sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				default: //error generico
+					msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.");
+					logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.",iSalida);
+					break;
+				}			
+			}
+
+			
+			
+			logger.debug("Finalizadas las comprobaciones.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-
-		
-		
-		logger.debug("Finalizadas las comprobaciones.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-
 	}
 
 	public String getsCODTRN() {

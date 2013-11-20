@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
@@ -117,17 +118,25 @@ public class GestorDetallesActivo implements Serializable
 	
 	public GestorDetallesActivo()
 	{
-		getCOACESElegido();
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorDetallesActivo...");	
+			getCOACESElegido();
+		}
 	}
 
 	public String volver()
 	{
-		
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		
-		session.removeAttribute("GestorDetallesActivo");
-		
-		return "listaactivos.xhtml";
+		String sPagina = "login.xhtml";
+		if (ConnectionManager.comprobarConexion())
+		{
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			
+			session.removeAttribute("GestorDetallesActivo");
+			
+			sPagina = "listaactivos.xhtml";
+		}
+		return sPagina;
 	}
 	
 	public void getCOACESElegido()

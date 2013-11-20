@@ -12,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLCuotas;
 import com.provisiones.ll.CLErrores;
 
@@ -108,7 +109,10 @@ public class GestorErroresCuotas implements Serializable
 	
 	public GestorErroresCuotas()
 	{
-
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorErroresCuotas...");	
+		}
 	}
 	
     public void borrarPlantillaError() 
@@ -235,150 +239,168 @@ public class GestorErroresCuotas implements Serializable
 	
 	public void buscaCuotasError(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		logger.debug("Buscando Cuotas con errores...");
-		
-		ErrorCuotaTabla filtro = new ErrorCuotaTabla(
-					sCOACESB.toUpperCase(), sCOCLDOB, "", sNUDCOMB.toUpperCase(),sCOSBACB, "",
-					"", "");
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			logger.debug("Buscando Cuotas con errores...");
+			
+			ErrorCuotaTabla filtro = new ErrorCuotaTabla(
+						sCOACESB.toUpperCase(), sCOCLDOB, "", sNUDCOMB.toUpperCase(),sCOSBACB, "",
+						"", "");
 
 			this.setTablacuotaserror(CLErrores.buscarCuotasConErrores(filtro));
-
-		
-		
-		msg = Utils.pfmsgInfo("Encontradas "+getTablacuotaserror().size()+" Cuotas relacionadas.");
-		logger.debug("Encontradas {} Cuotas relacionadas.",getTablacuotaserror().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			msg = Utils.pfmsgInfo("Encontradas "+getTablacuotaserror().size()+" Cuotas relacionadas.");
+			logger.debug("Encontradas {} Cuotas relacionadas.",getTablacuotaserror().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarMovimiento(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-		
-		this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
-    	
-		this.setTablaerrores(CLErrores.buscarErroresCuota(sCodMovimiento));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
-		logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		MovimientoCuota movimiento = CLCuotas.buscarMovimientoCuota(sCodMovimiento);
-		
-		this.sCOACCI = movimiento.getCOACCI();
-		this.sCOACES = movimiento.getCOACES();
-    	this.sCOCLDO = movimiento.getCOCLDO(); 
-    	this.sNUDCOM = movimiento.getNUDCOM();
-    	this.sCOSBAC = movimiento.getCOSBAC();
-    	this.sFIPAGO = Utils.recuperaFecha(movimiento.getFIPAGO());
-    	this.sFFPAGO = Utils.recuperaFecha(movimiento.getFFPAGO());
-    	this.sIMCUCO = Utils.recuperaImporte(false,movimiento.getIMCUCO());
-    	this.sFAACTA = Utils.recuperaFecha(movimiento.getFAACTA());
-    	this.sPTPAGO = movimiento.getPTPAGO();
-    	this.sOBTEXC = movimiento.getOBTEXC();
-				
-        	
-    	msg = Utils.pfmsgInfo("Errores de Cuota cargados.");
-    	logger.debug("Errores de Cuota cargados.");
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
+	    	
+			this.setTablaerrores(CLErrores.buscarErroresCuota(sCodMovimiento));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
+			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			MovimientoCuota movimiento = CLCuotas.buscarMovimientoCuota(sCodMovimiento);
+			
+			this.sCOACCI = movimiento.getCOACCI();
+			this.sCOACES = movimiento.getCOACES();
+	    	this.sCOCLDO = movimiento.getCOCLDO(); 
+	    	this.sNUDCOM = movimiento.getNUDCOM();
+	    	this.sCOSBAC = movimiento.getCOSBAC();
+	    	this.sFIPAGO = Utils.recuperaFecha(movimiento.getFIPAGO());
+	    	this.sFFPAGO = Utils.recuperaFecha(movimiento.getFFPAGO());
+	    	this.sIMCUCO = Utils.recuperaImporte(false,movimiento.getIMCUCO());
+	    	this.sFAACTA = Utils.recuperaFecha(movimiento.getFAACTA());
+	    	this.sPTPAGO = movimiento.getPTPAGO();
+	    	this.sOBTEXC = movimiento.getOBTEXC();
+					
+	        	
+	    	msg = Utils.pfmsgInfo("Errores de Cuota cargados.");
+	    	logger.debug("Errores de Cuota cargados.");
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void seleccionarError(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-    	
-		this.sCodError = errorseleccionado.getsCodError(); 
-		
-    	int iCodError  = Integer.parseInt(sCodError);
-    	
-    	
-    	logger.debug("Error seleccionado:|{}|",iCodError);
-    	
-    	String sMsg ="";
-    	
-    	if (editarError(iCodError))
-    	{
-    		sMsg = "Error editado.";
-    		msg = Utils.pfmsgInfo(sMsg);
-    		logger.info(sMsg);
-    	}
-    	else
-    	{
-    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
-    		msg = Utils.pfmsgFatal(sMsg);
-    		logger.error(sMsg);
-    	}
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+			this.sCodError = errorseleccionado.getsCodError(); 
+			
+	    	int iCodError  = Integer.parseInt(sCodError);
+	    	
+	    	
+	    	logger.debug("Error seleccionado:|{}|",iCodError);
+	    	
+	    	String sMsg ="";
+	    	
+	    	if (editarError(iCodError))
+	    	{
+	    		sMsg = "Error editado.";
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+	    	}
+	    	else
+	    	{
+	    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
+	    		msg = Utils.pfmsgFatal(sMsg);
+	    		logger.error(sMsg);
+	    	}
 
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
     
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		ActivoTabla buscaactivos = new ActivoTabla(
-				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-		
-		this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			ActivoTabla buscaactivos = new ActivoTabla(
+					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			
+			this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-    	
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	
-    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
-    	logger.info("Activo '{}' Seleccionado.",sCOACES);
-    	
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+	    	this.sCOACES  = activoseleccionado.getCOACES();
+	    	
+	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
+	    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+	    	
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void cargarCuotas(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
-		
-		msg = Utils.pfmsgInfo("Encontradas "+getTablacuotas().size()+" cuotas relacionadas.");
-		logger.info("Encontradas {} cuotas relacionadas.",getTablacuotas().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
+			
+			msg = Utils.pfmsgInfo("Encontradas "+getTablacuotas().size()+" cuotas relacionadas.");
+			logger.info("Encontradas {} cuotas relacionadas.",getTablacuotas().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarCuota(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
-    	
-    	this.sCOCLDO = cuotaseleccionada.getCOCLDO(); 
-    	this.sDesCOCLDO = cuotaseleccionada.getDCOCLDO();
-    	this.sNUDCOM = cuotaseleccionada.getNUDCOM();
-    	this.sCOSBAC = cuotaseleccionada.getCOSBAC();
-    	this.sDesCOSBAC = cuotaseleccionada.getDCOSBAC();
-    	this.sFIPAGO = cuotaseleccionada.getFIPAGO();
-    	this.sFFPAGO = cuotaseleccionada.getFFPAGO();
-    	this.sIMCUCO = cuotaseleccionada.getIMCUCO();
-    	this.sFAACTA = cuotaseleccionada.getFAACTA();
-    	this.sPTPAGO = cuotaseleccionada.getPTPAGO();
-    	this.sDesPTPAGO = cuotaseleccionada.getDPTPAGO();
-    	this.sOBTEXC = cuotaseleccionada.getOBTEXC();
-    	
-    	msg = Utils.pfmsgInfo("Cuota de '"+ sDesCOSBAC +"' Seleccionada.");
-    	logger.info("Cuota de '{}' Seleccionada.",sDesCOSBAC);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	this.sCOCLDO = cuotaseleccionada.getCOCLDO(); 
+	    	this.sDesCOCLDO = cuotaseleccionada.getDCOCLDO();
+	    	this.sNUDCOM = cuotaseleccionada.getNUDCOM();
+	    	this.sCOSBAC = cuotaseleccionada.getCOSBAC();
+	    	this.sDesCOSBAC = cuotaseleccionada.getDCOSBAC();
+	    	this.sFIPAGO = cuotaseleccionada.getFIPAGO();
+	    	this.sFFPAGO = cuotaseleccionada.getFFPAGO();
+	    	this.sIMCUCO = cuotaseleccionada.getIMCUCO();
+	    	this.sFAACTA = cuotaseleccionada.getFAACTA();
+	    	this.sPTPAGO = cuotaseleccionada.getPTPAGO();
+	    	this.sDesPTPAGO = cuotaseleccionada.getDPTPAGO();
+	    	this.sOBTEXC = cuotaseleccionada.getOBTEXC();
+	    	
+	    	msg = Utils.pfmsgInfo("Cuota de '"+ sDesCOSBAC +"' Seleccionada.");
+	    	logger.info("Cuota de '{}' Seleccionada.",sDesCOSBAC);
 
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void hoyFIPAGO (ActionEvent actionEvent)
@@ -401,88 +423,90 @@ public class GestorErroresCuotas implements Serializable
 	
 	public void registraDatos(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
-		if (!CLCuotas.existeMovimientoCuota(sCodMovimiento))
+		if (ConnectionManager.comprobarConexion())
 		{
-			sMsg = "[FATAL] ERROR:911 - No se puede modificar la cuota, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
-		else
-		{
-			MovimientoCuota movimiento = new MovimientoCuota (
-					sCODTRN.toUpperCase(), 
-					sCOTDOR.toUpperCase(), 
-					sIDPROV.toUpperCase(), 
-					sCOACCI.toUpperCase(), 
-					sCOCLDO.toUpperCase(), 
-					sNUDCOM.toUpperCase(), 
-					sCOENGP.toUpperCase(), 
-					sCOACES.toUpperCase(), 
-					ValoresDefecto.DEF_COGRUG_E2, 
-					ValoresDefecto.DEF_COTACA_E2, 
-					Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 
-					"", 
-					Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
-					"", 
-					Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
-					"", 
-					Utils.compruebaImporte(sIMCUCO.toUpperCase()), 
-					"", 
-					Utils.compruebaFecha(sFAACTA.toUpperCase()), 
-					"", 
-					sPTPAGO.toUpperCase(),
-					"", 
-					sOBTEXC.toUpperCase(), 
-					sOBDEER.toUpperCase());
+			FacesMessage msg;
 			
+			String sMsg = "";
 			
-			logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
-			logger.debug("sCodError:|{}|",sCodError);
-			int iSalida = CLErrores.reparaMovimientoCuota(movimiento,sCodMovimiento, sCodError);
-			
-			switch (iSalida) 
+			if (!CLCuotas.existeMovimientoCuota(sCodMovimiento))
 			{
-			case 0: //Sin errores
-				tablaerrores.remove(errorseleccionado);
-				sMsg = "El movimiento se ha modificado correctamente.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-				break;
-
-			case -804: //Error 804 - modificacion sin cambios
-				sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -900: //Error 900 - al crear un movimiento
-				sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+				sMsg = "[FATAL] ERROR:911 - No se puede modificar la cuota, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
-				break;
-
-
-			case -904: //Error 904 - error y rollback - error al modificar la cuota
-				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la cuota. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			default: //error generico
-				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.");
-				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.",iSalida);
-				break;
 			}
-		}
-		
-		
-		logger.debug("Finalizadas las comprobaciones.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			else
+			{
+				MovimientoCuota movimiento = new MovimientoCuota (
+						sCODTRN.toUpperCase(), 
+						sCOTDOR.toUpperCase(), 
+						sIDPROV.toUpperCase(), 
+						sCOACCI.toUpperCase(), 
+						sCOCLDO.toUpperCase(), 
+						sNUDCOM.toUpperCase(), 
+						sCOENGP.toUpperCase(), 
+						sCOACES.toUpperCase(), 
+						ValoresDefecto.DEF_COGRUG_E2, 
+						ValoresDefecto.DEF_COTACA_E2, 
+						Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 
+						"", 
+						Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
+						"", 
+						Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
+						"", 
+						Utils.compruebaImporte(sIMCUCO.toUpperCase()), 
+						"", 
+						Utils.compruebaFecha(sFAACTA.toUpperCase()), 
+						"", 
+						sPTPAGO.toUpperCase(),
+						"", 
+						sOBTEXC.toUpperCase(), 
+						sOBDEER.toUpperCase());
+				
+				
+				logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
+				logger.debug("sCodError:|{}|",sCodError);
+				int iSalida = CLErrores.reparaMovimientoCuota(movimiento,sCodMovimiento, sCodError);
+				
+				switch (iSalida) 
+				{
+				case 0: //Sin errores
+					tablaerrores.remove(errorseleccionado);
+					sMsg = "El movimiento se ha modificado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					break;
 
+				case -804: //Error 804 - modificacion sin cambios
+					sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -900: //Error 900 - al crear un movimiento
+					sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+
+				case -904: //Error 904 - error y rollback - error al modificar la cuota
+					sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la cuota. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				default: //error generico
+					msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.");
+					logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.",iSalida);
+					break;
+				}
+			}
+			
+			
+			logger.debug("Finalizadas las comprobaciones.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 
 	public String getsCODTRN() {

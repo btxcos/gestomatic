@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -40,11 +41,12 @@ public class GestorTablaComunidadActivo implements Serializable
 	
 	public GestorTablaComunidadActivo()
 	{
-
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorTablaComunidadActivo...");	
+		}
 	}
 	
-
-
 	private transient ActivoTabla activoseleccionadoalta = null;
 	
 	private transient ActivoTabla activoseleccionadobaja = null;
@@ -108,67 +110,74 @@ public class GestorTablaComunidadActivo implements Serializable
 	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		ActivoTabla buscaactivos = new ActivoTabla(
-				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			ActivoTabla buscaactivos = new ActivoTabla(
+					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 
-		this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(buscaactivos));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(buscaactivos));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 
 	public void seleccionarActivo(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
 
-    	this.sCOACES  = activoseleccionadoalta.getCOACES();
-    	
-    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
-    	logger.info("Activo '{}' Seleccionado.",sCOACES);
-    	
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	this.sCOACES  = activoseleccionadoalta.getCOACES();
+	    	
+	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
+	    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+	    	
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void cargarComunidad(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-		
-		this.sCOCLDO = comunidad.getsCOCLDO();
-		this.sNUDCOM = comunidad.getsNUDCOM();
-		this.sNOMCOC = comunidad.getsNOMCOC();
-		this.sNODCCO = comunidad.getsNODCCO();
-	
-		
-		if (comunidad.getsNUDCOM().equals(""))
+		if (ConnectionManager.comprobarConexion())
 		{
-			msg = Utils.pfmsgError("ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.");
-			logger.error("ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.");
-		}
-		else
-		{
-		
-			this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
-		
-			msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
-			logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
+			FacesMessage msg;
 			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
-			logger.info("Encontrados {} activos relacionados.",getTablaactivoscomunidad().size());
-		}
-
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			this.sCOCLDO = comunidad.getsCOCLDO();
+			this.sNUDCOM = comunidad.getsNUDCOM();
+			this.sNOMCOC = comunidad.getsNOMCOC();
+			this.sNODCCO = comunidad.getsNODCCO();
+		
+			
+			if (comunidad.getsNUDCOM().equals(""))
+			{
+				msg = Utils.pfmsgError("ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.");
+				logger.error("ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.");
+			}
+			else
+			{
+			
+				this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
+			
+				msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
+				logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
 				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				msg = Utils.pfmsgInfo("Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
+				logger.info("Encontrados {} activos relacionados.",getTablaactivoscomunidad().size());
+			}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}				
 	}
 
 	public FacesMessage nuevoMovimiento(String sCodCOACCI)
@@ -430,65 +439,66 @@ public class GestorTablaComunidadActivo implements Serializable
 	
     public void altaActivoComunidad(ActionEvent actionEvent) 
     {  
-    	
-    	FacesMessage msg;
-
-    	
-    	//comprobar el activo
-		
-		int iSalida = CLComunidades.comprobarActivo(sCOACES.toUpperCase());
-
-		switch (iSalida) 
+		if (ConnectionManager.comprobarConexion())
 		{
-			case 0: //Sin errores
-				msg = nuevoMovimiento("X");
-				logger.debug("Activo dado de alta:|{}|",sCOACES);
-		    	this.sCOACES  = "";
-				break;
+	    	FacesMessage msg;
 
-			case -1: //error - ya vinculado
-				msg = Utils.pfmsgError("ERROR: El activo '"+sCOACES.toUpperCase()+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.");
-				logger.error("ERROR: El activo '{}' ya esta vinculado a otra comunidada. Por favor, revise los datos.",sCOACES.toUpperCase());
-				break;
+	    	//comprobar el activo
+			int iSalida = CLComunidades.comprobarActivo(sCOACES.toUpperCase());
 
-			case -2: //error - no existe
-				msg = Utils.pfmsgError("ERROR: El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado en el sistema. Por favor, revise los datos.");
-				logger.error("ERROR: El activo '{}' no se encuentra registrado en el sistema. Por favor, revise los datos.",sCOACES.toUpperCase());
-				break;
+			switch (iSalida) 
+			{
+				case 0: //Sin errores
+					msg = nuevoMovimiento("X");
+					logger.debug("Activo dado de alta:|{}|",sCOACES);
+			    	this.sCOACES  = "";
+					break;
 
-			default: //error generico
-				msg = Utils.pfmsgFatal("[FATAL] ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.");
-				logger.error("[FATAL] ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.");
-				break;
-		}
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-	
+				case -1: //error - ya vinculado
+					msg = Utils.pfmsgError("ERROR: El activo '"+sCOACES.toUpperCase()+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.");
+					logger.error("ERROR: El activo '{}' ya esta vinculado a otra comunidada. Por favor, revise los datos.",sCOACES.toUpperCase());
+					break;
+
+				case -2: //error - no existe
+					msg = Utils.pfmsgError("ERROR: El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado en el sistema. Por favor, revise los datos.");
+					logger.error("ERROR: El activo '{}' no se encuentra registrado en el sistema. Por favor, revise los datos.",sCOACES.toUpperCase());
+					break;
+
+				default: //error generico
+					msg = Utils.pfmsgFatal("[FATAL] ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.");
+					logger.error("[FATAL] ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.");
+					break;
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}	
     }
     
     public void bajaActivoComunidad(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
 
-    	if (activoseleccionadobaja == null)
-    	{
-    		msg = Utils.pfmsgFatal("[FATAL] ERROR: Error al dar de baja el activo, la seleccion ya no esta disponible.");
-    		logger.error("[FATAL] ERROR: Error al dar de baja el activo, la seleccion ya no esta disponible.");
-    	}
-    	else
-    	{
-        	this.sCOACES  = activoseleccionadobaja.getCOACES();
-        	
-        	msg = nuevoMovimiento("E");
-        	
-        	logger.debug("Activo de baja:|{}|",activoseleccionadobaja.getCOACES());
-    	}
-    	
-    	
-    	this.sCOACES  = "";
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
+	    	if (activoseleccionadobaja == null)
+	    	{
+	    		msg = Utils.pfmsgFatal("[FATAL] ERROR: Error al dar de baja el activo, la seleccion ya no esta disponible.");
+	    		logger.error("[FATAL] ERROR: Error al dar de baja el activo, la seleccion ya no esta disponible.");
+	    	}
+	    	else
+	    	{
+	        	this.sCOACES  = activoseleccionadobaja.getCOACES();
+	        	
+	        	msg = nuevoMovimiento("E");
+	        	
+	        	logger.debug("Activo de baja:|{}|",activoseleccionadobaja.getCOACES());
+	    	}
+	    	
+	    	
+	    	this.sCOACES  = "";
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
+		}
     }
 
 	public String getsCOCLDO() {

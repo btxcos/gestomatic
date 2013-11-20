@@ -12,6 +12,7 @@ import javax.faces.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLErrores;
 import com.provisiones.ll.CLGastos;
@@ -166,50 +167,54 @@ public class GestorErroresGastos implements Serializable
 
 	public GestorErroresGastos()
 	{
-		tiposcotpga_g1HM.put("Plusvalia", "1");
-		tiposcotpga_g1HM.put("Notaria",   "2");
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorErroresGastos...");
 
-		tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
-		tiposcotpga_g2HM.put("Comunidades",     "2");
-		tiposcotpga_g2HM.put("Suministros",     "3");
-		
-		tiposcotpga_g3HM.put("Honorarios","2");
-		tiposcotpga_g3HM.put("Licencias", "3");
+			tiposcotpga_g1HM.put("Plusvalia", "1");
+			tiposcotpga_g1HM.put("Notaria",   "2");
 
-		tiposcosbga_t11HM.put("Plusvalia", "0");
-		tiposcosbga_t12HM.put("Notaria",   "1");
+			tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
+			tiposcotpga_g2HM.put("Comunidades",     "2");
+			tiposcotpga_g2HM.put("Suministros",     "3");
+			
+			tiposcotpga_g3HM.put("Honorarios","2");
+			tiposcotpga_g3HM.put("Licencias", "3");
 
-		tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
-		tiposcosbga_t21HM.put("IBIS",                                 "1");
-		tiposcosbga_t21HM.put("Tasas basura",                         "2");
-		tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
-		tiposcosbga_t21HM.put("Tasas agua",                           "4");
-		tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
-		tiposcosbga_t21HM.put("Otras tasas",                          "6");
-		
-		tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
-		tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
-		tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
-		tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
-		tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
-		tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
-		
-		tiposcosbga_t23HM.put("Suministros",               "0");
-		tiposcosbga_t23HM.put("Suministro luz",            "1");
-		tiposcosbga_t23HM.put("Suministro agua",           "2");
-		tiposcosbga_t23HM.put("Suministro gas",            "3");
-		
-		tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
-		tiposcosbga_t32HM.put("Prescripcion",            "1");  
-		tiposcosbga_t32HM.put("Colaboracion",            "2");  
-		tiposcosbga_t32HM.put("Otros honorarios",        "3");  
-		tiposcosbga_t32HM.put("Servicios varios",        "4");
-		
-		tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
-		
-		tiposcosigaHM.put("ESTIMADO",            "1");
-		tiposcosigaHM.put("CONOCIDO",            "2");
-		
+			tiposcosbga_t11HM.put("Plusvalia", "0");
+			tiposcosbga_t12HM.put("Notaria",   "1");
+
+			tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
+			tiposcosbga_t21HM.put("IBIS",                                 "1");
+			tiposcosbga_t21HM.put("Tasas basura",                         "2");
+			tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
+			tiposcosbga_t21HM.put("Tasas agua",                           "4");
+			tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
+			tiposcosbga_t21HM.put("Otras tasas",                          "6");
+			
+			tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
+			tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
+			tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
+			tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
+			tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
+			tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
+			
+			tiposcosbga_t23HM.put("Suministros",               "0");
+			tiposcosbga_t23HM.put("Suministro luz",            "1");
+			tiposcosbga_t23HM.put("Suministro agua",           "2");
+			tiposcosbga_t23HM.put("Suministro gas",            "3");
+			
+			tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
+			tiposcosbga_t32HM.put("Prescripcion",            "1");  
+			tiposcosbga_t32HM.put("Colaboracion",            "2");  
+			tiposcosbga_t32HM.put("Otros honorarios",        "3");  
+			tiposcosbga_t32HM.put("Servicios varios",        "4");
+			
+			tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
+			
+			tiposcosigaHM.put("ESTIMADO",            "1");
+			tiposcosigaHM.put("CONOCIDO",            "2");
+		}	
 	}
 	
     public void borrarPlantillaError() 
@@ -423,248 +428,268 @@ public class GestorErroresGastos implements Serializable
     
 	public void buscaGastosError(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		logger.debug("Buscando Gastos con errores...");
-		
-		ErrorGastoTabla filtro = new ErrorGastoTabla(
-				sCOACESB, sCOGRUGB, sCOTPGAB, sCOSBGA, "", "",Utils.compruebaFecha(sFEDEVE),
-				"", "");
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			logger.debug("Buscando Gastos con errores...");
+			
+			ErrorGastoTabla filtro = new ErrorGastoTabla(
+					sCOACESB, sCOGRUGB, sCOTPGAB, sCOSBGA, "", "",Utils.compruebaFecha(sFEDEVE),
+					"", "");
 
-		this.setTablagastoserror(CLErrores.buscarGastosConErrores(filtro));
+			this.setTablagastoserror(CLErrores.buscarGastosConErrores(filtro));
 
 
-		
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablagastoserror().size()+" Gastos relacionados.");
-		logger.debug("Encontrados {} gastos relacionados.",getTablagastoserror().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablagastoserror().size()+" Gastos relacionados.");
+			logger.debug("Encontrados {} gastos relacionados.",getTablagastoserror().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarMovimiento(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-		
-		this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
-    	
-		this.setTablaerrores(CLErrores.buscarErroresGasto(sCodMovimiento));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
-		logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		MovimientoGasto movimiento = CLGastos.buscarMovimientoGasto(sCodMovimiento);
-		
-		this.sCOACES = movimiento.getCOACES();
-	   	this.sCOGRUG = movimiento.getCOGRUG();
-    	this.sCOTPGA = movimiento.getCOTPGA();
-    	this.sCOSBGA = movimiento.getCOSBGA();
-    	this.sDCOSBGA = movimientoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
-    	this.sFEDEVE = Utils.recuperaFecha(movimiento.getFEDEVE());
-    	
-    	
-		logger.debug("sCOACES:|{}|",sCOACES);
-		logger.debug("sCOGRUG:|{}|",sCOGRUG);
-		logger.debug("sCOTPGA:|{}|",sCOTPGA);
-		logger.debug("sCOSBGA:|{}|",sCOSBGA);
-		logger.debug("sFEDEVE:|{}|",sFEDEVE);
-    	
-    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
+	    	
+			this.setTablaerrores(CLErrores.buscarErroresGasto(sCodMovimiento));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
+			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			MovimientoGasto movimiento = CLGastos.buscarMovimientoGasto(sCodMovimiento);
+			
+			this.sCOACES = movimiento.getCOACES();
+		   	this.sCOGRUG = movimiento.getCOGRUG();
+	    	this.sCOTPGA = movimiento.getCOTPGA();
+	    	this.sCOSBGA = movimiento.getCOSBGA();
+	    	this.sDCOSBGA = movimientoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
+	    	this.sFEDEVE = Utils.recuperaFecha(movimiento.getFEDEVE());
+	    	
+	    	
+			logger.debug("sCOACES:|{}|",sCOACES);
+			logger.debug("sCOGRUG:|{}|",sCOGRUG);
+			logger.debug("sCOTPGA:|{}|",sCOTPGA);
+			logger.debug("sCOSBGA:|{}|",sCOSBGA);
+			logger.debug("sFEDEVE:|{}|",sFEDEVE);
+	    	
+	    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
 
-		this.sPTPAGO = movimiento.getPTPAGO();
+			this.sPTPAGO = movimiento.getPTPAGO();
 
-		this.sFFGTVP = Utils.recuperaFecha(movimiento.getFFGTVP());
-		this.sFEPAGA = Utils.recuperaFecha(movimiento.getFEPAGA());
-		this.sFELIPG = Utils.recuperaFecha(movimiento.getFELIPG());
-		this.sCOSIGA = movimiento.getCOSIGA();
-		this.sFEEESI = Utils.recuperaFecha(movimiento.getFEEESI());
-		this.sFEECOI = Utils.recuperaFecha(movimiento.getFEECOI());
-		this.sFEEAUI = Utils.recuperaFecha(movimiento.getFEEAUI());
-		this.sFEEPAI = Utils.recuperaFecha(movimiento.getFEEPAI());
-		this.sIMNGAS = Utils.recuperaImporte(movimiento.getYCOS02().equals("-"),movimiento.getIMNGAS());
-		this.sIMRGAS = Utils.recuperaImporte(movimiento.getYCOS04().equals("-"),movimiento.getIMRGAS());
-		this.sIMDGAS = Utils.recuperaImporte(movimiento.getYCOS06().equals("-"),movimiento.getIMDGAS());
-		this.sIMCOST = Utils.recuperaImporte(movimiento.getYCOS08().equals("-"),movimiento.getIMCOST());
-		this.sIMOGAS = Utils.recuperaImporte(movimiento.getYCOS10().equals("-"),movimiento.getIMOGAS());
-		this.sIMDTGA = Utils.recuperaImporte(false,movimiento.getIMDTGA());
-		this.sIMIMGA = Utils.recuperaImporte(false,movimiento.getIMIMGA());
-		this.sCOIMPT = movimiento.getCOIMPT();
-		
-		this.sCOTNEG = movimiento.getCOTNEG();
-		this.sFEAGTO = Utils.recuperaFecha(movimiento.getFEAGTO());
-		this.sCOMONA = movimiento.getCOMONA();
-		this.sBIAUTO = movimiento.getBIAUTO();
-		this.sFEAUFA = Utils.recuperaFecha(movimiento.getFEAUFA());
-		this.sFEPGPR = Utils.recuperaFecha(movimiento.getFEPGPR());
-		
-		this.sCOUNMO = movimiento.getCOUNMO();
-		
-		this.sCOENCX = movimiento.getCOENCX();
-		this.sCOOFCX = movimiento.getCOOFCX();
-		this.sNUCONE = movimiento.getNUCONE();
-		
-		this.sNUPROF = movimiento.getNUPROF();
+			this.sFFGTVP = Utils.recuperaFecha(movimiento.getFFGTVP());
+			this.sFEPAGA = Utils.recuperaFecha(movimiento.getFEPAGA());
+			this.sFELIPG = Utils.recuperaFecha(movimiento.getFELIPG());
+			this.sCOSIGA = movimiento.getCOSIGA();
+			this.sFEEESI = Utils.recuperaFecha(movimiento.getFEEESI());
+			this.sFEECOI = Utils.recuperaFecha(movimiento.getFEECOI());
+			this.sFEEAUI = Utils.recuperaFecha(movimiento.getFEEAUI());
+			this.sFEEPAI = Utils.recuperaFecha(movimiento.getFEEPAI());
+			this.sIMNGAS = Utils.recuperaImporte(movimiento.getYCOS02().equals("-"),movimiento.getIMNGAS());
+			this.sIMRGAS = Utils.recuperaImporte(movimiento.getYCOS04().equals("-"),movimiento.getIMRGAS());
+			this.sIMDGAS = Utils.recuperaImporte(movimiento.getYCOS06().equals("-"),movimiento.getIMDGAS());
+			this.sIMCOST = Utils.recuperaImporte(movimiento.getYCOS08().equals("-"),movimiento.getIMCOST());
+			this.sIMOGAS = Utils.recuperaImporte(movimiento.getYCOS10().equals("-"),movimiento.getIMOGAS());
+			this.sIMDTGA = Utils.recuperaImporte(false,movimiento.getIMDTGA());
+			this.sIMIMGA = Utils.recuperaImporte(false,movimiento.getIMIMGA());
+			this.sCOIMPT = movimiento.getCOIMPT();
+			
+			this.sCOTNEG = movimiento.getCOTNEG();
+			this.sFEAGTO = Utils.recuperaFecha(movimiento.getFEAGTO());
+			this.sCOMONA = movimiento.getCOMONA();
+			this.sBIAUTO = movimiento.getBIAUTO();
+			this.sFEAUFA = Utils.recuperaFecha(movimiento.getFEAUFA());
+			this.sFEPGPR = Utils.recuperaFecha(movimiento.getFEPGPR());
+			
+			this.sCOUNMO = movimiento.getCOUNMO();
+			
+			this.sCOENCX = movimiento.getCOENCX();
+			this.sCOOFCX = movimiento.getCOOFCX();
+			this.sNUCONE = movimiento.getNUCONE();
+			
+			this.sNUPROF = movimiento.getNUPROF();
 
-		this.sCOTERR = movimiento.getCOTERR();
-		this.sFMPAGN = Utils.recuperaFecha(movimiento.getFMPAGN());
-	
-		this.sFEAPLI = Utils.recuperaFecha(movimiento.getFEAPLI());
-		this.sCOAPII = movimiento.getCOAPII();
-		this.sCOSPII = movimiento.getCOSPII();
-		this.sNUCLII = movimiento.getNUCLII();
-				
-        	
-    	msg = Utils.pfmsgInfo("Datos del movimiento cargados.");
-    	logger.debug("Datos del movimiento cargados.");
+			this.sCOTERR = movimiento.getCOTERR();
+			this.sFMPAGN = Utils.recuperaFecha(movimiento.getFMPAGN());
 		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			this.sFEAPLI = Utils.recuperaFecha(movimiento.getFEAPLI());
+			this.sCOAPII = movimiento.getCOAPII();
+			this.sCOSPII = movimiento.getCOSPII();
+			this.sNUCLII = movimiento.getNUCLII();
+					
+	        	
+	    	msg = Utils.pfmsgInfo("Datos del movimiento cargados.");
+	    	logger.debug("Datos del movimiento cargados.");
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void seleccionarError(ActionEvent actionEvent) 
-    {  
-		FacesMessage msg;
-    	
-		this.sCodError = errorseleccionado.getsCodError(); 
-		
-    	int iCodError  = Integer.parseInt(sCodError);
-    	
-    	
-    	logger.debug("Error seleccionado:|{}|",iCodError);
-    	
-    	String sMsg ="";
-    	
-    	if (editarError(iCodError))
-    	{
-    		sMsg = "Error editado.";
-    		msg = Utils.pfmsgInfo(sMsg);
-    		logger.info(sMsg);
-    	}
-    	else
-    	{
-    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
-    		msg = Utils.pfmsgFatal(sMsg);
-    		logger.error(sMsg);
-    	}
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+			this.sCodError = errorseleccionado.getsCodError(); 
+			
+	    	int iCodError  = Integer.parseInt(sCodError);
+	    	
+	    	
+	    	logger.debug("Error seleccionado:|{}|",iCodError);
+	    	
+	    	String sMsg ="";
+	    	
+	    	if (editarError(iCodError))
+	    	{
+	    		sMsg = "Error editado.";
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+	    	}
+	    	else
+	    	{
+	    		sMsg = "[FATAL] ERROR: El error seleccionado no es recuperable. Por favor, pongase en contacto con soporte.";
+	    		msg = Utils.pfmsgFatal(sMsg);
+	    		logger.error(sMsg);
+	    	}
 
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
     
     
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		ActivoTabla buscaactivos = new ActivoTabla(
-				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-		
-		this.setTablaactivos(CLGastos.buscarActivosConGastos(buscaactivos));
-		
-		msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			ActivoTabla buscaactivos = new ActivoTabla(
+					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			
+			this.setTablaactivos(CLGastos.buscarActivosConGastos(buscaactivos));
+			
+			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
- 
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	
-    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
-    	logger.info("Activo '{}' Seleccionado.",sCOACES);
-    	
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	 
+	    	this.sCOACES  = activoseleccionado.getCOACES();
+	    	
+	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
+	    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+	    	
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	public void cargarDatos(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		if (CLActivos.existeActivo(sCOACES))
+		if (ConnectionManager.comprobarConexion())
 		{
-			this.tablagastos = CLGastos.buscarGastosActivo(sCOACES);
-		
-			msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos en curso.");
-			logger.info("Encontrados {} gastos en curso.",getTablagastos().size());
+			FacesMessage msg;
+			
+			if (CLActivos.existeActivo(sCOACES))
+			{
+				this.tablagastos = CLGastos.buscarGastosActivo(sCOACES);
+			
+				msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos en curso.");
+				logger.info("Encontrados {} gastos en curso.",getTablagastos().size());
+			}
+			else
+			{
+				msg = Utils.pfmsgError("ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
+				logger.error("ERROR: No exite el activo '{}'. Por favor, revise los datos.",sCOACES);
+			}
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		else
-		{
-			msg = Utils.pfmsgError("ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
-			logger.error("ERROR: No exite el activo '{}'. Por favor, revise los datos.",sCOACES);
-		}
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
 	}
 	
 	public void seleccionarGasto(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
-    	
-    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
-    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
-    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
-    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
-    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
-    	
-	  	Gasto gasto = CLGastos.buscarGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
-    	
-    	logger.debug(gasto.logGasto());
- 
-    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
+	    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
+	    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
+	    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
+	    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
+	    	
+		  	Gasto gasto = CLGastos.buscarGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+	    	
+	    	logger.debug(gasto.logGasto());
+	 
+	    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
 
-		this.sPTPAGO = gasto.getPTPAGO();
+			this.sPTPAGO = gasto.getPTPAGO();
 
-		this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
-		this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
-		this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
-		this.sCOSIGA = gasto.getCOSIGA();
-		this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
-		this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
-		this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
-		this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
-		this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
-		this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
-		this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
-		this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
-		this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
-		this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
-		this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
-		this.sCOIMPT = gasto.getCOIMPT();
-		
-		this.sCOTNEG = gasto.getCOTNEG();
-		this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
-		this.sCOMONA = gasto.getCOMONA();
-		this.sBIAUTO = gasto.getBIAUTO();
-		this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-		this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
-		
-		this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
-		
-		this.sCOENCX = ValoresDefecto.DEF_COENCX;
-		this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-		this.sNUCONE = ValoresDefecto.DEF_NUCONE;
-		
-		this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
+			this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
+			this.sCOSIGA = gasto.getCOSIGA();
+			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
+			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
+			this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
+			this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+			this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
+			this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
+			this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
+			this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
+			this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
+			this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
+			this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
+			this.sCOIMPT = gasto.getCOIMPT();
+			
+			this.sCOTNEG = gasto.getCOTNEG();
+			this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
+			this.sCOMONA = gasto.getCOMONA();
+			this.sBIAUTO = gasto.getBIAUTO();
+			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
+			this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+			
+			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
+			
+			this.sCOENCX = ValoresDefecto.DEF_COENCX;
+			this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+			this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+			
+			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
 
-		this.sCOTERR = ValoresDefecto.DEF_COTERR;
-		this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
-	
-		this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
-		this.sCOAPII = ValoresDefecto.DEF_COAPII;
-		this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-		this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+			this.sCOTERR = ValoresDefecto.DEF_COTERR;
+			this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
 		
-		String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
-		
-		msg = Utils.pfmsgInfo(sTipo+" de '"+sDCOSBGA+"' se ha cargado.");
-		logger.info("{} de '{}' se ha cargado.",sTipo,sDCOSBGA);
+			this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+			this.sCOAPII = ValoresDefecto.DEF_COAPII;
+			this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+			this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+			
+			String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
+			
+			msg = Utils.pfmsgInfo(sTipo+" de '"+sDCOSBGA+"' se ha cargado.");
+			logger.info("{} de '{}' se ha cargado.",sTipo,sDCOSBGA);
 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
     }
 	
 	
@@ -859,115 +884,115 @@ public class GestorErroresGastos implements Serializable
 
 	public void registraGasto(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
-		if (!CLGastos.existeMovimientoGasto(sCodMovimiento))
+		if (ConnectionManager.comprobarConexion())
 		{
-			sMsg = "[FATAL] ERROR:911 - No se puede modificar el gasto, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
-		else
-		{
-			logger.debug("sCOACES:|{}|",sCOACES);
-			logger.debug("sCOGRUG:|{}|",sCOGRUG);
-			logger.debug("sCOTPGA:|{}|",sCOTPGA);
-			logger.debug("sCOSBGA:|{}|",sCOSBGA);
-			logger.debug("sFEDEVE:|{}|",sFEDEVE);
+			FacesMessage msg;
 			
-			MovimientoGasto nuevomovimiento = new MovimientoGasto (
-					sCOACES.toUpperCase(),
-					sCOGRUG.toUpperCase(),
-					sCOTPGA.toUpperCase(),
-					Utils.compruebaCodigoPago(false, sCOSBGA.toUpperCase()),
-					sPTPAGO.toUpperCase(),
-					Utils.compruebaFecha(sFEDEVE),
-					Utils.compruebaFecha(sFFGTVP),
-					"0",
-					Utils.compruebaFecha(sFELIPG),
-					sCOSIGA.toUpperCase(),
-					Utils.compruebaFecha(sFEEESI),
-					Utils.compruebaFecha(sFEECOI),
-					"0",
-					"0",
-					Utils.compruebaImporte(sIMNGAS.toUpperCase()),
-					sYCOS02.toUpperCase(),
-					Utils.compruebaImporte(sIMRGAS.toUpperCase()),
-					sYCOS04.toUpperCase(),
-					Utils.compruebaImporte(sIMDGAS.toUpperCase()),
-					sYCOS06.toUpperCase(),
-					Utils.compruebaImporte(sIMCOST.toUpperCase()),
-					sYCOS08.toUpperCase(),
-					Utils.compruebaImporte(sIMOGAS.toUpperCase()),
-					sYCOS10.toUpperCase(),
-					Utils.compruebaImporte(sIMDTGA.toUpperCase()),
-					ValoresDefecto.DEF_COUNMO,
-					Utils.compruebaImporte(sIMIMGA.toUpperCase()),
-					Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
-					ValoresDefecto.DEF_COTNEG,
-					ValoresDefecto.DEF_COENCX,
-					ValoresDefecto.DEF_COOFCX,
-					ValoresDefecto.DEF_NUCONE,
-					sNUPROF.toUpperCase(),
-					Utils.compruebaFecha(sFEAGTO),
-					ValoresDefecto.DEF_COMONA,
-					ValoresDefecto.DEF_BIAUTO,
-					ValoresDefecto.DEF_FEAUFA,
-					ValoresDefecto.DEF_COTERR,
-					ValoresDefecto.DEF_FMPAGN,
-					Utils.compruebaFecha(sFEPGPR),
-					ValoresDefecto.DEF_FEAPLI,
-					ValoresDefecto.DEF_COAPII,
-					ValoresDefecto.DEF_COSPII_GA,
-					ValoresDefecto.DEF_NUCLII);
-
-			//movimiento.pintaMovimientoGasto();
+			String sMsg = "";
 			
-			int iSalida = CLErrores.reparaMovimientoGasto(nuevomovimiento,sCodMovimiento,sCodError);
-			
-			logger.debug("Codigo de salida:"+iSalida);
-			
-			switch (iSalida) 
+			if (!CLGastos.existeMovimientoGasto(sCodMovimiento))
 			{
-			case 0: //Sin errores
-				sMsg = "El movimiento se ha registrado correctamente.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-				break;
-
-			case -806: //Error 806 - modificacion sin cambios
-				sMsg = "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				break;
-				
-	
-			case -900: //Error 900 - al crear un movimiento
-				sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+				sMsg = "[FATAL] ERROR:911 - No se puede modificar el gasto, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgFatal(sMsg);
 				logger.error(sMsg);
-				break;
-
-			case -904: //Error 904 - error y rollback - error al modificar el gasto
-				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			default: //error generico
-				msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
-				logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
-				break;
 			}
+			else
+			{
+				logger.debug("sCOACES:|{}|",sCOACES);
+				logger.debug("sCOGRUG:|{}|",sCOGRUG);
+				logger.debug("sCOTPGA:|{}|",sCOTPGA);
+				logger.debug("sCOSBGA:|{}|",sCOSBGA);
+				logger.debug("sFEDEVE:|{}|",sFEDEVE);
+				
+				MovimientoGasto nuevomovimiento = new MovimientoGasto (
+						sCOACES.toUpperCase(),
+						sCOGRUG.toUpperCase(),
+						sCOTPGA.toUpperCase(),
+						Utils.compruebaCodigoPago(false, sCOSBGA.toUpperCase()),
+						sPTPAGO.toUpperCase(),
+						Utils.compruebaFecha(sFEDEVE),
+						Utils.compruebaFecha(sFFGTVP),
+						"0",
+						Utils.compruebaFecha(sFELIPG),
+						sCOSIGA.toUpperCase(),
+						Utils.compruebaFecha(sFEEESI),
+						Utils.compruebaFecha(sFEECOI),
+						"0",
+						"0",
+						Utils.compruebaImporte(sIMNGAS.toUpperCase()),
+						sYCOS02.toUpperCase(),
+						Utils.compruebaImporte(sIMRGAS.toUpperCase()),
+						sYCOS04.toUpperCase(),
+						Utils.compruebaImporte(sIMDGAS.toUpperCase()),
+						sYCOS06.toUpperCase(),
+						Utils.compruebaImporte(sIMCOST.toUpperCase()),
+						sYCOS08.toUpperCase(),
+						Utils.compruebaImporte(sIMOGAS.toUpperCase()),
+						sYCOS10.toUpperCase(),
+						Utils.compruebaImporte(sIMDTGA.toUpperCase()),
+						ValoresDefecto.DEF_COUNMO,
+						Utils.compruebaImporte(sIMIMGA.toUpperCase()),
+						Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
+						ValoresDefecto.DEF_COTNEG,
+						ValoresDefecto.DEF_COENCX,
+						ValoresDefecto.DEF_COOFCX,
+						ValoresDefecto.DEF_NUCONE,
+						sNUPROF.toUpperCase(),
+						Utils.compruebaFecha(sFEAGTO),
+						ValoresDefecto.DEF_COMONA,
+						ValoresDefecto.DEF_BIAUTO,
+						ValoresDefecto.DEF_FEAUFA,
+						ValoresDefecto.DEF_COTERR,
+						ValoresDefecto.DEF_FMPAGN,
+						Utils.compruebaFecha(sFEPGPR),
+						ValoresDefecto.DEF_FEAPLI,
+						ValoresDefecto.DEF_COAPII,
+						ValoresDefecto.DEF_COSPII_GA,
+						ValoresDefecto.DEF_NUCLII);
 
-		}
+				//movimiento.pintaMovimientoGasto();
+				
+				int iSalida = CLErrores.reparaMovimientoGasto(nuevomovimiento,sCodMovimiento,sCodError);
+				
+				logger.debug("Codigo de salida:"+iSalida);
+				
+				switch (iSalida) 
+				{
+				case 0: //Sin errores
+					sMsg = "El movimiento se ha registrado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					break;
+
+				case -806: //Error 806 - modificacion sin cambios
+					sMsg = "ERROR:806 - No hay modificaciones que realizar. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					break;
+					
 		
-		logger.debug("Finalizadas las comprobaciones.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);		
+				case -900: //Error 900 - al crear un movimiento
+					sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
 
+				case -904: //Error 904 - error y rollback - error al modificar el gasto
+					sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
 
+				default: //error generico
+					msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
+					logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
+					break;
+				}
+			}
+			
+			logger.debug("Finalizadas las comprobaciones.");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 
 	public String getsCOACES() {

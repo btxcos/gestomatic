@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -41,66 +42,77 @@ public class GestorProvisiones implements Serializable
 	
 	public GestorProvisiones()
 	{
-
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorProvisiones...");	
+		}
 	}
 
 	public void cargaProvisionesAbiertas(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-    	
-		this.tablaprovisiones = CLProvisiones.buscarProvisionesAbiertas(); 
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+			this.tablaprovisiones = CLProvisiones.buscarProvisionesAbiertas(); 
 
-		msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
-		logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
+			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
+			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
+		}
 	}
 	
 	public void seleccionarProvision(ActionEvent actionEvent) 
-    {  
-    	FacesMessage msg;
-    	
-    	this.sNUPROF  = provisionseleccionada.getNUPROF();
-    	this.sCOSPAT  = provisionseleccionada.getCOSPAT();
-    	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
-    	this.sTAS  = provisionseleccionada.getTAS();
-    	this.sDTAS  = provisionseleccionada.getDTAS();
-    	this.sValorTolal  = Double.toString(CLProvisiones.calcularValorProvision(sNUPROF));
-    	this.sNumGastos  = Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
-    	
-    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
-    	logger.info("Provision '{}' Seleccionada.",sNUPROF);
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	this.sNUPROF  = provisionseleccionada.getNUPROF();
+	    	this.sCOSPAT  = provisionseleccionada.getCOSPAT();
+	    	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
+	    	this.sTAS  = provisionseleccionada.getTAS();
+	    	this.sDTAS  = provisionseleccionada.getDTAS();
+	    	this.sValorTolal  = Double.toString(CLProvisiones.calcularValorProvision(sNUPROF));
+	    	this.sNumGastos  = Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
+	    	
+	    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
+	    	logger.info("Provision '{}' Seleccionada.",sNUPROF);
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
+		}
     }
 	
 	public void cerrarProvision(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		Provision provision = new Provision(sNUPROF, sCOSPAT, sTAS, Utils.compruebaImporte(sValorTolal), sNumGastos, Utils.fechaDeHoy(false),ValoresDefecto.CAMPO_SIN_INFORMAR, ValoresDefecto.DEF_BAJA);
-		
-				
-		//CLProvisiones.detallesProvision(sNUPROF);
-		String sMsg = "";
-
-		if (CLProvisiones.cerrarProvision(provision))
+		if (ConnectionManager.comprobarConexion())
 		{
-			sMsg = "Provision '"+ sNUPROF +"' cerrada.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			FacesMessage msg;
+			
+			Provision provision = new Provision(sNUPROF, sCOSPAT, sTAS, Utils.compruebaImporte(sValorTolal), sNumGastos, Utils.fechaDeHoy(false),ValoresDefecto.CAMPO_SIN_INFORMAR, ValoresDefecto.DEF_BAJA);
+			
+					
+			//CLProvisiones.detallesProvision(sNUPROF);
+			String sMsg = "";
 
-		}
-		else
-		{
-			sMsg = "[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
+			if (CLProvisiones.cerrarProvision(provision))
+			{
+				sMsg = "Provision '"+ sNUPROF +"' cerrada.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
 
-    	
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+			else
+			{
+				sMsg = "[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+
+	    	
+			FacesContext.getCurrentInstance().addMessage(null, msg);	
+		}
 	}
 
 	public String getsNUPROF() {

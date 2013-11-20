@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
 
@@ -30,7 +31,10 @@ public class GestorCargas implements Serializable
 	
 	public GestorCargas ()
 	{
-		
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorCargas...");	
+		}
 	}
 
 	public void borrarResultadosCarga()
@@ -42,61 +46,66 @@ public class GestorCargas implements Serializable
     {  
     	borrarResultadosCarga();
     }
-
+    
 	public void cargaArchivo(FileUploadEvent event) 
     {
-		FacesMessage msg;
 		
-		logger.debug("Iniciando carga...");
-		
-		Resultados carga = FileManager.splitter(FileManager.guardarFichero(event));
-		
-		int iCodigoError = carga.getiCodigo();
-		
-		logger.debug("iCodigoError:|{}|",iCodigoError);
-		
-		if (carga.getAlCarga().size() > 0)
+		if (ConnectionManager.comprobarConexion())
 		{
-		
-			this.tablamensajes.addAll(carga.getAlCarga());
-		}
-		
-		logger.debug("tablamensajes.size():|{}|",tablamensajes.size());
-		
-		
-		if (iCodigoError == 0)
-		{
+			FacesMessage msg;
+			
+			logger.debug("Iniciando carga...");
+			
+			Resultados carga = FileManager.splitter(FileManager.guardarFichero(event));
+			
+			int iCodigoError = carga.getiCodigo();
+			
+			logger.debug("iCodigoError:|{}|",iCodigoError);
+			
+			if (carga.getAlCarga().size() > 0)
+			{
+			
+				this.tablamensajes.addAll(carga.getAlCarga());
+			}
+			
+			logger.debug("tablamensajes.size():|{}|",tablamensajes.size());
+			
+			
+			if (iCodigoError == 0)
+			{
 
-			msg = Utils.pfmsgInfo("'"+event.getFile().getFileName() +"' ha subido correctamente.");
-			logger.info("'{}' ha subido correctamente.",event.getFile().getFileName());
+				msg = Utils.pfmsgInfo("'"+event.getFile().getFileName() +"' ha subido correctamente.");
+				logger.info("'{}' ha subido correctamente.",event.getFile().getFileName());
 
-		}
-		else if (iCodigoError < 0)
-		{
-		
-			msg = Utils.pfmsgError("ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.");
-			logger.error("ERROR: El archivo '{}' no tiene un nombre reconocible. Por favor, reviselo.",event.getFile().getFileName());
+			}
+			else if (iCodigoError < 0)
+			{
+			
+				msg = Utils.pfmsgError("ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.");
+				logger.error("ERROR: El archivo '{}' no tiene un nombre reconocible. Por favor, reviselo.",event.getFile().getFileName());
 
-		}
-		else if (iCodigoError == 4)
-		{
-			msg = Utils.pfmsgWarning("El archivo de Gastos debe de ser primero supervisado por la entidad.");
-			logger.warn("El archivo de Gastos debe de ser primero supervisado por la entidad.");
-		}
-		else if (iCodigoError == 5)
-		{
-			msg = Utils.pfmsgWarning("El archivo de Cierres debe comprobado por la entidad.");
-			logger.warn("El archivo de Cierres debe comprobado por la entidad.");
-		}
-		else
-		{
-			msg = Utils.pfmsgFatal("ERROR: Se encontraron problemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.");
-			logger.error("[FATAL] ERROR: Se encontraron problemas al procesar el archivo '{}', contiene registros inconsistentes con el sistema. Por favor, reviselo.",event.getFile().getFileName());
+			}
+			else if (iCodigoError == 4)
+			{
+				msg = Utils.pfmsgWarning("El archivo de Gastos debe de ser primero supervisado por la entidad.");
+				logger.warn("El archivo de Gastos debe de ser primero supervisado por la entidad.");
+			}
+			else if (iCodigoError == 5)
+			{
+				msg = Utils.pfmsgWarning("El archivo de Cierres debe comprobado por la entidad.");
+				logger.warn("El archivo de Cierres debe comprobado por la entidad.");
+			}
+			else
+			{
+				msg = Utils.pfmsgFatal("ERROR: Se encontraron problemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.");
+				logger.error("[FATAL] ERROR: Se encontraron problemas al procesar el archivo '{}', contiene registros inconsistentes con el sistema. Por favor, reviselo.",event.getFile().getFileName());
+			}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			logger.debug("Carga completada!");
 		}
 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		logger.debug("Carga completada!");
 	}
 
 

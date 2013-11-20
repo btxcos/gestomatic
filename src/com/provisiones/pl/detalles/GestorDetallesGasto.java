@@ -2,11 +2,17 @@ package com.provisiones.pl.detalles;
 
 import java.io.Serializable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.provisiones.dal.ConnectionManager;
+
 public class GestorDetallesGasto implements Serializable 
 {
-
 	private static final long serialVersionUID = -2868110080833865958L;
 
+	private static Logger logger = LoggerFactory.getLogger(GestorDetallesGasto.class.getName());
+	
 	private String sCOACES = "";
 	private String sCOGRUG = "";
 	private String sCOTPGA = "";
@@ -54,7 +60,10 @@ public class GestorDetallesGasto implements Serializable
 	
 	public GestorDetallesGasto()
 	{
-		
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorDetallesGasto...");	
+		}
 	}
 	
 	

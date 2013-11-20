@@ -10,6 +10,7 @@ import javax.faces.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 
 import com.provisiones.misc.ValoresDefecto;
@@ -124,7 +125,11 @@ public class GestorActivos implements Serializable
 	
 	public GestorActivos()
 	{
-		encuentraActivos();
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorActivos...");	
+			encuentraActivos();
+		}
 	}
 	
 	
@@ -165,89 +170,134 @@ public class GestorActivos implements Serializable
 	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		
-		FacesMessage msg;
-		
-		encuentraActivos();
 
-		msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			encuentraActivos();
+
+			msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 		
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {  
-    	FacesMessage msg;
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
 
-    	this.sCOACES  = activoseleccionado.getCOACES();
-    	
-    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
-    	
-    	logger.debug("Activo seleccionado:|{}|",sCOACES);
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	this.sCOACES  = activoseleccionado.getCOACES();
+	    	
+	    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
+	    	
+	    	logger.debug("Activo seleccionado:|{}|",sCOACES);
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+
 		
     }
 	
 	public String cargarComunidad() 
     {  
-	
-    	this.sCOACES = activoseleccionado.getCOACES();
-    	
-    	logger.debug("Redirigiendo...");
-    	
-    	return "movimientoscomunidades.xhtml";
+		String sPagina = "login.xhtml";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	this.sCOACES = activoseleccionado.getCOACES();
+	    	
+	    	logger.debug("Redirigiendo...");
+	    	
+	    	sPagina =  "movimientoscomunidades.xhtml";
+		}
+
+		return sPagina;
     }
 
 	public String cargarCuota() 
     {  
-    	
-    	this.sCOACES = activoseleccionado.getCOACES();
-    	
-    	logger.debug("Redirigiendo...");
-    	
-    	return "movimientoscuotas.xhtml";
+		String sPagina = "login.xhtml";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	this.sCOACES = activoseleccionado.getCOACES();
+	    	
+	    	logger.debug("Redirigiendo...");
+	    	
+	    	sPagina =  "movimientoscuotas.xhtml";
+		}
+
+		return sPagina;
     }
 	
 	public String cargarReferencia() 
     {  
-    	
-    	this.sCOACES = activoseleccionado.getCOACES();
-    	
-    	logger.debug("Redirigiendo...");
-    	
-    	return "movimientosreferencias.xhtml";
+ 		String sPagina = "login.xhtml";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	this.sCOACES = activoseleccionado.getCOACES();
+	    	
+	    	logger.debug("Redirigiendo...");
+	    	
+	    	sPagina =  "movimientosreferencias.xhtml";
+		}
+
+		return sPagina;
     }
 	
 	public String cargarImpuestos() 
     {  
-    	
-    	this.sCOACES = activoseleccionado.getCOACES();
-    	
-    	logger.debug("Redirigiendo...");
-    	
-    	return "movimientosimpuestos.xhtml";
+		String sPagina = "login.xhtml";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	this.sCOACES = activoseleccionado.getCOACES();
+	    	
+	    	logger.debug("Redirigiendo...");
+	    	
+	    	sPagina =  "movimientosimpuestos.xhtml";
+		}
+		
+		return sPagina;
+
     }
 	public String cargarGastos() 
     {  
-    	
-    	this.sCOACES = activoseleccionado.getCOACES();
-    	
-    	logger.debug("Redirigiendo...");
-    	
-    	return "gastos.xhtml";
+		String sPagina = "login.xhtml";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	this.sCOACES = activoseleccionado.getCOACES();
+	    	
+	    	logger.debug("Redirigiendo...");
+	    	
+	    	sPagina =  "gastos.xhtml";
+		}
+
+		return sPagina;
     }
 
 	public String cargarDetalles() 
-    {  
-    	this.sCOACES = activoseleccionado.getCOACES();
-    	
-    	logger.debug("sCOACES:|{}|",sCOACES);
-    	
-    	logger.debug("Redirigiendo...");
+    { 
+		String sPagina = "login.xhtml";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	this.sCOACES = activoseleccionado.getCOACES();
+	    	
+	    	logger.debug("sCOACES:|{}|",sCOACES);
+	    	
+	    	logger.debug("Redirigiendo...");
 
-    	return "detallesactivo.xhtml";
+	    	sPagina = "detallesactivo.xhtml";
+		}
+
+		return sPagina;
     }
 	
 	public String getsCOACES() {

@@ -19,9 +19,12 @@ public class GestorIndice implements Serializable
 	
 	public GestorIndice()
 	{
-		logger.info("Inicializando aplicación.");
-		Utils.inicializarDirectorios();
-		CLProvisiones.inicializaProvisiones();
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.info("Inicializando aplicación.");
+			Utils.inicializarDirectorios();
+			CLProvisiones.inicializaProvisiones();	
+		}
 	}
 
 	public String getsUsuario() {

@@ -32,7 +32,6 @@ public class GestorSesion implements Serializable
 	
 	public GestorSesion()
 	{
-
 		borrarCamposLogin();
 	}
 	
@@ -58,7 +57,6 @@ public class GestorSesion implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
 			anulaSesion();
-			
 		}
 	}
 	
@@ -134,7 +132,7 @@ public class GestorSesion implements Serializable
 					sMensaje = "Acceso permitido.";
 					msg = Utils.pfmsgInfo(sMensaje);
 				}
-				sMensaje = "Para entrar al portal, pulse 'Continuar'.";
+				sMensaje = "Para entrar al portal pulse 'Continuar'.";
 				
 				conn = ConnectionManager.openDBConnection();
 				logger.debug("Conexión:|"+conn.toString()+"|");

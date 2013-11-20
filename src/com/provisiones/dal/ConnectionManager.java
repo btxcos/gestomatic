@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.misc.Utils;
 import com.provisiones.pl.GestorSesion;
 
 public class ConnectionManager 
@@ -24,6 +27,24 @@ public class ConnectionManager
 	
 	
 	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class.getName());
+
+    public static boolean comprobarConexion()
+    {
+    	boolean bSalida = true;
+    	
+    	if (ConnectionManager.getDBConnection() == null)
+    	{
+    		FacesMessage msg;
+    		
+    		msg = Utils.pfmsgFatal("Se perdió la sesión con el servidor. Por favor, salga y vuelva a iniciar una sesión.");
+    		
+    		FacesContext.getCurrentInstance().addMessage(null, msg);
+    		
+    		bSalida = false;
+    	}
+    	
+    	return bSalida;
+    }
 	
 	public static Connection getDBConnection() 
 	{
