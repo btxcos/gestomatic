@@ -424,7 +424,7 @@ public class QMMovimientosComunidades
 						logger.debug(CAMPO1+":|"+sMovimientoComunidadID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -556,7 +556,7 @@ public class QMMovimientosComunidades
 						logger.debug(CAMPO1+":|"+sMovimientoComunidadID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}			
@@ -621,7 +621,7 @@ public class QMMovimientosComunidades
 					logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 				}
 			}
-			if (bEncontrado == false) 
+			if (!bEncontrado) 
 			{
 				logger.debug("No se encontro la información.");
 			}

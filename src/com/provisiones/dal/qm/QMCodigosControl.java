@@ -108,7 +108,7 @@ public class QMCodigosControl
 						logger.debug(DESCRIPCION+":|"+sDescripcion+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 	 
 					logger.debug("No se encontró la información.");
@@ -227,7 +227,7 @@ public class QMCodigosControl
 
 						}
 					}
-					if (bEncontrado == false) 
+					if (!bEncontrado) 
 					{
 		 
 						logger.debug("No se encontró la información.");

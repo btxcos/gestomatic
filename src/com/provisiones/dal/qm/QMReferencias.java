@@ -281,7 +281,7 @@ public class QMReferencias
 	  					logger.debug(CAMPO2+":|"+sNURCAT+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -359,7 +359,7 @@ public class QMReferencias
 						logger.debug(CAMPO1+":|"+sReferenciaID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -424,7 +424,7 @@ public class QMReferencias
 	  					logger.debug(CAMPO1+":|"+sCodReferencia+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -539,7 +539,7 @@ public class QMReferencias
 						logger.debug(CAMPO10+":|"+sEstado+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

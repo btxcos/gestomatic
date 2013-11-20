@@ -180,7 +180,7 @@ public class QMListaReferencias
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -247,7 +247,7 @@ public class QMListaReferencias
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -322,7 +322,7 @@ public class QMListaReferencias
 						i++;
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -436,7 +436,7 @@ public class QMListaReferencias
 						logger.debug(CAMPO4+":|"+sValidado+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 	 
 					logger.debug("No se encontró la información.");
@@ -504,7 +504,7 @@ public class QMListaReferencias
 						logger.debug( "Numero de registros:|"+liNumero+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -614,7 +614,7 @@ public class QMListaReferencias
 						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -734,7 +734,7 @@ public class QMListaReferencias
 						logger.debug(CAMPO1+":|"+sCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -853,7 +853,7 @@ public class QMListaReferencias
 						logger.debug(CAMPO1+":|"+sCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -915,7 +915,7 @@ public class QMListaReferencias
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -987,7 +987,7 @@ public class QMListaReferencias
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -1057,7 +1057,7 @@ public class QMListaReferencias
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}			

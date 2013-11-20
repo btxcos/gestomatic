@@ -276,7 +276,7 @@ public class QMImpuestos
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -355,7 +355,7 @@ public class QMImpuestos
 						logger.debug(CAMPO11+":|"+sImpuestoRecursoID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -419,7 +419,7 @@ public class QMImpuestos
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -485,7 +485,7 @@ public class QMImpuestos
 						logger.debug(CAMPO1+":|"+sCodNURCAT+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -598,7 +598,7 @@ public class QMImpuestos
 						logger.debug(CAMPO11+":|"+sEstado+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

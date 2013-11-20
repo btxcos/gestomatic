@@ -451,7 +451,7 @@ public class QMGastos
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -565,7 +565,7 @@ public class QMGastos
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -638,7 +638,7 @@ public class QMGastos
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -712,7 +712,7 @@ public class QMGastos
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -878,7 +878,7 @@ public class QMGastos
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -954,7 +954,7 @@ public class QMGastos
 						i++;
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -1067,7 +1067,7 @@ public class QMGastos
 						logger.debug("{}:|"+QMActivos.CAMPO1,sCOACES);
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -1190,7 +1190,7 @@ public class QMGastos
 						logger.debug(CAMPO2+":|"+sCodCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

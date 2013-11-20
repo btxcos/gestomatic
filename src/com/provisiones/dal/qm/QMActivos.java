@@ -845,7 +845,7 @@ public class QMActivos
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}
@@ -1019,7 +1019,7 @@ public class QMActivos
 						//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}
@@ -1177,7 +1177,7 @@ public class QMActivos
 						//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}
@@ -1248,7 +1248,7 @@ public class QMActivos
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}
@@ -1320,7 +1320,7 @@ public class QMActivos
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}
@@ -1389,7 +1389,7 @@ public class QMActivos
 						logger.debug(CAMPO45+":|"+sBIARRE+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}
@@ -1457,7 +1457,7 @@ public class QMActivos
 						logger.debug(CAMPO88+":|"+sCodCOSPAT+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}
@@ -1560,7 +1560,7 @@ public class QMActivos
 						//logger.debug(CAMPO1+":|"+sCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 
 					logger.info("No se encontro la información.");
@@ -1677,7 +1677,7 @@ public class QMActivos
 						//logger.debug(CAMPO1+":|"+sCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

@@ -264,7 +264,7 @@ public class QMProvisiones
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -385,7 +385,7 @@ public class QMProvisiones
 						logger.debug("Numero de registros:|"+liNumero+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -447,7 +447,7 @@ public class QMProvisiones
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -513,7 +513,7 @@ public class QMProvisiones
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -586,7 +586,7 @@ public class QMProvisiones
 						logger.debug(CAMPO1 + ":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -659,7 +659,7 @@ public class QMProvisiones
 						i++;
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -749,7 +749,7 @@ public class QMProvisiones
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -819,7 +819,7 @@ public class QMProvisiones
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -886,7 +886,7 @@ public class QMProvisiones
 						logger.debug(CAMPO1 + ":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

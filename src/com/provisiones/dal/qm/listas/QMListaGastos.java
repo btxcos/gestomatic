@@ -175,7 +175,7 @@ public class QMListaGastos
 						bEncontrado = true;
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -251,7 +251,7 @@ public class QMListaGastos
 						i++;
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					resultado = new ArrayList<String>(); 
 					logger.debug("No se encontró la información.");
@@ -365,7 +365,7 @@ public class QMListaGastos
 						logger.debug(CAMPO3+":|"+sValidado+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -432,7 +432,7 @@ public class QMListaGastos
 						logger.debug( "Numero de registros:|"+liNumero+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -550,7 +550,7 @@ public class QMListaGastos
 						logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -679,7 +679,7 @@ public class QMListaGastos
 						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -746,7 +746,7 @@ public class QMListaGastos
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}			
@@ -813,7 +813,7 @@ public class QMListaGastos
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}			
@@ -880,7 +880,7 @@ public class QMListaGastos
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}			

@@ -204,7 +204,7 @@ public class QMPerfiles
 						logger.debug(CAMPO3+":|"+sEstado+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

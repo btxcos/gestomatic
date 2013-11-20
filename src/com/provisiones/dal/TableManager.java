@@ -4,10 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TableManager
 {
-
-	static String sClassName = TableManager.class.getName();
+	private static Logger logger = LoggerFactory.getLogger(TableManager.class.getName());
 
 	public static boolean eliminarTablasCodigos(Connection conn)
 	{
@@ -66,10 +68,7 @@ public class TableManager
 		} 
 		catch (SQLException ex) 
 		{
-
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		}
 		finally 
 		{
@@ -107,10 +106,7 @@ public class TableManager
 		} 
 		catch (SQLException ex) 
 		{
-
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		}
 		finally 
 		{
@@ -120,8 +116,9 @@ public class TableManager
 				{
 					stmt.close();
 				} 
-				catch (SQLException sqlEx) 
+				catch (SQLException ex) 
 				{
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 				} 
 				stmt = null;
 			}
@@ -144,10 +141,7 @@ public class TableManager
 		} 
 		catch (SQLException ex) 
 		{
-
-			System.out.println("SQLException: " + ex.getMessage());
-			System.out.println("SQLState: " + ex.getSQLState());
-			System.out.println("VendorError: " + ex.getErrorCode());
+			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		}
 		finally 
 		{

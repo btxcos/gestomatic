@@ -24,7 +24,7 @@ public class QMListaGastosProvisiones
 	static String CAMPO1 = "cod_gasto";
 	static String CAMPO2 = "cod_nuprof";
 	static String CAMPO3 = "cod_revisado";
-	static String CAMPO4 = "usuario_alta";    
+	static String CAMPO4 = "usuario_alta";
 	static String CAMPO5 = "fecha_alta";
 
 
@@ -170,7 +170,7 @@ public class QMListaGastosProvisiones
 						bEncontrado = true;
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -285,7 +285,7 @@ public class QMListaGastosProvisiones
 						logger.debug(CAMPO3+":|"+sRevisado+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 	 
 					logger.debug("No se encontró la información.");
@@ -356,7 +356,7 @@ public class QMListaGastosProvisiones
 						logger.debug(CAMPO2+":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -431,7 +431,7 @@ public class QMListaGastosProvisiones
 						logger.debug(CAMPO2+":|"+sNUPROF+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 	 
 					logger.debug("No se encontró la información.");
@@ -505,7 +505,7 @@ public class QMListaGastosProvisiones
 						i++;
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					resultado = new ArrayList<String>(); 
 					logger.debug("No se encontró la información.");
@@ -588,7 +588,7 @@ public class QMListaGastosProvisiones
 						logger.debug(CAMPO1+":|"+sGastoID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -698,7 +698,7 @@ public class QMListaGastosProvisiones
 						logger.debug( "Numero de registros:|"+liNumero+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -778,7 +778,7 @@ public class QMListaGastosProvisiones
 					}
 					logger.debug("Valor de Provisión:|"+dValor+"|");
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

@@ -383,7 +383,7 @@ public class QMComunidades
 					}
 				}
 
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -485,7 +485,7 @@ public class QMComunidades
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -550,7 +550,7 @@ public class QMComunidades
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -669,12 +669,10 @@ public class QMComunidades
 						logger.debug(CAMPO16+":|"+sEstado+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
-	 
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{

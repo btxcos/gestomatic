@@ -162,7 +162,7 @@ public class QMListaErroresGastos
 						logger.debug( "Numero de registros:|"+liNumero+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -275,7 +275,7 @@ public class QMListaErroresGastos
 						logger.debug(QMMovimientosGastos.CAMPO1+":|"+MOVIMIENTO+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -350,7 +350,7 @@ public class QMListaErroresGastos
 						logger.debug(sCodError+":|"+sDescripcion+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

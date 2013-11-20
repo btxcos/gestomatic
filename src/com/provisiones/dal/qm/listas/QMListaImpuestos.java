@@ -180,7 +180,7 @@ public class QMListaImpuestos
 					logger.debug("Encontrado el registro!");
 				}
 			}
-			if (bEncontrado == false) 
+			if (!bEncontrado) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -248,7 +248,7 @@ public class QMListaImpuestos
 						logger.debug(CAMPO2+":|"+sCodImpuesto+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -323,7 +323,7 @@ public class QMListaImpuestos
 						i++;
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -445,7 +445,7 @@ public class QMListaImpuestos
 						logger.debug(CAMPO1+":|"+sCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -570,7 +570,7 @@ public class QMListaImpuestos
 						logger.debug(CAMPO1+":|"+sCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -692,7 +692,7 @@ public class QMListaImpuestos
 						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -816,7 +816,7 @@ public class QMListaImpuestos
 						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -929,7 +929,7 @@ public class QMListaImpuestos
 						logger.debug(CAMPO4+":|"+sValidado+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 	 				logger.debug("No se encontró la información.");
 				}
@@ -996,7 +996,7 @@ public class QMListaImpuestos
 						logger.debug( "Numero de registros:|"+liNumero+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -1066,7 +1066,7 @@ public class QMListaImpuestos
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}			

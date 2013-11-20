@@ -57,7 +57,7 @@ public class ConnectionManager
 		{
 			try 
 			{
-				if (!(conn == null) && conn.isValid(1))
+				if ((conn != null) && conn.isValid(1))
 				{
 					logger.debug("Cerrando: "+conn.toString());
 					ConnectionManager.closeDBConnection(conn);

@@ -275,7 +275,7 @@ public class QMUsuarios
 						logger.debug("Encontrado el registro!");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -353,7 +353,7 @@ public class QMUsuarios
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -471,7 +471,7 @@ public class QMUsuarios
 
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -536,7 +536,7 @@ public class QMUsuarios
 					logger.debug("Encontrado el registro!");
 				}
 			}
-			if (bEncontrado == false) 
+			if (!bEncontrado) 
 			{
 				logger.debug("No se encontró la información.");
 			}
@@ -585,7 +585,7 @@ public class QMUsuarios
 				" WHERE "
 				+ CAMPO2  + " = '"+ sUsuario +"'";
 		
-		logger.debug(sQuery);
+		//logger.debug(sQuery);
 
 		try 
 		{
@@ -610,7 +610,7 @@ public class QMUsuarios
 					//logger.debug(CAMPO3+":|"+sPassword);
 				}
 			}
-			if (bEncontrado == false) 
+			if (!bEncontrado) 
 			{
 				logger.debug("No se encontró la información.");
 			}

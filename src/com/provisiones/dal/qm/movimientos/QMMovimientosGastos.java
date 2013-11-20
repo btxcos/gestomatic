@@ -517,7 +517,7 @@ public class QMMovimientosGastos
 						logger.debug(CAMPO1+":|"+sGastoID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -677,7 +677,7 @@ public class QMMovimientosGastos
 						logger.debug(CAMPO1+":|"+sGastoID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -744,7 +744,7 @@ public class QMMovimientosGastos
 						logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}

@@ -375,7 +375,7 @@ public class QMMovimientosCuotas
 						logger.debug(CAMPO1+":|"+sMovimientoCuotaID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -493,7 +493,7 @@ public class QMMovimientosCuotas
 						logger.debug(CAMPO1+":|"+sMovimientoCuotaID+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
@@ -560,7 +560,7 @@ public class QMMovimientosCuotas
 						logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 					}
 				}
-				if (bEncontrado == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontro la información.");
 				}
