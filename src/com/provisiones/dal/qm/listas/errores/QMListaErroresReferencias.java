@@ -16,7 +16,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.types.errores.ErrorReferenciaTabla;
 import com.provisiones.types.errores.ErrorTabla;
 
-public class QMListaErroresReferencias 
+public final class QMListaErroresReferencias 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresReferencias.class.getName());
 
@@ -25,6 +25,8 @@ public class QMListaErroresReferencias
 	public static final String CAMPO1  = "cod_movimiento";
 	public static final String CAMPO2  = "cod_cotdor";
 
+	private QMListaErroresReferencias(){}
+	
 	public static boolean addErrorReferencia(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = false;

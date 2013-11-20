@@ -1,6 +1,6 @@
 package com.provisiones.misc;
 
-public class Posiciones 
+public final class Posiciones 
 {
 
 	//Posicion de los campos en fichero de Activos
@@ -263,4 +263,5 @@ public class Posiciones
 	public static final int E4_OBTEXC_P  = 99;
 	public static final int E4_OBDEER_P  = 209;
 
+	private Posiciones(){}
 }

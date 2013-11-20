@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMActivos
+public final class QMActivos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMActivos.class.getName());
 	
@@ -113,6 +113,8 @@ public class QMActivos
 	public static final String CAMPO90 = "idcol3";
 	public static final String CAMPO91 = "cod_biobnu";
 	public static final String CAMPO92 = "pobrar";
+	
+	private QMActivos(){}
 
 	public static boolean addActivo(Connection conexion, Activo NuevoActivo) 
 	{

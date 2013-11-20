@@ -17,7 +17,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
 
-public class QMListaCuotas 
+public final class QMListaCuotas 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaCuotas.class.getName());
 	
@@ -33,6 +33,8 @@ public class QMListaCuotas
 	public static final String CAMPO5 = "usuario_movimiento";
 	public static final String CAMPO6 = "fecha_movimiento";
 
+	private QMListaCuotas(){}
+	
 	public static boolean addRelacionCuotas(Connection conexion, String sCodCOACES, String sCodCuota, String sCodMovimiento) 
 	{
 		boolean bSalida = true;

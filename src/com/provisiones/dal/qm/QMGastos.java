@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMGastos
+public final class QMGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMGastos.class.getName());
 	
@@ -59,6 +59,7 @@ public class QMGastos
 	public static final String CAMPO34 = "fepgpr";     
 	public static final String CAMPO35 = "cod_estado"; 
 
+	private QMGastos(){}
 	
 	public static int addGasto(Connection conexion, Gasto NuevoGasto, String sEstado) 
 	{

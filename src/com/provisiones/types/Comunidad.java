@@ -3,20 +3,20 @@ package com.provisiones.types;
 public class Comunidad 
 {
 
-	String sCOCLDO = "";
-	String sNUDCOM = "";
-	String sNOMCOC = "";
-	String sNODCCO = "";
-	String sNOMPRC = "";
-	String sNUTPRC = "";
-	String sNOMADC = "";
-	String sNUTADC = "";
-	String sNODCAD = "";
-	String sNUCCEN = "";
-	String sNUCCOF = "";
-	String sNUCCDI = "";
-	String sNUCCNT = "";
-	String sOBTEXC = "";
+	private String sCOCLDO = "";
+	private String sNUDCOM = "";
+	private String sNOMCOC = "";
+	private String sNODCCO = "";
+	private String sNOMPRC = "";
+	private String sNUTPRC = "";
+	private String sNOMADC = "";
+	private String sNUTADC = "";
+	private String sNODCAD = "";
+	private String sNUCCEN = "";
+	private String sNUCCOF = "";
+	private String sNUCCDI = "";
+	private String sNUCCNT = "";
+	private String sOBTEXC = "";
 
 	//Constructor de clase
 

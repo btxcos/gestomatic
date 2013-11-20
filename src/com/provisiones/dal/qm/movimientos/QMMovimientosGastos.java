@@ -12,7 +12,7 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMMovimientosGastos
+public final class QMMovimientosGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosGastos.class.getName());
 	
@@ -64,6 +64,8 @@ public class QMMovimientosGastos
 	public static final String CAMPO43 = "coapii";    
 	public static final String CAMPO44 = "cospii";    
 	public static final String CAMPO45 = "nuclii";
+
+	private QMMovimientosGastos(){}
 	
 	public static int addMovimientoGasto(Connection conexion, MovimientoGasto NuevoGasto) 
 	{

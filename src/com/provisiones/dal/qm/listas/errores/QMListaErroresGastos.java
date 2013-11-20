@@ -16,7 +16,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.types.errores.ErrorGastoTabla;
 import com.provisiones.types.errores.ErrorTabla;
 
-public class QMListaErroresGastos 
+public final class QMListaErroresGastos 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresGastos.class.getName());
 	
@@ -25,6 +25,8 @@ public class QMListaErroresGastos
 	public static final String CAMPO1  = "cod_movimiento";
 	public static final String CAMPO2  = "cod_coterr";
 
+	private QMListaErroresGastos(){}
+	
 	public static boolean addErrorGasto(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = false;

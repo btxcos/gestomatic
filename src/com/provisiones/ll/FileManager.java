@@ -45,10 +45,11 @@ import com.provisiones.types.Resultados;
 import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.ResultadosTabla;
 
-public class FileManager 
+public final class FileManager 
 {
-
 	private static Logger logger = LoggerFactory.getLogger(FileManager.class.getName());
+
+	private FileManager(){}
 	
 	public static String guardarFichero(FileUploadEvent event)
 	{
@@ -56,8 +57,6 @@ public class FileManager
 	
 		logger.debug("Guardando archivo...");
         UploadedFile file = event.getFile();
-        
-        
         
         String sFichero = Utils.timeStamp()+"_"+file.getFileName();
 
@@ -174,8 +173,6 @@ public class FileManager
 	           } 
 	           catch (Exception e2) 
 	           {
-	              //e2.printStackTrace();
-	              
 	              sNombreFichero = "";
 	              
 	              for (int i = 0; i < resultcomunidades.size() ; i++)
@@ -253,8 +250,6 @@ public class FileManager
 	           } 
 	           catch (Exception e2) 
 	           {
-	              //e2.printStackTrace();
-	              
 	              //En caso de error se devuelven los registros a su estado anterior
 	              sNombreFichero = "";
 	              
@@ -327,8 +322,6 @@ public class FileManager
 	           } 
 	           catch (Exception e2) 
 	           {
-	              e2.printStackTrace();
-
 	              //En caso de error se devuelven los registros a su estado anterior
 	              sNombreFichero = "";
 	              
@@ -399,8 +392,6 @@ public class FileManager
 	           } 
 	           catch (Exception e2) 
 	           {
-	              e2.printStackTrace();
-	              
 	              //En caso de error se devuelven los registros a su estado anterior
 	              sNombreFichero = "";
 	              
@@ -732,7 +723,7 @@ public class FileManager
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLGastos.actualizarGastoLeido(linea);
+	    			int iCodigo = CLGastos.actualizarGastoRecibido(linea);
 	    			
 	    			String sMensaje = "";
 	    			
@@ -741,6 +732,146 @@ public class FileManager
 	    			case 0:
 	    				sMensaje = "Movimiento validado.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_VALIDADO+"Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
+	    				break;
+	    			case 1:
+	    				sMensaje = "Movimiento de Gasto pendiente de revisión.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"(E) Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
+	    				break;
+	    			case -1:
+	    				sMensaje = "Registro no encontrado en el sistema.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    			case -2:
+	    				sMensaje = "No existe relación con la Gasto.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    			case -3:
+	    				sMensaje = "[FATAL] Error al validar la relación con el Gasto.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    			case -4:
+	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    			case -5:
+	    				sMensaje = "[FATAL] Error al actualizar la revisión del gasto.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;	
+	    			case -10:
+	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    			case -11:
+	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    			case -12:
+	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.warn(sMensaje);
+	    				break;
+	    			}
+	    			
+	    			if ( iCodigo >= 0 )
+	    			{
+	    				registros++;
+	    			}
+
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
+	    		}
+	        }
+		
+			br.close();
+		
+			logger.info( "Lectura de "+sNombre+" finalizada.\n");
+
+			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
+			
+			logger.debug("Registros procesados:|"+contador+"|");
+			logger.debug("Registros correctos:|"+registros+"|");
+
+			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+		}
+		catch (FileNotFoundException e)
+		{
+			logger.error("No se encontró el fichero recibido.");
+		}
+		catch (IOException e)
+		{
+			logger.error("Ocurrió un error al acceder al fichero recibido.");
+		}
+		logger.debug("tabla.size():|"+tabla.size()+"|");
+		
+        return tabla;
+	}
+	
+	public static ArrayList<ResultadosTabla> leerGastosVolcados(String sNombre) 
+	{
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre+"|");
+
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre);
+		
+		FileReader fr;
+
+		try 
+		{
+			fr = new FileReader (archivo);
+			
+			BufferedReader br = new BufferedReader(fr);
+			
+			String linea = "";
+
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
+			
+			logger.debug("Leyendo fichero..");
+
+			long liTiempo = System.currentTimeMillis();
+
+			int contador= 0 ;
+			int registros = 0;
+			
+			int iLongitudValida = Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L-Longitudes.OBDEER_L;
+			
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+
+	    		if (linea.equals(sFinFichero))
+	    		{
+	    			logger.info("Lectura finalizada.");
+	    		}
+	    		else if (linea.length()< iLongitudValida )
+	    		{
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
+	    		}
+	    		else
+	    		{
+	    			int iCodigo = CLGastos.actualizarGastoVolcado(linea);
+	    			
+	    			String sMensaje = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sMensaje = "Movimiento asimilado.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
 	    				logger.info(sMensaje);
 	    				break;
 	    			case 1:

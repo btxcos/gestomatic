@@ -17,7 +17,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.types.errores.ErrorImpuestoTabla;
 import com.provisiones.types.errores.ErrorTabla;
 
-public class QMListaErroresImpuestos 
+public final class QMListaErroresImpuestos 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresImpuestos.class.getName());
 
@@ -26,6 +26,8 @@ public class QMListaErroresImpuestos
 	public static final String CAMPO1  = "cod_movimiento";
 	public static final String CAMPO2  = "cod_cotdor";
 
+	private QMListaErroresImpuestos(){}
+	
 	public static boolean addErrorImpuesto(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = false;

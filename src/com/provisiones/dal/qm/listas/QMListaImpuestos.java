@@ -19,7 +19,7 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ImpuestoRecursoTabla;
 
-public class QMListaImpuestos 
+public final class QMListaImpuestos 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaImpuestos.class.getName());
 
@@ -35,6 +35,7 @@ public class QMListaImpuestos
 	public static final String CAMPO5 = "usuario_movimiento";
 	public static final String CAMPO6  = "fecha_movimiento";    
 
+	private QMListaImpuestos(){}
 
 	public static boolean addRelacionImpuestos(Connection conexion, String sCodCOACES, String sCodImpuesto, String sCodMovimiento) 
 	{

@@ -13,7 +13,7 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMComunidades
+public final class QMComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMComunidades.class.getName());
 	
@@ -42,7 +42,8 @@ public class QMComunidades
 	
 	//Campos de control
 	public static final String CAMPO16 = "cod_estado";
-	
+
+	private QMComunidades(){}
 
 	public static long addComunidad(Connection conexion, Comunidad NuevaComunidad)
 

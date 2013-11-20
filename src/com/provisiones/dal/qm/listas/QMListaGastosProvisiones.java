@@ -15,7 +15,7 @@ import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
-public class QMListaGastosProvisiones 
+public final class QMListaGastosProvisiones 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaGastosProvisiones.class.getName());
 	
@@ -27,6 +27,7 @@ public class QMListaGastosProvisiones
 	public static final String CAMPO4 = "usuario_alta";
 	public static final String CAMPO5 = "fecha_alta";
 
+	private QMListaGastosProvisiones(){}
 
 	public static boolean addRelacionGastoProvision(Connection conexion, String sCodGasto, String sCodNUPROF) 
 	{

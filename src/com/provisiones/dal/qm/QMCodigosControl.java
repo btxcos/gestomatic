@@ -11,9 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.misc.Utils;
 
-public class QMCodigosControl 
+public final class QMCodigosControl 
 {
-
 	private static Logger logger = LoggerFactory.getLogger(QMCodigosControl.class.getName());
 
 	public static final String DESCRIPCION = "descripcion";
@@ -59,6 +58,8 @@ public class QMCodigosControl
 
 	public static final String TCOTERR = "pp001_coterr_tbl";
 	public static final String ICOTERR = "coterr_id";
+
+	private QMCodigosControl(){}
 	
 	public static String getDesCampo(Connection conexion, String sTabla, String sCampo, String sValor)
 	{

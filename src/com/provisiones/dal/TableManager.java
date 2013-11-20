@@ -7,10 +7,12 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TableManager
+public final class TableManager
 {
 	private static Logger logger = LoggerFactory.getLogger(TableManager.class.getName());
 
+	private TableManager(){}
+	
 	public static boolean eliminarTablasCodigos(Connection conn)
 	{
 		Statement stmt = null;
@@ -152,8 +154,9 @@ public class TableManager
 				{
 					stmt.close();
 				} 
-				catch (SQLException sqlEx) 
+				catch (SQLException ex) 
 				{
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 				} 
 				stmt = null;
 			}

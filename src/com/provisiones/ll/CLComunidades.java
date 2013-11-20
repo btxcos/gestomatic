@@ -19,10 +19,11 @@ import com.provisiones.types.Comunidad;
 import com.provisiones.types.movimientos.MovimientoComunidad;
 import com.provisiones.types.tablas.ActivoTabla;
 
-
-public class CLComunidades 
+public final class CLComunidades 
 {
 	private static Logger logger = LoggerFactory.getLogger(CLComunidades.class.getName());
+	
+	private CLComunidades(){}
 	
 	//ID
 	public static String buscarCodigoComunidad (String sCodCOCLDO, String sCodNUDCOM)

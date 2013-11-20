@@ -2,7 +2,7 @@ package com.provisiones.misc;
 
 import java.io.File;
 
-public class ValoresDefecto 
+public final class ValoresDefecto 
 {
 	
 	public static final int CHAR_FIN = 26;
@@ -120,9 +120,17 @@ public class ValoresDefecto
 
 	public static final String DEF_PATH = "GLSL-portales"+File.separator+"provisiones"+File.separator;
 	public static final String DEF_EXEC_PATH = System.getProperty("user.dir")+File.separator+DEF_PATH;
-	public static final String DEF_PATH_BACKUP_RECIBIDOS = DEF_EXEC_PATH+"recibidos"+File.separator;
-	public static final String DEF_PATH_BACKUP_GENERADOS = DEF_EXEC_PATH+"generados"+File.separator;
-	public static final String DEF_PATH_LOGS = DEF_EXEC_PATH+"logs"+File.separator;
+
+	public static final String DEF_FILE_PATH = DEF_EXEC_PATH+"archivos"+File.separator;
+	public static final String DEF_PATH_BACKUP_RECIBIDOS = DEF_FILE_PATH+"recibidos"+File.separator;
+	public static final String DEF_PATH_BACKUP_GENERADOS = DEF_FILE_PATH+"generados"+File.separator;
 	
+	public static final String DEF_DUMP_PATH = DEF_EXEC_PATH+"volcados"+File.separator;
+	public static final String DEF_PATH_BACKUP_CARGADOS    = DEF_DUMP_PATH+"cargados"+File.separator;
+	public static final String DEF_PATH_BACKUP_DESCARGADOS = DEF_DUMP_PATH+"descargados"+File.separator;
+	
+	public static final String DEF_PATH_LOGS = DEF_EXEC_PATH+"logs"+File.separator;
+
+	private ValoresDefecto(){}
 	
 }

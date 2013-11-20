@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+	</h:head>
+	<h:body>
+		<h:form>
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="auto" header="Recepción de Archivos">
+					<h:panelGrid columns="2" cellpadding="5">
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="1" cellpadding="5">
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, tabla" actionListener="#{GestorRecepcion.limpiarPlantilla}" />
+							</h:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:growl id="popup" />
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Menús">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<p:panel>
+						<h:panelGrid columns="2" cellpadding="5">
+						<p:fileUpload fileUploadListener="#{GestorRecepcion.cargaArchivo}" mode="advanced" dragDropSupport="true"  
+							update="popup, msgs, tabla" allowTypes="/(\.|\/)(txt)$/" /> 
+						<p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">  
+							<f:facet name="start">  
+								<h:graphicImage value="recursos/loadingBar.gif" />  
+							</f:facet>  
+
+							<f:facet name="complete">  
+								<h:outputText value="" />  
+							</f:facet>
+						</p:ajaxStatus> 
+						</h:panelGrid>
+					</p:panel>
+					<p:panel>
+						<p:dataTable id="tabla" var="mensaje" value="#{GestorRecepcion.tablamensajes}" rowKey="#{mensaje.sObjeto}"  
+									paginator="true" paginatorPosition="bottom" rows="10" 
+									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+									rowsPerPageTemplate="10,15,20">  
+
+							<f:facet name="header">  
+								Resultado de la carga
+							</f:facet>
+
+							<p:column sortBy="#{mensaje.sObjeto}" headerText="Archivo">  
+							    #{mensaje.sObjeto}  
+							</p:column>  
+							
+							<p:column sortBy="#{mensaje.sResultado}" headerText="Resultado">  
+							    #{mensaje.sResultado}  
+							</p:column>  
+
+						</p:dataTable>
+					</p:panel>
+					
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

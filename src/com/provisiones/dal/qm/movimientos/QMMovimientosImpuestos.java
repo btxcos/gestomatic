@@ -12,7 +12,7 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMMovimientosImpuestos 
+public final class QMMovimientosImpuestos 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosImpuestos.class.getName());
 
@@ -45,6 +45,8 @@ public class QMMovimientosImpuestos
 	public static final String CAMPO24 = "obtexc";    
 	public static final String CAMPO25 = "obdeer";		
 
+	private QMMovimientosImpuestos(){}
+	
 	public static int addMovimientoImpuestoRecurso(Connection conexion, MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso)
 	{
 		int iCodigo = 0;

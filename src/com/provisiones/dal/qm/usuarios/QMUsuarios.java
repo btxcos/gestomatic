@@ -14,7 +14,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.usuarios.Usuario;
 
-public class QMUsuarios 
+public final class QMUsuarios 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMUsuarios.class.getName());
 	
@@ -31,6 +31,8 @@ public class QMUsuarios
 	public static final String CAMPO9  = "fecha_modificacion";
 	public static final String CAMPO10  = "tipo_usuario";
 	public static final String CAMPO11  = "activo";
+	
+	private QMUsuarios(){}
 	
 	public static long addUsuario (Connection conexion, Usuario NuevoUsuario) 
 	{

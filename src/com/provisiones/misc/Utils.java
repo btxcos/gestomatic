@@ -23,10 +23,11 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.types.ImporteDevolucion;
 
-public class Utils 
+public final class Utils 
 {
 	private static Logger logger = LoggerFactory.getLogger(Utils.class.getName());
 
+	private Utils(){}
 
 	public static String cifra (String sMsg)
 	{
@@ -278,9 +279,11 @@ public class Utils
 	public static void inicializarDirectorios ()
 	{
 		
-		logger.debug("DEF_PATH_LOGS:|{}|",ValoresDefecto.DEF_PATH_LOGS);
-		logger.debug("DEF_PATH_BACKUP_RECIBIDOS:|{}|",ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS);
-		logger.debug("DEF_PATH_BACKUP_GENERADOS:|{}|",ValoresDefecto.DEF_PATH_BACKUP_GENERADOS);
+		logger.debug("DEF_PATH_LOGS:|"+ValoresDefecto.DEF_PATH_LOGS+"|");
+		logger.debug("DEF_PATH_BACKUP_RECIBIDOS:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+"|");
+		logger.debug("DEF_PATH_BACKUP_GENERADOS:|"+ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+"|");
+		logger.debug("DEF_PATH_BACKUP_CARGADOS:   |"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+"|");
+		logger.debug("DEF_PATH_BACKUP_DESCARGADOS:|"+ValoresDefecto.DEF_PATH_BACKUP_DESCARGADOS+"|");
 		
 		File dirLogs = new File(ValoresDefecto.DEF_PATH_LOGS);
 		
@@ -289,6 +292,20 @@ public class Utils
 			dirLogs.mkdir(); 
 		}
 		
+		File dirArchivos = new File(ValoresDefecto.DEF_FILE_PATH);
+		
+		if(!dirArchivos.exists())
+		{
+			dirArchivos.mkdir(); 
+		}
+
+		File dirVolcados = new File(ValoresDefecto.DEF_DUMP_PATH);
+		
+		if(!dirVolcados.exists())
+		{
+			dirVolcados.mkdir(); 
+		}
+	
 		File dirRecibidos = new File(ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS);
 
 		if(!dirRecibidos.exists())
@@ -302,6 +319,21 @@ public class Utils
 		{
 			dirGenerados.mkdir(); 
 		}
+		
+		File dirCargados = new File(ValoresDefecto.DEF_PATH_BACKUP_CARGADOS);
+
+		if(!dirCargados.exists())
+		{
+			dirCargados.mkdir(); 
+		}
+		
+		File dirDescargados = new File(ValoresDefecto.DEF_PATH_BACKUP_DESCARGADOS);
+
+		if(!dirDescargados.exists())
+		{
+			dirDescargados.mkdir(); 
+		}
+		
 	}
 	
 	public static void standardIO2File(String sNombre)

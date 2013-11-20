@@ -13,11 +13,12 @@ import com.provisiones.misc.Parser;
 import com.provisiones.types.Activo;
 import com.provisiones.types.tablas.ActivoTabla;
 
-
-public class CLActivos 
+public final class CLActivos 
 {
 	private static Logger logger = LoggerFactory.getLogger(CLActivos.class.getName());
 	
+	private CLActivos(){}
+
 	//Interfaz básico
 	public static Activo buscarActivo (String sCodCOACES)
 	{

@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.qm.usuarios.QMUsuarios;
 import com.provisiones.pl.GestorSesion;
 
-public class CLUsuarios 
+public final class CLUsuarios 
 {
 	private static Logger logger = LoggerFactory.getLogger(CLUsuarios.class.getName());
+
+	private CLUsuarios(){}
 	
 	public static boolean comprobarConexion()
 	{

@@ -17,7 +17,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.ProvisionTabla;
 
-public class QMProvisiones 
+public final class QMProvisiones 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMProvisiones.class.getName());
 	
@@ -35,6 +35,8 @@ public class QMProvisiones
 	public static final String CAMPO9 = "usuario_modificacion";
 	public static final String CAMPO10 = "fecha_modificacion";
 
+	private QMProvisiones(){}
+	
 	public static boolean addProvision(Connection conexion, Provision NuevaProvision)
 	{
 		boolean bSalida = false;

@@ -20,11 +20,12 @@ import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ImpuestoRecursoTabla;
 
-public class CLImpuestos 
+public final class CLImpuestos 
 {
 	private static Logger logger = LoggerFactory.getLogger(CLImpuestos.class.getName());
 	
-
+	private CLImpuestos(){}
+	
 	//ID
 	public static String buscarCodigoImpuesto (String sCodNURCAT,String sCodCOSBAC)
 	{

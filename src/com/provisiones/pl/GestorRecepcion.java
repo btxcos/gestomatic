@@ -11,29 +11,25 @@ import org.primefaces.event.FileUploadEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
-
 import com.provisiones.types.Resultados;
 import com.provisiones.types.tablas.ResultadosTabla;
 
-
-public class GestorCargas implements Serializable
+public class GestorRecepcion implements Serializable 
 {
+	private static final long serialVersionUID = -7510569297029106911L;
 
-	private static final long serialVersionUID = 942487732660619012L;
-
-	private static Logger logger = LoggerFactory.getLogger(GestorCargas.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(GestorRecepcion.class.getName());
 	
 	private transient ArrayList<ResultadosTabla> tablamensajes = new ArrayList<ResultadosTabla>();
 	
-	public GestorCargas ()
+	public GestorRecepcion ()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorCargas...");
+			logger.debug("Iniciando GestorRecepcion...");
 		}
 	}
 
@@ -116,5 +112,5 @@ public class GestorCargas implements Serializable
 
 	public void setTablamensajes(ArrayList<ResultadosTabla> tablamensajes) {
 		this.tablamensajes = tablamensajes;
-	}  
+	}
 }

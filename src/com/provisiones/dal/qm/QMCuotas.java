@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMCuotas
+public final class QMCuotas
 {
 	private static Logger logger = LoggerFactory.getLogger(QMCuotas.class.getName());
 	
@@ -41,6 +41,8 @@ public class QMCuotas
 	//Campos de control
 	public static final String CAMPO12 = "cod_estado";
 
+	private QMCuotas(){}
+	
 	public static long addCuota(Connection conexion, Cuota NuevaCuota)
 	{
 		long liCodigo = 0;

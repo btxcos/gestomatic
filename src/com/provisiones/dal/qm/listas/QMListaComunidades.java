@@ -16,7 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 
-public class QMListaComunidades
+public final class QMListaComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaComunidades.class.getName());
 
@@ -30,6 +30,8 @@ public class QMListaComunidades
 	public static final String CAMPO3  = "cod_validado";    
 	public static final String CAMPO4  = "usuario_movimiento";
 	public static final String CAMPO5  = "fecha_movimiento";
+
+	private QMListaComunidades(){}
 	
 	public static boolean addRelacionComunidad(Connection conexion, String sCodComunidad, String sCodMovimiento)
 	{

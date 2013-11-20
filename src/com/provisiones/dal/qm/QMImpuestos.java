@@ -13,7 +13,7 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMImpuestos 
+public final class QMImpuestos 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMImpuestos.class.getName());
 	
@@ -38,6 +38,8 @@ public class QMImpuestos
 	//Campos de control
 	public static final String CAMPO11 = "cod_estado";
 
+	private QMImpuestos(){}
+	
 	public static long addImpuesto(Connection conexion, ImpuestoRecurso NuevoImpuestoRecurso)
 	{
 		long liCodigo = 0;

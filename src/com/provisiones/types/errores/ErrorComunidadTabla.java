@@ -17,7 +17,7 @@ public class ErrorComunidadTabla
 			String nOMCOC, String mOVIMIENTO, String eRRORES) {
 		super();
 		COCLDO = cOCLDO;
-		setDCOCLDO(dCOCLDO);
+		DCOCLDO = dCOCLDO;
 		NUDCOM = nUDCOM;
 		NOMCOC = nOMCOC;
 		MOVIMIENTO = mOVIMIENTO;

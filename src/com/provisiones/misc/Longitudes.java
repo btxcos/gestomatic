@@ -1,6 +1,6 @@
 package com.provisiones.misc;
 
-public class Longitudes 
+public final class Longitudes 
 {
 	//Tamaño de los campos segun codigo PACBASE
 	
@@ -229,4 +229,5 @@ public class Longitudes
 	public static final int FILLER_REFERENCIAS_L = 126;//124
 	public static final int FILLER_IMPUESTOS_L = 111;//109
 	
+	private Longitudes(){}
 }

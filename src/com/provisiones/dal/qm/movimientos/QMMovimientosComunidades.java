@@ -12,7 +12,7 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMMovimientosComunidades
+public final class QMMovimientosComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosComunidades.class.getName());
 
@@ -52,6 +52,8 @@ public class QMMovimientosComunidades
 	public static final String CAMPO31 = "obtexc";
 	public static final String CAMPO32 = "obdeer";         
 
+	private QMMovimientosComunidades(){}
+	
 	public static int addMovimientoComunidad(Connection conexion, MovimientoComunidad NuevoMovimientoComunidad)
 	{
 		int iCodigo = 0;

@@ -2,11 +2,11 @@ package com.provisiones.types.tablas;
 
 public class ComunidadTabla 
 {
-	String COCLDO = "";
-	String NUDCOM = "";
-	String NOMCOC = "";
-	String NOMPRC = "";
-	String NOMADC = "";
+	private String COCLDO = "";
+	private String NUDCOM = "";
+	private String NOMCOC = "";
+	private String NOMPRC = "";
+	private String NOMADC = "";
 	
 	//Constructor de clase
 

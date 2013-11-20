@@ -20,10 +20,11 @@ import com.provisiones.types.movimientos.MovimientoCuota;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.CuotaTabla;
 
-public class CLCuotas 
+public final class CLCuotas 
 {
-  
 	private static Logger logger = LoggerFactory.getLogger(CLCuotas.class.getName());
+
+	private CLCuotas(){}
 	
 	//ID
 	public static String buscarCodigoCuota (String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)

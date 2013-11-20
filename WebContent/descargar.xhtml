@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+	</h:head>
+	<h:body>
+		<h:form id="form" onkeypress="return event.keyCode != 13">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="auto" header="Generar Envios">
+								<h:panelGrid columns="3" cellpadding="5">
+									<p:fieldset legend="Acciones" id="acciones">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Revisar Movimientos" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos" actionListener="#{GestorEnvios.cargarMovimientosPendientes}"/>	
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Info">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
+											<h:panelGrid columns="2" cellpadding="5">
+												<p:messages id="msgs"/>
+												<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											</h:panelGrid>
+											</p:notificationBar>
+
+											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+											<p:growl id="popup" />
+										</h:panelGrid>
+									</p:fieldset>
+								</h:panelGrid>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Operativas">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+
+									<p:fieldset legend="Movimientos Pendientes" id="pendientes">
+										<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel >
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText for="NumComunidades" value="Comunidades: " />
+											<p:inputText id="NumComunidades" value="#{GestorEnvios.sNumComunidades}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botComunidades" value="Descargar Comunidades" ajax="false" actionListener="#{GestorEnvios.descargarComunidades}" 
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumComunidades}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+											<h:outputText for="NumCuotas" value="Cuotas: " />
+											<p:inputText id="NumCuotas" value="#{GestorEnvios.sNumCuotas}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botCuotas" value="Descargar Cuotas" ajax="false" actionListener="#{GestorEnvios.descargarCuotas}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumCuotas}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+											<h:outputText for="NumReferencias" value="Referencias: " />
+											<p:inputText id="NumReferencias" value="#{GestorEnvios.sNumReferencias}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botReferencias" value="Descargar Referencias" ajax="false" actionListener="#{GestorEnvios.descargarReferencias}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumReferencias}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+											<h:outputText for="NumImpuestos" value="Impuestos: " />
+											<p:inputText id="NumImpuestos" value="#{GestorEnvios.sNumImpuestos}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botImpuestos" value="Descargar Impuestos" ajax="false" actionListener="#{GestorEnvios.descargarImpuestos}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumImpuestos}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+											<h:outputText for="NumProvisiones" value="Provisiones: " />
+											<p:inputText id="NumProvisiones" value="#{GestorEnvios.sNumProvisiones}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botProvisiones" value="Descargar Cierres" ajax="false" actionListener="#{GestorEnvios.descargarProvisiones}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumProvisiones}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+											<h:outputText for="NumGastos" value="Gastos: " />
+											<p:inputText id="NumGastos" value="#{GestorEnvios.sNumGastos}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botGastos" value="Descargar Gastos" ajax="false" actionListener="#{GestorEnvios.descargarGastos}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumGastos}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+										</h:panelGrid>
+									</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+						</h:panelGrid>
+					</p:panel>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

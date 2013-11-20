@@ -19,7 +19,7 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
 
-public class QMListaGastos 
+public final class QMListaGastos 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaGastos.class.getName());
 	
@@ -33,6 +33,7 @@ public class QMListaGastos
 	public static final String CAMPO4 = "usuario_movimiento";    
 	public static final String CAMPO5 = "fecha_movimiento";
 
+	private QMListaGastos(){}
 
 	public static boolean addRelacionGasto(Connection conexion, String sCodGasto, String sCodMovimiento) 
 	{

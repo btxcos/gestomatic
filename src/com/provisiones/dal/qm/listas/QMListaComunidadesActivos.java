@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMListaComunidadesActivos
+public final class QMListaComunidadesActivos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaComunidadesActivos.class.getName());
 	
@@ -36,7 +36,8 @@ public class QMListaComunidadesActivos
 	public static final String CAMPO5  = "usuario_movimiento";
 	public static final String CAMPO6  = "fecha_movimiento";    
 
-
+	private QMListaComunidadesActivos(){}
+	
 	public static boolean addRelacionComunidad(Connection conexion, String sCodCOACES, String sCodComunidad, String sCodMovimiento)
 	{
 		boolean bSalida = false;

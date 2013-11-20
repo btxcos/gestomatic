@@ -2,7 +2,6 @@ package com.provisiones.types.tablas;
 
 public class CuotaTabla 
 {
-
 	private String COCLDO = "";
 	private String DCOCLDO = "";
 	private String NUDCOM = "";

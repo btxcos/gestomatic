@@ -17,7 +17,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.types.errores.ErrorCuotaTabla;
 import com.provisiones.types.errores.ErrorTabla;
 
-public class QMListaErroresCuotas 
+public final class QMListaErroresCuotas 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresCuotas.class.getName());
 	
@@ -26,6 +26,8 @@ public class QMListaErroresCuotas
 	public static final String CAMPO1  = "cod_movimiento";
 	public static final String CAMPO2  = "cod_cotdor";
 
+	private QMListaErroresCuotas(){}
+	
 	public static boolean addErrorCuota(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = false;

@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMListaReferencias
+public final class QMListaReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaReferencias.class.getName());
 
-	static String TABLA = "pp001_lista_referencias_multi";
+	public static final String TABLA = "pp001_lista_referencias_multi";
 
 	//identificadores
 	public static final String CAMPO1  = "cod_coaces";
@@ -34,6 +34,8 @@ public class QMListaReferencias
 	public static final String CAMPO5  = "usuario_movimiento";    
 	public static final String CAMPO6  = "fecha_movimiento";
 
+	private QMListaReferencias(){}
+	
 	public static boolean addRelacionReferencia(Connection conexion, String sCodCOACES, String sCodReferencia, String sCodMovimiento)
 	{
 		boolean bSalida = false;

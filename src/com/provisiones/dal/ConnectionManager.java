@@ -27,10 +27,7 @@ public final class ConnectionManager
 	private static String sUser = "root";
 	private static String sPass = "glsl1234";
 	
-	private ConnectionManager()
-	{
-		
-	}
+	private ConnectionManager(){}
 
     public static boolean comprobarConexion()
     {

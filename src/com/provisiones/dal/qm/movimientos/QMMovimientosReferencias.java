@@ -12,7 +12,7 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMMovimientosReferencias
+public final class QMMovimientosReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosReferencias.class.getName());
 
@@ -43,6 +43,8 @@ public class QMMovimientosReferencias
 	public static final String CAMPO21 = "cod_bitc25";    
 	public static final String CAMPO22 = "fereca";
 
+	private QMMovimientosReferencias(){}
+	
 	public static int addMovimientoReferenciaCatastral(Connection conexion, MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
 	{
 		int iCodigo = 0;

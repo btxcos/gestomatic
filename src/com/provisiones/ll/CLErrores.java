@@ -41,9 +41,11 @@ import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 
-public class CLErrores 
+public final class CLErrores 
 {
 	private static Logger logger = LoggerFactory.getLogger(CLErrores.class.getName());
+
+	private CLErrores(){}
 	
 	public static ArrayList<ErrorComunidadTabla> buscarComunidadesConErrores(ErrorComunidadTabla filtro)
 	{

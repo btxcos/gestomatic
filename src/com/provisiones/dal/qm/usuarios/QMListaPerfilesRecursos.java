@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.misc.Utils;
 
-public class QMListaPerfilesRecursos 
+public final class QMListaPerfilesRecursos 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMPerfiles.class.getName());
 	
@@ -20,6 +20,8 @@ public class QMListaPerfilesRecursos
 	public static final String CAMPO3  = "usuario_alta";
 	public static final String CAMPO4  = "fecha_alta";
 
+	private QMListaPerfilesRecursos(){}
+	
 	public static boolean addRelacionPerfil(Connection conexion, String sCodPerfil, String sCodRecurso, String sUsuario)
 	{
 		boolean bSalida = false;

@@ -21,10 +21,11 @@ import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ReferenciaTabla;
 
-
-public class CLReferencias 
+public final class CLReferencias 
 {
 	private static Logger logger = LoggerFactory.getLogger(CLReferencias.class.getName());
+
+	private CLReferencias(){}
 	
 	//ID	
 	public static String buscarCodigoReferencia (String sCodNURCAT)

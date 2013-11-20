@@ -13,7 +13,7 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QMReferencias
+public final class QMReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMReferencias.class.getName());
 	
@@ -37,6 +37,8 @@ public class QMReferencias
 	//Campos de control
 	public static final String CAMPO10 = "cod_estado";	
 
+	private QMReferencias(){}
+	
 	public static long addReferenciaCatastral(Connection conexion, ReferenciaCatastral NuevaReferenciaCatastral)
 	{
 		long liCodigo = 0;

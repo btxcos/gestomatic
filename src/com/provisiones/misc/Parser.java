@@ -11,10 +11,12 @@ import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 
-public class Parser {
+public final class Parser {
 
 	private static Logger logger = LoggerFactory.getLogger(Parser.class.getName());
 
+	private Parser(){}
+	
 	public static String limpiaCampoNumerico (String sCampo)
 	{
 
@@ -753,7 +755,7 @@ public class Parser {
 				+ impuestorecurso.getFILLER();
 	}
 
-	public static Cierre LeerCierre(String linea)
+	public static Cierre leerCierre(String linea)
 	{
 		String sNUPROF = limpiaCampoNumerico(linea.substring(0, Longitudes.NUPROF_L));
 		String sFEPFON = linea.substring(Longitudes.NUPROF_L+1, Longitudes.NUPROF_L+Longitudes.FEPFON_L+1);

@@ -21,10 +21,12 @@ import com.provisiones.types.Provision;
 import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.tablas.ProvisionTabla;
 
-public class CLProvisiones
+public final class CLProvisiones
 {
 	private static Logger logger = LoggerFactory.getLogger(CLProvisiones.class.getName());
 
+	private CLProvisiones(){}
+	
 	public static long buscarNumeroGastosProvision(String sNUPROF)
 	{
 		return QMListaGastosProvisiones.buscaCantidadGastos(ConnectionManager.getDBConnection(),sNUPROF);

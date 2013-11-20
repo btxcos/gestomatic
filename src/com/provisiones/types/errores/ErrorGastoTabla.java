@@ -26,7 +26,7 @@ public class ErrorGastoTabla
 		COTPGA = cOTPGA;
 		COSBGA = cOSBGA;
 		DCOSBGA = dCOSBGA;
-		setIMNGAS(iMNGAS);
+		IMNGAS = iMNGAS;
 		FEDEVE = fEDEVE;
 		MOVIMIENTO = mOVIMIENTO;
 		ERRORES = eRRORES;

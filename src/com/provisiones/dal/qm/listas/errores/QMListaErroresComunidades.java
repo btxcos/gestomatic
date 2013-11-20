@@ -17,7 +17,7 @@ import com.provisiones.types.errores.ErrorComunidadTabla;
 import com.provisiones.types.errores.ErrorTabla;
 
 
-public class QMListaErroresComunidades 
+public final class QMListaErroresComunidades 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresComunidades.class.getName());
 	
@@ -26,6 +26,8 @@ public class QMListaErroresComunidades
 	public static final String CAMPO1  = "cod_movimiento";
 	public static final String CAMPO2  = "cod_cotdor";
 
+	private QMListaErroresComunidades(){}
+	
 	public static boolean addErrorComunidad(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = false;

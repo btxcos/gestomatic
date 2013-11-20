@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
-public class QMPerfiles 
+public final class QMPerfiles 
 {
 	private static Logger logger = LoggerFactory.getLogger(QMPerfiles.class.getName());
 	
@@ -22,6 +22,8 @@ public class QMPerfiles
 	public static final String CAMPO2  = "perfil";
 	public static final String CAMPO3  = "activo";
 
+	private QMPerfiles(){}
+	
 	public static boolean addPerfil(Connection conexion, String sPerfil)
 	{
 		boolean bSalida = false;
