@@ -20,10 +20,10 @@ public class QMListaErroresReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresReferencias.class.getName());
 
-	static String TABLA = "pp001_lista_errores_referencias_multi";
+	public static final String TABLA = "pp001_lista_errores_referencias_multi";
 
-	static String CAMPO1  = "cod_movimiento";
-	static String CAMPO2  = "cod_cotdor";
+	public static final String CAMPO1  = "cod_movimiento";
+	public static final String CAMPO2  = "cod_cotdor";
 
 	public static boolean addErrorReferencia(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
 	{

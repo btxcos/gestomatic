@@ -16,34 +16,34 @@ public class QMMovimientosCuotas
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosCuotas.class.getName());
 
-	public static String TABLA = "pp001_e2_movimientos_tbl";
+	public static final String TABLA = "pp001_e2_movimientos_tbl";
 
-	public static String CAMPO1 = "e2_movimiento_id";
+	public static final String CAMPO1 = "e2_movimiento_id";
 
-	static String CAMPO2  = "cod_codtrn";
-	static String CAMPO3  = "cod_cotdor";
-	static String CAMPO4  = "idprov";
-	static String CAMPO5  = "cod_coacci";
-	public static String CAMPO6  = "cod_cocldo";
-	public static String CAMPO7  = "cod_nudcom";
-	static String CAMPO8  = "coengp";
-	public static String CAMPO9  = "cod_coaces";
-	static String CAMPO10 = "cogrug";     
-	static String CAMPO11 = "cotaca";     
-	public static String CAMPO12 = "cod_cosbac";     
-	static String CAMPO13 = "cod_bitc11"; 
-	static String CAMPO14 = "fipago";     
-	static String CAMPO15 = "cod_bitc12"; 
-	static String CAMPO16 = "ffpago";     
-	static String CAMPO17 = "cod_bitc13"; 
-	static String CAMPO18 = "imcuco";     
-	static String CAMPO19 = "cod_bitc14"; 
-	static String CAMPO20 = "faacta";     
-	static String CAMPO21 = "cod_bitc15"; 
-	static String CAMPO22 = "cod_ptpago";     
-	static String CAMPO23 = "cod_bitc09"; 
-	static String CAMPO24 = "obtexc";     
-	static String CAMPO25 = "obdeer";     
+	public static final String CAMPO2  = "cod_codtrn";
+	public static final String CAMPO3  = "cod_cotdor";
+	public static final String CAMPO4  = "idprov";
+	public static final String CAMPO5  = "cod_coacci";
+	public static final String CAMPO6  = "cod_cocldo";
+	public static final String CAMPO7  = "cod_nudcom";
+	public static final String CAMPO8  = "coengp";
+	public static final String CAMPO9  = "cod_coaces";
+	public static final String CAMPO10 = "cogrug";     
+	public static final String CAMPO11 = "cotaca";     
+	public static final String CAMPO12 = "cod_cosbac";     
+	public static final String CAMPO13 = "cod_bitc11"; 
+	public static final String CAMPO14 = "fipago";     
+	public static final String CAMPO15 = "cod_bitc12"; 
+	public static final String CAMPO16 = "ffpago";     
+	public static final String CAMPO17 = "cod_bitc13"; 
+	public static final String CAMPO18 = "imcuco";     
+	public static final String CAMPO19 = "cod_bitc14"; 
+	public static final String CAMPO20 = "faacta";     
+	public static final String CAMPO21 = "cod_bitc15"; 
+	public static final String CAMPO22 = "cod_ptpago";     
+	public static final String CAMPO23 = "cod_bitc09"; 
+	public static final String CAMPO24 = "obtexc";     
+	public static final String CAMPO25 = "obdeer";     
 
 	public static int addMovimientoCuota(Connection conexion, MovimientoCuota NuevoMovimientoCuota)
 	{

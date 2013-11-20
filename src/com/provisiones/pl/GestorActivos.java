@@ -284,7 +284,7 @@ public class GestorActivos implements Serializable
 
 	public String cargarDetalles() 
     { 
-		String sPagina = "login.xhtml";
+		String sPagina = ".";
 		
 		if (ConnectionManager.comprobarConexion())
 		{

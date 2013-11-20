@@ -16,32 +16,32 @@ public class QMMovimientosReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosReferencias.class.getName());
 
-	public static String TABLA = "pp001_e3_movimientos_tbl";
+	public static final String TABLA = "pp001_e3_movimientos_tbl";
 
-	public static String CAMPO1  = "e3_movimiento_id";
-	static String CAMPO2  = "cod_codtrn";  
-	static String CAMPO3  = "cod_cotdor";  
-	static String CAMPO4  = "idprov";      
-	static String CAMPO5  = "cod_coacci";  
-	static String CAMPO6  = "coengp";       
-	public static String CAMPO7  = "cod_coaces";
-	public static String CAMPO8  = "nurcat_id";   
-	static String CAMPO9  = "cod_bitc16";  
-	static String CAMPO10 = "tircat";      
-	static String CAMPO11 = "cod_bitc17";  
-	static String CAMPO12 = "enemis";      
-	static String CAMPO13 = "cotexa";      
-	static String CAMPO14 = "cod_bitc09";  
-	static String CAMPO15 = "obtexc";    
-	static String CAMPO16 = "obdeer";
+	public static final String CAMPO1  = "e3_movimiento_id";
+	public static final String CAMPO2  = "cod_codtrn";  
+	public static final String CAMPO3  = "cod_cotdor";  
+	public static final String CAMPO4  = "idprov";      
+	public static final String CAMPO5  = "cod_coacci";  
+	public static final String CAMPO6  = "coengp";       
+	public static final String CAMPO7  = "cod_coaces";
+	public static final String CAMPO8  = "nurcat_id";   
+	public static final String CAMPO9  = "cod_bitc16";  
+	public static final String CAMPO10 = "tircat";      
+	public static final String CAMPO11 = "cod_bitc17";  
+	public static final String CAMPO12 = "enemis";      
+	public static final String CAMPO13 = "cotexa";      
+	public static final String CAMPO14 = "cod_bitc09";  
+	public static final String CAMPO15 = "obtexc";    
+	public static final String CAMPO16 = "obdeer";
 
 	//Ampliacion de valor catastral
-	static String CAMPO17 = "cod_bitc23";  
-	static String CAMPO18 = "imvsue";      
-	static String CAMPO19 = "cod_bitc24";      
-	static String CAMPO20 = "imcata";  
-	static String CAMPO21 = "cod_bitc25";    
-	static String CAMPO22 = "fereca";
+	public static final String CAMPO17 = "cod_bitc23";  
+	public static final String CAMPO18 = "imvsue";      
+	public static final String CAMPO19 = "cod_bitc24";      
+	public static final String CAMPO20 = "imcata";  
+	public static final String CAMPO21 = "cod_bitc25";    
+	public static final String CAMPO22 = "fereca";
 
 	public static int addMovimientoReferenciaCatastral(Connection conexion, MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
 	{

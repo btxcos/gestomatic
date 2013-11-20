@@ -21,10 +21,10 @@ public class QMListaErroresComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresComunidades.class.getName());
 	
-	static String TABLA = "pp001_lista_errores_comunidades_multi";
+	public static final String TABLA = "pp001_lista_errores_comunidades_multi";
 
-	static String CAMPO1  = "cod_movimiento";
-	static String CAMPO2  = "cod_cotdor";
+	public static final String CAMPO1  = "cod_movimiento";
+	public static final String CAMPO2  = "cod_cotdor";
 
 	public static boolean addErrorComunidad(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
 	{

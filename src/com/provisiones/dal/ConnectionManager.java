@@ -14,8 +14,10 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.misc.Utils;
 import com.provisiones.pl.GestorSesion;
 
-public class ConnectionManager 
+public final class ConnectionManager 
 {
+	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class.getName());
+	
 	private static String sConnector = "org.mariadb.jdbc.Driver";
 	private static String sConnectorType = "jdbc:mariadb:";
 	private static String sHostResource = "//localhost/glsl";
@@ -25,8 +27,10 @@ public class ConnectionManager
 	private static String sUser = "root";
 	private static String sPass = "glsl1234";
 	
-	
-	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class.getName());
+	private ConnectionManager()
+	{
+		
+	}
 
     public static boolean comprobarConexion()
     {

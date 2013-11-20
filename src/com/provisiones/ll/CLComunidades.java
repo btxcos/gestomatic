@@ -99,7 +99,9 @@ public class CLComunidades
 		ArrayList<ActivoTabla> result = new ArrayList<ActivoTabla>();
 
 		if (CLComunidades.existeComunidad(sCodCOCLDO, sCodNUDCOM))
+		{
 			result = QMListaComunidadesActivos.buscaActivosComunidadDisponibles(ConnectionManager.getDBConnection(),filtro,CLComunidades.buscarCodigoComunidad(sCodCOCLDO, sCodNUDCOM)); 
+		}
 
 		return result;
 	}
@@ -137,12 +139,18 @@ public class CLComunidades
 		if (CLActivos.existeActivo(sCOACES))
 		{
 			if (CLComunidades.comprobarRelacion(sCOCLDO, sNUDCOM, sCOACES))
+			{
 				iCodigo = 0;
+			}
 			else
+			{
 				iCodigo = -1;
+			}
 		}
 		else
+		{
 			iCodigo = -2;
+		}
 
 		logger.debug("Código de salida:|{}|",iCodigo);
 		
@@ -548,7 +556,7 @@ public class CLComunidades
 								{
 									logger.debug("Modificando...");
 										
-									logger.debug(movimiento.logMovimientoComunidad());;
+									logger.debug(movimiento.logMovimientoComunidad());
 									logger.debug(movimiento_revisado.logMovimientoComunidad());
 										
 									if (QMComunidades.modComunidad(conexion,convierteMovimientoenComunidad(movimiento), sCodComunidad))
@@ -643,7 +651,7 @@ public class CLComunidades
 			
 			logger.debug(comunidad.logComunidad());
 			
-			logger.debug(movimiento.logMovimientoComunidad());;
+			logger.debug(movimiento.logMovimientoComunidad());
 			
 			
 			logger.debug("Estado:|{}|",sEstado);
@@ -890,7 +898,9 @@ public class CLComunidades
 					movimiento_revisado.setBITC10("#");
 					
 					if (!bCambio)
+					{
 						movimiento_revisado.setCOACCI("#");
+					}
 
 				}
 				else //X, E o B
@@ -912,7 +922,9 @@ public class CLComunidades
 						movimiento_revisado.setCOACES(movimiento.getCOACES());
 					}
 					else
+					{
 						movimiento_revisado.setBITC10("#");
+					}
 				}	
 		}
 

@@ -268,7 +268,7 @@ public class GestorEnvios implements Serializable
 			} 
 			catch (FileNotFoundException e) 
 			{
-				e.printStackTrace();
+				
 				
 	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
 	        	
@@ -303,7 +303,7 @@ public class GestorEnvios implements Serializable
 			} 
 			catch (FileNotFoundException e) 
 			{
-				e.printStackTrace();
+				
 				
 	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
 	        	
@@ -338,7 +338,7 @@ public class GestorEnvios implements Serializable
 			} 
 			catch (FileNotFoundException e) 
 			{
-				e.printStackTrace();
+				
 				
 	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
 	        	
@@ -373,7 +373,7 @@ public class GestorEnvios implements Serializable
 			} 
 			catch (FileNotFoundException e) 
 			{
-				e.printStackTrace();
+				
 				
 	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
 	        	
@@ -408,7 +408,7 @@ public class GestorEnvios implements Serializable
 			} 
 			catch (FileNotFoundException e) 
 			{
-				e.printStackTrace();
+				
 				
 	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
 	        	
@@ -443,7 +443,7 @@ public class GestorEnvios implements Serializable
 			} 
 			catch (FileNotFoundException e) 
 			{
-				e.printStackTrace();
+				
 				
 	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
 	        	

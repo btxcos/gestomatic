@@ -532,7 +532,7 @@ public class QMCuotas
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 
-			boolean found = false;
+			boolean bEncontrado = false;
 			
 			String sCOCLDO = "";
 			String sDesCOCLDO = "";
@@ -582,7 +582,7 @@ public class QMCuotas
 
 					while (rs.next()) 
 					{
-						found = true;
+						bEncontrado = true;
 						
 						sCOCLDO     = rs.getString(CAMPO3);
 						sDesCOCLDO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
@@ -619,7 +619,7 @@ public class QMCuotas
 						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
 					}
 				}
-				if (found == false) 
+				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}

@@ -151,7 +151,7 @@ public class CLImpuestos
 			{
 
 				
-				String sEstado = QMListaImpuestos.getValidado(conexion,sCodMovimiento);;
+				String sEstado = QMListaImpuestos.getValidado(conexion,sCodMovimiento);
 				
 				if (sEstado.equals("P"))
 				{
@@ -587,7 +587,9 @@ public class CLImpuestos
 					}
 					
 					if (!bCambio)
+					{
 						movimiento_revisado.setCOACCI("#");
+					}
 
 				}
 				else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA))
@@ -600,7 +602,9 @@ public class CLImpuestos
 					movimiento_revisado.setBITC09("#");
 				}
 				else
+				{
 					movimiento_revisado.setCOACCI("");
+				}
 		}		
 
 		logger.debug("Revisado! Nuevo movimiento:");

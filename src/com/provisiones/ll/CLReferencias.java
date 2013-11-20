@@ -174,7 +174,7 @@ public class CLReferencias
 			
 			if (!(sCodMovimiento.equals("")))
 			{
-				String sEstado = QMListaReferencias.getValidado(conexion,sCodMovimiento);;
+				String sEstado = QMListaReferencias.getValidado(conexion,sCodMovimiento);
 				
 				if (sEstado.equals("P"))
 				{
@@ -625,7 +625,9 @@ public class CLReferencias
 					}
 					
 					if (!bCambio)
+					{
 						movimiento_revisado.setCOACCI("#");
+					}
 					
 				}
 				else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA))
@@ -640,7 +642,9 @@ public class CLReferencias
 					movimiento_revisado.setBITC25("#");
 				}
 				else
+				{
 					movimiento_revisado.setCOACCI("");
+				}
 		}		
 
 		logger.debug("Revisado! Nuevo movimiento:");

@@ -25,14 +25,14 @@ public class QMListaReferencias
 	static String TABLA = "pp001_lista_referencias_multi";
 
 	//identificadores
-	static String CAMPO1  = "cod_coaces";
-	static String CAMPO2  = "cod_referencia";    
-	static String CAMPO3  = "cod_movimiento"; 
+	public static final String CAMPO1  = "cod_coaces";
+	public static final String CAMPO2  = "cod_referencia";    
+	public static final String CAMPO3  = "cod_movimiento"; 
 	
 	//Campos de control
-	static String CAMPO4  = "cod_validado";
-	static String CAMPO5  = "usuario_movimiento";    
-	static String CAMPO6  = "fecha_movimiento";
+	public static final String CAMPO4  = "cod_validado";
+	public static final String CAMPO5  = "usuario_movimiento";    
+	public static final String CAMPO6  = "fecha_movimiento";
 
 	public static boolean addRelacionReferencia(Connection conexion, String sCodCOACES, String sCodReferencia, String sCodMovimiento)
 	{

@@ -23,15 +23,15 @@ public class QMListaGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaGastos.class.getName());
 	
-	static String TABLA = "pp001_lista_gastos_multi";
+	public static final String TABLA = "pp001_lista_gastos_multi";
 
-	static String CAMPO1 = "cod_gasto";
-	static String CAMPO2 = "cod_movimiento";
+	public static final String CAMPO1 = "cod_gasto";
+	public static final String CAMPO2 = "cod_movimiento";
 	
-	static String CAMPO3 = "cod_validado";
+	public static final String CAMPO3 = "cod_validado";
 	
-	static String CAMPO4 = "usuario_movimiento";    
-	static String CAMPO5 = "fecha_movimiento";
+	public static final String CAMPO4 = "usuario_movimiento";    
+	public static final String CAMPO5 = "fecha_movimiento";
 
 
 	public static boolean addRelacionGasto(Connection conexion, String sCodGasto, String sCodMovimiento) 

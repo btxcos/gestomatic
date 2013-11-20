@@ -239,7 +239,7 @@ public class Utils
 
 	public static boolean closeResultSet ( ResultSet rs)
 	{
-		boolean bExit = true;
+		boolean bSalida = true;
 		if (rs != null) 
 		{
 			try 
@@ -248,20 +248,17 @@ public class Utils
 			} 
 			catch (SQLException sqlEx) 
 			{
-
-				bExit = false;
+				bSalida = false;
 				logger.error("ERROR: la conexíon se cerró de forma inesperada.");
-				
 			}
-			rs = null;
 		}
-		return bExit;
+		return bSalida;
 		
 	}
 
-	public static boolean closeStatement( Statement stmt)
+	public static boolean closeStatement(Statement stmt)
 	{
-		boolean bExit = true;
+		boolean bSalida = true;
 		if (stmt != null) 
 		{
 			try 
@@ -270,25 +267,14 @@ public class Utils
 			} 
 			catch (SQLException sqlEx) 
 			{
+				bSalida = false;
 				logger.error("ERROR: la conexíon se cerró de forma inesperada.");
-				bExit = false;
-				
 			}
-			stmt = null;
 		}
-		return bExit;
+		return bSalida;
 		
 	}
-	public static String FormatPath(String sPath)
-	{
-		String sResultPath = "";
-		
-		{
-			
-		}
-		
-		return sResultPath;
-	}
+
 	public static void inicializarDirectorios ()
 	{
 		
@@ -318,28 +304,29 @@ public class Utils
 		}
 	}
 	
-	public static void standardIO2File(String fileName)
+	public static void standardIO2File(String sNombre)
 	{
+		String sArchivo = sNombre;
 		//redirige la salida estandar a un fichero. Alternativa a log4j. Peor rendimiento.
 
 		logger.debug("user.dir:|{}|",System.getProperty("user.dir"));
 		logger.debug("ValoresDefecto.DEF_EXEC_PATH:|{}|",ValoresDefecto.DEF_EXEC_PATH);
 		
-		 if(fileName.equals(""))
+		 if(sArchivo.equals(""))
 		 {
-             fileName=ValoresDefecto.DEF_EXEC_PATH+"javalog.txt";
+			 sArchivo=ValoresDefecto.DEF_EXEC_PATH+"javalog.txt";
          }
  
         try 
         {
-            PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(new File(fileName),true)),true);
+            PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(new File(sArchivo),true)),true);
  
             System.setOut(ps);
             System.setErr(ps);
         } 
         catch (FileNotFoundException ex) 
         {
-            logger.error("Error al acceder al archivo '{}'",fileName);
+            logger.error("Error al acceder al archivo '{}'",sArchivo);
         }
  
     }
@@ -711,7 +698,9 @@ public class Utils
                     int iValor = (Integer.parseInt(sCIF.substring(i, i + 1)) * 2);
 
                     if (iValor < 10)
+                    {
                         iSuma = iSuma + iValor;
+                    }
                     else 
                     {
                         iSuma = iSuma + (Integer.parseInt(String.valueOf(iValor).substring(0, 1)))
@@ -730,7 +719,9 @@ public class Utils
                     byte[] ascii = new byte[1];
 
                     if (iCodigoControl == 0)
+                    {
                         iCodigoControl = 10;
+                    }
                     iCodigoControl = iCodigoControl + 64;
                     ascii[0] = (Integer.valueOf(iCodigoControl)).byteValue();
 

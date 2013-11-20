@@ -41,7 +41,9 @@ public class Parser {
 		String sResultado = sCampo.trim();
 		
 		if (sResultado.length()==0)
+		{
 			sResultado = sValorBlanco;
+		}
 
 		 //logger.debug("sResultado:|{}|",sResultado);
 		

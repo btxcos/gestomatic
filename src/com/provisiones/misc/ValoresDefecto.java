@@ -5,7 +5,7 @@ import java.io.File;
 public class ValoresDefecto 
 {
 	
-	public static final int iNumChar = 26;
+	public static final int CHAR_FIN = 26;
 	
 	public static final String CAMPO_SIN_INFORMAR = "0";
 	
@@ -116,7 +116,7 @@ public class ValoresDefecto
 	
 
 	public static final String DEF_CODIFICACION = "ISO-8859-15";
-	public static final String DEF_FIN_FICHERO = new Character((char) iNumChar).toString();
+	public static final String DEF_FIN_FICHERO = new Character((char) CHAR_FIN).toString();
 
 	public static final String DEF_PATH = "GLSL-portales"+File.separator+"provisiones"+File.separator;
 	public static final String DEF_EXEC_PATH = System.getProperty("user.dir")+File.separator+DEF_PATH;

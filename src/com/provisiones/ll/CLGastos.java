@@ -217,7 +217,7 @@ public class CLGastos
 			{
 
 				
-				String sEstadoMovimiento = QMListaGastos.getValidado(conexion,sCodMovimiento);;
+				String sEstadoMovimiento = QMListaGastos.getValidado(conexion,sCodMovimiento);
 				
 				if (sEstadoMovimiento.equals("P"))
 				{
@@ -1023,7 +1023,9 @@ public class CLGastos
 			movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
 			
 			if (!bCambio)
+			{
 				movimiento_revisado.setCOSIGA("#");
+			}
 		}
 		else if (sAccion.equals("M") || sAccion.equals("#")) //Modificacion
 		{
@@ -1207,7 +1209,9 @@ public class CLGastos
 			}
 			
 			if (!bCambio)
+			{
 				movimiento_revisado.setCOSIGA("#");
+			}
 		}
 		//Moneda
 		movimiento_revisado.setCOUNMO(movimiento.getCOUNMO());

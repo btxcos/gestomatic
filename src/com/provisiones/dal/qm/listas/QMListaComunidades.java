@@ -20,16 +20,16 @@ public class QMListaComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaComunidades.class.getName());
 
-	static String TABLA = "pp001_lista_comunidades_multi";
+	public static final String TABLA = "pp001_lista_comunidades_multi";
 
 	//identificadores
-	static String CAMPO1  = "cod_comunidad";
-	static String CAMPO2  = "cod_movimiento";
+	public static final String CAMPO1  = "cod_comunidad";
+	public static final String CAMPO2  = "cod_movimiento";
 
 	//Campos de control
-	static String CAMPO3  = "cod_validado";    
-	static String CAMPO4  = "usuario_movimiento";
-	static String CAMPO5  = "fecha_movimiento";
+	public static final String CAMPO3  = "cod_validado";    
+	public static final String CAMPO4  = "usuario_movimiento";
+	public static final String CAMPO5  = "fecha_movimiento";
 	
 	public static boolean addRelacionComunidad(Connection conexion, String sCodComunidad, String sCodMovimiento)
 	{

@@ -118,15 +118,18 @@ public class CLActivos
 			{
 				if (QMActivos.getCOTSINActivo(conexion,sCodCOACES).startsWith("SU"))
 				{
-					sTipo = "S"; //SUELOS Y OBRA EN CURSO 
+					//SUELOS Y OBRA EN CURSO
+					sTipo = "S";
 				}
 				else if (QMActivos.getBIARREActivo(conexion,sCodCOACES).equals("S"))
 				{
-					sTipo = "A"; //ARRENDAMIENTOS
+					//ARRENDAMIENTOS
+					sTipo = "A";
 				}
 				else
 				{
-					sTipo = "T"; //PRODUCTO TERMINADO
+					//PRODUCTO TERMINADO
+					sTipo = "T";
 				}
 			}
 		}

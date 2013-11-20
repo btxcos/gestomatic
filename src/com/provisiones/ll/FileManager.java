@@ -81,9 +81,7 @@ public class FileManager
 		} 
 		catch (IOException e) 
 		{
-			
 			logger.error("Error al guardar el fichero recibido.");
-			//e.printStackTrace();
 		}
         logger.debug("Completado con exito.");
         return sFichero;
@@ -145,10 +143,7 @@ public class FileManager
 	        } 
 	        catch (IOException e) 
 	        {
-	            //e.printStackTrace();
-	            
 	            sNombreFichero = "";
-	            
 	            
 	            //TODO conexion.rollback();
 	            for (int i = 0; i < resultcomunidades.size() ; i++)
@@ -233,8 +228,6 @@ public class FileManager
 	        } 
 	        catch (IOException e) 
 	        {
-	            //e.printStackTrace();
-	            
 	            //En caso de error se devuelven los registros a su estado anterior
 	            sNombreFichero = "";
 	            
@@ -311,8 +304,6 @@ public class FileManager
 	        } 
 	        catch (IOException e) 
 	        {
-	            //e.printStackTrace();
-	            
 	            //En caso de error se devuelven los registros a su estado anterior
 	            sNombreFichero = "";
 	          //TODO conexion.rollback();
@@ -384,7 +375,7 @@ public class FileManager
 	        } 
 	        catch (IOException e) 
 	        {
-	            e.printStackTrace();
+	            
 	            
 	            //En caso de error se devuelven los registros a su estado anterior
 	            sNombreFichero = "";
@@ -459,9 +450,6 @@ public class FileManager
 	        } 
 	        catch (IOException e) 
 	        {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				
 	            //En caso de error se devuelven los registros a su estado anterior
 	            sNombreFichero = "";
 	            
@@ -537,9 +525,6 @@ public class FileManager
 	        } 
 	        catch (IOException e) 
 	        {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				
 	            //En caso de error se devuelven los registros a su estado anterior
 	            sNombreFichero = "";
 	            
@@ -688,15 +673,11 @@ public class FileManager
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("No se encontró el fichero recibido.");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
-			e.printStackTrace();
 		}
 		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
@@ -832,15 +813,11 @@ public class FileManager
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("No se encontró el fichero recibido.");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
-			e.printStackTrace();
 		}
 		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
@@ -984,15 +961,11 @@ public class FileManager
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("No se encontró el fichero recibido.");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
-			e.printStackTrace();
 		}
 		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
@@ -1124,15 +1097,11 @@ public class FileManager
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("No se encontró el fichero recibido.");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
-			e.printStackTrace();
 		}
 		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
@@ -1266,15 +1235,11 @@ public class FileManager
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("No se encontró el fichero recibido.");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
-			e.printStackTrace();
 		}
 		logger.debug("tabla.size():|"+tabla.size()+"|");
 		
@@ -1409,15 +1374,11 @@ public class FileManager
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("No se encontró el fichero recibido.");
-			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
-			e.printStackTrace();
 		}
 		logger.debug("tabla.size():|"+tabla.size()+"|");
 		

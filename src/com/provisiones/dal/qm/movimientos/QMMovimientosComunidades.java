@@ -16,41 +16,41 @@ public class QMMovimientosComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosComunidades.class.getName());
 
-	public static String TABLA = "pp001_e1_movimientos_tbl";
+	public static final String TABLA = "pp001_e1_movimientos_tbl";
 
-	public static String CAMPO1 = "e1_movimiento_id";
+	public static final String CAMPO1 = "e1_movimiento_id";
 	
-	static String CAMPO2 = "cod_codtrn";
-	static String CAMPO3 = "cod_cotdor";
-	static String CAMPO4 = "idprov";
-	static String CAMPO5 = "cod_coacci";
-	static String CAMPO6 = "coengp";
-	public static String CAMPO7 = "cod_cocldo";
-	public static String CAMPO8 = "cod_nudcom";
-	static String CAMPO9 = "cod_bitc10";
-	public static String CAMPO10 = "cod_coaces";
-	static String CAMPO11 = "cod_bitc01";
-	public static String CAMPO12 = "nomcoc";
-	static String CAMPO13 = "cod_bitc02";
-	static String CAMPO14 = "nodcco";
-	static String CAMPO15 = "cod_bitc03";
-	static String CAMPO16 = "nomprc";
-	static String CAMPO17 = "cod_bitc04";
-	static String CAMPO18 = "nutprc";
-	static String CAMPO19 = "cod_bitc05";
-	static String CAMPO20 = "nomadc";
-	static String CAMPO21 = "cod_bitc06";
-	static String CAMPO22 = "nutadc";
-	static String CAMPO23 = "cod_bitc07";
-	static String CAMPO24 = "nodcad";
-	static String CAMPO25 = "cod_bitc08";
-	static String CAMPO26 = "nuccen";
-	static String CAMPO27 = "nuccof";
-	static String CAMPO28 = "nuccdi";
-	static String CAMPO29 = "nuccnt";
-	static String CAMPO30 = "cod_bitc09";
-	static String CAMPO31 = "obtexc";
-	static String CAMPO32 = "obdeer";         
+	public static final String CAMPO2 = "cod_codtrn";
+	public static final String CAMPO3 = "cod_cotdor";
+	public static final String CAMPO4 = "idprov";
+	public static final String CAMPO5 = "cod_coacci";
+	public static final String CAMPO6 = "coengp";
+	public static final String CAMPO7 = "cod_cocldo";
+	public static final String CAMPO8 = "cod_nudcom";
+	public static final String CAMPO9 = "cod_bitc10";
+	public static final String CAMPO10 = "cod_coaces";
+	public static final String CAMPO11 = "cod_bitc01";
+	public static final String CAMPO12 = "nomcoc";
+	public static final String CAMPO13 = "cod_bitc02";
+	public static final String CAMPO14 = "nodcco";
+	public static final String CAMPO15 = "cod_bitc03";
+	public static final String CAMPO16 = "nomprc";
+	public static final String CAMPO17 = "cod_bitc04";
+	public static final String CAMPO18 = "nutprc";
+	public static final String CAMPO19 = "cod_bitc05";
+	public static final String CAMPO20 = "nomadc";
+	public static final String CAMPO21 = "cod_bitc06";
+	public static final String CAMPO22 = "nutadc";
+	public static final String CAMPO23 = "cod_bitc07";
+	public static final String CAMPO24 = "nodcad";
+	public static final String CAMPO25 = "cod_bitc08";
+	public static final String CAMPO26 = "nuccen";
+	public static final String CAMPO27 = "nuccof";
+	public static final String CAMPO28 = "nuccdi";
+	public static final String CAMPO29 = "nuccnt";
+	public static final String CAMPO30 = "cod_bitc09";
+	public static final String CAMPO31 = "obtexc";
+	public static final String CAMPO32 = "obdeer";         
 
 	public static int addMovimientoComunidad(Connection conexion, MovimientoComunidad NuevoMovimientoComunidad)
 	{
@@ -167,7 +167,7 @@ public class QMMovimientosComunidades
 
 		logger.error("iCodigo: |" + iCodigo +"|");
 
-		return iCodigo;//bSalida
+		return iCodigo;
 	}
 	public static boolean modMovimientoComunidad(Connection conexion, MovimientoComunidad NuevoMovimientoComunidad, String sMovimientoComunidadID)
 	{

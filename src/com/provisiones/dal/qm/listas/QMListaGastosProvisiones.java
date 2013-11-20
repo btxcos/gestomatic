@@ -19,13 +19,13 @@ public class QMListaGastosProvisiones
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaGastosProvisiones.class.getName());
 	
-	static String TABLA = "pp001_lista_gastos_provisiones_multi";
+	public static final String TABLA = "pp001_lista_gastos_provisiones_multi";
 
-	static String CAMPO1 = "cod_gasto";
-	static String CAMPO2 = "cod_nuprof";
-	static String CAMPO3 = "cod_revisado";
-	static String CAMPO4 = "usuario_alta";
-	static String CAMPO5 = "fecha_alta";
+	public static final String CAMPO1 = "cod_gasto";
+	public static final String CAMPO2 = "cod_nuprof";
+	public static final String CAMPO3 = "cod_revisado";
+	public static final String CAMPO4 = "usuario_alta";
+	public static final String CAMPO5 = "fecha_alta";
 
 
 	public static boolean addRelacionGastoProvision(Connection conexion, String sCodGasto, String sCodNUPROF) 

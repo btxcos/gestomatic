@@ -398,7 +398,7 @@ public class QMProvisiones
 			} 
 			finally 
 			{
-				Utils.closeResultSet(rs);;
+				Utils.closeResultSet(rs);
 				Utils.closeStatement(stmt);
 			}
 		}
