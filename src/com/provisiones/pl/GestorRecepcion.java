@@ -52,7 +52,9 @@ public class GestorRecepcion implements Serializable
 			
 			logger.debug("Iniciando carga...");
 			
-			Resultados carga = FileManager.splitter(FileManager.guardarFichero(event));
+			boolean bRecibido = true;
+		
+			Resultados carga = FileManager.splitter(FileManager.guardarFichero(event,bRecibido),bRecibido);
 			
 			int iCodigoError = carga.getiCodigo();
 			
@@ -60,41 +62,41 @@ public class GestorRecepcion implements Serializable
 			
 			if (carga.getAlCarga().size() > 0)
 			{
-			
 				this.tablamensajes.addAll(carga.getAlCarga());
 			}
 			
 			logger.debug("tablamensajes.size():|{}|",tablamensajes.size());
 			
 			
-			if (iCodigoError == 0)
-			{
-
-				msg = Utils.pfmsgInfo("'"+event.getFile().getFileName() +"' ha subido correctamente.");
-				logger.info("'{}' ha subido correctamente.",event.getFile().getFileName());
-
-			}
-			else if (iCodigoError < 0)
-			{
+			String sMsg = "";
 			
-				msg = Utils.pfmsgError("ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.");
-				logger.error("ERROR: El archivo '{}' no tiene un nombre reconocible. Por favor, reviselo.",event.getFile().getFileName());
-
-			}
-			else if (iCodigoError == 4)
+			switch (iCodigoError) 
 			{
-				msg = Utils.pfmsgWarning("El archivo de Gastos debe de ser primero supervisado por la entidad.");
-				logger.warn("El archivo de Gastos debe de ser primero supervisado por la entidad.");
-			}
-			else if (iCodigoError == 5)
-			{
-				msg = Utils.pfmsgWarning("El archivo de Cierres debe comprobado por la entidad.");
-				logger.warn("El archivo de Cierres debe comprobado por la entidad.");
-			}
-			else
-			{
-				msg = Utils.pfmsgFatal("ERROR: Se encontraron problemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.");
-				logger.error("[FATAL] ERROR: Se encontraron problemas al procesar el archivo '{}', contiene registros inconsistentes con el sistema. Por favor, reviselo.",event.getFile().getFileName());
+			case 0:
+				sMsg = "'"+event.getFile().getFileName() +"' ha subido correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+				break;
+			case -4:
+				sMsg = "El archivo de Gastos debe de ser primero supervisado por la entidad.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				break;
+			case -5:
+				sMsg = "El archivo de Cierres debe comprobado por la entidad.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				break;
+			case -10:
+				sMsg = "ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+				break;
+			default:
+				sMsg = "ERROR: Se encontraron problemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);

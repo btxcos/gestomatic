@@ -56,7 +56,9 @@ public class GestorCargas implements Serializable
 			
 			logger.debug("Iniciando carga...");
 			
-			Resultados carga = FileManager.splitter(FileManager.guardarFichero(event));
+			boolean bRecibido = false; 
+			
+			Resultados carga = FileManager.splitter(FileManager.guardarFichero(event,bRecibido),bRecibido);
 			
 			int iCodigoError = carga.getiCodigo();
 			
@@ -70,6 +72,41 @@ public class GestorCargas implements Serializable
 			
 			logger.debug("tablamensajes.size():|{}|",tablamensajes.size());
 			
+			String sMsg = "";
+			
+			switch (iCodigoError) 
+			{
+			case 0:
+				sMsg = "'"+event.getFile().getFileName() +"' ha subido correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+				break;
+			case -1:
+				sMsg = "El archivo de Activos debe de ser cargado por recepción.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				break;
+			case -2:
+				sMsg = "El archivo de Rechazados debe de ser cargado por recepción.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				break;
+			case -3:
+				sMsg = "El archivo de Autorizados debe de ser cargado por recepción.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				break;
+			case -10:
+				sMsg = "ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+				break;
+			default:
+				sMsg = "ERROR: Se encontraron problemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+			}
 			
 			if (iCodigoError == 0)
 			{
@@ -78,7 +115,7 @@ public class GestorCargas implements Serializable
 				logger.info("'{}' ha subido correctamente.",event.getFile().getFileName());
 
 			}
-			else if (iCodigoError < 0)
+			else if (iCodigoError == -1)
 			{
 			
 				msg = Utils.pfmsgError("ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.");

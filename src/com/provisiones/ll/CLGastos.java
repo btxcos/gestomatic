@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
+import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresGastos;
@@ -18,6 +19,7 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
+import com.provisiones.types.Provision;
 import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
@@ -176,7 +178,6 @@ public final class CLGastos
 	
 	public static String buscarProvisionGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
-		
 		return QMListaGastosProvisiones.getProvisionDeGasto(ConnectionManager.getDBConnection(),buscarCodigoGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE));
 	}
 	
@@ -318,7 +319,7 @@ public final class CLGastos
 		return iCodigo;
 	}
 	
-	public static int actualizarGastoVolcado(String linea)
+	public static int inyectarGastoVolcado(String linea)
 	{
 		int iCodigo = 0;
 
@@ -328,152 +329,109 @@ public final class CLGastos
 		{
 			iCodigo = 0;
 			
-			MovimientoGasto gastonuevo = Parser.leerGasto(linea);
+			MovimientoGasto movimiento = Parser.leerGasto(linea);
 
-			logger.debug(gastonuevo.logMovimientoGasto());
+			logger.debug(movimiento.logMovimientoGasto());
 			
-			
-			String sCodMovimiento = QMMovimientosGastos.getMovimientoGastoID(conexion,gastonuevo);
-			
-			logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
-			
-			if ((sCodMovimiento.equals("")))
+			if (!CLProvisiones.existeProvision(movimiento.getNUPROF()))
 			{
-				logger.debug("Dando de alta el gasto...");
-				logger.debug(gastonuevo.logMovimientoGasto());
+				String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(movimiento.getCOACES());
+				
+				if (QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
+				{
+					sCOSPAT = "0";
+				}
+
+				String sTipo = CLActivos.compruebaTipoActivoSAREB(movimiento.getCOACES());
+				
+				Provision provision = new Provision(movimiento.getNUPROF(),sCOSPAT,sTipo,"0","0","0","0",ValoresDefecto.DEF_ALTA);
+				
+				if (!QMProvisiones.addProvision(conexion,provision))
+				{
+					//Error: provision no creada
+					iCodigo = -1;
+				}
+			}
 			
-				sCodGasto = Integer.toString(QMGastos.addGasto(conexion,gastonuevo,gastonuevo.getCOSIGA())); 
+			if (iCodigo == 0)
+			{
+
+				String sCodGasto = QMGastos.getGastoID(conexion, movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
+				
+				logger.debug("sCodGasto:|"+sCodGasto+"|");
+				
+				if (sCodGasto.equals(""))
+				{
+					sCodGasto = Integer.toString(QMGastos.addGasto(conexion,convierteMovimientoenGasto(movimiento),movimiento.getCOSIGA())); 
+				}
+
+				logger.debug("sCodGasto:|"+sCodGasto+"|");
 
 				if (!sCodGasto.equals("0"))
 				{
-					//OK - gasto creado
-					logger.debug("Hecho!");
+					String sCodMovimiento = QMMovimientosGastos.getMovimientoGastoID(conexion,movimiento);
+
+					logger.debug("sCodMovimiento:|"+sCodMovimiento+"|");
 					
-					if (QMListaGastos.addRelacionGasto(conexion,sCodGasto,sCodMovimiento))
+					if (sCodMovimiento.equals(""))
 					{
-						if (QMListaGastosProvisiones.addRelacionGastoProvision(conexion,sCodGasto,movimiento_revisado.getNUPROF()))
+						sCodMovimiento = Integer.toString(QMMovimientosGastos.addMovimientoGasto(conexion,movimiento));
+						
+						if (sCodMovimiento.equals("0"))
 						{
-							//OK 
-							iCodigo = 0;
+							//error al crear un movimiento
+							iCodigo = -4;
 						}
 						else
-						{
-							//error relacion gasto no creada - Rollback
-							QMListaGastos.delRelacionGasto(conexion,sCodMovimiento);
-							QMGastos.delGasto(conexion,sCodGasto);
-							QMMovimientosGastos.delMovimientoGasto(conexion,sCodMovimiento);
-							iCodigo = -906;
-						}
-					}
-					else
-					{
-						//error relacion gasto no creada - Rollback
-						QMGastos.delGasto(conexion,sCodGasto);
-						QMMovimientosGastos.delMovimientoGasto(conexion,sCodMovimiento);
-						iCodigo = -902;
-					}
-				}
-				else
-				{
-					//error gasto no creado - Rollback
-					QMMovimientosGastos.delMovimientoGasto(conexion,sCodMovimiento);
-					iCodigo = -901;
-				}
-				
-				
-				////
-				String sEstadoMovimiento = QMListaGastos.getValidado(conexion,sCodMovimiento);
-				
-				if (sEstadoMovimiento.equals("P"))
-				{
-					iCodigo = -11;
-				}
-				else if (sEstadoMovimiento.equals("X") || sEstadoMovimiento.equals("V") || sEstadoMovimiento.equals("R"))
-				{
-					iCodigo = -12;
-				}
-				else if (sEstadoMovimiento.equals("E"))
-				{
-					String sValidado = "";
-					
-					logger.debug("gasto.getCOTERR()|"+gasto.getCOTERR()+"|");
-					logger.debug("ValoresDefecto.DEF_COTERR|"+ValoresDefecto.DEF_COTERR+"|");
-					
-					if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
-					{
-						sValidado = "V";
-					}
-					else
-					{
-						sValidado = "X";
-					}
-					
-					logger.debug("sValidado|"+sValidado+"|");
-					
-					String sCodGasto = buscarCodigoGasto(gasto.getCOACES(), gasto.getCOGRUG(), gasto.getCOTPGA(), gasto.getCOSBGA(), gasto.getFEDEVE());
-					
-					if (QMListaGastos.existeRelacionGasto(conexion,sCodGasto, sCodMovimiento))
-					{
-						if(QMListaGastos.setValidado(conexion,sCodMovimiento, sValidado))
-						{
-							if (sValidado.equals("X"))
+						{	
+							//OK - movimiento creado
+							logger.debug("Hecho!");
+							
+							if (QMListaGastos.addRelacionGasto(conexion,sCodGasto,sCodMovimiento))
 							{
-								//recibido error
-								if (QMListaErroresGastos.addErrorGasto(conexion,sCodMovimiento, gasto.getCOTERR()))
+								
+								
+								if (QMListaGastos.setValidado(conexion,sCodGasto,ValoresDefecto.DEF_MOVIMIENTO_ENVIADO) &&
+									QMListaGastosProvisiones.addRelacionGastoProvision(conexion,sCodGasto,movimiento.getNUPROF()))
 								{
-									iCodigo = 1;
+									//OK 
+									logger.debug("Gasto añadido.");
+									iCodigo = 0;
 								}
 								else
 								{
-									QMListaGastos.setValidado(conexion,sCodMovimiento, "E");
-									iCodigo = -4;
+									//error relacion gasto y provision no creada - Rollback
+									QMListaGastos.delRelacionGasto(conexion,sCodMovimiento);
+									QMGastos.delGasto(conexion,sCodGasto);
+									QMMovimientosGastos.delMovimientoGasto(conexion,sCodMovimiento);
+									iCodigo = -6;
 								}
 							}
 							else
 							{
-								//recibido OK
-								if (!QMListaGastosProvisiones.getRevisado(conexion,sCodMovimiento).equals(sValidado))
-								{
-									if (QMListaGastosProvisiones.setRevisado(conexion,sCodMovimiento, sValidado))
-									{
-										logger.info("Gasto Revisado.");
-									}
-									else
-									{
-										QMListaGastos.setValidado(conexion,sCodMovimiento, "E");
-										iCodigo = -5;
-									}
-								}
-
-								logger.info("Movimiento validado.");
+								//error relacion gasto no creada - Rollback
+								QMGastos.delGasto(conexion,sCodGasto);
+								QMMovimientosGastos.delMovimientoGasto(conexion,sCodMovimiento);
+								iCodigo = -5;
 							}
 						}
-						else
-						{
-							iCodigo = -3;
-						}
 					}
-					else
+					else 
 					{
-						iCodigo = -2;
+						logger.error("El siguiente registro ya se encontraba en el sistema:");
+						logger.error("|"+linea+"|");
+						iCodigo = -3;
 					}
-					
-					//bSalida = QMMovimientosGastos.modMovimientoGasto(gasto, sCodMovimiento);
-					//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
-					//recuperaremos el codigo de error de la tabla pertinente.
 				}
 				else
 				{
-					iCodigo = -10;
+					//error gasto no creado
+					iCodigo = -2;
 				}
-					
 			}
-			else 
-			{
-				logger.error("El siguiente registro ya se encontraba en el sistema:");
-				logger.error("|"+linea+"|");
-				iCodigo = -1;
-			}
+			
+
+
 		}
 		
 		logger.error("iCodigo:|"+iCodigo+"|");

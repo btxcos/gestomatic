@@ -340,6 +340,51 @@ public final class QMProvisiones
 		return bSalida;
 	}
 	
+	public static boolean setEstado(Connection conexion, String sNUPROF, String sEstado) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO8 + " = '" + sEstado + "' " +
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static long buscaCantidadProvisionesCerradasPendientes(Connection conexion)
 	{
 		long liNumero = 0;

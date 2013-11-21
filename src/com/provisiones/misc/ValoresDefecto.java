@@ -7,6 +7,8 @@ public final class ValoresDefecto
 	
 	public static final int CHAR_FIN = 26;
 	
+	public static final int DECIMALES = 2;
+	
 	public static final String CAMPO_SIN_INFORMAR = "0";
 	
 	public static final String ACTIVO = "1";

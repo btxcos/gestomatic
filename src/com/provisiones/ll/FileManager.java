@@ -51,12 +51,23 @@ public final class FileManager
 
 	private FileManager(){}
 	
-	public static String guardarFichero(FileUploadEvent event)
+	public static String guardarFichero(FileUploadEvent event,boolean bRecibido)
 	{
 		logger.debug("ID:|"+event.getPhaseId().getOrdinal()+"|");
 	
 		logger.debug("Guardando archivo...");
         UploadedFile file = event.getFile();
+        
+        String sPATH = "";
+        
+        if (bRecibido)
+        {
+        	sPATH = ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS;
+        }
+        else
+        {
+        	sPATH = ValoresDefecto.DEF_PATH_BACKUP_CARGADOS;
+        }
         
         String sFichero = Utils.timeStamp()+"_"+file.getFileName();
 
@@ -64,7 +75,7 @@ public final class FileManager
 		try 
 		{
 			is = file.getInputstream();
-	        OutputStream out = new FileOutputStream(ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sFichero);
+	        OutputStream out = new FileOutputStream(sPATH+sFichero);
 	        
 	        byte buf[] = new byte[1024];
 	        int len;
@@ -863,7 +874,7 @@ public final class FileManager
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLGastos.actualizarGastoVolcado(linea);
+	    			int iCodigo = CLGastos.inyectarGastoVolcado(linea);
 	    			
 	    			String sMensaje = "";
 	    			
@@ -874,50 +885,35 @@ public final class FileManager
 	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
 	    				logger.info(sMensaje);
 	    				break;
-	    			case 1:
-	    				sMensaje = "Movimiento de Gasto pendiente de revisión.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"(E) Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
-	    				break;
 	    			case -1:
-	    				sMensaje = "Registro no encontrado en el sistema.";
+	    				sMensaje = "[FATAL] Error al crear la Provisión del Gasto.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
 	    			case -2:
-	    				sMensaje = "No existe relación con la Gasto.";
+	    				sMensaje = "[FATAL] Error al crear el Gasto.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
 	    			case -3:
-	    				sMensaje = "[FATAL] Error al validar la relación con el Gasto.";
+	    				sMensaje = "El movimiento cargado ya se encontraba en el sistema.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
 	    			case -4:
-	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				sMensaje = "[FATAL] Error al registrar el movimiento.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
 	    			case -5:
-	    				sMensaje = "[FATAL] Error al actualizar la revisión del gasto.";
+	    				sMensaje = "[FATAL] Error al crear la relación del Gasto.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;	
-	    			case -10:
-	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
+	    			case -6:
+	    				sMensaje = "[FATAL] Error al crear la relación del Gasto con la Provisión.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
-	    				break;
-	    			case -11:
-	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
-	    				break;
-	    			case -12:
-	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.warn(sMensaje);
 	    				break;
 	    			}
 	    			
@@ -1517,7 +1513,107 @@ public final class FileManager
 
 	}
 	
-	public static Resultados splitter(String sNombre) 
+	public static ArrayList<ResultadosTabla> leerCierresVolcados(String sNombre)
+	{
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre+"|");
+
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre);
+		
+		FileReader fr;
+		try 
+		{
+			fr = new FileReader (archivo);
+			
+			BufferedReader br = new BufferedReader(fr);
+			
+			String linea = "";
+
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
+			logger.debug("Leyendo fichero..");
+
+			long liTiempo = System.currentTimeMillis();
+
+			int contador= 0 ;
+			int registros = 0;
+			
+			int iLongitudValida = Longitudes.CIERRE_L-Longitudes.FILLER_CIERRE_L;
+			
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+
+	    		if (linea.equals(sFinFichero))
+	    		{
+	    			logger.info("Lectura finalizada.");
+	    		}
+	    		else if (linea.length()< iLongitudValida )
+	    		{
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
+	    		}
+	    		else
+	    		{
+	    			int iCodigo = CLProvisiones.inyertarCierreVolcado(linea);
+	    			String sMensaje = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sMensaje = "Provisión cerrada.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
+	    				logger.info(sMensaje);
+	    				break;
+	    			case -1:
+	    				sMensaje = "La provisión no se encuentra en el sistema.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    			case -2:
+	    				sMensaje = "[FATAL] Error al cerrar la Provisión.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    			}
+	    			if ( iCodigo >= 0 )
+	    			{
+	    				registros++;
+	    			}
+
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
+	    		}
+	        }
+		
+			br.close();
+
+			logger.info( "Lectura de "+sNombre+" finalizada.\n");
+
+			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
+			
+			logger.debug("Registros procesados:|"+contador+"|");
+			logger.debug("Registros correctos:|"+registros+"|");
+
+			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+		}
+		catch (FileNotFoundException e)
+		{
+			logger.error("No se encontró el fichero recibido.");
+		}
+		catch (IOException e)
+		{
+			logger.error("Ocurrió un error al acceder al fichero recibido.");
+		}
+		logger.debug("tabla.size():|"+tabla.size()+"|");
+		
+        return tabla;
+	}
+	
+	public static Resultados splitter(String sNombre, boolean bRecibido) 
 	{
 		Resultados carga = null;
 
@@ -1530,7 +1626,7 @@ public final class FileManager
 		
 		if (sNombre.length() < 9)
 		{
-			iCodigo = -1;
+			iCodigo = -10;
 			logger.error("El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
 		}
 		else 
@@ -1551,89 +1647,161 @@ public final class FileManager
 				switch (COSPII) {
 				case AC:
 					logger.debug("Activos");
-					tabla = leerActivos(sNombre);
-
-					if (tabla.size() == 0)	
+					if (bRecibido)
 					{
-						iCodigo = 1;
+						tabla = leerActivos(sNombre);
+
+						if (tabla.size() == 0)	
+						{
+							iCodigo = -1;
+						}
+					}
+					else
+					{
+						//Volcado no aceptado
+						iCodigo = -1;
 					}
 					break;
 				case RG:
 					logger.debug("Rechazados");
-					tabla = leerGastosRevisados(sNombre);
-
-					if (tabla.size() == 0)					
+					if (bRecibido)
 					{
-						iCodigo = 2;
+						tabla = leerGastosRevisados(sNombre);
+
+						if (tabla.size() == 0)					
+						{
+							iCodigo = -2;
+						}
+					}
+					else
+					{
+						//Volcado no aceptado
+						iCodigo = -2;
 					}
 					break;
 				case PA:
 					logger.debug("Autorizados");
-					tabla = leerGastosRevisados(sNombre);
-
-					if (tabla.size() == 0)					
+					if (bRecibido)
 					{
-						iCodigo = 3;
+						tabla = leerGastosRevisados(sNombre);
+
+						if (tabla.size() == 0)					
+						{
+							iCodigo = -3;
+						}
+					}
+					else
+					{
+						//Volcado no aceptado
+						iCodigo = -3;
 					}
 					break;
 				case GA:
 					logger.debug("Gastos");
-					/*tabla = leerGastosRevisados(sNombre);
+					if (bRecibido)
+					{
+						//Recepción no aceptada
+						iCodigo = -4;
+					}
+					else
+					{
+						tabla = leerGastosVolcados(sNombre);
 
-					if (tabla.size() == 0)	
-					{*/
-						iCodigo = 4;
-					//}
+						if (tabla.size() == 0)	
+						{
+							iCodigo = -4;
+						}
+					}
 					break;
 				case PP:
 					logger.debug("Cierres");
-					/*tabla = leerCierres(sNombre); //No implementable
+					if (bRecibido)
+					{
+						//Recepción no aceptada
+						iCodigo = -5;
+					}
+					else
+					{
+						tabla = leerCierresVolcados(sNombre);
 
-					if (tabla.size() == 0)	
-					{*/
-						iCodigo = 5;
-					//}
+						if (tabla.size() == 0)	
+						{
+							iCodigo = -5;
+						}
+					}
 					break;
 				case E1:
 					logger.debug("Comunidades");
-					tabla = leerComunidadesRevisadas(sNombre);
-
-					if (tabla.size() == 0)
+					if (bRecibido)
 					{
-						iCodigo = 6;
+						tabla = leerComunidadesRevisadas(sNombre);
+
+						if (tabla.size() == 0)
+						{
+							iCodigo = -6;
+						}						
+					}
+					else
+					{
+						//inyectar
+						iCodigo = -6;
 					}
 					break;
 				case E2:
 					logger.debug("Cuotas");
-					tabla = leerCuotasRevisadas(sNombre);
-
-					if (tabla.size() == 0)
+					if (bRecibido)
 					{
-						iCodigo = 7;
+						tabla = leerCuotasRevisadas(sNombre);
+
+						if (tabla.size() == 0)
+						{
+							iCodigo = -7;
+						}						
+					}
+					else
+					{
+						//inyectar
+						iCodigo = -7;
 					}
 					break;
 				case E3:
 					logger.debug("Referencias Catastrales");
-					tabla = leerReferenciasRevisadas(sNombre);
-
-					if (tabla.size() == 0)
+					if (bRecibido)
 					{
-						iCodigo = 8;
+						tabla = leerReferenciasRevisadas(sNombre);
+
+						if (tabla.size() == 0)
+						{
+							iCodigo = -8;
+						}						
+					}
+					else
+					{
+						//inyectar
+						iCodigo = -8;
 					}
 					break;
 				case E4:
 					logger.debug("Impuestos");
-					tabla = leerImpuestosRevisadas(sNombre);
-
-					if (tabla.size() == 0)
+					if (bRecibido)
 					{
-						iCodigo = 9;
+						tabla = leerImpuestosRevisadas(sNombre);
+
+						if (tabla.size() == 0)
+						{
+							iCodigo = -9;
+						}						
+					}
+					else
+					{
+						//inyectar
+						iCodigo = -9;
 					}
 					break;
 				default:
 					logger.error("El archivo suministrado no coincide con el nombrado establecido:");
-					logger.error("168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
-					iCodigo = -3;
+					logger.error("[*_]168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
+					iCodigo = -10;
 					break;
 				}
 				logger.debug("tabla.size():|"+tabla.size()+"|");
@@ -1650,6 +1818,7 @@ public final class FileManager
 
 		}
 		
+		//carga.setiCodigo(iCodigo);
 		carga = new Resultados(iCodigo,tabla);
 		
 		return carga;

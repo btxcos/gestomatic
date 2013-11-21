@@ -401,6 +401,43 @@ public final class Utils
 		
 		return sCodigoRevisado;
 	}
+	
+	public static String cortaDecimales(String sImporte)
+	{
+		String sResultado = sImporte;
+		
+		String sSeparador = "";
+		
+		if (sImporte.contains("."))
+		{
+			sSeparador = "\\.";
+		}
+		else if (sImporte.contains(","))
+		{
+			sSeparador = ",";
+		}
+		
+		if (!sSeparador.equals(""))
+		{
+			String[] arrayimporte = sImporte.split(sSeparador);
+			String sEuros = arrayimporte[0];
+			String sCentimos = arrayimporte[1];
+			if (sCentimos.length() < ValoresDefecto.DECIMALES)
+			{
+				sCentimos = sCentimos +"0";
+			}
+			else if (sCentimos.length() > ValoresDefecto.DECIMALES)
+			{
+				sCentimos = sCentimos.substring(0, ValoresDefecto.DECIMALES);
+			}
+			//logger.debug("sEuros:|{}|",sEuros);
+			//logger.debug("sCentimos:|{}|",sCentimos);
+		
+			sResultado = sEuros + sCentimos;
+		}
+		
+		return sResultado;
+	}
 
 	public static String compruebaImporte(String sImporte)
 	{
@@ -411,7 +448,7 @@ public final class Utils
 		
 		//logger.debug("sImporte:|{}|",sImporte);
 		
-		if (sImporte.matches("-?[\\d]+([\\.|,][\\d][\\d]?)?$"))
+		if (sImporte.matches("-?[\\d]+([\\.|,][\\d][\\d]*)?$"))
 		{
 			
 			if (sImporte.contains("."))
@@ -428,11 +465,14 @@ public final class Utils
 				String[] arrayimporte = sImporte.split(sSeparador);
 				String sEuros = arrayimporte[0];
 				String sCentimos = arrayimporte[1];
-				if (sCentimos.length()<2)
+				if (sCentimos.length() < ValoresDefecto.DECIMALES)
 				{
 					sCentimos = sCentimos +"0";
 				}
-				
+				else if (sCentimos.length() > ValoresDefecto.DECIMALES)
+				{
+					sCentimos = sCentimos.substring(0, ValoresDefecto.DECIMALES);
+				}
 				//logger.debug("sEuros:|{}|",sEuros);
 				//logger.debug("sCentimos:|{}|",sCentimos);
 			

@@ -758,7 +758,7 @@ public final class Parser {
 	public static Cierre leerCierre(String linea)
 	{
 		String sNUPROF = limpiaCampoNumerico(linea.substring(0, Longitudes.NUPROF_L));
-		String sFEPFON = linea.substring(Longitudes.NUPROF_L+1, Longitudes.NUPROF_L+Longitudes.FEPFON_L+1);
+		String sFEPFON = linea.substring(Longitudes.NUPROF_L, Longitudes.NUPROF_L+Longitudes.FEPFON_L);
 
 		return new Cierre(sNUPROF,sFEPFON);
 	}

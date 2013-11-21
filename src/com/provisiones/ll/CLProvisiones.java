@@ -17,6 +17,7 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Cierre;
 import com.provisiones.types.Provision;
 import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.tablas.ProvisionTabla;
@@ -47,7 +48,7 @@ public final class CLProvisiones
 		return QMListaGastosProvisiones.calculaValorProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
-	public static Provision detallesProvision (String sCodNUPROF)
+	public static Provision buscarProvision (String sCodNUPROF)
 	{
 		return QMProvisiones.getProvision(ConnectionManager.getDBConnection(),sCodNUPROF);
 	}
@@ -66,6 +67,45 @@ public final class CLProvisiones
 	{
 		return QMProvisiones.getUltimaProvisionCerrada(ConnectionManager.getDBConnection(),sCodCOSPAT);
 	}
+	
+	public static int inyertarCierreVolcado(String linea)
+	{
+		int iCodigo = 0;
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			iCodigo = 0;
+			
+			Cierre cierre = Parser.leerCierre(linea);
+			
+			if (QMProvisiones.existeProvision(conexion,cierre.getsNUPROF()))
+			{
+				Provision provision = buscarProvision(cierre.getsNUPROF());
+				
+				if (CLProvisiones.cerrarProvision(provision))
+				{
+					logger.debug("Provision '"+cierre.getsNUPROF()+"' cerrada");
+				}
+				else
+				{
+					//no se ha cerrado la provisión
+					iCodigo = -2;
+				}
+			}
+			else 
+			{
+				//provisión inexistente
+				iCodigo = -1;
+			}
+		}
+		
+		logger.error("iCodigo:|"+iCodigo+"|");
+		
+		return iCodigo;
+	}
+	
 	
 	public static boolean cerrarProvision (Provision provision)
 	{
