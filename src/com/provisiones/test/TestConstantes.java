@@ -11,11 +11,18 @@ public class TestConstantes
 
 	public static void main(String[] args) 
 	{
-		String sImporte = "123.2132112312";
+		String sImporte = "123231321321";
 		
-		System.out.println(Utils.compruebaImporte(sImporte));
 		
-		System.out.println(Utils.cortaDecimales(sImporte));
+		String sEuros = sImporte.substring(0, sImporte.length()-2);
+		String sCentimos = sImporte.substring(sImporte.length()-2,sImporte.length());
+		
+		System.out.println(sEuros);
+		System.out.println(sCentimos);
+			
+		System.out.println(Utils.recuperaImporte(true,sImporte));
+		
+		System.out.println(Utils.compruebaImporte(Utils.recuperaImporte(true,sImporte)));
 	}
 
 }

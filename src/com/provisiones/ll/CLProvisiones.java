@@ -43,9 +43,11 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesAbiertas(ConnectionManager.getDBConnection());
 	}	
 	
-	public static double calcularValorProvision (String sNUPROF)
+	public static String calcularValorProvision (String sNUPROF)
 	{
-		return QMListaGastosProvisiones.calculaValorProvision(ConnectionManager.getDBConnection(),sNUPROF);
+		long liValor = QMListaGastosProvisiones.calculaValorProvision(ConnectionManager.getDBConnection(),sNUPROF);
+		boolean bNegativo = (liValor < 0);
+		return Utils.recuperaImporte(bNegativo,Long.toString(liValor));
 	}
 	
 	public static Provision buscarProvision (String sCodNUPROF)
@@ -82,17 +84,32 @@ public final class CLProvisiones
 			
 			if (QMProvisiones.existeProvision(conexion,cierre.getsNUPROF()))
 			{
-				Provision provision = buscarProvision(cierre.getsNUPROF());
-				
-				if (CLProvisiones.cerrarProvision(provision))
+				if (!QMProvisiones.provisionCerrada(conexion, cierre.getsNUPROF()))
 				{
-					logger.debug("Provision '"+cierre.getsNUPROF()+"' cerrada");
+					Provision provision = buscarProvision(cierre.getsNUPROF());
+					
+					provision.setsValorTolal(calcularValorProvision(cierre.getsNUPROF()));
+					provision.setsNumGastos(Long.toString(CLProvisiones.buscarNumeroGastosProvision(cierre.getsNUPROF())));
+					provision.setsCodEstado(ValoresDefecto.DEF_BAJA);
+					provision.setsFEPFON(Utils.fechaDeHoy(false));
+					provision.setsFechaValidacion(Utils.fechaDeHoy(false));
+					
+					if (CLProvisiones.cerrarProvision(provision))
+					{
+						logger.debug("Provision '"+cierre.getsNUPROF()+"' cerrada");
+					}
+					else
+					{
+						//no se ha cerrado la provisión
+						iCodigo = -2;
+					}
 				}
 				else
 				{
-					//no se ha cerrado la provisión
-					iCodigo = -2;
+					//provisión ya cerrada
+					iCodigo = -3;
 				}
+
 			}
 			else 
 			{
@@ -119,7 +136,7 @@ public final class CLProvisiones
 			
 			bError = !QMProvisiones.modProvision(conexion,provision);
 			
-	        if (!bError)
+	        /*if (!bError)
 	        {
 	        	long OK = 0;
 	    		//Anular todos los gastos pendientes	
@@ -279,12 +296,12 @@ public final class CLProvisiones
 		        	if (OK > 0)
 		        	{
 			        	//Se han anulado gastos, recalculamos el valor de la provision
-			        	provision.setsValorTolal(Utils.compruebaImporte(Double.toString(calcularValorProvision(provision.getsNUPROF()))));
+			        	provision.setsValorTolal(Utils.compruebaImporte(calcularValorProvision(provision.getsNUPROF())));
 		        	}
 		        	QMProvisiones.modProvision(conexion,provision);
 	    		}
 
-			}
+			}*/
 		}
         
         if(!bError)

@@ -747,7 +747,7 @@ public final class FileManager
 	    				break;
 	    			case 1:
 	    				sMensaje = "Movimiento de Gasto pendiente de revisión.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"(E) Línea "+contador+": "+sMensaje;
+	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"Línea "+contador+": "+sMensaje;
 	    				logger.info(sMensaje);
 	    				break;
 	    			case -1:
@@ -786,7 +786,7 @@ public final class FileManager
 	    				logger.error(sMensaje);
 	    				break;
 	    			case -12:
-	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
+	    				sMensaje = "El movimiento recibido ya esta en revisión.";
 	    				sMensaje = "Línea "+contador+": "+sMensaje;
 	    				logger.warn(sMensaje);
 	    				break;
@@ -796,9 +796,11 @@ public final class FileManager
 	    			{
 	    				registros++;
 	    			}
-
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			else
+	    			{
+		    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+		    			tabla.add(resultado);
+	    			}
 	    		}
 	        }
 		
@@ -885,45 +887,53 @@ public final class FileManager
 	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
 	    				logger.info(sMensaje);
 	    				break;
-	    			case -1:
+	    			case -908:
 	    				sMensaje = "[FATAL] Error al crear la Provisión del Gasto.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
-	    			case -2:
+	    			case -901:
 	    				sMensaje = "[FATAL] Error al crear el Gasto.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
-	    			case -3:
+	    			case -909:
 	    				sMensaje = "El movimiento cargado ya se encontraba en el sistema.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
-	    			case -4:
+	    			case -900:
 	    				sMensaje = "[FATAL] Error al registrar el movimiento.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
-	    			case -5:
+	    			case -902:
 	    				sMensaje = "[FATAL] Error al crear la relación del Gasto.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;	
-	    			case -6:
+	    			case -906:
 	    				sMensaje = "[FATAL] Error al crear la relación del Gasto con la Provisión.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
+	    			default:
+	    				sMensaje = "El movimiento cargado no ha podido ser validado ("+iCodigo+").";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
+	    				
 	    			}
 	    			
 	    			if ( iCodigo >= 0 )
 	    			{
 	    				registros++;
 	    			}
-
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			else
+	    			{
+		    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+		    			tabla.add(resultado);
+	    			}
 	    		}
 	        }
 		
@@ -1578,6 +1588,11 @@ public final class FileManager
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
+	    			case -3:
+	    				sMensaje = "La provisión ya estaba cerrada.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;
 	    			}
 	    			if ( iCodigo >= 0 )
 	    			{
@@ -1626,7 +1641,7 @@ public final class FileManager
 		
 		if (sNombre.length() < 9)
 		{
-			iCodigo = -10;
+			iCodigo = 10;
 			logger.error("El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
 		}
 		else 
@@ -1653,13 +1668,13 @@ public final class FileManager
 
 						if (tabla.size() == 0)	
 						{
-							iCodigo = -1;
+							iCodigo = 1;
 						}
 					}
 					else
 					{
 						//Volcado no aceptado
-						iCodigo = -1;
+						iCodigo = 1;
 					}
 					break;
 				case RG:
@@ -1670,13 +1685,13 @@ public final class FileManager
 
 						if (tabla.size() == 0)					
 						{
-							iCodigo = -2;
+							iCodigo = 2;
 						}
 					}
 					else
 					{
 						//Volcado no aceptado
-						iCodigo = -2;
+						iCodigo = 2;
 					}
 					break;
 				case PA:
@@ -1687,13 +1702,13 @@ public final class FileManager
 
 						if (tabla.size() == 0)					
 						{
-							iCodigo = -3;
+							iCodigo = 3;
 						}
 					}
 					else
 					{
 						//Volcado no aceptado
-						iCodigo = -3;
+						iCodigo = 3;
 					}
 					break;
 				case GA:
@@ -1701,7 +1716,7 @@ public final class FileManager
 					if (bRecibido)
 					{
 						//Recepción no aceptada
-						iCodigo = -4;
+						iCodigo = 4;
 					}
 					else
 					{
@@ -1709,7 +1724,7 @@ public final class FileManager
 
 						if (tabla.size() == 0)	
 						{
-							iCodigo = -4;
+							iCodigo = 4;
 						}
 					}
 					break;
@@ -1718,7 +1733,7 @@ public final class FileManager
 					if (bRecibido)
 					{
 						//Recepción no aceptada
-						iCodigo = -5;
+						iCodigo = 5;
 					}
 					else
 					{
@@ -1726,7 +1741,7 @@ public final class FileManager
 
 						if (tabla.size() == 0)	
 						{
-							iCodigo = -5;
+							iCodigo = 5;
 						}
 					}
 					break;
@@ -1738,13 +1753,13 @@ public final class FileManager
 
 						if (tabla.size() == 0)
 						{
-							iCodigo = -6;
+							iCodigo = 6;
 						}						
 					}
 					else
 					{
 						//inyectar
-						iCodigo = -6;
+						iCodigo = 6;
 					}
 					break;
 				case E2:
@@ -1755,13 +1770,13 @@ public final class FileManager
 
 						if (tabla.size() == 0)
 						{
-							iCodigo = -7;
+							iCodigo = 7;
 						}						
 					}
 					else
 					{
 						//inyectar
-						iCodigo = -7;
+						iCodigo = 7;
 					}
 					break;
 				case E3:
@@ -1772,13 +1787,13 @@ public final class FileManager
 
 						if (tabla.size() == 0)
 						{
-							iCodigo = -8;
+							iCodigo = 8;
 						}						
 					}
 					else
 					{
 						//inyectar
-						iCodigo = -8;
+						iCodigo = 8;
 					}
 					break;
 				case E4:
@@ -1789,19 +1804,19 @@ public final class FileManager
 
 						if (tabla.size() == 0)
 						{
-							iCodigo = -9;
+							iCodigo = 9;
 						}						
 					}
 					else
 					{
 						//inyectar
-						iCodigo = -9;
+						iCodigo = 9;
 					}
 					break;
 				default:
 					logger.error("El archivo suministrado no coincide con el nombrado establecido:");
 					logger.error("[*_]168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
-					iCodigo = -10;
+					iCodigo = 10;
 					break;
 				}
 				logger.debug("tabla.size():|"+tabla.size()+"|");
@@ -1810,7 +1825,7 @@ public final class FileManager
 			} 
 			else
 			{
-				iCodigo = -1;
+				iCodigo = 10;
 				logger.error("El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
 				//lista = new ArrayList<String>();
 			}

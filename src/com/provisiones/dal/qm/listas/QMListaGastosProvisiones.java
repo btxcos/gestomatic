@@ -86,6 +86,63 @@ public final class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
+	public static boolean addRelacionGastoProvisionInyectado(Connection conexion, String sCodGasto, String sCodNUPROF) 
+	{
+		boolean bSalida = false;
+		
+		String sUsuario = ConnectionManager.getUser();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "INSERT INTO " 
+					+ TABLA + 
+					" (" 
+					+ CAMPO1 + "," 
+					+ CAMPO2 + "," 
+					+ CAMPO3 + "," 
+					+ CAMPO4 + "," 
+					+ CAMPO5 +						
+					") VALUES ('" 
+					+ sCodGasto + "','"
+					+ sCodNUPROF + "','"
+					+ ValoresDefecto.DEF_MOVIMIENTO_ENVIADO + "','"
+				    + sUsuario + "','"
+				    + Utils.timeStamp() +
+					"')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static boolean delRelacionGastoProvision(Connection conexion, String sCodGasto) 
 	{
 		boolean bSalida = false;
@@ -722,9 +779,9 @@ public final class QMListaGastosProvisiones
 		return liNumero;
 	}
 	
-	public static double calculaValorProvision(Connection conexion, String sNUPROF)
+	public static long calculaValorProvision(Connection conexion, String sNUPROF)
 	{
-		double dValor = 0;
+		long liValor = 0;
 
 		if (conexion != null)
 		{
@@ -773,11 +830,15 @@ public final class QMListaGastosProvisiones
 					{
 						bEncontrado = true;
 
-						dValor = dValor + Double.parseDouble(Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16)));
+						//bNegativo ? "-"+ sEuros + sCentimos : sEuros + sCentimos;
+						
+						liValor = rs.getString(QMGastos.CAMPO17).equals("-") ? liValor - rs.getLong(QMGastos.CAMPO16) : liValor + rs.getLong(QMGastos.CAMPO16);
+						
+						//dValor = dValor + Double.parseDouble(Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16)));
 						
 						logger.debug("Encontrado el registro!");
 					}
-					logger.debug("Valor de Provisión:|"+dValor+"|");
+					logger.debug("Valor de Provisión:|"+liValor+"|");
 				}
 				if (!bEncontrado) 
 				{
@@ -799,6 +860,6 @@ public final class QMListaGastosProvisiones
 			}
 		}
 
-		return dValor;
+		return liValor;
 	}
 }

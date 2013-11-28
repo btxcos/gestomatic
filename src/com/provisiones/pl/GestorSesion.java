@@ -1,5 +1,6 @@
 package com.provisiones.pl;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
 
@@ -60,13 +61,20 @@ public class GestorSesion implements Serializable
 		}
 	}
 	
-	public String anulaSesion()
+	public void anulaSesion()
 	{
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		
 		session.invalidate();
 		
-		return "login.xhtml";
+		try 
+		{
+			FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+		} 
+		catch (IOException e) 
+		{
+			logger.error("ERROR: No se puede acceder a la página de login.");
+		}
 	}
 	
 	public String cargarPortal() 
@@ -82,20 +90,34 @@ public class GestorSesion implements Serializable
     	return sPagina;
     }
 	
-	public void cerrarSesion(ActionEvent actionEvent)
+	public void cerrarSesion()
 	{
 		FacesMessage msg;
 
 		logger.debug(conn.toString());
-		ConnectionManager.closeDBConnection(conn);
 		
-		msg = new FacesMessage(sMensaje);
+		String sMsg = "Sesión cerrada";
+		
+		msg = new FacesMessage(sMsg);
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
-		logger.debug("sMensaje:|"+sMensaje+"|");
+		logger.info(sMsg + " "+ conn.toString());
+
+		ConnectionManager.closeDBConnection(conn);
 		
 		borrarCamposLogin();
+		
+		try 
+		{
+			FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+		} 
+		catch (IOException e) 
+		{
+			logger.error("ERROR: No se puede acceder a la página de login.");
+		}
+		
+		//return "login.xhtml?facesRedirect=false";
 	}
 	
 	
@@ -109,12 +131,16 @@ public class GestorSesion implements Serializable
 			sMensaje = "No se ha informado el campo 'Usuario'.";
 			msg = Utils.pfmsgError(sMensaje);
 			sMensaje = "Pulse 'Continuar' y revise los datos.";
+			
+			bComprobado = false;
 		}
 		else if (sClave.equals(""))
 		{
 			sMensaje = "No se ha informado el campo 'Clave'.";
 			msg = Utils.pfmsgError(sMensaje);
 			sMensaje = "Pulse 'Continuar' y revise los datos.";
+			
+			bComprobado = false;
 		}
 		else if (CLUsuarios.usuarioValido(sUsuario))
 		{

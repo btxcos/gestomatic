@@ -17,15 +17,17 @@
 
 				<p:layoutUnit position="north" size="auto" header="Gestión de errores en Gastos">
 					<h:panelGrid columns="4" cellpadding="5">
-
-						<p:panel>
-							<h:panelGrid columns="2" cellpadding="5">
-
-								<h:outputText value="Número de provision de fondos: "/>
-								<p:inputText id="NUPROF" value="#{GestorErroresGastos.sNUPROF}" disabled="true" size="9" maxlength="9"/>
-
+						<p:fieldset legend="Sesión" id="sesion">
+							<h:panelGrid columns="1" cellpadding="1">
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="1">
+										<h:outputText value="Usuario: "/>
+										<p:inputText id="USUARIO" value="#{GestorSesion.sUsuario}" size="10" disabled="true"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
 							</h:panelGrid>
-						</p:panel>
+						</p:fieldset>
 
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
@@ -68,7 +70,7 @@
 					<h:panelGrid columns="1" cellpadding="5">
 						<p:panel>
 							<p:contextMenu for="errores">
-								<p:menuitem value="Cargar Error" update="form:popup, form:msgs, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresGastos.seleccionarError}"/>
+								<p:menuitem value="Cargar Error" update="errores, form:popup, form:msgs, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresGastos.seleccionarError}"/>
 							</p:contextMenu>  
 
 							<p:dataTable id="errores" var="error" value="#{GestorErroresGastos.tablaerrores}" rowKey="#{error.sCodError}"  
@@ -109,6 +111,14 @@
 
 										<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()" disabled="#{GestorErroresGastos.bCOACES}"/>
 
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
+
+								<h:outputText value="Provisión: "/>
+								<p:inputText id="NUPROF" value="#{GestorErroresGastos.sNUPROF}" disabled="true" size="9" maxlength="9"/>
+
+							</h:panelGrid>
+						</p:panel>
 									</h:panelGrid>
 								</p:fieldset>
 
@@ -415,7 +425,7 @@
 								<p:panel id="panelBuscarErrores" >
 									<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="COACESB" value="Número: "/>
+											<h:outputText for="COACESB" value="Activo: "/>
 											<p:inputText id="COACESB" value="#{GestorErroresGastos.sCOACESB}" size="10" maxlength="10"/>
 
 											<h:outputText value="Grupo de gasto: "/>
@@ -470,7 +480,7 @@
 							<p:menuitem value="Cargar Errores" update="form:popup, form:msgs, form:errores, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresGastos.seleccionarMovimiento}" oncomplete="dlgTablaGastosError.hide(); dlgBuscarGastosError.hide()"/>
 						</p:contextMenu>  
 
-						<p:dataTable id="gastoserror" var="gastoe" value="#{GestorErroresGastos.tablagastoserror}" rowKey="#{gastoe.MOVIMIENTO}"  
+						<p:dataTable id="gastoserror" var="gastoe" value="#{GestorErroresGastos.tablagastoserror}" rowKey="#{gastoe.COACES}"  
 								selection="#{GestorErroresGastos.movimientoseleccionado}" selectionMode="single"
 									paginator="true" paginatorPosition="bottom" rows="10" 
 									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
@@ -478,6 +488,10 @@
 							<f:facet name="header">  
 								Gastos
 							</f:facet>
+							
+							<p:column headerText="Activo">
+								#{gastoe.COACES}
+							</p:column>
 
 							<p:column sortBy="#{gastoe.DCOSBGA}" headerText="Gasto">
 								#{gastoe.DCOSBGA}  
@@ -502,7 +516,22 @@
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
 						<p:graphicImage value="recursos/loadingBar.gif"/>
 					</p:dialog>
-
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de cerrar esta sesión?" />
+									<h:outputText value="- Todos los datos no guardados se perderán." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" action="#{GestorSesion.cerrarSesion}" oncomplete="dlgConfirmaSalir.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaSalir.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
 				</p:layoutUnit>
 
 			</p:layout>

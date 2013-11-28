@@ -704,6 +704,121 @@ public final class QMMovimientosGastos
 
 		return sGastoID;
 	}
+	
+	public static String getMovimientoGastoIDAutorizado(Connection conexion, MovimientoGasto gasto)
+	{
+		String sGastoID = "";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+						   + CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE ("
+					       + CAMPO2  +" = '" + gasto.getCOACES() + "' AND "
+					       + CAMPO3  +" = '" + gasto.getCOGRUG() + "' AND "
+					       + CAMPO4  +" = '" + gasto.getCOTPGA() + "' AND "
+					       + CAMPO5  +" = '" + gasto.getCOSBGA() + "' AND "
+					       + CAMPO6  +" = '" + gasto.getPTPAGO() + "' AND "
+					       + CAMPO7  +" = '" + gasto.getFEDEVE() + "' AND "
+					       + CAMPO8  +" = '" + gasto.getFFGTVP() + "' AND "
+					       + CAMPO9  +" = '" + gasto.getFEPAGA() + "' AND "
+					       + CAMPO10 +" = '" + gasto.getFELIPG() + "' AND "
+					       + CAMPO11 +" = '" + gasto.getCOSIGA() + "' AND "
+					       + CAMPO12 +" = '" + gasto.getFEEESI() + "' AND "
+					       + CAMPO13 +" = '" + gasto.getFEECOI() + "' AND "
+					       //+ CAMPO14 +" = '" + gasto.getFEEAUI() + "' AND "
+					       + CAMPO15 +" = '" + gasto.getFEEPAI() + "' AND "
+					       + CAMPO16 +" = '" + gasto.getIMNGAS() + "' AND "
+					       + CAMPO17 +" = '" + gasto.getYCOS02() + "' AND "
+					       + CAMPO18 +" = '" + gasto.getIMRGAS() + "' AND "
+					       + CAMPO19 +" = '" + gasto.getYCOS04() + "' AND "
+					       + CAMPO20 +" = '" + gasto.getIMDGAS() + "' AND "
+					       + CAMPO21 +" = '" + gasto.getYCOS06() + "' AND "
+					       + CAMPO22 +" = '" + gasto.getIMCOST() + "' AND "
+					       + CAMPO23 +" = '" + gasto.getYCOS08() + "' AND "
+					       + CAMPO24 +" = '" + gasto.getIMOGAS() + "' AND "
+					       + CAMPO25 +" = '" + gasto.getYCOS10() + "' AND "
+					       + CAMPO26 +" = '" + gasto.getIMDTGA() + "' AND "
+					       + CAMPO27 +" = '" + gasto.getCOUNMO() + "' AND "
+					       + CAMPO28 +" = '" + gasto.getIMIMGA() + "' AND "
+					       //+ CAMPO29 +" = '" + gasto.getCOIMPT() + "' AND "
+					       //+ CAMPO30 +" = '" + gasto.getCOTNEG() + "' AND "
+					       + CAMPO31 +" = '" + gasto.getCOENCX() + "' AND "
+					       + CAMPO32 +" = '" + gasto.getCOOFCX() + "' AND "
+					       + CAMPO33 +" = '" + gasto.getNUCONE() + "' AND "
+					       + CAMPO34 +" = '" + gasto.getNUPROF() + "' AND "
+					       + CAMPO35 +" = '" + gasto.getFEAGTO() + "' AND "
+					      // + CAMPO37 +" = '" + gasto.getBIAUTO() + "' AND "
+					      // + CAMPO38 +" = '" + gasto.getFEAUFA() + "' AND "
+					       + CAMPO40 +" = '" + gasto.getFMPAGN() + "' AND "
+					       + CAMPO41 +" = '" + gasto.getFEPGPR() + "') ";
+					       /*AND "
+					       + CAMPO42 +" = '" + gasto.getFEAPLI() + "' AND "
+					       + CAMPO43 +" = '" + gasto.getCOAPII() + "' AND "
+					       + CAMPO44 +" = '" + gasto.getCOSPII() + "' AND "
+					       + CAMPO45 +" = '" + gasto.getNUCLII() + 
+					       "')";*/
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery); 
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sGastoID = rs.getString(CAMPO1);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sGastoID+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sGastoID = "";
+				
+				logger.error("ERROR COACES:|"+gasto.getCOACES()+"|");
+				logger.error("ERROR COGRUG:|"+gasto.getCOGRUG()+"|");
+				logger.error("ERROR COTPGA:|"+gasto.getCOTPGA()+"|");
+				logger.error("ERROR COSBGA:|"+gasto.getCOSBGA()+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sGastoID;
+	}
 
 	public static boolean existeMovimientoGasto(Connection conexion, String sMovimientoGastoID)
 	{

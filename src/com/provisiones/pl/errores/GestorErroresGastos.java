@@ -16,6 +16,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLErrores;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
@@ -370,6 +371,7 @@ public class GestorErroresGastos implements Serializable
 			this.bCOSIGA = true;
 			this.bCOTPGA = true;
 			this.bDevolucion = true;
+			this.bFEAGTO = false;
 			this.bFEDEVE = true;
 			this.bFEEAUI = true;
 			this.bFEECOI = true;
@@ -384,7 +386,7 @@ public class GestorErroresGastos implements Serializable
 			this.bIMDGAS = true;
 			this.bIMDTGA = true;
 			this.bIMIMGA = true;
-			this.bIMNGAS = false;
+			this.bIMNGAS = true;
 			this.bIMOGAS = true;
 			this.bIMRGAS = true;
 			this.bPTPAGO = true;
@@ -399,6 +401,7 @@ public class GestorErroresGastos implements Serializable
 			this.bCOSIGA = true;
 			this.bCOTPGA = true;
 			this.bDevolucion = true;
+			this.bFEAGTO = true;
 			this.bFEDEVE = true;
 			this.bFEEAUI = true;
 			this.bFEECOI = true;
@@ -515,7 +518,8 @@ public class GestorErroresGastos implements Serializable
 			this.sCOOFCX = movimiento.getCOOFCX();
 			this.sNUCONE = movimiento.getNUCONE();
 			
-			this.sNUPROF = movimiento.getNUPROF();
+			//this.sNUPROF = movimiento.getNUPROF();
+	    	this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
 
 			this.sCOTERR = movimiento.getCOTERR();
 			this.sFMPAGN = Utils.recuperaFecha(movimiento.getFMPAGN());
@@ -551,6 +555,7 @@ public class GestorErroresGastos implements Serializable
 	    	if (editarError(iCodError))
 	    	{
 	    		sMsg = "Error editado.";
+	    		this.tablaerrores.remove(errorseleccionado);
 	    		msg = Utils.pfmsgInfo(sMsg);
 	    		logger.info(sMsg);
 	    	}
@@ -674,7 +679,7 @@ public class GestorErroresGastos implements Serializable
 			this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
 			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
-
+			
 			this.sCOTERR = ValoresDefecto.DEF_COTERR;
 			this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
 		
@@ -952,7 +957,8 @@ public class GestorErroresGastos implements Serializable
 
 				//movimiento.pintaMovimientoGasto();
 				
-				int iSalida = CLErrores.reparaMovimientoGasto(nuevomovimiento,sCodMovimiento,sCodError);
+				//int iSalida = CLErrores.reparaMovimientoGasto(nuevomovimiento,sCodMovimiento,sCodError);
+				int iSalida = CLGastos.registraMovimiento(nuevomovimiento, true);
 				
 				logger.debug("Codigo de salida:"+iSalida);
 				

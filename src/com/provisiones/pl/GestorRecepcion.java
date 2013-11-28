@@ -77,17 +77,17 @@ public class GestorRecepcion implements Serializable
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
-			case -4:
+			case 4:
 				sMsg = "El archivo de Gastos debe de ser primero supervisado por la entidad.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 				break;
-			case -5:
+			case 5:
 				sMsg = "El archivo de Cierres debe comprobado por la entidad.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 				break;
-			case -10:
+			case 10:
 				sMsg = "ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);

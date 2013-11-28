@@ -81,22 +81,22 @@ public class GestorCargas implements Serializable
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
-			case -1:
+			case 1:
 				sMsg = "El archivo de Activos debe de ser cargado por recepción.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 				break;
-			case -2:
+			case 2:
 				sMsg = "El archivo de Rechazados debe de ser cargado por recepción.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 				break;
-			case -3:
+			case 3:
 				sMsg = "El archivo de Autorizados debe de ser cargado por recepción.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 				break;
-			case -10:
+			case 10:
 				sMsg = "ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
@@ -108,36 +108,6 @@ public class GestorCargas implements Serializable
 				break;
 			}
 			
-			if (iCodigoError == 0)
-			{
-
-				msg = Utils.pfmsgInfo("'"+event.getFile().getFileName() +"' ha subido correctamente.");
-				logger.info("'{}' ha subido correctamente.",event.getFile().getFileName());
-
-			}
-			else if (iCodigoError == -1)
-			{
-			
-				msg = Utils.pfmsgError("ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.");
-				logger.error("ERROR: El archivo '{}' no tiene un nombre reconocible. Por favor, reviselo.",event.getFile().getFileName());
-
-			}
-			else if (iCodigoError == 4)
-			{
-				msg = Utils.pfmsgWarning("El archivo de Gastos debe de ser primero supervisado por la entidad.");
-				logger.warn("El archivo de Gastos debe de ser primero supervisado por la entidad.");
-			}
-			else if (iCodigoError == 5)
-			{
-				msg = Utils.pfmsgWarning("El archivo de Cierres debe comprobado por la entidad.");
-				logger.warn("El archivo de Cierres debe comprobado por la entidad.");
-			}
-			else
-			{
-				msg = Utils.pfmsgFatal("ERROR: Se encontraron problemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.");
-				logger.error("[FATAL] ERROR: Se encontraron problemas al procesar el archivo '{}', contiene registros inconsistentes con el sistema. Por favor, reviselo.",event.getFile().getFileName());
-			}
-
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
 			logger.debug("Carga completada!");
