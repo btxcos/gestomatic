@@ -49,6 +49,7 @@ public class GestorCargas implements Serializable
     
 	public void cargaArchivo(FileUploadEvent event) 
     {
+		borrarResultadosCarga();
 		
 		if (ConnectionManager.comprobarConexion())
 		{

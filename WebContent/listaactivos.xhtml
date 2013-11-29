@@ -86,17 +86,17 @@
 														</p:inputText>
 													<p:message for="NOMUIN" display="icon"/>
 
-													<h:outputText for="COPOIN" value="Codigo Postal: " />
+													<h:outputText for="COPOIN" value="Código Postal: " />
 														<p:inputText id="COPOIN" value="#{GestorActivos.sCOPOIN}" size="5" maxlength="5">
 														</p:inputText>
 													<p:message for="COPOIN" display="icon"/>
 
-													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+													<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
 														<p:inputText id="NOVIAS" value="#{GestorActivos.sNOVIAS}" size="60" maxlength="60">
 														</p:inputText>
 													<p:message for="NOVIAS" display="icon"/>
 
-													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+													<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: " />
 														<p:inputText id="NUPOAC" value="#{GestorActivos.sNUPOAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPOAC" display="icon"/>
@@ -121,7 +121,7 @@
 														<p:menuitem value="Referencia Catastral" update="form:popup" icon="ui-icon-script" action="#{GestorActivos.cargarReferencia}"/>
 														<p:menuitem value="Impuestos y Recursos" update="form:popup" icon="ui-icon-note" action="#{GestorActivos.cargarImpuestos}"/>
 														<p:menuitem value="Gastos" update="form:popup" icon="ui-icon-cart" action="#{GestorActivos.cargarGastos}"/-->
-													</p:contextMenu>															
+													</p:contextMenu>
 
 													<p:dataTable id="activos" var="activo" value="#{GestorActivos.tablaactivos}" rowKey="#{activo.COACES}"  
 															selection="#{GestorActivos.activoseleccionado}" selectionMode="single"
@@ -131,38 +131,67 @@
 														<f:facet name="header">  
 															Activos
 														</f:facet>
-															
-														<p:column sortBy="#{activo.COACES}" headerText="Codigo Activo">  
-														    #{activo.COACES}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NOPRAC}" headerText="Provinicia">  
-														    #{activo.NOPRAC}  
-														</p:column>  
-            							
-														<p:column sortBy="#{activo.NOMUIN}" headerText="Municipio">  
-														    #{activo.NOMUIN}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NOVIAS}" headerText="Via">  
-														    #{activo.NOVIAS}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NUPOAC}" headerText="Portal">  
-														    #{activo.NUPOAC}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NUPIAC}" headerText="Piso">  
-														    #{activo.NUPIAC}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NUPUAC}" headerText="Puerta">  
-														    #{activo.NUPUAC}  
-														</p:column>  
-															
-													</p:dataTable>
-													
 
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activo" />
+															</f:facet>
+															<h:outputText value="#{activo.COACES}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Provinicia" />
+															</f:facet>
+															<h:outputText value="#{activo.NOPRAC}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Municipio" />
+															</f:facet>
+															<h:outputText value="#{activo.NOMUIN}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Vía" />
+															</f:facet>
+															<h:outputText value="#{activo.NOVIAS}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Portal" />
+															</f:facet>
+															<h:outputText value="#{activo.NUPOAC}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Piso" />
+															</f:facet>
+															<h:outputText value="#{activo.NUPIAC}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Puerta" />
+															</f:facet>
+															<h:outputText value="#{activo.NUPUAC}" />
+														</p:column>
+
+        <f:facet name="footer">
+        	<h:panelGrid columns="2">
+        	<p:commandButton value="Limpiar Plantilla" actionListener="#{GestorActivos.limpiarPlantilla}" />
+													<h:commandLink>
+														<p:graphicImage value="recursos/excel.png" />  
+														<p:dataExporter type="xls" target="activos" fileName="listaactivos" encoding="ISO-8859-15"/>  
+													</h:commandLink>
+				</h:panelGrid>
+        </f:facet> 
+
+													</p:dataTable>
 								</h:panelGrid>
 							</p:panel>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  

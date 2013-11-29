@@ -555,7 +555,7 @@ public class GestorErroresGastos implements Serializable
 	    	if (editarError(iCodError))
 	    	{
 	    		sMsg = "Error editado.";
-	    		this.tablaerrores.remove(errorseleccionado);
+	    		//this.tablaerrores.remove(errorseleccionado);
 	    		msg = Utils.pfmsgInfo(sMsg);
 	    		logger.info(sMsg);
 	    	}
