@@ -28,7 +28,7 @@
 						</p:fieldset>
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="1" cellpadding="5">
-								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, tabla" actionListener="#{GestorRecepcion.limpiarPlantilla}" />
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, tabla, resultados" actionListener="#{GestorRecepcion.limpiarPlantilla}" />
 							</h:panelGrid>
 						</p:fieldset>
 						<p:fieldset legend="Info">
@@ -56,18 +56,25 @@
 				<p:layoutUnit position="center">
 					<p:panel>
 						<h:panelGrid columns="2" cellpadding="5">
-						<p:fileUpload fileUploadListener="#{GestorRecepcion.cargaArchivo}" mode="advanced" dragDropSupport="true"  
-							update="popup, msgs, tabla" allowTypes="/(\.|\/)(txt)$/" /> 
-						<p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">  
-							<f:facet name="start">  
-								<h:graphicImage value="recursos/loadingBar.gif" />  
-							</f:facet>  
+						<p:fileUpload fileUploadListener="#{GestorRecepcion.cargaArchivo}" mode="advanced" dragDropSupport="true" label="Buscar Achivo(s)"
+							update="popup, msgs, tabla, resultados" multiple="true" fileLimit="1" allowTypes="/(\.|\/)(txt)$/" showButtons="false" /> 
 
-							<f:facet name="complete">  
-								<h:outputText value="" />  
-							</f:facet>
-						</p:ajaxStatus> 
 						</h:panelGrid>
+									<p:panel id="resultados">
+										<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText value="Registros: " />
+											<p:inputText id="registros" value="#{GestorRecepcion.sRegistrosProcesados}" size="10" disabled="true" />
+
+											<h:outputText value="Correctos: " />
+											<p:inputText id="correctos" value="#{GestorRecepcion.sRegistrosCorrectos}" size="10" disabled="true" />
+
+											<h:outputText value="Duración: " />
+											<p:inputText id="duracion" value="#{GestorRecepcion.sDuracion}" size="30" disabled="true" />
+
+
+										</h:panelGrid>
+									</p:panel>						
 					</p:panel>
 					<p:panel>
 						<p:dataTable id="tabla" var="mensaje" value="#{GestorRecepcion.tablamensajes}" rowKey="#{mensaje.sObjeto}"  
@@ -79,16 +86,32 @@
 								Resultado de la carga
 							</f:facet>
 
-							<p:column sortBy="#{mensaje.sObjeto}" headerText="Archivo">  
-							    #{mensaje.sObjeto}  
-							</p:column>  
-							
-							<p:column sortBy="#{mensaje.sResultado}" headerText="Resultado">  
-							    #{mensaje.sResultado}  
-							</p:column>  
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Archivo" />
+								</f:facet>
+								<h:outputText value="#{mensaje.sObjeto}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Resultado" />
+								</f:facet>
+								<h:outputText value="#{mensaje.sResultado}" />
+							</p:column>
+
+							<f:facet name="footer">
+								<h:commandLink>
+									<p:graphicImage value="recursos/excel.png" />  
+									<p:dataExporter type="xls" target="tabla" fileName="resultado" encoding="ISO-8859-15"/>  
+								</h:commandLink>
+							</f:facet> 
 
 						</p:dataTable>
 					</p:panel>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
 					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
 						<h:panelGrid columns="1">
 							<p:panel>
@@ -104,7 +127,7 @@
 								</p:panel>
 							</p:panel>
 						</h:panelGrid>
-					</p:dialog>					
+					</p:dialog>
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>

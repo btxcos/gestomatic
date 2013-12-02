@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 
+import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -288,13 +289,25 @@ public class GestorActivos implements Serializable
 		
 		if (ConnectionManager.comprobarConexion())
 		{
-	    	this.sCOACES = activoseleccionado.getCOACES();
-	    	
-	    	logger.debug("sCOACES:|{}|",sCOACES);
-	    	
-	    	logger.debug("Redirigiendo...");
+			if (activoseleccionado != null)
+			{
+		    	this.sCOACES = activoseleccionado.getCOACES();
+		    	
+		    	logger.debug("sCOACES:|{}|",sCOACES);
+		    	
+		    	logger.debug("Redirigiendo...");
 
-	    	sPagina = "detallesactivo.xhtml";
+		    	sPagina = "detallesactivo.xhtml";
+			}
+			else
+			{
+				FacesMessage msg;
+
+				msg = Utils.pfmsgWarning("No se ha seleccionado ningún activo.");
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+
 		}
 
 		return sPagina;

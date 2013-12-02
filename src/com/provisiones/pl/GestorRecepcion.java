@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
-import com.provisiones.types.Resultados;
+import com.provisiones.types.ResultadoCarga;
 import com.provisiones.types.tablas.ResultadosTabla;
 
 public class GestorRecepcion implements Serializable 
@@ -25,6 +25,13 @@ public class GestorRecepcion implements Serializable
 	
 	private transient ArrayList<ResultadosTabla> tablamensajes = new ArrayList<ResultadosTabla>();
 	
+	private String sArchivo = "";
+	private String sDuracion = "";
+	private String sRegistrosProcesados = "";
+	private String sRegistrosCorrectos = "";
+	
+	private int iContador = 0;
+
 	public GestorRecepcion ()
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -36,6 +43,12 @@ public class GestorRecepcion implements Serializable
 	public void borrarResultadosCarga()
 	{
     	this.tablamensajes = new ArrayList<ResultadosTabla>();
+    	this.sArchivo = "";
+    	this.sDuracion = "";
+    	this.sRegistrosProcesados = "";
+    	this.sRegistrosCorrectos = "";
+    	this.iContador = 0;
+    	   	
 	}
 	
     public void limpiarPlantilla(ActionEvent actionEvent) 
@@ -43,26 +56,39 @@ public class GestorRecepcion implements Serializable
     	borrarResultadosCarga();
     }
     
+    public void cuenta() {  
+        iContador=iContador+1;  
+    } 
+    
 	public void cargaArchivo(FileUploadEvent event) 
     {
 		
 		if (ConnectionManager.comprobarConexion())
 		{
+			borrarResultadosCarga();
+			
 			FacesMessage msg;
 			
 			logger.debug("Iniciando carga...");
 			
 			boolean bRecibido = true;
 		
-			Resultados carga = FileManager.splitter(FileManager.guardarFichero(event,bRecibido),bRecibido);
+			ResultadoCarga resultado = FileManager.splitter(FileManager.guardarFichero(event,bRecibido),bRecibido);
 			
-			int iCodigoError = carga.getiCodigo();
+			int iCodigoError = resultado.getiCodigo();
+
+			this.sArchivo = resultado.getsArchivo();
+
+			this.sRegistrosProcesados = Integer.toString(resultado.getiRegistrosProcesados());
+			this.sRegistrosCorrectos = Integer.toString(resultado.getiRegistrosCorrectos());
+
+			this.sDuracion = resultado.getsDuracion();
 			
 			logger.debug("iCodigoError:|{}|",iCodigoError);
 			
-			if (carga.getAlCarga().size() > 0)
+			if (resultado.getAlCarga().size() > 0)
 			{
-				this.tablamensajes.addAll(carga.getAlCarga());
+				this.tablamensajes.addAll(resultado.getAlCarga());
 			}
 			
 			logger.debug("tablamensajes.size():|{}|",tablamensajes.size());
@@ -115,4 +141,45 @@ public class GestorRecepcion implements Serializable
 	public void setTablamensajes(ArrayList<ResultadosTabla> tablamensajes) {
 		this.tablamensajes = tablamensajes;
 	}
+	
+	public String getsArchivo() {
+		return sArchivo;
+	}
+
+	public void setsArchivo(String sArchivo) {
+		this.sArchivo = sArchivo;
+	}
+
+	public String getsDuracion() {
+		return sDuracion;
+	}
+
+	public void setsDuracion(String sDuracion) {
+		this.sDuracion = sDuracion;
+	}
+
+	public String getsRegistrosProcesados() {
+		return sRegistrosProcesados;
+	}
+
+	public void setsRegistrosProcesados(String sRegistrosProcesados) {
+		this.sRegistrosProcesados = sRegistrosProcesados;
+	}
+
+	public String getsRegistrosCorrectos() {
+		return sRegistrosCorrectos;
+	}
+
+	public void setsRegistrosCorrectos(String sRegistrosCorrectos) {
+		this.sRegistrosCorrectos = sRegistrosCorrectos;
+	}
+
+	public int getiContador() {
+		return iContador;
+	}
+
+	public void setiContador(int iContador) {
+		this.iContador = iContador;
+	}
+
 }

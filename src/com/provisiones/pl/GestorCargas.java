@@ -16,7 +16,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
 
-import com.provisiones.types.Resultados;
+import com.provisiones.types.ResultadoCarga;
 import com.provisiones.types.tablas.ResultadosTabla;
 
 
@@ -59,16 +59,16 @@ public class GestorCargas implements Serializable
 			
 			boolean bRecibido = false; 
 			
-			Resultados carga = FileManager.splitter(FileManager.guardarFichero(event,bRecibido),bRecibido);
+			ResultadoCarga resultado = FileManager.splitter(FileManager.guardarFichero(event,bRecibido),bRecibido);
 			
-			int iCodigoError = carga.getiCodigo();
+			int iCodigoError = resultado.getiCodigo();
 			
 			logger.debug("iCodigoError:|{}|",iCodigoError);
 			
-			if (carga.getAlCarga().size() > 0)
+			if (resultado.getAlCarga().size() > 0)
 			{
 			
-				this.tablamensajes.addAll(carga.getAlCarga());
+				this.tablamensajes.addAll(resultado.getAlCarga());
 			}
 			
 			logger.debug("tablamensajes.size():|{}|",tablamensajes.size());
