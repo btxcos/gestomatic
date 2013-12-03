@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLProvisiones;
 import com.provisiones.ll.CLUsuarios;
 import com.provisiones.misc.Utils;
 
@@ -85,6 +86,9 @@ public class GestorSesion implements Serializable
     	{
     		logger.debug("Redirigiendo...");
     		sPagina = "index.xhtml";
+			logger.info("Inicializando aplicación.");
+			Utils.inicializarDirectorios();
+			CLProvisiones.inicializaProvisiones();	
     	}
     	
     	return sPagina;
@@ -94,7 +98,6 @@ public class GestorSesion implements Serializable
 	{
 		FacesMessage msg;
 
-		logger.debug(conn.toString());
 		
 		String sMsg = "Sesión cerrada";
 		
@@ -102,9 +105,13 @@ public class GestorSesion implements Serializable
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
-		logger.info(sMsg + " "+ conn.toString());
+		if (conn != null)
+		{
+			logger.info(sMsg + ": "+ conn.toString());
 
-		ConnectionManager.closeDBConnection(conn);
+			ConnectionManager.closeDBConnection(conn);
+		}
+
 		
 		borrarCamposLogin();
 		

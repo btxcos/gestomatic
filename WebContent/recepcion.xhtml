@@ -14,7 +14,7 @@
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="auto" header="Recepción de Archivos">
-					<h:panelGrid columns="3" cellpadding="5">
+					<h:panelGrid columns="4" cellpadding="5">
 						<p:fieldset legend="Sesión" id="sesion">
 							<h:panelGrid columns="1" cellpadding="1">
 								<p:panel>
@@ -46,6 +46,7 @@
 								<p:growl id="popup" />
 							</h:panelGrid>
 						</p:fieldset>
+
 					</h:panelGrid>
 				</p:layoutUnit>
 
@@ -54,36 +55,37 @@
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
-					<p:panel>
-						<h:panelGrid columns="2" cellpadding="5">
-						<p:fileUpload fileUploadListener="#{GestorRecepcion.cargaArchivo}" mode="advanced" dragDropSupport="true" label="Buscar Achivo(s)"
-							update="popup, msgs, tabla, resultados" multiple="true" fileLimit="1" allowTypes="/(\.|\/)(txt)$/" showButtons="false" /> 
 
-						</h:panelGrid>
 									<p:panel id="resultados">
 										<h:panelGrid columns="6" cellpadding="5">
 
 											<h:outputText value="Registros: " />
 											<p:inputText id="registros" value="#{GestorRecepcion.sRegistrosProcesados}" size="10" disabled="true" />
 
-											<h:outputText value="Correctos: " />
-											<p:inputText id="correctos" value="#{GestorRecepcion.sRegistrosCorrectos}" size="10" disabled="true" />
-
-											<h:outputText value="Duración: " />
-											<p:inputText id="duracion" value="#{GestorRecepcion.sDuracion}" size="30" disabled="true" />
-
+											<h:outputText value="Errores: " />
+											<p:inputText id="errores" value="#{GestorRecepcion.sRegistrosErroneos}" size="10" disabled="true" />
+											<h:outputText value="Duración de la carga: " />
+											<p:inputText id="duracion" value="#{GestorRecepcion.sDuracion}" size="20" disabled="true" />
 
 										</h:panelGrid>
-									</p:panel>						
-					</p:panel>
+									</p:panel>	
+
 					<p:panel>
+						<h:panelGrid columns="2" cellpadding="5">
+						<p:fileUpload fileUploadListener="#{GestorRecepcion.cargaArchivo}" mode="advanced" dragDropSupport="true" label="Buscar Achivo(s)" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"
+							update="popup, msgs, tabla, resultados" multiple="true" fileLimit="1" allowTypes="/(\.|\/)(txt)$/" showButtons="false" /> 
+						</h:panelGrid>
+				
+					</p:panel>
+
+
 						<p:dataTable id="tabla" var="mensaje" value="#{GestorRecepcion.tablamensajes}" rowKey="#{mensaje.sObjeto}"  
 									paginator="true" paginatorPosition="bottom" rows="10" 
 									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
 									rowsPerPageTemplate="10,15,20">  
 
 							<f:facet name="header">  
-								Resultado de la carga
+								Detalle de la carga
 							</f:facet>
 
 							<p:column>
@@ -108,9 +110,11 @@
 							</f:facet> 
 
 						</p:dataTable>
-					</p:panel>
-					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+
+					
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false" onShow="escucha.start();">  
 						<p:graphicImage value="recursos/loadingBar.gif" />
+						<p:poll widgetVar="escucha" interval="60" listener="#{GestorRecepcion.cuenta}" stop="#{GestorRecepcion.bPoll}" autoStart="false"/> 
 					</p:dialog> 
 					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
 						<h:panelGrid columns="1">
@@ -128,6 +132,7 @@
 							</p:panel>
 						</h:panelGrid>
 					</p:dialog>
+					
 				</p:layoutUnit>
 			</p:layout>
 		</h:form>

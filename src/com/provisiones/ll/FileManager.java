@@ -575,14 +575,14 @@ public final class FileManager
 		
 		ResultadoCarga resultadocarga;
 		
-		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
+		//logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
 		FileReader fr;
 		
-		int contador= 0 ;
-		int registros = 0;
+		long contador= 0 ;
+		long registros = 0;
 		int iSalida = 0;
 		
 		String sDuracion = "0";
@@ -602,7 +602,7 @@ public final class FileManager
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
 			
-			logger.debug("Leyendo fichero..");
+			//logger.debug("Leyendo fichero..");
 
 
 			
@@ -612,8 +612,8 @@ public final class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
-				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+				//logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				//logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -675,8 +675,8 @@ public final class FileManager
 		
 			br.close();
 			
-			logger.debug("Registros procesados:|"+contador+"|");
-			logger.debug("Registros correctos:|"+registros+"|");
+			//logger.debug("Registros procesados:|"+contador+"|");
+			//logger.debug("Registros correctos:|"+registros+"|");
 			
 			if (iSalida != 0)
 			{
@@ -701,7 +701,7 @@ public final class FileManager
 		logger.info( "Lectura de "+sNombre+" finalizada.\n");
 		
 	
-		logger.debug("tabla.size():|"+tabla.size()+"|");
+		//logger.debug("tabla.size():|"+tabla.size()+"|");
 		
         return resultadocarga;
 	}
@@ -1687,8 +1687,8 @@ public final class FileManager
 						carga = leerActivos(sNombre);
 						
 						logger.debug("Codigo:|"+carga.getiCodigo()+"|");
-						logger.debug("Procesados:|"+carga.getiRegistrosProcesados()+"|");
-						logger.debug("Correctos:|"+carga.getiRegistrosCorrectos()+"|");
+						logger.debug("Procesados:|"+carga.getLiRegistrosProcesados()+"|");
+						logger.debug("Correctos:|"+carga.getLiRegistrosCorrectos()+"|");
 						logger.debug("Duracion:|"+carga.getsDuracion()+"|");
 					}
 					else

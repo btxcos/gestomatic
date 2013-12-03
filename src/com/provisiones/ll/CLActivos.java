@@ -63,13 +63,13 @@ public final class CLActivos
 			
 			String sCodActivo =  activo.getCOACES();
 			
-			logger.debug("sCodActivo:|"+sCodActivo+"|");
+			//logger.debug("sCodActivo:|"+sCodActivo+"|");
 			
 			if (!QMActivos.existeActivo(conexion,sCodActivo))
 			{
 				if (QMActivos.addActivo(conexion,activo))
 				{
-					logger.info("Nuevo Activo registrado.");
+					//logger.info("Nuevo Activo registrado.");
 				}
 				else
 				{
@@ -82,7 +82,7 @@ public final class CLActivos
 				{
 					if (QMActivos.modActivo(conexion,activo,sCodActivo))
 					{
-						logger.info("Activo actualizado.");
+						//logger.info("Activo actualizado.");
 						iCodigo = 1;
 					}
 					else
@@ -92,8 +92,8 @@ public final class CLActivos
 				}
 				else
 				{
-					logger.warn("El siguiente registro ya se encuentre en el sistema:");
-					logger.warn("|"+linea+"|");
+					//logger.warn("El siguiente registro ya se encuentre en el sistema:");
+					//logger.warn("|"+linea+"|");
 					
 					iCodigo = 2;
 				}

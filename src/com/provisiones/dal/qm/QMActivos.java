@@ -124,7 +124,7 @@ public final class QMActivos
 		{
 			Statement stmt = null;
 
-			logger.debug("Ejecutando Query...");
+			//logger.debug("Ejecutando Query...");
 			
 			String sQuery = "INSERT INTO " 
 					   + TABLA + 
@@ -315,14 +315,14 @@ public final class QMActivos
 				       + NuevoActivo.getBIOBNU() + "','"  
 				       + NuevoActivo.getPOBRAR() + "' )";
 			
-			logger.debug(sQuery);
+			//logger.debug(sQuery);
 			
 			try 
 			{
 				stmt = conexion.createStatement();
 				stmt.executeUpdate(sQuery);
 				
-				logger.debug("Ejecutada con éxito!");
+				//logger.debug("Ejecutada con éxito!");
 
 				bSalida = true;
 				
@@ -351,7 +351,7 @@ public final class QMActivos
 		{
 			Statement stmt = null;
 
-			logger.debug("Ejecutando Query...");
+			//logger.debug("Ejecutando Query...");
 			
 			String sQuery = "UPDATE " 
 					+ TABLA + 
@@ -450,14 +450,14 @@ public final class QMActivos
 					" WHERE "
 					+ CAMPO1 + " = '"+ sCodCOACES +"'";
 			
-			logger.debug(sQuery);
+			//logger.debug(sQuery);
 			
 			try 
 			{
 				stmt = conexion.createStatement();
 				stmt.executeUpdate(sQuery);
 				
-				logger.debug("Ejecutada con éxito!");
+				//logger.debug("Ejecutada con éxito!");
 
 				bSalida = true;
 						
@@ -1017,13 +1017,13 @@ public final class QMActivos
 					{
 						bEncontrado = true;
 
-						logger.debug("Encontrado el registro!");
+						//logger.debug("Encontrado el registro!");
 						//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 					}
 				}
 				if (!bEncontrado) 
 				{
-					logger.debug("No se encontro la información.");
+					//logger.debug("No se encontro la información.");
 				}
 
 			} 
@@ -1057,7 +1057,7 @@ public final class QMActivos
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 			
-			logger.debug("Ejecutando Query...");
+			//logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
 					+ CAMPO1  +
@@ -1157,7 +1157,7 @@ public final class QMActivos
 					+ CAMPO91 + " = '"+ NuevoActivo.getBIOBNU() + "' AND "
 					+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' )";
 			
-			logger.debug(sQuery);
+			//logger.debug(sQuery);
 			
 			try 
 			{
@@ -1175,13 +1175,13 @@ public final class QMActivos
 					{
 						bEncontrado = true;
 
-						logger.debug("Encontrado el registro!");
+						//logger.debug("Encontrado el registro!");
 						//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 					}
 				}
 				if (!bEncontrado) 
 				{
-					logger.debug("No se encontro la información.");
+					//logger.debug("No se encontro la información.");
 				}
 						
 			} 

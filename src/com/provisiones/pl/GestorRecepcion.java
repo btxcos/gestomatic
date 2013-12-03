@@ -28,9 +28,11 @@ public class GestorRecepcion implements Serializable
 	private String sArchivo = "";
 	private String sDuracion = "";
 	private String sRegistrosProcesados = "";
-	private String sRegistrosCorrectos = "";
+	private String sRegistrosErroneos = "";
 	
 	private int iContador = 0;
+	
+	private boolean bPoll = false;
 
 	public GestorRecepcion ()
 	{
@@ -46,7 +48,7 @@ public class GestorRecepcion implements Serializable
     	this.sArchivo = "";
     	this.sDuracion = "";
     	this.sRegistrosProcesados = "";
-    	this.sRegistrosCorrectos = "";
+    	this.sRegistrosErroneos = "";
     	this.iContador = 0;
     	   	
 	}
@@ -57,14 +59,18 @@ public class GestorRecepcion implements Serializable
     }
     
     public void cuenta() {  
-        iContador=iContador+1;  
+        iContador=iContador+1;
+        logger.debug("iContador:"+iContador);
     } 
     
 	public void cargaArchivo(FileUploadEvent event) 
     {
 		
+		
 		if (ConnectionManager.comprobarConexion())
 		{
+			this.bPoll = false;
+			
 			borrarResultadosCarga();
 			
 			FacesMessage msg;
@@ -79,8 +85,8 @@ public class GestorRecepcion implements Serializable
 
 			this.sArchivo = resultado.getsArchivo();
 
-			this.sRegistrosProcesados = Integer.toString(resultado.getiRegistrosProcesados());
-			this.sRegistrosCorrectos = Integer.toString(resultado.getiRegistrosCorrectos());
+			this.sRegistrosProcesados = Long.toString(resultado.getLiRegistrosProcesados());
+			this.sRegistrosErroneos = Long.toString(resultado.getLiRegistrosProcesados()-resultado.getLiRegistrosCorrectos());
 
 			this.sDuracion = resultado.getsDuracion();
 			
@@ -124,7 +130,9 @@ public class GestorRecepcion implements Serializable
 				logger.error(sMsg);
 				break;
 			}
-
+			
+			this.bPoll = true;
+			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
 			logger.debug("Carga completada!");
@@ -166,12 +174,12 @@ public class GestorRecepcion implements Serializable
 		this.sRegistrosProcesados = sRegistrosProcesados;
 	}
 
-	public String getsRegistrosCorrectos() {
-		return sRegistrosCorrectos;
+	public String getsRegistrosErroneos() {
+		return sRegistrosErroneos;
 	}
 
-	public void setsRegistrosCorrectos(String sRegistrosCorrectos) {
-		this.sRegistrosCorrectos = sRegistrosCorrectos;
+	public void setsRegistrosErroneos(String sRegistrosErroneos) {
+		this.sRegistrosErroneos = sRegistrosErroneos;
 	}
 
 	public int getiContador() {
@@ -180,6 +188,14 @@ public class GestorRecepcion implements Serializable
 
 	public void setiContador(int iContador) {
 		this.iContador = iContador;
+	}
+
+	public boolean isbPoll() {
+		return bPoll;
+	}
+
+	public void setbPoll(boolean bPoll) {
+		this.bPoll = bPoll;
 	}
 
 }

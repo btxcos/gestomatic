@@ -162,11 +162,11 @@ public final class Utils
 	public static String duracion(long liInicio, long liFin)
 	{
 	
-		logger.debug("liInicio:"+liInicio);
-		logger.debug("liFin:"+liFin);
+		//logger.debug("liInicio:"+liInicio);
+		//logger.debug("liFin:"+liFin);
 		long liTemporal = liFin - liInicio;
 		
-		logger.debug("liTemporal:"+liTemporal);
+		//logger.debug("liTemporal:"+liTemporal);
 		
 		String sDuracion = "";
 		
