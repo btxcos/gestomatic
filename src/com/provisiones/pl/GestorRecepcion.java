@@ -25,7 +25,7 @@ public class GestorRecepcion implements Serializable
 	
 	private transient ArrayList<ResultadosTabla> tablamensajes = new ArrayList<ResultadosTabla>();
 	
-	private String sArchivo = "";
+	private String sArchivo = "resultado";
 	private String sDuracion = "";
 	private String sRegistrosProcesados = "";
 	private String sRegistrosErroneos = "";
@@ -45,7 +45,7 @@ public class GestorRecepcion implements Serializable
 	public void borrarResultadosCarga()
 	{
     	this.tablamensajes = new ArrayList<ResultadosTabla>();
-    	this.sArchivo = "";
+    	this.sArchivo = "resultado";
     	this.sDuracion = "";
     	this.sRegistrosProcesados = "";
     	this.sRegistrosErroneos = "";
@@ -58,20 +58,20 @@ public class GestorRecepcion implements Serializable
     	borrarResultadosCarga();
     }
     
-    public void cuenta() {  
+    public void cuenta() 
+    {  
         iContador=iContador+1;
         logger.debug("iContador:"+iContador);
     } 
     
 	public void cargaArchivo(FileUploadEvent event) 
     {
-		
+
+		borrarResultadosCarga();
 		
 		if (ConnectionManager.comprobarConexion())
 		{
 			this.bPoll = false;
-			
-			borrarResultadosCarga();
 			
 			FacesMessage msg;
 			
@@ -83,7 +83,7 @@ public class GestorRecepcion implements Serializable
 			
 			int iCodigoError = resultado.getiCodigo();
 
-			this.sArchivo = resultado.getsArchivo();
+			this.sArchivo = resultado.getsArchivo()+"-resultado";
 
 			this.sRegistrosProcesados = Long.toString(resultado.getLiRegistrosProcesados());
 			this.sRegistrosErroneos = Long.toString(resultado.getLiRegistrosProcesados()-resultado.getLiRegistrosCorrectos());
@@ -98,7 +98,6 @@ public class GestorRecepcion implements Serializable
 			}
 			
 			logger.debug("tablamensajes.size():|{}|",tablamensajes.size());
-			
 			
 			String sMsg = "";
 			

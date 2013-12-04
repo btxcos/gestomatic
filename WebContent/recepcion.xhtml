@@ -56,19 +56,19 @@
 
 				<p:layoutUnit position="center">
 
-									<p:panel id="resultados">
-										<h:panelGrid columns="6" cellpadding="5">
+					<p:panel id="resultados">
+						<h:panelGrid columns="6" cellpadding="5">
 
-											<h:outputText value="Registros: " />
-											<p:inputText id="registros" value="#{GestorRecepcion.sRegistrosProcesados}" size="10" disabled="true" />
+							<h:outputText value="Registros: " />
+							<p:inputText id="registros" value="#{GestorRecepcion.sRegistrosProcesados}" size="10" disabled="true" />
 
-											<h:outputText value="Errores: " />
-											<p:inputText id="errores" value="#{GestorRecepcion.sRegistrosErroneos}" size="10" disabled="true" />
-											<h:outputText value="Duración de la carga: " />
-											<p:inputText id="duracion" value="#{GestorRecepcion.sDuracion}" size="20" disabled="true" />
+							<h:outputText value="Errores: " />
+							<p:inputText id="errores" value="#{GestorRecepcion.sRegistrosErroneos}" size="10" disabled="true" />
+							<h:outputText value="Duración de la carga: " />
+							<p:inputText id="duracion" value="#{GestorRecepcion.sDuracion}" size="20" disabled="true" />
 
-										</h:panelGrid>
-									</p:panel>	
+						</h:panelGrid>
+					</p:panel>	
 
 					<p:panel>
 						<h:panelGrid columns="2" cellpadding="5">
@@ -105,7 +105,7 @@
 							<f:facet name="footer">
 								<h:commandLink>
 									<p:graphicImage value="recursos/excel.png" />  
-									<p:dataExporter type="xls" target="tabla" fileName="resultado" encoding="ISO-8859-15"/>  
+									<p:dataExporter type="xls" target="tabla" fileName="#{GestorRecepcion.sArchivo}" encoding="ISO-8859-15"/>  
 								</h:commandLink>
 							</f:facet> 
 

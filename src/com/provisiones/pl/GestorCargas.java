@@ -28,6 +28,15 @@ public class GestorCargas implements Serializable
 	private static Logger logger = LoggerFactory.getLogger(GestorCargas.class.getName());
 	
 	private transient ArrayList<ResultadosTabla> tablamensajes = new ArrayList<ResultadosTabla>();
+
+	private String sArchivo = "";
+	private String sDuracion = "";
+	private String sRegistrosProcesados = "";
+	private String sRegistrosErroneos = "";
+	
+	private int iContador = 0;
+	
+	private boolean bPoll = false;
 	
 	public GestorCargas ()
 	{
@@ -40,6 +49,11 @@ public class GestorCargas implements Serializable
 	public void borrarResultadosCarga()
 	{
     	this.tablamensajes = new ArrayList<ResultadosTabla>();
+    	this.sArchivo = "resultado";
+    	this.sDuracion = "";
+    	this.sRegistrosProcesados = "";
+    	this.sRegistrosErroneos = "";
+    	this.iContador = 0;
 	}
 	
     public void limpiarPlantilla(ActionEvent actionEvent) 
@@ -47,12 +61,20 @@ public class GestorCargas implements Serializable
     	borrarResultadosCarga();
     }
     
+    public void cuenta() 
+    {  
+        iContador=iContador+1;
+        logger.debug("iContador:"+iContador);
+    } 
+    
 	public void cargaArchivo(FileUploadEvent event) 
     {
 		borrarResultadosCarga();
 		
 		if (ConnectionManager.comprobarConexion())
 		{
+			this.bPoll = false;
+			
 			FacesMessage msg;
 			
 			logger.debug("Iniciando carga...");
@@ -62,12 +84,18 @@ public class GestorCargas implements Serializable
 			ResultadoCarga resultado = FileManager.splitter(FileManager.guardarFichero(event,bRecibido),bRecibido);
 			
 			int iCodigoError = resultado.getiCodigo();
+
+			this.sArchivo = resultado.getsArchivo()+"-resultado";
+
+			this.sRegistrosProcesados = Long.toString(resultado.getLiRegistrosProcesados());
+			this.sRegistrosErroneos = Long.toString(resultado.getLiRegistrosProcesados()-resultado.getLiRegistrosCorrectos());
+
+			this.sDuracion = resultado.getsDuracion();
 			
 			logger.debug("iCodigoError:|{}|",iCodigoError);
 			
 			if (resultado.getAlCarga().size() > 0)
 			{
-			
 				this.tablamensajes.addAll(resultado.getAlCarga());
 			}
 			
@@ -109,6 +137,8 @@ public class GestorCargas implements Serializable
 				break;
 			}
 			
+			this.bPoll = true;
+			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
 			logger.debug("Carga completada!");
@@ -124,5 +154,53 @@ public class GestorCargas implements Serializable
 
 	public void setTablamensajes(ArrayList<ResultadosTabla> tablamensajes) {
 		this.tablamensajes = tablamensajes;
+	}
+
+	public String getsArchivo() {
+		return sArchivo;
+	}
+
+	public void setsArchivo(String sArchivo) {
+		this.sArchivo = sArchivo;
+	}
+
+	public String getsDuracion() {
+		return sDuracion;
+	}
+
+	public void setsDuracion(String sDuracion) {
+		this.sDuracion = sDuracion;
+	}
+
+	public String getsRegistrosProcesados() {
+		return sRegistrosProcesados;
+	}
+
+	public void setsRegistrosProcesados(String sRegistrosProcesados) {
+		this.sRegistrosProcesados = sRegistrosProcesados;
+	}
+
+	public String getsRegistrosErroneos() {
+		return sRegistrosErroneos;
+	}
+
+	public void setsRegistrosErroneos(String sRegistrosErroneos) {
+		this.sRegistrosErroneos = sRegistrosErroneos;
+	}
+
+	public int getiContador() {
+		return iContador;
+	}
+
+	public void setiContador(int iContador) {
+		this.iContador = iContador;
+	}
+
+	public boolean isbPoll() {
+		return bPoll;
+	}
+
+	public void setbPoll(boolean bPoll) {
+		this.bPoll = bPoll;
 	}  
 }

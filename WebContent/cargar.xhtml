@@ -54,21 +54,28 @@
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
+
+					<p:panel id="resultados">
+						<h:panelGrid columns="6" cellpadding="5">
+
+							<h:outputText value="Registros: " />
+							<p:inputText id="registros" value="#{GestorCargas.sRegistrosProcesados}" size="10" disabled="true" />
+
+							<h:outputText value="Errores: " />
+							<p:inputText id="errores" value="#{GestorCargas.sRegistrosErroneos}" size="10" disabled="true" />
+							<h:outputText value="Duración de la carga: " />
+							<p:inputText id="duracion" value="#{GestorCargas.sDuracion}" size="20" disabled="true" />
+
+						</h:panelGrid>
+					</p:panel>	
+
 					<p:panel>
 						<h:panelGrid columns="2" cellpadding="5">
-						<p:fileUpload fileUploadListener="#{GestorCargas.cargaArchivo}" mode="advanced" dragDropSupport="true"  
-							update="popup, msgs, tabla" allowTypes="/(\.|\/)(txt)$/" /> 
-						<p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">  
-							<f:facet name="start">  
-								<h:graphicImage value="recursos/loadingBar.gif" />  
-							</f:facet>  
-
-							<f:facet name="complete">  
-								<h:outputText value="" />  
-							</f:facet>
-						</p:ajaxStatus> 
+						<p:fileUpload fileUploadListener="#{GestorCargas.cargaArchivo}" mode="advanced" dragDropSupport="true" label="Buscar Achivo(s)" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"
+							update="popup, msgs, tabla, resultados" multiple="true" fileLimit="1" allowTypes="/(\.|\/)(txt)$/" showButtons="false" /> 
 						</h:panelGrid>
 					</p:panel>
+
 					<p:panel>
 						<p:dataTable id="tabla" var="mensaje" value="#{GestorCargas.tablamensajes}" rowKey="#{mensaje.sObjeto}"  
 									paginator="true" paginatorPosition="bottom" rows="10" 
@@ -76,19 +83,36 @@
 									rowsPerPageTemplate="10,15,20">  
 
 							<f:facet name="header">  
-								Resultado de la carga
+								Detalle de la carga
 							</f:facet>
 
-							<p:column sortBy="#{mensaje.sObjeto}" headerText="Archivo">  
-							    #{mensaje.sObjeto}  
-							</p:column>  
-							
-							<p:column sortBy="#{mensaje.sResultado}" headerText="Resultado">  
-							    #{mensaje.sResultado}  
-							</p:column>  
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Archivo" />
+								</f:facet>
+								<h:outputText value="#{mensaje.sObjeto}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Resultado" />
+								</f:facet>
+								<h:outputText value="#{mensaje.sResultado}" />
+							</p:column>
+
+							<f:facet name="footer">
+								<h:commandLink>
+									<p:graphicImage value="recursos/excel.png" />  
+									<p:dataExporter type="xls" target="tabla" fileName="#{GestorCargas.sArchivo}" encoding="ISO-8859-15"/>  
+								</h:commandLink>
+							</f:facet> 
 
 						</p:dataTable>
 					</p:panel>
+						<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false" onShow="escucha.start();">  
+							<p:graphicImage value="recursos/loadingBar.gif" />
+							<p:poll widgetVar="escucha" interval="60" listener="#{GestorCargas.cuenta}" stop="#{GestorCargas.bPoll}" autoStart="false"/> 
+						</p:dialog> 
 						<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
 						<h:panelGrid columns="1">
 							<p:panel>

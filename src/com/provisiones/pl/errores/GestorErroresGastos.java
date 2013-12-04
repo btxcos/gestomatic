@@ -356,6 +356,8 @@ public class GestorErroresGastos implements Serializable
     	borrarPlantillaError();
     }
     
+    //TODO implementar logica de purgar error. Elimina los errores y el movimiento asociado y sus descendientes.
+    
     public boolean editarError(int iCodError) 
     {  
     	boolean bSalida = false;

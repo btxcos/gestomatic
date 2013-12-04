@@ -9,17 +9,13 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
-import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMProvisiones;
-import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
-import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cierre;
 import com.provisiones.types.Provision;
-import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.tablas.ProvisionTabla;
 
 public final class CLProvisiones

@@ -587,8 +587,6 @@ public final class FileManager
 		
 		String sDuracion = "0";
 		
-		
-		
 		try 
 		{
 			long liTiempo = System.currentTimeMillis();
@@ -601,11 +599,8 @@ public final class FileManager
 
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
-			
 			//logger.debug("Leyendo fichero..");
 
-
-			
 			int iLongitudValida = Longitudes.ACTIVOS_L-Longitudes.FILLER_ACTIVOS_L-Longitudes.OBDEER_L;
 			
 			while((linea=br.readLine())!=null)
@@ -667,7 +662,6 @@ public final class FileManager
 
 	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre, sMensaje);
 	    			tabla.add(resultadolectura);
-
 	    		}
 	        }
 			
@@ -706,18 +700,28 @@ public final class FileManager
         return resultadocarga;
 	}
 
-	public static ArrayList<ResultadosTabla> leerGastosRevisados(String sNombre) 
+	public static ResultadoCarga leerGastosRevisados(String sNombre) 
 	{
 		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
-		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
+		ResultadoCarga resultadocarga;
+		
+		//logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_RECIBIDOS+sNombre);
 		
 		FileReader fr;
 
+		long contador= 0 ;
+		long registros = 0;
+		int iSalida = 0;
+		
+		String sDuracion = "0";
+		
 		try 
 		{
+			long liTiempo = System.currentTimeMillis();
+			
 			fr = new FileReader (archivo);
 			
 			BufferedReader br = new BufferedReader(fr);
@@ -726,13 +730,7 @@ public final class FileManager
 
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
-			
-			logger.debug("Leyendo fichero..");
-
-			long liTiempo = System.currentTimeMillis();
-
-			int contador= 0 ;
-			int registros = 0;
+			//logger.debug("Leyendo fichero..");
 			
 			int iLongitudValida = Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L-Longitudes.OBDEER_L;
 			
@@ -740,9 +738,9 @@ public final class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				//logger.debug("Longitud de línea leida:|"+linea.length()+"|");
 				
-				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+				//logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -769,6 +767,11 @@ public final class FileManager
 	    				sMensaje = "Movimiento de Gasto pendiente de revisión.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"Línea "+contador+": "+sMensaje;
 	    				logger.info(sMensaje);
+	    				break;
+	    			case 2:
+	    				sMensaje = "El movimiento recibido ya esta en revisión.";
+	    				sMensaje = "Línea "+contador+": "+sMensaje;
+	    				logger.warn(sMensaje);
 	    				break;
 	    			case -1:
 	    				sMensaje = "Registro no encontrado en el sistema.";
@@ -805,11 +808,6 @@ public final class FileManager
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
 	    				logger.error(sMensaje);
 	    				break;
-	    			case -12:
-	    				sMensaje = "El movimiento recibido ya esta en revisión.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.warn(sMensaje);
-	    				break;
 	    			}
 	    			
 	    			if ( iCodigo >= 0 )
@@ -818,48 +816,72 @@ public final class FileManager
 	    			}
 	    			else
 	    			{
-		    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-		    			tabla.add(resultado);
+	    				iSalida = -1;
 	    			}
+
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
 	    		}
 	        }
-		
-			br.close();
-		
-			logger.info( "Lectura de "+sNombre+" finalizada.\n");
 
-			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
+			sDuracion = Utils.duracion(liTiempo,System.currentTimeMillis());
 			
-			logger.debug("Registros procesados:|"+contador+"|");
-			logger.debug("Registros correctos:|"+registros+"|");
-
-			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+			br.close();
+			
+			//logger.debug("Registros procesados:|"+contador+"|");
+			//logger.debug("Registros correctos:|"+registros+"|");
+			
+			if (iSalida != 0)
+			{
+				logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+			}
+			
+			logger.info("Duración de la carga: "+sDuracion);
 		}
 		catch (FileNotFoundException e)
 		{
 			logger.error("No se encontró el fichero recibido.");
+			iSalida = -2;
 		}
 		catch (IOException e)
 		{
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			iSalida = -3;
 		}
-		logger.debug("tabla.size():|"+tabla.size()+"|");
+
+		resultadocarga = new ResultadoCarga(iSalida,tabla,sNombre,sDuracion,contador,registros);
 		
-        return tabla;
+		logger.info( "Lectura de "+sNombre+" finalizada.\n");
+		
+	
+		//logger.debug("tabla.size():|"+tabla.size()+"|");
+		
+        return resultadocarga;
+			
 	}
 	
-	public static ArrayList<ResultadosTabla> leerGastosVolcados(String sNombre) 
+	public static ResultadoCarga leerGastosVolcados(String sNombre) 
 	{
 		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
-		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre+"|");
+		ResultadoCarga resultadocarga;
+		
+		//logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre);
 		
 		FileReader fr;
+		
+		long contador= 0 ;
+		long registros = 0;
+		int iSalida = 0;
+		
+		String sDuracion = "0";
 
 		try 
 		{
+			long liTiempo = System.currentTimeMillis();
+			
 			fr = new FileReader (archivo);
 			
 			BufferedReader br = new BufferedReader(fr);
@@ -869,12 +891,7 @@ public final class FileManager
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
 			
-			logger.debug("Leyendo fichero..");
-
-			long liTiempo = System.currentTimeMillis();
-
-			int contador= 0 ;
-			int registros = 0;
+			//logger.debug("Leyendo fichero..");
 			
 			int iLongitudValida = Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L-Longitudes.OBDEER_L;
 			
@@ -882,9 +899,9 @@ public final class FileManager
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				//logger.debug("Longitud de línea leida:|"+linea.length()+"|");
 				
-				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+				//logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -897,7 +914,6 @@ public final class FileManager
 	    		else
 	    		{
 	    			int iCodigo = CLGastos.inyectarGastoVolcado(linea);
-	    			
 	    			String sMensaje = "";
 	    			
 	    			switch (iCodigo)
@@ -951,35 +967,47 @@ public final class FileManager
 	    			}
 	    			else
 	    			{
-		    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-		    			tabla.add(resultado);
+	    				iSalida = -1;
 	    			}
+
+	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
+	    			tabla.add(resultado);
 	    		}
 	        }
+			
+			sDuracion = Utils.duracion(liTiempo,System.currentTimeMillis());
 		
 			br.close();
 		
-			logger.info( "Lectura de "+sNombre+" finalizada.\n");
+			//logger.debug("Registros procesados:|"+contador+"|");
+			//logger.debug("Registros correctos:|"+registros+"|");
 
-			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
+			if (iSalida != 0)
+			{
+				logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+			}
 			
-			logger.debug("Registros procesados:|"+contador+"|");
-			logger.debug("Registros correctos:|"+registros+"|");
-
-			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+			logger.info("Duración de la carga: "+sDuracion);
 		}
 		catch (FileNotFoundException e)
 		{
 			logger.error("No se encontró el fichero recibido.");
+			iSalida = -2;
 		}
 		catch (IOException e)
 		{
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			iSalida = -3;
 		}
-		logger.debug("tabla.size():|"+tabla.size()+"|");
+
+		resultadocarga = new ResultadoCarga(iSalida,tabla,sNombre,sDuracion,contador,registros);
 		
-        return tabla;
+		logger.info( "Lectura de "+sNombre+" finalizada.\n");
 		
+	
+		//logger.debug("tabla.size():|"+tabla.size()+"|");
+		
+        return resultadocarga;
 	
 	}
 
@@ -1543,17 +1571,28 @@ public final class FileManager
 
 	}
 	
-	public static ArrayList<ResultadosTabla> leerCierresVolcados(String sNombre)
+	public static ResultadoCarga leerCierresVolcados(String sNombre)
 	{
 		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
-		logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre+"|");
+		ResultadoCarga resultadocarga;
+		
+		//logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre+"|");
 
 		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre);
 		
 		FileReader fr;
+		
+		long contador= 0 ;
+		long registros = 0;
+		int iSalida = 0;
+		
+		String sDuracion = "0";
+		
 		try 
 		{
+			long liTiempo = System.currentTimeMillis();
+			
 			fr = new FileReader (archivo);
 			
 			BufferedReader br = new BufferedReader(fr);
@@ -1562,21 +1601,16 @@ public final class FileManager
 
 			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
 			
-			logger.debug("Leyendo fichero..");
+			//logger.debug("Leyendo fichero..");
 
-			long liTiempo = System.currentTimeMillis();
-
-			int contador= 0 ;
-			int registros = 0;
-			
 			int iLongitudValida = Longitudes.CIERRE_L-Longitudes.FILLER_CIERRE_L;
 			
 			while((linea=br.readLine())!=null)
 	        {
 				contador++;
 
-				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
-				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+				//logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				//logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
 
 	    		if (linea.equals(sFinFichero))
 	    		{
@@ -1594,7 +1628,7 @@ public final class FileManager
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Provisión cerrada.";
+	    				sMensaje = "Provisión cerrada correctamente.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
 	    				logger.info(sMensaje);
 	    				break;
@@ -1618,34 +1652,49 @@ public final class FileManager
 	    			{
 	    				registros++;
 	    			}
+	    			else
+	    			{
+	    				iSalida = -1;
+	    			}
 
 	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
 	    			tabla.add(resultado);
 	    		}
 	        }
 		
-			br.close();
-
-			logger.info( "Lectura de "+sNombre+" finalizada.\n");
-
-			logger.info("Duración de la carga: "+Utils.duracion(liTiempo,System.currentTimeMillis()));
+			sDuracion = Utils.duracion(liTiempo,System.currentTimeMillis());
 			
-			logger.debug("Registros procesados:|"+contador+"|");
-			logger.debug("Registros correctos:|"+registros+"|");
-
-			logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+			br.close();
+			
+			//logger.debug("Registros procesados:|"+contador+"|");
+			//logger.debug("Registros correctos:|"+registros+"|");
+			
+			if (iSalida != 0)
+			{
+				logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+			}
+			
+			logger.info("Duración de la carga: "+sDuracion);
 		}
 		catch (FileNotFoundException e)
 		{
 			logger.error("No se encontró el fichero recibido.");
+			iSalida = -2;
 		}
 		catch (IOException e)
 		{
 			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			iSalida = -3;
 		}
-		logger.debug("tabla.size():|"+tabla.size()+"|");
+
+		resultadocarga = new ResultadoCarga(iSalida,tabla,sNombre,sDuracion,contador,registros);
 		
-        return tabla;
+		logger.info( "Lectura de "+sNombre+" finalizada.\n");
+		
+	
+		//logger.debug("tabla.size():|"+tabla.size()+"|");
+		
+        return resultadocarga;
 	}
 	
 	public static ResultadoCarga splitter(String sNombre, boolean bRecibido) 
@@ -1685,11 +1734,6 @@ public final class FileManager
 					if (bRecibido)
 					{
 						carga = leerActivos(sNombre);
-						
-						logger.debug("Codigo:|"+carga.getiCodigo()+"|");
-						logger.debug("Procesados:|"+carga.getLiRegistrosProcesados()+"|");
-						logger.debug("Correctos:|"+carga.getLiRegistrosCorrectos()+"|");
-						logger.debug("Duracion:|"+carga.getsDuracion()+"|");
 					}
 					else
 					{
@@ -1701,34 +1745,24 @@ public final class FileManager
 					logger.debug("Rechazados");
 					if (bRecibido)
 					{
-						tabla = leerGastosRevisados(sNombre);
-
-						if (tabla.size() == 0)					
-						{
-							iCodigo = 2;
-						}
+						carga = leerGastosRevisados(sNombre);
 					}
 					else
 					{
 						//Volcado no aceptado
-						iCodigo = 2;
+						carga.setiCodigo(2);
 					}
 					break;
 				case PA:
 					logger.debug("Autorizados");
 					if (bRecibido)
 					{
-						tabla = leerGastosRevisados(sNombre);
-
-						if (tabla.size() == 0)					
-						{
-							iCodigo = 3;
-						}
+						carga = leerGastosRevisados(sNombre);
 					}
 					else
 					{
 						//Volcado no aceptado
-						iCodigo = 3;
+						carga.setiCodigo(3);
 					}
 					break;
 				case GA:
@@ -1736,16 +1770,11 @@ public final class FileManager
 					if (bRecibido)
 					{
 						//Recepción no aceptada
-						iCodigo = 4;
+						carga.setiCodigo(4);
 					}
 					else
 					{
-						tabla = leerGastosVolcados(sNombre);
-
-						if (tabla.size() == 0)	
-						{
-							iCodigo = 4;
-						}
+						carga = leerGastosVolcados(sNombre);
 					}
 					break;
 				case PP:
@@ -1753,16 +1782,11 @@ public final class FileManager
 					if (bRecibido)
 					{
 						//Recepción no aceptada
-						iCodigo = 5;
+						carga.setiCodigo(5);
 					}
 					else
 					{
-						tabla = leerCierresVolcados(sNombre);
-
-						if (tabla.size() == 0)	
-						{
-							iCodigo = 5;
-						}
+						carga = leerCierresVolcados(sNombre);
 					}
 					break;
 				case E1:
@@ -1779,7 +1803,7 @@ public final class FileManager
 					else
 					{
 						//inyectar
-						iCodigo = 6;
+						carga.setiCodigo(6);
 					}
 					break;
 				case E2:
@@ -1796,7 +1820,7 @@ public final class FileManager
 					else
 					{
 						//inyectar
-						iCodigo = 7;
+						carga.setiCodigo(7);
 					}
 					break;
 				case E3:
@@ -1813,7 +1837,7 @@ public final class FileManager
 					else
 					{
 						//inyectar
-						iCodigo = 8;
+						carga.setiCodigo(8);
 					}
 					break;
 				case E4:
@@ -1830,13 +1854,13 @@ public final class FileManager
 					else
 					{
 						//inyectar
-						iCodigo = 9;
+						carga.setiCodigo(9);
 					}
 					break;
 				default:
 					logger.error("El archivo suministrado no coincide con el nombrado establecido:");
 					logger.error("[*_]168XX.txt donde XX puede ser AC, RG, PA, GA, PP, E1, E2, E3 o E4. ");
-					iCodigo = 10;
+					carga.setiCodigo(10);
 					break;
 				}
 				logger.debug("tabla.size():|"+tabla.size()+"|");
@@ -1845,13 +1869,18 @@ public final class FileManager
 			} 
 			else
 			{
-				iCodigo = 10;
+				carga.setiCodigo(10);
 				logger.error("El archivo suministrado no pertenece a esta subaplicacion INFOCAM.");
 				//lista = new ArrayList<String>();
 			}
 			
 
 		}
+		
+		logger.debug("Codigo:|"+carga.getiCodigo()+"|");
+		logger.debug("Procesados:|"+carga.getLiRegistrosProcesados()+"|");
+		logger.debug("Correctos:|"+carga.getLiRegistrosCorrectos()+"|");
+		logger.debug("Duracion:|"+carga.getsDuracion()+"|");
 		
 		//carga.setiCodigo(iCodigo);
 		//carga = new Resultados(iCodigo,tabla);

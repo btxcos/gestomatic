@@ -228,7 +228,8 @@ public final class CLGastos
 				}
 				else if (sEstadoMovimiento.equals("X") || sEstadoMovimiento.equals("V") || sEstadoMovimiento.equals("R"))
 				{
-					iCodigo = -12;
+					//TODO posible division e inclusion en pila de erroes para X
+					iCodigo = 2;
 				}
 				else if (sEstadoMovimiento.equals("E"))
 				{
