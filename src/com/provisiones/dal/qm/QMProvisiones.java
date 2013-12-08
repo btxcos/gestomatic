@@ -29,6 +29,10 @@ public final class QMProvisiones
 	public static final String CAMPO3 = "cod_tas";
 	public static final String CAMPO4 = "valor_total";
 	public static final String CAMPO5 = "numero_gastos";
+
+	public static final String CAMPO6 = "valor_autorizado";
+	public static final String CAMPO7 = "gastos_autorizados";
+	
 	public static final String CAMPO6 = "fepfon";
 	public static final String CAMPO7 = "fecha_envio";
 	public static final String CAMPO8 = "cod_estado";

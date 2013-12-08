@@ -84,7 +84,7 @@ public final class CLProvisiones
 				{
 					Provision provision = buscarProvision(cierre.getsNUPROF());
 					
-					provision.setsValorTolal(calcularValorProvision(cierre.getsNUPROF()));
+					provision.setsValorTolal(Utils.compruebaImporte(calcularValorProvision(cierre.getsNUPROF())));
 					provision.setsNumGastos(Long.toString(CLProvisiones.buscarNumeroGastosProvision(cierre.getsNUPROF())));
 					provision.setsCodEstado(ValoresDefecto.DEF_BAJA);
 					provision.setsFEPFON(Utils.fechaDeHoy(false));

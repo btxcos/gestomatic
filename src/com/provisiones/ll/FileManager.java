@@ -923,6 +923,11 @@ public final class FileManager
 	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
 	    				logger.info(sMensaje);
 	    				break;
+	    			case -8:
+	    				sMensaje = "El activo del gasto no pertenece a la cartera.";
+	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
+	    				logger.error(sMensaje);
+	    				break;	    				
 	    			case -908:
 	    				sMensaje = "[FATAL] Error al crear la Provisión del Gasto.";
 	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
