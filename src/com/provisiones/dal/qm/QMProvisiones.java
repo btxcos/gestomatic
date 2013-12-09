@@ -29,15 +29,13 @@ public final class QMProvisiones
 	public static final String CAMPO3 = "cod_tas";
 	public static final String CAMPO4 = "valor_total";
 	public static final String CAMPO5 = "numero_gastos";
-
 	public static final String CAMPO6 = "valor_autorizado";
 	public static final String CAMPO7 = "gastos_autorizados";
-	
-	public static final String CAMPO6 = "fepfon";
-	public static final String CAMPO7 = "fecha_envio";
-	public static final String CAMPO8 = "cod_estado";
-	public static final String CAMPO9 = "usuario_modificacion";
-	public static final String CAMPO10 = "fecha_modificacion";
+	public static final String CAMPO8 = "fepfon";
+	public static final String CAMPO9 = "fecha_envio";
+	public static final String CAMPO10 = "cod_estado";
+	public static final String CAMPO11 = "usuario_modificacion";
+	public static final String CAMPO12 = "fecha_modificacion";
 
 	private QMProvisiones(){}
 	
@@ -65,13 +63,17 @@ public final class QMProvisiones
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
 					+ CAMPO9 + ","
-					+ CAMPO10 +
+					+ CAMPO10 + ","
+					+ CAMPO11 + ","
+					+ CAMPO12 +
 					") VALUES ('" 
 					+ NuevaProvision.getsNUPROF() + "','"
 					+ NuevaProvision.getsCOSPAT() + "','"
 					+ NuevaProvision.getsTAS() + "','"
 					+ NuevaProvision.getsValorTolal() + "','"
 					+ NuevaProvision.getsNumGastos() + "','"
+					+ NuevaProvision.getsValorAutorizado() + "','"
+					+ NuevaProvision.getsGastosAutorizados() + "','"
 					+ NuevaProvision.getsFEPFON() + "','" 
 					+ NuevaProvision.getsFechaValidacion() + "','" 
 					+ NuevaProvision.getsCodEstado() + "','"
@@ -126,14 +128,17 @@ public final class QMProvisiones
 					+ CAMPO3 + " = '" + provision.getsTAS() + "', "
 					+ CAMPO4 + " = '" + provision.getsValorTolal() + "', " 
 					+ CAMPO5 + " = '" + provision.getsNumGastos() + "', "
-					+ CAMPO6 + " = '" + provision.getsFEPFON() + "', " 
-					+ CAMPO7 + " = '" + provision.getsFechaValidacion() + "', " 
-					+ CAMPO8 + " = '" + provision.getsCodEstado() + "', " 
-					+ CAMPO9 + " = '" + sUsuario + "', " 
-					+ CAMPO10 + " = '" + Utils.timeStamp() + "' " +					
+					+ CAMPO6 + " = '" + provision.getsValorAutorizado() + "', " 
+					+ CAMPO7 + " = '" + provision.getsGastosAutorizados() + "', "
+					+ CAMPO8 + " = '" + provision.getsFEPFON() + "', " 
+					+ CAMPO9 + " = '" + provision.getsFechaValidacion() + "', " 
+					+ CAMPO10 + " = '" + provision.getsCodEstado() + "', " 
+					+ CAMPO11 + " = '" + sUsuario + "', " 
+					+ CAMPO12 + " = '" + Utils.timeStamp() + "' " +					
 					" WHERE " 
 					+ CAMPO1 + " = '" + provision.getsNUPROF() + "'";
-			
+
+
 			logger.debug(sQuery);
 
 			try 
@@ -211,6 +216,8 @@ public final class QMProvisiones
 		String sTAS = "";
 		String sValorTolal = "";
 		String sNumGastos = "";
+		String sValorAutorizado = "";
+		String sGastosAutorizados = "";	
 		String sFEPFON = "";
 		String sFechaValidacion = "";
 		String sValidado = "";
@@ -233,7 +240,9 @@ public final class QMProvisiones
 					+ CAMPO5 + "," 
 					+ CAMPO6 + "," 
 					+ CAMPO7 + "," 
-					+ CAMPO8 +
+					+ CAMPO8 + "," 
+					+ CAMPO9 + "," 
+					+ CAMPO10 +
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
@@ -260,9 +269,11 @@ public final class QMProvisiones
 						sTAS = rs.getString(CAMPO3);
 						sValorTolal = rs.getString(CAMPO4);
 						sNumGastos = rs.getString(CAMPO5);
-						sFEPFON = rs.getString(CAMPO6);
-						sFechaValidacion = rs.getString(CAMPO7);
-						sValidado = rs.getString(CAMPO8);
+						sValorAutorizado = rs.getString(CAMPO6);
+						sGastosAutorizados = rs.getString(CAMPO7);
+						sFEPFON = rs.getString(CAMPO8);
+						sFechaValidacion = rs.getString(CAMPO9);
+						sValidado = rs.getString(CAMPO10);
 
 						
 						logger.debug("Encontrado el registro!");
@@ -281,6 +292,8 @@ public final class QMProvisiones
 				sTAS = "";
 				sValorTolal = "";
 				sNumGastos = "";
+				sValorAutorizado = "";
+				sGastosAutorizados = "";	
 				sFEPFON = "";
 				sFechaValidacion = "";
 				sValidado = "";
@@ -296,7 +309,7 @@ public final class QMProvisiones
 			}
 		}
 
-		return new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, sFEPFON, sFechaValidacion, sValidado);
+		return new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, sValorAutorizado, sGastosAutorizados, sFEPFON, sFechaValidacion, sValidado);
 	}
 	
 	public static boolean setFechaEnvio(Connection conexion, String sNUPROF, String sFechaEnvio) 
@@ -312,7 +325,7 @@ public final class QMProvisiones
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO7 + " = '" + sFechaEnvio + "' " +
+					+ CAMPO9 + " = '" + sFechaEnvio + "' " +
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -357,7 +370,7 @@ public final class QMProvisiones
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO8 + " = '" + sEstado + "' " +
+					+ CAMPO10 + " = '" + sEstado + "' " +
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -408,8 +421,9 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE " +
 					"(" 
-					+ CAMPO8 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
-					+ CAMPO7 + " = '0'"+
+					+ CAMPO10 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
+					+ CAMPO9 + " = '0' AND "
+					+ CAMPO8 + " <> '0'"+
 					")";
 			
 			logger.debug(sQuery);
@@ -540,7 +554,7 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE (" 
 					+ CAMPO1 + " = '"+ sNUPROF + "' AND "
-					+ CAMPO8 + " = '"+ ValoresDefecto.DEF_BAJA + 
+					+ CAMPO10 + " = '"+ ValoresDefecto.DEF_BAJA + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -608,7 +622,7 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE " +
 					"( " 
-					+ CAMPO8 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
+					+ CAMPO10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
 					+ CAMPO2 +" = '"+ sCodCOSPAT +"' AND "
 					+ CAMPO3 +" = '"+ sCodTAS + "' AND "
 					+ CAMPO1 +" <> 0)";
@@ -678,8 +692,8 @@ public final class QMProvisiones
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO8 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
-					+ CAMPO7 + " = '0'"+
+					+ CAMPO10 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
+					+ CAMPO9 + " = '0'"+
 					")";
 			
 			logger.debug(sQuery);
@@ -762,7 +776,7 @@ public final class QMProvisiones
 					+ CAMPO5 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
-					+ CAMPO8 + " = '"+ ValoresDefecto.DEF_ALTA + "' AND "
+					+ CAMPO10 + " = '"+ ValoresDefecto.DEF_ALTA + "' AND "
 					+CAMPO1+" <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+
 					"' )";
 			
@@ -843,7 +857,7 @@ public final class QMProvisiones
 						" FROM " 
 						+ TABLA + 
 						" WHERE ( " 
-						+ CAMPO8 + " = '"+ ValoresDefecto.DEF_BAJA + "' AND " 
+						+ CAMPO10 + " = '"+ ValoresDefecto.DEF_BAJA + "' AND " 
 						+ CAMPO2 +" = '"+ sCodCOSPAT +"') "+
 						" order by " + CAMPO1 + " desc limit 0,1 ";
 			

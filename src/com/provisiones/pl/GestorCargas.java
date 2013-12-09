@@ -125,6 +125,11 @@ public class GestorCargas implements Serializable
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 				break;
+			case 4:
+				sMsg = "El archivo de Gastos debe de ser validado por el banco.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				break;
 			case 10:
 				sMsg = "ERROR: El archivo '"+event.getFile().getFileName() +"' no tiene un nombre reconocible. Por favor, reviselo.";
 				msg = Utils.pfmsgError(sMsg);

@@ -80,29 +80,27 @@ public final class CLProvisiones
 			
 			if (QMProvisiones.existeProvision(conexion,cierre.getsNUPROF()))
 			{
-				if (!QMProvisiones.provisionCerrada(conexion, cierre.getsNUPROF()))
+				
+				if (QMProvisiones.provisionCerrada(conexion, cierre.getsNUPROF()))
 				{
 					Provision provision = buscarProvision(cierre.getsNUPROF());
 					
-					provision.setsValorTolal(Utils.compruebaImporte(calcularValorProvision(cierre.getsNUPROF())));
-					provision.setsNumGastos(Long.toString(CLProvisiones.buscarNumeroGastosProvision(cierre.getsNUPROF())));
-					provision.setsCodEstado(ValoresDefecto.DEF_BAJA);
-					provision.setsFEPFON(Utils.fechaDeHoy(false));
+					provision.setsFEPFON(cierre.getsFEPFON());
 					provision.setsFechaValidacion(Utils.fechaDeHoy(false));
 					
-					if (CLProvisiones.cerrarProvision(provision))
+					if (QMProvisiones.modProvision(conexion,provision))
 					{
-						logger.debug("Provision '"+cierre.getsNUPROF()+"' cerrada");
+						logger.debug("Provision '"+cierre.getsNUPROF()+"' validada.");
 					}
 					else
 					{
-						//no se ha cerrado la provisión
+						//no se ha validado la provisión
 						iCodigo = -2;
 					}
 				}
 				else
 				{
-					//provisión ya cerrada
+					//provisión no cerrada
 					iCodigo = -3;
 				}
 
@@ -318,7 +316,7 @@ public final class CLProvisiones
 			logger.info("Inicializando provisiones...");
 			if (!existeProvision("0"))
 			{
-				Provision provision = new Provision ("0", "0", "#", "0","0","0","0",ValoresDefecto.DEF_ALTA);
+				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0",ValoresDefecto.DEF_ALTA);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}
@@ -413,7 +411,7 @@ public final class CLProvisiones
 					logger.debug("sProvision:|{}|",sProvision);
 				}			
 				
-				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0",ValoresDefecto.DEF_ALTA);
+				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0",ValoresDefecto.DEF_ALTA);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}

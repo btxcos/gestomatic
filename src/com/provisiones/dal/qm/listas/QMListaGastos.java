@@ -115,7 +115,7 @@ public final class QMListaGastos
 					") VALUES ('" 
 					+ sCodGasto + "','"
 					+ sCodMovimiento + "','"
-					+ ValoresDefecto.DEF_MOVIMIENTO_ENVIADO + "','"
+					+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "','"
 				    + sUsuario + "','"
 				    + Utils.timeStamp() +
 					"')";

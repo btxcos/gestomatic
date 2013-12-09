@@ -209,128 +209,136 @@ public final class CLGastos
 			
 			MovimientoGasto gasto = Parser.leerGasto(linea);
 
-			logger.debug(gasto.logMovimientoGasto());
-			
-			
-			String sCodMovimiento = QMMovimientosGastos.getMovimientoGastoIDAutorizado(conexion,gasto);
-			
-			logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
-			
-			if (!(sCodMovimiento.equals("")))
+			if (CLActivos.existeActivo(gasto.getCOACES()))
 			{
+				logger.debug(gasto.logMovimientoGasto());
+				
+				
+				String sCodMovimiento = QMMovimientosGastos.getMovimientoGastoIDAutorizado(conexion,gasto);
+				
+				logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+				
+				if (!(sCodMovimiento.equals("")))
+				{
 
-				
-				String sEstadoMovimiento = QMListaGastos.getValidado(conexion,sCodMovimiento);
-				
-				if (sEstadoMovimiento.equals("P"))
-				{
-					iCodigo = -11;
-				}
-				else if (sEstadoMovimiento.equals("X") || sEstadoMovimiento.equals("V") || sEstadoMovimiento.equals("R"))
-				{
-					//TODO posible division e inclusion en pila de erroes para X
-					iCodigo = 2;
-				}
-				else if (sEstadoMovimiento.equals("E"))
-				{
-					String sValidado = "";
 					
-					logger.debug("gasto.getCOTERR()|"+gasto.getCOTERR()+"|");
-					logger.debug("ValoresDefecto.DEF_COTERR|"+ValoresDefecto.DEF_COTERR+"|");
+					String sEstadoMovimiento = QMListaGastos.getValidado(conexion,sCodMovimiento);
 					
-					if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
+					if (sEstadoMovimiento.equals("P"))
 					{
-						sValidado = "V";
+						iCodigo = -11;
 					}
-					else
+					else if (sEstadoMovimiento.equals("X") || sEstadoMovimiento.equals("V") || sEstadoMovimiento.equals("R"))
 					{
-						sValidado = "X";
+						//TODO posible division e inclusion en pila de erroes para X
+						iCodigo = 2;
 					}
-					
-					logger.debug("sValidado|"+sValidado+"|");
-					
-					String sCodGasto = buscarCodigoGasto(gasto.getCOACES(), gasto.getCOGRUG(), gasto.getCOTPGA(), gasto.getCOSBGA(), gasto.getFEDEVE());
-					
-					if (QMListaGastos.existeRelacionGasto(conexion,sCodGasto, sCodMovimiento))
+					else if (sEstadoMovimiento.equals("E"))
 					{
-						if(QMListaGastos.setValidado(conexion,sCodMovimiento, sValidado))
+						String sValidado = "";
+						
+						logger.debug("gasto.getCOTERR()|"+gasto.getCOTERR()+"|");
+						logger.debug("ValoresDefecto.DEF_COTERR|"+ValoresDefecto.DEF_COTERR+"|");
+						
+						if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
 						{
-							if (sValidado.equals("X"))
+							sValidado = "V";
+						}
+						else
+						{
+							sValidado = "X";
+						}
+						
+						logger.debug("sValidado|"+sValidado+"|");
+						
+						String sCodGasto = buscarCodigoGasto(gasto.getCOACES(), gasto.getCOGRUG(), gasto.getCOTPGA(), gasto.getCOSBGA(), gasto.getFEDEVE());
+						
+						if (QMListaGastos.existeRelacionGasto(conexion,sCodGasto, sCodMovimiento))
+						{
+							if(QMListaGastos.setValidado(conexion,sCodMovimiento, sValidado))
 							{
-								//recibido error
-								if (QMListaErroresGastos.addErrorGasto(conexion,sCodMovimiento, gasto.getCOTERR()))
+								if (sValidado.equals("X"))
 								{
-									//TODO Sustituir por PL
-									QMGastos.delGasto(conexion, sCodGasto);
-									/*ArrayList<String> dependenciasgastos = QMListaGastos.buscarDependencias(conexion,sCodGasto, sCodMovimiento);
-
-
-									for (int i = 0; i < dependenciasgastos.size() ; i++)
-						            {
-						            	if (!QMListaGastos.delRelacionGasto(conexion,dependenciasgastos.get(i)))
-						            	{
-						            		iCodigo = -4;
-						            	}
-						            	else if (!QMListaGastosProvisiones.delRelacionGastoProvision(conexion, sCodGasto))
-					            		{
-						            		iCodigo = -4;
-					            		}
-						            }
-									if (iCodigo != -4) 
-									{*/
-										iCodigo = 1;
-									//}
-								}
-								else
-								{
-									QMListaGastos.setValidado(conexion,sCodMovimiento, "E");
-									iCodigo = -4;
-								}
-							}
-							else
-							{
-								//recibido OK
-								if (!QMListaGastosProvisiones.getRevisado(conexion,sCodMovimiento).equals(sValidado))
-								{
-									if (QMListaGastosProvisiones.setRevisado(conexion,sCodMovimiento, sValidado))
+									//recibido error
+									if (QMListaErroresGastos.addErrorGasto(conexion,sCodMovimiento, gasto.getCOTERR()))
 									{
-										logger.info("Gasto Revisado.");
+										//TODO Sustituir por PL
+										QMGastos.delGasto(conexion, sCodGasto);
+										/*ArrayList<String> dependenciasgastos = QMListaGastos.buscarDependencias(conexion,sCodGasto, sCodMovimiento);
+
+
+										for (int i = 0; i < dependenciasgastos.size() ; i++)
+							            {
+							            	if (!QMListaGastos.delRelacionGasto(conexion,dependenciasgastos.get(i)))
+							            	{
+							            		iCodigo = -4;
+							            	}
+							            	else if (!QMListaGastosProvisiones.delRelacionGastoProvision(conexion, sCodGasto))
+						            		{
+							            		iCodigo = -4;
+						            		}
+							            }
+										if (iCodigo != -4) 
+										{*/
+											iCodigo = 1;
+										//}
 									}
 									else
 									{
 										QMListaGastos.setValidado(conexion,sCodMovimiento, "E");
-										iCodigo = -5;
+										iCodigo = -4;
 									}
 								}
+								else
+								{
+									//recibido OK
+									if (!QMListaGastosProvisiones.getRevisado(conexion,sCodMovimiento).equals(sValidado))
+									{
+										if (QMListaGastosProvisiones.setRevisado(conexion,sCodMovimiento, sValidado))
+										{
+											logger.info("Gasto Revisado.");
+										}
+										else
+										{
+											QMListaGastos.setValidado(conexion,sCodMovimiento, "E");
+											iCodigo = -5;
+										}
+									}
 
-								logger.info("Movimiento validado.");
+									logger.info("Movimiento validado.");
+								}
+							}
+							else
+							{
+								iCodigo = -3;
 							}
 						}
 						else
 						{
-							iCodigo = -3;
+							iCodigo = -2;
 						}
+						
+						//bSalida = QMMovimientosGastos.modMovimientoGasto(gasto, sCodMovimiento);
+						//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+						//recuperaremos el codigo de error de la tabla pertinente.
 					}
 					else
 					{
-						iCodigo = -2;
+						iCodigo = -10;
 					}
-					
-					//bSalida = QMMovimientosGastos.modMovimientoGasto(gasto, sCodMovimiento);
-					//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
-					//recuperaremos el codigo de error de la tabla pertinente.
+						
 				}
-				else
+				else 
 				{
-					iCodigo = -10;
+					logger.error("El siguiente registro no se encuentra en el sistema:");
+					logger.error("|"+linea+"|");
+					iCodigo = -1;
 				}
-					
 			}
 			else 
 			{
-				logger.error("El siguiente registro no se encuentra en el sistema:");
-				logger.error("|"+linea+"|");
-				iCodigo = -1;
+				logger.error("El activo '"+gasto.getCOACES()+"' no pertenece a la cartera.");
+				iCodigo = -8;
 			}
 		}
 		
@@ -384,7 +392,7 @@ public final class CLGastos
 
 						String sTipo = CLActivos.compruebaTipoActivoSAREB(movimiento.getCOACES());
 						
-						Provision provision = new Provision(movimiento.getNUPROF(),sCOSPAT,sTipo,"0","0","0","0",ValoresDefecto.DEF_BAJA);
+						Provision provision = new Provision(movimiento.getNUPROF(),sCOSPAT,sTipo,"0","0","0","0","0","0",ValoresDefecto.DEF_BAJA);
 						
 						if (!QMProvisiones.addProvision(conexion,provision))
 						{
@@ -402,7 +410,8 @@ public final class CLGastos
 						
 						if (sCodGasto.equals(""))
 						{
-							sCodGasto = Integer.toString(QMGastos.addGasto(conexion,convierteMovimientoenGasto(movimiento),movimiento.getCOSIGA())); 
+							//TODO pendiente cambiar DEF_GASTO_AUTORIZADO a Pagado si se paga segun se autoriza.
+							sCodGasto = Integer.toString(QMGastos.addGasto(conexion,convierteMovimientoenGasto(movimiento),ValoresDefecto.DEF_GASTO_AUTORIZADO)); 
 						}
 
 						logger.debug("sCodGasto:|"+sCodGasto+"|");

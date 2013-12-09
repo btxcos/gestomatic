@@ -32,6 +32,8 @@ public class GestorProvisiones implements Serializable
 	private String sDTAS = "";
 	private String sValorTolal = "";
 	private String sNumGastos = "";
+	private String sValorAutorizado = "";
+	private String sGastosAutorizados = "";	
 	private String sFEPFON = "";
 	private String sFechaValidacion = "";
 	private String sValidado = "";
@@ -74,8 +76,8 @@ public class GestorProvisiones implements Serializable
 	    	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
 	    	this.sTAS  = provisionseleccionada.getTAS();
 	    	this.sDTAS  = provisionseleccionada.getDTAS();
-	    	this.sValorTolal  = CLProvisiones.calcularValorProvision(sNUPROF);
-	    	this.sNumGastos  = Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
+	    	this.sValorTolal  = Utils.recuperaImporte(false, provisionseleccionada.getVALOR());//CLProvisiones.calcularValorProvision(sNUPROF);
+	    	this.sNumGastos  = provisionseleccionada.getGASTOS();//Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
 	    	
 	    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
 	    	logger.info("Provision '{}' Seleccionada.",sNUPROF);
@@ -90,7 +92,16 @@ public class GestorProvisiones implements Serializable
 		{
 			FacesMessage msg;
 			
-			Provision provision = new Provision(sNUPROF, sCOSPAT, sTAS, Utils.compruebaImporte(sValorTolal), sNumGastos, Utils.fechaDeHoy(false),ValoresDefecto.CAMPO_SIN_INFORMAR, ValoresDefecto.DEF_BAJA);
+			Provision provision = new Provision(sNUPROF, 
+					sCOSPAT, 
+					sTAS, 
+					Utils.compruebaImporte(sValorTolal), 
+					sNumGastos,
+					ValoresDefecto.CAMPO_SIN_INFORMAR,
+					ValoresDefecto.CAMPO_SIN_INFORMAR, 
+					Utils.fechaDeHoy(false),
+					ValoresDefecto.CAMPO_SIN_INFORMAR, 
+					ValoresDefecto.DEF_BAJA);
 			
 					
 			//CLProvisiones.detallesProvision(sNUPROF);
@@ -154,6 +165,22 @@ public class GestorProvisiones implements Serializable
 	public void setsNumGastos(String sNumGastos) {
 		this.sNumGastos = sNumGastos;
 	}
+	
+	public String getsValorAutorizado() {
+		return sValorAutorizado;
+	}
+
+	public void setsValorAutorizado(String sValorAutorizado) {
+		this.sValorAutorizado = sValorAutorizado;
+	}
+
+	public String getsGastosAutorizados() {
+		return sGastosAutorizados;
+	}
+
+	public void setsGastosAutorizados(String sGastosAutorizados) {
+		this.sGastosAutorizados = sGastosAutorizados;
+	}
 
 	public String getsValidado() {
 		return sValidado;
@@ -211,7 +238,5 @@ public class GestorProvisiones implements Serializable
 	public void setsDTAS(String sDTAS) {
 		this.sDTAS = sDTAS;
 	}
-
-
 
 }

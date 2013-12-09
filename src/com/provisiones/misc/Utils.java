@@ -835,7 +835,7 @@ public final class Utils
 			//logger.debug("sEuros:|{}|",sEuros);
 			//logger.debug("sCentimos:|{}|",sCentimos);
 	
-			sImporteReal = bNegativo ? "-"+ sEuros + "." + sCentimos : sEuros + "." + sCentimos;
+			sImporteReal = bNegativo ? "-"+ sEuros + "," + sCentimos : sEuros + "," + sCentimos;
 		}
 
 		//logger.debug("sImporteReal:|{}|",sImporteReal);

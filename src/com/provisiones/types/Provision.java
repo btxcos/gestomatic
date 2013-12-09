@@ -8,22 +8,27 @@ public class Provision
 	private String sTAS = "";
 	private String sValorTolal = "";
 	private String sNumGastos = "";	
+	private String sValorAutorizado = "";
+	private String sGastosAutorizados = "";	
 	private String sFEPFON = "";
 	private String sFechaValidacion = "";
 	private String sCodEstado = "";
 
 
 	//Constructor de clase
-	
+
 	public Provision(String sNUPROF, String sCOSPAT, String sTAS,
-			String sValorTolal, String sNumGastos, String sFEPFON,
-			String sFechaValidacion, String sCodEstado) {
+			String sValorTolal, String sNumGastos, String sValorAutorizado,
+			String sGastosAutorizados, String sFEPFON, String sFechaValidacion,
+			String sCodEstado) {
 		super();
 		this.sNUPROF = sNUPROF;
 		this.sCOSPAT = sCOSPAT;
 		this.sTAS = sTAS;
 		this.sValorTolal = sValorTolal;
 		this.sNumGastos = sNumGastos;
+		this.sValorAutorizado = sValorAutorizado;
+		this.sGastosAutorizados = sGastosAutorizados;
 		this.sFEPFON = sFEPFON;
 		this.sFechaValidacion = sFechaValidacion;
 		this.sCodEstado = sCodEstado;
@@ -82,6 +87,26 @@ public class Provision
 	}
 
 
+	public String getsValorAutorizado() {
+		return sValorAutorizado;
+	}
+
+
+	public void setsValorAutorizado(String sValorAutorizado) {
+		this.sValorAutorizado = sValorAutorizado;
+	}
+
+
+	public String getsGastosAutorizados() {
+		return sGastosAutorizados;
+	}
+
+
+	public void setsGastosAutorizados(String sGastosAutorizados) {
+		this.sGastosAutorizados = sGastosAutorizados;
+	}
+
+
 	public String getsFEPFON() {
 		return sFEPFON;
 	}
@@ -113,10 +138,8 @@ public class Provision
 
 	public String logProvision()
 	{
-		return String.format("(PROVISION)\nsNUPROF         :|%s|\nsCOSPAT         :|%s|\nsTAS            :|%s|\nsFEPFON         :|%s|\nsFechaValidacion:|%s|\nsCodEstado      :|%s|\nsValorTolal     :|%s|\nsNumGastos      :|%s|",sNUPROF,sCOSPAT,sTAS,sFEPFON,sFechaValidacion,sCodEstado,sValorTolal,sNumGastos);
+		return String.format("(PROVISION)\nsNUPROF         :|"+sNUPROF+"|\nsCOSPAT         :|"+sCOSPAT+"|\nsTAS            :|"+sTAS+"|\nsFEPFON         :|"+sFEPFON+"|\nsFechaValidacion:|"+sFechaValidacion+"|\nsCodEstado      :|"+sCodEstado+"|\nsValorTolal     :|"+sValorTolal+"|\nsNumGastos      :|"+sNumGastos+"|");
 	}
-
-
 
 
 }
