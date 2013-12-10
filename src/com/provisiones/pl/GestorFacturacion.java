@@ -1,27 +1,25 @@
 package com.provisiones.pl;
 
 import java.io.Serializable;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-
 import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.ProvisionTabla;
 
-public class GestorProvisiones implements Serializable 
+public class GestorFacturacion implements Serializable 
 {
-	private static final long serialVersionUID = 6140067108661410063L;
+	private static final long serialVersionUID = 1526110669315503027L;
 
 	private static Logger logger = LoggerFactory.getLogger(GestorProvisiones.class.getName());
 
@@ -45,15 +43,15 @@ public class GestorProvisiones implements Serializable
 	
 	private transient ProvisionTabla provisionseleccionada = null;
 	
-	public GestorProvisiones()
+	public GestorFacturacion()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorProvisiones...");	
+			logger.debug("Iniciando GestorFacturacion...");	
 		}
 	}
 
-	public void cargaProvisionesAbiertas(ActionEvent actionEvent)
+	public void cargaProvisionesAutorizadas(ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
@@ -103,8 +101,8 @@ public class GestorProvisiones implements Serializable
 					ValoresDefecto.CAMPO_SIN_INFORMAR,
 					ValoresDefecto.CAMPO_SIN_INFORMAR, 
 					Utils.fechaDeHoy(false),
-					ValoresDefecto.CAMPO_SIN_INFORMAR,
 					ValoresDefecto.CAMPO_SIN_INFORMAR, 
+					ValoresDefecto.CAMPO_SIN_INFORMAR,
 					ValoresDefecto.CAMPO_SIN_INFORMAR, 
 					ValoresDefecto.DEF_BAJA,
 					ValoresDefecto.DEF_PROVISION_PENDIENTE);
@@ -268,5 +266,4 @@ public class GestorProvisiones implements Serializable
 	public void setsDTAS(String sDTAS) {
 		this.sDTAS = sDTAS;
 	}
-
 }

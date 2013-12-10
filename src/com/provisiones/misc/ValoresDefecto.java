@@ -78,6 +78,11 @@ public final class ValoresDefecto
 	
 	public static final String DEF_GASTO_PROVISION_CONEXION = "0";
 	
+	public static final String DEF_PROVISION_PENDIENTE = "P";
+	public static final String DEF_PROVISION_ENVIADA = "E";
+	public static final String DEF_PROVISION_AUTORIZADA = "A";
+	public static final String DEF_PROVISION_FACTURADA = "F";
+	
 	public static final String DEF_COTERR = "0";
 	public static final String DEF_COTDOR = "0";
 	public static final String DEF_OBDEER = "                                                                                ";
@@ -91,7 +96,8 @@ public final class ValoresDefecto
 	public static final String DEF_FEAPLI = "0";
 	
 	public static final String DEF_COMONA = "0";
-	public static final String DEF_BIAUTO = "0";
+	public static final String DEF_BIAUTO = " ";
+	public static final String DEF_BIAUTO_AUTORIZADO = "1";
 	public static final String DEF_FEAUFA = "0";
 	public static final String DEF_FEAGTO = "0";
 	public static final String DEF_FEPGPR = "0";
@@ -116,8 +122,7 @@ public final class ValoresDefecto
 	public enum TIPOSACCIONESGASTO 
 	{
 		G, M, N, D, A
-	}
-	
+	}	
 
 	public static final String DEF_CODIFICACION = "ISO-8859-15";
 	public static final String DEF_FIN_FICHERO = new Character((char) CHAR_FIN).toString();

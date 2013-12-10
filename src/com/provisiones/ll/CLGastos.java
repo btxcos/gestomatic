@@ -136,6 +136,11 @@ public final class CLGastos
 		return QMGastos.setEstado(ConnectionManager.getDBConnection(),sCodGasto, ValoresDefecto.DEF_GASTO_ANULADO);
 	}
 	
+	public static boolean autorizaGasto(String sCodGasto, String sFEEAUI, String sFEAUFA)
+	{
+		return QMGastos.setAutorizado(ConnectionManager.getDBConnection(),sCodGasto, sFEEAUI, sFEAUFA);
+	}
+	
 	public static ArrayList<ActivoTabla> buscarActivosConGastos(ActivoTabla filtro)
 	{
 		return QMGastos.buscaActivosConGastos(ConnectionManager.getDBConnection(),filtro);
@@ -291,10 +296,11 @@ public final class CLGastos
 								}
 								else
 								{
+									
 									//recibido OK
 									if (!QMListaGastosProvisiones.getRevisado(conexion,sCodMovimiento).equals(sValidado))
 									{
-										if (QMListaGastosProvisiones.setRevisado(conexion,sCodMovimiento, sValidado))
+										if (QMListaGastosProvisiones.setRevisado(conexion,sCodMovimiento, sValidado) && autorizaGasto(sCodGasto, gasto.getFEEAUI(), gasto.getFEAUFA()))
 										{
 											logger.info("Gasto Revisado.");
 										}
@@ -392,7 +398,7 @@ public final class CLGastos
 
 						String sTipo = CLActivos.compruebaTipoActivoSAREB(movimiento.getCOACES());
 						
-						Provision provision = new Provision(movimiento.getNUPROF(),sCOSPAT,sTipo,"0","0","0","0","0","0",ValoresDefecto.DEF_BAJA);
+						Provision provision = new Provision(movimiento.getNUPROF(),sCOSPAT,sTipo,"0","0","0","0","0","0","0","0",ValoresDefecto.DEF_BAJA,ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 						
 						if (!QMProvisiones.addProvision(conexion,provision))
 						{

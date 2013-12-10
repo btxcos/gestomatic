@@ -51,6 +51,11 @@ public final class CLProvisiones
 		return QMProvisiones.getProvision(ConnectionManager.getDBConnection(),sCodNUPROF);
 	}
 	
+	public static boolean estaAutorizada (String sCodNUPROF)
+	{
+		return QMProvisiones.provisionAutorizada(ConnectionManager.getDBConnection(),sCodNUPROF);
+	}
+	
 	public static boolean estaCerrada (String sCodNUPROF)
 	{
 		return QMProvisiones.provisionCerrada(ConnectionManager.getDBConnection(),sCodNUPROF);
@@ -86,7 +91,7 @@ public final class CLProvisiones
 					Provision provision = buscarProvision(cierre.getsNUPROF());
 					
 					provision.setsFEPFON(cierre.getsFEPFON());
-					provision.setsFechaValidacion(Utils.fechaDeHoy(false));
+					provision.setsFechaEnvio(Utils.fechaDeHoy(false));
 					
 					if (QMProvisiones.modProvision(conexion,provision))
 					{
@@ -316,7 +321,7 @@ public final class CLProvisiones
 			logger.info("Inicializando provisiones...");
 			if (!existeProvision("0"))
 			{
-				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0",ValoresDefecto.DEF_ALTA);
+				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_ALTA,ValoresDefecto.DEF_PROVISION_PENDIENTE);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}
@@ -411,7 +416,7 @@ public final class CLProvisiones
 					logger.debug("sProvision:|{}|",sProvision);
 				}			
 				
-				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0",ValoresDefecto.DEF_ALTA);
+				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_ALTA,ValoresDefecto.DEF_PROVISION_PENDIENTE);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}

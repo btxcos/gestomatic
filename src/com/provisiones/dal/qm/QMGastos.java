@@ -785,6 +785,56 @@ public final class QMGastos
 
 		return bSalida;
 	}
+	
+	public static boolean setAutorizado(Connection conexion, String sCodGasto, String sFEEAUI, String sFEAUFA)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO14 + " = '"+ sFEEAUI + "', "
+					+ CAMPO32 + " = '"+ ValoresDefecto.DEF_BIAUTO_AUTORIZADO + "', "
+					+ CAMPO33 + " = '"+ sFEAUFA + "', "
+					+ CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO + "' "+
+					" WHERE "
+					+ CAMPO1  + " = '"+ sCodGasto +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 
 	public static boolean setEstado(Connection conexion, String sCodGasto, String sEstado)
 	{

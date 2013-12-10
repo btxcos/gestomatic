@@ -32,7 +32,7 @@ public class GestorRecepcion implements Serializable
 	
 	private int iContador = 0;
 	
-	private boolean bPoll = false;
+	private boolean bPoll = true;
 
 	public GestorRecepcion ()
 	{
@@ -50,7 +50,6 @@ public class GestorRecepcion implements Serializable
     	this.sRegistrosProcesados = "";
     	this.sRegistrosErroneos = "";
     	this.iContador = 0;
-    	   	
 	}
 	
     public void limpiarPlantilla(ActionEvent actionEvent) 
@@ -66,7 +65,6 @@ public class GestorRecepcion implements Serializable
     
 	public void cargaArchivo(FileUploadEvent event) 
     {
-
 		borrarResultadosCarga();
 		
 		if (ConnectionManager.comprobarConexion())

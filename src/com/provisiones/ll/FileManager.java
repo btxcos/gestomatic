@@ -1730,7 +1730,7 @@ public final class FileManager
 	    			{
 	    			case 0:
 	    				sDescripcion = "Provisión cerrada correctamente.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
+	    				sResultado = ValoresDefecto.DEF_CARGA_ACTUALIZADO;
 	    				break;
 	    			case -1:
 	    				sDescripcion = "La provisión no se encuentra en el sistema.";

@@ -33,9 +33,12 @@ public final class QMProvisiones
 	public static final String CAMPO7 = "gastos_autorizados";
 	public static final String CAMPO8 = "fepfon";
 	public static final String CAMPO9 = "fecha_envio";
-	public static final String CAMPO10 = "cod_estado";
-	public static final String CAMPO11 = "usuario_modificacion";
-	public static final String CAMPO12 = "fecha_modificacion";
+	public static final String CAMPO10 = "fecha_envio";
+	public static final String CAMPO11 = "fecha_envio";
+	public static final String CAMPO12 = "cod_estado";
+	public static final String CAMPO13 = "cod_validado";
+	public static final String CAMPO14 = "usuario_modificacion";
+	public static final String CAMPO15 = "fecha_modificacion";
 
 	private QMProvisiones(){}
 	
@@ -65,7 +68,10 @@ public final class QMProvisiones
 					+ CAMPO9 + ","
 					+ CAMPO10 + ","
 					+ CAMPO11 + ","
-					+ CAMPO12 +
+					+ CAMPO12 + ","
+					+ CAMPO13 + ","
+					+ CAMPO14 + ","	
+					+ CAMPO15 +
 					") VALUES ('" 
 					+ NuevaProvision.getsNUPROF() + "','"
 					+ NuevaProvision.getsCOSPAT() + "','"
@@ -75,8 +81,11 @@ public final class QMProvisiones
 					+ NuevaProvision.getsValorAutorizado() + "','"
 					+ NuevaProvision.getsGastosAutorizados() + "','"
 					+ NuevaProvision.getsFEPFON() + "','" 
-					+ NuevaProvision.getsFechaValidacion() + "','" 
+					+ NuevaProvision.getsFechaEnvio() + "','"
+					+ NuevaProvision.getsFechaAutorizado() + "','" 
+					+ NuevaProvision.getsFechaFacturado() + "','" 
 					+ NuevaProvision.getsCodEstado() + "','"
+					+ NuevaProvision.getsCodValidado() + "','"
 					+ sUsuario + "','"
 					+ Utils.timeStamp() + 
 					"')";
@@ -131,10 +140,13 @@ public final class QMProvisiones
 					+ CAMPO6 + " = '" + provision.getsValorAutorizado() + "', " 
 					+ CAMPO7 + " = '" + provision.getsGastosAutorizados() + "', "
 					+ CAMPO8 + " = '" + provision.getsFEPFON() + "', " 
-					+ CAMPO9 + " = '" + provision.getsFechaValidacion() + "', " 
-					+ CAMPO10 + " = '" + provision.getsCodEstado() + "', " 
-					+ CAMPO11 + " = '" + sUsuario + "', " 
-					+ CAMPO12 + " = '" + Utils.timeStamp() + "' " +					
+					+ CAMPO9 + " = '" + provision.getsFechaEnvio() + "', "
+					+ CAMPO10 + " = '" + provision.getsFechaAutorizado() + "', " 
+					+ CAMPO11 + " = '" + provision.getsFechaFacturado() + "', " 
+					+ CAMPO12 + " = '" + provision.getsCodEstado() + "', "
+					+ CAMPO13 + " = '" + provision.getsCodValidado() + "', " 
+					+ CAMPO14 + " = '" + sUsuario + "', " 
+					+ CAMPO15 + " = '" + Utils.timeStamp() + "' " +					
 					" WHERE " 
 					+ CAMPO1 + " = '" + provision.getsNUPROF() + "'";
 
@@ -219,7 +231,10 @@ public final class QMProvisiones
 		String sValorAutorizado = "";
 		String sGastosAutorizados = "";	
 		String sFEPFON = "";
-		String sFechaValidacion = "";
+		String sFechaEnvio = "";     
+		String sFechaAutorizado = "";
+		String sFechaFacturado = ""; 
+		String sEstado = "";
 		String sValidado = "";
 
 		if (conexion != null)
@@ -241,8 +256,11 @@ public final class QMProvisiones
 					+ CAMPO6 + "," 
 					+ CAMPO7 + "," 
 					+ CAMPO8 + "," 
-					+ CAMPO9 + "," 
-					+ CAMPO10 +
+					+ CAMPO9 + ","
+					+ CAMPO10 + "," 
+					+ CAMPO11 + "," 
+					+ CAMPO12 + "," 
+					+ CAMPO13 +
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
@@ -272,8 +290,11 @@ public final class QMProvisiones
 						sValorAutorizado = rs.getString(CAMPO6);
 						sGastosAutorizados = rs.getString(CAMPO7);
 						sFEPFON = rs.getString(CAMPO8);
-						sFechaValidacion = rs.getString(CAMPO9);
-						sValidado = rs.getString(CAMPO10);
+						sFechaEnvio = rs.getString(CAMPO9);
+						sFechaAutorizado = rs.getString(CAMPO10);
+						sFechaFacturado = rs.getString(CAMPO11);
+						sEstado = rs.getString(CAMPO12);
+						sValidado = rs.getString(CAMPO13);
 
 						
 						logger.debug("Encontrado el registro!");
@@ -295,7 +316,9 @@ public final class QMProvisiones
 				sValorAutorizado = "";
 				sGastosAutorizados = "";	
 				sFEPFON = "";
-				sFechaValidacion = "";
+				sFechaEnvio = "";
+				sFechaAutorizado = "";
+				sFechaFacturado = "";
 				sValidado = "";
 
 				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
@@ -309,7 +332,7 @@ public final class QMProvisiones
 			}
 		}
 
-		return new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, sValorAutorizado, sGastosAutorizados, sFEPFON, sFechaValidacion, sValidado);
+		return new Provision(sNUPROF, sCOSPAT, sTAS, sValorTolal, sNumGastos, sValorAutorizado, sGastosAutorizados, sFEPFON, sFechaEnvio, sFechaAutorizado, sFechaFacturado, sEstado, sValidado);
 	}
 	
 	public static boolean setFechaEnvio(Connection conexion, String sNUPROF, String sFechaEnvio) 
@@ -357,7 +380,7 @@ public final class QMProvisiones
 		return bSalida;
 	}
 	
-	public static boolean setEstado(Connection conexion, String sNUPROF, String sEstado) 
+	public static boolean setFechaAutorizado(Connection conexion, String sNUPROF, String sFechaAutorizado) 
 	{
 		boolean bSalida = false;
 		
@@ -370,7 +393,7 @@ public final class QMProvisiones
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO10 + " = '" + sEstado + "' " +
+					+ CAMPO10 + " = '" + sFechaAutorizado + "' " +
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -402,6 +425,209 @@ public final class QMProvisiones
 		return bSalida;
 	}
 	
+	public static boolean setFechaFacturado(Connection conexion, String sNUPROF, String sFechaFacturado) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO11 + " = '" + sFechaFacturado + "' " +
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setEstado(Connection conexion, String sNUPROF, String sEstado) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO12 + " = '" + sEstado + "' " +
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setValidado(Connection conexion, String sNUPROF, String sValidado) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO13 + " = '" + sValidado + "' " +
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static String getValidado(Connection conexion, String sNUPROF) 
+	{
+		String sValidado = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO13  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '"+ sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sValidado = rs.getString(CAMPO13);
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sValidado = "";
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return sValidado;
+	}
+	
 	public static long buscaCantidadProvisionesCerradasPendientes(Connection conexion)
 	{
 		long liNumero = 0;
@@ -421,7 +647,7 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE " +
 					"(" 
-					+ CAMPO10 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
+					+ CAMPO12 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
 					+ CAMPO9 + " = '0' AND "
 					+ CAMPO8 + " <> '0'"+
 					")";
@@ -554,7 +780,7 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE (" 
 					+ CAMPO1 + " = '"+ sNUPROF + "' AND "
-					+ CAMPO10 + " = '"+ ValoresDefecto.DEF_BAJA + 
+					+ CAMPO12 + " = '"+ ValoresDefecto.DEF_BAJA + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -601,6 +827,140 @@ public final class QMProvisiones
 		return bEncontrado;
 	}
 	
+	public static boolean provisionAutorizada(Connection conexion, String sNUPROF) 
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO1 + " = '"+ sNUPROF + "' AND "
+					+ CAMPO10 + " <> '"+ ValoresDefecto.CAMPO_SIN_INFORMAR + 
+					"')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return bEncontrado;
+	}
+	
+	public static boolean provisionFacturada(Connection conexion, String sNUPROF) 
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO1 + " = '"+ sNUPROF + "' AND "
+					+ CAMPO11 + " <> '"+ ValoresDefecto.CAMPO_SIN_INFORMAR + 
+					"')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return bEncontrado;
+	}
+	
+	
+	
 	public static String getProvisionAbierta(Connection conexion, String sCodCOSPAT, String sCodTAS) 
 	{
 		String sNUPROF = "";
@@ -622,10 +982,10 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE " +
 					"( " 
-					+ CAMPO10 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
+					+ CAMPO12 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
 					+ CAMPO2 +" = '"+ sCodCOSPAT +"' AND "
 					+ CAMPO3 +" = '"+ sCodTAS + "' AND "
-					+ CAMPO1 +" <> 0)";
+					+ CAMPO1 +" <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+"')";
 			
 			logger.debug(sQuery);
 			
@@ -692,7 +1052,7 @@ public final class QMProvisiones
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO10 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
+					+ CAMPO12 + " = '" + ValoresDefecto.DEF_BAJA + "' AND "
 					+ CAMPO9 + " = '0'"+
 					")";
 			
@@ -776,7 +1136,7 @@ public final class QMProvisiones
 					+ CAMPO5 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
-					+ CAMPO10 + " = '"+ ValoresDefecto.DEF_ALTA + "' AND "
+					+ CAMPO12 + " = '"+ ValoresDefecto.DEF_ALTA + "' AND "
 					+CAMPO1+" <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+
 					"' )";
 			
@@ -857,7 +1217,7 @@ public final class QMProvisiones
 						" FROM " 
 						+ TABLA + 
 						" WHERE ( " 
-						+ CAMPO10 + " = '"+ ValoresDefecto.DEF_BAJA + "' AND " 
+						+ CAMPO12 + " = '"+ ValoresDefecto.DEF_BAJA + "' AND " 
 						+ CAMPO2 +" = '"+ sCodCOSPAT +"') "+
 						" order by " + CAMPO1 + " desc limit 0,1 ";
 			

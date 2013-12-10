@@ -19,24 +19,22 @@ import com.provisiones.misc.Utils;
 import com.provisiones.types.ResultadoCarga;
 import com.provisiones.types.tablas.ResultadosTabla;
 
-
 public class GestorCargas implements Serializable
 {
-
 	private static final long serialVersionUID = 942487732660619012L;
 
 	private static Logger logger = LoggerFactory.getLogger(GestorCargas.class.getName());
 	
 	private transient ArrayList<ResultadosTabla> tablamensajes = new ArrayList<ResultadosTabla>();
 
-	private String sArchivo = "";
+	private String sArchivo = "resultado";
 	private String sDuracion = "";
 	private String sRegistrosProcesados = "";
 	private String sRegistrosErroneos = "";
 	
 	private int iContador = 0;
 	
-	private boolean bPoll = false;
+	private boolean bPoll = true;
 	
 	public GestorCargas ()
 	{

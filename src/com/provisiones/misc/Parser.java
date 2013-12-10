@@ -370,7 +370,7 @@ public final class Parser {
 		String sNUPROF = limpiaCampoNumerico(linea.substring(Posiciones.GA_NUPROF_P, Posiciones.GA_NUPROF_P+Longitudes.NUPROF_L));
 		String sFEAGTO = limpiaCampoNumerico(linea.substring(Posiciones.GA_FEAGTO_P, Posiciones.GA_FEAGTO_P+Longitudes.FEAGTO_L));
 		String sCOMONA = limpiaCampoNumerico(linea.substring(Posiciones.GA_COMONA_P, Posiciones.GA_COMONA_P+Longitudes.COMONA_L));
-		String sBIAUTO = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.GA_BIAUTO_P, Posiciones.GA_BIAUTO_P+Longitudes.BIAUTO_L),"0");
+		String sBIAUTO = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.GA_BIAUTO_P, Posiciones.GA_BIAUTO_P+Longitudes.BIAUTO_L),ValoresDefecto.DEF_BIAUTO);
 		String sFEAUFA = limpiaCampoNumerico(linea.substring(Posiciones.GA_FEAUFA_P, Posiciones.GA_FEAUFA_P+Longitudes.FEAUFA_L));
 		String sCOTERR = limpiaCampoNumerico(linea.substring(Posiciones.GA_COTERR_P, Posiciones.GA_COTERR_P+Longitudes.COTERR_L));
 		String sFMPAGN = limpiaCampoNumerico(linea.substring(Posiciones.GA_FMPAGN_P, Posiciones.GA_FMPAGN_P+Longitudes.FMPAGN_L));
@@ -428,7 +428,7 @@ public final class Parser {
         String sNUPROF = formateaCampoNumerico(gasto.getNUPROF(),Longitudes.NUPROF_L);
         String sFEAGTO = formateaCampoNumerico(gasto.getFEAGTO(),Longitudes.FEAGTO_L);
         String sCOMONA = formateaCampoNumerico(gasto.getCOMONA(),Longitudes.COMONA_L);
-        String sBIAUTO = formateaCampoAlfanumericoCodigo(gasto.getBIAUTO(),Longitudes.BIAUTO_L,"0");
+        String sBIAUTO = formateaCampoAlfanumericoCodigo(gasto.getBIAUTO(),Longitudes.BIAUTO_L,ValoresDefecto.DEF_BIAUTO);
         String sFEAUFA = formateaCampoNumerico(gasto.getFEAUFA(),Longitudes.FEAUFA_L);
         String sCOTERR = formateaCampoNumerico(gasto.getCOTERR(),Longitudes.COTERR_L);
         String sFMPAGN = formateaCampoNumerico(gasto.getFMPAGN(),Longitudes.FMPAGN_L);
