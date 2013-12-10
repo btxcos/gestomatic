@@ -95,9 +95,23 @@
 
 							<p:column>
 								<f:facet name="header">
+									<h:outputText value="Línea" />
+								</f:facet>
+								<h:outputText value="#{mensaje.liLinea}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
 									<h:outputText value="Resultado" />
 								</f:facet>
 								<h:outputText value="#{mensaje.sResultado}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Descripción" />
+								</f:facet>
+								<h:outputText value="#{mensaje.sDescripcion}" />
 							</p:column>
 
 							<f:facet name="footer">

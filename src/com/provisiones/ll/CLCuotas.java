@@ -133,108 +133,117 @@ public final class CLCuotas
 		{
 			MovimientoCuota cuota = Parser.leerCuota(linea);
 
-			logger.debug(cuota.logMovimientoCuota());
-			
-			String sCodMovimiento = QMMovimientosCuotas.getMovimientoCuotaID(conexion,cuota);
-			
-			logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
-			
-			if (!(sCodMovimiento.equals("")))
+			if (CLActivos.existeActivo(cuota.getCOACES()))
 			{
-
+				logger.debug(cuota.logMovimientoCuota());
 				
-				String sEstado = QMListaCuotas.getValidado(conexion,sCodMovimiento);
+				String sCodMovimiento = QMMovimientosCuotas.getMovimientoCuotaID(conexion,cuota);
 				
-				if (sEstado.equals("P"))
+				logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+				
+				if (!(sCodMovimiento.equals("")))
 				{
-					iCodigo = -11;
-				}
-				else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
-				{
-					iCodigo = -12;
-				}
-				else if (sEstado.equals("E"))
-				{
-					String sValidado = "";
 
-					logger.debug("cuota.getCOTDOR()|"+cuota.getCOTDOR()+"|");
-					logger.debug("ValoresDefecto.DEF_COTDOR|"+ValoresDefecto.DEF_COTDOR+"|");
-
-					if (cuota.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
-					{
-						sValidado = "V";
-					}
-					else
-					{
-						sValidado = "X";
-					}
 					
-					logger.debug("sValidado|"+sValidado+"|");
+					String sEstado = QMListaCuotas.getValidado(conexion,sCodMovimiento);
 					
-					logger.debug("cuota.getCOACCI()|"+cuota.getCOACCI()+"|");
-
-					ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(cuota.getCOACCI());
-
-					switch (COACCI)
+					if (sEstado.equals("P"))
 					{
-					case A: case M: case B:
-						if (QMListaCuotas.existeRelacionCuota(conexion,buscarCodigoCuota(cuota.getCOCLDO(),cuota.getNUDCOM(),cuota.getCOSBAC(),cuota.getCOACES()), sCodMovimiento))
+						iCodigo = -11;
+					}
+					else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
+					{
+						iCodigo = -12;
+					}
+					else if (sEstado.equals("E"))
+					{
+						String sValidado = "";
+
+						logger.debug("cuota.getCOTDOR()|"+cuota.getCOTDOR()+"|");
+						logger.debug("ValoresDefecto.DEF_COTDOR|"+ValoresDefecto.DEF_COTDOR+"|");
+
+						if (cuota.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
 						{
-							if(QMListaCuotas.setValidado(conexion,sCodMovimiento, sValidado))
+							sValidado = "V";
+						}
+						else
+						{
+							sValidado = "X";
+						}
+						
+						logger.debug("sValidado|"+sValidado+"|");
+						
+						logger.debug("cuota.getCOACCI()|"+cuota.getCOACCI()+"|");
+
+						ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(cuota.getCOACCI());
+
+						switch (COACCI)
+						{
+						case A: case M: case B:
+							if (QMListaCuotas.existeRelacionCuota(conexion,buscarCodigoCuota(cuota.getCOCLDO(),cuota.getNUDCOM(),cuota.getCOSBAC(),cuota.getCOACES()), sCodMovimiento))
 							{
-								if (sValidado.equals("X"))
+								if(QMListaCuotas.setValidado(conexion,sCodMovimiento, sValidado))
 								{
-									//recibido error
-									if (QMListaErroresCuotas.addErrorCuota(conexion,sCodMovimiento, cuota.getCOTDOR()))
+									if (sValidado.equals("X"))
 									{
-										iCodigo = 1;
+										//recibido error
+										if (QMListaErroresCuotas.addErrorCuota(conexion,sCodMovimiento, cuota.getCOTDOR()))
+										{
+											iCodigo = 1;
+										}
+										else
+										{
+											QMListaCuotas.setValidado(conexion,sCodMovimiento, "E");
+											iCodigo = -4;
+										}
 									}
 									else
 									{
-										QMListaCuotas.setValidado(conexion,sCodMovimiento, "E");
-										iCodigo = -4;
+										//recibido OK
+										logger.info("Movimiento validado.");
 									}
 								}
 								else
 								{
-									//recibido OK
-									logger.info("Movimiento validado.");
+									iCodigo = -3;
 								}
 							}
 							else
 							{
-								iCodigo = -3;
+								iCodigo = -2;
 							}
-						}
-						else
-						{
-							iCodigo = -2;
-						}
-						break;
+							break;
+							
+						default:
+							logger.error("Se ha recibido un movimiento con acción desconocida:|"+cuota.getCOACCI()+"|.");
+							iCodigo = -9;
+							break;
 						
-					default:
-						logger.error("Se ha recibido un movimiento con acción desconocida:|"+cuota.getCOACCI()+"|.");
-						iCodigo = -9;
-						break;
-					
+						}
+						
+						//bSalida = QMMovimientosCuotas.modMovimientoCuota(cuota, sCodMovimiento);
+						//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+						//recuperaremos el codigo de error de la tabla pertinente.
 					}
-					
-					//bSalida = QMMovimientosCuotas.modMovimientoCuota(cuota, sCodMovimiento);
-					//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
-					//recuperaremos el codigo de error de la tabla pertinente.
+					else
+					{
+						iCodigo = -10;
+					}
+						
 				}
-				else
+				else 
 				{
-					iCodigo = -10;
+					logger.error("El siguiente registro no se encuentra en el sistema:");
+					logger.error("|"+linea+"|");
+					iCodigo = -1;
 				}
-					
 			}
-			else 
+			else
 			{
-				logger.error("El siguiente registro no se encuentra en el sistema:");
-				logger.error("|"+linea+"|");
-				iCodigo = -1;
+				//activo desconocido
+				iCodigo = -8;
 			}
+
 		}
 		
 		logger.error("iCodigo:|"+iCodigo+"|");

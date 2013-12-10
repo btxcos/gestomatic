@@ -96,11 +96,13 @@ public final class ValoresDefecto
 	public static final String DEF_FEAGTO = "0";
 	public static final String DEF_FEPGPR = "0";
 
-	public static final String DEF_CARGA_ACTUALIZADO = "(A) ";
-	public static final String DEF_CARGA_REVISAR     = "(E) ";
-	public static final String DEF_CARGA_NUEVO       = "(N) ";
-	public static final String DEF_CARGA_VALIDADO    = "(V) ";
-	public static final String DEF_CARGA_ERROR       = "(X) ";
+	public static final String DEF_CARGA_ACTUALIZADO = "ACTUALIZADO";
+	public static final String DEF_CARGA_REVISAR     = "REVISAR";
+	public static final String DEF_CARGA_NUEVO       = "NUEVO";
+	public static final String DEF_CARGA_VALIDADO    = "VALIDADO";
+	public static final String DEF_CARGA_ERROR       = "ERROR";
+	public static final String DEF_CARGA_ERRORFATAL  = "FATAL";	
+	public static final String DEF_CARGA_SINCAMBIOS  = "SIN CAMBIOS";
 	
 	public enum TIPOSFICHERO 
 	{

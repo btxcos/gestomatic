@@ -195,135 +195,176 @@ public final class CLComunidades
 			iCodigo = 0;
 			
 			MovimientoComunidad comunidad = Parser.leerComunidad(linea);
-			
-			logger.debug(comunidad.logMovimientoComunidad());
-				
-			
-			String sCodMovimiento = QMMovimientosComunidades.getMovimientoComunidadID(conexion,comunidad);
-			
-			logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
-			
-			if (!(sCodMovimiento.equals("")))
+
+			if (CLActivos.existeActivo(comunidad.getCOACES()))
 			{
-				logger.debug("comunidad.getCOACCI()|{}|",comunidad.getCOACCI());
-
-				ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(comunidad.getCOACCI());
+				logger.debug(comunidad.logMovimientoComunidad());
 				
-				String sEstado = "";
 				
-				switch (COACCI)
-				{
-				case X:case E:
-					sEstado = QMListaComunidadesActivos.getValidado(conexion,sCodMovimiento);
-					break;
-
-				case M: case B: case A:
-					sEstado = QMListaComunidades.getValidado(conexion,sCodMovimiento);
-					break;
-					
-				default:
-					logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",comunidad.getCOACCI());
-					iCodigo = -9;
-					break;
-				}
+				String sCodMovimiento = QMMovimientosComunidades.getMovimientoComunidadID(conexion,comunidad);
 				
-				if (sEstado.equals("P"))
+				logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+				
+				if (!(sCodMovimiento.equals("")))
 				{
-					iCodigo = -11;
-				}
-				else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
-				{
-					iCodigo = -12;
-				}
-				else if (sEstado.equals("E"))
-				{
-					String sValidado = "";
-					
-					logger.debug("comunidad.getCOTDOR()|{}|",comunidad.getCOTDOR());
-					logger.debug("ValoresDefecto.DEF_COTDOR|{}|",ValoresDefecto.DEF_COTDOR);
-					
-					String sCodComunidad = buscarCodigoComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM());
+					logger.debug("comunidad.getCOACCI()|{}|",comunidad.getCOACCI());
 
-					if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
-					{
-						sValidado = "V";
-					}
-					else
-					{
-						sValidado = "X";
-					}
+					ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(comunidad.getCOACCI());
 					
-					logger.debug("sValidado|{}|",sValidado);
-
+					String sEstado = "";
+					
 					switch (COACCI)
 					{
 					case X:case E:
-						if (QMListaComunidadesActivos.existeRelacionComunidad(conexion,comunidad.getCOACES(), sCodComunidad, sCodMovimiento))
+						sEstado = QMListaComunidadesActivos.getValidado(conexion,sCodMovimiento);
+						break;
+
+					case M: case B: case A:
+						sEstado = QMListaComunidades.getValidado(conexion,sCodMovimiento);
+						break;
+						
+					default:
+						logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",comunidad.getCOACCI());
+						iCodigo = -9;
+						break;
+					}
+					
+					if (sEstado.equals("P"))
+					{
+						iCodigo = -11;
+					}
+					else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
+					{
+						iCodigo = -12;
+					}
+					else if (sEstado.equals("E"))
+					{
+						String sValidado = "";
+						
+						logger.debug("comunidad.getCOTDOR()|{}|",comunidad.getCOTDOR());
+						logger.debug("ValoresDefecto.DEF_COTDOR|{}|",ValoresDefecto.DEF_COTDOR);
+						
+						String sCodComunidad = buscarCodigoComunidad(comunidad.getCOCLDO(),comunidad.getNUDCOM());
+
+						if (comunidad.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
 						{
-							if (QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, sValidado))
+							sValidado = "V";
+						}
+						else
+						{
+							sValidado = "X";
+						}
+						
+						logger.debug("sValidado|{}|",sValidado);
+
+						switch (COACCI)
+						{
+						case X:case E:
+							if (QMListaComunidadesActivos.existeRelacionComunidad(conexion,comunidad.getCOACES(), sCodComunidad, sCodMovimiento))
 							{
-								if (sValidado.equals("X"))
+								if (QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, sValidado))
 								{
-									//recibido un error
-									if (QMListaErroresComunidades.addErrorComunidad(conexion,sCodMovimiento, comunidad.getCOTDOR()))
+									if (sValidado.equals("X"))
 									{
-										iCodigo = 1;
+										//recibido un error
+										if (QMListaErroresComunidades.addErrorComunidad(conexion,sCodMovimiento, comunidad.getCOTDOR()))
+										{
+											iCodigo = 1;
+										}
+										else
+										{
+											QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, "E");
+											iCodigo = -6;
+										}
 									}
 									else
 									{
-										QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, "E");
-										iCodigo = -6;
+										//recibido un OK
+										logger.info("Movimiento validado.");
 									}
 								}
 								else
 								{
-									//recibido un OK
-									logger.info("Movimiento validado.");
+									iCodigo = -5;
 								}
 							}
 							else
 							{
-								iCodigo = -5;
+								iCodigo = -3;
 							}
-						}
-						else
-						{
-							iCodigo = -3;
-						}
-						break;
-					case A:
-						if (QMListaComunidades.existeRelacionComunidad(conexion,sCodComunidad, sCodMovimiento))
-						{
-							if (QMListaComunidadesActivos.existeRelacionComunidad(conexion,sCodComunidad, comunidad.getCOACES(), sCodMovimiento))
+							break;
+						case A:
+							if (QMListaComunidades.existeRelacionComunidad(conexion,sCodComunidad, sCodMovimiento))
 							{
-								if (QMListaComunidades.setValidado(conexion,sCodMovimiento, sValidado))
+								if (QMListaComunidadesActivos.existeRelacionComunidad(conexion,sCodComunidad, comunidad.getCOACES(), sCodMovimiento))
 								{
-									if (QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, sValidado))
+									if (QMListaComunidades.setValidado(conexion,sCodMovimiento, sValidado))
 									{
-										if (sValidado.equals("X"))
+										if (QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, sValidado))
 										{
-											//recibido error
-											if (QMListaErroresComunidades.addErrorComunidad(conexion,sCodMovimiento, comunidad.getCOTDOR()))
+											if (sValidado.equals("X"))
 											{
-												iCodigo = 1;
+												//recibido error
+												if (QMListaErroresComunidades.addErrorComunidad(conexion,sCodMovimiento, comunidad.getCOTDOR()))
+												{
+													iCodigo = 1;
+												}
+												else
+												{
+													QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, "E");
+													QMListaComunidades.setValidado(conexion,sCodMovimiento, "E");
+													iCodigo = -6;
+												}
 											}
 											else
 											{
-												QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, "E");
-												QMListaComunidades.setValidado(conexion,sCodMovimiento, "E");
-												iCodigo = -6;
+												//recibido OK
+												logger.info("Movimiento validado.");
 											}
 										}
 										else
 										{
-											//recibido OK
-											logger.info("Movimiento validado.");
+											QMListaComunidades.setValidado(conexion,sCodMovimiento, "E");
+											iCodigo = -5;
 										}
 									}
 									else
 									{
-										QMListaComunidades.setValidado(conexion,sCodMovimiento, "E");
-										iCodigo = -5;
+										iCodigo = -4;
+									}
+								}
+								else
+								{
+									iCodigo = -3;						
+								}
+							}
+							else
+							{
+								iCodigo = -2;
+							}
+							break;
+						case M: case B:
+							if (QMListaComunidades.existeRelacionComunidad(conexion,sCodComunidad, sCodMovimiento))
+							{
+								if(QMListaComunidades.setValidado(conexion,sCodMovimiento, sValidado))
+								{
+									if (sValidado.equals("X"))
+									{
+										//recibido error
+										if (QMListaErroresComunidades.addErrorComunidad(conexion,sCodMovimiento, comunidad.getCOTDOR()))
+										{
+											iCodigo = 1;
+										}
+										else
+										{
+											QMListaComunidades.setValidado(conexion,sCodMovimiento, "E");
+											iCodigo = -6;
+										}
+									}
+									else
+									{
+										//recibido OK
+										logger.info("Movimiento validado.");
 									}
 								}
 								else
@@ -333,72 +374,40 @@ public final class CLComunidades
 							}
 							else
 							{
-								iCodigo = -3;						
+								iCodigo = -2;
 							}
-						}
-						else
-						{
-							iCodigo = -2;
-						}
-						break;
-					case M: case B:
-						if (QMListaComunidades.existeRelacionComunidad(conexion,sCodComunidad, sCodMovimiento))
-						{
-							if(QMListaComunidades.setValidado(conexion,sCodMovimiento, sValidado))
-							{
-								if (sValidado.equals("X"))
-								{
-									//recibido error
-									if (QMListaErroresComunidades.addErrorComunidad(conexion,sCodMovimiento, comunidad.getCOTDOR()))
-									{
-										iCodigo = 1;
-									}
-									else
-									{
-										QMListaComunidades.setValidado(conexion,sCodMovimiento, "E");
-										iCodigo = -6;
-									}
-								}
-								else
-								{
-									//recibido OK
-									logger.info("Movimiento validado.");
-								}
-							}
-							else
-							{
-								iCodigo = -4;
-							}
-						}
-						else
-						{
-							iCodigo = -2;
-						}
-						break;
+							break;
+							
+						default:
+							logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",comunidad.getCOACCI());
+							iCodigo = -9;
+							break;
 						
-					default:
-						logger.error("Se ha recibido un movimiento con acción desconocida:|{}|.",comunidad.getCOACCI());
-						iCodigo = -9;
-						break;
-					
+						}
+						
+						//bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
+						//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+						//recuperaremos el codigo de error de la tabla pertinente.
 					}
-					
-					//bSalida = QMMovimientosComunidades.modMovimientoComunidad(comunidad, sCodMovimiento);
-					//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
-					//recuperaremos el codigo de error de la tabla pertinente.
+					else
+					{
+						iCodigo = -10;
+					}
+						
 				}
-				else
+				else 
 				{
-					iCodigo = -10;
+					logger.error("El siguiente registro no se encuentra en el sistema:");
+					logger.error("|{}|",linea);
+					iCodigo = -1;
 				}
-					
 			}
-			else 
+			else
 			{
-				logger.error("El siguiente registro no se encuentra en el sistema:");
-				logger.error("|{}|",linea);
-				iCodigo = -1;
+				//activo desconocido
+				iCodigo = -8;
 			}
+
 		}
 		
 		logger.error("iCodigo:|{}|",iCodigo);

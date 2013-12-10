@@ -612,55 +612,60 @@ public final class FileManager
 
 	    		if (linea.equals(sFinFichero))
 	    		{
+	    			contador--;
 	    			logger.info("Lectura finalizada.");
 	    		}
 	    		else if (linea.length()< iLongitudValida )
 	    		{
+	    			iSalida = -1;
 	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
 	    		}
 	    		else
 	    		{
 	    			int iCodigo = CLActivos.actualizaActivoLeido(linea);
-	    			String sMensaje = "";
+
+	    			String sResultado = "";
+	    			String sDescripcion = "";
+
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Nuevo Activo registrado.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Nuevo Activo registrado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
 	    				break;
 	    			case -1:
-	    				sMensaje = "[FATAL] Error al actualizar el Activo.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al actualizar el Activo.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -2:
-	    				sMensaje = "[FATAL] Error al registrar el Activo.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al registrar el Activo.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case 1:
-	    				sMensaje = "Activo actualizado.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ACTUALIZADO+"Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Activo actualizado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ACTUALIZADO;
 	    				break;
 	    			case 2:
-	    				sMensaje = "El registro ya se encuentra en el sistema.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.warn(sMensaje);
+	    				sDescripcion = "El registro ya se encuentra en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
 	    				break;
 	    			}
+	    			
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
 	    			if ( iCodigo >= 0 )
 	    			{
+	    				logger.info(sMensaje);
 	    				registros++;
 	    			}
 	    			else
 	    			{
 	    				iSalida = -1;
+	    				logger.error(sMensaje);
 	    			}
 
-	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre, sMensaje);
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
 	    			tabla.add(resultadolectura);
 	    		}
 	        }
@@ -756,78 +761,73 @@ public final class FileManager
 	    		{
 	    			int iCodigo = CLGastos.actualizarGastoRecibido(linea);
 	    			
-	    			String sMensaje = "";
+	    			String sResultado = "";
+	    			String sDescripcion = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Movimiento validado.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_VALIDADO+"Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimiento validado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_VALIDADO;
 	    				break;
 	    			case 1:
-	    				sMensaje = "Movimiento de Gasto pendiente de revisión.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimiento de Gasto pendiente de revisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_REVISAR;
 	    				break;
 	    			case 2:
-	    				sMensaje = "El movimiento recibido ya esta en revisión.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.warn(sMensaje);
+	    				sDescripcion = "El movimiento recibido ya esta en revisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
 	    				break;
 	    			case -1:
-	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "Registro no encontrado en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No existe relación con la Gasto.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "No existe relación con la Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -3:
-	    				sMensaje = "[FATAL] Error al validar la relación con el Gasto.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al validar la relación con el Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -4:
-	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -5:
-	    				sMensaje = "[FATAL] Error al actualizar la revisión del gasto.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al actualizar la revisión del gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -8:
-	    				sMensaje = "El activo no pertenece a la cartera.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -10:
-	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Estado del movimiento desconocido.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -11:
-	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			}
 	    			
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
 	    			if ( iCodigo >= 0 )
 	    			{
+	    				logger.info(sMensaje);
 	    				registros++;
 	    			}
 	    			else
 	    			{
 	    				iSalida = -1;
+	    				logger.error(sMensaje);
 	    			}
 
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
+
 	    		}
 	        }
 
@@ -923,69 +923,66 @@ public final class FileManager
 	    		else
 	    		{
 	    			int iCodigo = CLGastos.inyectarGastoVolcado(linea);
-	    			String sMensaje = "";
+
+	    			String sResultado = "";
+	    			String sDescripcion = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Movimiento asimilado.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimiento asimilado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
 	    				break;
 	    			case -8:
-	    				sMensaje = "El activo no pertenece a la cartera.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;	    				
 	    			case -908:
-	    				sMensaje = "[FATAL] Error al crear la Provisión del Gasto.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al crear la Provisión del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -901:
-	    				sMensaje = "[FATAL] Error al crear el Gasto.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al crear el Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -909:
-	    				sMensaje = "El movimiento cargado ya se encontraba en el sistema.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "El movimiento cargado ya se encontraba en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -900:
-	    				sMensaje = "[FATAL] Error al registrar el movimiento.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al registrar el movimiento.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -902:
-	    				sMensaje = "[FATAL] Error al crear la relación del Gasto.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al crear la relación del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;	
 	    			case -906:
-	    				sMensaje = "[FATAL] Error al crear la relación del Gasto con la Provisión.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al crear la relación del Gasto con la Provisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			default:
-	    				sMensaje = "El movimiento cargado no ha podido ser validado ("+iCodigo+").";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "El movimiento cargado no ha podido ser validado ("+iCodigo+").";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    				
 	    			}
 	    			
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
 	    			if ( iCodigo >= 0 )
 	    			{
+	    				logger.info(sMensaje);
 	    				registros++;
 	    			}
 	    			else
 	    			{
 	    				iSalida = -1;
+	    				logger.error(sMensaje);
 	    			}
 
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
 	    		}
 	        }
 			
@@ -1079,82 +1076,81 @@ public final class FileManager
 	    		else
 	    		{
 	    			int iCodigo = CLComunidades.actualizarComunidadLeida(linea);
-	    			String sMensaje = "";
+
+	    			String sResultado = "";
+	    			String sDescripcion = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Movimiento validado.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_VALIDADO+"Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimiento validado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_VALIDADO;
 	    				break;
 	    			case 1:
-	    				sMensaje = "Movimento de Comunidad pendiente de revisión.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_REVISAR+"Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimento de Comunidad pendiente de revisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_REVISAR;
 	    				break;
 	    			case -1:
-	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "Registro no encontrado en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No existe relación con la Comunidad.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "No existe relación con la Comunidad.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -3:
-	    				sMensaje = "No existe relación Activo-Comunidad.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "No existe relación Activo-Comunidad.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -4:
-	    				sMensaje = "[FATAL] Error al validar la reclación con la Comunidad.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al validar la reclación con la Comunidad.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -5:
-	    				sMensaje = "[FATAL] Error al validar la relación Activo-Comunidad.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al validar la relación Activo-Comunidad.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -6:
-	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -8:
+	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -9:
-	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Accion desconocida.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -10:
-	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Estado del movimiento desconocido.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -11:
-	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -12:
-	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.warn(sMensaje);
+	    				sDescripcion = "El movimiento recibido ya ha sido revisado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
 	    				break;
 	    			}
+
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
 	    			if ( iCodigo >= 0 )
 	    			{
+	    				logger.info(sMensaje);
 	    				registros++;
 	    			}
 	    			else
 	    			{
 	    				iSalida = -1;
+	    				logger.error(sMensaje);
 	    			}
 
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
 	    		}
 	        }
 
@@ -1247,72 +1243,73 @@ public final class FileManager
 	    		else
 	    		{
 	    			int iCodigo = CLCuotas.actualizarCuotaLeida(linea);
-	    			String sMensaje = "";
+
+	    			String sResultado = "";
+	    			String sDescripcion = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Movimiento validado.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimiento validado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_VALIDADO;
 	    				break;
 	    			case 1:
-	    				sMensaje = "Movimento de Cuota pendiente de revisión.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimento de Cuota pendiente de revisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_REVISAR;
 	    				break;
 	    			case -1:
-	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "Registro no encontrado en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No existe relación con la Cuota.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "No existe relación con la Cuota.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -3:
-	    				sMensaje = "[FATAL] Error al validar la reclación con la Cuota.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al validar la reclación con la Cuota.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -4:
-	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
-	    				break;	    				
+	    				sDescripcion = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -8:
+	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
 	    			case -9:
-	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Accion desconocida.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -10:
-	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Estado del movimiento desconocido.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -11:
-	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -12:
-	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.warn(sMensaje);
+	    				sDescripcion = "El movimiento recibido ya ha sido revisado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
 	    				break;
 	    			}
+	    			
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
 	    			if ( iCodigo >= 0 )
 	    			{
+	    				logger.info(sMensaje);
 	    				registros++;
 	    			}
 	    			else
 	    			{
 	    				iSalida = -1;
+	    				logger.error(sMensaje);
 	    			}
 
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
 	    		}
 	        }
 
@@ -1406,73 +1403,73 @@ public final class FileManager
 	    		{
 	    			int iCodigo = CLReferencias.actualizaReferenciaLeida(linea);
 
-	    			String sMensaje = "";
+	    			String sResultado = "";
+	    			String sDescripcion = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Movimiento validado.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimiento validado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_VALIDADO;
 	    				break;
 	    			case 1:
-	    				sMensaje = "Movimento de Referencia Catastral pendiente de revisión.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimento de Referencia Catastral pendiente de revisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_REVISAR;
 	    				break;
 	    			case -1:
-	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "Registro no encontrado en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No existe relación con la Referencia Catastral.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "No existe relación con la Referencia Catastral.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -3:
-	    				sMensaje = "[FATAL] Error al validar la reclación con la Referencia Catastral.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al validar la reclación con la Referencia Catastral.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -4:
-	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
-	    				break;	    				
+	    				sDescripcion = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -8:
+	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
 	    			case -9:
-	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Accion desconocida.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -10:
-	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Estado del movimiento desconocido.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -11:
-	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -12:
-	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.warn(sMensaje);
+	    				sDescripcion = "El movimiento recibido ya ha sido revisado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
 	    				break;
 	    			}
 	    			
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
 	    			if ( iCodigo >= 0 )
 	    			{
+	    				logger.info(sMensaje);
 	    				registros++;
 	    			}
 	    			else
 	    			{
 	    				iSalida = -1;
+	    				logger.error(sMensaje);
 	    			}
 
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
+	    			
 	    		}
 	        }
 
@@ -1567,72 +1564,72 @@ public final class FileManager
 	    		{
 	    			int iCodigo = CLImpuestos.actualizarImpuestoLeido(linea);
 
-	    			String sMensaje = "";
+	    			String sResultado = "";
+	    			String sDescripcion = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Movimiento validado.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimiento validado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_VALIDADO;
 	    				break;
 	    			case 1:
-	    				sMensaje = "Movimento de Impuesto pendiente de revisión.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Movimento de Impuesto pendiente de revisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_REVISAR;
 	    				break;
 	    			case -1:
-	    				sMensaje = "Registro no encontrado en el sistema.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "Registro no encontrado en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -2:
-	    				sMensaje = "No existe relación con el Impuesto.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "No existe relación con el Impuesto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -3:
-	    				sMensaje = "[FATAL] Error al validar la reclación con el Impuestos.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al validar la reclación con el Impuestos.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -4:
-	    				sMensaje = "[FATAL] Error al registrar el movimiento pendiente.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
-	    				break;	    				
+	    				sDescripcion = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;	 
+	    			case -8:
+	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
 	    			case -9:
-	    				sMensaje = "[FATAL] Accion desconocida.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Acción desconocida.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -10:
-	    				sMensaje = "[FATAL] Estado del movimiento desconocido.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Estado del movimiento desconocido.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -11:
-	    				sMensaje = "[FATAL] El movimiento recibido figura como 'no enviado'.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -12:
-	    				sMensaje = "El movimiento recibido ya ha sido revisado.";
-	    				sMensaje = "Línea "+contador+": "+sMensaje;
-	    				logger.warn(sMensaje);
+	    				sDescripcion = "El movimiento recibido ya ha sido revisado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
 	    				break;
 	    			}
+
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
 	    			if ( iCodigo >= 0 )
 	    			{
+	    				logger.info(sMensaje);
 	    				registros++;
 	    			}
 	    			else
 	    			{
 	    				iSalida = -1;
+	    				logger.error(sMensaje);
 	    			}
 
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
 	    		}
 	        }
 
@@ -1725,42 +1722,45 @@ public final class FileManager
 	    		else
 	    		{
 	    			int iCodigo = CLProvisiones.inyertarCierreVolcado(linea);
-	    			String sMensaje = "";
+
+	    			String sResultado = "";
+	    			String sDescripcion = "";
 	    			
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sMensaje = "Provisión cerrada correctamente.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_NUEVO+"Línea "+contador+": "+sMensaje;
-	    				logger.info(sMensaje);
+	    				sDescripcion = "Provisión cerrada correctamente.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
 	    				break;
 	    			case -1:
-	    				sMensaje = "La provisión no se encuentra en el sistema.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "La provisión no se encuentra en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -2:
-	    				sMensaje = "[FATAL] Error al validar la Provisión.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "[FATAL] Error al validar la Provisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -3:
-	    				sMensaje = "La provisión no estaba cerrada.";
-	    				sMensaje = ValoresDefecto.DEF_CARGA_ERROR+"Línea "+contador+": "+sMensaje;
-	    				logger.error(sMensaje);
+	    				sDescripcion = "La provisión no estaba cerrada.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			}
+
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
 	    			if ( iCodigo >= 0 )
 	    			{
+	    				logger.info(sMensaje);
 	    				registros++;
 	    			}
 	    			else
 	    			{
 	    				iSalida = -1;
+	    				logger.error(sMensaje);
 	    			}
 
-	    			ResultadosTabla resultado = new ResultadosTabla(sNombre, sMensaje);
-	    			tabla.add(resultado);
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
 	    		}
 	        }
 		

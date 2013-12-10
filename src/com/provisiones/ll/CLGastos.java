@@ -337,7 +337,7 @@ public final class CLGastos
 			}
 			else 
 			{
-				logger.error("El activo '"+gasto.getCOACES()+"' no pertenece a la cartera.");
+				//error activo desconocido
 				iCodigo = -8;
 			}
 		}

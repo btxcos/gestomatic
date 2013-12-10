@@ -141,109 +141,118 @@ public final class CLImpuestos
 			iCodigo = 0;
 			
 			MovimientoImpuestoRecurso impuesto = Parser.leerImpuestoRecurso(linea);
-			
-			logger.debug(impuesto.logMovimientoImpuestoRecurso());
-			
-			String sCodMovimiento = QMMovimientosImpuestos.getMovimientoImpuestoRecursoID(conexion,impuesto);
-			
-			logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
-			
-			if (!(sCodMovimiento.equals("")))
+
+			if (CLActivos.existeActivo(impuesto.getCOACES()))
 			{
-
+				logger.debug(impuesto.logMovimientoImpuestoRecurso());
 				
-				String sEstado = QMListaImpuestos.getValidado(conexion,sCodMovimiento);
+				String sCodMovimiento = QMMovimientosImpuestos.getMovimientoImpuestoRecursoID(conexion,impuesto);
 				
-				if (sEstado.equals("P"))
+				logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+				
+				if (!(sCodMovimiento.equals("")))
 				{
-					iCodigo = -11;
-				}
-				else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
-				{
-					iCodigo = -12;
-				}
-				else if (sEstado.equals("E"))
-				{
-					String sValidado = "";
-					
-					logger.debug("impuesto.getCOTDOR()|"+impuesto.getCOTDOR()+"|");
-					logger.debug("ValoresDefecto.DEF_COTDOR|"+ValoresDefecto.DEF_COTDOR+"|");
 
-					if (impuesto.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
+					
+					String sEstado = QMListaImpuestos.getValidado(conexion,sCodMovimiento);
+					
+					if (sEstado.equals("P"))
 					{
-						sValidado = "V";
+						iCodigo = -11;
 					}
-					else
+					else if (sEstado.equals("X") || sEstado.equals("V") || sEstado.equals("R"))
 					{
-						sValidado = "X";
+						iCodigo = -12;
 					}
-					
-					logger.debug("sValidado|"+sValidado+"|");
-					
-					logger.debug("impuesto.getCOACCI()|"+impuesto.getCOACCI()+"|");
-
-					ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(impuesto.getCOACCI());
-
-					switch (COACCI)
+					else if (sEstado.equals("E"))
 					{
-					case A: case M: case B:
-						if (QMListaImpuestos.existeRelacionImpuesto(conexion,impuesto.getCOACES(), buscarCodigoImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC()), sCodMovimiento))
+						String sValidado = "";
+						
+						logger.debug("impuesto.getCOTDOR()|"+impuesto.getCOTDOR()+"|");
+						logger.debug("ValoresDefecto.DEF_COTDOR|"+ValoresDefecto.DEF_COTDOR+"|");
+
+						if (impuesto.getCOTDOR().equals(ValoresDefecto.DEF_COTDOR))
 						{
-							if(QMListaImpuestos.setValidado(conexion,sCodMovimiento, sValidado))
+							sValidado = "V";
+						}
+						else
+						{
+							sValidado = "X";
+						}
+						
+						logger.debug("sValidado|"+sValidado+"|");
+						
+						logger.debug("impuesto.getCOACCI()|"+impuesto.getCOACCI()+"|");
+
+						ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(impuesto.getCOACCI());
+
+						switch (COACCI)
+						{
+						case A: case M: case B:
+							if (QMListaImpuestos.existeRelacionImpuesto(conexion,impuesto.getCOACES(), buscarCodigoImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC()), sCodMovimiento))
 							{
-								if (sValidado.equals("X"))
+								if(QMListaImpuestos.setValidado(conexion,sCodMovimiento, sValidado))
 								{
-									//recibido error
-									if (QMListaErroresImpuestos.addErrorImpuesto(conexion,sCodMovimiento, impuesto.getCOTDOR()))
+									if (sValidado.equals("X"))
 									{
-										iCodigo = 1;
+										//recibido error
+										if (QMListaErroresImpuestos.addErrorImpuesto(conexion,sCodMovimiento, impuesto.getCOTDOR()))
+										{
+											iCodigo = 1;
+										}
+										else
+										{
+											QMListaImpuestos.setValidado(conexion,sCodMovimiento, "E");
+											iCodigo = -4;
+										}
 									}
 									else
 									{
-										QMListaImpuestos.setValidado(conexion,sCodMovimiento, "E");
-										iCodigo = -4;
+										//recibido OK
+										logger.info("Movimiento validado.");
 									}
 								}
 								else
 								{
-									//recibido OK
-									logger.info("Movimiento validado.");
+									iCodigo = -3;
 								}
 							}
 							else
 							{
-								iCodigo = -3;
+								iCodigo = -2;
 							}
-						}
-						else
-						{
-							iCodigo = -2;
-						}
-						break;
+							break;
+							
+						default:
+							logger.error("Se ha recibido un movimiento con acción desconocida:|"+impuesto.getCOACCI()+"|.");
+							iCodigo = -9;
+							break;
 						
-					default:
-						logger.error("Se ha recibido un movimiento con acción desconocida:|"+impuesto.getCOACCI()+"|.");
-						iCodigo = -9;
-						break;
-					
+						}
+						
+						//bSalida = QMMovimientosImpuestos.modMovimientoImpuesto(impuesto, sCodMovimiento);
+						//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
+						//recuperaremos el codigo de error de la tabla pertinente.
 					}
-					
-					//bSalida = QMMovimientosImpuestos.modMovimientoImpuesto(impuesto, sCodMovimiento);
-					//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
-					//recuperaremos el codigo de error de la tabla pertinente.
+					else
+					{
+						iCodigo = -10;
+					}
+						
 				}
-				else
+				else 
 				{
-					iCodigo = -10;
+					logger.error("El siguiente registro no se encuentra en el sistema:");
+					logger.error("|"+linea+"|");
+					iCodigo = -1;
 				}
-					
 			}
-			else 
+			else
 			{
-				logger.error("El siguiente registro no se encuentra en el sistema:");
-				logger.error("|"+linea+"|");
-				iCodigo = -1;
+				//activo desconocido
+				iCodigo = -8;
 			}
+
 		}
 		
 		logger.debug("iCodigo:|"+iCodigo+"|");
