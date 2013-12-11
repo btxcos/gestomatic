@@ -953,6 +953,165 @@ public final class QMGastos
 		return sEstado;
 	}
 	
+	public static long getValor(Connection conexion, String sGastoID)
+	{
+		long liIMNGAS = 0;
+		String sYCOS02 = "";
+		long liIMRGAS = 0;
+		String sYCOS04 = "";
+		long liIMDGAS = 0;
+		String sYCOS06 = "";
+		long liIMCOST = 0;
+		String sYCOS08 = "";
+		long liIMOGAS = 0;
+		String sYCOS10 = "";
+		long liIMDTGA = 0;
+		long liIMIMGA = 0;
+
+
+		long liValor = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","              
+				       + CAMPO24 + ","              
+				       + CAMPO25 + ","              
+				       + CAMPO26 + ","              
+				       + CAMPO27 +      
+				       "  FROM " 
+				       + TABLA + 
+				       " WHERE "
+				       + CAMPO1  + " = '"+ sGastoID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liIMNGAS = rs.getLong(CAMPO16); 
+						sYCOS02 = rs.getString(CAMPO17); 
+						liIMRGAS = rs.getLong(CAMPO18); 
+						sYCOS04 = rs.getString(CAMPO19); 
+						liIMDGAS = rs.getLong(CAMPO20); 
+						sYCOS06 = rs.getString(CAMPO21); 
+						liIMCOST = rs.getLong(CAMPO22); 
+						sYCOS08 = rs.getString(CAMPO23); 
+						liIMOGAS = rs.getLong(CAMPO24); 
+						sYCOS10 = rs.getString(CAMPO25); 
+						liIMDTGA = rs.getLong(CAMPO26); 
+						liIMIMGA = rs.getLong(CAMPO27); 
+						
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+
+				liIMNGAS = 0;
+				sYCOS02 = "";
+				liIMRGAS = 0;
+				sYCOS04 = "";
+				liIMDGAS = 0;
+				sYCOS06 = "";
+				liIMCOST = 0;
+				sYCOS08 = "";
+				liIMOGAS = 0;
+				sYCOS10 = "";
+				liIMDTGA = 0;
+				liIMIMGA = 0;
+
+				logger.error("ERROR GASTO:|"+sGastoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+		
+		if (sYCOS02.equals("-"))
+		{
+			liIMNGAS = -liIMNGAS;
+		}
+		if (sYCOS04.equals("-"))
+		{
+			liIMRGAS = -liIMRGAS;
+		}
+		if (sYCOS06.equals("-"))
+		{
+			liIMDGAS = -liIMDGAS;
+		}
+		if (sYCOS08.equals("-"))
+		{
+			liIMCOST = -liIMCOST;
+		}
+		if (sYCOS10.equals("-"))
+		{
+			liIMOGAS = -liIMOGAS;
+		}
+		
+		liValor = liIMNGAS+liIMRGAS+liIMDGAS+liIMCOST+liIMOGAS;
+		
+		if (liValor < 0)
+		{
+			liValor = liValor + liIMDTGA;
+		}
+		else
+		{
+			liValor = liValor - liIMDTGA;
+		}
+		
+		if (liValor < 0)
+		{
+			liValor = liValor - liIMIMGA;
+		}
+		else
+		{
+			liValor = liValor + liIMIMGA;
+		}
+
+		return liValor;
+	}
+	
 	public static ArrayList<String>  getGastosPorActivo(Connection conexion, String sCodCOACES) 
 	{
 		ArrayList<String> resultado = new ArrayList<String>(); 

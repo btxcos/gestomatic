@@ -37,7 +37,6 @@ public class GestorFacturacion implements Serializable
 	private String sFechaAutorizado = "";
 	private String sFechaFacturado = "";
 	private String sEstado = "";
-	private String sValidado = "";
 
 	private transient ArrayList<ProvisionTabla> tablaprovisiones = null;
 	
@@ -104,7 +103,6 @@ public class GestorFacturacion implements Serializable
 					ValoresDefecto.CAMPO_SIN_INFORMAR, 
 					ValoresDefecto.CAMPO_SIN_INFORMAR,
 					ValoresDefecto.CAMPO_SIN_INFORMAR, 
-					ValoresDefecto.DEF_BAJA,
 					ValoresDefecto.DEF_PROVISION_PENDIENTE);
 			
 					
@@ -209,15 +207,6 @@ public class GestorFacturacion implements Serializable
 	public void setsEstado(String sEstado) {
 		this.sEstado = sEstado;
 	}
-
-	public String getsValidado() {
-		return sValidado;
-	}
-
-	public void setsValidado(String sValidado) {
-		this.sValidado = sValidado;
-	}
-
 
 	public String getsCOSPAT() {
 		return sCOSPAT;

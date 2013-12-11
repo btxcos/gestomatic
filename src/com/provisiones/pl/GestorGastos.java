@@ -298,10 +298,12 @@ public class GestorGastos implements Serializable
 	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
+		FacesMessage msg;
+		
+		String sMsg = "";
+
 		if (ConnectionManager.comprobarConexion())
 		{
-			FacesMessage msg;
-			
 			ActivoTabla buscaactivos = new ActivoTabla(
 					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
@@ -309,79 +311,163 @@ public class GestorGastos implements Serializable
 			
 			
 			ArrayList<ActivoTabla> resultcuotasimpuestos = CLGastos.buscarActivosConMovimientos(buscaactivos);
-			
-			
-			logger.debug("TAM RESULT-CI:|{}|",resultcuotasimpuestos.size());
-					
 					
 			this.setTablaactivos(resultcuotasimpuestos);
 
-			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+			sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
+
 		}
+		else
+		{
+			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+		}
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {
+		FacesMessage msg;
+		
+		String sMsg = "";
+
 		if (ConnectionManager.comprobarConexion())
 		{
-			FacesMessage msg;
-	    	
 	     	this.sCOACES  = activoseleccionado.getCOACES();
 	 
-	     	msg = Utils.pfmsgInfo("Activo "+ sCOACES +" Seleccionado.");
-	     	
-	     	logger.info("Activo {} Seleccionado.",sCOACES);
-	     	
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+	     	sMsg = "Activo "+ sCOACES +" Seleccionado.";
+	     	msg = Utils.pfmsgInfo(sMsg);
+	     	logger.info(sMsg);
 		}
+		else
+		{
+			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+		}
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 	
 	public void cargarDatos(ActionEvent actionEvent)
 	{
+		FacesMessage msg;
+		
+		String sMsg = "";
+		
 		if (ConnectionManager.comprobarConexion())
 		{
-			FacesMessage msg;
-			
-			if (CLActivos.existeActivo(sCOACES))
+			if (!sCOACES.equals(""))
 			{
-				this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
-			
-				msg = Utils.pfmsgInfo("Encontradas "+getTablacuotas().size()+" cuotas pendientes.");
-				logger.info("Encontradas {} cuotas pendientes.",getTablacuotas().size());
+				if (CLActivos.existeActivo(sCOACES))
+				{
+					this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
 				
-				FacesContext.getCurrentInstance().addMessage(null, msg);
+					sMsg = "Encontradas "+getTablacuotas().size()+" cuotas pendientes.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
 
-				this.tabladevoluciones = CLImpuestos.buscarDevolucionesDelActivo(sCOACES.toUpperCase());
-			
-				msg = Utils.pfmsgInfo("Encontradas "+getTabladevoluciones().size()+" devoluciones pendientes.");
-				logger.info("Encontradas {} devoluciones pendientes.",getTabladevoluciones().size());
+					this.tabladevoluciones = CLImpuestos.buscarDevolucionesDelActivo(sCOACES.toUpperCase());
 				
-				FacesContext.getCurrentInstance().addMessage(null, msg);
-			
-				this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
-			
-				msg = Utils.pfmsgInfo("Provision '"+sNUPROF+"' asignada.");
-				logger.info("Provision '{}' asignada.",sNUPROF);
-				
+					sMsg = "Encontradas "+getTabladevoluciones().size()+" devoluciones pendientes.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					msg = Utils.pfmsgError("No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
+					logger.error("No exite el activo '{}'. Por favor, revise los datos.",sCOACES);
+				}
 			}
 			else
 			{
-				msg = Utils.pfmsgError("No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
-				logger.error("No exite el activo '{}'. Por favor, revise los datos.",sCOACES);
+				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}		
+		}
+		else
+		{
+			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+
+
+
+	}
+	
+	public void asignarProvision(ActionEvent actionEvent)
+	{
+		FacesMessage msg;
+		
+		String sMsg = "";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+			if (!sCOACES.equals(""))
+			{
+				if (CLActivos.existeActivo(sCOACES))
+				{
+					this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
+					
+					if (!sNUPROF.equals(""))
+					{
+						sMsg = "Provision '"+sNUPROF+"' asignada.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "[FATAL] No se pudo asignar una provision al activo '"+sCOACES+"'. Por favor, avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+					}
+
+				}
+				else
+				{
+					sMsg = "El activo '"+sCOACES+"' no pertenece a esta cartera. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
+			else
+			{
+				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+		}
+		else
+		{
+			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+		}
+
+
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+
 	}
 	
 	public void seleccionarCuota(ActionEvent actionEvent) 
 	{
+		FacesMessage msg;
+		
+		String sMsg = "";
+		
 		if (ConnectionManager.comprobarConexion())
 		{
-	    	FacesMessage msg;
-	    	
 	    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E2;
 	    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E2;
 	    	this.sCOSBGA = cuotaseleccionada.getCOSBAC();
@@ -391,38 +477,55 @@ public class GestorGastos implements Serializable
 	    	this.bDevolucion = false;
 
 	    	
-	    	tiposcotpgaHM = tiposcotpga_g2HM;
-	    	tiposcosbgaHM = tiposcosbga_t22HM;
+	    	this.tiposcotpgaHM = tiposcotpga_g2HM;
+	    	this.tiposcosbgaHM = tiposcosbga_t22HM;
 	    	
 
-	    	msg = Utils.pfmsgInfo("Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.");
-	    	logger.info("Cuota de '{}' Seleccionada.",cuotaseleccionada.getDCOSBAC());
-	    	
-	    	FacesContext.getCurrentInstance().addMessage(null, msg);			
+	    	sMsg = "Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 		}
+		else
+		{
+			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+		}
+		
+    	FacesContext.getCurrentInstance().addMessage(null, msg);	
     }
 	
 	public void seleccionarDevolucion(ActionEvent actionEvent) 
     {
+		FacesMessage msg;
+		
+		String sMsg = "";
+
 		if (ConnectionManager.comprobarConexion())
 		{
-			FacesMessage msg;
-	    	
+
 	    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E4;
 	    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E4;
 	    	this.sCOSBGA = devolucionseleccionada.getCOSBAC();
 	    	this.sPTPAGO = "1";
 	    	this.bDevolucion = true;
 	    	
-	    	tiposcotpgaHM = tiposcotpga_g2HM;
-	    	tiposcosbgaHM = tiposcosbga_t21HM;
+	    	this.tiposcotpgaHM = tiposcotpga_g2HM;
+	    	this.tiposcosbgaHM = tiposcosbga_t21HM;
 	    	
-
-	    	msg = Utils.pfmsgInfo("Devolucion de '"+ devolucionseleccionada.getDCOSBAC() +"' Seleccionada.");
-	    	logger.info("Devolucion de '{}' Seleccionada.",devolucionseleccionada.getDCOSBAC());
-	    	
-	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	sMsg = "Devolucion de '"+ devolucionseleccionada.getDCOSBAC() +"' Seleccionada.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 		}
+		else
+		{
+			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+		}
+		
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		
     }
 	
 	public void cambiaGrupo()
@@ -609,11 +712,12 @@ public class GestorGastos implements Serializable
 
 	public void registraGasto(ActionEvent actionEvent)
 	{
+		FacesMessage msg;
+		
+		String sMsg = "";
+
 		if (ConnectionManager.comprobarConexion())
 		{
-			FacesMessage msg;
-			
-			String sMsg = "";
 			
 			if (CLGastos.existeGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 			{
@@ -964,8 +1068,15 @@ public class GestorGastos implements Serializable
 			}
 			
 			logger.debug("Finalizadas las comprobaciones.");
-			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
+		else
+		{
+			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+		}
+		
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
     
 	public String getsCOACES() {

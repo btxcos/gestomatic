@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
+import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Parser;
@@ -28,6 +29,12 @@ public final class CLProvisiones
 	{
 		return QMListaGastosProvisiones.buscaCantidadGastos(ConnectionManager.getDBConnection(),sNUPROF);
 	}
+	
+	public static ArrayList<String> buscarGastosProvision(String sNUPROF)
+	{
+		return QMListaGastosProvisiones.buscaGastosPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
+	}
+	
 	
 	public static long buscarNumeroProvisionesCerradas()
 	{
@@ -51,9 +58,9 @@ public final class CLProvisiones
 		return QMProvisiones.getProvision(ConnectionManager.getDBConnection(),sCodNUPROF);
 	}
 	
-	public static boolean estaAutorizada (String sCodNUPROF)
+	public static String estadoProvision (String sCodNUPROF)
 	{
-		return QMProvisiones.provisionAutorizada(ConnectionManager.getDBConnection(),sCodNUPROF);
+		return QMProvisiones.getEstado(ConnectionManager.getDBConnection(),sCodNUPROF);
 	}
 	
 	public static boolean estaCerrada (String sCodNUPROF)
@@ -92,9 +99,34 @@ public final class CLProvisiones
 					
 					provision.setsFEPFON(cierre.getsFEPFON());
 					provision.setsFechaEnvio(Utils.fechaDeHoy(false));
-					
+					provision.setsFechaFacturado(Utils.fechaDeHoy(false));
+					provision.setsCodEstado(ValoresDefecto.DEF_PROVISION_FACTURADA);
+
 					if (QMProvisiones.modProvision(conexion,provision))
 					{
+						ArrayList<String> listagastos = buscarGastosProvision(cierre.getsNUPROF());
+			    		if (listagastos.size() > 0)
+			    		{
+				        	for (int i = 0; i < listagastos.size() ; i++)
+					        {
+					        	
+					        	String sEstado = "";
+					        	
+					        	if (QMGastos.getValor(conexion, listagastos.get(i)) < 0)
+					        	{
+					        		sEstado = ValoresDefecto.DEF_GASTO_ABONADO;
+					        	}
+					        	else
+					        	{
+					        		sEstado = ValoresDefecto.DEF_GASTO_PAGADO;
+					        	}
+					        	
+					        	QMGastos.setEstado(conexion, listagastos.get(i), sEstado);
+					        }
+
+			    		}
+			    		//TODO else rollback
+						
 						logger.debug("Provision '"+cierre.getsNUPROF()+"' validada.");
 					}
 					else
@@ -321,7 +353,7 @@ public final class CLProvisiones
 			logger.info("Inicializando provisiones...");
 			if (!existeProvision("0"))
 			{
-				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_ALTA,ValoresDefecto.DEF_PROVISION_PENDIENTE);
+				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}
@@ -416,7 +448,7 @@ public final class CLProvisiones
 					logger.debug("sProvision:|{}|",sProvision);
 				}			
 				
-				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_ALTA,ValoresDefecto.DEF_PROVISION_PENDIENTE);
+				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}

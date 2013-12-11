@@ -28,14 +28,6 @@
 								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
 							</h:panelGrid>
 						</p:fieldset>
-						<p:panel>
-							<h:panelGrid columns="2" cellpadding="5">
-
-								<h:outputText value="Provisión: "/>
-								<p:inputText id="NUPROF" value="#{GestorGastos.sNUPROF}" disabled="true" size="9" maxlength="9"/>
-
-							</h:panelGrid>
-						</p:panel>
 
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
@@ -76,30 +68,50 @@
 						<p:panel id="panel">
 							<h:panelGrid columns="1" cellpadding="1">
 
-								<p:fieldset legend="Activo">
-									<h:panelGrid columns="2" cellpadding="5">
-
+								<p:fieldset legend="Activo y Provisión">
+									<h:panelGrid columns="4" cellpadding="5">
 										<p:panel>
-											<h:panelGrid columns="3" cellpadding="5">
+											<h:panelGrid columns="2" cellpadding="3">
+												<p:panel>
+													<h:panelGrid columns="3" cellpadding="3">
 
-												<h:outputText for="COACES" value="Código de activo: "/>
-												<p:inputText id="COACES" value="#{GestorGastos.sCOACES}" size="9" maxlength="9"/>
+														<h:outputText for="COACES" value="Activo: "/>
+														<p:inputText id="COACES" value="#{GestorGastos.sCOACES}" size="9" maxlength="9"/>
 
-												<p:commandButton value="Cargar Datos" update="msgs, popup, COACES, NUPROF, form:cuotas, form:devoluciones" actionListener="#{GestorGastos.cargarDatos}" oncomplete="dlgTablaPendientes.show()"/>
+														<p:commandButton value="Comprobar" update="msgs, popup, COACES, form:cuotas, form:devoluciones" actionListener="#{GestorGastos.cargarDatos}" oncomplete="dlgTablaPendientes.show()"/>
+
+													</h:panelGrid>
+												</p:panel>
+
+												<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>
 
 											</h:panelGrid>
 										</p:panel>
 
-										<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
 
+												<p:panel>
+													<h:panelGrid columns="2" cellpadding="5">
+
+														<h:outputText value="Provisión: "/>
+														<p:inputText id="NUPROF" value="#{GestorGastos.sNUPROF}" disabled="true" size="9" maxlength="9"/>
+
+													</h:panelGrid>
+												</p:panel>
+
+												<p:commandButton value="Asignar" update="NUPROF, msgs, popup" actionListener="#{GestorGastos.asignarProvision}"/>
+											</h:panelGrid>
+										</p:panel>
 									</h:panelGrid>
 								</p:fieldset>
 
-								<p:fieldset legend="Datos">
+
+								<p:fieldset legend="Gasto">
 									<h:panelGrid columns="2" cellpadding="1">
 
 										<p:panel>
-											<p:fieldset legend="Tipo de Gasto">
+											<p:fieldset legend="Tipo">
 												<h:panelGrid columns="2" cellpadding="5">
 
 													<h:outputText value="Devolución: "/>
@@ -135,7 +147,7 @@
 												</h:panelGrid>
 											</p:fieldset>
 
-											<p:fieldset legend="Fechas del gasto">
+											<p:fieldset legend="Fechas">
 												<h:panelGrid columns="1" cellpadding="5">
 
 													<p:panel>
@@ -169,7 +181,7 @@
 												</h:panelGrid>
 											</p:fieldset>
 
-											<p:fieldset legend="Situación del gasto">
+											<p:fieldset legend="Situación">
 												<h:panelGrid columns="1" cellpadding="5">
 
 													<p:panel>
@@ -202,7 +214,10 @@
 										</p:panel>
 
 										<p:panel>
-											<p:fieldset legend="Importes del gasto">
+
+
+
+											<p:fieldset legend="Importes">
 												<h:panelGrid columns="1" cellpadding="5">
 
 													<p:panel>

@@ -78,9 +78,10 @@ public final class ValoresDefecto
 	
 	public static final String DEF_GASTO_PROVISION_CONEXION = "0";
 	
+	public static final String DEF_PROVISION_ABIERTA = "A";
 	public static final String DEF_PROVISION_PENDIENTE = "P";
 	public static final String DEF_PROVISION_ENVIADA = "E";
-	public static final String DEF_PROVISION_AUTORIZADA = "A";
+	public static final String DEF_PROVISION_AUTORIZADA = "T";
 	public static final String DEF_PROVISION_FACTURADA = "F";
 	
 	public static final String DEF_COTERR = "0";

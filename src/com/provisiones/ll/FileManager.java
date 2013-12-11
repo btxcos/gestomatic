@@ -521,6 +521,7 @@ public final class FileManager
 	            	Provision provision = QMProvisiones.getProvision(conexion,resultcierres.get(i));
 	                pw.println(Parser.escribirCierre(provision.getsNUPROF(),provision.getsFEPFON()));
 	                QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),Utils.fechaDeHoy(false));
+	                QMProvisiones.setEstado(conexion, resultcierres.get(i), ValoresDefecto.DEF_PROVISION_ENVIADA);
 	            }
 	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
 	 
@@ -533,6 +534,7 @@ public final class FileManager
 	            for (int i = 0; i < resultcierres.size() ; i++)
 	            {
 	            	QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),"0");
+	            	QMProvisiones.setEstado(conexion, resultcierres.get(i), ValoresDefecto.DEF_PROVISION_PENDIENTE);
 	            }
 	            
 	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
@@ -800,6 +802,10 @@ public final class FileManager
 	    				break;
 	    			case -8:
 	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
+	    			case -9:
+	    				sDescripcion = "La provisión de gastos asociada figura como 'no enviada'.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -10:

@@ -15,15 +15,14 @@ public class Provision
 	private String sFechaAutorizado = "";
 	private String sFechaFacturado = "";
 	private String sCodEstado = "";
-	private String sCodValidado = "";
 
 	//Constructor de clase
 
 	public Provision(String sNUPROF, String sCOSPAT, String sTAS,
 			String sValorTolal, String sNumGastos, String sValorAutorizado,
 			String sGastosAutorizados, String sFEPFON, String sFechaEnvio,
-			String sFechaAutorizado, String sFechaFacturado, String sCodEstado,
-			String sCodValidado) {
+			String sFechaAutorizado, String sFechaFacturado, String sCodEstado) 
+	{
 		super();
 		this.sNUPROF = sNUPROF;
 		this.sCOSPAT = sCOSPAT;
@@ -37,7 +36,6 @@ public class Provision
 		this.sFechaAutorizado = sFechaAutorizado;
 		this.sFechaFacturado = sFechaFacturado;
 		this.sCodEstado = sCodEstado;
-		this.sCodValidado = sCodValidado;
 	}
 
 	//Métodos de acceso
@@ -154,14 +152,6 @@ public class Provision
 	}
 
 	
-	public String getsCodValidado() {
-		return sCodValidado;
-	}
-
-	public void setsCodValidado(String sCodValidado) {
-		this.sCodValidado = sCodValidado;
-	}
-
 	//log
 	public String logProvision()
 	{
