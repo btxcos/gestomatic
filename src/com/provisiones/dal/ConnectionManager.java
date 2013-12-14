@@ -20,7 +20,7 @@ public final class ConnectionManager
 	
 	private static String sConnector = "org.mariadb.jdbc.Driver";
 	private static String sConnectorType = "jdbc:mariadb:";
-	private static String sHostResource = "//localhost/glsl";
+	private static String sHostResource = "//localhost:3306/glsl";
 	//private static String sLogin = "?user=root&password=glsl1234";
 	
 	private static String sURL = sConnectorType+sHostResource;

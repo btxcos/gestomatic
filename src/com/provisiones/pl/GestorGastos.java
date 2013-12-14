@@ -298,12 +298,13 @@ public class GestorGastos implements Serializable
 	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
 
 		if (ConnectionManager.comprobarConexion())
 		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
 			ActivoTabla buscaactivos = new ActivoTabla(
 					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
@@ -318,49 +319,37 @@ public class GestorGastos implements Serializable
 			msg = Utils.pfmsgInfo(sMsg);
 			logger.info(sMsg);
 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		else
-		{
-			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
     {
-		FacesMessage msg;
-		
-		String sMsg = "";
-
 		if (ConnectionManager.comprobarConexion())
 		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
 	     	this.sCOACES  = activoseleccionado.getCOACES();
 	 
 	     	sMsg = "Activo "+ sCOACES +" Seleccionado.";
 	     	msg = Utils.pfmsgInfo(sMsg);
 	     	logger.info(sMsg);
+	     	
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		else
-		{
-			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 	
 	public void cargarDatos(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
 		if (ConnectionManager.comprobarConexion())
 		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
 			if (!sCOACES.equals(""))
 			{
 				if (CLActivos.existeActivo(sCOACES))
@@ -391,28 +380,20 @@ public class GestorGastos implements Serializable
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		else
-		{
-			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
-
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-
-
 
 	}
 	
 	public void asignarProvision(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
 		if (ConnectionManager.comprobarConexion())
 		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+
 			if (!sCOACES.equals(""))
 			{
 				if (CLActivos.existeActivo(sCOACES))
@@ -446,28 +427,20 @@ public class GestorGastos implements Serializable
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
-		}
-		else
-		{
-			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
 
-
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 
 	}
 	
 	public void seleccionarCuota(ActionEvent actionEvent) 
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-		
 		if (ConnectionManager.comprobarConexion())
 		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
 	    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E2;
 	    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E2;
 	    	this.sCOSBGA = cuotaseleccionada.getCOSBAC();
@@ -484,26 +457,19 @@ public class GestorGastos implements Serializable
 	    	sMsg = "Cuota de '"+ cuotaseleccionada.getDCOSBAC() +"' Seleccionada.";
 	    	msg = Utils.pfmsgInfo(sMsg);
 	    	logger.info(sMsg);
+
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		else
-		{
-			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
-		
-    	FacesContext.getCurrentInstance().addMessage(null, msg);	
     }
 	
 	public void seleccionarDevolucion(ActionEvent actionEvent) 
     {
-		FacesMessage msg;
-		
-		String sMsg = "";
-
 		if (ConnectionManager.comprobarConexion())
 		{
-
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
 	    	this.sCOGRUG = ValoresDefecto.DEF_COGRUG_E4;
 	    	this.sCOTPGA = ValoresDefecto.DEF_COTACA_E4;
 	    	this.sCOSBGA = devolucionseleccionada.getCOSBAC();
@@ -516,16 +482,9 @@ public class GestorGastos implements Serializable
 	    	sMsg = "Devolucion de '"+ devolucionseleccionada.getDCOSBAC() +"' Seleccionada.";
 	    	msg = Utils.pfmsgInfo(sMsg);
 	    	logger.info(sMsg);
+
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		else
-		{
-			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
-		
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
-		
     }
 	
 	public void cambiaGrupo()
@@ -712,13 +671,12 @@ public class GestorGastos implements Serializable
 
 	public void registraGasto(ActionEvent actionEvent)
 	{
-		FacesMessage msg;
-		
-		String sMsg = "";
-
 		if (ConnectionManager.comprobarConexion())
 		{
+			FacesMessage msg;
 			
+			String sMsg = "";
+
 			if (CLGastos.existeGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 			{
 				sMsg = "ERROR: El gasto informado no se puede dar de alta, ya existe en el sistema.";
@@ -1068,15 +1026,10 @@ public class GestorGastos implements Serializable
 			}
 			
 			logger.debug("Finalizadas las comprobaciones.");
+			
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		else
-		{
-			sMsg = "Se perdió la conexión con el servidor. Por favor, salga e inicie una nueva sesión.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
-		}
-		
-    	FacesContext.getCurrentInstance().addMessage(null, msg);
+
 	}
     
 	public String getsCOACES() {

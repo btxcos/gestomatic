@@ -397,7 +397,6 @@ public final class CLGastos
 
 				if (iCodigo == 0)
 				{
-
 					
 					if (!CLProvisiones.existeProvision(movimiento.getNUPROF()))
 					{
