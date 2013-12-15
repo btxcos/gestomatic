@@ -143,7 +143,7 @@ public class GestorSesion implements Serializable
 		}
 		else if (sClave.equals(""))
 		{
-			sMensaje = "No se ha informado el campo 'Clave'.";
+			sMensaje = "No se ha informado el campo 'Contraseña'.";
 			msg = Utils.pfmsgError(sMensaje);
 			sMensaje = "Pulse 'Continuar' y revise los datos.";
 			
@@ -180,7 +180,7 @@ public class GestorSesion implements Serializable
 		}
 		else
 		{
-			sMensaje = "El usuario '"+sUsuario+"' no está registrado en el sistema.";
+			sMensaje = "El usuario '"+sUsuario+"' no tiene acceso al sistema.";
 			msg = Utils.pfmsgError(sMensaje);
 			sMensaje = "Pulse 'Continuar' y revise los datos.";
 		}

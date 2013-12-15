@@ -136,6 +136,7 @@ public class GestorActivos implements Serializable
 	
 	public void borrarCamposActivo()
 	{
+		this.sCOACES = "";
     	this.sCOPOIN = "";
     	this.sNOMUIN = "";
     	this.sNOPRAC = "";
@@ -164,8 +165,15 @@ public class GestorActivos implements Serializable
 		
 		logger.debug("Buscando Activos...");
 		
-		this.setTablaactivos(CLActivos.buscarActivos(buscaactivos));
-		
+		if (sCOACES.equals(""))
+		{
+			this.setTablaactivos(CLActivos.buscarActivos(buscaactivos));
+		}
+		else
+		{
+			this.setTablaactivos(CLActivos.buscarActivoUnico(buscaactivos));
+		}		
+
 		logger.debug("Encontrados {} activos relacionados.",getTablaactivos().size());
 	}
 	
@@ -177,9 +185,20 @@ public class GestorActivos implements Serializable
 			FacesMessage msg;
 			
 			encuentraActivos();
-
-			msg = new FacesMessage("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 			
+			if (getTablaactivos().size() == 0)
+			{
+				msg = Utils.pfmsgWarning("No se encontraron activos con los criterios solicitados.");
+			}
+			else if (getTablaactivos().size() == 1)
+			{
+				msg = Utils.pfmsgInfo("Encontrado un activo relacionado.");
+			}
+			else
+			{
+				msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			}
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		

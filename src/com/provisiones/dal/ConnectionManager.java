@@ -121,6 +121,12 @@ public final class ConnectionManager
 		} 
 		catch (SQLException ex) 
 		{
+    		FacesMessage msg;
+    		
+    		msg = Utils.pfmsgFatal("No se pudo abrir una conexión con el servidor. Por favor, avise a soporte.");
+    		
+    		FacesContext.getCurrentInstance().addMessage(null, msg);
+    		
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		}
 

@@ -1524,8 +1524,114 @@ public final class QMActivos
 					   + CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
 					   + CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
 					   + CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
-					   + CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ 			   
+					   + CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ 
 					   "%')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(CAMPO1);
+						sCOPOIN = rs.getString(CAMPO14);
+						sNOMUIN = rs.getString(CAMPO11);
+						sNOPRAC = rs.getString(CAMPO13);
+						sNOVIAS = rs.getString(CAMPO6);
+						sNUPIAC = rs.getString(CAMPO9);
+						sNUPOAC = rs.getString(CAMPO7);
+						sNUPUAC = rs.getString(CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						//logger.debug( "Encontrado el registro!");
+						//logger.debug(CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+
+					logger.info("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR COPOIN:|"+filtro.getCOPOIN()+"|");
+				logger.error("ERROR NOMUIN:|"+filtro.getNOMUIN()+"|");
+				logger.error("ERROR NOPRAC:|"+filtro.getNOPRAC()+"|");
+				logger.error("ERROR NOVIAS:|"+filtro.getNOVIAS()+"|");
+				logger.error("ERROR NUPIAC:|"+filtro.getNUPIAC()+"|");
+				logger.error("ERROR NUPOAC:|"+filtro.getNUPOAC()+"|");
+				logger.error("ERROR NUPUAC:|"+filtro.getNUPUAC()+"|");
+				
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaActivo(Connection conexion, ActivoTabla filtro)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO1 + ","        
+					   + CAMPO14 + ","
+					   + CAMPO11 + ","
+					   + CAMPO13 + ","
+					   + CAMPO6 + ","
+					   + CAMPO9 + ","
+					   + CAMPO7 + ","
+					   + CAMPO10 + 
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE "
+
+					   + CAMPO1 + " = '" + filtro.getCOACES()	+"'";
 			
 			logger.debug(sQuery);
 

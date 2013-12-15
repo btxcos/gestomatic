@@ -29,6 +29,11 @@ public final class CLActivos
 	{
 		return QMActivos.buscaListaActivos(ConnectionManager.getDBConnection(),activobuscado);
 	}
+	
+	public static ArrayList<ActivoTabla> buscarActivoUnico (ActivoTabla activobuscado)
+	{
+		return QMActivos.buscaActivo(ConnectionManager.getDBConnection(),activobuscado);
+	}
 
 	public static ArrayList<ActivoTabla> buscarListaActivosConReferencia (ActivoTabla activo)
 	{

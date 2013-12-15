@@ -499,140 +499,152 @@ public final class QMUsuarios
 	//Ámbito Login 
 	public static boolean existeUsuario(String sLogin)
 	{
-		Connection conexion = null;
-		conexion = ConnectionManager.openDBConnection();
-
-		Statement stmt = null;
-
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-
 		boolean bEncontrado = false;
 
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-					+ CAMPO1  +       
-					" FROM " 
-					+ TABLA + 
-					" WHERE "
-					+ CAMPO2 + " = '"+ sLogin +"'";
-		
-		logger.debug(sQuery);
-		
-		try 
-		{
-			stmt = conexion.createStatement();
+		Connection conexion = null;
 
-			pstmt = conexion.prepareStatement(sQuery);
-			rs = pstmt.executeQuery();
+		conexion = ConnectionManager.openDBConnection();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			ResultSet rs = null;
+			PreparedStatement pstmt = null;
+
+
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
-
-			if (rs != null) 
+			String sQuery = "SELECT "
+						+ CAMPO1  +       
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO2 + " = '"+ sLogin +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
 			{
-				while (rs.next()) 
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
+					while (rs.next()) 
+					{
+						bEncontrado = true;
 
-					logger.debug("Encontrado el registro!");
+						logger.debug("Encontrado el registro!");
+					}
 				}
-			}
-			if (!bEncontrado) 
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR USUARIO:|"+sLogin+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
 
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR USUARIO:|"+sLogin+"|");
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+			ConnectionManager.closeDBConnection(conexion);
 		}
+		
 
-		ConnectionManager.closeDBConnection(conexion);
 
 		return bEncontrado;
 	}
 	
 	public static String getPassword(String sUsuario)
 	{
+		String sPassword = "";
+
 		Connection conexion = null;
 		conexion = ConnectionManager.openDBConnection();
 
-		Statement stmt = null;
-
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		String sPassword = "";
-
-		boolean bEncontrado = false;
-
-		logger.debug("Ejecutando Query...");
-		
-		String sQuery = "SELECT "
-				+ "AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
-				//+ CAMPO3 + 
-				" FROM "
-				+ TABLA + 
-				" WHERE "
-				+ CAMPO2  + " = '"+ sUsuario +"'";
-		
-		//logger.debug(sQuery);
-
-		try 
+		if (conexion != null)
 		{
-			stmt = conexion.createStatement();
+			Statement stmt = null;
 
-			pstmt = conexion.prepareStatement(sQuery);
-			rs = pstmt.executeQuery();
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
 			
-			logger.debug("Ejecutada con exito!");
+			String sQuery = "SELECT "
+					+ "AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+					//+ CAMPO3 + 
+					" FROM "
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO2  + " = '"+ sUsuario +"'";
+			
+			//logger.debug(sQuery);
 
-			if (rs != null) 
+			try 
 			{
-				while (rs.next()) 
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
 				{
-					bEncontrado = true;
-					
-					sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-					//sPassword = rs.getString(CAMPO3);
-					
-					logger.debug("Encontrado el registro!");
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						//sPassword = rs.getString(CAMPO3);
+						
+						logger.debug("Encontrado el registro!");
 
-					//logger.debug(CAMPO3+":|"+sPassword);
+						//logger.debug(CAMPO3+":|"+sPassword);
+					}
 				}
-			}
-			if (!bEncontrado) 
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
 			{
-				logger.debug("No se encontró la información.");
+				bEncontrado = false;
+
+				logger.error("ERROR USUARIO:|"+sUsuario);
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
 			}
 
-		} 
-		catch (SQLException ex) 
-		{
-			bEncontrado = false;
-
-			logger.error("ERROR USUARIO:|"+sUsuario);
-
-			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-		} 
-		finally 
-		{
-			Utils.closeResultSet(rs);
-			Utils.closeStatement(stmt);
+			ConnectionManager.closeDBConnection(conexion);
 		}
-
-		ConnectionManager.closeDBConnection(conexion);
 
 		return sPassword;
 	}

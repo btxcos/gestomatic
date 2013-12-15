@@ -43,7 +43,7 @@
 
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar" actionListener="#{GestorActivos.limpiarPlantilla}" />
+													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, activos" actionListener="#{GestorActivos.limpiarPlantilla}" />
 													<p:commandButton value="Buscar" update="msgs, popup, activos" actionListener="#{GestorActivos.buscaActivos}"/>
 													<p:commandButton value="Detalles" update="form:popup" action="#{GestorActivos.cargarDetalles}" />
 										</h:panelGrid>
@@ -76,12 +76,12 @@
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >
 												<h:panelGrid columns="3" cellpadding="5">
-													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+													<h:outputText for="NOPRAC" value="Provincia: " />
 														<p:inputText id="NOPRAC" value="#{GestorActivos.sNOPRAC}" size="18" maxlength="18">
 														</p:inputText>
 													<p:message for="NOPRAC" display="icon"/>
 
-													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+													<h:outputText for="NOMUIN" value="Municipio: " />
 														<p:inputText id="NOMUIN" value="#{GestorActivos.sNOMUIN}" size="30" maxlength="30">
 														</p:inputText>
 													<p:message for="NOMUIN" display="icon"/>
@@ -91,7 +91,7 @@
 														</p:inputText>
 													<p:message for="COPOIN" display="icon"/>
 
-													<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
+													<h:outputText for="NOVIAS" value="Vía: " />
 														<p:inputText id="NOVIAS" value="#{GestorActivos.sNOVIAS}" size="60" maxlength="60">
 														</p:inputText>
 													<p:message for="NOVIAS" display="icon"/>
@@ -110,6 +110,12 @@
 														<p:inputText id="NUPUAC" value="#{GestorActivos.sNUPUAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPUAC" display="icon"/>
+												</h:panelGrid>
+											</p:panel>
+											<p:panel>
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="COACES" value="Número de Activo: "/>
+													<p:inputText id="COACES" value="#{GestorActivos.sCOACES}" size="9" maxlength="9"/>
 												</h:panelGrid>
 											</p:panel>
 										</h:panelGrid>
@@ -181,15 +187,12 @@
 															<h:outputText value="#{activo.NUPUAC}" />
 														</p:column>
 
-        <f:facet name="footer">
-        	<h:panelGrid columns="2">
-        	<p:commandButton value="Limpiar Plantilla" actionListener="#{GestorActivos.limpiarPlantilla}" />
-													<h:commandLink>
-														<p:graphicImage value="recursos/excel.png" />  
-														<p:dataExporter type="xls" target="activos" fileName="listaactivos" encoding="ISO-8859-15"/>  
-													</h:commandLink>
-				</h:panelGrid>
-        </f:facet> 
+														<f:facet name="footer">
+															<h:commandLink>
+																<p:graphicImage value="recursos/excel.png" />  
+																<p:dataExporter type="xls" target="activos" fileName="listaactivos" encoding="ISO-8859-15"/>  
+															</h:commandLink>
+														</f:facet> 
 
 													</p:dataTable>
 								</h:panelGrid>

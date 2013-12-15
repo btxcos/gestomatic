@@ -18,6 +18,10 @@
 		<param-name>primefaces.THEME</param-name>
 		<param-value>south-street</param-value>
 	</context-param>
+	<context-param>
+      <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+      <param-value>true</param-value>
+   </context-param>
 
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
