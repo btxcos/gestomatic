@@ -942,7 +942,11 @@ public final class FileManager
 	    			case -8:
 	    				sDescripcion = "El activo no pertenece a la cartera.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
-	    				break;	    				
+	    				break;
+	    			case -9:
+	    				sDescripcion = "No existe la provisión de gasto en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;	
 	    			case -908:
 	    				sDescripcion = "[FATAL] Error al crear la Provisión del Gasto.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
@@ -1735,20 +1739,16 @@ public final class FileManager
 	    			switch (iCodigo)
 	    			{
 	    			case 0:
-	    				sDescripcion = "Provisión cerrada correctamente.";
+	    				sDescripcion = "Provisión asimilada correctamente.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ACTUALIZADO;
 	    				break;
 	    			case -1:
-	    				sDescripcion = "La provisión no se encuentra en el sistema.";
+	    				sDescripcion = "La provisión ya se encuentra en el sistema.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			case -2:
-	    				sDescripcion = "[FATAL] Error al validar la Provisión.";
+	    				sDescripcion = "[FATAL] Error al asimilar la Provisión.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
-	    				break;
-	    			case -3:
-	    				sDescripcion = "La provisión no estaba cerrada.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;
 	    			}
 

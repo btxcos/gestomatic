@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
-import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Parser;
@@ -90,61 +89,27 @@ public final class CLProvisiones
 			
 			Cierre cierre = Parser.leerCierre(linea);
 			
-			if (QMProvisiones.existeProvision(conexion,cierre.getsNUPROF()))
+			if (!QMProvisiones.existeProvision(conexion,cierre.getsNUPROF()))
 			{
+				Provision provision = new Provision (cierre.getsNUPROF(), "0", "#", "0","0","0","0",cierre.getsFEPFON(),cierre.getsFEPFON(),"0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
-				if (QMProvisiones.provisionCerrada(conexion, cierre.getsNUPROF()))
+				provision.setsFEPFON(cierre.getsFEPFON());
+				provision.setsFechaEnvio(Utils.fechaDeHoy(false));
+				provision.setsCodEstado(ValoresDefecto.DEF_PROVISION_ENVIADA);
+
+				if (QMProvisiones.addProvision(conexion,provision))
 				{
-					Provision provision = buscarProvision(cierre.getsNUPROF());
-					
-					provision.setsFEPFON(cierre.getsFEPFON());
-					provision.setsFechaEnvio(Utils.fechaDeHoy(false));
-					provision.setsFechaFacturado(Utils.fechaDeHoy(false));
-					provision.setsCodEstado(ValoresDefecto.DEF_PROVISION_FACTURADA);
-
-					if (QMProvisiones.modProvision(conexion,provision))
-					{
-						ArrayList<String> listagastos = buscarGastosProvision(cierre.getsNUPROF());
-			    		if (listagastos.size() > 0)
-			    		{
-				        	for (int i = 0; i < listagastos.size() ; i++)
-					        {
-					        	
-					        	String sEstado = "";
-					        	
-					        	if (QMGastos.getValor(conexion, listagastos.get(i)) < 0)
-					        	{
-					        		sEstado = ValoresDefecto.DEF_GASTO_ABONADO;
-					        	}
-					        	else
-					        	{
-					        		sEstado = ValoresDefecto.DEF_GASTO_PAGADO;
-					        	}
-					        	
-					        	QMGastos.setEstado(conexion, listagastos.get(i), sEstado);
-					        }
-
-			    		}
-			    		//TODO else rollback
-						
-						logger.debug("Provision '"+cierre.getsNUPROF()+"' validada.");
-					}
-					else
-					{
-						//no se ha validado la provisión
-						iCodigo = -2;
-					}
+					logger.debug("Provision '"+cierre.getsNUPROF()+"' validada.");
 				}
 				else
 				{
-					//provisión no cerrada
-					iCodigo = -3;
+					//no se ha validado la provisión
+					iCodigo = -2;
 				}
-
 			}
 			else 
 			{
-				//provisión inexistente
+				//provisión ya existe
 				iCodigo = -1;
 			}
 		}

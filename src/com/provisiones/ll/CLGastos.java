@@ -394,28 +394,29 @@ public final class CLGastos
 				String sAccion = decideAccion(movimiento, sEstado);
 				
 				iCodigo = validaMovimiento(movimiento, sEstado,sAccion);*/
-
-				if (iCodigo == 0)
+				
+				if (CLProvisiones.existeProvision(movimiento.getNUPROF()))
 				{
 					
-					if (!CLProvisiones.existeProvision(movimiento.getNUPROF()))
+					Provision provision = CLProvisiones.buscarProvision(movimiento.getNUPROF());
+					String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(movimiento.getCOACES());
+					
+					if (QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
 					{
-						String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(movimiento.getCOACES());
-						
-						if (QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
-						{
-							sCOSPAT = "0";
-						}
+						sCOSPAT = "0";
+					}
+					
+					provision.setsCOSPAT(sCOSPAT);
 
-						String sTipo = CLActivos.compruebaTipoActivoSAREB(movimiento.getCOACES());
-						
-						Provision provision = new Provision(movimiento.getNUPROF(),sCOSPAT,sTipo,"0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ENVIADA);
-						
-						if (!QMProvisiones.addProvision(conexion,provision))
-						{
-							//Error: provision no creada
-							iCodigo = -908;
-						}
+					String sTipo = CLActivos.compruebaTipoActivoSAREB(movimiento.getCOACES());
+					
+					provision.setsTAS(sTipo);
+					
+					
+					if (!QMProvisiones.modProvision(conexion,provision))
+					{
+						//Error: provision no creada
+						iCodigo = -908;
 					}
 					
 					if (iCodigo == 0)
@@ -512,6 +513,12 @@ public final class CLGastos
 						}
 					}
 				}
+				else
+				{
+					//no existe la provision
+					iCodigo = -9;
+				}
+
 			}
 			else
 			{
