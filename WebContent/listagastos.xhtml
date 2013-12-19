@@ -28,22 +28,11 @@
 								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
 							</h:panelGrid>
 						</p:fieldset>
-									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
 
-
-											<h:outputText value="IDPROV: " />
-											<p:inputText id="IDPROV" value="#{GestorActivos.sIDPROV}" disabled="true" />
-
-											<h:outputText value="COENGP: " />
-											<p:inputText id="COENGP" value="#{GestorActivos.sCOENGP}" disabled="true" />
-
-										</h:panelGrid>
-									</p:panel>
 
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-													<p:commandButton value="Buscar" update="msgs, popup, activos" actionListener="#{GestorActivos.buscaActivos}"/>	
+													<p:commandButton value="Buscar" update="msgs, popup, activos" actionListener="#{GestorListaGastos.buscarGastos}"/>	
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -75,61 +64,73 @@
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
 													<h:outputText for="COACES" value="Codigo de activo: " />
-														<p:inputText id="COACES" value="#{GestorTablaComunidadActivo.sCOACES}" size="9" maxlength="9">
+														<p:inputText id="COACES" value="#{GestorListaGastos.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Buscar Gastos" update="msgs, popup, COACES, activos" actionListener="#{GestorTablaComunidadActivo.altaActivoComunidad}"/>	
+													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastos}"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar un activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										<p:commandButton value="Buscar Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										</h:panelGrid>
+									</p:fieldset>
+
+								<p:fieldset legend="Provisión">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="NUPROF" value="Codigo de activo: " />
+														<p:inputText id="NUPROF" value="#{GestorListaGastos.sNUPROF}" size="9" maxlength="9">
+														</p:inputText>
+													<p:message for="NUPROF" display="icon"/>
+													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastos}"/>	
+												</h:panelGrid>
+											</p:panel>
+										<p:commandButton value="Buscar Provisión" update="NUPROF, form:provisiones" oncomplete="dlgBuscarProvision.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 
 										</h:panelGrid>
 									</p:fieldset>
 
-													<p:contextMenu for="tablaActivos">
-														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" actionListener="#{GestorActivos.cargarDetalles}" url="detallesgasto.xhtml"/>
-													</p:contextMenu>  
-															
-													<p:dataTable id="tablaActivos" var="activo" value="#{GestorActivos.tablaactivos}" rowKey="#{activo.COACES}"  
-															selection="#{GestorActivos.activoseleccionado}" selectionMode="single"
-																paginator="true" paginatorPosition="bottom" rows="10" 
-																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-																rowsPerPageTemplate="5,10,15">  
-														<f:facet name="header">  
-															Gastos
-														</f:facet>
-															
-														<p:column sortBy="#{activo.COACES}" headerText="Codigo Activo">  
-														    #{activo.COACES}  
-														</p:column>  
+						<p:contextMenu for="gastos">
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs" icon="ui-icon-check" action="#{GestorListaGastos.cargarDetalles}"/>
+						</p:contextMenu>
+
+						<p:dataTable id="gastos" var="gasto" value="#{GestorListaGastos.tablagastos}" rowKey="#{gasto.DCOSBGA}"
+															selection="#{GestorListaGastos.gastoseleccionado}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15">
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Gasto" />
+															</f:facet>
+															<h:outputText value="#{gasto.DCOSBGA}" />
+														</p:column>
 														
-														<p:column sortBy="#{activo.NOPRAC}" headerText="Comunidad Autonoma">  
-														    #{activo.NOPRAC}  
-														</p:column>  
-            							
-														<p:column sortBy="#{activo.NOMUIN}" headerText="Municipio">  
-														    #{activo.NOMUIN}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NOVIAS}" headerText="Via">  
-														    #{activo.NOVIAS}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NUPOAC}" headerText="Portal">  
-														    #{activo.NUPOAC}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NUPIAC}" headerText="Piso">  
-														    #{activo.NUPIAC}  
-														</p:column>  
-														
-														<p:column sortBy="#{activo.NUPUAC}" headerText="Puerta">  
-														    #{activo.NUPUAC}  
-														</p:column>  
-															
-													</p:dataTable>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Periodicidad" />
+															</f:facet>
+															<h:outputText value="#{gasto.DPTPAGO}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Importe" />
+															</f:facet>
+															<h:outputText value="#{gasto.IMNGAS}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Fecha de Devengo" />
+															</f:facet>
+															<h:outputText value="#{gasto.FEDEVE}" />
+														</p:column>
+
+						</p:dataTable>
 
 													
 								</h:panelGrid>
@@ -137,11 +138,14 @@
 					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
-								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorTablaComunidadActivo.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorListaGastos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
 							</p:contextMenu>  
 									
-							<p:dataTable id="activos" var="activo" value="#{GestorTablaComunidadActivo.tablaactivos}" rowKey="#{activo.COACES}"  
-									              selection="#{GestorTablaComunidadActivo.activoseleccionadoalta}" selectionMode="single">  
+							<p:dataTable id="activos" var="activo" value="#{GestorListaGastos.tablaactivos}" rowKey="#{activo.COACES}"  
+									              selection="#{GestorListaGastos.activoseleccionado}" selectionMode="single"
+									              paginator="true" paginatorPosition="bottom" rows="10"
+												  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												  rowsPerPageTemplate="5,10,15">	  
 									
 								<p:column headerText="Codigo Activo">  
 								    #{activo.COACES}  
@@ -179,37 +183,37 @@
 											<p:panel id="panelBuscar" >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
-														<p:inputText id="NOPRAC" value="#{GestorTablaComunidadActivo.sNOPRAC}" size="18" maxlength="18">
+														<p:inputText id="NOPRAC" value="#{GestorListaGastos.sNOPRAC}" size="18" maxlength="18">
 														</p:inputText>
 													<p:message for="NOPRAC" display="icon"/>
 
 													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
-														<p:inputText id="NOMUIN" value="#{GestorTablaComunidadActivo.sNOMUIN}" size="30" maxlength="30">
+														<p:inputText id="NOMUIN" value="#{GestorListaGastos.sNOMUIN}" size="30" maxlength="30">
 														</p:inputText>
 													<p:message for="NOMUIN" display="icon"/>
 
 													<h:outputText for="COPOIN" value="Codigo Postal: " />
-														<p:inputText id="COPOIN" value="#{GestorTablaComunidadActivo.sCOPOIN}" size="5" maxlength="5">
+														<p:inputText id="COPOIN" value="#{GestorListaGastos.sCOPOIN}" size="5" maxlength="5">
 														</p:inputText>
 													<p:message for="COPOIN" display="icon"/>
 
 													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
-														<p:inputText id="NOVIAS" value="#{GestorTablaComunidadActivo.sNOVIAS}" size="60" maxlength="60">
+														<p:inputText id="NOVIAS" value="#{GestorListaGastos.sNOVIAS}" size="60" maxlength="60">
 														</p:inputText>
 													<p:message for="NOVIAS" display="icon"/>
 
 													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
-														<p:inputText id="NUPOAC" value="#{GestorTablaComunidadActivo.sNUPOAC}" size="17" maxlength="17">
+														<p:inputText id="NUPOAC" value="#{GestorListaGastos.sNUPOAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPOAC" display="icon"/>
 
 													<h:outputText for="NUPIAC" value="Piso: " />
-														<p:inputText id="NUPIAC" value="#{GestorTablaComunidadActivo.sNUPIAC}" size="11" maxlength="11">
+														<p:inputText id="NUPIAC" value="#{GestorListaGastos.sNUPIAC}" size="11" maxlength="11">
 														</p:inputText>
 													<p:message for="NUPIAC" display="icon"/>
 
 													<h:outputText for="NUPUAC" value="Puerta: " />
-														<p:inputText id="NUPUAC" value="#{GestorTablaComunidadActivo.sNUPUAC}" size="17" maxlength="17">
+														<p:inputText id="NUPUAC" value="#{GestorListaGastos.sNUPUAC}" size="17" maxlength="17">
 														</p:inputText>
 													<p:message for="NUPUAC" display="icon"/>
 												</h:panelGrid>
@@ -217,25 +221,63 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorTablaComunidadActivo.buscaActivos}" oncomplete="dlgTabla.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorTablaComunidadActivo.limpiarPlantillaActivo}" />	
+													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorListaGastos.buscarActivos}" oncomplete="dlgTabla.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorListaGastos.limpiarPlantillaActivo}" />	
 
-														<p:ajaxStatus  id="pensandoActivo">  
-															<f:facet name="start">  
-																<h:graphicImage value="/recursos/loadingBar.gif" />  
-															</f:facet>  
-
-															<f:facet name="complete">  
-																<h:outputText value="" />  
-															</f:facet>  
-
-														</p:ajaxStatus> 
 												</h:panelGrid>
 											</p:panel>
 
 													
 										</h:panelGrid>
 									</p:fieldset>
+					</p:dialog>
+					<p:dialog header="Criterios de Búsqueda: " widgetVar="dlgBuscarProvision" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscarProvision" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="FEPFON" value="Fecha de provisión: " />
+													<p:inputMask id="FEPFON" value="#{GestorListaGastos.sFEPFON}" mask="99/99/9999" size="10" maxlength="8"/>
+													<p:message for="FEPFON" display="icon"/>
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, form:provisiones" actionListener="#{GestorListaGastos.buscarProvisiones}" oncomplete="dlgTablaProvisiones.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscarProvision" actionListener="#{GestorListaGastos.limpiarPlantillaProvision}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
+					<p:dialog header="Provisiones abiertas: " widgetVar="dlgTablaProvisiones" resizable="false">  
+    				
+							<p:contextMenu for="provisiones">  
+								<p:menuitem value="Seleccionar" update="form:NUPROF, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorListaGastos.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide(); dlgBuscarProvision.hide();"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="provisiones" var="provision" value="#{GestorListaGastos.tablaprovisiones}" rowKey="#{provision.NUPROF}"  
+									            selection="#{GestorListaGastos.provisionseleccionada}" selectionMode="single"  
+												paginator="true" paginatorPosition="bottom" rows="10"
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">									
+
+								<p:column headerText="Número de Provisión">  
+								    #{provision.NUPROF}  
+								</p:column>  
+								
+								<p:column headerText="Sociedad Patrimonial">  
+								    #{provision.DCOSPAT}  
+								</p:column>
+
+								<p:column headerText="Tipo de Activos SAREB">  
+								    #{provision.DTAS}  
+								</p:column>
+
+							</p:dataTable> 
 					</p:dialog>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
 						<p:graphicImage value="recursos/loadingBar.gif" />

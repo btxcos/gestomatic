@@ -2,16 +2,26 @@ package com.provisiones.pl.detalles;
 
 import java.io.Serializable;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLGastos;
+import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.pl.listas.GestorListaGastos;
+import com.provisiones.types.Gasto;
 
 public class GestorDetallesGasto implements Serializable 
 {
 	private static final long serialVersionUID = -2868110080833865958L;
 
 	private static Logger logger = LoggerFactory.getLogger(GestorDetallesGasto.class.getName());
+	
+	private boolean bDevolucion = false;
 	
 	private String sCOACES = "";
 	private String sCOGRUG = "";
@@ -66,6 +76,93 @@ public class GestorDetallesGasto implements Serializable
 		}
 	}
 	
+	public String volver()
+	{
+		String sPagina = "login.xhtml";
+		if (ConnectionManager.comprobarConexion())
+		{
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			
+			session.removeAttribute("GestorDetallesGasto");
+			
+			sPagina = "listagastos.xhtml";
+		}
+		return sPagina;
+	}
+	
+	public void cargarGastoElegido()
+	{
+		
+
+		
+		String sValor = ((GestorListaGastos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaGastos")).getsCodGasto();
+		
+		logger.debug("sCOACESnB:|{}|",sValor);
+
+		
+		
+		logger.debug("sCOACES:|{}|",sCOACES);
+		
+		
+		if (!sValor.equals(""))
+		{
+
+		  	Gasto gasto = CLGastos.buscarGastoConCodigo(sValor);
+
+	    	logger.debug(gasto.logGasto());
+		  	
+	    	this.sCOGRUG = gasto.getCOGRUG();
+	    	this.sCOTPGA = gasto.getCOTPGA();
+	    	this.sCOSBGA = gasto.getCOSBGA();
+	    	this.sFEDEVE = gasto.getFEDEVE();
+	 
+	    	this.setbDevolucion((Integer.parseInt(sCOSBGA) > 49));
+
+			this.sPTPAGO = gasto.getPTPAGO();
+
+			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
+			this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
+			this.sCOSIGA = gasto.getCOSIGA();
+			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
+			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
+			this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
+			this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+			this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
+			this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
+			this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
+			this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
+			this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
+			this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
+			this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
+			this.sCOIMPT = gasto.getCOIMPT();
+			
+			this.sCOTNEG = gasto.getCOTNEG();
+			this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
+			this.sCOMONA = gasto.getCOMONA();
+			this.sBIAUTO = gasto.getBIAUTO();
+			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
+			this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+			
+			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
+			
+			this.sCOENCX = ValoresDefecto.DEF_COENCX;
+			this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+			this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+			
+			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+
+			this.sCOTERR = ValoresDefecto.DEF_COTERR;
+			this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
+		
+			this.sFEAPLI = Utils.recuperaFecha(ValoresDefecto.DEF_FEAPLI);
+			this.sCOAPII = ValoresDefecto.DEF_COAPII;
+			this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+			this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+
+		}
+		
+	}
 	
 	public String getsCOACES() {
 		return sCOACES;
@@ -73,6 +170,14 @@ public class GestorDetallesGasto implements Serializable
 	public void setsCOACES(String sCOACES) {
 		this.sCOACES = sCOACES;
 	}
+	public boolean isbDevolucion() {
+		return bDevolucion;
+	}
+
+	public void setbDevolucion(boolean bDevolucion) {
+		this.bDevolucion = bDevolucion;
+	}
+
 	public String getsCOGRUG() {
 		return sCOGRUG;
 	}

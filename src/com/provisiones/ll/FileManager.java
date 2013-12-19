@@ -502,7 +502,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<String> resultcierres = QMProvisiones.getProvisionesCerradasPendientes(conexion);
+			ArrayList<String> resultcierres = QMProvisiones.getProvisionesCerradasPorEstado(conexion,ValoresDefecto.DEF_PROVISION_PENDIENTE);
 	        
 	        FileWriter ficheroPP = null;
 	        

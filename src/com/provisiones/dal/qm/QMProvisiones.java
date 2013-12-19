@@ -577,7 +577,7 @@ public final class QMProvisiones
 		return sValidado;
 	}
 	
-	public static long buscaCantidadProvisionesCerradasPendientes(Connection conexion)
+	public static long buscaCantidadProvisionesCerradasPorEstado(Connection conexion, String sEstado)
 	{
 		long liNumero = 0;
 
@@ -596,7 +596,7 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE " +
 					"(" 
-					+ CAMPO12 + " = '" + ValoresDefecto.DEF_PROVISION_PENDIENTE + "' AND "
+					+ CAMPO12 + " = '" + sEstado + "' AND "
 					+ CAMPO9 + " = '0' AND "
 					+ CAMPO8 + " <> '0'"+
 					")";
@@ -849,7 +849,7 @@ public final class QMProvisiones
 		return sNUPROF;
 	}
 	
-	public static ArrayList<String>  getProvisionesCerradasPendientes(Connection conexion) 
+	public static ArrayList<String>  getProvisionesCerradasPorEstado(Connection conexion, String sEstado) 
 	{
 		//TODO Revisar y eliminar busqueda por campo 9
 		ArrayList<String> resultado = new ArrayList<String>();
@@ -870,7 +870,7 @@ public final class QMProvisiones
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO12 + " = '" + ValoresDefecto.DEF_PROVISION_PENDIENTE + "' AND "
+					+ CAMPO12 + " = '" + sEstado + "' AND "
 					+ CAMPO9 + " = '0'"+
 					")";
 			
@@ -923,7 +923,7 @@ public final class QMProvisiones
 		return resultado;
 	}
 	
-	public static ArrayList<ProvisionTabla> buscaProvisionesAbiertas(Connection conexion) 
+	public static ArrayList<ProvisionTabla> buscaProvisionesPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
 		
@@ -954,7 +954,7 @@ public final class QMProvisiones
 					+ CAMPO5 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
-					+ CAMPO12 + " = '"+ ValoresDefecto.DEF_PROVISION_ABIERTA + "' AND "
+					+ CAMPO12 + " = '"+ sEstado + "' AND "
 					+CAMPO1+" <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+
 					"' )";
 			
@@ -1013,7 +1013,95 @@ public final class QMProvisiones
 		return resultado;
 	}
 	
+	public static ArrayList<ProvisionTabla> buscaProvisionesPorFecha(Connection conexion, String sFEPFON) 
+	{
+		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			String sNUPROF = "";
+			String sTAS = "";
+			String sDTAS = "";
+			String sCOSPAT = "";
+			String sDCOSPAT = "";
+			String sVALOR = "";
+			String sGASTOS = "";
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + ","
+					+ CAMPO2 + ","
+					+ CAMPO3 + ","
+					+ CAMPO4 + ","
+					+ CAMPO5 + 
+					" FROM " + TABLA + 
+					" WHERE ( " 
+					+ CAMPO8 + " = '"+ sFEPFON + "' AND "
+					+CAMPO1+" <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+
+					"' )";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNUPROF =  rs.getString(CAMPO1);
+						sCOSPAT =  rs.getString(CAMPO2);
+						sDCOSPAT =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
+						sTAS =  rs.getString(CAMPO3);
+						sDTAS =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
+						sVALOR =   rs.getString(CAMPO4);
+						sGASTOS =  rs.getString(CAMPO5);
+
+						ProvisionTabla provisionencontrada = new ProvisionTabla(sNUPROF,sCOSPAT,sDCOSPAT,sTAS,sDTAS,sVALOR,sGASTOS);
+						
+						resultado.add(provisionencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ProvisionTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
 	
 	public static String getUltimaProvisionCerrada(Connection conexion, String sCodCOSPAT) 
 	{

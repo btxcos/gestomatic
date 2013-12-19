@@ -156,9 +156,14 @@ public final class CLGastos
 		return QMCodigosControl.getDesCOSBGA(ConnectionManager.getDBConnection(),sCodCOGRUG, sCodCOTPGA, sCodCOSBGA);
 	}
 	
+	public static ArrayList<GastoTabla> buscarGastosNuevosActivo(String sCodCOACES)
+	{
+		return QMGastos.buscaGastosNuevosPorActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+	}
+	
 	public static ArrayList<GastoTabla> buscarGastosActivo(String sCodCOACES)
 	{
-		return QMGastos.buscaGastosActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMGastos.buscaGastosPorActivo(ConnectionManager.getDBConnection(),sCodCOACES);
 	}
 	
 	public static ArrayList<GastoTabla> buscarGastosValidadosActivo(String sCodCOACES)
@@ -169,6 +174,11 @@ public final class CLGastos
 	public static Gasto buscarGasto(String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		return QMGastos.getGasto(ConnectionManager.getDBConnection(),buscarCodigoGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE));
+	}
+	
+	public static Gasto buscarGastoConCodigo(String sCodGasto)
+	{
+		return QMGastos.getGasto(ConnectionManager.getDBConnection(),sCodGasto);
 	}
 	
 	public static MovimientoGasto buscarMovimientoGasto (String sCodMovimiento)
@@ -185,6 +195,13 @@ public final class CLGastos
 	{
 		return QMListaGastosProvisiones.getProvisionDeGasto(ConnectionManager.getDBConnection(),buscarCodigoGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE));
 	}
+	
+	public static ArrayList<GastoTabla> buscarGastosProvision(String sNUPROF)
+	{
+		return QMListaGastosProvisiones.buscaGastosPorvision(ConnectionManager.getDBConnection(),sNUPROF);
+	}
+	
+	
 	
 	public static String estadoGasto(String sCodGasto)
 	{

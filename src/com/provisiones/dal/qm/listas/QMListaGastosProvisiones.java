@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.tablas.GastoTabla;
 
 public final class QMListaGastosProvisiones 
 {
@@ -513,7 +515,7 @@ public final class QMListaGastosProvisiones
 		return sNUPROF;
 	}
 
-	public static ArrayList<String>  buscaGastosPorProvision(Connection conexion, String sCodNUPROF) 
+	public static ArrayList<String>  buscaGastosIDPorProvision(Connection conexion, String sCodNUPROF) 
 	{
 		ArrayList<String> resultado = new ArrayList<String>(); 
 
@@ -657,6 +659,127 @@ public final class QMListaGastosProvisiones
 
 				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<GastoTabla> buscaGastosPorvision(Connection conexion, String sNUPROF)
+	{
+		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			String sCOACES = "";
+			String sCOGRUG = "";
+			String sCOTPGA = "";
+			String sCOSBGA = "";
+			String sDCOSBGA = "";
+			String sPTPAGO = "";
+			String sDPTPAGO = "";
+			String sFEDEVE = "";
+			String sCOSIGA = "";
+			String sDCOSIGA = "";
+			String sIMNGAS = "";
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						
+						   + QMGastos.CAMPO2 + ","        
+						   + QMGastos.CAMPO3 + ","
+						   + QMGastos.CAMPO4 + ","
+						   + QMGastos.CAMPO5 + ","
+						   + QMGastos.CAMPO6 + ","
+						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO11 + ","
+						   + QMGastos.CAMPO16 + ","
+						   + QMGastos.CAMPO17 +
+
+						   " FROM " 
+						   + QMGastos.TABLA + 
+						   " WHERE ("
+						   + QMGastos.CAMPO1 + 
+						   " IN (SELECT "
+						   +  CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE " 
+						   + CAMPO2 + " = '"+ sNUPROF + "'))";					   
+						   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES  = rs.getString(QMGastos.CAMPO2);
+						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						sDPTPAGO = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						sCOSIGA  = rs.getString(QMGastos.CAMPO11);
+						sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16));
+						
+						GastoTabla gastoencontrado = new GastoTabla(
+								sCOACES,
+								sCOGRUG,
+								sCOTPGA,
+								sCOSBGA,
+								sDCOSBGA,
+								sPTPAGO,
+								sDPTPAGO,
+								sFEDEVE,
+								sCOSIGA,
+								sDCOSIGA,
+								sIMNGAS);
+						
+						resultado.add(gastoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO2+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
 			finally 

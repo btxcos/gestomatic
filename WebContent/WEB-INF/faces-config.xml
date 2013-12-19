@@ -66,8 +66,8 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>GestorActivos</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorActivos</managed-bean-class>
+		<managed-bean-name>GestorListaActivos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaActivos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
@@ -143,6 +143,11 @@
 	<managed-bean>
 		<managed-bean-name>GestorRecepcion</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.GestorRecepcion</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaGastos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaGastos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

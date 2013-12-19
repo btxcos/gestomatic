@@ -12,7 +12,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
-import com.provisiones.pl.GestorActivos;
+import com.provisiones.pl.listas.GestorListaActivos;
 
 import com.provisiones.types.Activo;
 
@@ -121,7 +121,7 @@ public class GestorDetallesActivo implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			logger.debug("Iniciando GestorDetallesActivo...");	
-			getCOACESElegido();
+			cargarActivoElegido();
 		}
 	}
 
@@ -139,12 +139,12 @@ public class GestorDetallesActivo implements Serializable
 		return sPagina;
 	}
 	
-	public void getCOACESElegido()
+	public void cargarActivoElegido()
 	{
 		
 
 		
-		String sValor = ((GestorActivos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorActivos")).getsCOACES();
+		String sValor = ((GestorListaActivos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaActivos")).getsCOACES();
 		
 		logger.debug("sCOACESnB:|{}|",sValor);
 
@@ -156,7 +156,7 @@ public class GestorDetallesActivo implements Serializable
 		if (!sValor.equals(""))
 		{
 		
-			Activo activo = CLActivos.buscarActivo(sValor);
+			Activo activo = CLActivos.buscarDetallesActivo(sValor);
 			
 			this.sCOACES = activo.getCOACES();
 			this.sNUINMU = activo.getNUINMU();

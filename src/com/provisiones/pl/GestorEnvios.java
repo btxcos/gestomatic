@@ -202,7 +202,7 @@ public class GestorEnvios implements Serializable
 	    		FacesContext.getCurrentInstance().addMessage(null, msg);
 	    	}
 	    	
-	    	this.sNumProvisiones  = Long.toString(CLProvisiones.buscarNumeroProvisionesCerradas());
+	    	this.sNumProvisiones  = Long.toString(CLProvisiones.buscarNumeroProvisionesCerradasPendientes());
 	    	this.bNumProvisiones = sNumProvisiones.equals("0");
 	    	if (!bNumProvisiones)
 	    	{

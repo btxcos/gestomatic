@@ -25,9 +25,24 @@ public final class CLActivos
 		return QMActivos.getActivo(ConnectionManager.getDBConnection(),sCodCOACES);
 	}
 	
+	public static Activo buscarDetallesActivo (String sCodCOACES)
+	{
+		return QMActivos.getDetallesActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+	}
+
 	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla activobuscado)
 	{
 		return QMActivos.buscaListaActivos(ConnectionManager.getDBConnection(),activobuscado);
+	}
+
+	public static ArrayList<ActivoTabla> buscarActivosConFichaInmovilizado (ActivoTabla activobuscado)
+	{
+		return QMActivos.buscaListaActivosPorInmovilizado(ConnectionManager.getDBConnection(),activobuscado, true);
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivosSinFichaInmovilizado (ActivoTabla activobuscado)
+	{
+		return QMActivos.buscaListaActivosPorInmovilizado(ConnectionManager.getDBConnection(),activobuscado, false);
 	}
 	
 	public static ArrayList<ActivoTabla> buscarActivoUnico (ActivoTabla activobuscado)

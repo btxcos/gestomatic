@@ -59,6 +59,57 @@ public final class QMCodigosControl
 	public static final String TCOTERR = "pp001_coterr_tbl";
 	public static final String ICOTERR = "coterr_id";
 
+	public static final String TCOSOPA = "pp001_cosopa_tbl";
+	public static final String ICOSOPA = "cosopa_id";
+
+	public static final String TCOENAE = "pp001_coenae_tbl";
+	public static final String ICOENAE = "coenae_id";
+	
+	public static final String TCOESEN = "pp001_coesen_tbl";
+	public static final String ICOESEN = "coesen_id";
+
+	public static final String TCOREAE = "pp001_coreae_tbl";
+	public static final String ICOREAE = "coreae_id";
+
+	public static final String TCODIJU = "pp001_codiju_tbl";
+	public static final String ICODIJU = "codiju_id";
+	
+	public static final String TCOSJUP = "pp001_cosjup_tbl";
+	public static final String ICOSJUP = "cosjup_id";
+	
+	public static final String TCOSTLI = "pp001_costli_tbl";
+	public static final String ICOSTLI = "costli_id";
+	
+	public static final String TCOSCAR = "pp001_coscar_tbl";
+	public static final String ICOSCAR = "coscar_id";
+	
+	public static final String TCOESVE = "pp001_coesve_tbl";
+	public static final String ICOESVE = "coesve_id";
+	
+	public static final String TCOTSIN = "pp001_cotsin_tbl";
+	public static final String ICOTSIN = "cotsin_id";
+	
+	public static final String TCOSOCU = "pp001_cosocu_tbl";
+	public static final String ICOSOCU = "cosocu_id";
+	
+	public static final String TCOXPRO = "pp001_coxpro_tbl";
+	public static final String ICOXPRO = "coxpro_id";
+	
+	public static final String TCOGRAP = "pp001_cograp_tbl";
+	public static final String ICOGRAP = "cograp_id";
+
+	public static final String TCOTPET = "pp001_cotpet_tbl";
+	public static final String ICOTPET = "cotpet_id";
+
+	public static final String TCOXSIA = "pp001_coxsia_tbl";
+	public static final String ICOXSIA = "coxsia_id";
+	
+	public static final String TCOSPAT = "pp001_cospat_tbl";
+	public static final String ICOSPAT = "cospat_id";
+	
+	public static final String TBIOBNU = "pp001_biobnu_tbl";
+	public static final String IBIOBNU = "biobnu_id";
+	
 	private QMCodigosControl(){}
 	
 	public static String getDesCampo(Connection conexion, String sTabla, String sCampo, String sValor)

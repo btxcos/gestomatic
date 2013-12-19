@@ -1,4 +1,4 @@
-package com.provisiones.pl;
+package com.provisiones.pl.listas;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,17 +12,15 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
-
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
 
-public class GestorActivos implements Serializable 
-{
+public class GestorListaActivos implements Serializable {
 
-	private static final long serialVersionUID = 1167759390910696681L;
+	private static final long serialVersionUID = -8623132319361614898L;
 	
-	private static Logger logger = LoggerFactory.getLogger(GestorActivos.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(GestorListaActivos.class.getName());
 	
 	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
 	private String sCOENGP = ValoresDefecto.DEF_COENGP;
@@ -124,12 +122,12 @@ public class GestorActivos implements Serializable
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	
 	
-	public GestorActivos()
+	public GestorListaActivos()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorActivos...");	
-			encuentraActivos();
+			logger.debug("Iniciando GestorListaActivos...");	
+			//encuentraActivos();
 		}
 	}
 	
@@ -174,7 +172,7 @@ public class GestorActivos implements Serializable
 			this.setTablaactivos(CLActivos.buscarActivoUnico(buscaactivos));
 		}		
 
-		logger.debug("Encontrados {} activos relacionados.",getTablaactivos().size());
+		logger.debug("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 	}
 	
 	public void buscaActivos (ActionEvent actionEvent)
@@ -185,7 +183,7 @@ public class GestorActivos implements Serializable
 			FacesMessage msg;
 			
 			encuentraActivos();
-			
+
 			if (getTablaactivos().size() == 0)
 			{
 				msg = Utils.pfmsgWarning("No se encontraron activos con los criterios solicitados.");
@@ -1099,6 +1097,6 @@ public class GestorActivos implements Serializable
 	public void setsCOENGP(String sCOENGP) {
 		this.sCOENGP = sCOENGP;
 	}
-
+	
 
 }

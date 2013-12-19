@@ -31,19 +31,30 @@ public final class CLProvisiones
 	
 	public static ArrayList<String> buscarGastosProvision(String sNUPROF)
 	{
-		return QMListaGastosProvisiones.buscaGastosPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
+		return QMListaGastosProvisiones.buscaGastosIDPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
 	
-	public static long buscarNumeroProvisionesCerradas()
+	public static long buscarNumeroProvisionesCerradasPendientes()
 	{
-		return (QMProvisiones.buscaCantidadProvisionesCerradasPendientes(ConnectionManager.getDBConnection()));
+		return QMProvisiones.buscaCantidadProvisionesCerradasPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PENDIENTE);
 	}
 
 	public static ArrayList<ProvisionTabla> buscarProvisionesAbiertas()
 	{
-		return QMProvisiones.buscaProvisionesAbiertas(ConnectionManager.getDBConnection());
-	}	
+		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_ABIERTA);
+	}
+	
+	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadas()
+	{
+		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+	}
+	
+	
+	public static ArrayList<ProvisionTabla> buscarProvisionesFecha(String sFecha)
+	{
+		return QMProvisiones.buscaProvisionesPorFecha(ConnectionManager.getDBConnection(),sFecha);
+	}
 	
 	public static String calcularValorProvision (String sNUPROF)
 	{

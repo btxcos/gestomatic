@@ -330,7 +330,7 @@ public class GestorMovimientosGastos implements Serializable
 			
 			if (CLActivos.existeActivo(sCOACES))
 			{
-				this.tablagastos = CLGastos.buscarGastosActivo(sCOACES);
+				this.tablagastos = CLGastos.buscarGastosNuevosActivo(sCOACES);
 			
 				msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos en curso.");
 				logger.info("Encontrados {} gastos en curso.",getTablagastos().size());

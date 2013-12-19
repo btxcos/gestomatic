@@ -311,7 +311,7 @@ public class GestorGastos implements Serializable
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
 			
-			ArrayList<ActivoTabla> resultcuotasimpuestos = CLGastos.buscarActivosConMovimientos(buscaactivos);
+			ArrayList<ActivoTabla> resultcuotasimpuestos = CLActivos.buscarActivosConFichaInmovilizado(buscaactivos);
 					
 			this.setTablaactivos(resultcuotasimpuestos);
 

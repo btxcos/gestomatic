@@ -1300,7 +1300,7 @@ public final class QMGastos
 
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosActivo(Connection conexion, String sCodCOACES)
+	public static ArrayList<GastoTabla> buscaGastosNuevosPorActivo(Connection conexion, String sCodCOACES)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -1348,6 +1348,123 @@ public final class QMGastos
 						   "') AND "					   
 						   
 						   + CAMPO7 + " <= '"+Utils.fechaDeHoy(false)+"')";					   
+						   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES  = rs.getString(QMGastos.CAMPO2);
+						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						sDPTPAGO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						sCOSIGA  = rs.getString(QMGastos.CAMPO11);
+						sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16));
+
+						GastoTabla gastoencontrado = new GastoTabla(
+								sCOACES,
+								sCOGRUG,
+								sCOTPGA,
+								sCOSBGA,
+								sDCOSBGA,
+								sPTPAGO,
+								sDPTPAGO,
+								sFEDEVE,
+								sCOSIGA,
+								sDCOSIGA,
+								sIMNGAS);
+						
+						resultado.add(gastoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO2+":|"+sCodCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<GastoTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<GastoTabla> buscaGastosPorActivo(Connection conexion, String sCodCOACES)
+	{
+		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			String sCOACES = "";
+			String sCOGRUG = "";
+			String sCOTPGA = "";
+			String sCOSBGA = "";
+			String sDCOSBGA = "";
+			String sPTPAGO = "";
+			String sDPTPAGO = "";
+			String sFEDEVE = "";
+			String sCOSIGA = "";
+			String sDCOSIGA = "";
+			String sIMNGAS = "";
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						
+						   + CAMPO2 + ","        
+						   + CAMPO3 + ","
+						   + CAMPO4 + ","
+						   + CAMPO5 + ","
+						   + CAMPO6 + ","
+						   + CAMPO7 + ","
+						   + CAMPO11 + ","
+						   + CAMPO16 + ","
+						   + CAMPO17 +
+
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE "
+						   + CAMPO2 + " = '"+sCodCOACES+"'";					   
 						   
 			
 			logger.debug(sQuery);

@@ -1,6 +1,7 @@
 package com.provisiones.dal.qm;
 
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Activo;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -975,6 +976,457 @@ public final class QMActivos
 				sNOMADC, sNUTADC, sIMPCOO, sCOENOR, sCOSPAT, sCOSPAS, sIDCOL3,
 				sBIOBNU, sPOBRAR);
 	}
+	
+	public static Activo getDetallesActivo(Connection conexion, String sCodCOACES)
+	{
+		String sCOACES = "";
+		String sNUINMU = "";
+		String sCOSOPA = "";
+		String sCOENAE = "";
+		String sCOESEN = "";
+		String sNOVIAS = "";
+		String sNUPOAC = "";
+		String sNUESAC = "";
+		String sNUPIAC = "";
+		String sNUPUAC = "";
+		String sNOMUIN = "";
+		String sCOPRAE = "";
+		String sNOPRAC = "";
+		String sCOPOIN = "";
+		String sFEREAP = "";
+		String sCOREAE = "";
+		String sFEINAU = "";
+		String sFESOPO = "";
+		String sFESEPO = "";
+		String sFEREPO = "";
+		String sFEADAC = "";
+		String sCODIJU = "";
+		String sCOSJUP = "";
+		String sCOSTLI = "";
+		String sCOSCAR = "";
+		String sCOESVE = "";
+		String sCOTSIN = "";
+		String sNUFIRE = "";
+		String sNUREGP = "";
+		String sNOMUI0 = "";
+		String sNULIBE = "";
+		String sNUTOME = "";
+		String sNUFOLE = "";
+		String sNUINSR = "";
+		String sCOSOCU = "";
+		String sCOXPRO = "";
+		String sFESOLA = "";
+		String sFESELA = "";
+		String sFERELA = "";
+		String sFERLLA = "";
+		String sCASPRE = "";
+		String sCASUTR = "";
+		String sCASUTC = "";
+		String sCASUTG = "";
+		String sBIARRE = "";
+		String sCADORM = "";
+		String sCABANO = "";
+		String sBIGAPA = "";
+		String sCAGAPA = "";
+		String sCASUTE = "";
+		String sBILIPO = "";
+		String sBILIAC = "";
+		String sBILIUS = "";
+		String sBIBOIN = "";
+		String sBICEFI = "";
+		String sCASUCB = "";
+		String sCASUCS = "";
+		String sFEACON = "";
+		String sIDAUTO = "";
+		String sFEDEMA = "";
+		String sYNOCUR = "";
+		String sOBRECO = "";
+		String sYNOLEC = "";
+		String sNOLOJZ = "";
+		String sFEREDE = "";
+		String sPOPROP = "";
+		String sCOGRAP = "";
+		String sFEPREG = "";
+		String sFEPHAC = "";
+		String sFEFOAC = "";
+		String sFEVACT = "";
+		String sIMVACT = "";
+		String sNUFIPR = "";
+		String sCOTPET = "";
+		String sFEEMPT = "";
+		String sFESORC = "";
+		String sFESODE = "";
+		String sFEREAC = "";
+		String sCOXSIA = "";
+		String sNUJUZD = "";
+		String sNURCAT = "";
+		String sNOMPRC = "";
+		String sNUTPRC = "";
+		String sNOMADC = "";
+		String sNUTADC = "";
+		String sIMPCOO = "";
+		String sCOENOR = "";
+		String sCOSPAT = "";
+		String sCOSPAS = "";
+		String sIDCOL3 = "";
+		String sBIOBNU = "";
+		String sPOBRAR = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO1  + ","
+					   + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  + ","              
+				       + CAMPO10 + ","              
+				       + CAMPO11 + ","              
+				       + CAMPO12 + ","              
+				       + CAMPO13 + ","              
+				       + CAMPO14 + ","              
+				       + CAMPO15 + ","              
+				       + CAMPO16 + ","              
+				       + CAMPO17 + ","              
+				       + CAMPO18 + ","              
+				       + CAMPO19 + ","              
+				       + CAMPO20 + ","              
+				       + CAMPO21 + ","              
+				       + CAMPO22 + ","              
+				       + CAMPO23 + ","              
+				       + CAMPO24 + ","              
+				       + CAMPO25 + ","              
+				       + CAMPO26 + ","              
+				       + CAMPO27 + ","              
+				       + CAMPO28 + ","              
+				       + CAMPO29 + ","              
+				       + CAMPO30 + ","              
+				       + CAMPO31 + ","              
+				       + CAMPO32 + ","              
+				       + CAMPO33 + ","              
+				       + CAMPO34 + ","              
+				       + CAMPO35 + ","              
+				       + CAMPO36 + ","              
+				       + CAMPO37 + ","              
+				       + CAMPO38 + ","              
+				       + CAMPO39 + ","              
+				       + CAMPO40 + ","              
+				       + CAMPO41 + ","              
+				       + CAMPO42 + ","              
+				       + CAMPO43 + ","              
+				       + CAMPO44 + ","              
+				       + CAMPO45 + ","              
+				       + CAMPO46 + ","              
+				       + CAMPO47 + ","              
+				       + CAMPO48 + ","              
+				       + CAMPO49 + ","              
+				       + CAMPO50 + ","              
+				       + CAMPO51 + ","              
+				       + CAMPO52 + ","              
+				       + CAMPO53 + ","              
+				       + CAMPO54 + ","              
+				       + CAMPO55 + ","              
+				       + CAMPO56 + ","              
+				       + CAMPO57 + ","              
+				       + CAMPO58 + ","              
+				       + CAMPO59 + ","              
+				       + CAMPO60 + ","              
+				       + CAMPO61 + ","              
+				       + CAMPO62 + ","              
+				       + CAMPO63 + ","              
+				       + CAMPO64 + ","              
+				       + CAMPO65 + ","              
+				       + CAMPO66 + ","              
+				       + CAMPO67 + ","              
+				       + CAMPO68 + ","              
+				       + CAMPO69 + ","              
+				       + CAMPO70 + ","              
+				       + CAMPO71 + ","              
+				       + CAMPO72 + ","              
+				       + CAMPO73 + ","              
+				       + CAMPO74 + ","              
+				       + CAMPO75 + ","              
+				       + CAMPO76 + ","              
+				       + CAMPO77 + ","              
+				       + CAMPO78 + ","              
+				       + CAMPO79 + ","              
+				       + CAMPO80 + ","              
+				       + CAMPO81 + ","              
+				       + CAMPO82 + ","              
+				       + CAMPO83 + ","              
+				       + CAMPO84 + ","              
+				       + CAMPO85 + ","              
+				       + CAMPO86 + ","              
+				       + CAMPO87 + ","              
+				       + CAMPO88 + ","              
+				       + CAMPO89 + ","              
+				       + CAMPO90 + ","              
+				       + CAMPO91 + ","              
+				       + CAMPO92 +        
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE "
+				       + CAMPO1 + " = '" + sCodCOACES	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sCOACES = rs.getString(CAMPO1);
+						sNUINMU = rs.getString(CAMPO2);
+						sCOSOPA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSOPA, QMCodigosControl.ICOSOPA, rs.getString(CAMPO3));
+						sCOENAE = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOENAE, QMCodigosControl.ICOENAE, rs.getString(CAMPO4));
+						sCOESEN = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOESEN, QMCodigosControl.ICOESEN, rs.getString(CAMPO5));
+						sNOVIAS = rs.getString(CAMPO6);
+						sNUPOAC = rs.getString(CAMPO7);
+						sNUESAC = rs.getString(CAMPO8);
+						sNUPIAC = rs.getString(CAMPO9);
+						sNUPUAC = rs.getString(CAMPO10);
+						sNOMUIN = rs.getString(CAMPO11);
+						sCOPRAE = rs.getString(CAMPO12);
+						sNOPRAC = rs.getString(CAMPO13);
+						sCOPOIN = rs.getString(CAMPO14);
+						sFEREAP = rs.getString(CAMPO15);
+						sCOREAE = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOREAE, QMCodigosControl.ICOREAE, rs.getString(CAMPO16));
+						sFEINAU = rs.getString(CAMPO17);
+						sFESOPO = rs.getString(CAMPO18);
+						sFESEPO = rs.getString(CAMPO19);
+						sFEREPO = rs.getString(CAMPO20);
+						sFEADAC = rs.getString(CAMPO21);
+						sCODIJU = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCODIJU, QMCodigosControl.ICODIJU, rs.getString(CAMPO22));
+						sCOSJUP = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSJUP, QMCodigosControl.ICOSJUP, rs.getString(CAMPO23));
+						sCOSTLI = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSTLI, QMCodigosControl.ICOSTLI, rs.getString(CAMPO24));
+						sCOSCAR = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSCAR, QMCodigosControl.ICOSCAR, rs.getString(CAMPO25));
+						sCOESVE = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOESVE, QMCodigosControl.ICOESVE, rs.getString(CAMPO26));
+						sCOTSIN = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOTSIN, QMCodigosControl.ICOTSIN, rs.getString(CAMPO27));
+						sNUFIRE = rs.getString(CAMPO28);
+						sNUREGP = rs.getString(CAMPO29);
+						sNOMUI0 = rs.getString(CAMPO30);
+						sNULIBE = rs.getString(CAMPO31);
+						sNUTOME = rs.getString(CAMPO32);
+						sNUFOLE = rs.getString(CAMPO33);
+						sNUINSR = rs.getString(CAMPO34);
+						sCOSOCU = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSOCU, QMCodigosControl.ICOSOCU, rs.getString(CAMPO35));
+						sCOXPRO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOXPRO, QMCodigosControl.ICOXPRO, rs.getString(CAMPO36));
+						sFESOLA = rs.getString(CAMPO37);
+						sFESELA = rs.getString(CAMPO38);
+						sFERELA = rs.getString(CAMPO39);
+						sFERLLA = rs.getString(CAMPO40);
+						sCASPRE = rs.getString(CAMPO41);
+						sCASUTR = rs.getString(CAMPO42);
+						sCASUTC = rs.getString(CAMPO43);
+						sCASUTG = rs.getString(CAMPO44);
+						sBIARRE = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBINARIA, QMCodigosControl.IBINARIA, rs.getString(CAMPO45));
+						sCADORM = rs.getString(CAMPO46);
+						sCABANO = rs.getString(CAMPO47);
+						sBIGAPA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBINARIA, QMCodigosControl.IBINARIA, rs.getString(CAMPO48));
+						sCAGAPA = rs.getString(CAMPO49);
+						sCASUTE = rs.getString(CAMPO50);
+						sBILIPO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBINARIA, QMCodigosControl.IBINARIA, rs.getString(CAMPO51));
+						sBILIAC = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBINARIA, QMCodigosControl.IBINARIA, rs.getString(CAMPO52));
+						sBILIUS = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBINARIA, QMCodigosControl.IBINARIA, rs.getString(CAMPO53));
+						sBIBOIN = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBINARIA, QMCodigosControl.IBINARIA, rs.getString(CAMPO54));
+						sBICEFI = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBINARIA, QMCodigosControl.IBINARIA, rs.getString(CAMPO55));
+						sCASUCB = rs.getString(CAMPO56);
+						sCASUCS = rs.getString(CAMPO57);
+						sFEACON = rs.getString(CAMPO58);
+						sIDAUTO = rs.getString(CAMPO59);
+						sFEDEMA = rs.getString(CAMPO60);
+						sYNOCUR = rs.getString(CAMPO61);
+						sOBRECO = rs.getString(CAMPO62);
+						sYNOLEC = rs.getString(CAMPO63);
+						sNOLOJZ = rs.getString(CAMPO64);
+						sFEREDE = rs.getString(CAMPO65);
+						sPOPROP = rs.getString(CAMPO66);
+						sCOGRAP = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOGRAP, QMCodigosControl.ICOGRAP, rs.getString(CAMPO67));
+						sFEPREG = rs.getString(CAMPO68);
+						sFEPHAC = rs.getString(CAMPO69);
+						sFEFOAC = rs.getString(CAMPO70);
+						sFEVACT = rs.getString(CAMPO71);
+						sIMVACT = rs.getString(CAMPO72);
+						sNUFIPR = rs.getString(CAMPO73);
+						sCOTPET = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOTPET, QMCodigosControl.ICOTPET, rs.getString(CAMPO74));
+						sFEEMPT = rs.getString(CAMPO75);
+						sFESORC = rs.getString(CAMPO76);
+						sFESODE = rs.getString(CAMPO77);
+						sFEREAC = rs.getString(CAMPO78);
+						sCOXSIA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOXSIA, QMCodigosControl.ICOXSIA, rs.getString(CAMPO79));
+						sNUJUZD = rs.getString(CAMPO80);
+						sNURCAT = rs.getString(CAMPO81);
+						sNOMPRC = rs.getString(CAMPO82);
+						sNUTPRC = rs.getString(CAMPO83);
+						sNOMADC = rs.getString(CAMPO84);
+						sNUTADC = rs.getString(CAMPO85);
+						sIMPCOO = rs.getString(CAMPO86);
+						sCOENOR = rs.getString(CAMPO87);
+						sCOSPAT = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSPAT, QMCodigosControl.ICOSPAT, rs.getString(CAMPO88));
+						sCOSPAS = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSPAT, QMCodigosControl.ICOSPAT, rs.getString(CAMPO89));
+						sIDCOL3 = rs.getString(CAMPO90);
+						sBIOBNU = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBIOBNU, QMCodigosControl.IBIOBNU, rs.getString(CAMPO91));
+						sPOBRAR = rs.getString(CAMPO92);
+
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				sCOACES = "";
+				sNUINMU = "";
+				sCOSOPA = "";
+				sCOENAE = "";
+				sCOESEN = "";
+				sNOVIAS = "";
+				sNUPOAC = "";
+				sNUESAC = "";
+				sNUPIAC = "";
+				sNUPUAC = "";
+				sNOMUIN = "";
+				sCOPRAE = "";
+				sNOPRAC = "";
+				sCOPOIN = "";
+				sFEREAP = "";
+				sCOREAE = "";
+				sFEINAU = "";
+				sFESOPO = "";
+				sFESEPO = "";
+				sFEREPO = "";
+				sFEADAC = "";
+				sCODIJU = "";
+				sCOSJUP = "";
+				sCOSTLI = "";
+				sCOSCAR = "";
+				sCOESVE = "";
+				sCOTSIN = "";
+				sNUFIRE = "";
+				sNUREGP = "";
+				sNOMUI0 = "";
+				sNULIBE = "";
+				sNUTOME = "";
+				sNUFOLE = "";
+				sNUINSR = "";
+				sCOSOCU = "";
+				sCOXPRO = "";
+				sFESOLA = "";
+				sFESELA = "";
+				sFERELA = "";
+				sFERLLA = "";
+				sCASPRE = "";
+				sCASUTR = "";
+				sCASUTC = "";
+				sCASUTG = "";
+				sBIARRE = "";
+				sCADORM = "";
+				sCABANO = "";
+				sBIGAPA = "";
+				sCAGAPA = "";
+				sCASUTE = "";
+				sBILIPO = "";
+				sBILIAC = "";
+				sBILIUS = "";
+				sBIBOIN = "";
+				sBICEFI = "";
+				sCASUCB = "";
+				sCASUCS = "";
+				sFEACON = "";
+				sIDAUTO = "";
+				sFEDEMA = "";
+				sYNOCUR = "";
+				sOBRECO = "";
+				sYNOLEC = "";
+				sNOLOJZ = "";
+				sFEREDE = "";
+				sPOPROP = "";
+				sCOGRAP = "";
+				sFEPREG = "";
+				sFEPHAC = "";
+				sFEFOAC = "";
+				sFEVACT = "";
+				sIMVACT = "";
+				sNUFIPR = "";
+				sCOTPET = "";
+				sFEEMPT = "";
+				sFESORC = "";
+				sFESODE = "";
+				sFEREAC = "";
+				sCOXSIA = "";
+				sNUJUZD = "";
+				sNURCAT = "";
+				sNOMPRC = "";
+				sNUTPRC = "";
+				sNOMADC = "";
+				sNUTADC = "";
+				sIMPCOO = "";
+				sCOENOR = "";
+				sCOSPAT = "";
+				sCOSPAS = "";
+				sIDCOL3 = "";
+				sBIOBNU = "";
+				sPOBRAR = "";
+				
+				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+		
+
+		return new Activo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
+				sNUPOAC, sNUESAC, sNUPIAC, sNUPUAC, sNOMUIN, sCOPRAE, sNOPRAC,
+				sCOPOIN, sFEREAP, sCOREAE, sFEINAU, sFESOPO, sFESEPO, sFEREPO,
+				sFEADAC, sCODIJU, sCOSJUP, sCOSTLI, sCOSCAR, sCOESVE, sCOTSIN,
+				sNUFIRE, sNUREGP, sNOMUI0, sNULIBE, sNUTOME, sNUFOLE, sNUINSR,
+				sCOSOCU, sCOXPRO, sFESOLA, sFESELA, sFERELA, sFERLLA, sCASPRE,
+				sCASUTR, sCASUTC, sCASUTG, sBIARRE, sCADORM, sCABANO, sBIGAPA,
+				sCAGAPA, sCASUTE, sBILIPO, sBILIAC, sBILIUS, sBIBOIN, sBICEFI,
+				sCASUCB, sCASUCS, sFEACON, sIDAUTO, sFEDEMA, sYNOCUR, sOBRECO,
+				sYNOLEC, sNOLOJZ, sFEREDE, sPOPROP, sCOGRAP, sFEPREG, sFEPHAC,
+				sFEFOAC, sFEVACT, sIMVACT, sNUFIPR, sCOTPET, sFEEMPT, sFESORC,
+				sFESODE, sFEREAC, sCOXSIA, sNUJUZD, sNURCAT, sNOMPRC, sNUTPRC,
+				sNOMADC, sNUTADC, sIMPCOO, sCOENOR, sCOSPAT, sCOSPAS, sIDCOL3,
+				sBIOBNU, sPOBRAR);
+	}
+	
 
 	public static boolean existeActivo(Connection conexion, String sCodCOACES)
 	{
@@ -1518,6 +1970,122 @@ public final class QMActivos
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE ("
+					   + CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+					   + CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+					   + CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+					   + CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+					   + CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+					   + CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+					   + CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ 
+					   "%')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(CAMPO1);
+						sCOPOIN = rs.getString(CAMPO14);
+						sNOMUIN = rs.getString(CAMPO11);
+						sNOPRAC = rs.getString(CAMPO13);
+						sNOVIAS = rs.getString(CAMPO6);
+						sNUPIAC = rs.getString(CAMPO9);
+						sNUPOAC = rs.getString(CAMPO7);
+						sNUPUAC = rs.getString(CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						//logger.debug( "Encontrado el registro!");
+						//logger.debug(CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+
+					logger.info("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR COPOIN:|"+filtro.getCOPOIN()+"|");
+				logger.error("ERROR NOMUIN:|"+filtro.getNOMUIN()+"|");
+				logger.error("ERROR NOPRAC:|"+filtro.getNOPRAC()+"|");
+				logger.error("ERROR NOVIAS:|"+filtro.getNOVIAS()+"|");
+				logger.error("ERROR NUPIAC:|"+filtro.getNUPIAC()+"|");
+				logger.error("ERROR NUPOAC:|"+filtro.getNUPOAC()+"|");
+				logger.error("ERROR NUPUAC:|"+filtro.getNUPUAC()+"|");
+				
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaListaActivosPorInmovilizado(Connection conexion, ActivoTabla filtro, boolean bInmovilizado)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+
+			logger.debug("Ejecutando Query...");
+			
+			String sInmovilizado = CAMPO2 + (bInmovilizado ?  " <> '"+ ValoresDefecto.CAMPO_SIN_INFORMAR : " = '"+ ValoresDefecto.CAMPO_SIN_INFORMAR)+ "' AND ";
+			
+			
+			String sQuery = "SELECT "
+					   + CAMPO1 + ","        
+					   + CAMPO14 + ","
+					   + CAMPO11 + ","
+					   + CAMPO13 + ","
+					   + CAMPO6 + ","
+					   + CAMPO9 + ","
+					   + CAMPO7 + ","
+					   + CAMPO10 + 
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE ("
+					   + sInmovilizado
 					   + CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
 					   + CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
 					   + CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
