@@ -72,7 +72,8 @@ public class GestorDetallesGasto implements Serializable
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorDetallesGasto...");	
+			logger.debug("Iniciando GestorDetallesGasto...");
+			cargarGastoElegido();
 		}
 	}
 	
@@ -92,24 +93,26 @@ public class GestorDetallesGasto implements Serializable
 	
 	public void cargarGastoElegido()
 	{
-		
+		logger.debug("Cargando Gasto...");
 
 		
-		String sValor = ((GestorListaGastos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaGastos")).getsCodGasto();
+		String sGastoID = ((GestorListaGastos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaGastos")).getsCodGasto();
 		
-		logger.debug("sCOACESnB:|{}|",sValor);
+		logger.debug("sGastoID:|"+sGastoID+"|");
 
 		
 		
-		logger.debug("sCOACES:|{}|",sCOACES);
+		logger.debug("sCOACES:|"+sCOACES+"|");
 		
 		
-		if (!sValor.equals(""))
+		if (!sGastoID.equals(""))
 		{
 
-		  	Gasto gasto = CLGastos.buscarGastoConCodigo(sValor);
+		  	Gasto gasto = CLGastos.buscarGastoConCodigo(sGastoID);
 
 	    	logger.debug(gasto.logGasto());
+	    	
+	    	this.sCOACES = gasto.getCOACES();
 		  	
 	    	this.sCOGRUG = gasto.getCOGRUG();
 	    	this.sCOTPGA = gasto.getCOTPGA();
@@ -150,7 +153,7 @@ public class GestorDetallesGasto implements Serializable
 			this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 			this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
-			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sFEDEVE);
 
 			this.sCOTERR = ValoresDefecto.DEF_COTERR;
 			this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);

@@ -248,7 +248,9 @@ public class GestorListaGastos implements Serializable
 		    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
 		    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
 		    	
-		    	this.sCodGasto = CLGastos.buscarCodigoGasto(sCOACES,sCOGRUG,sCOTPGA,sCOSBGA,sFEDEVE);
+		    	this.sCodGasto = CLGastos.buscarCodigoGasto(sCOACES,sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
+		    	
+		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
 		    	
 		    	logger.debug("sCOACES:|"+sCOACES+"|");
 		    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");

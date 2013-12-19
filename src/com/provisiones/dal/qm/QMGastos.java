@@ -51,14 +51,19 @@ public final class QMGastos
 	public static final String CAMPO26 = "imdtga";     
 	public static final String CAMPO27 = "imimga";     
 	public static final String CAMPO28 = "cod_coimpt"; 
-	public static final String CAMPO29 = "cod_cotneg"; 
+	public static final String CAMPO29 = "cod_cotneg";
+	//public static final String CAMPO30 = "coencx";    
+	//public static final String CAMPO31 = "coofcx";    
+	//public static final String CAMPO32 = "nucone";  
 	public static final String CAMPO30 = "feagto";     
 	public static final String CAMPO31 = "cod_comona"; 
 	public static final String CAMPO32 = "cod_biauto"; 
 	public static final String CAMPO33 = "feaufa";     
-	public static final String CAMPO34 = "fepgpr";     
+	public static final String CAMPO34 = "fepgpr";
+	//public static final String CAMPO38 = "feapli";   
 	public static final String CAMPO35 = "cod_estado"; 
-
+	//public static final String CAMPO40 = "valor_gasto";   
+	
 	private QMGastos(){}
 	
 	public static int addGasto(Connection conexion, Gasto NuevoGasto, String sEstado) 

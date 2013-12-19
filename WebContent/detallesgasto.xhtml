@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -14,8 +14,9 @@
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="auto" header="Gastos">
+								<h:panelGrid columns="3" cellpadding="5">
 						<p:fieldset legend="Sesión" id="sesion">
-							<h:panelGrid columns="2" cellpadding="1">
+							<h:panelGrid columns="1" cellpadding="1">
 								<p:panel>
 									<h:panelGrid columns="2" cellpadding="1">
 										<h:outputText value="Usuario: "/>
@@ -31,6 +32,7 @@
 										</h:panelGrid>
 											<p:messages id="msgs"/>
 									</p:fieldset>
+								</h:panelGrid>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="west" size="20%" header="Menus">
@@ -41,62 +43,75 @@
 					<p:panel>
 						<h:panelGrid columns="1" cellpadding="5">
 							<p:fieldset legend="Informacion">
-								<h:panelGrid columns="2" cellpadding="5">
+								<h:panelGrid columns="1" cellpadding="5">
 									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Identificador de activo especial: " />
-											<p:inputText id="COACES" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="9" maxlength="9"/>
+										<h:panelGrid columns="4" cellpadding="5">
+											<h:outputText value="Activo: " />
+											<p:inputText id="COACES" value="#{GestorDetallesGasto.sCOACES}" disabled="true" size="9"/>
 
-											<h:outputText value="Numero de provision de fondos: " />
-											<p:inputText id="NUPROF" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="9" maxlength="9"/>
+											<h:outputText value="Provisión: " />
+											<p:inputText id="NUPROF" value="#{GestorDetallesGasto.sNUPROF}" disabled="true" size="9"/>
 										</h:panelGrid>
 									</p:panel>
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Fecha de entrada en la aplicacion: " />
-											<p:inputText id="FEAPLI" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="8" maxlength="8"/>
+											<h:outputText value="Fecha de entrada en la aplicación: " />
+											<p:inputText id="FEAPLI" value="#{GestorDetallesGasto.sFEAPLI}" disabled="true" size="9"/>
 
-											<h:outputText value="Codigo de aplicacion INFOCAM: " />
-											<p:inputText id="COAPII" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="3" maxlength="3"/>
+											<h:outputText value="Código de aplicación INFOCAM: " />
+											<p:inputText id="COAPII" value="#{GestorDetallesGasto.sCOAPII}" disabled="true" size="4"/>
 
-											<h:outputText value="Codigo de subaplicacion INFOCAM: " />
-											<p:inputText id="COSPII" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="2" maxlength="2"/>
+											<h:outputText value="Código de subaplicación INFOCAM: " />
+											<p:inputText id="COSPII" value="#{GestorDetallesGasto.sCOSPII}" disabled="true" size="3"/>
 
 											<h:outputText
-												value="Numero de cliente para intercambio de ficheros: " />
-											<p:inputText id="NUCLII" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="13" maxlength="13"/>
+												value="Número de cliente para intercambio de ficheros: " />
+											<p:inputText id="NUCLII" value="#{GestorDetallesGasto.sNUCLII}" disabled="true" size="14"/>
 										</h:panelGrid>
 									</p:panel>
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
 
+
+											<h:outputText value="Codigo de unidad monetaria: " />
+											<p:inputText id="COUNMO" value="#{GestorDetallesGasto.sCOUNMO}" disabled="true" size="5"/>
+
+											<h:outputText value="Tipo de Negociado: " />
+											<p:inputText id="COTNEG" value="#{GestorDetallesGasto.sCOTNEG}" disabled="true" size="5"/>
+														</h:panelGrid>
+													</p:panel>
 								</h:panelGrid>
 							</p:fieldset>
-							<p:fieldset legend="Rechazo">
+							<p:fieldset legend="Anulacíon">
 								<h:panelGrid columns="2" cellpadding="5">
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Codigo de error: " />
-											<p:inputText id="COTERR" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="2" maxlength="2"/>
 
-											<h:outputText value="Indicador de autorizacion: " />
-											<p:inputText id="BIAUTO" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="1" maxlength="1"/>
+											<h:outputText value="Fecha de anulacion del gasto: " />
+											<p:inputText id="FEAGTO" value="#{GestorDetallesGasto.sFEAGTO}" disabled="true" size="9"/>
+
+
 										</h:panelGrid>
 									</p:panel>
+								</h:panelGrid>
+							</p:fieldset>
+							<p:fieldset legend="Autorización">
+								<h:panelGrid columns="1" cellpadding="5">
 									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Fecha de anulacion del gasto: " />
-											<p:inputText id="FEAGTO" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="8" maxlength="8"/>
+										<h:panelGrid columns="4" cellpadding="5">
+											<h:outputText value="Indicador de autorizacion: " />
+											<p:inputText id="BIAUTO" value="#{GestorDetallesGasto.sBIAUTO}" disabled="true" size="4"/>
 
-											<h:outputText value="Motivo de no autorizacion: " />
-											<p:inputText id="COMONA" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="2" maxlength="2"/>
+											<h:outputText value="Motivo: " />
+											<p:inputText id="COMONA" value="#{GestorDetallesGasto.sCOMONA}" disabled="true" size="22"/>
 										</h:panelGrid>
 									</p:panel>
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Fecha de autorizacion del gasto: " />
-											<p:inputText id="FEAUFA" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="8" maxlength="8"/>
+											<p:inputText id="FEAUFA" value="#{GestorDetallesGasto.sFEAUFA}" disabled="true" size="9"/>
 
-											<h:outputText value="Fecha del pago al proveedor: " />
-											<p:inputText id="FEPGPR" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="8" maxlength="8"/>
+
 										</h:panelGrid>
 									</p:panel>
 								</h:panelGrid>
@@ -104,156 +119,149 @@
 							<p:fieldset legend="Datos">
 								<h:panelGrid columns="2" cellpadding="5">
 									<p:panel>
+										<p:fieldset legend="Tipo de Gasto">
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Grupo de gasto: " />
-											<p:selectOneMenu id="COGRUG" value="#{TestPF.ssn}">
-												<f:selectItem itemLabel="Grupo" itemValue="" />
-												<f:selectItems value="#{GestorDetallesGasto.sBIRESO}" />
-											</p:selectOneMenu>
+											<p:inputText id="COGRUG" value="#{GestorDetallesGasto.sCOGRUG}" disabled="true" size="8" maxlength="8"/>
 
 											<h:outputText value="Tipo de concepto de gasto:  " />
-											<p:selectOneMenu id="COTPGA" value="#{TestPF.ssn}">
-												<f:selectItem itemLabel="Tipo" itemValue="" />
-												<f:selectItems value="#{GestorDetallesGasto.sBIRESO}" />
-											</p:selectOneMenu>
+											<p:inputText id="COTPGA" value="#{GestorDetallesGasto.sCOTPGA}" disabled="true" size="8" maxlength="8"/>
 
 											<h:outputText value="Subtipo de gasto: " />
-											<p:selectOneMenu id="COSBGA" value="#{TestPF.ssn}">
-												<f:selectItem itemLabel="Subtipo" itemValue="" />
-												<f:selectItems value="#{GestorDetallesGasto.sBIRESO}" />
-											</p:selectOneMenu>
+											<p:inputText id="COSBGA" value="#{GestorDetallesGasto.sCOSBGA}" disabled="true" size="8" maxlength="8"/>
 
 											<h:outputText value="Periodicidad de pago: " />
-											<p:selectOneMenu id="PTPAGO" value="#{TestPF.ssn}">
-												<f:selectItem itemLabel="Periodicidad" itemValue="" />
-												<f:selectItems value="#{GestorDetallesGasto.sBIRESO}" />
-											</p:selectOneMenu>
-										</h:panelGrid>
-									</p:panel>
-									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Fecha del devengo: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="9999/99/99" size="5" maxlength="5"/>
-
-											<h:outputText value="Fecha de fin de periodo: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="9999/99/99" size="5" maxlength="5"/>
-
-											<h:outputText value="Fecha del pago: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="9999/99/99" size="5" maxlength="5"/>
-
-											<h:outputText value="Fecha limite del pago: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="9999/99/99" size="5" maxlength="5"/>
-										</h:panelGrid>
-									</p:panel>
-									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Situacion del gasto: " />
-											<p:selectOneMenu id="COSIGA" value="#{TestPF.ssn}">
-												<f:selectItem itemLabel="Situacion" itemValue="" />
-												<f:selectItems value="#{GestorDetallesGasto.sBIRESO}" />
-											</p:selectOneMenu>
-										</h:panelGrid>
-									</p:panel>
-									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Fecha de estado estimado del importe: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="9999/99/99" size="5" maxlength="5"/>
-
-											<h:outputText value="Fecha de estado conocido del importe: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="9999/99/99" size="5" maxlength="5"/>
-
-											<h:outputText
-												value="Fecha de estado autoriazado del importe: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="9999/99/99" size="5" maxlength="5"/>
-
-											<h:outputText value="Fecha de estado pagado del importe: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="9999/99/99" size="5" maxlength="5"/>
-										</h:panelGrid>
-									</p:panel>
-									<p:panel>
-										<h:panelGrid columns="4" cellpadding="5">
-											<h:outputText value="Importe del gasto: " />
-											<h:outputText value="-" />
-											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
-												<f:selectItem itemLabel="" itemValue="-" />
-											</p:selectManyCheckbox>
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="999999.99" size="5" maxlength="5"/>
-
-											<h:outputText value="Recargo en el importe del gasto: " />
-											<h:outputText value="-" />
-											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
-												<f:selectItem itemLabel="" itemValue="-" />
-											</p:selectManyCheckbox>
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="999999.99" size="5" maxlength="5"/>
-
-											<h:outputText value="Importe de demora del gasto: " />
-											<h:outputText value="-" />
-											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
-												<f:selectItem itemLabel="" itemValue="-" />
-											</p:selectManyCheckbox>
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="999999.99" size="5" maxlength="5"/>
-
-											<h:outputText value="Importe de costas: " />
-											<h:outputText value="-" />
-											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
-												<f:selectItem itemLabel="" itemValue="-" />
-											</p:selectManyCheckbox>
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="999999.99" size="5" maxlength="5"/>
-
-											<h:outputText value="Importe de otros incrementos: " />
-											<h:outputText value="-" />
-											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
-												<f:selectItem itemLabel="" itemValue="-" />
-											</p:selectManyCheckbox>
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="999999.99" size="5" maxlength="5"/>
-
-											<h:outputText value="Importe de descuento de gastos: " />
-											<h:outputText value="-" />
-											<p:selectManyCheckbox value="#{formBean.selectedOptions}">
-												<f:selectItem itemLabel="" itemValue="-" />
-											</p:selectManyCheckbox>
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="999999.99" size="5" maxlength="5"/>
-
-										</h:panelGrid>
-									</p:panel>
-
-									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Codigo de unidad monetaria: " />
-											<p:inputText id="COUNMO" value="#{GestorDetallesGasto.sBIRESO}" disabled="true" size="5" maxlength="5"/>
-
-											<h:outputText value="Importe de impuestos del gasto: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="99/99/9999" size="5" maxlength="5"/>
-
-											<h:outputText value="Tipo de impuesto: " />
-											<p:selectOneMenu id="COIMPT" value="#{TestPF.ssn}">
-												<f:selectItem itemLabel="Tipo" itemValue="" />
-												<f:selectItems value="#{GestorDetallesGasto.sBIRESO}" />
-											</p:selectOneMenu>
-
-											<h:outputText value="Tipo de Negociado: " />
-											<p:selectOneMenu id="COTNEG" value="#{TestPF.ssn}">
-												<f:selectItem itemLabel="A cargo de..." itemValue="" />
-												<f:selectItems value="#{GestorDetallesGasto.sBIRESO}" />
-											</p:selectOneMenu>
-										</h:panelGrid>
-									</p:panel>
-
-									<p:fieldset legend="Conexion">
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Codigo de entidad: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="99/99/9999" size="5" maxlength="5"/>
-
-											<h:outputText value="Oficina de emision: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="(999) 999-9999" size="5" maxlength="5"/>
-
-											<h:outputText value="Numero de conexion: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="(999) 999-9999? x99999" size="5" maxlength="5"/>
-
-											<h:outputText value="Fecha del pago por conexion: " />
-											<p:inputMask value="#{GestorDetallesGasto.sBIRESO}" mask="99/99/9999" size="5" maxlength="5"/>
+											<p:inputText id="PTPAGO" value="#{GestorDetallesGasto.sPTPAGO}" disabled="true" size="8" maxlength="8"/>
 										</h:panelGrid>
 									</p:fieldset>
+									<p:fieldset legend="Fechas del gasto">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha del devengo: " />
+											<p:inputText id="FEDEVE" value="#{GestorDetallesGasto.sFEDEVE}" disabled="true" size="9"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha de fin de periodo: " />
+											<p:inputText id="FFGTVP" value="#{GestorDetallesGasto.sFFGTVP}" disabled="true" size="9"/>
+
+											<h:outputText value="Fecha del pago al proveedor: " />
+											<p:inputText id="FEPGPR" value="#{GestorDetallesGasto.sFEPGPR}" disabled="true" size="9"/>
+
+											<h:outputText value="Fecha limite del pago: " />
+											<p:inputText id="FELIPG" value="#{GestorDetallesGasto.sFELIPG}" disabled="true" size="9"/>
+														</h:panelGrid>
+													</p:panel>
+										</h:panelGrid>
+									</p:fieldset>
+											<p:fieldset legend="Situación del gasto">
+												<h:panelGrid columns="1" cellpadding="5">
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Situacion del gasto: " />
+											<p:inputText id="COSIGA" value="#{GestorDetallesGasto.sCOSIGA}" disabled="true" size="8"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha de estimado: " />
+											<p:inputText id="FEEESI" value="#{GestorDetallesGasto.sFEEESI}" disabled="true" size="9"/>
+
+											<h:outputText value="Fecha de conocido: " />
+											<p:inputText id="FEECOI" value="#{GestorDetallesGasto.sFEECOI}" disabled="true" size="9"/>
+
+											<h:outputText value="Fecha de autoriazado: " />
+											<p:inputText id="FEEAUI" value="#{GestorDetallesGasto.sFEEAUI}" disabled="true" size="9"/>
+
+											<h:outputText value="Fecha de pagado: " />
+											<p:inputText id="FEEPAI" value="#{GestorDetallesGasto.sFEEPAI}" disabled="true" size="9"/>
+
+													</h:panelGrid>
+
+												</h:panelGrid>
+											</p:fieldset>
+										</p:panel>
+									<p:panel>
+										<p:fieldset legend="Importes del gasto">
+												<h:panelGrid columns="1" cellpadding="5">
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+											<h:outputText value="Importe del gasto: " />
+											<p:inputText id="IMNGAS" value="#{GestorDetallesGasto.sIMNGAS}" disabled="true" size="8"/>
+											<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+											<h:outputText value="Recargo: " />
+											<p:inputText id="IMRGAS" value="#{GestorDetallesGasto.sIMRGAS}" disabled="true" size="8"/>
+											<h:outputText value="¤"/>
+
+											<h:outputText value="Demora: " />
+											<p:inputText id="IMDGAS" value="#{GestorDetallesGasto.sIMDGAS}" disabled="true" size="8"/>
+											<h:outputText value="¤"/>
+
+											<h:outputText value="Costas: " />
+											<p:inputText id="IMCOST" value="#{GestorDetallesGasto.sIMCOST}" disabled="true" size="8"/>
+											<h:outputText value="¤"/>
+
+											<h:outputText value="Otros incrementos: " />
+											<p:inputText id="IMOGAS" value="#{GestorDetallesGasto.sIMOGAS}" disabled="true" size="8"/>
+											<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+											<h:outputText value="Descuentos: " />
+											<p:inputText id="IMDTGA" value="#{GestorDetallesGasto.sIMDTGA}" disabled="true" size="8"/>
+											<h:outputText value="¤"/>
+
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="5">
+
+
+											<h:outputText value="Impuestos: " />
+											<p:inputText id="IMIMGA" value="#{GestorDetallesGasto.sIMIMGA}" disabled="true" size="8"/>
+											<h:outputText value="¤"/>
+
+											<h:outputText value="Tipo de impuesto: " />
+											<p:inputText id="COIMPT" value="#{GestorDetallesGasto.sCOIMPT}" disabled="true" size="5"/>
+
+														</h:panelGrid>
+													</p:panel>
+
+
+
+												</h:panelGrid>
+											</p:fieldset>
+									<p:fieldset legend="Conexión">
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Codigo de entidad: " />
+											<p:inputText id="COENCX" value="#{GestorDetallesGasto.sCOENCX}" disabled="true" size="5"/>
+
+											<h:outputText value="Oficina de emision: " />
+											<p:inputText id="COOFCX" value="#{GestorDetallesGasto.sCOOFCX}" disabled="true" size="5"/>
+
+											<h:outputText value="Numero de conexion: " />
+											<p:inputText id="NUCONE" value="#{GestorDetallesGasto.sNUCONE}" disabled="true" size="5"/>
+
+											<h:outputText value="Fecha del pago por conexion: " />
+											<p:inputText id="FMPAGN" value="#{GestorDetallesGasto.sFMPAGN}" disabled="true" size="9"/>
+										</h:panelGrid>
+									</p:fieldset>
+</p:panel>
+
 
 
 
@@ -261,6 +269,9 @@
 							</p:fieldset>
 						</h:panelGrid>
 					</p:panel>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
 					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
 						<h:panelGrid columns="1">
 							<p:panel>

@@ -31,11 +31,15 @@ public class Gasto
 	private String IMIMGA = "";
 	private String COIMPT = "";
 	private String COTNEG = "";
+	//private String COENCX = "";
+	//private String COOFCX = "";
+	//private String NUCONE = "";
 	private String FEAGTO = "";
 	private String COMONA = "";
 	private String BIAUTO = "";
 	private String FEAUFA = "";
 	private String FEPGPR = "";
+	//private String FEAPLI = "";
 	
 	//Constructor de clase
 
