@@ -366,7 +366,7 @@ public final class CLGastos
 				else
 				{
 					//error provision abierta
-					iCodigo = -9;//TODO revisar codigo
+					iCodigo = -9;
 				}
 
 			}
@@ -395,6 +395,7 @@ public final class CLGastos
 
 			if (CLActivos.existeActivo(movimiento.getCOACES()))
 			{
+				iCodigo = 0;
 				//TODO revisar PA->GA
 				movimiento.setFEAPLI(ValoresDefecto.CAMPO_SIN_INFORMAR);
 				movimiento.setCOAPII(ValoresDefecto.DEF_COAPII);
@@ -536,6 +537,35 @@ public final class CLGastos
 					iCodigo = -9;
 				}
 
+			}
+			else
+			{
+				//error activo desconocido
+				iCodigo = -8;
+			}
+
+
+		}
+		
+		logger.debug("iCodigo:|"+iCodigo+"|");
+		
+		return iCodigo;
+	}
+	
+	public static int validarGastoVolcado(String linea)
+	{
+		int iCodigo = 0;
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			
+			MovimientoGasto movimiento = Parser.leerGasto(linea);
+
+			if (CLActivos.existeActivo(movimiento.getCOACES()))
+			{
+				iCodigo = 0;
 			}
 			else
 			{

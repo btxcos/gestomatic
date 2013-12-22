@@ -117,7 +117,7 @@ public class GestorDetallesGasto implements Serializable
 	    	this.sCOGRUG = gasto.getCOGRUG();
 	    	this.sCOTPGA = gasto.getCOTPGA();
 	    	this.sCOSBGA = gasto.getCOSBGA();
-	    	this.sFEDEVE = gasto.getFEDEVE();
+	    	this.sFEDEVE = Utils.recuperaFecha(gasto.getFEDEVE());
 	 
 	    	this.setbDevolucion((Integer.parseInt(sCOSBGA) > 49));
 

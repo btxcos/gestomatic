@@ -928,7 +928,8 @@ public final class FileManager
 	    		}
 	    		else
 	    		{
-	    			int iCodigo = CLGastos.inyectarGastoVolcado(linea);
+	    			//int iCodigo = CLGastos.inyectarGastoVolcado(linea);
+	    			int iCodigo = CLGastos.validarGastoVolcado(linea);
 
 	    			String sResultado = "";
 	    			String sDescripcion = "";
@@ -1883,8 +1884,8 @@ public final class FileManager
 					}
 					else
 					{
-						//carga = leerGastosVolcados(sNombre);
-						carga.setiCodigo(4);
+						carga = leerGastosVolcados(sNombre);
+						//carga.setiCodigo(4);
 					}
 					break;
 				case PP:
