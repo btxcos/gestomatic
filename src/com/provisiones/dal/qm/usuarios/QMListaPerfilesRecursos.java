@@ -13,7 +13,7 @@ public final class QMListaPerfilesRecursos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMPerfiles.class.getName());
 	
-	public static final String TABLA = "pp001_lista_perfiles_recursos_multi";
+	public static final String TABLA = "pp000_lista_perfiles_recursos_multi";
 
 	public static final String CAMPO1  = "cod_perfil";
 	public static final String CAMPO2  = "cod_recurso";

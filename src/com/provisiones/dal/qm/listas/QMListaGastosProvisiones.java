@@ -21,7 +21,7 @@ public final class QMListaGastosProvisiones
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaGastosProvisiones.class.getName());
 	
-	public static final String TABLA = "pp001_lista_gastos_provisiones_multi";
+	public static final String TABLA = "pp002_lista_gastos_provisiones_multi";
 
 	public static final String CAMPO1 = "cod_gasto";
 	public static final String CAMPO2 = "cod_nuprof";

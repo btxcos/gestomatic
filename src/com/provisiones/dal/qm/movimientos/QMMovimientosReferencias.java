@@ -16,7 +16,7 @@ public final class QMMovimientosReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosReferencias.class.getName());
 
-	public static final String TABLA = "pp001_e3_movimientos_tbl";
+	public static final String TABLA = "pp002_e3_movimientos_tbl";
 
 	public static final String CAMPO1  = "e3_movimiento_id";
 	public static final String CAMPO2  = "cod_codtrn";  

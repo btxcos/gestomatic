@@ -16,7 +16,7 @@ public final class QMMovimientosImpuestos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosImpuestos.class.getName());
 
-	public static final String TABLA = "pp001_e4_movimientos_tbl";
+	public static final String TABLA = "pp002_e4_movimientos_tbl";
 
 	public static final String CAMPO1 = "e4_movimiento_id";
 

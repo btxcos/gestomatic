@@ -16,7 +16,7 @@ public final class QMMovimientosComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosComunidades.class.getName());
 
-	public static final String TABLA = "pp001_e1_movimientos_tbl";
+	public static final String TABLA = "pp002_e1_movimientos_tbl";
 
 	public static final String CAMPO1 = "e1_movimiento_id";
 	

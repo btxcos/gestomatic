@@ -17,7 +17,7 @@ public final class QMComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMComunidades.class.getName());
 	
-	public static final String TABLA = "pp001_e1_comunidades_tbl";
+	public static final String TABLA = "pp002_e1_comunidades_tbl";
 
 	//Primary Key
 	public static final String CAMPO1  = "e1_comunidad_id";

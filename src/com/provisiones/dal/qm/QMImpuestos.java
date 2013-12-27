@@ -17,7 +17,7 @@ public final class QMImpuestos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMImpuestos.class.getName());
 	
-	public static final String TABLA = "pp001_e4_impuestos_tbl";
+	public static final String TABLA = "pp002_e4_impuestos_tbl";
 
 	//Primary Key
 	public static final String CAMPO1  = "e4_impuesto_id";

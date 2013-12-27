@@ -21,7 +21,7 @@ public final class QMGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMGastos.class.getName());
 	
-	public static final String TABLA = "pp001_ga_gastos_tbl";
+	public static final String TABLA = "pp002_ga_gastos_tbl";
 
 	public static final String CAMPO1  = "ga_gasto_id";
 	public static final String CAMPO2  = "cod_coaces"; 

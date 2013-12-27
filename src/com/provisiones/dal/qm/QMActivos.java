@@ -19,7 +19,7 @@ public final class QMActivos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMActivos.class.getName());
 	
-	public static final String TABLA = "pp001_ac_activos_tbl";
+	public static final String TABLA = "pp002_ac_activos_tbl";
 
 	public static final String CAMPO1 = "coaces_id";
 

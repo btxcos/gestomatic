@@ -85,6 +85,8 @@ public final class CLActivos
 			
 			//logger.debug("sCodActivo:|"+sCodActivo+"|");
 			
+			//TODO Actualiza registro activo
+			
 			if (!QMActivos.existeActivo(conexion,sCodActivo))
 			{
 				if (QMActivos.addActivo(conexion,activo))

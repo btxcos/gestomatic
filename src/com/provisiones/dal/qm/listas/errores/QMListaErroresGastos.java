@@ -20,7 +20,7 @@ public final class QMListaErroresGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaErroresGastos.class.getName());
 	
-	public static final String TABLA = "pp001_lista_errores_gastos_multi";
+	public static final String TABLA = "pp002_lista_errores_gastos_multi";
 
 	public static final String CAMPO1  = "cod_movimiento";
 	public static final String CAMPO2  = "cod_coterr";

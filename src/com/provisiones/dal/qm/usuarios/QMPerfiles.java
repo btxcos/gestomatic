@@ -16,7 +16,7 @@ public final class QMPerfiles
 {
 	private static Logger logger = LoggerFactory.getLogger(QMPerfiles.class.getName());
 	
-	public static final String TABLA = "pp001_perfiles_usuarios_tbl";
+	public static final String TABLA = "pp002_perfiles_usuarios_tbl";
 
 	public static final String CAMPO1  = "perfil_id";
 	public static final String CAMPO2  = "perfil";

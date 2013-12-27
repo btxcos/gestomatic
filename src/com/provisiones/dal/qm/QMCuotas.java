@@ -19,7 +19,7 @@ public final class QMCuotas
 {
 	private static Logger logger = LoggerFactory.getLogger(QMCuotas.class.getName());
 	
-	public static final String TABLA = "pp001_e2_cuotas_tbl";
+	public static final String TABLA = "pp002_e2_cuotas_tbl";
 
 	//Primary Key
 	public static final String CAMPO1  = "e2_cuota_id";

@@ -17,7 +17,7 @@ public final class QMReferencias
 {
 	private static Logger logger = LoggerFactory.getLogger(QMReferencias.class.getName());
 	
-	public static final String TABLA = "pp001_e3_referencias_tbl";
+	public static final String TABLA = "pp002_e3_referencias_tbl";
 
 	//Primary Key
 	public static final String CAMPO1  = "e3_referencia_id";

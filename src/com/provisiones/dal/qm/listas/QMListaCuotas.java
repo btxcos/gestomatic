@@ -21,7 +21,7 @@ public final class QMListaCuotas
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaCuotas.class.getName());
 	
-	public static final String TABLA = "pp001_lista_cuotas_multi";
+	public static final String TABLA = "pp002_lista_cuotas_multi";
 
 	//identificadores
 	public static final String CAMPO1 = "cod_coaces";        

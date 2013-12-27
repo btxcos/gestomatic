@@ -24,7 +24,7 @@ public final class QMListaComunidadesActivos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaComunidadesActivos.class.getName());
 	
-	public static final String TABLA = "pp001_lista_comunidades_activos_multi";
+	public static final String TABLA = "pp002_lista_comunidades_activos_multi";
 
 	//identificadores
 	public static final String CAMPO1  = "cod_coaces";

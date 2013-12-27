@@ -928,6 +928,166 @@ public final class FileManager
 	    		}
 	    		else
 	    		{
+	    			int iCodigo = CLGastos.inyectarGastoVolcado(linea);
+	    			//int iCodigo = CLGastos.validarGastoVolcado(linea);
+
+	    			String sResultado = "";
+	    			String sDescripcion = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sDescripcion = "Movimiento asimilado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
+	    				break;
+	    			case -8:
+	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
+	    			case -9:
+	    				sDescripcion = "No existe la provisión de gasto en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;	
+	    			case -908:
+	    				sDescripcion = "[FATAL] Error al crear la Provisión del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -901:
+	    				sDescripcion = "[FATAL] Error al crear el Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -909:
+	    				sDescripcion = "El movimiento cargado ya se encontraba en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
+	    			case -900:
+	    				sDescripcion = "[FATAL] Error al registrar el movimiento.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -902:
+	    				sDescripcion = "[FATAL] Error al crear la relación del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;	
+	    			case -906:
+	    				sDescripcion = "[FATAL] Error al crear la relación del Gasto con la Provisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			default:
+	    				sDescripcion = "El movimiento cargado no ha podido ser validado ("+iCodigo+").";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
+	    				
+	    			}
+	    			
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
+	    			if ( iCodigo >= 0 )
+	    			{
+	    				logger.info(sMensaje);
+	    				registros++;
+	    			}
+	    			else
+	    			{
+	    				iSalida = -1;
+	    				logger.error(sMensaje);
+	    			}
+
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
+	    		}
+	        }
+			
+			sDuracion = Utils.duracion(liTiempo,System.currentTimeMillis());
+		
+			br.close();
+		
+			//logger.debug("Registros procesados:|"+contador+"|");
+			//logger.debug("Registros correctos:|"+registros+"|");
+
+			if (iSalida != 0)
+			{
+				logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+			}
+			
+			logger.info("Duración de la carga: "+sDuracion);
+		}
+		catch (FileNotFoundException e)
+		{
+			logger.error("No se encontró el fichero recibido.");
+			iSalida = -2;
+		}
+		catch (IOException e)
+		{
+			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			iSalida = -3;
+		}
+
+		resultadocarga = new ResultadoCarga(iSalida,tabla,sNombre,sDuracion,contador,registros);
+		
+		logger.info( "Lectura de "+sNombre+" finalizada.\n");
+		
+	
+		//logger.debug("tabla.size():|"+tabla.size()+"|");
+		
+        return resultadocarga;
+	
+	}
+	
+	public static ResultadoCarga validarGastosVolcados(String sNombre) 
+	{
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		ResultadoCarga resultadocarga;
+		
+		//logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre+"|");
+
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre);
+		
+		FileReader fr;
+		
+		long contador= 0 ;
+		long registros = 0;
+		int iSalida = 0;
+		
+		String sDuracion = "0";
+
+		try 
+		{
+			long liTiempo = System.currentTimeMillis();
+			
+			fr = new FileReader (archivo);
+			
+			BufferedReader br = new BufferedReader(fr);
+			
+			String linea = "";
+
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
+			
+			//logger.debug("Leyendo fichero..");
+			
+			int iLongitudValida = Longitudes.GASTOS_L-Longitudes.FILLER_GASTOS_L-Longitudes.OBDEER_L;
+			
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+
+				//logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				
+				//logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+
+	    		if (linea.equals(sFinFichero))
+	    		{
+	    			contador--;
+	    			logger.info("Lectura finalizada.");
+	    		}
+	    		else if (linea.length()< iLongitudValida )
+	    		{
+	    			iSalida = -1;
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
+	    		}
+	    		else
+	    		{
 	    			//int iCodigo = CLGastos.inyectarGastoVolcado(linea);
 	    			int iCodigo = CLGastos.validarGastoVolcado(linea);
 
@@ -1884,7 +2044,7 @@ public final class FileManager
 					}
 					else
 					{
-						carga = leerGastosVolcados(sNombre);
+						carga = validarGastosVolcados(sNombre);
 						//carga.setiCodigo(4);
 					}
 					break;

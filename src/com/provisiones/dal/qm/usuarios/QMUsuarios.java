@@ -18,7 +18,7 @@ public final class QMUsuarios
 {
 	private static Logger logger = LoggerFactory.getLogger(QMUsuarios.class.getName());
 	
-	public static final String TABLA = "pp001_usuarios_tbl";
+	public static final String TABLA = "pp000_usuarios_tbl";
 
 	public static final String CAMPO1  = "usuario_id";
 	public static final String CAMPO2  = "login";

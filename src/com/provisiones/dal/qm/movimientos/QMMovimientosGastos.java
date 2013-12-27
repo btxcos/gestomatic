@@ -16,7 +16,7 @@ public final class QMMovimientosGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMMovimientosGastos.class.getName());
 	
-	public static final String TABLA = "pp001_ga_movimientos_tbl";
+	public static final String TABLA = "pp002_ga_movimientos_tbl";
 
 	public static final String CAMPO1  = "ga_movimiento_id";
 	

@@ -23,7 +23,7 @@ public final class QMListaGastos
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaGastos.class.getName());
 	
-	public static final String TABLA = "pp001_lista_gastos_multi";
+	public static final String TABLA = "pp002_lista_gastos_multi";
 
 	public static final String CAMPO1 = "cod_gasto";
 	public static final String CAMPO2 = "cod_movimiento";

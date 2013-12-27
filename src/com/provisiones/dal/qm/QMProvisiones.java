@@ -21,7 +21,7 @@ public final class QMProvisiones
 {
 	private static Logger logger = LoggerFactory.getLogger(QMProvisiones.class.getName());
 	
-	public static final String TABLA = "pp001_provisiones_tbl";
+	public static final String TABLA = "pp002_provisiones_tbl";
 
 	public static final String CAMPO1 = "nuprof_id";
 

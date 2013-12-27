@@ -20,7 +20,7 @@ public final class QMListaComunidades
 {
 	private static Logger logger = LoggerFactory.getLogger(QMListaComunidades.class.getName());
 
-	public static final String TABLA = "pp001_lista_comunidades_multi";
+	public static final String TABLA = "pp002_lista_comunidades_multi";
 
 	//identificadores
 	public static final String CAMPO1  = "cod_comunidad";
