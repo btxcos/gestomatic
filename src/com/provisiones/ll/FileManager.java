@@ -637,11 +637,11 @@ public final class FileManager
 	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
 	    				break;
 	    			case -1:
-	    				sDescripcion = "[FATAL] Error al actualizar el Activo.";
+	    				sDescripcion = "[FATAL] Error al registrar el Activo.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -2:
-	    				sDescripcion = "[FATAL] Error al registrar el Activo.";
+	    				sDescripcion = "[FATAL] Error al actualizar el Activo.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case 1:

@@ -86,7 +86,7 @@ public final class CLActivos
 			//logger.debug("sCodActivo:|"+sCodActivo+"|");
 			
 			//TODO Actualiza registro activo
-			
+
 			if (!QMActivos.existeActivo(conexion,sCodActivo))
 			{
 				if (QMActivos.addActivo(conexion,activo))
@@ -95,7 +95,7 @@ public final class CLActivos
 				}
 				else
 				{
-					iCodigo = -2;
+					iCodigo = -1;
 				}
 			}
 			else
@@ -109,14 +109,13 @@ public final class CLActivos
 					}
 					else
 					{
-						iCodigo = -1;
+						iCodigo = -2;
 					}
 				}
 				else
 				{
 					//logger.warn("El siguiente registro ya se encuentre en el sistema:");
 					//logger.warn("|"+linea+"|");
-					
 					iCodigo = 2;
 				}
 			}
@@ -136,8 +135,10 @@ public final class CLActivos
 			sTipo = "#";
 			
 			logger.debug("sCodCOACES:|"+sCodCOACES+"|");
+			
+			String sCOSPAT = QMActivos.getSociedadPatrimonial(conexion,sCodCOACES);
 
-			if (QMActivos.getSociedadPatrimonial(conexion,sCodCOACES).equals("9999"))
+			if (sCOSPAT.equals("9999") || sCOSPAT.equals("9998"))
 			{
 				if (QMActivos.getCOTSINActivo(conexion,sCodCOACES).startsWith("SU"))
 				{

@@ -153,7 +153,7 @@ public class GestorDetallesGasto implements Serializable
 			this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 			this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
-			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, sFEDEVE);
+			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
 
 			this.sCOTERR = ValoresDefecto.DEF_COTERR;
 			this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
