@@ -511,7 +511,7 @@ public final class QMListaGastos
 		return liNumero;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosConGastosValidados(Connection conexion, ActivoTabla activo)
+	public static ArrayList<ActivoTabla> buscaActivosConGastosAutorizados(Connection conexion, ActivoTabla activo)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 
@@ -563,8 +563,7 @@ public final class QMListaGastos
 	   					   " FROM " 
 						   + QMGastos.TABLA +
 	   					   " WHERE " 
-	   					   + QMGastos.CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
-	   					   + QMGastos.CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' AND " 
+	   					   + QMGastos.CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO 
 
 	   					   + QMGastos.CAMPO1 + " IN (SELECT "
 						   + CAMPO1 + 

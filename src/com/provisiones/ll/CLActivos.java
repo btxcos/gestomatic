@@ -1,6 +1,7 @@
 package com.provisiones.ll;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.dal.qm.registros.QMRegistroActivos;
 
 import com.provisiones.misc.Parser;
 import com.provisiones.types.Activo;
@@ -84,41 +86,94 @@ public final class CLActivos
 			String sCodActivo =  activo.getCOACES();
 			
 			//logger.debug("sCodActivo:|"+sCodActivo+"|");
-			
-			//TODO Actualiza registro activo
 
-			if (!QMActivos.existeActivo(conexion,sCodActivo))
+			try 
 			{
-				if (QMActivos.addActivo(conexion,activo))
+				conexion.setAutoCommit(false);
+				
+				if (!QMActivos.existeActivo(conexion,sCodActivo))
 				{
-					//logger.info("Nuevo Activo registrado.");
-				}
-				else
-				{
-					iCodigo = -1;
-				}
-			}
-			else
-			{
-				if (!QMActivos.compruebaActivo(conexion,activo))
-				{
-					if (QMActivos.modActivo(conexion,activo,sCodActivo))
+					if (QMActivos.addActivo(conexion,activo))
 					{
-						//logger.info("Activo actualizado.");
-						iCodigo = 1;
+						//logger.info("Nuevo Activo registrado.");
+						if (QMRegistroActivos.addRegistroActivo(conexion, sCodActivo))
+						{
+							conexion.commit();
+						}
+						else
+						{
+							iCodigo = -3;
+							conexion.rollback();
+						}
+						
 					}
 					else
 					{
-						iCodigo = -2;
+						iCodigo = -1;
+						conexion.rollback();
 					}
 				}
 				else
 				{
-					//logger.warn("El siguiente registro ya se encuentre en el sistema:");
-					//logger.warn("|"+linea+"|");
-					iCodigo = 2;
+					if (!QMActivos.compruebaActivo(conexion,activo))
+					{
+						if (QMActivos.modActivo(conexion,activo,sCodActivo))
+						{
+							//logger.info("Activo actualizado.");
+							if (QMRegistroActivos.modRegistroActivo(conexion, sCodActivo))
+							{
+								iCodigo = 1;
+								conexion.commit();
+							}
+							else
+							{
+								iCodigo = -4;
+								conexion.rollback();
+							}
+						}
+						else
+						{
+							iCodigo = -2;
+							conexion.rollback();
+						}
+					}
+					else
+					{
+						//logger.warn("El siguiente registro ya se encuentre en el sistema:");
+						//logger.warn("|"+linea+"|");
+						iCodigo = 2;
+					}
 				}
+				conexion.setAutoCommit(true);
+			} 
+			catch (SQLException e) 
+			{
+				//error de conexion con base de datos.
+				iCodigo = -5;
+
+				try 
+				{
+					//reintentamos
+					conexion.rollback();
+					conexion.setAutoCommit(true);
+					conexion.close();
+				} 
+				catch (SQLException e1) 
+				{
+					try 
+					{
+						conexion.close();
+					}
+					catch (SQLException e2) 
+					{
+						logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+					}
+				}
+				
+				
 			}
+
+
 		}
 				
 		return iCodigo;

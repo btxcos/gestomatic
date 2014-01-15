@@ -30,7 +30,7 @@
         </layout>
     </appender> 
     <root>
-        <priority value="info" />
+        <priority value="debug" />
         <appender-ref ref="loggerSinLinea" />
     </root>
 </log4j:configuration>

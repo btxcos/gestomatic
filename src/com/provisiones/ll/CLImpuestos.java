@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.provisiones.dal.ConnectionManager;
@@ -283,144 +284,190 @@ public final class CLImpuestos
 				}
 				else
 				{
-					int indice = QMMovimientosImpuestos.addMovimientoImpuestoRecurso(conexion,movimiento_revisado);
-					
-					if (indice == 0)
+					try 
 					{
-						//error al crear un movimiento
-						iCodigo = -900;
-					}
-					else
-					{	
-						ValoresDefecto.TIPOSACCIONES COACCES = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
+						conexion.setAutoCommit(false);
+
+						int indice = QMMovimientosImpuestos.addMovimientoImpuestoRecurso(conexion,movimiento_revisado);
 						
-						switch (COACCES) 
+						if (indice == 0)
 						{
-							case A:
-								ImpuestoRecurso impuestodealta = convierteMovimientoenImpuesto(movimiento_revisado);
+							//error al crear un movimiento
+							iCodigo = -900;
+						}
+						else
+						{	
+							ValoresDefecto.TIPOSACCIONES COACCES = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
+							
+							switch (COACCES) 
+							{
+								case A:
+									ImpuestoRecurso impuestodealta = convierteMovimientoenImpuesto(movimiento_revisado);
 
-								logger.debug("Dando de alta la referencia...");
+									logger.debug("Dando de alta la referencia...");
 
-								logger.debug(impuestodealta.logImpuestoRecurso());
+									logger.debug(impuestodealta.logImpuestoRecurso());
 
-								if (estaDeBaja (movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC())) //Alta de baja
-								{
-									if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
+									if (estaDeBaja (movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC())) //Alta de baja
 									{
-										if (QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_ALTA))
+										if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
 										{
-											if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento),sCodImpuesto))
+											if (QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_ALTA))
 											{
-												//OK 
-												iCodigo = 0;
+												if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento),sCodImpuesto))
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													//error modificacion impuesto - Rollback
+													//QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_BAJA);
+													//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+													//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
+													iCodigo = -904;
+													conexion.rollback();
+												}
 											}
 											else
 											{
-												//error modificacion impuesto - Rollback
-												QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_BAJA);
-												QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-												QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
-												iCodigo = -904;						
+												//error estado no establecido - Rollback
+												//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+												//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
+												iCodigo = -903;
+												conexion.rollback();
 											}
-										}
-										else
-										{
-											//error estado no establecido - Rollback
-											QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-											QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
-											iCodigo = -903;
-										}
-									}
-									else
-									{
-										//error relacion impuesto no creada - Rollback
-										QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-										iCodigo = -902;
-									}
-
-								}
-								else //Alta nueva
-								{
-									sCodImpuesto = Long.toString(QMImpuestos.addImpuesto(conexion,impuestodealta));
-									if (!sCodImpuesto.equals("0"))
-									{
-										//OK - impuesto creado
-										logger.debug("Hecho!");
-										if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
-										{
-											//OK 
-											iCodigo = 0;
 										}
 										else
 										{
 											//error relacion impuesto no creada - Rollback
-											QMImpuestos.delImpuestoRecurso(conexion,sCodImpuesto);
-											QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+											//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
 											iCodigo = -902;
+											conexion.rollback();
 										}
-									}
-									else
-									{
-										//error impuesto no creada - Rollback
-										QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-										iCodigo = -901;
-									}
 
-								}
-							
-								break;
-							case B:
-								if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
-								{
+									}
+									else //Alta nueva
+									{
+										sCodImpuesto = Long.toString(QMImpuestos.addImpuesto(conexion,impuestodealta));
+										if (!sCodImpuesto.equals("0"))
+										{
+											//OK - impuesto creado
+											logger.debug("Hecho!");
+											if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												//error relacion impuesto no creada - Rollback
+												//QMImpuestos.delImpuestoRecurso(conexion,sCodImpuesto);
+												//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+												iCodigo = -902;
+												conexion.rollback();
+											}
+										}
+										else
+										{
+											//error impuesto no creada - Rollback
+											//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+											iCodigo = -901;
+											conexion.rollback();
+										}
+
+									}
 								
-									if (QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_BAJA))
+									break;
+								case B:
+									if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
 									{
-										//OK 
-										iCodigo = 0; 
+									
+										if (QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_BAJA))
+										{
+											//OK 
+											iCodigo = 0;
+											conexion.commit();
+										}
+										else
+										{
+											//error estado no establecido - Rollback
+											//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+											//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
+											iCodigo = -903;
+											conexion.rollback();
+										}
+			
 									}
 									else
 									{
-										//error estado no establecido - Rollback
-										QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-										QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
-										iCodigo = -903;
+										//error relacion impuesto no creada - Rollback
+										//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+										iCodigo = -902;
+										conexion.rollback();
 									}
-		
-								}
-								else
-								{
-									//error relacion impuesto no creada - Rollback
-									QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-									iCodigo = -902;
-								}
-								break;
-							case M:
-								if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
-								{
-									//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
-									if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento), sCodImpuesto))
+									break;
+								case M:
+									if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
 									{
-										//OK 
-										iCodigo = 0;
-									}
-									else
-									{
-										//error modificacion impuesto - Rollback
-										QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-										QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
-										iCodigo = -904;						
-									}
+										//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
+										if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento), sCodImpuesto))
+										{
+											//OK 
+											iCodigo = 0;
+											conexion.commit();
+										}
+										else
+										{
+											//error modificacion impuesto - Rollback
+											//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+											//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
+											iCodigo = -904;
+											conexion.rollback();
+										}
 
-								}
-								else
-								{
-									//error relacion impuesto no creada - Rollback
-									QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-									iCodigo = -902;
-								}
-								break;
-							default:
-								break;
+									}
+									else
+									{
+										//error relacion impuesto no creada - Rollback
+										//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
+										iCodigo = -902;
+										conexion.rollback();
+									}
+									break;
+								default:
+									break;
+							}
+						}
+					
+						
+						conexion.setAutoCommit(true);
+					
+					} 
+					catch (SQLException e) 
+					{
+						//error de conexion con base de datos.
+						iCodigo = -910;
+
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException e1) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException e2) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
 						}
 					}
 				}

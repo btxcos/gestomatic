@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
@@ -117,12 +116,12 @@ public class GestorListaGastos implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla buscaactivos = new ActivoTabla(
+			ActivoTabla filtro = new ActivoTabla(
 					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(buscaactivos));
+			this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
 
 			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 			

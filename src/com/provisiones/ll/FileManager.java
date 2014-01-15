@@ -637,11 +637,23 @@ public final class FileManager
 	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
 	    				break;
 	    			case -1:
-	    				sDescripcion = "[FATAL] Error al registrar el Activo.";
+	    				sDescripcion = "[FATAL] Error al crear el Activo.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case -2:
 	    				sDescripcion = "[FATAL] Error al actualizar el Activo.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -3:
+	    				sDescripcion = "[FATAL] Error al crear la entrada en el registro de Activos.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
+	    				break;
+	    			case -4:
+	    				sDescripcion = "[FATAL] Error al modificar la entrada en el registro de Activos.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -5:
+	    				sDescripcion = "[FATAL] Error de acceso a base de datos.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
 	    			case 1:

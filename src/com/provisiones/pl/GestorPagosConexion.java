@@ -295,7 +295,7 @@ public class GestorPagosConexion implements Serializable
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLGastos.buscarActivosConGastosValidados(buscaactivos));
+			this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(buscaactivos));
 			
 			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
@@ -936,10 +936,17 @@ public class GestorPagosConexion implements Serializable
 					msg = Utils.pfmsgFatal(sMsg);
 					logger.error(sMsg);
 					break;
+					
+				case -910: //Error 910 - error y rollback - error al conectar con la base de datos
+					sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
 
 				default: //error generico
-					msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
-					logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
+					sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
 					break;
 				}
 

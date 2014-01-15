@@ -461,9 +461,16 @@ public class GestorComunidades implements Serializable
 					logger.error(sMsg);
 					break;
 					
+				case -910: //Error 910 - error y rollback - error al conectar con la base de datos
+					sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
 				default: //error generico
-					msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operación solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.");
-					logger.error("[FATAL] ERROR:{} - La operación solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.",iSalida);
+					sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
 					break;
 				}
 			}

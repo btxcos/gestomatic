@@ -1,6 +1,7 @@
 package com.provisiones.ll;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -305,143 +306,189 @@ public final class CLReferencias
 				}
 				else
 				{
-					int indice = QMMovimientosReferencias.addMovimientoReferenciaCatastral(conexion,movimiento_revisado);
-					
-					if (indice == 0)
+					try 
 					{
-						//error al crear un movimiento
-						iCodigo = -900;
-					}
-					else
-					{	
-						ValoresDefecto.TIPOSACCIONES COACCES = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
+						conexion.setAutoCommit(false);
+
+						int indice = QMMovimientosReferencias.addMovimientoReferenciaCatastral(conexion,movimiento_revisado);
 						
-						switch (COACCES) 
+						if (indice == 0)
 						{
-							case A:
-								ReferenciaCatastral referenciadealta = convierteMovimientoenReferencia(movimiento_revisado);
-
-								logger.debug("Dando de alta la referencia...");
-
-								logger.debug(referenciadealta.logReferenciaCatastral());
+							//error al crear un movimiento
+							iCodigo = -900;
+						}
+						else
+						{	
+							ValoresDefecto.TIPOSACCIONES COACCES = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
 							
-								if (estaDeBaja(movimiento_revisado.getNURCAT()))
-								{
-									if (QMListaReferencias.addRelacionReferencia(conexion,movimiento_revisado.getCOACES(),sCodReferencia, Integer.toString(indice)))
+							switch (COACCES) 
+							{
+								case A:
+									ReferenciaCatastral referenciadealta = convierteMovimientoenReferencia(movimiento_revisado);
+
+									logger.debug("Dando de alta la referencia...");
+
+									logger.debug(referenciadealta.logReferenciaCatastral());
+								
+									if (estaDeBaja(movimiento_revisado.getNURCAT()))
 									{
-										//OK 
-										if (QMReferencias.setEstado(conexion,sCodReferencia, ValoresDefecto.DEF_ALTA))
+										if (QMListaReferencias.addRelacionReferencia(conexion,movimiento_revisado.getCOACES(),sCodReferencia, Integer.toString(indice)))
 										{
-											//Se cambian los valores de la antigua referencia
-											if(QMReferencias.modReferenciaCatastral(conexion,convierteMovimientoenReferencia(movimiento), sCodReferencia))
+											//OK 
+											if (QMReferencias.setEstado(conexion,sCodReferencia, ValoresDefecto.DEF_ALTA))
 											{
-												//OK 
-												iCodigo = 0;
+												//Se cambian los valores de la antigua referencia
+												if(QMReferencias.modReferenciaCatastral(conexion,convierteMovimientoenReferencia(movimiento), sCodReferencia))
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+													//QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
+													//QMReferencias.setEstado(conexion,sCodReferencia, ValoresDefecto.DEF_BAJA);
+													iCodigo = -904;
+													conexion.rollback();
+												}
 											}
 											else
 											{
-												QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
-												QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
-												QMReferencias.setEstado(conexion,sCodReferencia, ValoresDefecto.DEF_BAJA);
-												iCodigo = -904;						
+												//error estado no establecido - Rollback
+												//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+												//QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
+												iCodigo = -903;
+												conexion.rollback();
 											}
 										}
 										else
 										{
+											//error relacion referencia no creada - Rollback
+											//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+											iCodigo = -902;
+											conexion.rollback();
+										}
+										
+
+									}
+									else
+									{
+										sCodReferencia = Long.toString(QMReferencias.addReferenciaCatastral(conexion,referenciadealta));
+										if (!sCodReferencia.equals("0"))
+										{
+											//OK - referencia creada
+											logger.debug("Hecho!");
+											if (QMListaReferencias.addRelacionReferencia(conexion,movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												//error relacion referencia no creada - Rollback
+												//QMReferencias.delReferenciaCatastral(conexion,sCodReferencia);
+												//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+												iCodigo = -902;
+												conexion.rollback();
+											}
+										}
+										else
+										{
+											//error referencia no creada - Rollback
+											//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+											iCodigo = -901;
+											conexion.rollback();
+										}
+									}
+									
+									break;
+								case B:
+									if (QMListaReferencias.addRelacionReferencia(conexion,movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
+									{
+										if (QMReferencias.setEstado(conexion,sCodReferencia, ValoresDefecto.DEF_BAJA))
+										{
+											//OK 
+											iCodigo = 0; 
+											conexion.commit();
+										}
+										else
+										{
+											//ReferenciaCatastral referenciadebaja = convierteMovimientoenReferencia(movimiento);
 											//error estado no establecido - Rollback
-											QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
-											QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
+											//QMReferencias.addReferenciaCatastral(referenciadebaja);
+											//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+											//QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
 											iCodigo = -903;
+											conexion.rollback();
 										}
 									}
 									else
 									{
 										//error relacion referencia no creada - Rollback
-										QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+										//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 										iCodigo = -902;
+										conexion.rollback();
 									}
-									
-
-								}
-								else
-								{
-									sCodReferencia = Long.toString(QMReferencias.addReferenciaCatastral(conexion,referenciadealta));
-									if (!sCodReferencia.equals("0"))
+									break;
+								case M:
+									if (QMListaReferencias.addRelacionReferencia(conexion,movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
 									{
-										//OK - referencia creada
-										logger.debug("Hecho!");
-										if (QMListaReferencias.addRelacionReferencia(conexion,movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
+										//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
+										if(QMReferencias.modReferenciaCatastral(conexion,convierteMovimientoenReferencia(movimiento), sCodReferencia))
 										{
 											//OK 
 											iCodigo = 0;
+											conexion.commit();
 										}
 										else
 										{
-											//error relacion referencia no creada - Rollback
-											QMReferencias.delReferenciaCatastral(conexion,sCodReferencia);
-											QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
-											iCodigo = -902;
+											//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+											//QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
+											iCodigo = -904;
+											conexion.rollback();
 										}
 									}
 									else
 									{
-										//error referencia no creada - Rollback
-										QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
-										iCodigo = -901;
+										//error relacion referencia no creada - Rollback
+										//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
+										iCodigo = -902;
+										conexion.rollback();
 									}
-								}
-								
-								break;
-							case B:
-								if (QMListaReferencias.addRelacionReferencia(conexion,movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
-								{
-									if (QMReferencias.setEstado(conexion,sCodReferencia, ValoresDefecto.DEF_BAJA))
-									{
-										//OK 
-										iCodigo = 0; 
-									}
-									else
-									{
-										//ReferenciaCatastral referenciadebaja = convierteMovimientoenReferencia(movimiento);
-										//error estado no establecido - Rollback
-										//QMReferencias.addReferenciaCatastral(referenciadebaja);
-										QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
-										QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
-										iCodigo = -903;
-									}
-								}
-								else
-								{
-									//error relacion referencia no creada - Rollback
-									QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
-									iCodigo = -902;
-								}
-								break;
-							case M:
-								if (QMListaReferencias.addRelacionReferencia(conexion,movimiento_revisado.getCOACES(), sCodReferencia, Integer.toString(indice)))
-								{
-									//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
-									if(QMReferencias.modReferenciaCatastral(conexion,convierteMovimientoenReferencia(movimiento), sCodReferencia))
-									{
-										//OK 
-										iCodigo = 0;
-									}
-									else
-									{
-										QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
-										QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
-										iCodigo = -904;						
-									}
-								}
-								else
-								{
-									//error relacion referencia no creada - Rollback
-									QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
-									iCodigo = -902;
-								}
-								break;
-							default:
-								break;
+									break;
+								default:
+									break;
+							}
+						}
+					
+						
+						conexion.setAutoCommit(true);
+					
+					} 
+					catch (SQLException e) 
+					{
+						//error de conexion con base de datos.
+						iCodigo = -910;
+
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException e1) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException e2) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
 						}
 					}
 				}

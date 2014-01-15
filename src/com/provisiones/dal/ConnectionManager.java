@@ -117,6 +117,8 @@ public final class ConnectionManager
 			//conn = DriverManager.getConnection(sConnectionData);
 			conn = DriverManager.getConnection(sURL,sUser,sPass);
 			//logger.debug("tiempo FIN:|{}|", Utils.timeStamp());
+			
+			//conn.setAutoCommit(false);
 
 		} 
 		catch (SQLException ex) 

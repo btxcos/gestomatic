@@ -1,6 +1,7 @@
 package com.provisiones.ll;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -277,145 +278,190 @@ public final class CLCuotas
 				}
 				else
 				{
-					int indice = QMMovimientosCuotas.addMovimientoCuota(conexion,movimiento_revisado);
-					
-					if (indice == 0)
+					try 
 					{
-						//error al crear un movimiento
-						iCodigo = -900;
-					}
-					else
-					{	
-				
-						ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
-					
-						switch (COACCI)
+						conexion.setAutoCommit(false);
+
+						int indice = QMMovimientosCuotas.addMovimientoCuota(conexion,movimiento_revisado);
+						
+						if (indice == 0)
 						{
-							case A:
-								Cuota cuotadealta = convierteMovimientoenCuota(movimiento_revisado);
+							//error al crear un movimiento
+							iCodigo = -900;
+						}
+						else
+						{
 
-								logger.debug("Dando de alta la cuota...");
+							ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
+						
+							switch (COACCI)
+							{
+								case A:
+									Cuota cuotadealta = convierteMovimientoenCuota(movimiento_revisado);
 
-								logger.debug(cuotadealta.logCuota());
-								
-								if (estaDeBaja(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
-								{
-									if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
+									logger.debug("Dando de alta la cuota...");
+
+									logger.debug(cuotadealta.logCuota());
+									
+									if (estaDeBaja(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
 									{
-										//OK 
-										if (QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_ALTA))
+										if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
 										{
-											//Se cambian los valores de la antigua cuota
-											if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), sCodCuota))
+											//OK 
+											if (QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_ALTA))
 											{
-												//OK 
-												iCodigo = 0;
+												//Se cambian los valores de la antigua cuota
+												if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), sCodCuota))
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													//Error cuota no modificada
+													//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+													//QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
+													//QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_BAJA);
+													iCodigo = -904;	
+													conexion.rollback();
+												} 
 											}
 											else
 											{
-												//Error cuota no modificada
-												QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-												QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
-												QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_BAJA);
-												iCodigo = -904;									
-											} 
+												//error estado no establecido - Rollback
+												//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+												//QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
+												iCodigo = -903;
+												conexion.rollback();
+											}
+										}
+										else
+										{
+											//error relacion cuota no creada - Rollback
+											//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+											iCodigo = -902;
+											conexion.rollback();
+										}
+										
+
+									}
+									else
+									{
+										sCodCuota = Long.toString(QMCuotas.addCuota(conexion,cuotadealta));
+										if (!sCodCuota.equals("0"))
+										{
+											//OK - Cuota creada
+											logger.debug("Hecho!");
+											if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												//error relacion cuota no creada - Rollback
+												//QMCuotas.delCuota(conexion,sCodCuota);
+												//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+												iCodigo = -902;
+												conexion.rollback();
+											}
+										}
+										else
+										{
+											//error cuota no creada - Rollback
+											//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+											iCodigo = -901;
+											conexion.rollback();
+										}
+									}
+
+									break;
+								case B:
+									if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
+									{
+										if (QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_BAJA))
+										{
+											//OK 
+											iCodigo = 0;
+											conexion.commit();
 										}
 										else
 										{
 											//error estado no establecido - Rollback
-											QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-											QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
+											//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+											//QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
 											iCodigo = -903;
+											conexion.rollback();
 										}
 									}
 									else
 									{
 										//error relacion cuota no creada - Rollback
-										QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+										//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
 										iCodigo = -902;
+										conexion.rollback();
 									}
-									
-
-								}
-								else
-								{
-									sCodCuota = Long.toString(QMCuotas.addCuota(conexion,cuotadealta));
-									if (!sCodCuota.equals("0"))
+									break;
+								case M:
+									if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
 									{
-										//OK - Cuota creada
-										logger.debug("Hecho!");
-										if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
+										//Cuota cuotamodificada = QMCuotas.getCuota( movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC());
+										if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), sCodCuota))
 										{
 											//OK 
 											iCodigo = 0;
+											conexion.rollback();
 										}
 										else
 										{
-											//error relacion cuota no creada - Rollback
-											QMCuotas.delCuota(conexion,sCodCuota);
-											QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-											iCodigo = -902;
+											//Error cuota no modificada
+											//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+											//QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
+											iCodigo = -904;
+											conexion.rollback();
 										}
-									}
-									else
-									{
-										//error cuota no creada - Rollback
-										QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-										iCodigo = -901;
-									}
-								}
 
-								break;
-							case B:
-								if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
-								{
-									if (QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_BAJA))
-									{
-										//OK 
-										iCodigo = 0; 
 									}
 									else
 									{
-										//error estado no establecido - Rollback
-										QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-										QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
-										iCodigo = -903;
+										//error relacion cuota no creada - Rollback
+										//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
+										iCodigo = -902;
+										conexion.rollback();
 									}
-								}
-								else
-								{
-									//error relacion cuota no creada - Rollback
-									QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-									iCodigo = -902;
-								}
-								break;
-							case M:
-								if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
-								{
-									//Cuota cuotamodificada = QMCuotas.getCuota( movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC());
-									if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), sCodCuota))
-									{
-										//OK 
-										iCodigo = 0;
-									}
-									else
-									{
-										//Error cuota no modificada
-										QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-										QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
-										iCodigo = -904;									
-									}
+									break;
+								default:
+									break;
+							}
+							
+						}
+						
+						conexion.setAutoCommit(true);
+					} 
+					catch (SQLException e) 
+					{
+						//error de conexion con base de datos.
+						iCodigo = -910;
 
-								}
-								else
-								{
-									//error relacion cuota no creada - Rollback
-									QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-									iCodigo = -902;
-								}
-								break;
-							default:
-								break;
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException e1) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException e2) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
 						}
 					}
 				}

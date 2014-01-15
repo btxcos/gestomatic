@@ -1193,7 +1193,7 @@ public final class QMGastos
 		return resultado;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosConGastos(Connection conexion, ActivoTabla filtro)
+	public static ArrayList<ActivoTabla> buscaActivosConGastosPendientes(Connection conexion, ActivoTabla filtro)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 

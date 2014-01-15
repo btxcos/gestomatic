@@ -1,6 +1,7 @@
 package com.provisiones.ll;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -472,173 +473,230 @@ public final class CLComunidades
 				}
 				else
 				{
-
-					int indice = QMMovimientosComunidades.addMovimientoComunidad(conexion,movimiento_revisado);
-					
-					if (indice == 0)
+					try 
 					{
-						//Error al crear un movimiento
-						iCodigo = -900;
-					}
-					else
-					{
-						ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
+						conexion.setAutoCommit(false);
 						
-						switch (COACCI) 
+						int indice = QMMovimientosComunidades.addMovimientoComunidad(conexion,movimiento_revisado);
+						
+						if (indice == 0)
 						{
-							case A:
-								
-								logger.debug("Dando de Alta...");
-								
-								Comunidad comunidad = convierteMovimientoenComunidad(movimiento_revisado);
-								
-								sCodComunidad = Long.toString(QMComunidades.addComunidad(conexion,comunidad));
-								
-								if (!sCodComunidad.equals("0"))
-								{
-								
-									if (QMListaComunidades.addRelacionComunidad(conexion,sCodComunidad, Integer.toString(indice)))
-									{	
-																	
+							//Error al crear un movimiento
+							iCodigo = -900;
+							conexion.rollback();
+						}
+						else
+						{
+							ValoresDefecto.TIPOSACCIONES COACCI = ValoresDefecto.TIPOSACCIONES.valueOf(movimiento.getCOACCI());
+							
+							switch (COACCI) 
+							{
+								case A:
+									
+									logger.debug("Dando de Alta...");
+									
+									Comunidad comunidad = convierteMovimientoenComunidad(movimiento_revisado);
+									
+									sCodComunidad = Long.toString(QMComunidades.addComunidad(conexion,comunidad));
+									
+									if (!sCodComunidad.equals("0"))
+									{
+									
+										if (QMListaComunidades.addRelacionComunidad(conexion,sCodComunidad, Integer.toString(indice)))
+										{	
+																		
 
-										logger.debug("COACES:|{}|",movimiento_revisado.getCOACES());
-										/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().equals(""))
-										{
-											//OK 
-											iCodigo = 0;
-										}
-										else*/ if (QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), sCodComunidad, Integer.toString(indice)))
-										{
-											//OK 
-											iCodigo = 0;
+											logger.debug("COACES:|{}|",movimiento_revisado.getCOACES());
+											/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().equals(""))
+											{
+												//OK 
+												iCodigo = 0;
+											}
+											else*/ 
+											if (QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), sCodComunidad, Integer.toString(indice)))
+											{
+												//OK 
+												iCodigo = 0;
+												
+												conexion.commit();
+											}
+											else
+											{
+												//Error y Rollback - error al registrar el activo durante el alta
+												iCodigo = -903;
+												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+												//QMComunidades.delComunidad(conexion,sCodComunidad);
+												//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
+												conexion.rollback();
+											}
 										}
 										else
 										{
-											//Error y Rollback - error al registrar el activo durante el alta
-											iCodigo = -903;
-											QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-											QMComunidades.delComunidad(conexion,sCodComunidad);
-											QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
+											//Error y Rollback - error al registrar la relaccion
+												iCodigo = -902;
+												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+												//QMComunidades.delComunidad(conexion,sCodComunidad);
+												
+												conexion.rollback();
 										}
 									}
 									else
 									{
-										//Error y Rollback - error al registrar la relaccion
-											iCodigo = -902;
-											QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-											QMComunidades.delComunidad(conexion,sCodComunidad);
+										//Error y Rollback - error al registrar la comuidad
+											iCodigo = -901;
+											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+											
+											conexion.rollback();
 									}
-								}
-								else
-								{
-									//Error y Rollback - error al registrar la comuidad
-										iCodigo = -901;
-										QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-								}
-								break;
-							case B:
-								if (QMListaComunidades.addRelacionComunidad(conexion,sCodComunidad, Integer.toString(indice)))
-								{
-									
-									logger.debug("Dando de Baja...");
-									if (QMComunidades.setEstado(conexion,sCodComunidad, "B"))
+									break;
+								case B:
+									if (QMListaComunidades.addRelacionComunidad(conexion,sCodComunidad, Integer.toString(indice)))
 									{
-										//OK 
-										iCodigo = 0; 
-									}
-									else
-									{
-										//error y rollback - error al cambiar el estado
-										iCodigo = -904;
-										QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-										QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-									}
-								}
-								else
-								{
-									//error y rollback - error al registrar la relaccion
-									iCodigo = -902;
-									QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-								}
-								break;
-							case M:
-								if (QMListaComunidades.addRelacionComunidad(conexion,sCodComunidad, Integer.toString(indice)))
-								{
-									logger.debug("Modificando...");
 										
-									logger.debug(movimiento.logMovimientoComunidad());
-									logger.debug(movimiento_revisado.logMovimientoComunidad());
+										logger.debug("Dando de Baja...");
+										if (QMComunidades.setEstado(conexion,sCodComunidad, "B"))
+										{
+											//OK 
+											iCodigo = 0; 
+											conexion.commit();
+										}
+										else
+										{
+											//error y rollback - error al cambiar el estado
+											iCodigo = -904;
+											//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
+											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+											
+											conexion.rollback();
+										}
+									}
+									else
+									{
+										//error y rollback - error al registrar la relaccion
+										iCodigo = -902;
+										//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
 										
-									if (QMComunidades.modComunidad(conexion,convierteMovimientoenComunidad(movimiento), sCodComunidad))
-									{	
-										//OK 
-										iCodigo = 0;
+										conexion.rollback();
 									}
-									else
+									break;
+								case M:
+									if (QMListaComunidades.addRelacionComunidad(conexion,sCodComunidad, Integer.toString(indice)))
 									{
-										//error y rollback - error al modificar la comunidad
-										iCodigo = -905;
-										QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-										QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-									}
-								}
-								else
-								{
-									//error y rollback - error al registrar la relaccion
-									iCodigo = -902;
-									QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-								}
-								break;
-							case X:
-									String sMovimientoAlta = QMListaComunidadesActivos.getMovimientoDeActivoVinculadoComunidad(conexion,sCodComunidad, movimiento_revisado.getCOACES());
-									if (!sMovimientoAlta.equals(""))
-									{
-										//error y rollback - el activo ya esta vinculado
-										iCodigo = -906;
-										QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-									}
-									else
-									{							
-										if (QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), sCodComunidad, Integer.toString(indice)))
-										{
+										logger.debug("Modificando...");
+											
+										logger.debug(movimiento.logMovimientoComunidad());
+										logger.debug(movimiento_revisado.logMovimientoComunidad());
+											
+										if (QMComunidades.modComunidad(conexion,convierteMovimientoenComunidad(movimiento), sCodComunidad))
+										{	
 											//OK 
 											iCodigo = 0;
+											conexion.commit();
 										}
 										else
 										{
-											//error y rollback - error al asociar el activo en la comunidad
-											iCodigo = -907;
-											QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+											//error y rollback - error al modificar la comunidad
+											iCodigo = -905;
+											//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
+											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+											conexion.rollback();
 										}
-									}
-								break;
-							case E:
-									String sMovimientoBaja = QMListaComunidadesActivos.getMovimientoDeActivoVinculadoComunidad(conexion,sCodComunidad, movimiento_revisado.getCOACES());
-									
-									if (sMovimientoBaja.equals(""))
-									{
-										//error y rollback - el activo no esta vinculado
-										iCodigo = -908;
-										QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
 									}
 									else
-									{	
-										if (QMListaComunidadesActivos.delRelacionComunidad(conexion,sMovimientoBaja))
+									{
+										//error y rollback - error al registrar la relaccion
+										iCodigo = -902;
+										//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+										conexion.rollback();
+									}
+									break;
+								case X:
+										String sMovimientoAlta = QMListaComunidadesActivos.getMovimientoDeActivoVinculadoComunidad(conexion,sCodComunidad, movimiento_revisado.getCOACES());
+										if (!sMovimientoAlta.equals(""))
 										{
-											//OK 
-											iCodigo = 0;
+											//error y rollback - el activo ya esta vinculado
+											iCodigo = -906;
+											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+											conexion.rollback();
 										}
 										else
-										{
-											//error y rollback - error al desasociar el activo en la comunidad
-											iCodigo = -909;
-											QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-											QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), sCodComunidad, sMovimientoBaja);
+										{							
+											if (QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), sCodComunidad, Integer.toString(indice)))
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												//error y rollback - error al asociar el activo en la comunidad
+												iCodigo = -907;
+												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+												conexion.rollback();
+											}
 										}
-									}
-								break;
-						}	
+									break;
+								case E:
+										String sMovimientoBaja = QMListaComunidadesActivos.getMovimientoDeActivoVinculadoComunidad(conexion,sCodComunidad, movimiento_revisado.getCOACES());
+										
+										if (sMovimientoBaja.equals(""))
+										{
+											//error y rollback - el activo no esta vinculado
+											iCodigo = -908;
+											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+											conexion.rollback();
+										}
+										else
+										{	
+											if (QMListaComunidadesActivos.delRelacionComunidad(conexion,sMovimientoBaja))
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												//error y rollback - error al desasociar el activo en la comunidad
+												iCodigo = -909;
+												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+												//QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), sCodComunidad, sMovimientoBaja);
+												
+												conexion.rollback();
+											}
+										}
+									break;
+							}	
+						}
+						
+						conexion.setAutoCommit(true);
+						
 					}
+					catch (SQLException e) 
+					{
+						//error de conexion con base de datos.
+						iCodigo = -910;
+
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException e1) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException e2) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+
+
 				}
 			}
 		}
