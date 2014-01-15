@@ -563,7 +563,7 @@ public final class QMListaGastos
 	   					   " FROM " 
 						   + QMGastos.TABLA +
 	   					   " WHERE " 
-	   					   + QMGastos.CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO 
+	   					   + QMGastos.CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO +"' AND "
 
 	   					   + QMGastos.CAMPO1 + " IN (SELECT "
 						   + CAMPO1 + 
