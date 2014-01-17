@@ -577,17 +577,15 @@ public final class Utils
 		
 		return sFechaFormateada;
 	}
-	
-    public static boolean compruebaCC(String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT) 
+    public static String calculaDC(String sNUCCEN, String sNUCCOF, String sNUCCNT) 
     {
-
     	String sDC = "";
         int iTotal = 0;
         int iProducto = 0;
         String sCifra1 = "";
         String sCifra2 = "";
         
-        boolean bResultado = false;
+
         
         //logger.debug("sNUCCEN:|{}|",sNUCCEN);
         //logger.debug("sNUCCOF:|{}|",sNUCCOF);
@@ -597,7 +595,6 @@ public final class Utils
         
         if ((sNUCCEN.length() == 4)
         	&& (sNUCCOF.length() == 4)
-        	&& (sNUCCDI.length() == 2)
         	&& (sNUCCNT.length() == 10))
         {
             /*Primer dígito.*/
@@ -721,11 +718,21 @@ public final class Utils
             }
 
             sDC=sCifra1+sCifra2;
-            
-            bResultado = sDC.equals(sNUCCDI); 
         }
-
-        return bResultado;
+        
+        return sDC;
+    }
+	
+    public static boolean compruebaCC(String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT) 
+    {
+    	boolean bOK = false;
+    	
+    	if (sNUCCDI.length() == 2)
+    	{
+    		bOK = calculaDC(sNUCCEN,sNUCCOF,sNUCCNT).equals(sNUCCDI);
+    	}
+    	
+        return bOK;
     }
     
     public static boolean compruebaCIF(String sNUDCOM) 

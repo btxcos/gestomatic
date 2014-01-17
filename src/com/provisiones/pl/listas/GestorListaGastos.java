@@ -158,13 +158,27 @@ public class GestorListaGastos implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = ""; 
-
-			this.setTablaprovisiones(CLProvisiones.buscarProvisionesFecha(Utils.compruebaFecha(sFEPFON)));
-
-			sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
-			msg = Utils.pfmsgInfo(sMsg);
 			
-			logger.info(sMsg);
+			String sFecha = Utils.compruebaFecha(sFEPFON);
+			
+			if (sFecha.equals("#"))
+			{
+				sMsg = "La fecha proporcionada no es válida. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				
+				logger.error(sMsg);
+			}
+			else
+			{
+				this.setTablaprovisiones(CLProvisiones.buscarProvisionesFecha(sFecha));
+
+				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
+				msg = Utils.pfmsgInfo(sMsg);
+				
+				logger.info(sMsg);
+			}
+
+
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -204,7 +218,7 @@ public class GestorListaGastos implements Serializable
 			this.setTablagastos(CLGastos.buscarGastosProvision(sNUPROF));
 		}
 		
-		logger.debug("Encontrados "+getTablagastos().size()+" activos relacionados.");
+		logger.debug("Encontrados "+getTablagastos().size()+" gastos relacionados.");
 	}
     
 	public void buscarGastos (ActionEvent actionEvent)
@@ -242,6 +256,7 @@ public class GestorListaGastos implements Serializable
 		{
 			if (gastoseleccionado != null)
 			{
+				this.sCOACES = gastoseleccionado.getCOACES();
 		    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
 		    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
 		    	this.sCOSBGA = gastoseleccionado.getCOSBGA();

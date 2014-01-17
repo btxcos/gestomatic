@@ -1031,6 +1031,8 @@ public final class QMProvisiones
 			String sDCOSPAT = "";
 			String sVALOR = "";
 			String sGASTOS = "";
+			
+			String sCondicion = (sFEPFON.equals("0")) ? "" : CAMPO8 + " = '"+ sFEPFON + "' AND ";
 
 			boolean bEncontrado = false;
 
@@ -1044,7 +1046,7 @@ public final class QMProvisiones
 					+ CAMPO5 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
-					+ CAMPO8 + " = '"+ sFEPFON + "' AND "
+					+ sCondicion
 					+CAMPO1+" <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+
 					"' )";
 			
