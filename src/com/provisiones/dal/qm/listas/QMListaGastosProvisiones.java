@@ -706,9 +706,9 @@ public final class QMListaGastosProvisiones
 						   + QMGastos.CAMPO5 + ","
 						   + QMGastos.CAMPO6 + ","
 						   + QMGastos.CAMPO7 + ","
-						   + QMGastos.CAMPO11 + ","
-						   + QMGastos.CAMPO16 + ","
-						   + QMGastos.CAMPO17 +
+						   + QMGastos.CAMPO10 + ","
+						   + QMGastos.CAMPO15 + ","
+						   + QMGastos.CAMPO16 +
 
 						   " FROM " 
 						   + QMGastos.TABLA + 
@@ -747,9 +747,9 @@ public final class QMListaGastosProvisiones
 						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
 						sDPTPAGO = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
 						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
-						sCOSIGA  = rs.getString(QMGastos.CAMPO11);
+						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
 						sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16));
+						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sCOACES,
@@ -918,12 +918,12 @@ public final class QMListaGastosProvisiones
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-					+ QMGastos.CAMPO16 + ","
-					+ QMGastos.CAMPO17 +
+					+ QMGastos.CAMPO15 + ","
+					+ QMGastos.CAMPO16 +
 					" FROM "
 					+ QMGastos.TABLA + 
 					" WHERE (" 
-					+ QMGastos.CAMPO35 + " NOT IN ('" 
+					+ QMGastos.CAMPO34 + " NOT IN ('" 
 					+ ValoresDefecto.DEF_GASTO_ANULADO + "','"
 					+ ValoresDefecto.DEF_GASTO_ABONADO +
 					"') AND "
@@ -955,7 +955,7 @@ public final class QMListaGastosProvisiones
 
 						//bNegativo ? "-"+ sEuros + sCentimos : sEuros + sCentimos;
 						
-						liValor = rs.getString(QMGastos.CAMPO17).equals("-") ? liValor - rs.getLong(QMGastos.CAMPO16) : liValor + rs.getLong(QMGastos.CAMPO16);
+						liValor = rs.getString(QMGastos.CAMPO16).equals("-") ? liValor - rs.getLong(QMGastos.CAMPO15) : liValor + rs.getLong(QMGastos.CAMPO15);
 						
 						//dValor = dValor + Double.parseDouble(Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16)));
 						

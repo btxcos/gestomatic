@@ -124,7 +124,9 @@ public class GestorDetallesGasto implements Serializable
 			this.sPTPAGO = gasto.getPTPAGO();
 
 			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
-			this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+			
+			//TODO sacar de datos de pago
+			//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
 			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
 			this.sCOSIGA = gasto.getCOSIGA();
 			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
@@ -145,20 +147,24 @@ public class GestorDetallesGasto implements Serializable
 			this.sCOMONA = gasto.getCOMONA();
 			this.sBIAUTO = gasto.getBIAUTO();
 			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-			this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+			//TODO sacar de datos de pago
+			//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
 			
 			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
 			
-			this.sCOENCX = ValoresDefecto.DEF_COENCX;
-			this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-			this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+			//TODO sacar de datos de pago
+			//this.sCOENCX = ValoresDefecto.DEF_COENCX;
+			//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+			//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
 			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
 
 			this.sCOTERR = ValoresDefecto.DEF_COTERR;
-			this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
+			
+			//TODO sacar de datos de pago
+			//this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
 		
-			this.sFEAPLI = Utils.recuperaFecha(ValoresDefecto.DEF_FEAPLI);
+			this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 			this.sCOAPII = ValoresDefecto.DEF_COAPII;
 			this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 			this.sNUCLII = ValoresDefecto.DEF_NUCLII;

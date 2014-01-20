@@ -651,7 +651,7 @@ public class GestorErroresGastos implements Serializable
 			this.sPTPAGO = gasto.getPTPAGO();
 
 			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
-			this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+			//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
 			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
 			this.sCOSIGA = gasto.getCOSIGA();
 			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
@@ -672,7 +672,7 @@ public class GestorErroresGastos implements Serializable
 			this.sCOMONA = gasto.getCOMONA();
 			this.sBIAUTO = gasto.getBIAUTO();
 			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-			this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+			//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
 			
 			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
 			

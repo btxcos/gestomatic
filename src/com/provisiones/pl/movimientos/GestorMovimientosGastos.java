@@ -42,15 +42,15 @@ public class GestorMovimientosGastos implements Serializable
 	private String sFEDEVE = "";
 	private String sFFGTVP = "";
 	private boolean bFFGTVP = true;
-	private String sFEPAGA = "";
+	//private String sFEPAGA = ValoresDefecto.DEF_FEPAGA;
 	private String sFELIPG = "";
 	private String sCOSIGA = "";
 	private String sFEEESI = "";
 	private boolean bFEEESI = true;
 	private String sFEECOI = "";
 	private boolean bFEECOI = true;
-	private String sFEEAUI = "";
-	private String sFEEPAI = "";
+	//private String sFEEAUI = "";
+	//private String sFEEPAI = "";
 
 	private String sIMNGAS = "";
 	private String sYCOS02 = "";
@@ -69,25 +69,25 @@ public class GestorMovimientosGastos implements Serializable
 	private boolean bIMIMGA = false;
 	private String sCOIMPT = "";
 	
-	private String sCOTNEG = ValoresDefecto.DEF_COTNEG;
+	//private String sCOTNEG = ValoresDefecto.DEF_COTNEG;
 	
-	private String sCOENCX = ValoresDefecto.DEF_COENCX;
-	private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
-	private String sNUCONE = ValoresDefecto.DEF_NUCONE;
+	//private String sCOENCX = ValoresDefecto.DEF_COENCX;
+	//private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
+	//private String sNUCONE = ValoresDefecto.DEF_NUCONE;
 	private String sNUPROF = "";
 	private String sFEAGTO = ValoresDefecto.DEF_FEAGTO;
-	private String sCOMONA = ValoresDefecto.DEF_COMONA;
-	private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
-	private String sFEAUFA = ValoresDefecto.DEF_FEAUFA;
-	private String sCOTERR = ValoresDefecto.DEF_COTERR;
-	private String sFMPAGN = ValoresDefecto.DEF_FMPAGN;
-	private String sFEPGPR = "";
+	//private String sCOMONA = ValoresDefecto.DEF_COMONA;
+	//private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
+	//private String sFEAUFA = ValoresDefecto.DEF_FEAUFA;
+	//private String sCOTERR = ValoresDefecto.DEF_COTERR;
+	//private String sFMPAGN = ValoresDefecto.DEF_FMPAGN;
+	//private String sFEPGPR = ValoresDefecto.DEF_FEPGPR;
 	
-	private String sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+	//private String sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 	
-	private String sCOAPII = ValoresDefecto.DEF_COAPII;
-	private String sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-	private String sNUCLII = ValoresDefecto.DEF_NUCLII;
+	//private String sCOAPII = ValoresDefecto.DEF_COAPII;
+	//private String sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+	//private String sNUCLII = ValoresDefecto.DEF_NUCLII;
 
 	//recuperar cuotas
 	private String sCOSBAC = "";
@@ -215,7 +215,7 @@ public class GestorMovimientosGastos implements Serializable
 		this.sFEDEVE = "";
 		this.sFFGTVP = "";
 		this.bFFGTVP = true;
-		this.sFEPAGA = "";
+		//this.sFEPAGA = ValoresDefecto.DEF_FEPAGA;
 		this.sFELIPG = "";
 
 		this.sCOSIGA = "";
@@ -223,8 +223,8 @@ public class GestorMovimientosGastos implements Serializable
 		this.bFEEESI = true;
 		this.sFEECOI = "";
 		this.bFEECOI = true;
-		this.sFEEAUI = "";
-		this.sFEEPAI = "";
+		//this.sFEEAUI = "";
+		//this.sFEEPAI = "";
 
 		this.sIMNGAS = "";
 		this.sYCOS02 = "";
@@ -241,29 +241,29 @@ public class GestorMovimientosGastos implements Serializable
 		this.sIMIMGA = "";
 		this.sCOIMPT = "";
 
-		this.sCOTNEG = ValoresDefecto.DEF_COTNEG;
+		//this.sCOTNEG = ValoresDefecto.DEF_COTNEG;
 
-		this.sCOENCX = ValoresDefecto.DEF_COENCX;
-		this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-		this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+		//this.sCOENCX = ValoresDefecto.DEF_COENCX;
+		//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+		//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 
 		this.sNUPROF = "";
 
 		this.sFEAGTO = ValoresDefecto.DEF_FEAGTO;
 
-		this.sCOMONA = ValoresDefecto.DEF_COMONA;
-		this.sBIAUTO = ValoresDefecto.DEF_BIAUTO;
-		this.sFEAUFA = ValoresDefecto.DEF_FEAUFA;
-		this.sCOTERR = ValoresDefecto.DEF_COTERR;
+		//this.sCOMONA = ValoresDefecto.DEF_COMONA;
+		//this.sBIAUTO = ValoresDefecto.DEF_BIAUTO;
+		//this.sFEAUFA = ValoresDefecto.DEF_FEAUFA;
+		//this.sCOTERR = ValoresDefecto.DEF_COTERR;
 
-		this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
-		this.sFEPGPR = "";
+		//this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
+		//this.sFEPGPR = "";
 		
-		this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+		//this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 		
-		this.sCOAPII = ValoresDefecto.DEF_COAPII;
-		this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-		this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+		//this.sCOAPII = ValoresDefecto.DEF_COAPII;
+		//this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+		//this.sNUCLII = ValoresDefecto.DEF_NUCLII;
 		
 		this.sCOSBAC = "";
 		this.sIMCUCO = "";
@@ -365,13 +365,13 @@ public class GestorMovimientosGastos implements Serializable
 			this.sPTPAGO = gasto.getPTPAGO();
 
 			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
-			this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+			//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
 			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
 			this.sCOSIGA = gasto.getCOSIGA();
 			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
 			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
-			this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
-			this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+			//this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
+			//this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
 			this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
 			this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
 			this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
@@ -381,28 +381,30 @@ public class GestorMovimientosGastos implements Serializable
 			this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
 			this.sCOIMPT = gasto.getCOIMPT();
 			
-			this.sCOTNEG = gasto.getCOTNEG();
+			//this.sCOTNEG = gasto.getCOTNEG();
 			this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
-			this.sCOMONA = gasto.getCOMONA();
-			this.sBIAUTO = gasto.getBIAUTO();
-			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-			this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+			//this.sCOMONA = gasto.getCOMONA();
+			//this.sBIAUTO = gasto.getBIAUTO();
+			//this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
+			
+			//TODO Buscar FEPGPR en la tabla de pagos si esta en estado pagado, si no, ira a 0.
+			//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
 			
 			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
 			
-			this.sCOENCX = ValoresDefecto.DEF_COENCX;
-			this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-			this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+			//this.sCOENCX = ValoresDefecto.DEF_COENCX;
+			//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+			//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
 			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
 
-			this.sCOTERR = ValoresDefecto.DEF_COTERR;
-			this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
+			//this.sCOTERR = ValoresDefecto.DEF_COTERR;
+			//this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
 		
-			this.sFEAPLI = Utils.recuperaFecha(ValoresDefecto.DEF_FEAPLI);
-			this.sCOAPII = ValoresDefecto.DEF_COAPII;
-			this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-			this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+			//this.sFEAPLI = Utils.recuperaFecha(ValoresDefecto.DEF_FEAPLI);
+			//this.sCOAPII = ValoresDefecto.DEF_COAPII;
+			//this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+			//this.sNUCLII = ValoresDefecto.DEF_NUCLII;
 			
 			String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
 			
@@ -561,11 +563,11 @@ public class GestorMovimientosGastos implements Serializable
 		logger.debug("sFFGTVP:|{}|",sFFGTVP);
 	}
 
-	public void hoyFEPAGA (ActionEvent actionEvent)
+	/*public void hoyFEPAGA (ActionEvent actionEvent)
 	{
 		this.setsFEPAGA(Utils.fechaDeHoy(true));
 		logger.debug("sFEPAGA:|{}|",sFEPAGA);
-	}
+	}*/
 
 	public void hoyFELIPG (ActionEvent actionEvent)
 	{
@@ -585,11 +587,11 @@ public class GestorMovimientosGastos implements Serializable
 		logger.debug("sFEECOI:|{}|",sFEECOI);
 	}
 	
-	public void hoyFEPGPR (ActionEvent actionEvent)
+	/*public void hoyFEPGPR (ActionEvent actionEvent)
 	{
 		this.setsFEPGPR(Utils.fechaDeHoy(true));
 		logger.debug("sFEPGPR:|{}|",sFEPGPR);
-	}
+	}*/
 	
 	public void hoyFEAGTO (ActionEvent actionEvent)
 	{
@@ -659,7 +661,7 @@ public class GestorMovimientosGastos implements Serializable
 						ValoresDefecto.DEF_FEAUFA,
 						ValoresDefecto.DEF_COTERR,
 						ValoresDefecto.DEF_FMPAGN,
-						Utils.compruebaFecha(sFEPGPR),
+						ValoresDefecto.DEF_FEPGPR,
 						ValoresDefecto.DEF_FEAPLI,
 						ValoresDefecto.DEF_COAPII,
 						ValoresDefecto.DEF_COSPII_GA,
@@ -1030,13 +1032,13 @@ public class GestorMovimientosGastos implements Serializable
 		this.sFFGTVP = sFFGTVP;
 	}
 
-	public String getsFEPAGA() {
+	/*public String getsFEPAGA() {
 		return sFEPAGA;
 	}
 
 	public void setsFEPAGA(String sFEPAGA) {
 		this.sFEPAGA = sFEPAGA;
-	}
+	}*/
 
 	public String getsFELIPG() {
 		return sFELIPG;
@@ -1070,7 +1072,7 @@ public class GestorMovimientosGastos implements Serializable
 		this.sFEECOI = sFEECOI;
 	}
 
-	public String getsFEEAUI() {
+	/*public String getsFEEAUI() {
 		return sFEEAUI;
 	}
 
@@ -1084,7 +1086,7 @@ public class GestorMovimientosGastos implements Serializable
 
 	public void setsFEEPAI(String sFEEPAI) {
 		this.sFEEPAI = sFEEPAI;
-	}
+	}*/
 
 	public String getsIMNGAS() {
 		return sIMNGAS;
@@ -1198,7 +1200,7 @@ public class GestorMovimientosGastos implements Serializable
 		this.sCOIMPT = sCOIMPT;
 	}
 
-	public String getsCOTNEG() {
+	/*public String getsCOTNEG() {
 		return sCOTNEG;
 	}
 
@@ -1228,7 +1230,7 @@ public class GestorMovimientosGastos implements Serializable
 
 	public void setsNUCONE(String sNUCONE) {
 		this.sNUCONE = sNUCONE;
-	}
+	}*/
 
 	public String getsNUPROF() {
 		return sNUPROF;
@@ -1246,7 +1248,7 @@ public class GestorMovimientosGastos implements Serializable
 		this.sFEAGTO = sFEAGTO;
 	}
 
-	public String getsCOMONA() {
+	/*public String getsCOMONA() {
 		return sCOMONA;
 	}
 
@@ -1300,9 +1302,9 @@ public class GestorMovimientosGastos implements Serializable
 
 	public void setsFEAPLI(String sFEAPLI) {
 		this.sFEAPLI = sFEAPLI;
-	}
+	}*/
 
-	public String getsCOAPII() {
+	/*public String getsCOAPII() {
 		return sCOAPII;
 	}
 
@@ -1324,7 +1326,7 @@ public class GestorMovimientosGastos implements Serializable
 
 	public void setsNUCLII(String sNUCLII) {
 		this.sNUCLII = sNUCLII;
-	}
+	}*/
 
 	public Map<String, String> getTiposcotpgaHM() {
 		return tiposcotpgaHM;

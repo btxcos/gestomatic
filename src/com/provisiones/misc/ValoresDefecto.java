@@ -96,6 +96,8 @@ public final class ValoresDefecto
 	public static final String DEF_COTNEG = "0";
 	public static final String DEF_FEAPLI = "0";
 	
+	public static final String DEF_FEPAGA = "0";
+	
 	public static final String DEF_COMONA = "0";
 	public static final String DEF_BIAUTO = " ";
 	public static final String DEF_BIAUTO_AUTORIZADO = "1";

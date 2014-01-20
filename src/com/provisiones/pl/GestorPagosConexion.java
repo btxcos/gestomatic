@@ -363,7 +363,7 @@ public class GestorPagosConexion implements Serializable
 			this.sPTPAGO = gasto.getPTPAGO();
 
 			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
-			this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+			this.sFEPAGA = ValoresDefecto.DEF_FEPAGA;
 			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
 			this.sCOSIGA = ValoresDefecto.DEF_GASTO_PAGADO_CONEXION;
 			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
@@ -384,7 +384,7 @@ public class GestorPagosConexion implements Serializable
 			this.sCOMONA = gasto.getCOMONA();
 			this.sBIAUTO = gasto.getBIAUTO();
 			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-			this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+			this.sFEPGPR = ValoresDefecto.DEF_FEPGPR;
 			
 			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
 			
@@ -626,13 +626,13 @@ public class GestorPagosConexion implements Serializable
 						sPTPAGO.toUpperCase(),
 						Utils.compruebaFecha(sFEDEVE),
 						Utils.compruebaFecha(sFFGTVP),
-						"0",
+						"0",//TODO revisar fecha de pagado.
 						Utils.compruebaFecha(sFELIPG),
 						sCOSIGA.toUpperCase(),
 						Utils.compruebaFecha(sFEEESI),
 						Utils.compruebaFecha(sFEECOI),
-						"0",
-						"0",
+						Utils.compruebaFecha(sFEEAUI),
+						"0", //TODO revisar fecha de estado pagado.
 						Utils.compruebaImporte(sIMNGAS.toUpperCase()),
 						sYCOS02.toUpperCase(),
 						Utils.compruebaImporte(sIMRGAS.toUpperCase()),
@@ -652,14 +652,14 @@ public class GestorPagosConexion implements Serializable
 						sCOOFCX,
 						sNUCONE,
 						"0",
-						Utils.compruebaFecha(sFEAGTO),
+						ValoresDefecto.DEF_FEAGTO,
 						ValoresDefecto.DEF_COMONA,
 						ValoresDefecto.DEF_BIAUTO,
 						ValoresDefecto.DEF_FEAUFA,
 						ValoresDefecto.DEF_COTERR,
 						Utils.compruebaFecha(sFMPAGN),
 						Utils.compruebaFecha(sFEPGPR),
-						ValoresDefecto.DEF_FEAPLI,
+						Utils.compruebaFecha(sFEAPLI),
 						ValoresDefecto.DEF_COAPII,
 						ValoresDefecto.DEF_COSPII_GA,
 						ValoresDefecto.DEF_NUCLII);

@@ -563,7 +563,7 @@ public final class QMListaGastos
 	   					   " FROM " 
 						   + QMGastos.TABLA +
 	   					   " WHERE " 
-	   					   + QMGastos.CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO +"' AND "
+	   					   + QMGastos.CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO +"' AND "
 
 	   					   + QMGastos.CAMPO1 + " IN (SELECT "
 						   + CAMPO1 + 
@@ -662,19 +662,19 @@ public final class QMListaGastos
 						   + QMGastos.CAMPO5 + ","
 						   + QMGastos.CAMPO6 + ","
 						   + QMGastos.CAMPO7 + ","
-						   + QMGastos.CAMPO11 + ","
-						   + QMGastos.CAMPO16 + ","
-						   + QMGastos.CAMPO17 +
+						   + QMGastos.CAMPO10 + ","
+						   + QMGastos.CAMPO15 + ","
+						   + QMGastos.CAMPO16 +
 
 						   " FROM " 
 						   + QMGastos.TABLA + 
 						   " WHERE ((("
-						   + QMGastos.CAMPO35 + 
+						   + QMGastos.CAMPO34 + 
 						   " IN ('" 
 						   + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" 
 						   + ValoresDefecto.DEF_GASTO_CONOCIDO + 
 						   "')) AND "
-						   + QMGastos.CAMPO17 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
+						   + QMGastos.CAMPO16 + " <> '" + ValoresDefecto.DEF_NEGATIVO + "' "+
 						   ") AND "					   
 						   + QMGastos.CAMPO2 + " = '" + sCodCOACES	+ "' AND "
 						   + QMGastos.CAMPO7 + " <= '"+Utils.fechaDeHoy(false)+"' AND "
@@ -712,9 +712,9 @@ public final class QMListaGastos
 						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
 						sDPTPAGO = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
 						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
-						sCOSIGA  = rs.getString(QMGastos.CAMPO11);
+						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
 						sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16));
+						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sCOACES,

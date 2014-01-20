@@ -10,7 +10,6 @@ public class Gasto
 	private String PTPAGO = "";
 	private String FEDEVE = "";
 	private String FFGTVP = "";
-	private String FEPAGA = "";
 	private String FELIPG = "";
 	private String COSIGA = "";
 	private String FEEESI = "";
@@ -31,27 +30,22 @@ public class Gasto
 	private String IMIMGA = "";
 	private String COIMPT = "";
 	private String COTNEG = "";
-	//private String COENCX = "";
-	//private String COOFCX = "";
-	//private String NUCONE = "";
 	private String FEAGTO = "";
 	private String COMONA = "";
 	private String BIAUTO = "";
 	private String FEAUFA = "";
-	private String FEPGPR = "";
-	//private String FEAPLI = "";
+	private long valor_total = 0;
 	
 	//Constructor de clase
 
 	public Gasto(String cOACES, String cOGRUG, String cOTPGA, String cOSBGA,
-			String pTPAGO, String fEDEVE, String fFGTVP, String fEPAGA,
-			String fELIPG, String cOSIGA, String fEEESI, String fEECOI,
-			String fEEAUI, String fEEPAI, String iMNGAS, String yCOS02,
-			String iMRGAS, String yCOS04, String iMDGAS, String yCOS06,
-			String iMCOST, String yCOS08, String iMOGAS, String yCOS10,
-			String iMDTGA, String iMIMGA, String cOIMPT, String cOTNEG,
-			String fEAGTO, String cOMONA, String bIAUTO, String fEAUFA,
-			String fEPGPR) {
+			String pTPAGO, String fEDEVE, String fFGTVP, String fELIPG,
+			String cOSIGA, String fEEESI, String fEECOI, String fEEAUI,
+			String fEEPAI, String iMNGAS, String yCOS02, String iMRGAS,
+			String yCOS04, String iMDGAS, String yCOS06, String iMCOST,
+			String yCOS08, String iMOGAS, String yCOS10, String iMDTGA,
+			String iMIMGA, String cOIMPT, String cOTNEG, String fEAGTO,
+			String cOMONA, String bIAUTO, String fEAUFA) {
 		super();
 		COACES = cOACES;
 		COGRUG = cOGRUG;
@@ -60,7 +54,6 @@ public class Gasto
 		PTPAGO = pTPAGO;
 		FEDEVE = fEDEVE;
 		FFGTVP = fFGTVP;
-		FEPAGA = fEPAGA;
 		FELIPG = fELIPG;
 		COSIGA = cOSIGA;
 		FEEESI = fEEESI;
@@ -85,7 +78,7 @@ public class Gasto
 		COMONA = cOMONA;
 		BIAUTO = bIAUTO;
 		FEAUFA = fEAUFA;
-		FEPGPR = fEPGPR;
+		setValor_total();
 	}
 
 	//Métodos de acceso
@@ -144,14 +137,6 @@ public class Gasto
 
 	public void setFFGTVP(String fFGTVP) {
 		FFGTVP = fFGTVP;
-	}
-
-	public String getFEPAGA() {
-		return FEPAGA;
-	}
-
-	public void setFEPAGA(String fEPAGA) {
-		FEPAGA = fEPAGA;
 	}
 
 	public String getFELIPG() {
@@ -346,16 +331,70 @@ public class Gasto
 		FEAUFA = fEAUFA;
 	}
 
-	public String getFEPGPR() {
-		return FEPGPR;
+	public long getValor_total() {
+		return valor_total;
 	}
 
-	public void setFEPGPR(String fEPGPR) {
-		FEPGPR = fEPGPR;
+	public void setValor_total()
+	{
+		long liIMNGAS = IMNGAS.equals("") ? 0 : Long.parseLong(IMNGAS);
+		long liIMRGAS = IMRGAS.equals("") ? 0 : Long.parseLong(IMRGAS);
+		long liIMDGAS = IMDGAS.equals("") ? 0 : Long.parseLong(IMDGAS);
+		long liIMCOST = IMCOST.equals("") ? 0 : Long.parseLong(IMCOST);
+		long liIMOGAS = IMOGAS.equals("") ? 0 : Long.parseLong(IMOGAS);
+		long liIMDTGA = IMDTGA.equals("") ? 0 : Long.parseLong(IMDTGA);
+		long liIMIMGA = IMIMGA.equals("") ? 0 : Long.parseLong(IMIMGA);
+
+
+		long liValor = 0;
+
+		if (YCOS02.equals("-"))
+		{
+			liIMNGAS = -liIMNGAS;
+		}
+		if (YCOS04.equals("-"))
+		{
+			liIMRGAS = -liIMRGAS;
+		}
+		if (YCOS06.equals("-"))
+		{
+			liIMDGAS = -liIMDGAS;
+		}
+		if (YCOS08.equals("-"))
+		{
+			liIMCOST = -liIMCOST;
+		}
+		if (YCOS10.equals("-"))
+		{
+			liIMOGAS = -liIMOGAS;
+		}
+		
+		liValor = liIMNGAS+liIMRGAS+liIMDGAS+liIMCOST+liIMOGAS;
+		
+		if (liValor < 0)
+		{
+			liValor = liValor + liIMDTGA;
+		}
+		else
+		{
+			liValor = liValor - liIMDTGA;
+		}
+		
+		if (liValor < 0)
+		{
+			liValor = liValor - liIMIMGA;
+		}
+		else
+		{
+			liValor = liValor + liIMIMGA;
+		}
+		
+		
+		this.valor_total = liValor;
 	}
-	
+
 	public String logGasto()
 	{
-		return String.format("(GASTO)\nCOACES:|%s|\nCOGRUG:|%s|\nCOTPGA:|%s|\nCOSBGA:|%s|\nPTPAGO:|%s|\nFEDEVE:|%s|\nFFGTVP:|%s|\nFEPAGA:|%s|\nFELIPG:|%s|\nCOSIGA:|%s|\nFEEESI:|%s|\nFEECOI:|%s|\nFEEAUI:|%s|\nFEEPAI:|%s|\nIMNGAS:|%s|\nYCOS02:|%s|\nIMRGAS:|%s|\nYCOS04:|%s|\nIMDGAS:|%s|\nYCOS06:|%s|\nIMCOST:|%s|\nYCOS08:|%s|\nIMOGAS:|%s|\nYCOS10:|%s|\nIMDTGA:|%s|\nIMIMGA:|%s|\nCOIMPT:|%s|\nCOTNEG:|%s|\nFEAGTO:|%s|\nCOMONA:|%s|\nBIAUTO:|%s|\nFEAUFA:|%s|\nFEPGPR:|%s|",COACES,COGRUG,COTPGA,COSBGA,PTPAGO,FEDEVE,FFGTVP,FEPAGA,FELIPG,COSIGA,FEEESI,FEECOI,FEEAUI,FEEPAI,IMNGAS,YCOS02,IMRGAS,YCOS04,IMDGAS,YCOS06,IMCOST,YCOS08,IMOGAS,YCOS10,IMDTGA,IMIMGA,COIMPT,COTNEG,FEAGTO,COMONA,BIAUTO,FEAUFA,FEPGPR); 
+		return String.format("(GASTO)\nCOACES:|%s|\nCOGRUG:|%s|\nCOTPGA:|%s|\nCOSBGA:|%s|\nPTPAGO:|%s|\nFEDEVE:|%s|\nFFGTVP:|%s|\nFELIPG:|%s|\nCOSIGA:|%s|\nFEEESI:|%s|\nFEECOI:|%s|\nFEEAUI:|%s|\nFEEPAI:|%s|\nIMNGAS:|%s|\nYCOS02:|%s|\nIMRGAS:|%s|\nYCOS04:|%s|\nIMDGAS:|%s|\nYCOS06:|%s|\nIMCOST:|%s|\nYCOS08:|%s|\nIMOGAS:|%s|\nYCOS10:|%s|\nIMDTGA:|%s|\nIMIMGA:|%s|\nCOIMPT:|%s|\nCOTNEG:|%s|\nFEAGTO:|%s|\nCOMONA:|%s|\nBIAUTO:|%s|\nFEAUFA:|%s|",COACES,COGRUG,COTPGA,COSBGA,PTPAGO,FEDEVE,FFGTVP,FELIPG,COSIGA,FEEESI,FEECOI,FEEAUI,FEEPAI,IMNGAS,YCOS02,IMRGAS,YCOS04,IMDGAS,YCOS06,IMCOST,YCOS08,IMOGAS,YCOS10,IMDTGA,IMIMGA,COIMPT,COTNEG,FEAGTO,COMONA,BIAUTO,FEAUFA); 
 	} 
 }

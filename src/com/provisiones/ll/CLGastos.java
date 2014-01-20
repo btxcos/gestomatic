@@ -50,7 +50,7 @@ public final class CLGastos
 				gasto.getPTPAGO(),
 				gasto.getFEDEVE(),
 				gasto.getFFGTVP(),
-				gasto.getFEPAGA(),
+				ValoresDefecto.DEF_FEPAGA,
 				gasto.getFELIPG(),
 				gasto.getCOSIGA(),
 				gasto.getFEEESI(),
@@ -82,7 +82,7 @@ public final class CLGastos
 				gasto.getFEAUFA(),
 				ValoresDefecto.DEF_COTERR,
 				ValoresDefecto.DEF_FMPAGN,
-				gasto.getFEPGPR(),
+				ValoresDefecto.DEF_FEPGPR,
 				ValoresDefecto.DEF_FEAPLI,
 				ValoresDefecto.DEF_COAPII,
 				ValoresDefecto.DEF_COSPII_GA,
@@ -102,7 +102,6 @@ public final class CLGastos
 				movimiento.getPTPAGO(),
 				movimiento.getFEDEVE(),
 				movimiento.getFFGTVP(),
-				movimiento.getFEPAGA(),
 				movimiento.getFELIPG(),
 				movimiento.getCOSIGA(),
 				movimiento.getFEEESI(),
@@ -126,8 +125,7 @@ public final class CLGastos
 				movimiento.getFEAGTO(),
 				movimiento.getCOMONA(),
 				movimiento.getBIAUTO(),
-				movimiento.getFEAUFA(),
-				movimiento.getFEPGPR());
+				movimiento.getFEAUFA());
 		
 	}
 	
@@ -398,7 +396,7 @@ public final class CLGastos
 			{
 				iCodigo = 0;
 				//TODO revisar PA->GA
-				movimiento.setFEAPLI(ValoresDefecto.CAMPO_SIN_INFORMAR);
+				movimiento.setFEAPLI(ValoresDefecto.DEF_FEAPLI);
 				movimiento.setCOAPII(ValoresDefecto.DEF_COAPII);
 				movimiento.setCOSPII(ValoresDefecto.DEF_COSPII_GA);
 				movimiento.setNUCLII(ValoresDefecto.DEF_NUCLII);
@@ -847,6 +845,8 @@ public final class CLGastos
 			if (bValida)
 			{
 				iCodigo = validaMovimiento(movimiento_revisado,sEstado,sAccion);
+				
+				logger.debug("validado.");
 			}
 
 			if (iCodigo == 0)
@@ -1282,7 +1282,7 @@ public final class CLGastos
 			movimiento_revisado.setPTPAGO(movimiento.getPTPAGO());
 
 			movimiento_revisado.setFFGTVP(movimiento.getFFGTVP());
-			movimiento_revisado.setFEPAGA(movimiento.getFEPAGA());
+			//movimiento_revisado.setFEPAGA(movimiento.getFEPAGA());
 			movimiento_revisado.setFELIPG(movimiento.getFELIPG());
 			
 			movimiento_revisado.setCOSIGA(movimiento.getCOSIGA());
@@ -1295,7 +1295,7 @@ public final class CLGastos
 			movimiento_revisado.setIMIMGA(movimiento.getIMIMGA());
 			movimiento_revisado.setCOIMPT(movimiento.getCOIMPT());
 			movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
-			movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
+			//movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
 		}
 		
 		
@@ -1304,7 +1304,7 @@ public final class CLGastos
 			movimiento_revisado.setPTPAGO(gasto.getPTPAGO());
 			
 			movimiento_revisado.setFFGTVP(gasto.getFFGTVP());
-			movimiento_revisado.setFEPAGA(gasto.getFEPAGA());
+			//movimiento_revisado.setFEPAGA(gasto.getFEPAGA());
 			movimiento_revisado.setFELIPG(gasto.getFELIPG());
 
 			movimiento_revisado.setCOSIGA(gasto.getCOSIGA());
@@ -1317,7 +1317,7 @@ public final class CLGastos
 			movimiento_revisado.setIMIMGA(gasto.getIMIMGA());
 			movimiento_revisado.setCOIMPT(gasto.getCOIMPT());
 			movimiento_revisado.setFEAGTO(movimiento.getFEAGTO());
-			movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
+			//movimiento_revisado.setFEPGPR(ValoresDefecto.CAMPO_SIN_INFORMAR);
 			
 
 		}
@@ -1385,7 +1385,7 @@ public final class CLGastos
 			movimiento_revisado.setPTPAGO(gasto.getPTPAGO());
 
 			movimiento_revisado.setFFGTVP(gasto.getFFGTVP());
-			movimiento_revisado.setFEPAGA(gasto.getFEPAGA());
+			//movimiento_revisado.setFEPAGA(gasto.getFEPAGA());
 			movimiento_revisado.setFELIPG(gasto.getFELIPG());
 			
 			movimiento_revisado.setCOSIGA(gasto.getCOSIGA());
@@ -1395,7 +1395,7 @@ public final class CLGastos
 			movimiento_revisado.setFEEPAI(gasto.getFEEPAI());
 
 			movimiento_revisado.setFEAGTO(gasto.getFEAGTO());
-			movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
+			//movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
 			
 			if (!bCambio)
 			{
@@ -1486,7 +1486,7 @@ public final class CLGastos
 				movimiento_revisado.setFFGTVP(gasto.getFFGTVP());
 			}
 			
-			if (!movimiento.getFEPAGA().equals(gasto.getFEPAGA()))
+			/*if (!movimiento.getFEPAGA().equals(gasto.getFEPAGA()))
 			{
 				bCambio = true;
 				movimiento_revisado.setFEPAGA(movimiento.getFEPAGA());
@@ -1494,7 +1494,7 @@ public final class CLGastos
 			else
 			{
 				movimiento_revisado.setFEPAGA(gasto.getFEPAGA());
-			}
+			}*/
 
 			if (!movimiento.getFELIPG().equals(gasto.getFELIPG()))
 			{
@@ -1566,7 +1566,7 @@ public final class CLGastos
 				movimiento_revisado.setFEAGTO(gasto.getFEAGTO());
 			}
 		
-			if (!movimiento.getFEPGPR().equals(gasto.getFEPGPR()))
+			/*if (!movimiento.getFEPGPR().equals(gasto.getFEPGPR()))
 			{
 				bCambio = true;
 				movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
@@ -1574,7 +1574,7 @@ public final class CLGastos
 			else
 			{
 				movimiento_revisado.setFEPGPR(gasto.getFEPGPR());
-			}
+			}*/
 			
 			
 			//cambio de provision tras cierre
@@ -1588,6 +1588,11 @@ public final class CLGastos
 				movimiento_revisado.setCOSIGA("#");
 			}
 		}
+		
+		//Pago
+		movimiento_revisado.setFEPAGA(movimiento.getFEPAGA());
+		movimiento_revisado.setFEPGPR(movimiento.getFEPGPR());
+		
 		//Moneda
 		movimiento_revisado.setCOUNMO(movimiento.getCOUNMO());
 
@@ -1629,6 +1634,8 @@ public final class CLGastos
 		if (conexion != null)
 		{
 			iCodigo = 0;
+			
+			logger.debug("validando moviviento...");
 			
 			if (movimiento_revisado.getNUPROF().equals(""))
 			{

@@ -31,38 +31,33 @@ public final class QMGastos
 	public static final String CAMPO6  = "cod_ptpago"; 
 	public static final String CAMPO7  = "fedeve";     
 	public static final String CAMPO8  = "ffgtvp";     
-	public static final String CAMPO9  = "fepaga";     
-	public static final String CAMPO10 = "felipg";     
-	public static final String CAMPO11 = "cod_cosiga"; 
-	public static final String CAMPO12 = "feeesi";     
-	public static final String CAMPO13 = "feecoi";     
-	public static final String CAMPO14 = "feeaui";     
-	public static final String CAMPO15 = "feepai";     
-	public static final String CAMPO16 = "imngas";     
-	public static final String CAMPO17 = "ycos02";     
-	public static final String CAMPO18 = "imrgas";     
-	public static final String CAMPO19 = "ycos04";     
-	public static final String CAMPO20 = "imdgas";     
-	public static final String CAMPO21 = "ycos06";     
-	public static final String CAMPO22 = "imcost";     
-	public static final String CAMPO23 = "ycos08";     
-	public static final String CAMPO24 = "imogas";     
-	public static final String CAMPO25 = "ycos10";     
-	public static final String CAMPO26 = "imdtga";     
-	public static final String CAMPO27 = "imimga";     
-	public static final String CAMPO28 = "cod_coimpt"; 
-	public static final String CAMPO29 = "cod_cotneg";
-	//public static final String CAMPO30 = "coencx";    
-	//public static final String CAMPO31 = "coofcx";    
-	//public static final String CAMPO32 = "nucone";  
-	public static final String CAMPO30 = "feagto";     
-	public static final String CAMPO31 = "cod_comona"; 
-	public static final String CAMPO32 = "cod_biauto"; 
-	public static final String CAMPO33 = "feaufa";     
-	public static final String CAMPO34 = "fepgpr";
-	//public static final String CAMPO38 = "feapli";   
-	public static final String CAMPO35 = "cod_estado"; 
-	//public static final String CAMPO40 = "valor_gasto";   
+	public static final String CAMPO9  = "felipg";     
+	public static final String CAMPO10 = "cod_cosiga"; 
+	public static final String CAMPO11 = "feeesi";     
+	public static final String CAMPO12 = "feecoi";     
+	public static final String CAMPO13 = "feeaui";     
+	public static final String CAMPO14 = "feepai";     
+	public static final String CAMPO15 = "imngas";     
+	public static final String CAMPO16 = "ycos02";     
+	public static final String CAMPO17 = "imrgas";     
+	public static final String CAMPO18 = "ycos04";     
+	public static final String CAMPO19 = "imdgas";     
+	public static final String CAMPO20 = "ycos06";     
+	public static final String CAMPO21 = "imcost";     
+	public static final String CAMPO22 = "ycos08";     
+	public static final String CAMPO23 = "imogas";     
+	public static final String CAMPO24 = "ycos10";     
+	public static final String CAMPO25 = "imdtga";     
+	public static final String CAMPO26 = "imimga";     
+	public static final String CAMPO27 = "cod_coimpt"; 
+	public static final String CAMPO28 = "cod_cotneg"; 
+	public static final String CAMPO29 = "feagto";     
+	public static final String CAMPO30 = "cod_comona"; 
+	public static final String CAMPO31 = "cod_biauto"; 
+	public static final String CAMPO32 = "feaufa";     
+	public static final String CAMPO33 = "valor_total";
+	public static final String CAMPO34 = "cod_estado";
+	public static final String CAMPO35 = "comentario";
 	
 	private QMGastos(){}
 	
@@ -112,7 +107,7 @@ public final class QMGastos
 				       + CAMPO31 + ","              
 				       + CAMPO32 + ","              
 				       + CAMPO33 + ","
-				       + CAMPO34  + ","    
+				       + CAMPO34 + ","
 				       + CAMPO35 +               
 	          
 				       ") VALUES ('"        
@@ -123,7 +118,6 @@ public final class QMGastos
 				       + NuevoGasto.getPTPAGO() + "','"  
 				       + NuevoGasto.getFEDEVE() + "','"  
 				       + NuevoGasto.getFFGTVP() + "','"  
-				       + NuevoGasto.getFEPAGA() + "','"  
 				       + NuevoGasto.getFELIPG() + "','"  
 				       + NuevoGasto.getCOSIGA() + "','"  
 				       + NuevoGasto.getFEEESI() + "','"  
@@ -148,8 +142,8 @@ public final class QMGastos
 				       + NuevoGasto.getCOMONA() + "','"  
 				       + NuevoGasto.getBIAUTO() + "','"  
 				       + NuevoGasto.getFEAUFA() + "','"  
-				       + NuevoGasto.getFEPGPR() + "','"
-				       + sEstado + "' )";
+				       + NuevoGasto.getValor_total() + "','"
+				       + sEstado + "','' )";
 			
 			logger.debug(sQuery);
 
@@ -204,32 +198,32 @@ public final class QMGastos
 					" SET " 
 					+ CAMPO6  + " = '"+ NuevoGasto.getPTPAGO() + "', "
 					+ CAMPO8  + " = '"+ NuevoGasto.getFFGTVP() + "', "
-					+ CAMPO9  + " = '"+ NuevoGasto.getFEPAGA() + "', "
-					+ CAMPO10  + " = '"+ NuevoGasto.getFELIPG() + "', "
-					+ CAMPO11 + " = '"+ NuevoGasto.getCOSIGA() + "', "
-					+ CAMPO12 + " = '"+ NuevoGasto.getFEEESI() + "', "
-					+ CAMPO13 + " = '"+ NuevoGasto.getFEECOI() + "', "
-					+ CAMPO14 + " = '"+ NuevoGasto.getFEEAUI() + "', "
-					+ CAMPO15 + " = '"+ NuevoGasto.getFEEPAI() + "', "
-					+ CAMPO16 + " = '"+ NuevoGasto.getIMNGAS() + "', "
-					+ CAMPO17 + " = '"+ NuevoGasto.getYCOS02() + "', "
-					+ CAMPO18 + " = '"+ NuevoGasto.getIMRGAS() + "', "
-					+ CAMPO19 + " = '"+ NuevoGasto.getYCOS04() + "', "
-					+ CAMPO20 + " = '"+ NuevoGasto.getIMDGAS() + "', "
-					+ CAMPO21 + " = '"+ NuevoGasto.getYCOS06() + "', "
-					+ CAMPO22 + " = '"+ NuevoGasto.getIMCOST() + "', "
-					+ CAMPO23 + " = '"+ NuevoGasto.getYCOS08() + "', "
-					+ CAMPO24 + " = '"+ NuevoGasto.getIMOGAS() + "', "
-					+ CAMPO25 + " = '"+ NuevoGasto.getYCOS10() + "', "
-					+ CAMPO26 + " = '"+ NuevoGasto.getIMDTGA() + "', "
-					+ CAMPO27 + " = '"+ NuevoGasto.getIMIMGA() + "', "
-					+ CAMPO28 + " = '"+ NuevoGasto.getCOIMPT() + "', "
-					+ CAMPO29 + " = '"+ NuevoGasto.getCOTNEG() + "', "
-					+ CAMPO30 + " = '"+ NuevoGasto.getFEAGTO() + "', "
-					+ CAMPO31 + " = '"+ NuevoGasto.getCOMONA() + "', "
-					+ CAMPO32 + " = '"+ NuevoGasto.getBIAUTO() + "', "
-					+ CAMPO33 + " = '"+ NuevoGasto.getFEAUFA() + "', "
-					+ CAMPO34 + " = '"+ NuevoGasto.getFEPGPR() + 
+					+ CAMPO9  + " = '"+ NuevoGasto.getFELIPG() + "', "
+					+ CAMPO10 + " = '"+ NuevoGasto.getCOSIGA() + "', "
+					+ CAMPO11 + " = '"+ NuevoGasto.getFEEESI() + "', "
+					+ CAMPO12 + " = '"+ NuevoGasto.getFEECOI() + "', "
+					+ CAMPO13 + " = '"+ NuevoGasto.getFEEAUI() + "', "
+					+ CAMPO14 + " = '"+ NuevoGasto.getFEEPAI() + "', "
+					+ CAMPO15 + " = '"+ NuevoGasto.getIMNGAS() + "', "
+					+ CAMPO16 + " = '"+ NuevoGasto.getYCOS02() + "', "
+					+ CAMPO17 + " = '"+ NuevoGasto.getIMRGAS() + "', "
+					+ CAMPO18 + " = '"+ NuevoGasto.getYCOS04() + "', "
+					+ CAMPO19 + " = '"+ NuevoGasto.getIMDGAS() + "', "
+					+ CAMPO20 + " = '"+ NuevoGasto.getYCOS06() + "', "
+					+ CAMPO21 + " = '"+ NuevoGasto.getIMCOST() + "', "
+					+ CAMPO22 + " = '"+ NuevoGasto.getYCOS08() + "', "
+					+ CAMPO23 + " = '"+ NuevoGasto.getIMOGAS() + "', "
+					+ CAMPO24 + " = '"+ NuevoGasto.getYCOS10() + "', "
+					+ CAMPO25 + " = '"+ NuevoGasto.getIMDTGA() + "', "
+					+ CAMPO26 + " = '"+ NuevoGasto.getIMIMGA() + "', "
+					+ CAMPO27 + " = '"+ NuevoGasto.getCOIMPT() + "', "
+					+ CAMPO28 + " = '"+ NuevoGasto.getCOTNEG() + "', "
+					+ CAMPO29 + " = '"+ NuevoGasto.getFEAGTO() + "', "
+					+ CAMPO30 + " = '"+ NuevoGasto.getCOMONA() + "', "
+					+ CAMPO31 + " = '"+ NuevoGasto.getBIAUTO() + "', "
+					+ CAMPO32 + " = '"+ NuevoGasto.getFEAUFA() + "', "
+					+ CAMPO33 + " = '"+ NuevoGasto.getValor_total() +
+
 					"' "+
 					" WHERE " +
 					"("	+ 
@@ -324,7 +318,6 @@ public final class QMGastos
 		String sPTPAGO = "";
 		String sFEDEVE = "";
 		String sFFGTVP = "";
-		String sFEPAGA = "";
 		String sFELIPG = "";
 		String sCOSIGA = "";
 		String sFEEESI = "";
@@ -349,7 +342,6 @@ public final class QMGastos
 		String sCOMONA = "";
 		String sBIAUTO = "";
 		String sFEAUFA = "";
-		String sFEPGPR = "";
 
 		if (conexion != null)
 		{
@@ -393,10 +385,8 @@ public final class QMGastos
 				       + CAMPO29 + ","              
 				       + CAMPO30 + ","              
 				       + CAMPO31 + ","              
-				       + CAMPO32 + ","
-				       + CAMPO33  + ","
-				       + CAMPO34 +      
-				       "  FROM " 
+				       + CAMPO32 +      
+				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
 				       + CAMPO1  + " = '"+ sGastoID +"'";
@@ -426,32 +416,30 @@ public final class QMGastos
 						sPTPAGO = rs.getString(CAMPO6);  
 						sFEDEVE = rs.getString(CAMPO7);
 						sFFGTVP = rs.getString(CAMPO8);  
-						sFEPAGA = rs.getString(CAMPO9);  
-						sFELIPG = rs.getString(CAMPO10); 
-						sCOSIGA = rs.getString(CAMPO11); 
-						sFEEESI = rs.getString(CAMPO12); 
-						sFEECOI = rs.getString(CAMPO13); 
-						sFEEAUI = rs.getString(CAMPO14); 
-						sFEEPAI = rs.getString(CAMPO15); 
-						sIMNGAS = rs.getString(CAMPO16); 
-						sYCOS02 = rs.getString(CAMPO17); 
-						sIMRGAS = rs.getString(CAMPO18); 
-						sYCOS04 = rs.getString(CAMPO19); 
-						sIMDGAS = rs.getString(CAMPO20); 
-						sYCOS06 = rs.getString(CAMPO21); 
-						sIMCOST = rs.getString(CAMPO22); 
-						sYCOS08 = rs.getString(CAMPO23); 
-						sIMOGAS = rs.getString(CAMPO24); 
-						sYCOS10 = rs.getString(CAMPO25); 
-						sIMDTGA = rs.getString(CAMPO26); 
-						sIMIMGA = rs.getString(CAMPO27); 
-						sCOIMPT = rs.getString(CAMPO28); 
-						sCOTNEG = rs.getString(CAMPO29); 
-						sFEAGTO = rs.getString(CAMPO30); 
-						sCOMONA = rs.getString(CAMPO31); 
-						sBIAUTO = rs.getString(CAMPO32); 
-						sFEAUFA = rs.getString(CAMPO33); 
-						sFEPGPR = rs.getString(CAMPO34); 
+						sFELIPG = rs.getString(CAMPO9);  
+						sCOSIGA = rs.getString(CAMPO10); 
+						sFEEESI = rs.getString(CAMPO11); 
+						sFEECOI = rs.getString(CAMPO12); 
+						sFEEAUI = rs.getString(CAMPO13); 
+						sFEEPAI = rs.getString(CAMPO14); 
+						sIMNGAS = rs.getString(CAMPO15); 
+						sYCOS02 = rs.getString(CAMPO16); 
+						sIMRGAS = rs.getString(CAMPO17); 
+						sYCOS04 = rs.getString(CAMPO18); 
+						sIMDGAS = rs.getString(CAMPO19); 
+						sYCOS06 = rs.getString(CAMPO20); 
+						sIMCOST = rs.getString(CAMPO21); 
+						sYCOS08 = rs.getString(CAMPO22); 
+						sIMOGAS = rs.getString(CAMPO23); 
+						sYCOS10 = rs.getString(CAMPO24); 
+						sIMDTGA = rs.getString(CAMPO25); 
+						sIMIMGA = rs.getString(CAMPO26); 
+						sCOIMPT = rs.getString(CAMPO27); 
+						sCOTNEG = rs.getString(CAMPO28); 
+						sFEAGTO = rs.getString(CAMPO29); 
+						sCOMONA = rs.getString(CAMPO30); 
+						sBIAUTO = rs.getString(CAMPO31); 
+						sFEAUFA = rs.getString(CAMPO32); 
 						
 						logger.debug("Encontrado el registro!");
 
@@ -472,7 +460,6 @@ public final class QMGastos
 				sPTPAGO = "";
 				sFEDEVE = "";
 				sFFGTVP = "";
-				sFEPAGA = "";
 				sFELIPG = "";
 				sCOSIGA = "";
 				sFEEESI = "";
@@ -497,7 +484,6 @@ public final class QMGastos
 				sCOMONA = "";
 				sBIAUTO = "";
 				sFEAUFA = "";
-				sFEPGPR = "";
 
 				logger.error("ERROR GASTO:|"+sGastoID+"|");
 
@@ -511,11 +497,10 @@ public final class QMGastos
 		}
 		
 		return new Gasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA,
-				sPTPAGO, sFEDEVE, sFFGTVP, sFEPAGA, sFELIPG, sCOSIGA, sFEEESI,
-				sFEECOI, sFEEAUI, sFEEPAI, sIMNGAS, sYCOS02, sIMRGAS, sYCOS04,
-				sIMDGAS, sYCOS06, sIMCOST, sYCOS08, sIMOGAS, sYCOS10, sIMDTGA,
-				sIMIMGA, sCOIMPT, sCOTNEG, sFEAGTO, sCOMONA, sBIAUTO, sFEAUFA,
-				sFEPGPR);
+				sPTPAGO, sFEDEVE, sFFGTVP, sFELIPG, sCOSIGA, sFEEESI, sFEECOI,
+				sFEEAUI, sFEEPAI, sIMNGAS, sYCOS02, sIMRGAS, sYCOS04, sIMDGAS,
+				sYCOS06, sIMCOST, sYCOS08, sIMOGAS, sYCOS10, sIMDTGA, sIMIMGA,
+				sCOIMPT, sCOTNEG, sFEAGTO, sCOMONA, sBIAUTO, sFEAUFA);
 	}
 	
 	public static String getGastoID(Connection conexion, String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
@@ -694,8 +679,8 @@ public final class QMGastos
 						+ CAMPO4  + " = '"+ sCodCOTPGA +"' AND " 
 						+ CAMPO5  + " = '"+ sCodCOSBGA +"' AND " 
 						+ CAMPO7  + " = '"+ sFEDEVE +"' AND " 
-						+ CAMPO30 + " <> '"+  ValoresDefecto.CAMPO_SIN_INFORMAR +"' AND " 
-						+ CAMPO35  + " = '"+ ValoresDefecto.DEF_GASTO_ANULADO + 
+						+ CAMPO29 + " <> '"+  ValoresDefecto.CAMPO_SIN_INFORMAR +"' AND " 
+						+ CAMPO34  + " = '"+ ValoresDefecto.DEF_GASTO_ANULADO + 
 					    "')";
 			
 			logger.debug(sQuery);
@@ -758,7 +743,7 @@ public final class QMGastos
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO30 + " = '"+ sFEAGTO + "' "+
+					+ CAMPO29 + " = '"+ sFEAGTO + "' "+
 					" WHERE "
 					+ CAMPO1  + " = '"+ sCodGasto +"'";
 			
@@ -804,10 +789,10 @@ public final class QMGastos
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO14 + " = '"+ sFEEAUI + "', "
-					+ CAMPO32 + " = '"+ ValoresDefecto.DEF_BIAUTO_AUTORIZADO + "', "
-					+ CAMPO33 + " = '"+ sFEAUFA + "', "
-					+ CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO + "' "+
+					+ CAMPO13 + " = '"+ sFEEAUI + "', "
+					+ CAMPO31 + " = '"+ ValoresDefecto.DEF_BIAUTO_AUTORIZADO + "', "
+					+ CAMPO32 + " = '"+ sFEAUFA + "', "
+					+ CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO + "' "+
 					" WHERE "
 					+ CAMPO1  + " = '"+ sCodGasto +"'";
 			
@@ -854,7 +839,7 @@ public final class QMGastos
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO35 + " = '"+ sEstado + "' "+
+					+ CAMPO34 + " = '"+ sEstado + "' "+
 					" WHERE "
 					+ CAMPO1  + " = '"+ sCodGasto +"'";
 			
@@ -902,7 +887,7 @@ public final class QMGastos
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-					+ CAMPO35 + 
+					+ CAMPO34 + 
 					" FROM "
 					+ TABLA + 
 					" WHERE "
@@ -926,11 +911,11 @@ public final class QMGastos
 					{
 						bEncontrado = true;
 
-						sEstado = rs.getString(CAMPO35);
+						sEstado = rs.getString(CAMPO34);
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO35+":|"+sEstado+"|");
+						logger.debug(CAMPO34+":|"+sEstado+"|");
 
 					}
 				}
@@ -1243,8 +1228,8 @@ public final class QMGastos
 						   + CAMPO2 + 
 						   " FROM " + TABLA +
 						   " WHERE " 
-						   + CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
-	   					   + CAMPO35 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) )";
+						   + CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
+	   					   + CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) )";
 			
 			logger.debug(sQuery);
 			
@@ -1340,16 +1325,16 @@ public final class QMGastos
 						   + CAMPO5 + ","
 						   + CAMPO6 + ","
 						   + CAMPO7 + ","
-						   + CAMPO11 + ","
-						   + CAMPO16 + ","
-						   + CAMPO17 +
+						   + CAMPO10 + ","
+						   + CAMPO15 + ","
+						   + CAMPO16 +
 
 						   " FROM " 
 						   + TABLA + 
 						   " WHERE (" +
 						   "("
-						   + CAMPO35 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-						   + CAMPO35 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + 					   
+						   + CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
+						   + CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + 					   
 						   "') AND "					   
 						   
 						   + CAMPO7 + " <= '"+Utils.fechaDeHoy(false)+"')";					   
@@ -1381,9 +1366,9 @@ public final class QMGastos
 						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
 						sDPTPAGO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
 						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
-						sCOSIGA  = rs.getString(QMGastos.CAMPO11);
+						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
 						sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16));
+						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 
 						GastoTabla gastoencontrado = new GastoTabla(
 								sCOACES,
@@ -1462,9 +1447,9 @@ public final class QMGastos
 						   + CAMPO5 + ","
 						   + CAMPO6 + ","
 						   + CAMPO7 + ","
-						   + CAMPO11 + ","
-						   + CAMPO16 + ","
-						   + CAMPO17 +
+						   + CAMPO10 + ","
+						   + CAMPO15 + ","
+						   + CAMPO16 +
 
 						   " FROM " 
 						   + TABLA + 
@@ -1498,9 +1483,9 @@ public final class QMGastos
 						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
 						sDPTPAGO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
 						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
-						sCOSIGA  = rs.getString(QMGastos.CAMPO11);
+						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
 						sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO17).equals("-"),rs.getString(QMGastos.CAMPO16));
+						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 
 						GastoTabla gastoencontrado = new GastoTabla(
 								sCOACES,
