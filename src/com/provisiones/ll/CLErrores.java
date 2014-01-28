@@ -65,7 +65,7 @@ public final class CLErrores
 
 	public static int reparaMovimientoComunidad(MovimientoComunidad movimiento, String sCodMovimiento, String sCodError)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 
 		Connection conexion = ConnectionManager.getDBConnection();
 		
@@ -201,7 +201,7 @@ public final class CLErrores
 	
 	public static int reparaMovimientoCuota(MovimientoCuota movimiento, String sCodMovimiento, String sCodError)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 		
 		Connection conexion = ConnectionManager.getDBConnection();
 		
@@ -323,7 +323,7 @@ public final class CLErrores
 	
 	public static int reparaMovimientoReferencia(MovimientoReferenciaCatastral movimiento, String sCodMovimiento, String sCodError)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 		
 		Connection conexion = ConnectionManager.getDBConnection();
 		
@@ -448,7 +448,7 @@ public final class CLErrores
 	
 	public static int reparaMovimientoImpuesto(MovimientoImpuestoRecurso movimiento, String sCodMovimiento, String sCodError)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 		
 		Connection conexion = ConnectionManager.getDBConnection();
 		
@@ -572,7 +572,7 @@ public final class CLErrores
 	public static int reparaMovimientoGasto(MovimientoGasto movimiento, String sCodMovimiento, String sCodError)
 	{
 		
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 		
 		Connection conexion = ConnectionManager.getDBConnection();
 		

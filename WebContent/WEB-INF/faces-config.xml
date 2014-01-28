@@ -131,11 +131,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>GestorPagosConexion</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorPagosConexion</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>GestorSesion</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.GestorSesion</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -148,6 +143,31 @@
 	<managed-bean>
 		<managed-bean-name>GestorListaGastos</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.listas.GestorListaGastos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorPagosConexion</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.pagos.GestorPagosConexion</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorPagosSimple</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.pagos.GestorPagosSimple</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorCuentasActivos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.cuentas.GestorCuentasActivos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorCuentasComunidades</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.cuentas.GestorCuentasComunidades</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaProvisiones</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaProvisiones</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

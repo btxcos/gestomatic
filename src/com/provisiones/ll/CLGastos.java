@@ -180,6 +180,11 @@ public final class CLGastos
 		return QMGastos.getGasto(ConnectionManager.getDBConnection(),sCodGasto);
 	}
 	
+	public static Gasto buscarDetallesGasto(String sCodGasto)
+	{
+		return QMGastos.getDetallesGasto(ConnectionManager.getDBConnection(),sCodGasto);
+	}
+	
 	public static MovimientoGasto buscarMovimientoGasto (String sCodMovimiento)
 	{
 		return QMMovimientosGastos.getMovimientoGasto(ConnectionManager.getDBConnection(),sCodMovimiento);
@@ -195,9 +200,14 @@ public final class CLGastos
 		return QMListaGastosProvisiones.getProvisionDeGasto(ConnectionManager.getDBConnection(),buscarCodigoGasto(sCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE));
 	}
 	
+	public static String buscarProvisionGastoID(String GastoID)
+	{
+		return QMListaGastosProvisiones.getProvisionDeGasto(ConnectionManager.getDBConnection(),GastoID);
+	}
+	
 	public static ArrayList<GastoTabla> buscarGastosProvision(String sNUPROF)
 	{
-		return QMListaGastosProvisiones.buscaGastosPorvision(ConnectionManager.getDBConnection(),sNUPROF);
+		return QMListaGastosProvisiones.buscaGastosProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
 	
@@ -400,6 +410,8 @@ public final class CLGastos
 				movimiento.setCOAPII(ValoresDefecto.DEF_COAPII);
 				movimiento.setCOSPII(ValoresDefecto.DEF_COSPII_GA);
 				movimiento.setNUCLII(ValoresDefecto.DEF_NUCLII);
+				
+				//movimiento.setCOSIGA(ValoresDefecto.DEF_GASTO_AUTORIZADO);
 				
 				
 				logger.debug(movimiento.logMovimientoGasto());
@@ -821,12 +833,14 @@ public final class CLGastos
 
 	public static int registraMovimiento(MovimientoGasto movimiento, boolean bValida)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 
 		Connection conexion = ConnectionManager.getDBConnection();
 		
 		if (conexion != null)
 		{
+			iCodigo = 0;
+			
 			String sCodGasto = buscarCodigoGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 			
 			logger.debug("Comprobando estado...");
@@ -1077,12 +1091,14 @@ public final class CLGastos
 	
 	public static int registraPagoConexion(MovimientoGasto movimiento)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 
 		Connection conexion = ConnectionManager.getDBConnection();
 		
 		if (conexion != null)
 		{
+			iCodigo = 0;
+			
 			String sCodGasto = buscarCodigoGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 			
 			logger.debug("Comprobando estado...");

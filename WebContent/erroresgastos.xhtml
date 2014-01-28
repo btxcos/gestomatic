@@ -315,27 +315,53 @@
 							<p:menuitem value="Seleccionar" update="form:panel, form:popup, form:msgs, form:DCOSBGA, form:PTPAGO, form:bDEVO form:NUPROF" icon="ui-icon-check" actionListener="#{GestorErroresGastos.seleccionarGasto}" oncomplete="dlgTablaPendientes.hide()"/>
 						</p:contextMenu>
 
-						<p:dataTable id="gastos" var="gasto" value="#{GestorErroresGastos.tablagastos}" rowKey="#{gasto.DCOSBGA}"
+						<p:dataTable id="gastos" var="gasto" value="#{GestorErroresGastos.tablagastos}" rowKey="#{gasto.NUPROF}"
 															selection="#{GestorErroresGastos.gastoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15">
 
-							<p:column headerText="Gasto">
-								#{gasto.DCOSBGA}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Provisión" />
+															</f:facet>
+															<h:outputText value="#{gasto.NUPROF}" />
+														</p:column>
 
-							<p:column headerText="Periodicidad">
-								#{gasto.DPTPAGO}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activo" />
+															</f:facet>
+															<h:outputText value="#{gasto.COACES}" />
+														</p:column>
 
-							<p:column headerText="Importe">
-								#{gasto.IMNGAS}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Gasto" />
+															</f:facet>
+															<h:outputText value="#{gasto.DCOSBGA}" />
+														</p:column>
+														
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Periodicidad" />
+															</f:facet>
+															<h:outputText value="#{gasto.DPTPAGO}" />
+														</p:column>
 
-							<p:column headerText="Fecha de Devengo">
-								#{gasto.FEDEVE}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Importe" />
+															</f:facet>
+															<h:outputText value="#{gasto.IMNGAS}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Fecha de Devengo" />
+															</f:facet>
+															<h:outputText value="#{gasto.FEDEVE}" />
+														</p:column>
 
 						</p:dataTable>
 
@@ -432,8 +458,11 @@
 								<p:panel id="panelBuscarErrores" >
 									<h:panelGrid columns="2" cellpadding="5">
 
+											<h:outputText for="NUPROFB" value="Provisión: "/>
+											<p:inputText id="NUPROFB" value="#{GestorErroresGastos.sNUPROFB}" size="10" maxlength="9"/>
+
 											<h:outputText for="COACESB" value="Activo: "/>
-											<p:inputText id="COACESB" value="#{GestorErroresGastos.sCOACESB}" size="10" maxlength="10"/>
+											<p:inputText id="COACESB" value="#{GestorErroresGastos.sCOACESB}" size="10" maxlength="9"/>
 
 											<h:outputText value="Grupo de gasto: "/>
 											<p:selectOneMenu id="COGRUGB" value="#{GestorErroresGastos.sCOGRUGB}">
@@ -487,7 +516,7 @@
 							<p:menuitem value="Cargar Errores" update="form:popup, form:msgs, form:errores, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresGastos.seleccionarMovimiento}" oncomplete="dlgTablaGastosError.hide(); dlgBuscarGastosError.hide()"/>
 						</p:contextMenu>  
 
-						<p:dataTable id="gastoserror" var="gastoe" value="#{GestorErroresGastos.tablagastoserror}" rowKey="#{gastoe.COACES}"  
+						<p:dataTable id="gastoserror" var="gastoe" value="#{GestorErroresGastos.tablagastoserror}" rowKey="#{gastoe.NUPROF}"  
 								selection="#{GestorErroresGastos.movimientoseleccionado}" selectionMode="single"
 									paginator="true" paginatorPosition="bottom" rows="10" 
 									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
@@ -496,25 +525,56 @@
 								Gastos
 							</f:facet>
 							
-							<p:column headerText="Activo">
-								#{gastoe.COACES}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Provisión" />
+															</f:facet>
+															<h:outputText value="#{gastoe.NUPROF}" />
+														</p:column>
 
-							<p:column sortBy="#{gastoe.DCOSBGA}" headerText="Gasto">
-								#{gastoe.DCOSBGA}  
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activo" />
+															</f:facet>
+															<h:outputText value="#{gastoe.COACES}" />
+														</p:column>
 
-							<p:column sortBy="#{gastoe.FEDEVE}" headerText="Fecha">
-								#{gastoe.FEDEVE}  
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Gasto" />
+															</f:facet>
+															<h:outputText value="#{gastoe.DCOSBGA}" />
+														</p:column>
+														
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Periodicidad" />
+															</f:facet>
+															<h:outputText value="#{gastoe.DPTPAGO}" />
+														</p:column>
 
-							<p:column sortBy="#{gastoe.IMNGAS}" headerText="Importe">
-								#{gastoe.IMNGAS}  
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Importe" />
+															</f:facet>
+															<h:outputText value="#{gastoe.IMNGAS}" />
+														</p:column>
 
-							<p:column sortBy="#{gastoe.ERRORES}" headerText="Errores">
-								#{gastoe.ERRORES}  
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Fecha de Devengo" />
+															</f:facet>
+															<h:outputText value="#{gastoe.FEDEVE}" />
+														</p:column>
+														
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Errores" />
+															</f:facet>
+															<h:outputText value="#{gastoe.ERRORES}" />
+														</p:column>
+
+
 
 						</p:dataTable>
 

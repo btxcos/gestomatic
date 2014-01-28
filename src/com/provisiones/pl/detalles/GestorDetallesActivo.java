@@ -1,9 +1,11 @@
 package com.provisiones.pl.detalles;
 
+import java.io.IOException;
 import java.io.Serializable;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+import javax.faces.event.ActionEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
-import com.provisiones.pl.listas.GestorListaActivos;
 
 import com.provisiones.types.Activo;
 
@@ -121,44 +123,53 @@ public class GestorDetallesActivo implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			logger.debug("Iniciando GestorDetallesActivo...");	
-			cargarActivoElegido();
+			cargarDetallesActivo();
 		}
 	}
 
-	public String volver()
+	public void volver(ActionEvent actionEvent)
 	{
-		String sPagina = "login.xhtml";
-		if (ConnectionManager.comprobarConexion())
+		
+		try 
 		{
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-			
-			session.removeAttribute("GestorDetallesActivo");
-			
-			sPagina = "listaactivos.xhtml";
+			FacesContext.getCurrentInstance().getExternalContext().redirect(Sesion.cargarHistorial());
 		}
-		return sPagina;
+		catch (IOException e)
+		{
+			FacesMessage msg;
+			
+			String sMsg = "ERROR: Ocurrió un problema al intentar regresar. Por favor, avise a soporte.";
+			
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+
+		}
+		
 	}
 	
-	public void cargarActivoElegido()
+	public void cargarDetallesActivo()
 	{
 		
 
 		
-		String sValor = ((GestorListaActivos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaActivos")).getsCOACES();
-		
-		logger.debug("sCOACESnB:|{}|",sValor);
+		//String sValor = ((GestorListaActivos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaActivos")).getsCOACES();
 
+		//logger.debug("sCOACESnB:|{}|",sValor);
 		
+		this.sCOACES  = Sesion.cargarDetalle();
 		
 		logger.debug("sCOACES:|{}|",sCOACES);
 		
 		
-		if (!sValor.equals(""))
+		if (!sCOACES.equals(""))
 		{
 		
-			Activo activo = CLActivos.buscarDetallesActivo(sValor);
+			Activo activo = CLActivos.buscarDetallesActivo(sCOACES);
 			
-			this.sCOACES = activo.getCOACES();
+			//this.sCOACES = activo.getCOACES();
 			this.sNUINMU = activo.getNUINMU();
 			this.sCOSOPA = activo.getCOSOPA();
 			this.sCOENAE = activo.getCOENAE();

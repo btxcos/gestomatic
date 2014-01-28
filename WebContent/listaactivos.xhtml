@@ -45,7 +45,7 @@
 										<h:panelGrid columns="3" cellpadding="5">
 													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, activos" actionListener="#{GestorListaActivos.limpiarPlantilla}" />
 													<p:commandButton value="Buscar" update="msgs, popup, activos" actionListener="#{GestorListaActivos.buscaActivos}"/>
-													<p:commandButton value="Detalles" update="form:popup" action="#{GestorListaActivos.cargarDetalles}" />
+													<p:commandButton value="Detalles" update="form:popup" actionListener="#{GestorListaActivos.cargarDetalles}" />
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -121,7 +121,7 @@
 										</h:panelGrid>
 									</p:fieldset>
 													<p:contextMenu for="activos">
-														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" action="#{GestorListaActivos.cargarDetalles}"/>
+														<p:menuitem value="Detalles" update="form:popup" icon="ui-icon-folder-open" actionListener="#{GestorListaActivos.cargarDetalles}"/>
 														<!--p:menuitem value="Comunidad" update="form:popup" icon="ui-icon-home" action="#{GestorListaActivos.cargarComunidad}"/>
 														<p:menuitem value="Cuotas" update="form:popup" icon="ui-icon-calculator" action="#{GestorListaActivos.cargarCuota}"/>
 														<p:menuitem value="Referencia Catastral" update="form:popup" icon="ui-icon-script" action="#{GestorListaActivos.cargarReferencia}"/>

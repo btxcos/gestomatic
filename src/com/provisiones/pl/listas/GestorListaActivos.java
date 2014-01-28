@@ -1,5 +1,6 @@
 package com.provisiones.pl.listas;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -300,7 +302,7 @@ public class GestorListaActivos implements Serializable {
 		return sPagina;
     }
 
-	public String cargarDetalles() 
+	public void cargarDetalles(ActionEvent actionEvent) 
     { 
 		String sPagina = ".";
 		
@@ -309,10 +311,11 @@ public class GestorListaActivos implements Serializable {
 			if (activoseleccionado != null)
 			{
 		    	this.sCOACES = activoseleccionado.getCOACES();
-		    	
 		    	logger.debug("sCOACES:|{}|",sCOACES);
-		    	
-		    	logger.debug("Redirigiendo...");
+		    			    	
+		    	Sesion.guardaDetalle(sCOACES);
+		    	Sesion.limpiarHistorial();
+		    	Sesion.guardarHistorial("listaactivos.xhtml","GestorDetallesActivo");
 
 		    	sPagina = "detallesactivo.xhtml";
 			}
@@ -324,10 +327,27 @@ public class GestorListaActivos implements Serializable {
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
+			
+			try 
+			{
+				logger.debug("Redirigiendo...");
+				FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+			}
+			catch (IOException e)
+			{
+				FacesMessage msg;
+				
+				String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+				
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
 
 		}
 
-		return sPagina;
+		//return sPagina;
     }
 	
 	public String getsCOACES() {

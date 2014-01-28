@@ -448,14 +448,12 @@ public final class CLComunidades
 	
 	public static int registraMovimiento(MovimientoComunidad movimiento)
 	{
-		int iCodigo = 0; //variable conexion
+		int iCodigo = -910;//Error de conexion
 		
 		Connection conexion = ConnectionManager.getDBConnection();
 		
 		if (conexion != null)
 		{
-			iCodigo = 0;
-			
 			String sCodComunidad = buscarCodigoComunidad(movimiento.getCOCLDO(),movimiento.getNUDCOM());
 			
 			iCodigo = validaMovimiento(movimiento,sCodComunidad);

@@ -1,5 +1,6 @@
 package com.provisiones.pl.listas;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLProvisiones;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
@@ -204,31 +206,15 @@ public class GestorListaGastos implements Serializable
 		}
     }
     
-	public void encuentraGastos()
-	{
-		
-		logger.debug("Buscando Gastos...");
-		
-		if (!sCOACES.equals(""))
-		{
-			this.setTablagastos(CLGastos.buscarGastosActivo(sCOACES));
-		}
-		else if (!sNUPROF.equals(""))
-		{
-			this.setTablagastos(CLGastos.buscarGastosProvision(sNUPROF));
-		}
-		
-		logger.debug("Encontrados "+getTablagastos().size()+" gastos relacionados.");
-	}
     
-	public void buscarGastos (ActionEvent actionEvent)
+	public void buscarGastosActivo (ActionEvent actionEvent)
 	{
 
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
 			
-			encuentraGastos();
+			this.setTablagastos(CLGastos.buscarGastosActivo(sCOACES));
 			
 			if (getTablagastos().size() == 0)
 			{
@@ -248,31 +234,61 @@ public class GestorListaGastos implements Serializable
 		
 	}
 	
-	public String cargarDetalles() 
+	public void buscarGastosProvision (ActionEvent actionEvent)
+	{
+
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			this.setTablagastos(CLGastos.buscarGastosProvision(sNUPROF));
+			
+			if (getTablagastos().size() == 0)
+			{
+				msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
+			}
+			else if (getTablagastos().size() == 1)
+			{
+				msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
+			}
+			else
+			{
+				msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
+			}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+	}
+	
+	public void cargarDetallesGasto(ActionEvent actionEvent) 
     { 
 		String sPagina = ".";
 		
 		if (ConnectionManager.comprobarConexion())
 		{
+			
 			if (gastoseleccionado != null)
 			{
+
 				this.sCOACES = gastoseleccionado.getCOACES();
 		    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
 		    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
 		    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
 		    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
-		    	
-		    	this.sCodGasto = CLGastos.buscarCodigoGasto(sCOACES,sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
-		    	
-		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
-		    	
+
 		    	logger.debug("sCOACES:|"+sCOACES+"|");
 		    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");
 		    	logger.debug("sCOTPGA:|"+sCOTPGA+"|");
 		    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
 		    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
 		    	
-		    	logger.debug("Redirigiendo...");
+		    	this.sCodGasto = CLGastos.buscarCodigoGasto(sCOACES,sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
+		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
+		    	
+		    	Sesion.guardaDetalle(sCodGasto);
+		    	Sesion.limpiarHistorial();
+		    	Sesion.guardarHistorial("listagastos.xhtml","GestorDetallesGasto");
 
 		    	sPagina = "detallesgasto.xhtml";
 			}
@@ -284,10 +300,29 @@ public class GestorListaGastos implements Serializable
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
+			
+			try 
+			{
+				logger.debug("Redirigiendo...");
+				FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+			}
+			catch (IOException e)
+			{
+				FacesMessage msg;
+				
+				String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+				
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+
+			}
 
 		}
 
-		return sPagina;
+		//return sPagina;
     }
 	
 	public String getsCOACES() {

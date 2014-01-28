@@ -197,9 +197,11 @@ public class GestorMovimientosComunidades implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			borrarCamposComunidad();
 
-			Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES.toUpperCase());
+			Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES);
 			
 			this.sCOCLDO = comunidad.getsCOCLDO();
 			this.sNUDCOM = comunidad.getsNUDCOM();
@@ -218,13 +220,15 @@ public class GestorMovimientosComunidades implements Serializable
 			
 			if (comunidad.getsNUDCOM().equals(""))
 			{
-				msg = Utils.pfmsgError("ERROR: El Activo '"+sCOACES.toUpperCase()+"' no esta asociado a ninguna comunidad.");
-				logger.error("ERROR: El Activo '{}' no esta asociado a ninguna comunidad.",sCOACES.toUpperCase());
+				sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
 			else
 			{
-				msg = Utils.pfmsgInfo("La comunidad se ha cargado correctamente.");
-				logger.info("La comunidad se ha cargado correctamente.");
+				sMsg = "La comunidad se ha cargado correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);

@@ -22,13 +22,23 @@
 						</p:submenu>
 						
 						<p:submenu label="Pagos" async="true">
+							<p:submenu label="Cuentas" icon="ui-icon-contact">
+								<p:menuitem value="Cuentas Activo"
+									url="gestioncuentasactivos.xhtml" icon="ui-icon-bookmark" />
+								<p:menuitem value="Cuentas Comunidad"
+									url="gestioncuentascomunidad.xhtml" icon="ui-icon-note" />
+							</p:submenu>
 							<p:menuitem value="Pago por Conexión"
 								url="pagoconexion.xhtml" icon="ui-icon-signal-diag" />
+							<p:menuitem value="Pago Simple"
+								url="pagosimple.xhtml" icon="ui-icon-signal-cart" />
 						</p:submenu>
 
 						<p:submenu label="Provisiones">
 							<p:menuitem value="Cerrar" 
 								url="cierraprovisiones.xhtml" icon="ui-icon-check" />
+							<p:menuitem value="Lista de Provisiones" 
+								url="listaprovisiones.xhtml" icon="ui-icon-search" />
 						</p:submenu>
 
 						<p:submenu label="Comunidades">

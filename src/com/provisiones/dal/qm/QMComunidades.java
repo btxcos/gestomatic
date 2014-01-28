@@ -42,7 +42,8 @@ public final class QMComunidades
 	
 	//Campos de control
 	public static final String CAMPO16 = "cod_estado";
-
+	public static final String CAMPO17 = "comentario";
+	
 	private QMComunidades(){}
 
 	public static long addComunidad(Connection conexion, Comunidad NuevaComunidad)
@@ -74,8 +75,9 @@ public final class QMComunidades
 				       + CAMPO12 + ","              
 				       + CAMPO13 + ","
 				       + CAMPO14 + "," 
-					   + CAMPO15 + "," 
-				       + CAMPO16 +               
+					   + CAMPO15 + ","
+					   + CAMPO16 + ","
+				       + CAMPO17 +               
 				       ") VALUES ('" 
 				       + NuevaComunidad.getsCOCLDO() + "','" 
 				       + NuevaComunidad.getsNUDCOM() + "',"
@@ -105,7 +107,7 @@ public final class QMComunidades
 				       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
 				       
 				       + NuevaComunidad.getsOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "' )";
+				       + ValoresDefecto.DEF_ALTA + "','' )";
 			
 			logger.debug(sQuery);
 

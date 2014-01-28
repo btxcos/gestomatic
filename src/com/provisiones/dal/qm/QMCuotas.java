@@ -40,6 +40,7 @@ public final class QMCuotas
 	
 	//Campos de control
 	public static final String CAMPO12 = "cod_estado";
+	public static final String CAMPO13 = "comentario";
 
 	private QMCuotas(){}
 	
@@ -64,8 +65,9 @@ public final class QMCuotas
 				       + CAMPO8  + ","
 				       + CAMPO9  + ","
 				       + CAMPO10  + ","
-					   + CAMPO11  + ","  
-				       + CAMPO12  + 
+					   + CAMPO11  + ","
+					   + CAMPO12  + "," 
+				       + CAMPO13  + 
 				       ") VALUES ('"
 				       + NuevaCuota.getCOACES() + "','"
 				       + NuevaCuota.getCOCLDO() + "','"
@@ -77,7 +79,7 @@ public final class QMCuotas
 				       + NuevaCuota.getFAACTA() + "','"
 				       + NuevaCuota.getPTPAGO() + "','"
 				       + NuevaCuota.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "' )";
+				       + ValoresDefecto.DEF_ALTA + "','' )";
 
 			logger.debug(sQuery);
 

@@ -2,7 +2,7 @@ package com.provisiones.types.errores;
 
 public class ErrorGastoTabla 
 {
-	
+	private String NUPROF = "";
 	private String COACES = "";
 	
 	private String COGRUG = "";
@@ -17,10 +17,11 @@ public class ErrorGastoTabla
 
 	//Constructor de clase
 
-	public ErrorGastoTabla(String cOACES, String cOGRUG, String cOTPGA,
-			String cOSBGA, String dCOSBGA, String iMNGAS, String fEDEVE,
-			String mOVIMIENTO, String eRRORES) {
+	public ErrorGastoTabla(String nUPROF, String cOACES, String cOGRUG,
+			String cOTPGA, String cOSBGA, String dCOSBGA, String iMNGAS,
+			String fEDEVE, String mOVIMIENTO, String eRRORES) {
 		super();
+		NUPROF = nUPROF;
 		COACES = cOACES;
 		COGRUG = cOGRUG;
 		COTPGA = cOTPGA;
@@ -34,6 +35,14 @@ public class ErrorGastoTabla
 
 	//Métodos de acceso
 
+	public String getNUPROF() {
+		return NUPROF;
+	}
+
+	public void setNUPROF(String nUPROF) {
+		NUPROF = nUPROF;
+	}
+	
 	public String getCOACES() {
 		return COACES;
 	}

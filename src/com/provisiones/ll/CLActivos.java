@@ -75,12 +75,14 @@ public final class CLActivos
 	//Interfaz avanzado
 	public static int actualizaActivoLeido(String linea)
 	{
-		int iCodigo = 0;
+		int iCodigo = -5;//Error de conexion
 		
 		Connection conexion = ConnectionManager.getDBConnection();
 		
 		if (conexion != null)
 		{
+			iCodigo = 0;
+			
 			Activo activo = Parser.leerActivo(linea);
 			
 			String sCodActivo =  activo.getCOACES();

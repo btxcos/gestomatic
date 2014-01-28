@@ -255,13 +255,12 @@ public final class CLCuotas
 	
 	public static int registraMovimiento(MovimientoCuota movimiento)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 
 		Connection conexion = ConnectionManager.getDBConnection();
 		
 		if (conexion != null)
 		{
-			iCodigo = 0;
 			
 			String sCodCuota = buscarCodigoCuota(movimiento.getCOACES(), movimiento.getCOCLDO(),movimiento.getNUDCOM(), movimiento.getCOSBAC());
 			

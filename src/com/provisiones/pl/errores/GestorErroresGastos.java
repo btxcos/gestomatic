@@ -130,6 +130,7 @@ public class GestorErroresGastos implements Serializable
 	private String sCodMovimiento ="";
 	private String sCodError = "";
 	
+	private String sNUPROFB = "";
 	private String sCOACESB = "";
 	private String sCOGRUGB = "";
 	private String sCOTPGAB = "";
@@ -440,7 +441,7 @@ public class GestorErroresGastos implements Serializable
 			logger.debug("Buscando Gastos con errores...");
 			
 			ErrorGastoTabla filtro = new ErrorGastoTabla(
-					sCOACESB, sCOGRUGB, sCOTPGAB, sCOSBGA, "", "",Utils.compruebaFecha(sFEDEVE),
+					sNUPROFB, sCOACESB, sCOGRUGB, sCOTPGAB, sCOSBGA, "", "",Utils.compruebaFecha(sFEDEVE),
 					"", "");
 
 			this.setTablagastoserror(CLErrores.buscarGastosConErrores(filtro));
@@ -1826,6 +1827,14 @@ public class GestorErroresGastos implements Serializable
 
 	public void setsCodError(String sCodError) {
 		this.sCodError = sCodError;
+	}
+
+	public String getsNUPROFB() {
+		return sNUPROFB;
+	}
+
+	public void setsNUPROFB(String sNUPROFB) {
+		this.sNUPROFB = sNUPROFB;
 	}
 
 	public String getsCOACESB() {

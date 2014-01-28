@@ -3,6 +3,7 @@ package com.provisiones.pl;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.util.LinkedList;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -16,6 +17,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.ll.CLUsuarios;
 import com.provisiones.misc.Utils;
+import com.provisiones.types.Historial;
 
 public class GestorSesion implements Serializable 
 {
@@ -29,6 +31,11 @@ public class GestorSesion implements Serializable
 	
 	private String sMensaje = "";
 	private boolean bComprobado = false;
+	
+	private String sDetalle = "";
+	
+	private LinkedList<Historial> historial = new  LinkedList<Historial>();
+	
 	
 	private Connection conn = null;
 	
@@ -230,5 +237,19 @@ public class GestorSesion implements Serializable
 		return bComprobado;
 	}
 
+	public String getsDetalle() {
+		return sDetalle;
+	}
 
+	public void setsDetalle(String sDetalle) {
+		this.sDetalle = sDetalle;
+	}
+
+	public LinkedList<Historial> getHistorial() {
+		return historial;
+	}
+
+	public void setHistorial(LinkedList<Historial> historial) {
+		this.historial = historial;
+	}
 }

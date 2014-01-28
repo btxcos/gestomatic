@@ -2,6 +2,7 @@ package com.provisiones.types.tablas;
 
 public class GastoTabla 
 {
+	private String NUPROF = "";
 	private String COACES = "";
 	private String COGRUG = "";
 	private String COTPGA = "";
@@ -16,10 +17,12 @@ public class GastoTabla
 
 	//Constructor de clase
 	
-	public GastoTabla(String cOACES, String cOGRUG, String cOTPGA,
-			String cOSBGA, String dCOSBGA, String pTPAGO, String dPTPAGO,
-			String fEDEVE, String cOSIGA, String dCOSIGA, String iMNGAS) {
+	public GastoTabla(String nUPROF, String cOACES, String cOGRUG,
+			String cOTPGA, String cOSBGA, String dCOSBGA, String pTPAGO,
+			String dPTPAGO, String fEDEVE, String cOSIGA, String dCOSIGA,
+			String iMNGAS) {
 		super();
+		NUPROF = nUPROF;
 		COACES = cOACES;
 		COGRUG = cOGRUG;
 		COTPGA = cOTPGA;
@@ -35,6 +38,14 @@ public class GastoTabla
 	
 	//Métodos de acceso
 
+	public String getNUPROF() {
+		return NUPROF;
+	}
+
+	public void setNUPROF(String nUPROF) {
+		NUPROF = nUPROF;
+	}
+	
 	public String getCOACES() {
 		return COACES;
 	}
@@ -122,4 +133,5 @@ public class GastoTabla
 	public void setIMNGAS(String iMNGAS) {
 		IMNGAS = iMNGAS;
 	}
+
 }

@@ -32,7 +32,7 @@
 
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-													<p:commandButton value="Seleccionar" update="msgs, popup, activos" action="#{GestorListaGastos.cargarDetalles}"/>
+													<p:commandButton value="Detalles" update="msgs, popup, activos" action="#{GestorListaGastos.cargarDetalles}"/>
 													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastos, COACES, NUPROF" actionListener="#{GestorListaGastos.limpiarPlantilla}" />	
 
 										</h:panelGrid>
@@ -64,14 +64,14 @@
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
-													<h:outputText for="COACES" value="Codigo de activo: " />
+													<h:outputText for="COACES" value="Activo: " />
 														<p:inputText id="COACES" value="#{GestorListaGastos.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastos}"/>	
+													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastosActivo}"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+										<p:commandButton value="Buscar Activo" update="COACES, form:activos, msgs, popup" oncomplete="dlgBuscar.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 
@@ -79,14 +79,14 @@
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
-													<h:outputText for="NUPROF" value="Provisión de fondos: " />
+													<h:outputText for="NUPROF" value="Provisión: " />
 														<p:inputText id="NUPROF" value="#{GestorListaGastos.sNUPROF}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="NUPROF" display="icon"/>
-													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastos}"/>	
+													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastosProvision}"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar Provisión" update="NUPROF, form:provisiones" oncomplete="dlgBuscarProvision.show()"/>		
+										<p:commandButton value="Buscar Provisión" update="NUPROF, form:provisiones, msgs, popup" oncomplete="dlgBuscarProvision.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 
@@ -94,14 +94,28 @@
 									</p:fieldset>
 
 						<p:contextMenu for="gastos">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs" icon="ui-icon-check" action="#{GestorListaGastos.cargarDetalles}"/>
+							<p:menuitem value="Detalles" update="form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorListaGastos.cargarDetallesGasto}"/>
 						</p:contextMenu>
 
-						<p:dataTable id="gastos" var="gasto" value="#{GestorListaGastos.tablagastos}" rowKey="#{gasto.DCOSBGA}"
+						<p:dataTable id="gastos" var="gasto" value="#{GestorListaGastos.tablagastos}" rowKey="#{gasto.NUPROF}"
 															selection="#{GestorListaGastos.gastoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15">
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Provisión" />
+															</f:facet>
+															<h:outputText value="#{gasto.NUPROF}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activo" />
+															</f:facet>
+															<h:outputText value="#{gasto.COACES}" />
+														</p:column>
 
 														<p:column>
 															<f:facet name="header">

@@ -78,6 +78,11 @@ public final class ValoresDefecto
 	
 	public static final String DEF_GASTO_PROVISION_CONEXION = "0";
 	
+	public static final String DEF_PAGO_CONEXION = "C";
+	public static final String DEF_PAGO_MULTIPLE = "M";
+	public static final String DEF_PAGO_SIMPLE = "S";
+	
+	
 	public static final String DEF_PROVISION_ABIERTA = "A";
 	public static final String DEF_PROVISION_PENDIENTE = "P";
 	public static final String DEF_PROVISION_ENVIADA = "E";

@@ -1,0 +1,12 @@
+2014-01-20 21:36:02,435 ERROR [com.provisiones.dal.ConnectionManager:getUser] ERROR: Ocurrió un problema al solicitar el usuario de sesión.
+2014-01-20 21:36:02,439 DEBUG [com.provisiones.dal.qm.QMPagos:addPago] Ejecutando Query...
+2014-01-20 21:36:02,445 DEBUG [com.provisiones.dal.qm.QMPagos:addPago] INSERT INTO pp002_pagos_tbl (cod_gasto,cod_tp,fepgpr,pais,dciban,nuccen,nuccof,nuccdi) VALUES ('1','1','1','1','1','1','1','1','1','','20140120213602441')
+2014-01-20 21:36:02,447 ERROR [com.provisiones.dal.qm.QMPagos:addPago] ERROR GASTO:|1|
+2014-01-20 21:36:02,447 ERROR [com.provisiones.dal.qm.QMPagos:addPago] ERROR FECHA:|1|
+2014-01-20 21:36:02,448 ERROR [com.provisiones.dal.qm.QMPagos:addPago] ERROR 1136 (21S01): Column count doesn't match value count at row 1
+2014-01-20 21:36:27,852 ERROR [com.provisiones.dal.ConnectionManager:getUser] ERROR: Ocurrió un problema al solicitar el usuario de sesión.
+2014-01-20 21:36:27,854 DEBUG [com.provisiones.dal.qm.QMPagos:addPago] Ejecutando Query...
+2014-01-20 21:36:27,857 DEBUG [com.provisiones.dal.qm.QMPagos:addPago] INSERT INTO pp002_pagos_tbl (cod_gasto,cod_tp,fepgpr,pais,dciban,nuccen,nuccof,nuccdi) VALUES ('1','1','1','1','1','1','1','1','1','','20140120213627855')
+2014-01-20 21:36:27,860 ERROR [com.provisiones.dal.qm.QMPagos:addPago] ERROR GASTO:|1|
+2014-01-20 21:36:27,860 ERROR [com.provisiones.dal.qm.QMPagos:addPago] ERROR FECHA:|1|
+2014-01-20 21:36:27,861 ERROR [com.provisiones.dal.qm.QMPagos:addPago] ERROR 1136 (21S01): Column count doesn't match value count at row 1

@@ -37,6 +37,7 @@ public final class QMImpuestos
 	
 	//Campos de control
 	public static final String CAMPO11 = "cod_estado";
+	public static final String CAMPO12 = "comentario";
 
 	private QMImpuestos(){}
 	
@@ -61,7 +62,8 @@ public final class QMImpuestos
 				       + CAMPO8  + ","
 				       + CAMPO9  + ","
 				       + CAMPO10 + ","
-				       + CAMPO11 +  
+				       + CAMPO11 + ","
+				       + CAMPO12 +  
 				       ") VALUES ('" 
 				       + NuevoImpuestoRecurso.getNURCAT() + "','"
 				       + NuevoImpuestoRecurso.getCOSBAC() + "','"
@@ -72,7 +74,7 @@ public final class QMImpuestos
 				       + NuevoImpuestoRecurso.getBIRESO() + "','"
 				       + NuevoImpuestoRecurso.getCOTEXA() + "','"
 				       + NuevoImpuestoRecurso.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "' )";
+				       + ValoresDefecto.DEF_ALTA + "','' )";
 
 			try 
 			{

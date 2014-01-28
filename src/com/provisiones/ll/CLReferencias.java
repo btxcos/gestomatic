@@ -286,7 +286,7 @@ public final class CLReferencias
 	
 	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 
 		Connection conexion = ConnectionManager.getDBConnection();
 		

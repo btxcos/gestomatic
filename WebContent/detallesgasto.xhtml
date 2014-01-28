@@ -28,7 +28,7 @@
 						</p:fieldset>
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Volver" action="#{GestorDetallesGasto.volver}"/>
+											<p:commandButton value="Volver" actionListener="#{GestorDetallesGasto.volver}"/>
 										</h:panelGrid>
 											<p:messages id="msgs"/>
 									</p:fieldset>
@@ -42,76 +42,20 @@
 				<p:layoutUnit position="center">
 					<p:panel>
 						<h:panelGrid columns="1" cellpadding="5">
-							<p:fieldset legend="Informacion">
-								<h:panelGrid columns="1" cellpadding="5">
-									<p:panel>
-										<h:panelGrid columns="4" cellpadding="5">
-											<h:outputText value="Activo: " />
-											<p:inputText id="COACES" value="#{GestorDetallesGasto.sCOACES}" disabled="true" size="9"/>
-
-											<h:outputText value="Provisión: " />
-											<p:inputText id="NUPROF" value="#{GestorDetallesGasto.sNUPROF}" disabled="true" size="9"/>
-										</h:panelGrid>
-									</p:panel>
-									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Fecha de entrada en la aplicación: " />
-											<p:inputText id="FEAPLI" value="#{GestorDetallesGasto.sFEAPLI}" disabled="true" size="9"/>
-
-											<h:outputText value="Código de aplicación INFOCAM: " />
-											<p:inputText id="COAPII" value="#{GestorDetallesGasto.sCOAPII}" disabled="true" size="4"/>
-
-											<h:outputText value="Código de subaplicación INFOCAM: " />
-											<p:inputText id="COSPII" value="#{GestorDetallesGasto.sCOSPII}" disabled="true" size="3"/>
-
-											<h:outputText
-												value="Número de cliente para intercambio de ficheros: " />
-											<p:inputText id="NUCLII" value="#{GestorDetallesGasto.sNUCLII}" disabled="true" size="14"/>
-										</h:panelGrid>
-									</p:panel>
-													<p:panel>
-														<h:panelGrid columns="2" cellpadding="5">
-
-
-											<h:outputText value="Codigo de unidad monetaria: " />
-											<p:inputText id="COUNMO" value="#{GestorDetallesGasto.sCOUNMO}" disabled="true" size="5"/>
-
-											<h:outputText value="Tipo de Negociado: " />
-											<p:inputText id="COTNEG" value="#{GestorDetallesGasto.sCOTNEG}" disabled="true" size="5"/>
-														</h:panelGrid>
-													</p:panel>
-								</h:panelGrid>
-							</p:fieldset>
-							<p:fieldset legend="Anulacíon">
+							<p:fieldset legend="Indentificación">
 								<h:panelGrid columns="2" cellpadding="5">
 									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-
-											<h:outputText value="Fecha de anulacion del gasto: " />
-											<p:inputText id="FEAGTO" value="#{GestorDetallesGasto.sFEAGTO}" disabled="true" size="9"/>
-
-
-										</h:panelGrid>
-									</p:panel>
-								</h:panelGrid>
-							</p:fieldset>
-							<p:fieldset legend="Autorización">
-								<h:panelGrid columns="1" cellpadding="5">
-									<p:panel>
-										<h:panelGrid columns="4" cellpadding="5">
-											<h:outputText value="Indicador de autorizacion: " />
-											<p:inputText id="BIAUTO" value="#{GestorDetallesGasto.sBIAUTO}" disabled="true" size="4"/>
-
-											<h:outputText value="Motivo: " />
-											<p:inputText id="COMONA" value="#{GestorDetallesGasto.sCOMONA}" disabled="true" size="22"/>
+										<h:panelGrid columns="3" cellpadding="5">
+											<h:outputText value="Activo: " />
+											<p:inputText id="COACES" value="#{GestorDetallesGasto.sCOACES}" readonly="true" size="9"/>
+											<p:commandButton value="Detalles" actionListener="#{GestorDetallesGasto.cargarDetallesActivo}"/>
 										</h:panelGrid>
 									</p:panel>
 									<p:panel>
-										<h:panelGrid columns="2" cellpadding="5">
-											<h:outputText value="Fecha de autorizacion del gasto: " />
-											<p:inputText id="FEAUFA" value="#{GestorDetallesGasto.sFEAUFA}" disabled="true" size="9"/>
-
-
+										<h:panelGrid columns="3" cellpadding="5">
+											<h:outputText value="Provisión: " />
+											<p:inputText id="NUPROF" value="#{GestorDetallesGasto.sNUPROF}" readonly="true" size="9"/>
+											<p:commandButton value="Detalles" actionListener="#{GestorDetallesGasto.cargarDetallesProvision}"/>
 										</h:panelGrid>
 									</p:panel>
 								</h:panelGrid>
@@ -122,16 +66,16 @@
 										<p:fieldset legend="Tipo de Gasto">
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Grupo de gasto: " />
-											<p:inputText id="COGRUG" value="#{GestorDetallesGasto.sCOGRUG}" disabled="true" size="8" maxlength="8"/>
+											<p:inputText id="COGRUG" value="#{GestorDetallesGasto.sCOGRUG}" disabled="true" size="0"/>
 
 											<h:outputText value="Tipo de concepto de gasto:  " />
-											<p:inputText id="COTPGA" value="#{GestorDetallesGasto.sCOTPGA}" disabled="true" size="8" maxlength="8"/>
+											<p:inputText id="COTPGA" value="#{GestorDetallesGasto.sCOTPGA}" disabled="true" size="0"/>
 
 											<h:outputText value="Subtipo de gasto: " />
-											<p:inputText id="COSBGA" value="#{GestorDetallesGasto.sCOSBGA}" disabled="true" size="8" maxlength="8"/>
+											<p:inputText id="COSBGA" value="#{GestorDetallesGasto.sCOSBGA}" disabled="true" size="0"/>
 
 											<h:outputText value="Periodicidad de pago: " />
-											<p:inputText id="PTPAGO" value="#{GestorDetallesGasto.sPTPAGO}" disabled="true" size="8" maxlength="8"/>
+											<p:inputText id="PTPAGO" value="#{GestorDetallesGasto.sPTPAGO}" disabled="true" size="0"/>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Fechas del gasto">
@@ -163,7 +107,7 @@
 													<p:panel>
 														<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Situacion del gasto: " />
-											<p:inputText id="COSIGA" value="#{GestorDetallesGasto.sCOSIGA}" disabled="true" size="8"/>
+											<p:inputText id="COSIGA" value="#{GestorDetallesGasto.sCOSIGA}" disabled="true" size="0"/>
 														</h:panelGrid>
 													</p:panel>
 
@@ -192,7 +136,7 @@
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText value="Importe del gasto: " />
-											<p:inputText id="IMNGAS" value="#{GestorDetallesGasto.sIMNGAS}" disabled="true" size="8"/>
+											<p:inputText id="IMNGAS" value="#{GestorDetallesGasto.sIMNGAS}" disabled="true" size="14"/>
 											<h:outputText value="¤"/>
 														</h:panelGrid>
 													</p:panel>
@@ -200,19 +144,19 @@
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText value="Recargo: " />
-											<p:inputText id="IMRGAS" value="#{GestorDetallesGasto.sIMRGAS}" disabled="true" size="8"/>
+											<p:inputText id="IMRGAS" value="#{GestorDetallesGasto.sIMRGAS}" disabled="true" size="14"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText value="Demora: " />
-											<p:inputText id="IMDGAS" value="#{GestorDetallesGasto.sIMDGAS}" disabled="true" size="8"/>
+											<p:inputText id="IMDGAS" value="#{GestorDetallesGasto.sIMDGAS}" disabled="true" size="14"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText value="Costas: " />
-											<p:inputText id="IMCOST" value="#{GestorDetallesGasto.sIMCOST}" disabled="true" size="8"/>
+											<p:inputText id="IMCOST" value="#{GestorDetallesGasto.sIMCOST}" disabled="true" size="14"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText value="Otros incrementos: " />
-											<p:inputText id="IMOGAS" value="#{GestorDetallesGasto.sIMOGAS}" disabled="true" size="8"/>
+											<p:inputText id="IMOGAS" value="#{GestorDetallesGasto.sIMOGAS}" disabled="true" size="14"/>
 											<h:outputText value="¤"/>
 														</h:panelGrid>
 													</p:panel>
@@ -220,7 +164,7 @@
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText value="Descuentos: " />
-											<p:inputText id="IMDTGA" value="#{GestorDetallesGasto.sIMDTGA}" disabled="true" size="8"/>
+											<p:inputText id="IMDTGA" value="#{GestorDetallesGasto.sIMDTGA}" disabled="true" size="14"/>
 											<h:outputText value="¤"/>
 
 
@@ -232,12 +176,13 @@
 
 
 											<h:outputText value="Impuestos: " />
-											<p:inputText id="IMIMGA" value="#{GestorDetallesGasto.sIMIMGA}" disabled="true" size="8"/>
+											<p:inputText id="IMIMGA" value="#{GestorDetallesGasto.sIMIMGA}" disabled="true" size="14"/>
 											<h:outputText value="¤"/>
 
-											<h:outputText value="Tipo de impuesto: " />
-											<p:inputText id="COIMPT" value="#{GestorDetallesGasto.sCOIMPT}" disabled="true" size="5"/>
 
+													<h:outputText value="Tipo de impuesto: " />
+													<p:inputText id="COIMPT" value="#{GestorDetallesGasto.sCOIMPT}" disabled="true" size="14"/>
+													
 														</h:panelGrid>
 													</p:panel>
 
@@ -267,6 +212,74 @@
 
 								</h:panelGrid>
 							</p:fieldset>
+
+							<p:fieldset legend="Autorización">
+								<h:panelGrid columns="1" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="4" cellpadding="5">
+											<h:outputText value="Indicador de autorizacion: " />
+											<p:inputText id="BIAUTO" value="#{GestorDetallesGasto.sBIAUTO}" disabled="true" size="0"/>
+
+											<h:outputText value="Motivo: " />
+											<p:inputText id="COMONA" value="#{GestorDetallesGasto.sCOMONA}" disabled="true" size="0"/>
+										</h:panelGrid>
+									</p:panel>
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha de autorizacion del gasto: " />
+											<p:inputText id="FEAUFA" value="#{GestorDetallesGasto.sFEAUFA}" disabled="true" size="9"/>
+
+
+										</h:panelGrid>
+									</p:panel>
+								</h:panelGrid>
+							</p:fieldset>
+							<p:fieldset legend="Anulacíon">
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText value="Fecha de anulacion del gasto: " />
+											<p:inputText id="FEAGTO" value="#{GestorDetallesGasto.sFEAGTO}" disabled="true" size="9"/>
+
+
+										</h:panelGrid>
+									</p:panel>
+								</h:panelGrid>
+							</p:fieldset>
+
+														<p:fieldset legend="Información">
+								<h:panelGrid columns="1" cellpadding="5">
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+											<h:outputText value="Fecha de entrada en la aplicación: " />
+											<p:inputText id="FEAPLI" value="#{GestorDetallesGasto.sFEAPLI}" disabled="true" size="9"/>
+
+											<h:outputText value="Código de aplicación INFOCAM: " />
+											<p:inputText id="COAPII" value="#{GestorDetallesGasto.sCOAPII}" disabled="true" size="4"/>
+
+											<h:outputText value="Código de subaplicación INFOCAM: " />
+											<p:inputText id="COSPII" value="#{GestorDetallesGasto.sCOSPII}" disabled="true" size="3"/>
+
+											<h:outputText
+												value="Número de cliente para intercambio de ficheros: " />
+											<p:inputText id="NUCLII" value="#{GestorDetallesGasto.sNUCLII}" disabled="true" size="14"/>
+										</h:panelGrid>
+									</p:panel>
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+
+											<h:outputText value="Codigo de unidad monetaria: " />
+											<p:inputText id="COUNMO" value="#{GestorDetallesGasto.sCOUNMO}" disabled="true" size="5"/>
+
+											<h:outputText value="Tipo de Negociado: " />
+											<p:inputText id="COTNEG" value="#{GestorDetallesGasto.sCOTNEG}" disabled="true" size="0"/>
+														</h:panelGrid>
+													</p:panel>
+								</h:panelGrid>
+							</p:fieldset>
+
 						</h:panelGrid>
 					</p:panel>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  

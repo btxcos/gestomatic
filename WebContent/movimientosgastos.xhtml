@@ -285,27 +285,54 @@
 							<p:menuitem value="Seleccionar" update="form:panel, form:popup, form:msgs, form:DCOSBGA, form:PTPAGO, form:bDEVO form:NUPROF" icon="ui-icon-check" actionListener="#{GestorMovimientosGastos.seleccionarGasto}" oncomplete="dlgTablaPendientes.hide()"/>
 						</p:contextMenu>
 
-						<p:dataTable id="gastos" var="gasto" value="#{GestorMovimientosGastos.tablagastos}" rowKey="#{gasto.DCOSBGA}"
+						<p:dataTable id="gastos" var="gasto" value="#{GestorMovimientosGastos.tablagastos}" rowKey="#{gasto.NUPROF}"
 															selection="#{GestorMovimientosGastos.gastoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15">
 
-							<p:column headerText="Gasto">
-								#{gasto.DCOSBGA}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Provisión" />
+															</f:facet>
+															<h:outputText value="#{gasto.NUPROF}" />
+														</p:column>
 
-							<p:column headerText="Periodicidad">
-								#{gasto.DPTPAGO}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activo" />
+															</f:facet>
+															<h:outputText value="#{gasto.COACES}" />
+														</p:column>
 
-							<p:column headerText="Importe">
-								#{gasto.IMNGAS}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Gasto" />
+															</f:facet>
+															<h:outputText value="#{gasto.DCOSBGA}" />
+														</p:column>
+														
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Periodicidad" />
+															</f:facet>
+															<h:outputText value="#{gasto.DPTPAGO}" />
+														</p:column>
 
-							<p:column headerText="Fecha de Devengo">
-								#{gasto.FEDEVE}
-							</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Importe" />
+															</f:facet>
+															<h:outputText value="#{gasto.IMNGAS}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Fecha de Devengo" />
+															</f:facet>
+															<h:outputText value="#{gasto.FEDEVE}" />
+														</p:column>
+
 
 						</p:dataTable>
 

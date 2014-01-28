@@ -640,6 +640,7 @@ public final class QMListaGastos
 
 			boolean bEncontrado = false;
 
+			String sNUPROF = "";
 			String sCOACES = "";
 			String sCOGRUG = "";
 			String sCOTPGA = "";
@@ -655,7 +656,7 @@ public final class QMListaGastos
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
-						
+						   + QMGastos.CAMPO1 + ","
 						   + QMGastos.CAMPO2 + ","        
 						   + QMGastos.CAMPO3 + ","
 						   + QMGastos.CAMPO4 + ","
@@ -704,6 +705,7 @@ public final class QMListaGastos
 					{
 						bEncontrado = true;
 						
+						sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getString(QMGastos.CAMPO1));
 						sCOACES  = rs.getString(QMGastos.CAMPO2);
 						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
 						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
@@ -717,6 +719,7 @@ public final class QMListaGastos
 						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
+								sNUPROF,
 								sCOACES,
 								sCOGRUG,
 								sCOTPGA,
@@ -743,6 +746,8 @@ public final class QMListaGastos
 			} 
 			catch (SQLException ex) 
 			{
+				resultado = new ArrayList<GastoTabla>();
+				
 				logger.error("ERROR COACES:|"+sCodCOACES+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());

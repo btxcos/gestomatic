@@ -263,7 +263,7 @@ public final class CLImpuestos
 	
 	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento)
 	{
-		int iCodigo = 0;
+		int iCodigo = -910;//Error de conexion
 
 		Connection conexion = ConnectionManager.getDBConnection();
 		

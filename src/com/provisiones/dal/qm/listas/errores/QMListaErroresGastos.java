@@ -200,6 +200,7 @@ public final class QMListaErroresGastos
 			
 			boolean bEncontrado = false;
 
+			String NUPROF = "";
 			String COACES = "";
 			String COGRUG = "";
 			String COTPGA = "";
@@ -222,7 +223,8 @@ public final class QMListaErroresGastos
 						   + QMMovimientosGastos.CAMPO5 + ","
 						   + QMMovimientosGastos.CAMPO7 + ","
 						   + QMMovimientosGastos.CAMPO16 + ","
-						   + QMMovimientosGastos.CAMPO17 + 
+						   + QMMovimientosGastos.CAMPO17 + ","
+						   + QMMovimientosGastos.CAMPO34 + 
 
 						   "  FROM " 
 						   + QMMovimientosGastos.TABLA + 
@@ -257,6 +259,7 @@ public final class QMListaErroresGastos
 					{
 						bEncontrado = true;
 						
+						NUPROF = rs.getString(QMMovimientosGastos.CAMPO34);
 						COACES = rs.getString(QMMovimientosGastos.CAMPO2);
 						COGRUG = rs.getString(QMMovimientosGastos.CAMPO3);
 						COTPGA = rs.getString(QMMovimientosGastos.CAMPO4);
@@ -268,7 +271,7 @@ public final class QMListaErroresGastos
 						MOVIMIENTO = rs.getString(QMMovimientosGastos.CAMPO1);
 						ERRORES = Long.toString(buscaCantidadErrores(conexion,MOVIMIENTO));
 						
-						ErrorGastoTabla errorencontrado = new ErrorGastoTabla(COACES, COGRUG, COTPGA, COSBGA, DCOSBGA, IMNGAS, FEDEVE,MOVIMIENTO, ERRORES);
+						ErrorGastoTabla errorencontrado = new ErrorGastoTabla(NUPROF, COACES, COGRUG, COTPGA, COSBGA, DCOSBGA, IMNGAS, FEDEVE,MOVIMIENTO, ERRORES);
 						
 						resultado.add(errorencontrado);
 						

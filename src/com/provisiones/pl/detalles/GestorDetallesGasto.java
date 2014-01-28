@@ -1,18 +1,20 @@
 package com.provisiones.pl.detalles;
 
+import java.io.IOException;
 import java.io.Serializable;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+import javax.faces.event.ActionEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
-import com.provisiones.pl.listas.GestorListaGastos;
 import com.provisiones.types.Gasto;
 
 public class GestorDetallesGasto implements Serializable 
@@ -73,42 +75,46 @@ public class GestorDetallesGasto implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			logger.debug("Iniciando GestorDetallesGasto...");
-			cargarGastoElegido();
+			cargarDetallesGasto();
 		}
 	}
 	
-	public String volver()
+	public void volver(ActionEvent actionEvent)
 	{
-		String sPagina = "login.xhtml";
-		if (ConnectionManager.comprobarConexion())
+		//return Sesion.cargarHistorial("GestorDetallesGasto");
+		
+		try 
 		{
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-			
-			session.removeAttribute("GestorDetallesGasto");
-			
-			sPagina = "listagastos.xhtml";
+			FacesContext.getCurrentInstance().getExternalContext().redirect(Sesion.cargarHistorial());
 		}
-		return sPagina;
+		catch (IOException e)
+		{
+			FacesMessage msg;
+			
+			String sMsg = "ERROR: Ocurrió un problema al intentar regresar. Por favor, avise a soporte.";
+			
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+
+		}
+		
 	}
 	
-	public void cargarGastoElegido()
+	public void cargarDetallesGasto()
 	{
 		logger.debug("Cargando Gasto...");
 
-		
-		String sGastoID = ((GestorListaGastos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaGastos")).getsCodGasto();
+		String sGastoID = Sesion.cargarDetalle();
 		
 		logger.debug("sGastoID:|"+sGastoID+"|");
-
-		
-		
-		logger.debug("sCOACES:|"+sCOACES+"|");
-		
 		
 		if (!sGastoID.equals(""))
 		{
 
-		  	Gasto gasto = CLGastos.buscarGastoConCodigo(sGastoID);
+		  	Gasto gasto = CLGastos.buscarDetallesGasto(sGastoID);
 
 	    	logger.debug(gasto.logGasto());
 	    	
@@ -119,7 +125,6 @@ public class GestorDetallesGasto implements Serializable
 	    	this.sCOSBGA = gasto.getCOSBGA();
 	    	this.sFEDEVE = Utils.recuperaFecha(gasto.getFEDEVE());
 	 
-	    	this.setbDevolucion((Integer.parseInt(sCOSBGA) > 49));
 
 			this.sPTPAGO = gasto.getPTPAGO();
 
@@ -157,14 +162,14 @@ public class GestorDetallesGasto implements Serializable
 			//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 			//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
-			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
+			this.sNUPROF = CLGastos.buscarProvisionGastoID(sGastoID);
 
 			this.sCOTERR = ValoresDefecto.DEF_COTERR;
 			
 			//TODO sacar de datos de pago
 			//this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
 		
-			this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+			//this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
 			this.sCOAPII = ValoresDefecto.DEF_COAPII;
 			this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 			this.sNUCLII = ValoresDefecto.DEF_NUCLII;
@@ -172,6 +177,103 @@ public class GestorDetallesGasto implements Serializable
 		}
 		
 	}
+	
+	public void cargarDetallesActivo(ActionEvent actionEvent) 
+    { 
+		String sPagina = ".";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("sCOACES:|"+sCOACES+"|");
+			
+			if (sCOACES != "")
+			{
+		    	Sesion.guardaDetalle(sCOACES);
+		    	Sesion.guardarHistorial("detallesgasto.xhtml","GestorDetallesActivo");
+
+		    	sPagina = "detallesactivo.xhtml";
+			}
+			else
+			{
+				FacesMessage msg;
+
+				msg = Utils.pfmsgWarning("No se ha seleccionado ningún gasto.");
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+			
+			try 
+			{
+				logger.debug("Redirigiendo...");
+				FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+			}
+			catch (IOException e)
+			{
+				FacesMessage msg;
+				
+				String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+				
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+
+		}
+
+		//return sPagina;
+    }
+	
+	
+	public void cargarDetallesProvision(ActionEvent actionEvent) 
+    { 
+		String sPagina = ".";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	logger.debug("sNUPROF:"+sNUPROF);
+
+			if (sNUPROF != "")
+			{
+	    	
+		    	Sesion.guardaDetalle(sNUPROF);
+		    	Sesion.guardarHistorial("detallesgasto.xhtml","GestorDetallesProvision");
+
+		    	sPagina = "detallesprovision.xhtml";
+			}
+			else
+			{
+				FacesMessage msg;
+
+				msg = Utils.pfmsgWarning("No se ha seleccionado una provisión.");
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+			
+			try 
+			{
+				logger.debug("Redirigiendo...");
+				FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+			}
+			catch (IOException e)
+			{
+				FacesMessage msg;
+				
+				String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+				
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+
+			}
+
+		}
+
+		//return sPagina;
+
+    }
 	
 	public String getsCOACES() {
 		return sCOACES;

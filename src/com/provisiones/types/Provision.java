@@ -13,7 +13,7 @@ public class Provision
 	private String sFEPFON = "";
 	private String sFechaEnvio = "";
 	private String sFechaAutorizado = "";
-	private String sFechaFacturado = "";
+	private String sFechaPagado = "";
 	private String sCodEstado = "";
 
 	//Constructor de clase
@@ -21,7 +21,7 @@ public class Provision
 	public Provision(String sNUPROF, String sCOSPAT, String sTAS,
 			String sValorTolal, String sNumGastos, String sValorAutorizado,
 			String sGastosAutorizados, String sFEPFON, String sFechaEnvio,
-			String sFechaAutorizado, String sFechaFacturado, String sCodEstado) 
+			String sFechaAutorizado, String sFechaPagado, String sCodEstado) 
 	{
 		super();
 		this.sNUPROF = sNUPROF;
@@ -34,7 +34,7 @@ public class Provision
 		this.sFEPFON = sFEPFON;
 		this.sFechaEnvio = sFechaEnvio;
 		this.sFechaAutorizado = sFechaAutorizado;
-		this.sFechaFacturado = sFechaFacturado;
+		this.sFechaPagado = sFechaPagado;
 		this.sCodEstado = sCodEstado;
 	}
 
@@ -134,12 +134,12 @@ public class Provision
 		this.sFechaAutorizado = sFechaAutorizado;
 	}
 
-	public String getsFechaFacturado() {
-		return sFechaFacturado;
+	public String getsFechaPagado() {
+		return sFechaPagado;
 	}
 
-	public void setsFechaFacturado(String sFechaFacturado) {
-		this.sFechaFacturado = sFechaFacturado;
+	public void setsFechaPagado(String sFechaPagado) {
+		this.sFechaPagado = sFechaPagado;
 	}
 
 	public String getsCodEstado() {
@@ -155,7 +155,7 @@ public class Provision
 	//log
 	public String logProvision()
 	{
-		return String.format("(PROVISION)\nsNUPROF         :|"+sNUPROF+"|\nsCOSPAT         :|"+sCOSPAT+"|\nsTAS            :|"+sTAS+"|\nsFEPFON         :|"+sFEPFON+"|\nsFechaEnvio     :|"+sFechaEnvio+"|\nsFechaAutorizado:|"+sFechaAutorizado+"|\nsFechaFacturado :|"+sFechaFacturado+"|\nsCodEstado      :|"+sCodEstado+"|\nsValorTolal     :|"+sValorTolal+"|\nsNumGastos      :|"+sNumGastos+"|");
+		return String.format("(PROVISION)\nsNUPROF         :|"+sNUPROF+"|\nsCOSPAT         :|"+sCOSPAT+"|\nsTAS            :|"+sTAS+"|\nsFEPFON         :|"+sFEPFON+"|\nsFechaEnvio     :|"+sFechaEnvio+"|\nsFechaAutorizado:|"+sFechaAutorizado+"|\nsFechaPagado :|"+sFechaPagado+"|\nsCodEstado      :|"+sCodEstado+"|\nsValorTolal     :|"+sValorTolal+"|\nsNumGastos      :|"+sNumGastos+"|");
 	}
 
 

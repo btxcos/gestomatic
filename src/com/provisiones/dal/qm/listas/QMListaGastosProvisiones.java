@@ -671,7 +671,7 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosPorvision(Connection conexion, String sNUPROF)
+	public static ArrayList<GastoTabla> buscaGastosProvision(Connection conexion, String sNUPROF)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -699,7 +699,7 @@ public final class QMListaGastosProvisiones
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
-						
+						   + QMGastos.CAMPO1 + "," 
 						   + QMGastos.CAMPO2 + ","        
 						   + QMGastos.CAMPO3 + ","
 						   + QMGastos.CAMPO4 + ","
@@ -752,6 +752,7 @@ public final class QMListaGastosProvisiones
 						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
+								sNUPROF,
 								sCOACES,
 								sCOGRUG,
 								sCOTPGA,
@@ -791,6 +792,9 @@ public final class QMListaGastosProvisiones
 
 		return resultado;
 	}
+	
+	
+
 	
 	public static boolean resuelveGastos(Connection conexion, String sNUPROF) 
 	{

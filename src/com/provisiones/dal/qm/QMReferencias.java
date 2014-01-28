@@ -35,7 +35,8 @@ public final class QMReferencias
 	public static final String CAMPO9  = "fereca";
 	
 	//Campos de control
-	public static final String CAMPO10 = "cod_estado";	
+	public static final String CAMPO10 = "cod_estado";
+	public static final String CAMPO11 = "comentario";
 
 	private QMReferencias(){}
 	
@@ -61,7 +62,8 @@ public final class QMReferencias
 				       + CAMPO7  + ","
 				       + CAMPO8  + ","
 				       + CAMPO9  + ","
-				       + CAMPO10 +              
+				       + CAMPO10  + ","
+				       + CAMPO11 +              
 				       ") VALUES ('" 
 				       + NuevaReferenciaCatastral.getNURCAT() + "','"
 				       + NuevaReferenciaCatastral.getTIRCAT() + "','"
@@ -74,7 +76,7 @@ public final class QMReferencias
 				       + NuevaReferenciaCatastral.getIMCATA() + "','"
 				       + NuevaReferenciaCatastral.getFERECA() + "','"
 
-				       + ValoresDefecto.DEF_ALTA + "' )";
+				       + ValoresDefecto.DEF_ALTA + "','' )";
 			
 			logger.debug(sQuery);
 

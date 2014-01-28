@@ -79,7 +79,18 @@ public final class ConnectionManager
 	
 	public static String getUser() 
 	{
-		return ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getsUsuario();
+		String sUser = "";
+		
+		try
+		{
+			sUser = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getsUsuario(); 
+		}
+		catch (NullPointerException npe)
+		{
+			sUser = "";
+			logger.error("ERROR: Ocurrió un problema al solicitar el usuario de sesión.");
+		}
+		return sUser;
 	}
 	
 	public static boolean initDBDriver()

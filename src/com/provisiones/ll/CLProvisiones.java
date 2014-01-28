@@ -50,10 +50,26 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 	}
 	
+	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasActivo(String sCOACES)
+	{
+		return QMProvisiones.buscaProvisionesAutorizadasPorActivo(ConnectionManager.getDBConnection(),sCOACES);
+	}
+	
+	
+	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasComunidad(String sCOACES)
+	{
+		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+	}
+	
 	
 	public static ArrayList<ProvisionTabla> buscarProvisionesFecha(String sFecha)
 	{
 		return QMProvisiones.buscaProvisionesPorFecha(ConnectionManager.getDBConnection(),sFecha);
+	}
+	
+	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasFecha(String sFecha)
+	{
+		return QMProvisiones.buscaProvisionesAutorizadasPorFecha(ConnectionManager.getDBConnection(),sFecha);
 	}
 	
 	public static String calcularValorProvision (String sNUPROF)
@@ -66,6 +82,11 @@ public final class CLProvisiones
 	public static Provision buscarProvision (String sCodNUPROF)
 	{
 		return QMProvisiones.getProvision(ConnectionManager.getDBConnection(),sCodNUPROF);
+	}
+	
+	public static Provision buscarDetallesProvision(String sCodNUPROF)
+	{
+		return QMProvisiones.getDetallesProvision(ConnectionManager.getDBConnection(),sCodNUPROF);
 	}
 	
 	public static String estadoProvision (String sCodNUPROF)

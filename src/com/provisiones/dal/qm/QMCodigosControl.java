@@ -20,6 +20,10 @@ public final class QMCodigosControl
 	public static final String TCOCLDO = "pp001_cocldo_tbl";
 	public static final String ICOCLDO = "cocldo_id";
 	
+	public static final String TCOGRUG = "pp001_cogrug_tbl";
+	public static final String ICOGRUG = "cogrug_id";
+	
+	
 	public static final String TCOSBGAT22 = "pp001_cosbga_t22_tbl";
 	public static final String ICOSBGAT22 = "cosbga_id";
 	
@@ -110,6 +114,26 @@ public final class QMCodigosControl
 	public static final String TBIOBNU = "pp001_biobnu_tbl";
 	public static final String IBIOBNU = "biobnu_id";
 	
+	public static final String TESGAST = "pp001_estados_gasto_tbl";
+	public static final String IESGAST = "estado_gasto_id";
+	
+	public static final String TCOIMPT = "pp001_coimpt_tbl";
+	public static final String ICOIMPT = "coimpt_id";
+	
+	public static final String TCOTNEG = "pp001_cotneg_tbl";
+	public static final String ICOTNEG = "cotneg_id";
+	
+	public static final String TCOMONA = "pp001_comona_tbl";
+	public static final String ICOMONA = "comona_id";
+	
+	public static final String TBIAUTO = "pp001_biauto_tbl";
+	public static final String IBIAUTO = "biauto_id";
+	
+	public static final String TESPROF = "pp001_estados_provision_tbl";
+	public static final String IESPROF = "estado_provision_id";
+	
+	
+	
 	private QMCodigosControl(){}
 	
 	public static String getDesCampo(Connection conexion, String sTabla, String sCampo, String sValor)
@@ -179,6 +203,89 @@ public final class QMCodigosControl
 			{
 				Utils.closeResultSet(rs);
 				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sDescripcion;
+	}
+	
+	public static String getDesCOTPGA(Connection conexion, String sCodCOGRUG, String sCodCOTPGA)
+	{
+		String sDescripcion = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+		
+			String sTabla = "pp001_cotpga_g"+sCodCOGRUG+"_tbl";
+			String sCampo  = "cotpga_id";    
+
+			if (!sTabla.equals(""))
+			{
+				
+				logger.debug("Ejecutando Query...");
+				
+				String sQuery = "SELECT " 
+						+ DESCRIPCION + 
+						" FROM " 
+						+ sTabla + 
+						" WHERE "
+						+ sCampo + " = '" + sCodCOTPGA + "'";
+				
+				logger.debug(sQuery);
+
+				try 
+				{
+					stmt = conexion.createStatement();
+
+					pstmt = conexion.prepareStatement(sQuery);
+					rs = pstmt.executeQuery();
+					
+					logger.debug("Ejecutada con exito!");
+					
+					
+					if (rs != null) 
+					{
+						
+						while (rs.next()) 
+						{
+							bEncontrado = true;
+
+							sDescripcion = rs.getString(DESCRIPCION);
+
+							logger.debug("Encontrado el registro!");
+
+							logger.debug(DESCRIPCION+":|"+sDescripcion+"|");
+
+
+						}
+					}
+					if (!bEncontrado) 
+					{
+		 
+						logger.debug("No se encontró la información.");
+					}
+
+				} 
+				catch (SQLException ex) 
+				{
+					sDescripcion = "";
+
+					logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
+					logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
+
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				} 
+				finally 
+				{
+					Utils.closeResultSet(rs);
+					Utils.closeStatement(stmt);
+				}
 			}
 		}
 
