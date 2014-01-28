@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -13,219 +13,181 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="33%" header="Detalles de la Provision">
+				<p:layoutUnit position="north" size="auto" header="Cerrar Provisión">
 								<h:panelGrid columns="3" cellpadding="5">
 						<p:fieldset legend="Sesión" id="sesion">
 							<h:panelGrid columns="1" cellpadding="1">
 								<p:panel>
 									<h:panelGrid columns="2" cellpadding="1">
 										<h:outputText value="Usuario: "/>
-										<p:inputText id="USUARIO" value="#{GestorIndice.sUsuario}" size="10" disabled="true"/>
+										<p:inputText id="USUARIO" value="#{GestorSesion.sUsuario}" size="10" disabled="true"/>
 									</h:panelGrid>
 								</p:panel>
 								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
 							</h:panelGrid>
 						</p:fieldset>
-									<p:fieldset legend="Acciones">
+									<p:fieldset legend="Acciones" id="acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Volver" url="listaactivos.xhtml"/>
+											<p:commandButton value="Volver" actionListener="#{GestorDetallesProvision.volver}"/>
 										</h:panelGrid>
-											<p:messages id="msgs"/>
+									</p:fieldset>
+									<p:fieldset legend="Info">
+										<h:panelGrid columns="3" cellpadding="5">
+											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+
+											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
+											<h:panelGrid columns="2" cellpadding="5">
+												<p:messages id="msgs"/>
+												<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
+											</h:panelGrid>
+											</p:notificationBar>
+
+											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+											<p:growl id="popup" />
+										</h:panelGrid>
 									</p:fieldset>
 								</h:panelGrid>
 				</p:layoutUnit>
-				<p:layoutUnit position="west" size="20%" header="Menus">
+
+				<p:layoutUnit position="west" size="20%" header="Operativas">
 					<ui:include src="menu.xhtml"/>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
-				<p:growl id="popup" />
-
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
-									<p:fieldset legend="Activo #{GestorDetallesGasto.sCOACES}">
+
+									<p:fieldset legend="Provisión" id="provision">
 										<h:panelGrid columns="1" cellpadding="5">
 
-											<h:outputText for="COACES" value="COACES: " />
-												<p:inputText id="COACES" value="#{GestorDetallesGasto.sCOACES}" size="18" maxlength="18"  disabled="true">
-												</p:inputText>
+									<p:panel >
+										<h:panelGrid columns="4" cellpadding="5">
 
-											<h:outputText for="COGRUG" value="COGRUG: " />
-												<p:inputText id="COGRUG" value="#{GestorDetallesGasto.sCOGRUG}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="NUPROF" value="Provisión de fondos: " />
+											<p:inputText id="NUPROF" value="#{GestorDetallesProvision.sNUPROF}" size="10" readonly="true"/>
 
-											<h:outputText for="COTPGA" value="COACES: " />
-												<p:inputText id="COTPGA" value="#{GestorDetallesGasto.sCOTPGA}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="Estado" value="Estado: " />
+											<p:inputText id="Estado" value="#{GestorDetallesProvision.sCodEstado}" size="12" disabled="true"/>
 
-											<h:outputText for="COSBGA" value="COSBGA: " />
-												<p:inputText id="COSBGA" value="#{GestorDetallesGasto.sCOSBGA}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
 
-											<h:outputText for="PTPAGO" value="PTPAGO: " />
-												<p:inputText id="PTPAGO" value="#{GestorDetallesGasto.sPTPAGO}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+										</h:panelGrid>
+									</p:panel>
+									<p:panel >
+										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="FEDEVE" value="FEDEVE: " />
-												<p:inputText id="FEDEVE" value="#{GestorDetallesGasto.sFEDEVE}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="TAS" value="Tipo de activos SAREB: " />
+											<p:inputText id="TAS" value="#{GestorDetallesProvision.sTAS}" size="25" disabled="true"/>
 
-											<h:outputText for="FFGTVP" value="FFGTVP: " />
-												<p:inputText id="FFGTVP" value="#{GestorDetallesGasto.sFFGTVP}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="COSPAT" value="Sociedad patrimonial: " />
+											<p:inputText id="COSPAT" value="#{GestorDetallesProvision.sCOSPAT}" size="60" disabled="true"/>
 
-											<h:outputText for="FEPAGA" value="FEPAGA: " />
-												<p:inputText id="FEPAGA" value="#{GestorDetallesGasto.sFEPAGA}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="FEPFON" value="Fecha de cierre: " />
+											<p:inputText id="FEPFON" value="#{GestorDetallesProvision.sFEPFON}" size="9" disabled="true"/>
 
-											<h:outputText for="FELIPG" value="FELIPG: " />
-												<p:inputText id="FELIPG" value="#{GestorDetallesGasto.sFELIPG}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+										</h:panelGrid>
+									</p:panel>
+									<p:panel >
+										<h:panelGrid columns="5" cellpadding="5">
 
-											<h:outputText for="COSIGA" value="COSIGA: " />
-												<p:inputText id="COSIGA" value="#{GestorDetallesGasto.sCOSIGA}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="NumGastos" value="Gastos en provisión: " />
+											<p:inputText id="NumGastos" value="#{GestorDetallesProvision.sNumGastos}" size="6" disabled="true"/>
 
-											<h:outputText for="FEEESI" value="FEEESI: " />
-												<p:inputText id="FEEESI" value="#{GestorDetallesGasto.sFEEESI}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="ValorTolal" value="Valor de provisión: " />
+											<p:inputText id="ValorTolal" value="#{GestorDetallesProvision.sValorTolal}" size="20" disabled="true"/>
+											<h:outputText value="¤"/>
 
-											<h:outputText for="FEECOI" value="FEECOI: " />
-												<p:inputText id="FEECOI" value="#{GestorDetallesGasto.sFEECOI}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="FechaEnvio" value="Fecha de envio: " />
+											<p:inputText id="FechaEnvio" value="#{GestorDetallesProvision.sFechaEnvio}" size="9" disabled="true"/>
 
-											<h:outputText for="FEEAUI" value="FEEAUI: " />
-												<p:inputText id="FEEAUI" value="#{GestorDetallesGasto.sFEEAUI}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+										</h:panelGrid>
+									</p:panel>
+									<p:panel >
+										<h:panelGrid columns="5" cellpadding="5">
 
-											<h:outputText for="FEEPAI" value="FEEPAI: " />
-												<p:inputText id="FEEPAI" value="#{GestorDetallesGasto.sFEEPAI}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="GastosAutorizados" value="Gastos autorizados: " />
+											<p:inputText id="GastosAutorizados" value="#{GestorDetallesProvision.sGastosAutorizados}" size="6" disabled="true"/>
 
-											<h:outputText for="IMNGAS" value="IMNGAS: " />
-												<p:inputText id="IMNGAS" value="#{GestorDetallesGasto.sIMNGAS}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="ValorAutorizado" value="Valor de autorizado: " />
+											<p:inputText id="ValorAutorizado" value="#{GestorDetallesProvision.sValorAutorizado}" size="20" disabled="true"/>
+											<h:outputText value="¤"/>
 
-											<h:outputText for="YCOS02" value="YCOS02: " />
-												<p:inputText id="YCOS02" value="#{GestorDetallesGasto.sYCOS02}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="FechaAutorizado" value="Fecha de autorización: " />
+											<p:inputText id="FechaAutorizado" value="#{GestorDetallesProvision.sFechaAutorizado}" size="9" disabled="true"/>
 
-											<h:outputText for="IMRGAS" value="IMRGAS: " />
-												<p:inputText id="IMRGAS" value="#{GestorDetallesGasto.sIMRGAS}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
 
-											<h:outputText for="YCOS04" value="YCOS04: " />
-												<p:inputText id="YCOS04" value="#{GestorDetallesGasto.sYCOS04}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+										</h:panelGrid>
+									</p:panel>
 
-											<h:outputText for="IMDGAS" value="IMDGAS: " />
-												<p:inputText id="IMDGAS" value="#{GestorDetallesGasto.sIMDGAS}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+									<p:panel >
+										<h:panelGrid columns="2" cellpadding="5">
 
-											<h:outputText for="YCOS06" value="YCOS06: " />
-												<p:inputText id="YCOS06" value="#{GestorDetallesGasto.sYCOS06}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+											<h:outputText for="FechaPagado" value="Fecha de pago: " />
+											<p:inputText id="FechaPagado" value="#{GestorDetallesProvision.sFechaPagado}" size="9" disabled="true"/>
 
-											<h:outputText for="IMCOST" value="IMCOST: " />
-												<p:inputText id="IMCOST" value="#{GestorDetallesGasto.sIMCOST}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="YCOS08" value="YCOS08: " />
-												<p:inputText id="YCOS08" value="#{GestorDetallesGasto.sYCOS08}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="IMOGAS" value="IMOGAS: " />
-												<p:inputText id="IMOGAS" value="#{GestorDetallesGasto.sIMOGAS}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="YCOS10" value="YCOS10: " />
-												<p:inputText id="YCOS10" value="#{GestorDetallesGasto.sYCOS10}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="IMDTGA" value="IMDTGA: " />
-												<p:inputText id="IMDTGA" value="#{GestorDetallesGasto.sIMDTGA}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COUNMO" value="COUNMO: " />
-												<p:inputText id="COUNMO" value="#{GestorDetallesGasto.sCOUNMO}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="IMIMGA" value="IMIMGA: " />
-												<p:inputText id="IMIMGA" value="#{GestorDetallesGasto.sIMIMGA}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COIMPT" value="COIMPT: " />
-												<p:inputText id="COIMPT" value="#{GestorDetallesGasto.sCOIMPT}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COTNEG" value="COTNEG: " />
-												<p:inputText id="COTNEG" value="#{GestorDetallesGasto.sCOTNEG}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COENCX" value="COENCX: " />
-												<p:inputText id="COENCX" value="#{GestorDetallesGasto.sCOENCX}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COOFCX" value="COOFCX: " />
-												<p:inputText id="COOFCX" value="#{GestorDetallesGasto.sCOOFCX}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUCONE" value="NUCONE: " />
-												<p:inputText id="NUCONE" value="#{GestorDetallesGasto.sNUCONE}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUPROF" value="NUPROF: " />
-												<p:inputText id="NUPROF" value="#{GestorDetallesGasto.sNUPROF}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEAGTO" value="FEAGTO: " />
-												<p:inputText id="FEAGTO" value="#{GestorDetallesGasto.sFEAGTO}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COMONA" value="COMONA: " />
-												<p:inputText id="COMONA" value="#{GestorDetallesGasto.sCOMONA}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="BIAUTO" value="BIAUTO: " />
-												<p:inputText id="BIAUTO" value="#{GestorDetallesGasto.sBIAUTO}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEAUFA" value="FEAUFA: " />
-												<p:inputText id="FEAUFA" value="#{GestorDetallesGasto.sFEAUFA}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COTERR" value="COTERR: " />
-												<p:inputText id="COTERR" value="#{GestorDetallesGasto.sCOTERR}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FMPAGN" value="FMPAGN: " />
-												<p:inputText id="FMPAGN" value="#{GestorDetallesGasto.sFMPAGN}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEPGPR" value="FEPGPR: " />
-												<p:inputText id="FEPGPR" value="#{GestorDetallesGasto.sFEPGPR}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="FEAPLI" value="FEAPLI: " />
-												<p:inputText id="FEAPLI" value="#{GestorDetallesGasto.sFEAPLI}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COAPII" value="COAPII: " />
-												<p:inputText id="COAPII" value="#{GestorDetallesGasto.sCOAPII}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="COSPII" value="COSPII: " />
-												<p:inputText id="COSPII" value="#{GestorDetallesGasto.sCOSPII}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
-
-											<h:outputText for="NUCLII" value="NUCLII: " />
-												<p:inputText id="NUCLII" value="#{GestorDetallesGasto.sNUCLII}" size="18" maxlength="18" disabled="true">
-												</p:inputText>
+										</h:panelGrid>
+									</p:panel>
 
 										</h:panelGrid>
 									</p:fieldset>
-								</h:panelGrid>
-							</p:panel>
+									<p:fieldset legend="Gastos">
+										<h:panelGrid columns="1" cellpadding="5">
+										
+										<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorDetallesProvision.buscarGastos}"/>	
+										
+						<p:contextMenu for="gastos">
+							<p:menuitem value="Detalles" icon="ui-icon-check" actionListener="#{GestorDetallesProvision.cargarDetallesGasto}"/>
+						</p:contextMenu>
+
+						<p:dataTable id="gastos" var="gasto" value="#{GestorDetallesProvision.tablagastos}" rowKey="#{gasto.COACES}"
+															selection="#{GestorDetallesProvision.gastoseleccionado}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15">
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activo" />
+															</f:facet>
+															<h:outputText value="#{gasto.COACES}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Gasto" />
+															</f:facet>
+															<h:outputText value="#{gasto.DCOSBGA}" />
+														</p:column>
+														
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Periodicidad" />
+															</f:facet>
+															<h:outputText value="#{gasto.DPTPAGO}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Importe" />
+															</f:facet>
+															<h:outputText value="#{gasto.IMNGAS}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Fecha de Devengo" />
+															</f:facet>
+															<h:outputText value="#{gasto.FEDEVE}" />
+														</p:column>
+
+						</p:dataTable>
+										</h:panelGrid>
+									</p:fieldset>
+						</h:panelGrid>
+
+					</p:panel>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog>
 					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
 						<h:panelGrid columns="1">
 							<p:panel>
