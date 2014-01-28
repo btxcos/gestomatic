@@ -24,10 +24,12 @@ import com.provisiones.types.tablas.GastoTabla;
 
 public class GestorPagosConexion implements Serializable 
 {
-	private static final long serialVersionUID = 724548829800684854L;
+
+	private static final long serialVersionUID = -9040763054305525983L;
 
 	private static Logger logger = LoggerFactory.getLogger(GestorPagosConexion.class.getName());
 
+	//TODO revisar
 	private String sCOACES = "";
 	private boolean bDevolucion = false;
 	private String sCOGRUG = "";

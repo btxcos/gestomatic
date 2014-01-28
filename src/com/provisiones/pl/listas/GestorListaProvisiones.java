@@ -156,8 +156,10 @@ public class GestorListaProvisiones implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
+			
+			String sFecha = Utils.compruebaFecha(sFEPFONB);
 	    	
-			this.tablaprovisiones = CLProvisiones.buscarProvisionesAutorizadasFecha(sFEPFONB); 
+			this.tablaprovisiones = CLProvisiones.buscarProvisionesAutorizadasFecha(sFecha); 
 
 			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
 			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
