@@ -1275,7 +1275,7 @@ public final class QMProvisiones
 						sDCOSPAT =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
 						sTAS =  rs.getString(CAMPO3);
 						sDTAS =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
-						sVALOR =   rs.getString(CAMPO4);
+						sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO4));
 						sGASTOS =  rs.getString(CAMPO5);
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(sNUPROF,sCOSPAT,sDCOSPAT,sTAS,sDTAS,sVALOR,sGASTOS);
@@ -1378,7 +1378,7 @@ public final class QMProvisiones
 						sDCOSPAT =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
 						sTAS =  rs.getString(CAMPO3);
 						sDTAS =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
-						sVALOR =   rs.getString(CAMPO4);
+						sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO4));
 						sGASTOS =  rs.getString(CAMPO5);
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(sNUPROF,sCOSPAT,sDCOSPAT,sTAS,sDTAS,sVALOR,sGASTOS);

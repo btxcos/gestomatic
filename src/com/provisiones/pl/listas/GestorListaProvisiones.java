@@ -79,6 +79,56 @@ public class GestorListaProvisiones implements Serializable
 		}
 	}
 	
+
+	public void borrarCamposActivo()
+	{
+		this.sCOACESB = "";
+		
+		this.sCOPOIN = "";
+		this.sNOMUIN = "";
+		this.sNOPRAC = "";
+		this.sNOVIAS = "";
+		this.sNUPIAC = "";
+		this.sNUPOAC = "";
+		this.sNUPUAC = "";
+    	
+    	this.setActivoseleccionado(null);
+    	this.setTablaactivos(null);
+	}
+	
+    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
+    {  
+    	borrarCamposActivo();
+    }
+    
+	public void borrarCamposComunidad()
+	{
+		this.sCOCLDOB = "";
+		this.sNUDCOMB = "";
+    	
+	}
+    
+    
+	public void borrarCamposProvision()
+	{
+		this.sFEPFON = "";
+    	
+    	this.setProvisionseleccionada(null);
+    	this.setTablaprovisiones(null);
+	}
+	
+    public void limpiarPlantillaProvision(ActionEvent actionEvent) 
+    {  
+    	borrarCamposProvision();
+    }
+    
+    public void limpiarPlantilla(ActionEvent actionEvent) 
+    {  
+    	borrarCamposComunidad();
+    	borrarCamposActivo();
+    	borrarCamposProvision();
+    }	
+	
 	public void buscarActivos (ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -128,7 +178,7 @@ public class GestorListaProvisiones implements Serializable
 	    	
 			this.tablaprovisiones = CLProvisiones.buscarProvisionesAutorizadasActivo(sCOACESB); 
 
-			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
+			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.");
 			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);			
@@ -144,7 +194,7 @@ public class GestorListaProvisiones implements Serializable
 			//TODO Implementar busqueda por comunidad
 			this.tablaprovisiones = CLProvisiones.buscarProvisionesAbiertas(); 
 
-			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
+			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.");
 			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);			
@@ -161,7 +211,7 @@ public class GestorListaProvisiones implements Serializable
 	    	
 			this.tablaprovisiones = CLProvisiones.buscarProvisionesAutorizadasFecha(sFecha); 
 
-			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
+			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.");
 			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);			

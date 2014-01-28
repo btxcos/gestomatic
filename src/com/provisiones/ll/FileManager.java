@@ -970,7 +970,7 @@ public final class FileManager
 	    				break;
 	    			case -909:
 	    				sDescripcion = "El movimiento cargado ya se encontraba en el sistema.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
 	    				break;
 	    			case -900:
 	    				sDescripcion = "[FATAL] Error al registrar el movimiento.";
