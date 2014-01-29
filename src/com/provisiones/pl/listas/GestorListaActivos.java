@@ -318,29 +318,31 @@ public class GestorListaActivos implements Serializable {
 		    	Sesion.guardarHistorial("listaactivos.xhtml","GestorDetallesActivo");
 
 		    	sPagina = "detallesactivo.xhtml";
+		    	
+				try 
+				{
+					logger.debug("Redirigiendo...");
+					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+				}
+				catch (IOException e)
+				{
+					FacesMessage msg;
+					
+					String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
+		    	
+		    	
 			}
 			else
 			{
 				FacesMessage msg;
 
 				msg = Utils.pfmsgWarning("No se ha seleccionado ningún activo.");
-				
-				FacesContext.getCurrentInstance().addMessage(null, msg);
-			}
-			
-			try 
-			{
-				logger.debug("Redirigiendo...");
-				FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
-			}
-			catch (IOException e)
-			{
-				FacesMessage msg;
-				
-				String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
-				
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}

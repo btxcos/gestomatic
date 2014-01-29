@@ -256,6 +256,25 @@ public class GestorListaProvisiones implements Serializable
 		    	Sesion.guardarHistorial("listaprovisiones.xhtml","GestorDetallesProvision");
 
 		    	sPagina = "detallesprovision.xhtml";
+		    	
+				try 
+				{
+			    	logger.debug("Redirigiendo...");
+					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+				}
+				catch (IOException e)
+				{
+					FacesMessage msg;
+					
+					String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+					
+
+				}
 			}
 			else
 			{
@@ -266,24 +285,7 @@ public class GestorListaProvisiones implements Serializable
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 			
-			try 
-			{
-		    	logger.debug("Redirigiendo...");
-				FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
-			}
-			catch (IOException e)
-			{
-				FacesMessage msg;
-				
-				String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
-				
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				
-				FacesContext.getCurrentInstance().addMessage(null, msg);
-				
 
-			}
 
 		}
 
