@@ -12,18 +12,14 @@ public class Comunidad
 	private String sNOMADC = "";
 	private String sNUTADC = "";
 	private String sNODCAD = "";
-	private String sNUCCEN = "";
-	private String sNUCCOF = "";
-	private String sNUCCDI = "";
-	private String sNUCCNT = "";
+	private String sCuenta = "";
 	private String sOBTEXC = "";
 
 	//Constructor de clase
 
 	public Comunidad(String sCOCLDO, String sNUDCOM, String sNOMCOC,
 			String sNODCCO, String sNOMPRC, String sNUTPRC, String sNOMADC,
-			String sNUTADC, String sNODCAD, String sNUCCEN, String sNUCCOF,
-			String sNUCCDI, String sNUCCNT, String sOBTEXC) {
+			String sNUTADC, String sNODCAD, String sCuenta, String sOBTEXC) {
 		super();
 		this.sCOCLDO = sCOCLDO;
 		this.sNUDCOM = sNUDCOM;
@@ -34,10 +30,7 @@ public class Comunidad
 		this.sNOMADC = sNOMADC;
 		this.sNUTADC = sNUTADC;
 		this.sNODCAD = sNODCAD;
-		this.sNUCCEN = sNUCCEN;
-		this.sNUCCOF = sNUCCOF;
-		this.sNUCCDI = sNUCCDI;
-		this.sNUCCNT = sNUCCNT;
+		this.sCuenta = sCuenta;
 		this.sOBTEXC = sOBTEXC;
 	}
 
@@ -115,36 +108,12 @@ public class Comunidad
 		this.sNODCAD = sNODCAD;
 	}
 
-	public String getsNUCCEN() {
-		return sNUCCEN;
+	public String getsCuenta() {
+		return sCuenta;
 	}
 
-	public void setsNUCCEN(String sNUCCEN) {
-		this.sNUCCEN = sNUCCEN;
-	}
-
-	public String getsNUCCOF() {
-		return sNUCCOF;
-	}
-
-	public void setsNUCCOF(String sNUCCOF) {
-		this.sNUCCOF = sNUCCOF;
-	}
-
-	public String getsNUCCDI() {
-		return sNUCCDI;
-	}
-
-	public void setsNUCCDI(String sNUCCDI) {
-		this.sNUCCDI = sNUCCDI;
-	}
-
-	public String getsNUCCNT() {
-		return sNUCCNT;
-	}
-
-	public void setsNUCCNT(String sNUCCNT) {
-		this.sNUCCNT = sNUCCNT;
+	public void setsCuenta(String sCuenta) {
+		this.sCuenta = sCuenta;
 	}
 
 	public String getsOBTEXC() {
@@ -154,7 +123,7 @@ public class Comunidad
 	public void setsOBTEXC(String sOBTEXC) {
 		this.sOBTEXC = sOBTEXC;
 	}
-	
+
 	public String logComunidad()
 	{
 		return "(COMUNIDAD)\nCOCLDO:|"+sCOCLDO+
@@ -166,10 +135,9 @@ public class Comunidad
 				"|\nNOMADC:|"+sNOMADC+
 				"|\nNUTADC:|"+sNUTADC+
 				"|\nNODCAD:|"+sNODCAD+
-				"|\nNUCCEN:|"+sNUCCEN+
-				"|\nNUCCOF:|"+sNUCCOF+
-				"|\nNUCCDI:|"+sNUCCDI+
-				"|\nNUCCNT:|"+sNUCCNT+
+				"|\nCuenta:|"+sCuenta+
 				"|\nOBTEXC:|"+sOBTEXC+"|";
 	}
+
+
 }

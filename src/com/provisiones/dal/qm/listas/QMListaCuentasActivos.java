@@ -27,7 +27,7 @@ public class QMListaCuentasActivos
 
 	private QMListaCuentasActivos(){}
 
-	public static boolean addRelacionActivo(Connection conexion, String sCodCuenta, String sCodCOACES)
+	public static boolean addRelacionActivo(Connection conexion, long liCodCuenta, String sCodCOACES)
 	{
 		boolean bSalida = false;
 		
@@ -43,7 +43,7 @@ public class QMListaCuentasActivos
 					   + CAMPO1  + "," 
 				       + CAMPO2  +    
 				       ") VALUES ('"
-				       + sCodCuenta + "','" 
+				       + liCodCuenta + "','" 
 				       + sCodCOACES + "' )";
 			
 			logger.debug(sQuery);
@@ -61,7 +61,7 @@ public class QMListaCuentasActivos
 			{
 				bSalida = false;
 
-				logger.error("ERROR CUENTA:|"+sCodCuenta+"|");
+				logger.error("ERROR CUENTA:|"+liCodCuenta+"|");
 				logger.error("ERROR ACTIVO:|"+sCodCOACES+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -75,7 +75,7 @@ public class QMListaCuentasActivos
 		return bSalida;
 	}
 
-	public static boolean delRelacionActivo(Connection conexion, String sCodCuenta, String sCodCOACES)
+	public static boolean delRelacionActivo(Connection conexion, long liCodCuenta, String sCodCOACES)
 	{
 		boolean bSalida = false;
 		
@@ -88,7 +88,7 @@ public class QMListaCuentasActivos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE ("
-					+ CAMPO1 + " = '" + sCodCuenta	+ "' AND "
+					+ CAMPO1 + " = '" + liCodCuenta	+ "' AND "
 					+ CAMPO2 + " = '" + sCodCOACES	+ "' )";
 			
 			logger.debug(sQuery);
@@ -106,7 +106,7 @@ public class QMListaCuentasActivos
 			{
 				bSalida = false;
 
-				logger.error("ERROR CUENTA:|"+sCodCuenta+"|");
+				logger.error("ERROR CUENTA:|"+liCodCuenta+"|");
 				logger.error("ERROR ACTIVO:|"+sCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -120,7 +120,7 @@ public class QMListaCuentasActivos
 		return bSalida;
 	}
 
-	public static boolean existeRelacionActivo(Connection conexion, String sCodCuenta, String sCodCOACES)
+	public static boolean existeRelacionActivo(Connection conexion, long liCodCuenta, String sCodCOACES)
 	{
 		boolean bEncontrado = false;
 		
@@ -138,7 +138,7 @@ public class QMListaCuentasActivos
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE (" 
-				       + CAMPO1 + " = '" + sCodCuenta + "' AND "
+				       + CAMPO1 + " = '" + liCodCuenta + "' AND "
 				       + CAMPO2 + " = '" + sCodCOACES + "')";
 			
 			logger.debug(sQuery);
@@ -170,7 +170,7 @@ public class QMListaCuentasActivos
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR CUENTA:|"+sCodCuenta+"|");
+				logger.error("ERROR CUENTA:|"+liCodCuenta+"|");
 				logger.error("ERROR ACTIVO:|"+sCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());

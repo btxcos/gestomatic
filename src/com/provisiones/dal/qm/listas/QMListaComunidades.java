@@ -33,7 +33,7 @@ public final class QMListaComunidades
 
 	private QMListaComunidades(){}
 	
-	public static boolean addRelacionComunidad(Connection conexion, String sCodComunidad, String sCodMovimiento)
+	public static boolean addRelacionComunidad(Connection conexion, long liCodComunidad, String sCodMovimiento)
 	{
 		boolean bSalida = false;
 
@@ -54,7 +54,7 @@ public final class QMListaComunidades
 				       + CAMPO4  + ","
 				       + CAMPO5  +  
 				       ") VALUES ('"
-				       + sCodComunidad + "','" 
+				       + liCodComunidad + "','" 
 				       + sCodMovimiento + "','"
 				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				       + sUsuario + "','"
@@ -76,7 +76,7 @@ public final class QMListaComunidades
 			{
 				bSalida = false;
 
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -133,7 +133,7 @@ public final class QMListaComunidades
 		return bSalida;
 	}
 	
-	public static boolean existeComunidad(Connection conexion, String sCodComunidad)
+	public static boolean existeComunidad(Connection conexion, long liCodComunidad)
 	{
 		boolean bEncontrado = false;
 		
@@ -151,7 +151,7 @@ public final class QMListaComunidades
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE " 
-				       + CAMPO1 + " = '" + sCodComunidad + "'";
+				       + CAMPO1 + " = '" + liCodComunidad + "'";
 			
 			logger.debug(sQuery);
 
@@ -183,7 +183,7 @@ public final class QMListaComunidades
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -197,7 +197,7 @@ public final class QMListaComunidades
 		return bEncontrado;
 	}
 	
-	public static boolean existeRelacionComunidad(Connection conexion, String sCodComunidad, String sCodMovimiento)
+	public static boolean existeRelacionComunidad(Connection conexion, long liCodComunidad, String sCodMovimiento)
 	{
 		boolean bEncontrado = false;
 
@@ -215,7 +215,7 @@ public final class QMListaComunidades
 				       " FROM "
 				       + TABLA + 
 				       " WHERE (" 
-				       + CAMPO1 + " = '" + sCodComunidad + "' AND "
+				       + CAMPO1 + " = '" + liCodComunidad + "' AND "
 				       + CAMPO2 + " = '" + sCodMovimiento + 
 				       "')";
 			
@@ -249,7 +249,7 @@ public final class QMListaComunidades
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -519,7 +519,7 @@ public final class QMListaComunidades
 		return liNumero;
 	}
 	
-	public static ArrayList<String> buscarDependencias(Connection conexion, String sCodComunidad, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(Connection conexion, long liCodComunidad, String sCodMovimiento)
 	{
 		ArrayList<String> resultado = new ArrayList<String>();
 
@@ -539,7 +539,7 @@ public final class QMListaComunidades
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO1 + " = '" + sCodComunidad + "' AND "
+					+ CAMPO1 + " = '" + liCodComunidad + "' AND "
 					+ CAMPO2 + " >=  '" + sCodMovimiento + 
 					"')";
 			
@@ -574,7 +574,7 @@ public final class QMListaComunidades
 			{
 				resultado = new ArrayList<String>();
 
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());

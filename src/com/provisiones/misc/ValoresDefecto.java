@@ -11,8 +11,11 @@ public final class ValoresDefecto
 	
 	public static final String CAMPO_SIN_INFORMAR = "0";
 	
-	public static final String ACTIVO = "1";
-	public static final String INACTIVO = "0";
+	public static final byte ACTIVO = 1;
+	public static final byte INACTIVO = 0;
+	
+	public static final byte CUENTA_COMUNIDAD = 1;
+	public static final byte CUENTA_CONVENCIONAL = 0;	
 	
 	public static final String DEF_COAPII = "168";
 	public static final String DEF_NUCLII = "2306894218400";

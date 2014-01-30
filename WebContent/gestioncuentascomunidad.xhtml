@@ -15,7 +15,7 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="auto" header="Gestion de Activos de la Comunidad">
+				<p:layoutUnit position="north" size="auto" header="Gestion de Cuentas de la Comunidad">
 					<h:panelGrid columns="4" cellpadding="5">
 						<p:fieldset legend="Sesión" id="sesion">
 							<h:panelGrid columns="1" cellpadding="1">
@@ -32,7 +32,9 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="panel, activosComunidad" actionListener="#{GestorCuentasComunidades.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Limpiar Plantilla" update="panel, cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN" actionListener="#{GestorCuentasComunidades.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Añadir Cuenta" update="cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN, msgs, popup" actionListener="#{GestorCuentasComunidades.altaCuentaComunidad}" />
+								<p:commandButton value="Eliminar Cuenta" update="cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN, msgs, popup" actionListener="#{GestorCuentasComunidades.bajaCuentaComunidad}" />
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -67,6 +69,25 @@
 						<p:panel id="panel">
 							<h:panelGrid columns="1" cellpadding="5">
 
+							<p:fieldset legend="Activo relacionado">
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<p:panel >
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText for="COACES" value="Código de activo: "/>
+											<p:inputText id="COACES" value="#{GestorCuentasComunidades.sCOACES}" size="9" maxlength="9"/>
+
+											<p:commandButton value="Buscar Comunidad" update="cuentas, msgs, popup, panel" actionListener="#{GestorCuentasComunidades.buscarComunidad}"/>	
+
+										</h:panelGrid>
+									</p:panel>
+
+								<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>		
+
+								</h:panelGrid>
+							</p:fieldset>
+
 								<p:fieldset legend="Comunidad de proprietarios" id="panelComunidad">
 									<h:panelGrid columns="1" cellpadding="5">
 
@@ -82,7 +103,7 @@
 												<h:outputText for="NUDCOM" value="Número: " />
 												<p:inputText id="NUDCOM" value="#{GestorCuentasComunidades.sNUDCOM}" size="10" maxlength="10"/>
 
-												<p:commandButton value="Cargar" update="activosComunidad, panelComunidad, msgs, popup" actionListener="#{GestorCuentasComunidades.cargarComunidad}" />
+												<p:commandButton value="Cargar" update="cuentas, panelComunidad, msgs, popup" actionListener="#{GestorCuentasComunidades.cargarComunidad}" />
 
 											</h:panelGrid>
 									  </p:panel>
@@ -102,76 +123,162 @@
 									</h:panelGrid>
 								</p:fieldset>
 
-								<p:fieldset legend="Activo">
-									<h:panelGrid columns="2" cellpadding="5">
-										<p:panel >
-											<h:panelGrid columns="4" cellpadding="5">
-												<h:outputText for="COACES" value="Código de activo: " />
-													<p:inputText id="COACES" value="#{GestorCuentasComunidades.sCOACES}" size="9" maxlength="9">
-													</p:inputText>
-												<p:message for="COACES" display="icon"/>
-												<p:commandButton value="Dar de Alta" update="msgs, popup, COACES, activosComunidad" actionListener="#{GestorCuentasComunidades.altaActivoComunidad}"/>
+								<p:fieldset legend="Cuenta corriente de la Comunidad">
+									<h:panelGrid columns="1" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="7" cellpadding="5">
+										<p:inputText id="PAIS" value="#{GestorCuentasComunidades.sPais}" size="3" disabled="true"/>
+
+										<p:inputText id="DCIBAN" value="#{GestorCuentasComunidades.sDCIBAN}" size="3" disabled="true"/>
+
+										<h:outputText value="Número de Cuenta: "/>
+
+										<p:inputText id="NUCCEN" value="#{GestorCuentasComunidades.sNUCCEN}" size="5" disabled="true"/>
+
+										<p:inputText id="NUCCOF" value="#{GestorCuentasComunidades.sNUCCOF}" size="5" disabled="true"/>
+
+										<p:inputText id="NUCCDI" value="#{GestorCuentasComunidades.sNUCCDI}" size="3" disabled="true"/>
+
+										<p:inputText id="NUCCNT" value="#{GestorCuentasComunidades.sNUCCNT}" size="11" disabled="true"/>
+
 											</h:panelGrid>
-										</p:panel>
-									<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>
+									  </p:panel>
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+												<h:outputText value="Descripción: "/>
+												<p:inputText id="DESCRIPCION" value="#{GestorCuentasComunidades.sDescripcion}" size="66" disabled="true"/>
+											</h:panelGrid>
+									  </p:panel>
+
 									</h:panelGrid>
 								</p:fieldset>
+
 							</h:panelGrid>
 						</p:panel>
 
-						<p:panel id="panelTablaActivosComunidad">
+								<p:fieldset legend="Nueva Cuenta Adicional">
+									<h:panelGrid columns="1" cellpadding="5">
+										<p:panel>
+											<h:panelGrid columns="7" cellpadding="5">
+										<p:inputText id="PAISN" value="#{GestorCuentasComunidades.sPaisN}" size="3" disabled="true"/>
+
+										<p:inputText id="DCIBANN" value="#{GestorCuentasComunidades.sDCIBANN}" size="3" disabled="true"/>
+
+										<h:outputText value="Número de Cuenta: "/>
+
+										<p:inputMask id="NUCCENN" value="#{GestorCuentasComunidades.sNUCCENN}" mask="9999" size="4">
+											<f:validateLength minimum="4"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCOFN" value="#{GestorCuentasComunidades.sNUCCOFN}" mask="9999" size="4">
+											<f:validateLength minimum="4"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCDIN" value="#{GestorCuentasComunidades.sNUCCDIN}" mask="99" size="2">
+											<f:validateLength minimum="2"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCNTN" value="#{GestorCuentasComunidades.sNUCCNTN}" mask="9999999999" size="10">
+											<f:validateLength minimum="10"/>
+										</p:inputMask>
+											</h:panelGrid>
+									  </p:panel>
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+												<h:outputText value="Descripción: "/>
+												<p:inputText id="DESCRIPCIONN" value="#{GestorCuentasComunidades.sDescripcionN}" size="66" maxlength="60"/>
+											</h:panelGrid>
+									  </p:panel>
+
+										<p:commandButton value="Limpiar" update="NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN, msgs, popup" actionListener="#{GestorCuentasComunidades.limpiarPlantillaNuevaCuenta}" />
+
+									</h:panelGrid>
+								</p:fieldset>
+
+						<p:fieldset legend="Cuentas adicionales">
 							<h:panelGrid columns="1" cellpadding="5">
-								<p:contextMenu for="activosComunidad">
-									<p:menuitem value="Dar de Baja" update="activosComunidad, COACES, popup, msgs" icon="ui-icon-check" actionListener="#{GestorCuentasComunidades.bajaActivoComunidad}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:contextMenu for="cuentas">
+									<p:menuitem value="Eliminar" update="cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN, popup, msgs" icon="ui-icon-check" actionListener="#{GestorCuentasComunidades.bajaCuentaComunidad}"/>
 								</p:contextMenu>
 
-								<p:dataTable id="activosComunidad" var="activo" value="#{GestorCuentasComunidades.tablaactivoscomunidad}" rowKey="#{activo.COACES}"
-															selection="#{GestorCuentasComunidades.activoseleccionadobaja}" selectionMode="single"
+								<p:dataTable id="cuentas" var="cuenta" value="#{GestorCuentasComunidades.tablacuentas}" rowKey="#{cuenta.sNUCCEN}"
+															selection="#{GestorCuentasComunidades.cuentaseleccionada}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15">
 
-									<p:column headerText="Código Activo">
-										#{activo.COACES}
-									</p:column>
 
-									<p:column headerText="Provincia">
-										#{activo.NOPRAC}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="País" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sPais}" />
+														</p:column>
 
-									<p:column headerText="Municipio">
-										#{activo.NOMUIN}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="DCIBAN" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sDCIBAN}" />
+														</p:column>
 
-									<p:column headerText="Vía">
-										#{activo.NOVIAS}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Entidad" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sNUCCEN}" />
+														</p:column>
 
-									<p:column headerText="Portal">
-										#{activo.NUPOAC}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Oficina" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sNUCCOF}" />
+														</p:column>
 
-									<p:column headerText="Piso">
-										#{activo.NUPIAC}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="DC" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sNUCCDI}" />
+														</p:column>
 
-									<p:column headerText="Puerta">
-										#{activo.NUPUAC}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Cuenta" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sNUCCNT}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Descripción" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sDescripcion}" />
+														</p:column>
+
+														<f:facet name="footer">
+															<h:commandLink>
+																<p:graphicImage value="recursos/excel.png" />  
+																<p:dataExporter type="xls" target="cuentas" fileName="cuentascomunidad" encoding="ISO-8859-15"/>  
+															</h:commandLink>
+														</f:facet> 
 
 								</p:dataTable>
 
 							</h:panelGrid>
-						</p:panel>
+						</p:fieldset>
 					</h:panelGrid>
 
-					<p:dialog header="Activos sin Comunidad:" widgetVar="dlgTabla" resizable="false">
+					<p:dialog header="Activos con Comunidad: " widgetVar="dlgTabla" resizable="false">
+
 						<p:contextMenu for="activos">
 							<p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorCuentasComunidades.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 						</p:contextMenu>
 
 						<p:dataTable id="activos" var="activo" value="#{GestorCuentasComunidades.tablaactivos}" rowKey="#{activo.COACES}"
-															selection="#{GestorCuentasComunidades.activoseleccionadoalta}" selectionMode="single"
+															selection="#{GestorCuentasComunidades.activoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15">
@@ -180,7 +287,7 @@
 								#{activo.COACES}
 							</p:column>
 
-							<p:column headerText="Comunidad Autonoma">
+							<p:column headerText="Provincia">
 								#{activo.NOPRAC}
 							</p:column>
 
@@ -207,46 +314,43 @@
 						</p:dataTable>
 					</p:dialog>
 
-					<p:dialog header="Buscar Activos sin Comunidad" widgetVar="dlgBuscar" resizable="false">
+					<p:dialog header="Buscar Activos con Comunidad" widgetVar="dlgBuscar" resizable="false">
 						<p:fieldset legend="Criterios de Búsqueda">
 							<h:panelGrid columns="1" cellpadding="5">
-
 								<p:panel id="panelBuscar" >
 									<h:panelGrid columns="2" cellpadding="5">
 
-										<h:outputText for="NOPRAC" value="Provincia: " />
+										<h:outputText for="NOPRAC" value="Provincia: "/>
 										<p:inputText id="NOPRAC" value="#{GestorCuentasComunidades.sNOPRAC}" size="18" maxlength="18"/>
 
-										<h:outputText for="NOMUIN" value="Municipio: " />
+										<h:outputText for="NOMUIN" value="Municipio: "/>
 										<p:inputText id="NOMUIN" value="#{GestorCuentasComunidades.sNOMUIN}" size="30" maxlength="30"/>
 
-										<h:outputText for="COPOIN" value="Código Postal: " />
+										<h:outputText for="COPOIN" value="Código Postal: "/>
 										<p:inputText id="COPOIN" value="#{GestorCuentasComunidades.sCOPOIN}" size="5" maxlength="5"/>
 
-										<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
+										<h:outputText for="NOVIAS" value="Nombre de la Vía: "/>
 										<p:inputText id="NOVIAS" value="#{GestorCuentasComunidades.sNOVIAS}" size="60" maxlength="60"/>
 
-										<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: " />
+										<h:outputText for="NUPOAC" value="Portal/Punto Kilométrico: "/>
 										<p:inputText id="NUPOAC" value="#{GestorCuentasComunidades.sNUPOAC}" size="17" maxlength="17"/>
 
-										<h:outputText for="NUPIAC" value="Piso: " />
+										<h:outputText for="NUPIAC" value="Piso: "/>
 										<p:inputText id="NUPIAC" value="#{GestorCuentasComunidades.sNUPIAC}" size="11" maxlength="11"/>
 
-										<h:outputText for="NUPUAC" value="Puerta: " />
+										<h:outputText for="NUPUAC" value="Puerta: "/>
 										<p:inputText id="NUPUAC" value="#{GestorCuentasComunidades.sNUPUAC}" size="17" maxlength="17"/>
 
 									</h:panelGrid>
 								</p:panel>
-
 								<p:panel >
-									<h:panelGrid columns="2" cellpadding="5">
+									<h:panelGrid columns="3" cellpadding="5">
 
-										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorCuentasComunidades.buscaActivos}" oncomplete="dlgTabla.show()"/>
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorCuentasComunidades.limpiarPlantillaActivo}" />
+										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorCuentasComunidades.buscaActivos}" oncomplete="dlgTabla.show()"/>	
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorCuentasComunidades.limpiarPlantillaActivo}"/>
 
 									</h:panelGrid>
 								</p:panel>
-
 							</h:panelGrid>
 						</p:fieldset>
 					</p:dialog>

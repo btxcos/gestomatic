@@ -30,12 +30,13 @@ public class QMCuentas
 	public static final String CAMPO6 = "nuccdi";
 	public static final String CAMPO7 = "nuccnt";
 	public static final String CAMPO8 = "descripcion";
-	public static final String CAMPO9 = "usuario_modificacion";
-	public static final String CAMPO10 = "fecha_modificacion";
+	public static final String CAMPO9 = "comunidad";
+	public static final String CAMPO10 = "usuario_modificacion";
+	public static final String CAMPO11 = "fecha_modificacion";
 
 	private QMCuentas(){}
 	
-	public static long addCuenta(Connection conexion, Cuenta NuevaCuenta)
+	public static long addCuenta(Connection conexion, Cuenta NuevaCuenta, byte btComunidad)
 	{
 		long liCodigo = 0;
 
@@ -60,7 +61,8 @@ public class QMCuentas
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
 					+ CAMPO9 + ","
-					+ CAMPO10 +
+					+ CAMPO10 + ","
+					+ CAMPO11 +
 					") VALUES (" 
 					+ "AES_ENCRYPT('"+NuevaCuenta.getsPais()  +"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevaCuenta.getsDCIBAN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
@@ -68,7 +70,8 @@ public class QMCuentas
 					+ "AES_ENCRYPT('"+NuevaCuenta.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevaCuenta.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevaCuenta.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
-					+ NuevaCuenta.getsDescripcion() + "','"
+					+ NuevaCuenta.getsDescripcion() + "',"
+					+ btComunidad + ",'"
 					+ sUsuario + "','"
 					+ Utils.timeStamp() + 
 					"')";
@@ -110,7 +113,7 @@ public class QMCuentas
 		return liCodigo;
 	}
 
-	public static boolean modCuenta(Connection conexion, Cuenta cuenta, String sCuentaID) 
+	public static boolean modCuenta(Connection conexion, Cuenta cuenta, long liCuentaID, byte btComunidad) 
 	{
 		boolean bSalida = false;
 
@@ -125,19 +128,12 @@ public class QMCuentas
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-
-					+ CAMPO2    + " = AES_ENCRYPT('"+cuenta.getsPais()  +"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO3    + " = AES_ENCRYPT('"+cuenta.getsDCIBAN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO4    + " = AES_ENCRYPT('"+cuenta.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO5    + " = AES_ENCRYPT('"+cuenta.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO6    + " = AES_ENCRYPT('"+cuenta.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO7   + " = AES_ENCRYPT('"+cuenta.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-
 					+ CAMPO8 + " = '" + cuenta.getsDescripcion() + "', "
-					+ CAMPO9 + " = '" + sUsuario + "', " 
-					+ CAMPO10 + " = '" + Utils.timeStamp() + "' " +					
+					+ CAMPO9 + " = " + btComunidad + ", "
+					+ CAMPO10 + " = '" + sUsuario + "', " 
+					+ CAMPO11 + " = '" + Utils.timeStamp() + "' " +					
 					" WHERE " 
-					+ CAMPO1 + " = '" + sCuentaID + "'";
+					+ CAMPO1 + " = '" + liCuentaID + "'";
 
 
 			logger.debug(sQuery);
@@ -155,7 +151,7 @@ public class QMCuentas
 			{
 				bSalida = false;
 
-				logger.error("ERROR CUENTA:|"+sCuentaID+"|");
+				logger.error("ERROR CUENTA:|"+liCuentaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -168,7 +164,7 @@ public class QMCuentas
 		return bSalida;
 	}
 
-	public static boolean delCuenta(Connection conexion, String sCuentaID) 
+	public static boolean delCuenta(Connection conexion, long liCuentaID) 
 	{
 		boolean bSalida = false;
 
@@ -181,7 +177,7 @@ public class QMCuentas
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sCuentaID + "'";
+					+ CAMPO1 + " = '" + liCuentaID + "'";
 			
 			logger.debug(sQuery);
 
@@ -198,7 +194,7 @@ public class QMCuentas
 			{
 				bSalida = false;
 
-				logger.error("ERROR CUENTA:|"+sCuentaID+"|");
+				logger.error("ERROR CUENTA:|"+liCuentaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -211,7 +207,7 @@ public class QMCuentas
 		return bSalida;
 	}
 	
-	public static Cuenta getCuenta(Connection conexion, String sCuentaID)
+	public static Cuenta getCuenta(Connection conexion, long liCuentaID)
 	{
 		String sPais = "";	
 		String sDCIBAN = "";
@@ -239,11 +235,11 @@ public class QMCuentas
 				       + "AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 				       + "AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 				       + "AES_DECRYPT("+CAMPO7+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + CAMPO8 + ","
-				       +" FROM "
+				       + CAMPO8 + 
+				       " FROM "
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1 + " = '"+ sCuentaID +"'";
+				       + CAMPO1 + " = '"+ liCuentaID +"'";
 			
 			logger.debug(sQuery);
 
@@ -256,7 +252,7 @@ public class QMCuentas
 				
 				logger.debug("Ejecutada con exito!");
 
-				logger.debug(CAMPO1 + ":|"+sCuentaID+"|");
+				logger.debug(CAMPO1 + ":|"+liCuentaID+"|");
 
 				if (rs != null) 
 				{
@@ -293,7 +289,7 @@ public class QMCuentas
 				sNUCCNT = "";
 				sDescripcion = "";
 
-				logger.error("ERROR CUENTA:|"+sCuentaID+"|");
+				logger.error("ERROR CUENTA:|"+liCuentaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -315,10 +311,10 @@ public class QMCuentas
 	}
 
 	
-	public static String getCuentaID(Connection conexion, String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT)
+	public static long getCuentaID(Connection conexion, String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT)
 	{
 		//Buscar por CCC
-		String sCuentaID = "";
+		long liCuentaID = 0;
 
 		if (conexion != null)
 		{
@@ -361,9 +357,9 @@ public class QMCuentas
 					{
 						bEncontrado = true;
 
-						sCuentaID = rs.getString(CAMPO1);
+						liCuentaID = rs.getLong(CAMPO1);
 						
-						logger.debug(CAMPO1+":|"+sCuentaID+"|");
+						logger.debug(CAMPO1+":|"+liCuentaID+"|");
 						
 						logger.debug("Encontrado el registro!");
 					}
@@ -376,7 +372,7 @@ public class QMCuentas
 			} 
 			catch (SQLException ex) 
 			{
-				sCuentaID = "";
+				liCuentaID = 0;
 				
 				logger.error("ERROR ENTIDAD:|"+sNUCCEN+"|");
 				logger.error("ERROR OFICINA:|"+sNUCCOF+"|");
@@ -392,7 +388,7 @@ public class QMCuentas
 			}
 		}
 
-		return sCuentaID;
+		return liCuentaID;
 	}	
 	
 	public static boolean existeCuenta(Connection conexion, String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT)
@@ -465,7 +461,7 @@ public class QMCuentas
 		return bEncontrado;
 	}
 	
-	public static String getDescripcion(Connection conexion, String sCuentaID) 
+	public static String getDescripcion(Connection conexion, long liCuentaID) 
 	{
 		String sFechaCuenta = "";
 
@@ -485,7 +481,7 @@ public class QMCuentas
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '"+ sCuentaID + "'";
+					+ CAMPO1 + " = '"+ liCuentaID + "'";
 			
 			logger.debug(sQuery);
 
@@ -507,7 +503,7 @@ public class QMCuentas
 						sFechaCuenta = rs.getString(CAMPO4);
 
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO1+":|"+sCuentaID+"|");
+						logger.debug(CAMPO1+":|"+liCuentaID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -519,7 +515,7 @@ public class QMCuentas
 			{
 				sFechaCuenta = "";
 
-				logger.error("ERROR CUENTA:|"+sCuentaID+"|");
+				logger.error("ERROR CUENTA:|"+liCuentaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

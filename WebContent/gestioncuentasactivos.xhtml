@@ -32,7 +32,9 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="panel, cuentasActivo" actionListener="#{GestorCuentasActivos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Limpiar Plantilla" update="panel, cuentas" actionListener="#{GestorCuentasActivos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Añadir Cuenta" update="cuentas, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION, msgs, popup" actionListener="#{GestorCuentasActivos.altaCuentaActivo}" />
+								<p:commandButton value="Eliminar Cuenta" update="cuentas, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION, msgs, popup" actionListener="#{GestorCuentasActivos.bajaCuentaActivo}" />
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -75,70 +77,51 @@
 													<p:inputText id="COACES" value="#{GestorCuentasActivos.sCOACES}" size="9" maxlength="9">
 													</p:inputText>
 												<p:message for="COACES" display="icon"/>
-												<p:commandButton value="Comprobar" update="msgs, popup, COACES, cuentasActivo" actionListener="#{GestorCuentasActivos.buscaCuentas}"/>
+												<p:commandButton value="Comprobar" update="msgs, popup, COACES, cuentas" actionListener="#{GestorCuentasActivos.buscaCuentas}"/>
 											</h:panelGrid>
 										</p:panel>
 									<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>
 									</h:panelGrid>
 								</p:fieldset>
 
-							<p:fieldset legend="Cuenta Corriente">
-								<h:panelGrid columns="2" cellpadding="1">
-								<p:panel id="panelCuentas">
-								<h:panelGrid columns="1" cellpadding="1">
-
+								<p:fieldset legend="Nueva Cuenta">
+									<h:panelGrid columns="1" cellpadding="5">
 										<p:panel>
-											<h:panelGrid columns="4" cellpadding="5">
-									<h:outputText for="DESCRIPCION" value="Descripción: "/>
-									<p:inputText id="DESCRIPCION" value="#{GestorCuentasActivos.sDescripcion}" size="60" maxlength="60"/>
-									
+											<h:panelGrid columns="7" cellpadding="5">
+										<p:inputText id="PAIS" value="#{GestorCuentasActivos.sPais}" size="3" disabled="true"/>
 
+										<p:inputText id="DCIBAN" value="#{GestorCuentasActivos.sDCIBAN}" size="3" disabled="true"/>
+
+										<h:outputText value="Número de Cuenta: "/>
+
+										<p:inputMask id="NUCCEN" value="#{GestorCuentasActivos.sNUCCEN}" mask="9999" size="4">
+											<f:validateLength minimum="4"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCOF" value="#{GestorCuentasActivos.sNUCCOF}" mask="9999" size="4">
+											<f:validateLength minimum="4"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCDI" value="#{GestorCuentasActivos.sNUCCDI}" mask="99" size="2">
+											<f:validateLength minimum="2"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCNT" value="#{GestorCuentasActivos.sNUCCNT}" mask="9999999999" size="10">
+											<f:validateLength minimum="10"/>
+										</p:inputMask>
 											</h:panelGrid>
-										</p:panel>
-
-										<p:panel >
-											<h:panelGrid columns="4" cellpadding="5">
-									<h:outputText for="PAIS" value="Códigos SEPA: "/>
-									<p:inputText id="PAIS" value="#{GestorCuentasActivos.sPais}" size="3" maxlength="2" disabled="true"/>
-									
-									<p:inputMask id="DCIBAN" value="#{GestorCuentasActivos.sDCIBAN}" mask="99" size="3" disabled="true">
-										<f:validateLength minimum="2"/>
-									</p:inputMask>
+									  </p:panel>
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+												<h:outputText value="Descripción: "/>
+												<p:inputText id="DESCRIPCION" value="#{GestorCuentasActivos.sDescripcion}" size="66" maxlength="60"/>
 											</h:panelGrid>
-										</p:panel>
+									  </p:panel>
 
-										<p:panel >
-											<h:panelGrid columns="5" cellpadding="5">
-									<h:outputText for="NUCCEN" value="Número de Cuenta: "/>
-									<p:inputMask id="NUCCEN" value="#{GestorCuentasActivos.sNUCCEN}" mask="9999" size="4" >
-										<f:validateLength minimum="4"/>
-									</p:inputMask>
-									
-									<p:inputMask id="NUCCOF" value="#{GestorCuentasActivos.sNUCCOF}" mask="9999" size="4" >
-										<f:validateLength minimum="4"/>
-									</p:inputMask>
-									
-									<p:inputMask id="NUCCDI" value="#{GestorCuentasActivos.sNUCCDI}" mask="99" size="2" >
-										<f:validateLength minimum="2"/>
-									</p:inputMask>
-									
-									<p:inputMask id="NUCCNT" value="#{GestorCuentasActivos.sNUCCNT}" mask="9999999999" size="10" >
-										<f:validateLength minimum="10"/>
-									</p:inputMask>
-											</h:panelGrid>
-										</p:panel>
+										<p:commandButton value="Limpiar" update="NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION, msgs, popup" actionListener="#{GestorCuentasActivos.limpiarPlantillaNuevaCuenta}" />
 
-								</h:panelGrid>
-								</p:panel>
-								<p:panel>
-									<h:panelGrid columns="1" cellpadding="1">
-										<p:commandButton value="Comprobar" update="msgs, popup, COACES" actionListener="#{GestorCuentasActivos.buscarCuentas}"/>
-										<p:commandButton value="Dar de Alta" update="msgs, popup, COACES, panelTablaCuentasActivo" actionListener="#{GestorCuentasActivos.altaCuenta}"/>
-										<p:commandButton value="Dar de Baja" update="msgs, popup, COACES, panelTablaCuentasActivo" actionListener="#{GestorCuentasActivos.bajaCuenta}"/>
 									</h:panelGrid>
-								</p:panel>
-								</h:panelGrid>
-							</p:fieldset>
+								</p:fieldset>
 
 							</h:panelGrid>
 						</p:panel>
@@ -146,39 +129,71 @@
 
 						<p:panel id="panelTablaCuentasActivo">
 							<h:panelGrid columns="1" cellpadding="5">
-								<p:contextMenu for="cuentasActivo">
-									<p:menuitem value="Seleccionar" update="cuentasActivo, COACES, popup, msgs, panelCuentas" icon="ui-icon-check" actionListener="#{GestorCuentasActivos.cargarCuenta}"/>
+								<p:contextMenu for="cuentas">
+									<p:menuitem value="Eliminar" update="cuentas, COACES, popup, msgs, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" icon="ui-icon-check" actionListener="#{GestorCuentasActivos.bajaCuentaActivo}"/>
 								</p:contextMenu>
 
-								<p:dataTable id="cuentasActivo" var="cuenta" value="#{GestorCuentasActivos.tablacuentas}" rowKey="#{cuenta.sNUCCEN}"
+								<p:dataTable id="cuentas" var="cuenta" value="#{GestorCuentasActivos.tablacuentas}" rowKey="#{cuenta.sNUCCEN}"
 															selection="#{GestorCuentasActivos.cuentaseleccionada}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15">
 
-									<p:column headerText="País">
-										#{cuenta.sPais}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="País" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sPais}" />
+														</p:column>
 
-									<p:column headerText="DCIBAN">
-										#{cuenta.sDCIBAN}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="DCIBAN" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sDCIBAN}" />
+														</p:column>
 
-									<p:column headerText="Entidad">
-										#{cuenta.sNUCCEN}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Entidad" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sNUCCEN}" />
+														</p:column>
 
-									<p:column headerText="Oficina">
-										#{cuenta.sNUCCOF}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Oficina" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sNUCCOF}" />
+														</p:column>
 
-									<p:column headerText="DC">
-										#{cuenta.sNUCCDI}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="DC" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sNUCCDI}" />
+														</p:column>
 
-									<p:column headerText="Cuenta">
-										#{cuenta.sNUCCNT}
-									</p:column>
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Cuenta" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sNUCCNT}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Descripción" />
+															</f:facet>
+															<h:outputText value="#{cuenta.sDescripcion}" />
+														</p:column>
+
+														<f:facet name="footer">
+															<h:commandLink>
+																<p:graphicImage value="recursos/excel.png" />  
+																<p:dataExporter type="xls" target="cuentas" fileName="cuentasactivo" encoding="ISO-8859-15"/>  
+															</h:commandLink>
+														</f:facet> 
 
 								</p:dataTable>
 

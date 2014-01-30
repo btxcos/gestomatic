@@ -13,9 +13,11 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLComunidades;
+import com.provisiones.ll.CLCuentas;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
+import com.provisiones.types.Cuenta;
 import com.provisiones.types.movimientos.MovimientoComunidad;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -203,21 +205,6 @@ public class GestorMovimientosComunidades implements Serializable
 
 			Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES);
 			
-			this.sCOCLDO = comunidad.getsCOCLDO();
-			this.sNUDCOM = comunidad.getsNUDCOM();
-			this.sNOMCOC = comunidad.getsNOMCOC();
-			this.sNODCCO = comunidad.getsNODCCO();
-			this.sNOMPRC = comunidad.getsNOMPRC();
-			this.sNUTPRC = comunidad.getsNUTPRC();
-			this.sNOMADC = comunidad.getsNOMADC();
-			this.sNUTADC = comunidad.getsNUTADC();
-			this.sNODCAD = comunidad.getsNODCAD();
-			this.sNUCCEN = comunidad.getsNUCCEN();
-			this.sNUCCOF = comunidad.getsNUCCOF();
-			this.sNUCCDI = comunidad.getsNUCCDI();
-			this.sNUCCNT = comunidad.getsNUCCNT();
-			this.sOBTEXC = comunidad.getsOBTEXC();
-			
 			if (comunidad.getsNUDCOM().equals(""))
 			{
 				sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
@@ -226,6 +213,23 @@ public class GestorMovimientosComunidades implements Serializable
 			}
 			else
 			{
+				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+				
+				this.sCOCLDO = comunidad.getsCOCLDO();
+				this.sNUDCOM = comunidad.getsNUDCOM();
+				this.sNOMCOC = comunidad.getsNOMCOC();
+				this.sNODCCO = comunidad.getsNODCCO();
+				this.sNOMPRC = comunidad.getsNOMPRC();
+				this.sNUTPRC = comunidad.getsNUTPRC();
+				this.sNOMADC = comunidad.getsNOMADC();
+				this.sNUTADC = comunidad.getsNUTADC();
+				this.sNODCAD = comunidad.getsNODCAD();
+				this.sNUCCEN = cuenta.getsNUCCEN();
+				this.sNUCCOF = cuenta.getsNUCCOF();
+				this.sNUCCDI = cuenta.getsNUCCDI();
+				this.sNUCCNT = cuenta.getsNUCCNT();
+				this.sOBTEXC = comunidad.getsOBTEXC();
+				
 				sMsg = "La comunidad se ha cargado correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
@@ -244,28 +248,33 @@ public class GestorMovimientosComunidades implements Serializable
 			
 			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 			
-			this.sCOCLDO = comunidad.getsCOCLDO();
-			this.sNUDCOM = comunidad.getsNUDCOM();
-			this.sNOMCOC = comunidad.getsNOMCOC();
-			this.sNODCCO = comunidad.getsNODCCO();
-			this.sNOMPRC = comunidad.getsNOMPRC();
-			this.sNUTPRC = comunidad.getsNUTPRC();
-			this.sNOMADC = comunidad.getsNOMADC();
-			this.sNUTADC = comunidad.getsNUTADC();
-			this.sNODCAD = comunidad.getsNODCAD();
-			this.sNUCCEN = comunidad.getsNUCCEN();
-			this.sNUCCOF = comunidad.getsNUCCOF();
-			this.sNUCCDI = comunidad.getsNUCCDI();
-			this.sNUCCNT = comunidad.getsNUCCNT();
-			this.sOBTEXC = comunidad.getsOBTEXC();
+			String sMsg = "";
 
 			if (comunidad.getsNUDCOM().equals(""))
 			{
-				msg = Utils.pfmsgError("ERROR: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
-				logger.error("ERROR: La comunidad '{}' no esta registrada en el sistema.","+sNUDCOM.toUpperCase()+");
+				sMsg = "ERROR: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
 			else
 			{
+				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+				
+				this.sCOCLDO = comunidad.getsCOCLDO();
+				this.sNUDCOM = comunidad.getsNUDCOM();
+				this.sNOMCOC = comunidad.getsNOMCOC();
+				this.sNODCCO = comunidad.getsNODCCO();
+				this.sNOMPRC = comunidad.getsNOMPRC();
+				this.sNUTPRC = comunidad.getsNUTPRC();
+				this.sNOMADC = comunidad.getsNOMADC();
+				this.sNUTADC = comunidad.getsNUTADC();
+				this.sNODCAD = comunidad.getsNODCAD();
+				this.sNUCCEN = cuenta.getsNUCCEN();
+				this.sNUCCOF = cuenta.getsNUCCOF();
+				this.sNUCCDI = cuenta.getsNUCCDI();
+				this.sNUCCNT = cuenta.getsNUCCNT();
+				this.sOBTEXC = comunidad.getsOBTEXC();
+				
 				msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
 				logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
 			}

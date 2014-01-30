@@ -13,11 +13,13 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLComunidades;
+import com.provisiones.ll.CLCuentas;
 import com.provisiones.ll.CLErrores;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Comunidad;
+import com.provisiones.types.Cuenta;
 import com.provisiones.types.errores.ErrorComunidadTabla;
 import com.provisiones.types.errores.ErrorTabla;
 import com.provisiones.types.movimientos.MovimientoComunidad;
@@ -425,6 +427,8 @@ public class GestorErroresComunidades implements Serializable
 
 			Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES.toUpperCase());
 			
+			Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+			
 			this.sCOCLDO = comunidad.getsCOCLDO();
 			this.sNUDCOM = comunidad.getsNUDCOM();
 			this.sNOMCOC = comunidad.getsNOMCOC();
@@ -434,10 +438,10 @@ public class GestorErroresComunidades implements Serializable
 			this.sNOMADC = comunidad.getsNOMADC();
 			this.sNUTADC = comunidad.getsNUTADC();
 			this.sNODCAD = comunidad.getsNODCAD();
-			this.sNUCCEN = comunidad.getsNUCCEN();
-			this.sNUCCOF = comunidad.getsNUCCOF();
-			this.sNUCCDI = comunidad.getsNUCCDI();
-			this.sNUCCNT = comunidad.getsNUCCNT();
+			this.sNUCCEN = cuenta.getsNUCCEN();
+			this.sNUCCOF = cuenta.getsNUCCOF();
+			this.sNUCCDI = cuenta.getsNUCCDI();
+			this.sNUCCNT = cuenta.getsNUCCNT();
 			this.sOBTEXC = comunidad.getsOBTEXC();
 			
 			if (comunidad.getsNUDCOM().equals(""))
@@ -464,6 +468,8 @@ public class GestorErroresComunidades implements Serializable
 			
 			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 			
+			Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+			
 			this.sCOCLDO = comunidad.getsCOCLDO();
 			this.sNUDCOM = comunidad.getsNUDCOM();
 			this.sNOMCOC = comunidad.getsNOMCOC();
@@ -473,10 +479,10 @@ public class GestorErroresComunidades implements Serializable
 			this.sNOMADC = comunidad.getsNOMADC();
 			this.sNUTADC = comunidad.getsNUTADC();
 			this.sNODCAD = comunidad.getsNODCAD();
-			this.sNUCCEN = comunidad.getsNUCCEN();
-			this.sNUCCOF = comunidad.getsNUCCOF();
-			this.sNUCCDI = comunidad.getsNUCCDI();
-			this.sNUCCNT = comunidad.getsNUCCNT();
+			this.sNUCCEN = cuenta.getsNUCCEN();
+			this.sNUCCOF = cuenta.getsNUCCOF();
+			this.sNUCCDI = cuenta.getsNUCCDI();
+			this.sNUCCNT = cuenta.getsNUCCNT();
 			this.sOBTEXC = comunidad.getsOBTEXC();
 
 			if (comunidad.getsNUDCOM().equals(""))

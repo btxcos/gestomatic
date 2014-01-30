@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLComunidades;
+import com.provisiones.ll.CLCuentas;
 import com.provisiones.ll.CLDescripciones;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLPagos;
@@ -19,6 +20,7 @@ import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
+import com.provisiones.types.Cuenta;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Pago;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -531,6 +533,8 @@ public class GestorPagosSimple implements Serializable
 
 			Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES);
 			
+			Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+			
 			this.sCOCLDO = comunidad.getsCOCLDO();
 			this.sNUDCOM = comunidad.getsNUDCOM();
 
@@ -542,10 +546,10 @@ public class GestorPagosSimple implements Serializable
 			this.sNUTADC = comunidad.getsNUTADC();
 			this.sNODCAD = comunidad.getsNODCAD();
 
-			this.sNUCCEN = comunidad.getsNUCCEN();
-			this.sNUCCOF = comunidad.getsNUCCOF();
-			this.sNUCCDI = comunidad.getsNUCCDI();
-			this.sNUCCNT = comunidad.getsNUCCNT();
+			this.sNUCCEN = cuenta.getsNUCCEN();
+			this.sNUCCOF = cuenta.getsNUCCOF();
+			this.sNUCCDI = cuenta.getsNUCCDI();
+			this.sNUCCNT = cuenta.getsNUCCNT();
 
 			
 			if (comunidad.getsNUDCOM().equals(""))

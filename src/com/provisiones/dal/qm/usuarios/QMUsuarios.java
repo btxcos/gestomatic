@@ -70,8 +70,8 @@ public final class QMUsuarios
 				       + NuevoUsuario.getsContacto() + "','"  
 				       + sFecha + "','"  
 				       + sFecha + "','"  
-				       + NuevoUsuario.getsTipoUsuario() + "',b'"  
-				       + ValoresDefecto.ACTIVO + "' )";
+				       + NuevoUsuario.getsTipoUsuario() + "',"  
+				       + ValoresDefecto.ACTIVO + " )";
 			
 			logger.debug(sQuery);
 
@@ -393,9 +393,9 @@ public final class QMUsuarios
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO11 + " = '"+ sEstado + "' "+
+					+ CAMPO11 + " = "+ sEstado + " "+
 					" WHERE "
-					+ CAMPO1  + " = b'"+ sUsuarioID +"'";
+					+ CAMPO1  + " = '"+ sUsuarioID +"'";
 			
 			logger.debug(sQuery);
 			

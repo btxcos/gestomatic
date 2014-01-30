@@ -1,14 +1,11 @@
 package com.provisiones.ll;
 
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMPagos;
-import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.types.Pago;
 
 public class CLPagos 

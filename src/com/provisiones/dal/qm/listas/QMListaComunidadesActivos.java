@@ -38,7 +38,7 @@ public final class QMListaComunidadesActivos
 
 	private QMListaComunidadesActivos(){}
 	
-	public static boolean addRelacionComunidad(Connection conexion, String sCodCOACES, String sCodComunidad, String sCodMovimiento)
+	public static boolean addRelacionComunidad(Connection conexion, String sCodCOACES, long liCodComunidad, String sCodMovimiento)
 	{
 		boolean bSalida = false;
 		
@@ -61,7 +61,7 @@ public final class QMListaComunidadesActivos
 				       + CAMPO6  +    
 				       ") VALUES ('"
 				       + sCodCOACES + "','" 
-				       + sCodComunidad + "','"
+				       + liCodComunidad + "','"
 				       + sCodMovimiento + "','"
 				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				       + sUsuario  + "','"
@@ -84,7 +84,7 @@ public final class QMListaComunidadesActivos
 				bSalida = false;
 
 				logger.error("ERROR COACES:|"+sCodCOACES+"|");
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -141,7 +141,7 @@ public final class QMListaComunidadesActivos
 		return bSalida;
 	}
 
-	public static boolean existeRelacionComunidad(Connection conexion, String sCodCOACES, String sCodComunidad, String sCodMovimiento)
+	public static boolean existeRelacionComunidad(Connection conexion, String sCodCOACES, long liCodComunidad, String sCodMovimiento)
 	{
 		boolean bEncontrado = false;
 		
@@ -160,7 +160,7 @@ public final class QMListaComunidadesActivos
 				       + TABLA + 
 				       " WHERE (" 
 				       + CAMPO1 + " = '" + sCodCOACES + "' AND "
-				       + CAMPO2 + " = '" + sCodComunidad + "' AND "
+				       + CAMPO2 + " = '" + liCodComunidad + "' AND "
 				       + CAMPO3 + " = '" + sCodMovimiento	+ 
 				       "')";
 			
@@ -194,7 +194,7 @@ public final class QMListaComunidadesActivos
 				bEncontrado = false;
 
 				logger.error("ERROR COACES:|"+sCodCOACES+"|");
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -209,7 +209,7 @@ public final class QMListaComunidadesActivos
 		return bEncontrado;
 	}
 
-	public static boolean compruebaRelacionComunidadActivo(Connection conexion, String sCodComunidad, String sCodCOACES)
+	public static boolean compruebaRelacionComunidadActivo(Connection conexion, long liCodComunidad, String sCodCOACES)
 	{
 		boolean bEncontrado = false;
 
@@ -235,8 +235,8 @@ public final class QMListaComunidadesActivos
 					   + QMComunidades.CAMPO1 + 
 					   " FROM " + QMComunidades.TABLA +
 					   " WHERE (" 
-					   + QMComunidades.CAMPO1 + " = '" + sCodComunidad + "' AND " 
-				       + QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "')))";
+					   + QMComunidades.CAMPO1 + " = '" + liCodComunidad + "' AND " 
+				       + QMComunidades.CAMPO13 + " = '" + ValoresDefecto.DEF_ALTA + "')))";
 			
 			logger.debug(sQuery);
 			
@@ -306,7 +306,7 @@ public final class QMListaComunidadesActivos
 				       " FROM " 
 				       + QMComunidades.TABLA +
 				       " WHERE " 
-				       + QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "'))";
+				       + QMComunidades.CAMPO13 + " = '" + ValoresDefecto.DEF_ALTA + "'))";
 			
 			logger.debug(sQuery);
 			
@@ -351,7 +351,7 @@ public final class QMListaComunidadesActivos
 		return bEncontrado;
 	}
 	
-	public static String getMovimientoDeActivoVinculadoComunidad(Connection conexion, String sCodComunidad, String sCodCOACES)
+	public static String getMovimientoDeActivoVinculadoComunidad(Connection conexion, long liCodComunidad, String sCodCOACES)
 	{
 		String sMovimiento = "";
 
@@ -372,7 +372,7 @@ public final class QMListaComunidadesActivos
 				       + TABLA + 
 				       " WHERE (" 
 				       + CAMPO1 + " = '" + sCodCOACES + "' AND  "
-				       + CAMPO2 + " = '" + sCodComunidad +
+				       + CAMPO2 + " = '" + liCodComunidad +
 				       "')";
 			
 			logger.debug(sQuery);
@@ -407,7 +407,7 @@ public final class QMListaComunidadesActivos
 				sMovimiento = "";
 
 				logger.error("ERROR COACES:|"+sCodCOACES+"|");
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -601,7 +601,7 @@ public final class QMListaComunidadesActivos
 		return liNumero;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosComunidad(Connection conexion, String sCodComunidad)
+	public static ArrayList<ActivoTabla> buscaActivosComunidad(Connection conexion, long liCodComunidad)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 		
@@ -644,7 +644,7 @@ public final class QMListaComunidadesActivos
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE "
-					   + CAMPO2 + " = '" + sCodComunidad	+ "')";
+					   + CAMPO2 + " = '" + liCodComunidad	+ "')";
 			
 			logger.debug(sQuery);
 
@@ -690,7 +690,7 @@ public final class QMListaComunidadesActivos
 			{
 				resultado = new ArrayList<ActivoTabla>();
 
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -704,7 +704,7 @@ public final class QMListaComunidadesActivos
 		return resultado;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosComunidadDisponibles(Connection conexion, ActivoTabla filtro, String sCodComunidad)
+	public static ArrayList<ActivoTabla> buscaActivosComunidadDisponibles(Connection conexion, ActivoTabla filtro, long liCodComunidad)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 		
@@ -764,7 +764,7 @@ public final class QMListaComunidadesActivos
 						   " FROM " 
 						   + QMComunidades.TABLA + 
 						   " WHERE "
-						   + QMComunidades.CAMPO1 + " = '" + sCodComunidad	+ "'))))";
+						   + QMComunidades.CAMPO1 + " = '" + liCodComunidad	+ "'))))";
 			
 			logger.debug(sQuery);
 
@@ -881,7 +881,7 @@ public final class QMListaComunidadesActivos
 							" FROM " 
 							+ QMComunidades.TABLA + 
 							" WHERE " 
-							+ QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "' )))";
+							+ QMComunidades.CAMPO13 + " = '" + ValoresDefecto.DEF_ALTA + "' )))";
 			
 			logger.debug(sQuery);
 
@@ -997,7 +997,7 @@ public final class QMListaComunidadesActivos
 							" FROM " 
 							+ QMComunidades.TABLA + 
 							" WHERE " 
-							+ QMComunidades.CAMPO16 + " = '" + ValoresDefecto.DEF_ALTA + "')))";
+							+ QMComunidades.CAMPO13 + " = '" + ValoresDefecto.DEF_ALTA + "')))";
 			
 			logger.debug(sQuery);
 
@@ -1237,10 +1237,7 @@ public final class QMListaComunidadesActivos
 		String sNOMADC = "";
 		String sNUTADC = "";
 		String sNODCAD = "";
-		String sNUCCEN = "";
-		String sNUCCOF = "";
-		String sNUCCDI = "";
-		String sNUCCNT = "";
+		String sCuenta = "";
 		String sOBTEXC = "";
 
 		if (conexion != null)
@@ -1275,12 +1272,9 @@ public final class QMListaComunidadesActivos
 				       + "AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 				       + "AES_DECRYPT("+QMComunidades.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 				       + "AES_DECRYPT("+QMComunidades.CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+QMComunidades.CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+QMComunidades.CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+QMComunidades.CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+QMComunidades.CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-
-				       + QMComunidades.CAMPO15 +     
+				       + QMComunidades.CAMPO11 + "," 
+				       
+				       + QMComunidades.CAMPO12 +     
 					   
 					   " FROM " 
 					   + QMComunidades.TABLA + 
@@ -1331,12 +1325,9 @@ public final class QMListaComunidadesActivos
 						sNOMADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sNUTADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sNODCAD = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-						sNUCCEN = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-						sNUCCOF = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-						sNUCCDI = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-						sNUCCNT = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-						
-						sOBTEXC = rs.getString(QMComunidades.CAMPO15);
+
+						sCuenta = rs.getString(QMComunidades.CAMPO11);						
+						sOBTEXC = rs.getString(QMComunidades.CAMPO12);
 
 						
 						logger.debug("Encontrado el registro!");
@@ -1361,10 +1352,7 @@ public final class QMListaComunidadesActivos
 				sNOMADC = "";
 				sNUTADC = "";
 				sNODCAD = "";
-				sNUCCEN = "";
-				sNUCCOF = "";
-				sNUCCDI = "";
-				sNUCCNT = "";
+				sCuenta = "";
 				sOBTEXC = "";
 
 				logger.error("ERROR COACES:|"+sCodCOACES+"|");
@@ -1388,14 +1376,11 @@ public final class QMListaComunidadesActivos
 				sNOMADC,
 				sNUTADC,
 				sNODCAD,
-				sNUCCEN,
-				sNUCCOF,
-				sNUCCDI,
-				sNUCCNT,
+				sCuenta,
 				sOBTEXC);
 	}
 	
-	public static ArrayList<String> buscarDependencias(Connection conexion, String sCodComunidad, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(Connection conexion, long liCodComunidad, String sCodMovimiento)
 	{
 		ArrayList<String> resultado = new ArrayList<String>();
 		
@@ -1415,7 +1400,7 @@ public final class QMListaComunidadesActivos
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO2 + " = '" + sCodComunidad + "' AND "
+					+ CAMPO2 + " = '" + liCodComunidad + "' AND "
 					+ CAMPO3 + " >=  '" + sCodMovimiento + 
 					"')";
 			
@@ -1450,7 +1435,7 @@ public final class QMListaComunidadesActivos
 			{
 				resultado = new ArrayList<String>();
 
-				logger.error("ERROR Comunidad:|"+sCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());

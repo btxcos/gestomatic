@@ -467,6 +467,18 @@ public class GestorComunidades implements Serializable
 					logger.error(sMsg);
 					break;
 					
+				case -911: //Error 911 - error y rollback - error al crear la cuenta de la comunidad
+					sMsg = "[FATAL] ERROR:911 - Se ha producido un error al crear la cuenta de la comunidad. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -912: //Error 912 - error y rollback - error al crear la cuenta de la comunidad
+					sMsg = "[FATAL] ERROR:912 - Se ha producido un error al crear la relacion cuenta-comunidad. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
 				default: //error generico
 					sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
 					msg = Utils.pfmsgFatal(sMsg);

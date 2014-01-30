@@ -37,8 +37,8 @@ public class GestorCuentasActivos implements Serializable
 	private String sNUPUAC = "";
 	
 	//Nueva Cuenta
-	private String sPais = "";	
-	private String sDCIBAN = "";
+	private String sPais = "ES";	
+	private String sDCIBAN = "#";
 	private String sNUCCEN = "";
 	private String sNUCCOF = "";
 	private String sNUCCDI = "";
@@ -71,10 +71,6 @@ public class GestorCuentasActivos implements Serializable
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
 		
-	}
-	
-	public void borrarResultadosActivo()
-	{
     	this.tablaactivos = null;
 	}
 	
@@ -84,27 +80,33 @@ public class GestorCuentasActivos implements Serializable
 
     	borrarCamposActivo();
     	
-    	borrarResultadosActivo();
+    	this.tablacuentas = null;
     }
     
-	public void borrarCamposComunidad()
+	public void borrarCamposNuevaCuenta()
 	{
-
-    	this.sCOPOIN = "";
-    	this.sNOMUIN = "";
-    	this.sNOPRAC = "";
-    	this.sNOVIAS = "";
-    	this.sNUPIAC = "";
-    	this.sNUPOAC = "";
-    	this.sNUPUAC = "";
+    	//this.sPais = "";
+    	//this.sDCIBAN = "";
+    	this.sNUCCEN = "";
+    	this.sNUCCOF = "";
+    	this.sNUCCDI = "";
+    	this.sNUCCNT = "";
+    	this.sDescripcion = "";
 	}
+	
+    public void limpiarPlantillaNuevaCuenta(ActionEvent actionEvent) 
+    {  
+		borrarCamposNuevaCuenta();
+    }
 	
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
 		this.sCOACES = "";
 
-		borrarResultadosActivo();
-		borrarCamposComunidad();
+		borrarCamposActivo();
+		borrarCamposNuevaCuenta();
+		
+		this.tablacuentas = null;
     }
 	
 	public void buscaActivos (ActionEvent actionEvent)
@@ -196,88 +198,97 @@ public class GestorCuentasActivos implements Serializable
 		}				
 	}
 
-	public FacesMessage nuevoMovimiento(boolean bOperacion)
+	public FacesMessage nuevoMovimiento(boolean bAlta, Cuenta cuenta)
 	{
-		
+	
 		FacesMessage msg;
-
-		String sMsg = "";
 		
-		if (ConnectionManager.comprobarConexion())
+		String sMsg = "";
+
+		
+		if (!CLActivos.existeActivo(sCOACES))
 		{
-			if (sCOACES.equals(""))
-			{
-				sMsg = "ERROR: El campo Activo no ha sido informado. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}
-			else if (!CLActivos.existeActivo(sCOACES))
-			{
-				sMsg = "ERROR: El Activo informado no pertenece a la cartera. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}
-			else
-			{
-				int iSalida = CLCuentas.registraMovimientoActivo(bOperacion,sCOACES, sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT, sDescripcion);
-
-				switch (iSalida)
-				{
-					case 0: //Sin errores
-
-						//this.sPais  = "";
-						this.sNUCCEN  = "";
-						this.sNUCCOF  = "";
-						this.sNUCCDI  = "";
-				    	this.sNUCCNT  = "";
-						sMsg = "Operación de "+(bOperacion? "Alta":"Baja")+" realizada.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-						break;
-
-					case -901: //Error 901 - error y rollback - error al crear la Cuenta
-						sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la cuenta. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -902: //Error 902 - error y rollback - error al registrar la relaccion
-						sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-						
-					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
-						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					default: //error generico
-						sMsg = "[FATAL] ERROR: Se ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-				}
-			}
-			
-
-			
-
-			
-			logger.debug("Finalizadas las comprobaciones.");
+			sMsg = "ERROR: No se puede operar sobre la cuenta, el activo no pertenece a la cartera. Por favor, revise los datos.";
+			msg = Utils.pfmsgError(sMsg);
+			logger.error(sMsg);
 		}
 		else
 		{
-			sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
-			msg = Utils.pfmsgFatal(sMsg);
-			logger.error(sMsg);
+			
+			int iSalida = CLCuentas.registraMovimientoActivo(bAlta, sCOACES, cuenta);
+			
+			switch (iSalida) 
+			{
+			case 0: //Sin errores
+				if (bAlta)
+				{
+					tablacuentas.add(cuenta);
+			    	borrarCamposNuevaCuenta();
+				}
+				else
+				{
+					
+					this.sPais = cuenta.getsPais();
+					this.sDCIBAN = cuenta.getsDCIBAN();
+					this.sNUCCEN = cuenta.getsNUCCEN();
+					this.sNUCCOF = cuenta.getsNUCCOF();
+					this.sNUCCDI = cuenta.getsNUCCDI();
+					this.sNUCCNT = cuenta.getsNUCCNT();
+					this.sDescripcion = cuenta.getsDescripcion();
+					
+					tablacuentas.remove(cuentaseleccionada);
+				}
+
+				sMsg = "Operación de "+(bAlta? "Alta":"Baja")+" realizada.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+				break;
+
+			case -901: //Error 901 - error y rollback - error al crear la Cuenta
+				sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la cuenta. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+
+			case -902: //Error 902 - error y rollback - error al registrar la relaccion
+				sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+
+			case -903: //Error 903 - error y rollback - error al borrar la cuenta
+				sMsg = "[FATAL] ERROR:903 - Se ha producido un error al borrar la cuenta. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+
+			case -904: //Error 904 - error y rollback - error al eliminar la relaccion
+				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al eliminar la relacion. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;				
+
+			case -910: //Error 910 - error y rollback - error al conectar con la base de datos
+				sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+
+			default: //error generico
+				sMsg = "[FATAL] ERROR: Se ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
+			}		
 		}
+
+		
+		logger.debug("Finalizadas las comprobaciones.");
 		
 		return msg;
 	}
 	
-    public void altaCuenta(ActionEvent actionEvent) 
+    public void altaCuentaActivo(ActionEvent actionEvent) 
     {  
 		if (ConnectionManager.comprobarConexion())
 		{
@@ -285,45 +296,70 @@ public class GestorCuentasActivos implements Serializable
 	    	
 	    	String sMsg = "";
 
-	    	//comprobar el activo
-			if (!CLCuentas.buscarCodigoCuenta (sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT).equals(""))
+	    	//comprobar la cuenta
+			if (!CLCuentas.existeCuenta(sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT))
 			{
-				sMsg = "ERROR: - La cuenta ya esta dada de alta. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
+				if (sCOACES.equals("") || 
+
+						sPais.equals("") ||
+						sDCIBAN.equals("") ||
+						sNUCCEN.equals("") ||
+						sNUCCOF.equals("") ||
+						sNUCCDI.equals("") ||
+						sNUCCNT.equals("") ||
+						sDescripcion.equals(""))
+					{
+						sMsg = "ERROR: Faltan campos por informar para realizar el alta. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+					}
+					else
+					{
+						Cuenta cuenta = new Cuenta(
+								sPais, 
+								sDCIBAN, 
+								sNUCCEN, 
+								sNUCCOF, 
+								sNUCCDI, 
+								sNUCCNT, 
+								sDescripcion);
+
+						msg = nuevoMovimiento(true, cuenta);
+						logger.debug("Cuenta dada de alta:|"+sPais+"|"+sDCIBAN+"|"+sNUCCEN+"|"+sNUCCOF+"|"+sNUCCDI+"|"+sNUCCNT+"|"+sDescripcion+"|");
+
+					}
 			}
 			else
 			{
-				msg = nuevoMovimiento(true);
+				sMsg = "ERROR: La cuenta proporcionada ya esta registrada. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
-			
 
-			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
     
-    public void bajaCuenta(ActionEvent actionEvent) 
+    public void bajaCuentaActivo(ActionEvent actionEvent) 
     {
 		if (ConnectionManager.comprobarConexion())
 		{
 	    	FacesMessage msg;
-	    	
-	    	String sMsg = "";
 
-	    	//comprobar el activo
-			if (CLCuentas.buscarCodigoCuenta (sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT).equals(""))
-			{
-				sMsg = "ERROR: - La cuenta no esta dada de alta. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}
-			else
-			{
-				msg = nuevoMovimiento(false);
-			}
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	if (cuentaseleccionada == null)
+	    	{
+	    		String sMsg = "ERROR: No se ha seleccionado una cuenta.";
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
+	    	}
+	    	else
+	    	{
+	    		Cuenta cuenta = cuentaseleccionada;
+
+	    		msg = nuevoMovimiento(false, cuenta);
+	    	}
+	
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
 		}
     }
 

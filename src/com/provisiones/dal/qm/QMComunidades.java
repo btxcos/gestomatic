@@ -34,15 +34,12 @@ public final class QMComunidades
 	public static final String CAMPO8  = "nomadc";    
 	public static final String CAMPO9  = "nutadc";    
 	public static final String CAMPO10 = "nodcad";    
-	public static final String CAMPO11 = "nuccen";    
-	public static final String CAMPO12 = "nuccof";    
-	public static final String CAMPO13 = "nuccdi";    
-	public static final String CAMPO14 = "nuccnt";    
-	public static final String CAMPO15 = "obtexc";
+	public static final String CAMPO11 = "cod_cuenta";    
+	public static final String CAMPO12 = "obtexc";
 	
 	//Campos de control
-	public static final String CAMPO16 = "cod_estado";
-	public static final String CAMPO17 = "comentario";
+	public static final String CAMPO13 = "cod_estado";
+	public static final String CAMPO14 = "comentario";
 	
 	private QMComunidades(){}
 
@@ -72,12 +69,9 @@ public final class QMComunidades
 				       + CAMPO9  + ","              
 				       + CAMPO10 + ","              
 				       + CAMPO11 + ","              
-				       + CAMPO12 + ","              
-				       + CAMPO13 + ","
-				       + CAMPO14 + "," 
-					   + CAMPO15 + ","
-					   + CAMPO16 + ","
-				       + CAMPO17 +               
+					   + CAMPO12 + ","
+					   + CAMPO13 + ","
+				       + CAMPO14 +               
 				       ") VALUES ('" 
 				       + NuevaComunidad.getsCOCLDO() + "','" 
 				       + NuevaComunidad.getsNUDCOM() + "',"
@@ -100,12 +94,8 @@ public final class QMComunidades
 				       + "AES_ENCRYPT('"+NuevaComunidad.getsNUTPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 				       + "AES_ENCRYPT('"+NuevaComunidad.getsNOMADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 				       + "AES_ENCRYPT('"+NuevaComunidad.getsNUTADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-				       + "AES_ENCRYPT('"+NuevaComunidad.getsNODCAD()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-				       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-				       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-				       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-				       + "AES_ENCRYPT('"+NuevaComunidad.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
-				       
+				       + "AES_ENCRYPT('"+NuevaComunidad.getsNODCAD()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), '"
+				       + NuevaComunidad.getsCuenta() + "','" 
 				       + NuevaComunidad.getsOBTEXC() + "','" 
 				       + ValoresDefecto.DEF_ALTA + "','' )";
 			
@@ -148,7 +138,7 @@ public final class QMComunidades
 
 		return liCodigo;
 	}
-	public static boolean modComunidad(Connection conexion, Comunidad NuevaComunidad, String sComunidadID)
+	public static boolean modComunidad(Connection conexion, Comunidad NuevaComunidad, long liComunidadID)
 	{
 		boolean bSalida = false;
 
@@ -186,16 +176,12 @@ public final class QMComunidades
 					+ CAMPO8    + " = AES_ENCRYPT('"+NuevaComunidad.getsNOMADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
 					+ CAMPO9    + " = AES_ENCRYPT('"+NuevaComunidad.getsNUTADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
 					+ CAMPO10   + " = AES_ENCRYPT('"+NuevaComunidad.getsNODCAD()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO11   + " = AES_ENCRYPT('"+NuevaComunidad.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO12   + " = AES_ENCRYPT('"+NuevaComunidad.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO13   + " = AES_ENCRYPT('"+NuevaComunidad.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO14   + " = AES_ENCRYPT('"+NuevaComunidad.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
 
-					
-					+ CAMPO15 + " = '"+ NuevaComunidad.getsOBTEXC() +
-					"' "+
+					+ CAMPO11 + " = '"+ NuevaComunidad.getsCuenta() + "', "
+
+					+ CAMPO12 + " = '"+ NuevaComunidad.getsOBTEXC() + "' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sComunidadID +"'";
+					+ CAMPO1 + " = '"+ liComunidadID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -213,7 +199,7 @@ public final class QMComunidades
 			{
 				bSalida = false;
 
-				logger.error("ERROR COMUNIDAD:|"+sComunidadID+"|");
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -226,7 +212,7 @@ public final class QMComunidades
 		return bSalida;
 	}
 
-	public static boolean delComunidad(Connection conexion, String sComunidadID)
+	public static boolean delComunidad(Connection conexion, long liComunidadID)
 	{
 		boolean bSalida = true;
 
@@ -239,7 +225,7 @@ public final class QMComunidades
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1 + " = '"+ sComunidadID+"'";
+					+ CAMPO1 + " = '"+ liComunidadID+"'";
 			
 			logger.debug(sQuery);
 
@@ -256,7 +242,7 @@ public final class QMComunidades
 			{
 				bSalida = false;
 
-				logger.error("ERROR COMUNIDAD:|"+sComunidadID+"|");
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -269,7 +255,7 @@ public final class QMComunidades
 		return bSalida;
 	}
 
-	public static Comunidad getComunidad(Connection conexion, String sComunidadID)
+	public static Comunidad getComunidad(Connection conexion, long liComunidadID)
 	{
 		String sCOCLDO = "";
 		String sNUDCOM = "";
@@ -280,10 +266,8 @@ public final class QMComunidades
 		String sNOMADC = "";
 		String sNUTADC = "";
 		String sNODCAD = "";
-		String sNUCCEN = "";
-		String sNUCCOF = "";
-		String sNUCCDI = "";
-		String sNUCCNT = "";
+		String sCuenta = "";
+
 		String sOBTEXC = "";
 
 		if (conexion != null)
@@ -321,16 +305,12 @@ public final class QMComunidades
 				       + "AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 				       + "AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 				       + "AES_DECRYPT("+CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-
-				       + CAMPO15 +               
+				       + CAMPO11 + ","
+				       + CAMPO12 +            
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1 + " = '"+ sComunidadID +"'";
+				       + CAMPO1 + " = '"+ liComunidadID +"'";
 			
 			logger.debug(sQuery);
 
@@ -343,7 +323,7 @@ public final class QMComunidades
 				
 				logger.debug("Ejecutada con exito!");
 
-				logger.debug(CAMPO1 + ":|"+sComunidadID+"|");
+				logger.debug(CAMPO1 + ":|"+liComunidadID+"|");
 
 				if (rs != null) 
 				{
@@ -375,12 +355,9 @@ public final class QMComunidades
 						sNOMADC = rs.getString("AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						sNUTADC = rs.getString("AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						sNODCAD = rs.getString("AES_DECRYPT("+CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCEN = rs.getString("AES_DECRYPT("+CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCOF = rs.getString("AES_DECRYPT("+CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCDI = rs.getString("AES_DECRYPT("+CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCNT = rs.getString("AES_DECRYPT("+CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sCuenta = rs.getString(CAMPO11); 
 
-						sOBTEXC = rs.getString(CAMPO15); 
+						sOBTEXC = rs.getString(CAMPO12); 
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -403,13 +380,10 @@ public final class QMComunidades
 				sNOMADC = "";
 				sNUTADC = "";
 				sNODCAD = "";
-				sNUCCEN = "";
-				sNUCCOF = "";
-				sNUCCDI = "";
-				sNUCCNT = "";
+				sCuenta = "";
 				sOBTEXC = "";
 
-				logger.error("ERROR COMUNIDAD:|"+sComunidadID+"|");
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -430,16 +404,13 @@ public final class QMComunidades
 				sNOMADC,
 				sNUTADC,
 				sNODCAD,
-				sNUCCEN,
-				sNUCCOF,
-				sNUCCDI,
-				sNUCCNT,
+				sCuenta,
 				sOBTEXC);
 	}
 
-	public static String getComunidadID(Connection conexion, String sCodCOCLDO, String sCodNUDCOM)
+	public static long getComunidadID(Connection conexion, String sCodCOCLDO, String sCodNUDCOM)
 	{
-		String sComunidadID = "";
+		long liComunidadID = 0;
 
 		if (conexion != null)
 		{
@@ -481,9 +452,9 @@ public final class QMComunidades
 					{
 						bEncontrado = true;
 
-						sComunidadID = rs.getString(CAMPO1);
+						liComunidadID = rs.getLong(CAMPO1);
 						
-						logger.debug(CAMPO1+":|"+sComunidadID+"|");
+						logger.debug(CAMPO1+":|"+liComunidadID+"|");
 						
 						logger.debug("Encontrado el registro!");
 					}
@@ -496,7 +467,7 @@ public final class QMComunidades
 			} 
 			catch (SQLException ex) 
 			{
-				sComunidadID = "";
+				liComunidadID = 0;
 				
 				logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
 				logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
@@ -510,10 +481,10 @@ public final class QMComunidades
 			}
 		}
 
-		return sComunidadID;
+		return liComunidadID;
 	}	
 	
-	public static boolean existeComunidad(Connection conexion, String sComunidadID)
+	public static boolean existeComunidad(Connection conexion, long liComunidadID)
 	{
 		boolean bEncontrado = false;
 
@@ -531,7 +502,7 @@ public final class QMComunidades
 				       	" FROM " 
 				       	+ TABLA + 
 				       	" WHERE "
-				       	+ CAMPO1 + " = '"+ sComunidadID +"'";
+				       	+ CAMPO1 + " = '"+ liComunidadID +"'";
 			
 			logger.debug(sQuery);
 
@@ -562,7 +533,7 @@ public final class QMComunidades
 			{
 				bEncontrado = false;
 				
-				logger.error("ERROR Comunidad:|"+sComunidadID+"|");
+				logger.error("ERROR Comunidad:|"+liComunidadID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -576,7 +547,7 @@ public final class QMComunidades
 		return bEncontrado;
 	}
 	
-	public static boolean setEstado(Connection conexion, String sComunidadID, String sEstado)
+	public static boolean setEstado(Connection conexion, long liComunidadID, String sEstado)
 	{
 		boolean bSalida = false;
 
@@ -589,9 +560,9 @@ public final class QMComunidades
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO16 + " = '"+ sEstado +"' "+
+					+ CAMPO13 + " = '"+ sEstado +"' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sComunidadID +"'";
+					+ CAMPO1 + " = '"+ liComunidadID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -609,7 +580,7 @@ public final class QMComunidades
 			{
 				bSalida = false;
 
-				logger.error("ERROR COMUNIDAD:|"+sComunidadID+"|");
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 
@@ -624,7 +595,7 @@ public final class QMComunidades
 		return bSalida;
 	}
 	
-	public static String getEstado(Connection conexion, String sComunidadID)
+	public static String getEstado(Connection conexion, long liComunidadID)
 	{
 		String sEstado = "";
 
@@ -640,11 +611,11 @@ public final class QMComunidades
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-						+ CAMPO16 + 
+						+ CAMPO13 + 
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
-						+ CAMPO1 + " = '"+ sComunidadID +"'";
+						+ CAMPO1 + " = '"+ liComunidadID +"'";
 			
 			logger.debug(sQuery);
 
@@ -663,13 +634,13 @@ public final class QMComunidades
 					{
 						bEncontrado = true;
 
-						sEstado = rs.getString(CAMPO16);
+						sEstado = rs.getString(CAMPO13);
 						
-						logger.debug(CAMPO1+":|"+sComunidadID+"|");
+						logger.debug(CAMPO1+":|"+liComunidadID+"|");
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO16+":|"+sEstado+"|");
+						logger.debug(CAMPO13+":|"+sEstado+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -681,7 +652,7 @@ public final class QMComunidades
 			{
 				sEstado = "";
 				
-				logger.error("ERROR COMUNIDAD:|"+sComunidadID+"|");
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -693,5 +664,76 @@ public final class QMComunidades
 		}
 
 		return sEstado;
+	}
+	
+	public static long getCodCuentaComunidad(Connection conexion, long liComunidadID)
+	{
+		long liCodCuenta = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO11 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liComunidadID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liCodCuenta = rs.getLong(CAMPO11);
+						
+						logger.debug(CAMPO1+":|"+liComunidadID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO11+":|"+liCodCuenta+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liCodCuenta = 0;
+				
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liCodCuenta;
 	}
 }
