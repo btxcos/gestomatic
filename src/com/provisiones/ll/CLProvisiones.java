@@ -50,14 +50,15 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 	}
 	
-	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasActivo(String sCOACES)
+	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasActivo(int iCOACES)
 	{
-		return QMProvisiones.buscaProvisionesAutorizadasPorActivo(ConnectionManager.getDBConnection(),sCOACES);
+		return QMProvisiones.buscaProvisionesAutorizadasPorActivo(ConnectionManager.getDBConnection(),iCOACES);
 	}
 	
 	
-	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasComunidad(String sCOACES)
+	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasComunidad(int iCOACES)
 	{
+		//TODO revisar
 		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 	}
 	
@@ -79,29 +80,29 @@ public final class CLProvisiones
 		return Utils.recuperaImporte(bNegativo,Long.toString(liValor));
 	}
 	
-	public static Provision buscarProvision (String sCodNUPROF)
+	public static Provision buscarProvision (String sNUPROF)
 	{
-		return QMProvisiones.getProvision(ConnectionManager.getDBConnection(),sCodNUPROF);
+		return QMProvisiones.getProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
-	public static Provision buscarDetallesProvision(String sCodNUPROF)
+	public static Provision buscarDetallesProvision(String sNUPROF)
 	{
-		return QMProvisiones.getDetallesProvision(ConnectionManager.getDBConnection(),sCodNUPROF);
+		return QMProvisiones.getDetallesProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
-	public static String estadoProvision (String sCodNUPROF)
+	public static String estadoProvision (String sNUPROF)
 	{
-		return QMProvisiones.getEstado(ConnectionManager.getDBConnection(),sCodNUPROF);
+		return QMProvisiones.getEstado(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
-	public static boolean estaCerrada (String sCodNUPROF)
+	public static boolean estaCerrada (String sNUPROF)
 	{
-		return QMProvisiones.provisionCerrada(ConnectionManager.getDBConnection(),sCodNUPROF);
+		return QMProvisiones.provisionCerrada(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
-	public static boolean existeProvision (String sCodNUPROF)
+	public static boolean existeProvision (String sNUPROF)
 	{
-		return QMProvisiones.existeProvision(ConnectionManager.getDBConnection(),sCodNUPROF);
+		return QMProvisiones.existeProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
 	public static String ultimaProvisionCerrada (String sCodCOSPAT)
@@ -121,7 +122,7 @@ public final class CLProvisiones
 			
 			Cierre cierre = Parser.leerCierre(linea);
 			
-			if (!QMProvisiones.existeProvision(conexion,cierre.getsNUPROF()))
+			if (!QMProvisiones.existeProvision(conexion, cierre.getsNUPROF()))
 			{
 				Provision provision = new Provision (cierre.getsNUPROF(), "0", "#", "0","0","0","0",cierre.getsFEPFON(),cierre.getsFEPFON(),"0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
@@ -358,7 +359,7 @@ public final class CLProvisiones
 		}
 	}
 	
-	public static String provisionAsignada (String sCodCOACES)
+	public static String provisionAsignada (int iCodCOACES)
 	{
 		String sProvision = "";
 
@@ -366,14 +367,14 @@ public final class CLProvisiones
 		
 		if (conexion != null)
 		{
-			String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(sCodCOACES);
+			String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(iCodCOACES);
 			
 			if (QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
 			{
 				sCOSPAT = "0";
 			}
 
-			String sTipo = CLActivos.compruebaTipoActivoSAREB(sCodCOACES);
+			String sTipo = CLActivos.compruebaTipoActivoSAREB(iCodCOACES);
 
 			sProvision = QMProvisiones.getProvisionAbierta(conexion,sCOSPAT,sTipo);
 
@@ -389,6 +390,7 @@ public final class CLProvisiones
 				}
 				else
 				{
+
 					//Ampliacion de numeros de provision de fondos
 					sProvision = Parser.formateaCampoNumerico(sProvision,9);
 					int iAmpliacion = Integer.parseInt(sProvision.substring(0, 2));
@@ -442,7 +444,9 @@ public final class CLProvisiones
 					}
 			
 					sProvision = sAmpliacion+iAño+ValoresDefecto.DEF_COREAE+sNumero;
-					logger.debug("sProvision:|{}|",sProvision);
+					
+		
+					logger.debug("sProvision:|"+sProvision+"|");
 				}			
 				
 				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);

@@ -167,7 +167,7 @@ public class GestorDetallesActivo implements Serializable
 		if (!sCOACES.equals(""))
 		{
 		
-			Activo activo = CLActivos.buscarDetallesActivo(sCOACES);
+			Activo activo = CLActivos.buscarDetallesActivo(Integer.parseInt(sCOACES));
 			
 			//this.sCOACES = activo.getCOACES();
 			this.sNUINMU = activo.getNUINMU();

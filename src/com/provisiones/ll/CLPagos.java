@@ -10,14 +10,15 @@ import com.provisiones.types.Pago;
 
 public class CLPagos 
 {
+	//TODO EN CONTRUCCION
 	private static Logger logger = LoggerFactory.getLogger(CLPagos.class.getName());
 
 	private CLPagos(){}
 	
 	//ID
-	public static String buscarCodigoPago (String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static long buscarCodigoPago (String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		return QMCuotas.getCuotaID(ConnectionManager.getDBConnection(),sCodCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC);
+		return QMCuotas.getCuotaID(ConnectionManager.getDBConnection(),Integer.parseInt(sCodCOACES), sCodCOCLDO, sCodNUDCOM, sCodCOSBAC);
 	}
 	
 	public static String buscarFechaPago(String sGastoID)

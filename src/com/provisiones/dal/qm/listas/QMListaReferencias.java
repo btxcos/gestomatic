@@ -36,7 +36,7 @@ public final class QMListaReferencias
 
 	private QMListaReferencias(){}
 	
-	public static boolean addRelacionReferencia(Connection conexion, String sCodCOACES, String sCodReferencia, String sCodMovimiento)
+	public static boolean addRelacionReferencia(Connection conexion, int iCodCOACES, long liCodReferencia, String sCodMovimiento)
 	{
 		boolean bSalida = false;
 
@@ -58,8 +58,8 @@ public final class QMListaReferencias
 				       + CAMPO5  + ","              
 				       + CAMPO6  +    
 				       ") VALUES ('" 
-				       + sCodCOACES + "','" 
-				       + sCodReferencia + "','"
+				       + iCodCOACES + "','" 
+				       + liCodReferencia + "','"
 				       + sCodMovimiento + "','"
 				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				       + sUsuario + "','"
@@ -81,8 +81,8 @@ public final class QMListaReferencias
 			{
 				bSalida = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+				logger.error("ERROR Referencia:|"+liCodReferencia+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -139,7 +139,7 @@ public final class QMListaReferencias
 		return bSalida;
 	}
 
-	public static boolean existeRelacionReferencia(Connection conexion, String sCodCOACES, String sCodReferencia, String sCodMovimiento)
+	public static boolean existeRelacionReferencia(Connection conexion, int iCodCOACES, long liCodReferencia, String sCodMovimiento)
 	{
 		boolean bEncontrado = false;
 
@@ -157,8 +157,8 @@ public final class QMListaReferencias
 				    " FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO1 + " = '" + sCodCOACES + "' AND " 
-					+ CAMPO2 + " = '" + sCodReferencia + "' AND " 
+					+ CAMPO1 + " = '" + iCodCOACES + "' AND " 
+					+ CAMPO2 + " = '" + liCodReferencia + "' AND " 
 					+ CAMPO3 + " = '" + sCodMovimiento	+ 
 					"')";
 			
@@ -191,8 +191,8 @@ public final class QMListaReferencias
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+				logger.error("ERROR Referencia:|"+liCodReferencia+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -207,7 +207,7 @@ public final class QMListaReferencias
 		return bEncontrado;
 	}
 	
-	public static boolean compruebaRelacionReferenciaActivo(Connection conexion, String sCodCOACES, String sCodReferencia)
+	public static boolean compruebaRelacionReferenciaActivo(Connection conexion, int iCodCOACES, long liCodReferencia)
 	{
 		boolean bEncontrado = false;
 
@@ -225,8 +225,8 @@ public final class QMListaReferencias
 				    " FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO1 + " = '" + sCodCOACES + "' AND " 
-					+ CAMPO2 + " = '" + sCodReferencia + 
+					+ CAMPO1 + " = '" + iCodCOACES + "' AND " 
+					+ CAMPO2 + " = '" + liCodReferencia + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -258,8 +258,8 @@ public final class QMListaReferencias
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+				logger.error("ERROR Referencia:|"+liCodReferencia+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -529,7 +529,7 @@ public final class QMListaReferencias
 		return liNumero;
 	}
 	
-	public static ArrayList<ReferenciaTabla> buscaReferenciasActivo(Connection conexion, String sCodCOACES)
+	public static ArrayList<ReferenciaTabla> buscaReferenciasActivo(Connection conexion, int iCodCOACES)
 	{
 		ArrayList<ReferenciaTabla> resultado = new ArrayList<ReferenciaTabla>();
 
@@ -574,7 +574,7 @@ public final class QMListaReferencias
 					   " FROM " 
 					   + TABLA +
 					   " WHERE "
-					   + CAMPO1 +  " = '" + sCodCOACES	+ "')";
+					   + CAMPO1 +  " = '" + iCodCOACES	+ "')";
 			
 			logger.debug(sQuery);
 
@@ -613,7 +613,7 @@ public final class QMListaReferencias
 						resultado.add(referenciaencontrada);
 						
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+						logger.debug(CAMPO1+":|"+iCodCOACES+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -625,7 +625,7 @@ public final class QMListaReferencias
 			{
 				resultado = new ArrayList<ReferenciaTabla>();
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -877,7 +877,7 @@ public final class QMListaReferencias
 
 	}
 	
-	public static boolean activoAsociado(Connection conexion, String sCodCOACES)
+	public static boolean activoAsociado(Connection conexion, int iCodCOACES)
 	{
 		boolean bEncontrado = false;
 
@@ -895,7 +895,7 @@ public final class QMListaReferencias
 				    "  FROM " 
 				    + TABLA + 
 				    " WHERE "
-				    + CAMPO1 + " = '" + sCodCOACES + "'";
+				    + CAMPO1 + " = '" + iCodCOACES + "'";
 			
 			logger.debug(sQuery);
 			
@@ -926,7 +926,7 @@ public final class QMListaReferencias
 			{
 				bEncontrado = false;
 				
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -940,7 +940,7 @@ public final class QMListaReferencias
 		return bEncontrado;
 	}
 	
-	public static String referenciaAsociada(Connection conexion, String sCodCOACES)
+	public static String referenciaAsociada(Connection conexion, int iCodCOACES)
 	{
 		String sReferencia = "";
 
@@ -965,7 +965,7 @@ public final class QMListaReferencias
 				    " FROM " 
 				    + TABLA + 
 				    " WHERE "
-				    + CAMPO1 + " = '" + sCodCOACES + "')";
+				    + CAMPO1 + " = '" + iCodCOACES + "')";
 			
 			logger.debug(sQuery);
 			
@@ -998,7 +998,7 @@ public final class QMListaReferencias
 			{
 				sReferencia = "";
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1012,7 +1012,7 @@ public final class QMListaReferencias
 		return sReferencia;
 	}
 	
-	public static ArrayList<String> buscarDependencias(Connection conexion, String sCodCOACES, String sCodReferencia, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(Connection conexion, int iCodCOACES, long liCodReferencia, String sCodMovimiento)
 	{
 		ArrayList<String> resultado = new ArrayList<String>();
 
@@ -1032,8 +1032,8 @@ public final class QMListaReferencias
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO1 + " = '" + sCodCOACES + "' AND "
-					+ CAMPO2 + " = '" + sCodReferencia + "' AND "
+					+ CAMPO1 + " = '" + iCodCOACES + "' AND "
+					+ CAMPO2 + " = '" + liCodReferencia + "' AND "
 					+ CAMPO3 + " >=  '" + sCodMovimiento + 
 					"')";
 			
@@ -1068,8 +1068,8 @@ public final class QMListaReferencias
 			{
 				resultado = new ArrayList<String>();
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+				logger.error("ERROR Referencia:|"+liCodReferencia+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());

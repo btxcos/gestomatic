@@ -37,7 +37,7 @@ public final class QMImpuestos
 	
 	//Campos de control
 	public static final String CAMPO11 = "cod_estado";
-	public static final String CAMPO12 = "comentario";
+	public static final String CAMPO12 = "nota";
 
 	private QMImpuestos(){}
 	
@@ -74,7 +74,9 @@ public final class QMImpuestos
 				       + NuevoImpuestoRecurso.getBIRESO() + "','"
 				       + NuevoImpuestoRecurso.getCOTEXA() + "','"
 				       + NuevoImpuestoRecurso.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "','' )";
+				       + ValoresDefecto.DEF_ALTA + "','"
+				       + ValoresDefecto.CAMPO_SIN_INFORMAR + 
+				       "')";
 
 			try 
 			{
@@ -111,7 +113,7 @@ public final class QMImpuestos
 		return liCodigo;
 	}
 
-	public static boolean modImpuestoRecurso(Connection conexion, ImpuestoRecurso NuevoImpuestoRecurso, String sCodImpuesto)
+	public static boolean modImpuestoRecurso(Connection conexion, ImpuestoRecurso NuevoImpuestoRecurso, long liImpuestoID)
 	{
 		boolean bSalida = false;
 
@@ -134,7 +136,7 @@ public final class QMImpuestos
 					+ CAMPO10 + " = '"+ NuevoImpuestoRecurso.getOBTEXC() +
 					"' "+
 					" WHERE "
-					+ CAMPO1 + " = '" + sCodImpuesto + "'";
+					+ CAMPO1 + " = '" + liImpuestoID + "'";
 			
 			logger.debug(sQuery);
 			
@@ -151,7 +153,7 @@ public final class QMImpuestos
 			{
 				bSalida = false;
 
-				logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
+				logger.error("ERROR Impuesto:|"+liImpuestoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -164,7 +166,7 @@ public final class QMImpuestos
 		return bSalida;
 	}
 
-	public static boolean delImpuestoRecurso(Connection conexion, String sCodImpuesto)
+	public static boolean delImpuestoRecurso(Connection conexion, long liImpuestoID)
 	{
 		boolean bSalida = false;
 
@@ -177,7 +179,7 @@ public final class QMImpuestos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sCodImpuesto + "'";
+					+ CAMPO1 + " = '" + liImpuestoID + "'";
 
 			logger.debug(sQuery);
 
@@ -194,7 +196,7 @@ public final class QMImpuestos
 			{
 				bSalida = false;
 
-				logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
+				logger.error("ERROR Impuesto:|"+liImpuestoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -207,7 +209,7 @@ public final class QMImpuestos
 		return bSalida;
 	}
 
-	public static ImpuestoRecurso getImpuestoRecurso(Connection conexion, String sCodImpuesto)
+	public static ImpuestoRecurso getImpuestoRecurso(Connection conexion, long liImpuestoID)
 	{	
 		String sNURCAT = "";
 		String sCOSBAC = "";
@@ -242,7 +244,7 @@ public final class QMImpuestos
 				       + CAMPO10  +              
 				       " FROM " + TABLA + 
 				       " WHERE "
-				       + CAMPO1 + " = '" + sCodImpuesto + "'";
+				       + CAMPO1 + " = '" + liImpuestoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -298,7 +300,7 @@ public final class QMImpuestos
 				sCOTEXA = "";
 				sOBTEXC = "";
 
-				logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
+				logger.error("ERROR Impuesto:|"+liImpuestoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -312,9 +314,9 @@ public final class QMImpuestos
 		return new ImpuestoRecurso(sNURCAT, sCOSBAC, sFEPRRE, sFERERE, sFEDEIN, sBISODE, sBIRESO, sCOTEXA, sOBTEXC);
 	}
 
-	public static String getImpuestoRecursoID(Connection conexion, String sCodNURCAT,String sCodCOSBAC)
+	public static long getImpuestoRecursoID(Connection conexion, String sCodNURCAT,String sCodCOSBAC)
 	{
-		String sImpuestoRecursoID = "";
+		long liImpuestoID = 0;
 
 		if (conexion != null)
 		{
@@ -352,11 +354,11 @@ public final class QMImpuestos
 					{
 						bEncontrado = true;
 
-						sImpuestoRecursoID = rs.getString(CAMPO1);
+						liImpuestoID = rs.getLong(CAMPO1);
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO11+":|"+sImpuestoRecursoID+"|");
+						logger.debug(CAMPO11+":|"+liImpuestoID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -366,7 +368,7 @@ public final class QMImpuestos
 			} 
 			catch (SQLException ex) 
 			{
-				sImpuestoRecursoID = "";
+				liImpuestoID = 0;
 				
 				logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
 				logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
@@ -380,10 +382,10 @@ public final class QMImpuestos
 			}
 		}
 
-		return sImpuestoRecursoID;
+		return liImpuestoID;
 	}
 	
-	public static boolean existeImpuestoRecurso(Connection conexion, String sCodImpuesto)
+	public static boolean existeImpuestoRecurso(Connection conexion, long liImpuestoID)
 	{
 		boolean bEncontrado = false;
 
@@ -401,7 +403,7 @@ public final class QMImpuestos
 				       " FROM "
 				       + TABLA + 
 				       " WHERE " 
-				       + CAMPO1 + " = '" + sCodImpuesto + "'";
+				       + CAMPO1 + " = '" + liImpuestoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -432,7 +434,7 @@ public final class QMImpuestos
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
+				logger.error("ERROR Impuesto:|"+liImpuestoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -511,7 +513,7 @@ public final class QMImpuestos
 	}
 
 
-	public static boolean setEstado(Connection conexion, String sCodImpuesto, String sEstado)
+	public static boolean setEstado(Connection conexion, long liImpuestoID, String sEstado)
 	{
 		boolean bSalida = false;
 
@@ -525,7 +527,7 @@ public final class QMImpuestos
 					" SET " 
 					+ CAMPO11 + " = '"+ sEstado + "' "+
 					" WHERE "
-					+ CAMPO1 + " = '" + sCodImpuesto + "'";
+					+ CAMPO1 + " = '" + liImpuestoID + "'";
 			
 			logger.debug(sQuery);
 			
@@ -543,7 +545,7 @@ public final class QMImpuestos
 			{
 				bSalida = false;
 
-				logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
+				logger.error("ERROR Impuesto:|"+liImpuestoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -556,7 +558,7 @@ public final class QMImpuestos
 		return bSalida;
 	}
 	
-	public static String getEstado(Connection conexion, String sCodImpuesto)
+	public static String getEstado(Connection conexion, long liImpuestoID)
 	{
 		String sEstado = "";
 		
@@ -576,7 +578,7 @@ public final class QMImpuestos
 					" FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1 + " = '" + sCodImpuesto + "'";
+					+ CAMPO1 + " = '" + liImpuestoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -611,7 +613,7 @@ public final class QMImpuestos
 			{
 				sEstado = "";
 
-				logger.error("ERROR Impuesto:|"+sCodImpuesto+"|");
+				logger.error("ERROR Impuesto:|"+liImpuestoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -625,4 +627,122 @@ public final class QMImpuestos
 		return sEstado;
 	}
 
+	public static boolean setNota(Connection conexion, long liComunidadID, String sNota)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO12 + " = '"+ sNota +"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ liComunidadID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static String getNota(Connection conexion, long liComunidadID)
+	{
+		String sNota = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO12 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liComunidadID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNota = rs.getString(CAMPO12);
+						
+						logger.debug(CAMPO1+":|"+liComunidadID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO12+":|"+sNota+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNota = "";
+				
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNota;
+	}
 }

@@ -209,9 +209,9 @@ public final class CLErrores
 		{
 			iCodigo = 0;
 			
-			String sCodCuota = CLCuotas.buscarCodigoCuota(movimiento.getCOACES(), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC());
+			long liCodCuota = CLCuotas.buscarCodigoCuota(Integer.parseInt(movimiento.getCOACES()), movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOSBAC());
 			
-			MovimientoCuota movimiento_revisado = CLCuotas.revisaCodigosControl(movimiento,sCodCuota);
+			MovimientoCuota movimiento_revisado = CLCuotas.revisaCodigosControl(movimiento,liCodCuota);
 			
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
@@ -236,10 +236,10 @@ public final class CLErrores
 						if(QMListaErroresCuotas.delErrorCuota(conexion,sCodMovimiento, sCodError))
 						{	
 
-							if (QMCuotas.modCuota(conexion,CLCuotas.convierteMovimientoenCuota(movimiento), sCodCuota))	
+							if (QMCuotas.modCuota(conexion,CLCuotas.convierteMovimientoenCuota(movimiento), liCodCuota))	
 							{
 								
-								ArrayList<String> dependenciascuotas = QMListaCuotas.buscarDependencias(conexion,sCodCuota, sCodMovimiento);
+								ArrayList<String> dependenciascuotas = QMListaCuotas.buscarDependencias(conexion,liCodCuota, sCodMovimiento);
 
 								boolean bError = false;
 								
@@ -331,9 +331,9 @@ public final class CLErrores
 		{
 			iCodigo = 0;
 			
-			String sCodReferencia = CLReferencias.buscarCodigoReferencia(movimiento.getNURCAT());
+			long liCodReferencia = CLReferencias.buscarCodigoReferencia(movimiento.getNURCAT());
 			
-			MovimientoReferenciaCatastral movimiento_revisado = CLReferencias.revisaCodigosControl(movimiento,sCodReferencia);
+			MovimientoReferenciaCatastral movimiento_revisado = CLReferencias.revisaCodigosControl(movimiento,liCodReferencia);
 			
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
@@ -358,9 +358,9 @@ public final class CLErrores
 						if(QMListaErroresReferencias.delErrorReferencia(conexion,sCodMovimiento, sCodError))
 						{	
 
-							if (QMReferencias.modReferenciaCatastral(conexion,CLReferencias.convierteMovimientoenReferencia(movimiento), sCodReferencia))	
+							if (QMReferencias.modReferenciaCatastral(conexion,CLReferencias.convierteMovimientoenReferencia(movimiento), liCodReferencia))	
 							{
-								ArrayList<String> dependenciascuotas = QMListaReferencias.buscarDependencias(conexion,movimiento.getCOACES(), sCodReferencia, sCodMovimiento);
+								ArrayList<String> dependenciascuotas = QMListaReferencias.buscarDependencias(conexion,Integer.parseInt(movimiento.getCOACES()), liCodReferencia, sCodMovimiento);
 
 								boolean bError = false;
 
@@ -456,9 +456,9 @@ public final class CLErrores
 		{
 			iCodigo = 0;
 			
-			String sCodImpuesto = CLImpuestos.buscarCodigoImpuesto(movimiento.getNURCAT(), movimiento.getCOSBAC());
+			long liCodImpuesto = CLImpuestos.buscarCodigoImpuesto(movimiento.getNURCAT(), movimiento.getCOSBAC());
 			
-			MovimientoImpuestoRecurso movimiento_revisado = CLImpuestos.revisaCodigosControl(movimiento,sCodImpuesto);
+			MovimientoImpuestoRecurso movimiento_revisado = CLImpuestos.revisaCodigosControl(movimiento,liCodImpuesto);
 			
 			if (movimiento_revisado.getCOACCI().equals("#"))
 			{	
@@ -483,9 +483,9 @@ public final class CLErrores
 						if(QMListaErroresImpuestos.delErrorImpuesto(conexion,sCodMovimiento, sCodError))
 						{	
 
-							if (QMImpuestos.modImpuestoRecurso(conexion,CLImpuestos.convierteMovimientoenImpuesto(movimiento), sCodImpuesto))	
+							if (QMImpuestos.modImpuestoRecurso(conexion,CLImpuestos.convierteMovimientoenImpuesto(movimiento), liCodImpuesto))	
 							{
-								ArrayList<String> dependenciasimpuestos = QMListaImpuestos.buscarDependencias(conexion,movimiento.getCOACES(), sCodImpuesto, sCodMovimiento);
+								ArrayList<String> dependenciasimpuestos = QMListaImpuestos.buscarDependencias(conexion,Integer.parseInt(movimiento.getCOACES()), liCodImpuesto, sCodMovimiento);
 
 								boolean bError = false;
 
@@ -580,7 +580,7 @@ public final class CLErrores
 		{
 			iCodigo = 0;
 			
-			String sEstado = QMGastos.getEstado(conexion,CLGastos.buscarCodigoGasto(movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()));
+			String sEstado = QMGastos.getEstado(conexion,CLGastos.buscarCodigoGasto(Integer.parseInt(movimiento.getCOACES()), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()));
 
 			logger.debug("sEstado:|"+sEstado+"|");
 			
@@ -616,9 +616,9 @@ public final class CLErrores
 
 							if (QMGastos.modGasto(conexion,CLGastos.convierteMovimientoenGasto(movimiento_revisado)))
 							{
-								String sCodGasto = QMGastos.getGastoID(conexion,movimiento.getCOACES(), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
+								long liCodGasto = QMGastos.getGastoID(conexion,Integer.parseInt(movimiento.getCOACES()), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 								
-								ArrayList<String> dependenciasgastos = QMListaGastos.buscarDependencias(conexion,sCodGasto, sCodMovimiento);
+								ArrayList<String> dependenciasgastos = QMListaGastos.buscarDependencias(conexion,liCodGasto, sCodMovimiento);
 
 								boolean bError = false;
 

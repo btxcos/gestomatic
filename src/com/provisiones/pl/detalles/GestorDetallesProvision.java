@@ -143,7 +143,7 @@ public class GestorDetallesProvision implements Serializable
 		    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
 		    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
 		    	
-		    	this.sCodGasto = CLGastos.buscarCodigoGasto(sCOACES,sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
+		    	this.sCodGasto = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
 		    	
 		    	
 		    	Sesion.guardaDetalle(sCodGasto);

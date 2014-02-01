@@ -39,6 +39,7 @@ public final class QMProvisiones
 	public static final String CAMPO12 = "cod_estado";
 	public static final String CAMPO13 = "usuario_modificacion";
 	public static final String CAMPO14 = "fecha_modificacion";
+	public static final String CAMPO15 = "nota";
 
 	private QMProvisiones(){}
 	
@@ -69,8 +70,9 @@ public final class QMProvisiones
 					+ CAMPO10 + ","
 					+ CAMPO11 + ","
 					+ CAMPO12 + ","
-					+ CAMPO13 + ","	
-					+ CAMPO14 +
+					+ CAMPO13 + ","
+					+ CAMPO14 + ","
+					+ CAMPO15 +
 					") VALUES ('" 
 					+ NuevaProvision.getsNUPROF() + "','"
 					+ NuevaProvision.getsCOSPAT() + "','"
@@ -85,7 +87,8 @@ public final class QMProvisiones
 					+ NuevaProvision.getsFechaPagado() + "','" 
 					+ NuevaProvision.getsCodEstado() + "','"
 					+ sUsuario + "','"
-					+ Utils.timeStamp() + 
+					+ Utils.timeStamp() + "','"
+					+ ValoresDefecto.CAMPO_SIN_INFORMAR + 
 					"')";
 
 			logger.debug(sQuery);
@@ -686,6 +689,125 @@ public final class QMProvisiones
 
 		return sValidado;
 	}
+
+	public static boolean setNota(Connection conexion, long liComunidadID, String sNota)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO15 + " = '"+ sNota +"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ liComunidadID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static String getNota(Connection conexion, long liComunidadID)
+	{
+		String sNota = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO15 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liComunidadID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNota = rs.getString(CAMPO15);
+						
+						logger.debug(CAMPO1+":|"+liComunidadID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO15+":|"+sNota+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNota = "";
+				
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNota;
+	}
 	
 	public static long buscaCantidadProvisionesCerradasPorEstado(Connection conexion, String sEstado)
 	{
@@ -1007,7 +1129,7 @@ public final class QMProvisiones
 											
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(resultado.get(i)); 
+						logger.debug("Resultado:|"+resultado.get(i)+"|"); 
 						
 						i++;
 					}
@@ -1308,7 +1430,7 @@ public final class QMProvisiones
 		return resultado;
 	}
 	
-	public static ArrayList<ProvisionTabla> buscaProvisionesAutorizadasPorActivo(Connection conexion, String sCOACES)
+	public static ArrayList<ProvisionTabla> buscaProvisionesAutorizadasPorActivo(Connection conexion, int iCOACES)
 	{
 		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
 
@@ -1352,7 +1474,7 @@ public final class QMProvisiones
 					" FROM " 
 					+ QMGastos.TABLA + 
 					" WHERE "
-					+ QMGastos.CAMPO2 + " = '" + sCOACES + "')))";
+					+ QMGastos.CAMPO2 + " = '" + iCOACES + "')))";
 					
 						   
 			

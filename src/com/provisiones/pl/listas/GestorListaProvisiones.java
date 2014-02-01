@@ -142,9 +142,9 @@ public class GestorListaProvisiones implements Serializable
 			
 			this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
 
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			
-			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -157,13 +157,10 @@ public class GestorListaProvisiones implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
-	    	String sMsg = ""; 
-	    	
 	    	this.sCOACESB  = activoseleccionado.getCOACES();
 	    	
-	    	sMsg = "Activo '"+sCOACESB+"' seleccionado.";
+	    	String sMsg = "Activo '"+sCOACESB+"' seleccionado.";
 	    	msg = Utils.pfmsgInfo(sMsg);
-	    	
 	    	logger.info(sMsg);
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -175,11 +172,25 @@ public class GestorListaProvisiones implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
-	    	
-			this.tablaprovisiones = CLProvisiones.buscarProvisionesAutorizadasActivo(sCOACESB); 
+			
+			String sMsg = "";
+			
+			try
+			{
+				this.tablaprovisiones = CLProvisiones.buscarProvisionesAutorizadasActivo(Integer.parseInt(sCOACESB)); 
 
-			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.");
-			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
+				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+	    	
+
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);			
 		}
@@ -194,8 +205,9 @@ public class GestorListaProvisiones implements Serializable
 			//TODO Implementar busqueda por comunidad
 			this.tablaprovisiones = CLProvisiones.buscarProvisionesAbiertas(); 
 
-			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.");
-			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
+			String sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);			
 		}
@@ -211,8 +223,9 @@ public class GestorListaProvisiones implements Serializable
 	    	
 			this.tablaprovisiones = CLProvisiones.buscarProvisionesAutorizadasFecha(sFecha); 
 
-			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.");
-			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
+			String sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones autorizadas.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);			
 		}
@@ -233,8 +246,9 @@ public class GestorListaProvisiones implements Serializable
 	    	this.sValorTolal  = Utils.recuperaImporte(false, provisionseleccionada.getVALOR());//CLProvisiones.calcularValorProvision(sNUPROF);
 	    	this.sNumGastos  = provisionseleccionada.getGASTOS();//Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
 	    	
-	    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
-	    	logger.info("Provision '{}' Seleccionada.",sNUPROF);
+	    	String sMsg = "Provision '"+ sNUPROF +"' Seleccionada.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);			
 		}

@@ -222,16 +222,18 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 			
 			logger.debug("Buscando Referencias con errores...");
 			
+			String sMsg = "";
+			
 			ErrorReferenciaTabla filtro = new ErrorReferenciaTabla(
 						sCOACESB.toUpperCase(), sNURCATB.toUpperCase(),
 						"", "");
 
-				this.setTablareferenciaserror(CLErrores.buscarReferenciasConErrores(filtro));
+			this.setTablareferenciaserror(CLErrores.buscarReferenciasConErrores(filtro));
 
 			
-			
-			msg = Utils.pfmsgInfo("Encontradas "+getTablareferenciaserror().size()+" Referencias relacionadas.");
-			logger.debug("Encontradas {} Referencias relacionadas.",getTablareferenciaserror().size());
+			sMsg = "Encontradas "+getTablareferenciaserror().size()+" Referencias relacionadas.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -243,12 +245,16 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 		{
 			FacesMessage msg;
 			
+			
+			String sMsg = "";
+			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
 			this.setTablaerrores(CLErrores.buscarErroresReferencia(sCodMovimiento));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
-			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
@@ -268,10 +274,10 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 	    	this.sFERECA = Utils.recuperaFecha(movimiento.getFERECA());
 	    	
 					
-	        	
-	    	msg = Utils.pfmsgInfo("Errores de Referencia Catastral cargados.");
-	    	logger.debug("Errores de Referencia Catastral cargados.");
-			
+	    	sMsg = "Errores de Referencia Catastral cargados.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.debug(sMsg);
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
@@ -287,7 +293,7 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 	    	int iCodError  = Integer.parseInt(sCodError);
 	    	
 	    	
-	    	logger.debug("Error seleccionado:|{}|",iCodError);
+	    	logger.debug("Error seleccionado:|"+iCodError+"|");
 	    	
 	    	String sMsg ="";
 	    	
@@ -314,15 +320,18 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			ActivoTabla buscaactivos = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(),"");
 			
 			this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			logger.info("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -334,10 +343,13 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
+	    	String sMsg = "";
+	    	
 	    	this.sCOACES  = activoseleccionado.getCOACES();
 	    	
-	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' cargado.");
-	    	logger.info("Activo '{}' cargado.",sCOACES);
+	    	sMsg = "Activo '"+ sCOACES +"' cargado.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -349,10 +361,22 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 		{
 			FacesMessage msg;
 			
-			this.tablareferencias = CLReferencias.buscarReferenciasActivo(sCOACES.toUpperCase());
+			String sMsg = "";
 			
-			msg = Utils.pfmsgInfo("Encontradas "+getTablareferencias().size()+" referencias relacionadas.");
-			logger.info("Encontradas {} referencias relacionadas.",getTablareferencias().size());
+			try
+			{
+				this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
+				
+				sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);	
 		}
@@ -365,6 +389,8 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
+	    	String sMsg = "";
+	    	
 	    	this.sNURCAT = referenciaseleccionada.getNURCAT(); 
 	    	this.sTIRCAT = referenciaseleccionada.getTIRCAT();
 	    	this.sENEMIS = referenciaseleccionada.getENEMIS();
@@ -375,8 +401,9 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 	    	this.sIMCATA = referenciaseleccionada.getIMCATA();
 	    	this.sFERECA = referenciaseleccionada.getFERECA();
 
-	    	msg = Utils.pfmsgInfo("Referencia '"+ sNURCAT +"' Seleccionada.");
-	    	logger.info("Referencia '{}' Seleccionada.",sNURCAT);
+	    	sMsg = "Referencia '"+ sNURCAT +"' Seleccionada.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -410,7 +437,7 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 						sIDPROV.toUpperCase(), 
 						sCOACCI.toUpperCase(), 
 						sCOENGP.toUpperCase(), 
-						sCOACES.toUpperCase(), 
+						sCOACES, 
 						sNURCAT.toUpperCase(),
 						"", 
 						sTIRCAT.toUpperCase(),
@@ -427,8 +454,9 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 						"", 
 						Utils.compruebaFecha(sFERECA.toUpperCase()));
 
-				logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
-				logger.debug("sCodError:|{}|",sCodError);			
+				logger.debug("sCodMovimiento:|"+sCodMovimiento+"|");
+				logger.debug("sCodError:|"+sCodError+"|");			
+
 				int iSalida = CLErrores.reparaMovimientoReferencia(movimiento,sCodMovimiento, sCodError);
 				
 				logger.debug("Codigo de salida:"+iSalida);

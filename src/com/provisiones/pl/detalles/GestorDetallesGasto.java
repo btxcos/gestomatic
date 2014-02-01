@@ -114,7 +114,7 @@ public class GestorDetallesGasto implements Serializable
 		if (!sGastoID.equals(""))
 		{
 
-		  	Gasto gasto = CLGastos.buscarDetallesGasto(sGastoID);
+		  	Gasto gasto = CLGastos.buscarDetallesGasto(Integer.parseInt(sGastoID));
 
 	    	logger.debug(gasto.logGasto());
 	    	
@@ -162,7 +162,7 @@ public class GestorDetallesGasto implements Serializable
 			//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 			//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
-			this.sNUPROF = CLGastos.buscarProvisionGastoID(sGastoID);
+			this.sNUPROF = CLGastos.buscarProvisionGastoID(Integer.parseInt(sGastoID));
 
 			this.sCOTERR = ValoresDefecto.DEF_COTERR;
 			

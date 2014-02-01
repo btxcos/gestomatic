@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
 public class QMRegistroActivos implements Serializable 
 {
@@ -28,11 +29,11 @@ public class QMRegistroActivos implements Serializable
 	public static final String CAMPO2  = "fecha_registro";
 	public static final String CAMPO3  = "usuario_carga";
 	public static final String CAMPO4  = "fecha_carga";
-	public static final String CAMPO5  = "comentario";
+	public static final String CAMPO5  = "nota";
 	
 
 	
-	public static boolean addRegistroActivo(Connection conexion, String sCodActivo)
+	public static boolean addRegistroActivo(Connection conexion, int iCodCOACES)
 	{
 		boolean bSalida = false;
 
@@ -55,10 +56,12 @@ public class QMRegistroActivos implements Serializable
 				       + CAMPO4  + ","
 				       + CAMPO5  + 
 				       ") VALUES ('"
-				       + sCodActivo + "','" 
+				       + iCodCOACES + "','" 
 				       + sTimeStamp + "','"
 				       + sUsuario + "','"
-				       + sTimeStamp + "','')";
+				       + sTimeStamp + "','"
+				       + ValoresDefecto.CAMPO_SIN_INFORMAR + 
+				       "')";
 			
 			logger.debug(sQuery);
 
@@ -75,7 +78,7 @@ public class QMRegistroActivos implements Serializable
 			{
 				bSalida = false;
 
-				logger.error("ERROR Activo:|"+sCodActivo+"|");
+				logger.error("ERROR Activo:|"+iCodCOACES+"|");
 				//logger.error("ERROR Movimiento:|"+sFechaRegistro+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -89,7 +92,7 @@ public class QMRegistroActivos implements Serializable
 		return bSalida;
 	}
 	
-	public static boolean modRegistroActivo(Connection conexion, String sCodActivo)
+	public static boolean modRegistroActivo(Connection conexion, int iCodCOACES)
 	{
 		boolean bSalida = false;
 
@@ -107,7 +110,7 @@ public class QMRegistroActivos implements Serializable
 					+ CAMPO3  + " = '"+ sUsuario + "', "
 					+ CAMPO4  + " = '"+ Utils.timeStamp() + "' "+
 					" WHERE " 
-					+ CAMPO1  + " = '"+ sCodActivo +"'";
+					+ CAMPO1  + " = '"+ iCodCOACES +"'";
 			
 			logger.debug(sQuery);
 
@@ -124,7 +127,7 @@ public class QMRegistroActivos implements Serializable
 			{
 				bSalida = false;
 
-				logger.error("ERROR sCodActivo:|"+sCodActivo+"|");
+				logger.error("ERROR iCodCOACES:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -137,7 +140,7 @@ public class QMRegistroActivos implements Serializable
 		return bSalida;
 	}
 
-	public static boolean delRegistroActivo(Connection conexion, String sCodActivo)
+	public static boolean delRegistroActivo(Connection conexion, int iCodCOACES)
 	{
 		boolean bSalida = false;
 		
@@ -150,7 +153,7 @@ public class QMRegistroActivos implements Serializable
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1 + " = '" + sCodActivo	+ "'";
+					+ CAMPO1 + " = '" + iCodCOACES	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -167,7 +170,7 @@ public class QMRegistroActivos implements Serializable
 			{
 				bSalida = false;
 
-				logger.error("ERROR sCodActivo:|"+sCodActivo+"|");
+				logger.error("ERROR iCodCOACES:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -180,7 +183,7 @@ public class QMRegistroActivos implements Serializable
 		return bSalida;
 	}
 	
-	public static boolean existeRegistroActivo(Connection conexion, String sCodActivo)
+	public static boolean existeRegistroActivo(Connection conexion, int iCodCOACES)
 	{
 		boolean bEncontrado = false;
 
@@ -198,7 +201,7 @@ public class QMRegistroActivos implements Serializable
 				       " FROM "
 				       + TABLA + 
 				       " WHERE " 
-				       + CAMPO1 + " = '" + sCodActivo + "'";
+				       + CAMPO1 + " = '" + iCodCOACES + "'";
 			
 			logger.debug(sQuery);
 
@@ -230,7 +233,7 @@ public class QMRegistroActivos implements Serializable
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR sCodActivo:|"+sCodActivo+"|");
+				logger.error("ERROR iCodCOACES:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -244,7 +247,7 @@ public class QMRegistroActivos implements Serializable
 		return bEncontrado;
 	}
 
-	public static boolean setComentario(Connection conexion, String sCodActivo, String sComentario)
+	public static boolean setComentario(Connection conexion, int iCodCOACES, String sComentario)
 	{
 		boolean bSalida = false;
 
@@ -259,7 +262,7 @@ public class QMRegistroActivos implements Serializable
 					" SET " 
 					+ CAMPO5 + " = '"+ sComentario + "' "+
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodActivo +"'";
+					+ CAMPO1  + " = '"+ iCodCOACES +"'";
 			
 			logger.debug(sQuery);
 			
@@ -276,7 +279,7 @@ public class QMRegistroActivos implements Serializable
 			{
 				bSalida = false;
 
-				logger.error("ERROR ACTIVO:|"+sCodActivo+"|");
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -289,9 +292,57 @@ public class QMRegistroActivos implements Serializable
 		return bSalida;
 	}
 	
-	public static String getComentario(Connection conexion, String sCodActivo)
+	public static boolean setNota(Connection conexion, int iCodCOACES, String sNota)
 	{
-		String sComentario = "";
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO5 + " = '"+ sNota +"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ iCodCOACES +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COMUNIDAD:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static String getNota(Connection conexion, int iCodCOACES)
+	{
+		String sNota = "";
 
 		if (conexion != null)
 		{
@@ -299,17 +350,17 @@ public class QMRegistroActivos implements Serializable
 
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
-
+			
 			boolean bEncontrado = false;
 
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "SELECT "
-					+ CAMPO5 + 
-					" FROM "
-					+ TABLA + 
-					" WHERE "
-					+ CAMPO1  + " = '"+ sCodActivo +"'";
+			String sQuery = "SELECT " 
+						+ CAMPO5 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ iCodCOACES +"'";
 			
 			logger.debug(sQuery);
 
@@ -321,33 +372,32 @@ public class QMRegistroActivos implements Serializable
 				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
-
+				
 				if (rs != null) 
 				{
-
 					while (rs.next()) 
 					{
 						bEncontrado = true;
 
-						sComentario = rs.getString(CAMPO5);
+						sNota = rs.getString(CAMPO5);
+						
+						logger.debug(CAMPO1+":|"+iCodCOACES+"|");
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO5+":|"+sComentario+"|");
-
+						logger.debug(CAMPO5+":|"+sNota+"|");
 					}
 				}
 				if (!bEncontrado) 
 				{
 					logger.debug("No se encontró la información.");
 				}
-
 			} 
 			catch (SQLException ex) 
 			{
-				sComentario = "";
-
-				logger.error("ERROR ACTIVO:|"+sCodActivo+"|");
+				sNota = "";
+				
+				logger.error("ERROR COMUNIDAD:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -358,7 +408,7 @@ public class QMRegistroActivos implements Serializable
 			}
 		}
 
-		return sComentario;
+		return sNota;
 	}
 
 }

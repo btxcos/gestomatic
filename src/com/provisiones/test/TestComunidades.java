@@ -42,7 +42,7 @@ public class TestComunidades
 
 		//logger.debug("Provision:|"+CLProvisiones.ultimaProvisionCerrada("9999")+"|");
 		
-		logger.debug("Provision:|"+CLProvisiones.provisionAsignada("3100058")+"|");
+		logger.debug("Provision:|"+CLProvisiones.provisionAsignada(3100058)+"|");
 		
 		//Utils.inicializarDirectorios();
 		

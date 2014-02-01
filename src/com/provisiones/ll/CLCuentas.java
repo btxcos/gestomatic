@@ -37,9 +37,9 @@ public class CLCuentas
 		return QMCuentas.existeCuenta(ConnectionManager.getDBConnection(), sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT);
 	}
 	
-	public static ArrayList<Cuenta> buscarCuentasActivo (String sCOACES)
+	public static ArrayList<Cuenta> buscarCuentasActivo (int iCodCOACES)
 	{
-		return QMListaCuentasActivos.buscaListaCuentas(ConnectionManager.getDBConnection(),sCOACES);
+		return QMListaCuentasActivos.buscaListaCuentas(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
 	public static ArrayList<Cuenta> buscarCuentasComunidad (long liCodComunidad)
@@ -47,7 +47,7 @@ public class CLCuentas
 		return QMListaCuentasComunidades.buscaCuentasConvnecionales(ConnectionManager.getDBConnection(),liCodComunidad);
 	}
 
-	public static int registraMovimientoActivo (boolean bAlta, String sCOACES, Cuenta cuenta)
+	public static int registraMovimientoActivo (boolean bAlta, int iCodCOACES, Cuenta cuenta)
 	{
 		//TODO Implementar SEPA
 		int iCodigo = -910;
@@ -74,7 +74,7 @@ public class CLCuentas
 					
 					if ( liCodCuenta != 0)
 					{
-						if (QMListaCuentasActivos.addRelacionActivo(conexion, liCodCuenta, sCOACES))
+						if (QMListaCuentasActivos.addRelacionActivo(conexion, liCodCuenta, iCodCOACES))
 						{
 							//OK 
 							iCodigo = 0;
@@ -101,7 +101,7 @@ public class CLCuentas
 
 					if (QMCuentas.delCuenta(conexion, liCodCuenta))
 					{
-						if (QMListaCuentasActivos.delRelacionActivo(conexion, liCodCuenta, sCOACES))
+						if (QMListaCuentasActivos.delRelacionActivo(conexion, liCodCuenta, iCodCOACES))
 						{
 							//OK 
 							iCodigo = 0;

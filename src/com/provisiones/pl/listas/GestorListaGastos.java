@@ -214,19 +214,28 @@ public class GestorListaGastos implements Serializable
 		{
 			FacesMessage msg;
 			
-			this.setTablagastos(CLGastos.buscarGastosActivo(sCOACES));
-			
-			if (getTablagastos().size() == 0)
+			try
 			{
-				msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
+				this.setTablagastos(CLGastos.buscarGastosActivo(Integer.parseInt(sCOACES)));
+				
+				if (getTablagastos().size() == 0)
+				{
+					msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
+				}
+				else if (getTablagastos().size() == 1)
+				{
+					msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
+				}
+				else
+				{
+					msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
+				}
 			}
-			else if (getTablagastos().size() == 1)
+			catch(NumberFormatException nfe)
 			{
-				msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
-			}
-			else
-			{
-				msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
+				String sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -283,7 +292,7 @@ public class GestorListaGastos implements Serializable
 		    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
 		    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
 		    	
-		    	this.sCodGasto = CLGastos.buscarCodigoGasto(sCOACES,sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
+		    	this.sCodGasto = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
 		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
 		    	
 		    	Sesion.guardaDetalle(sCodGasto);

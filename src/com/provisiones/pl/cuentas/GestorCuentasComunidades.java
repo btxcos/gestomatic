@@ -145,7 +145,7 @@ public class GestorCuentasComunidades implements Serializable
 			FacesMessage msg;
 			
 			ActivoTabla buscaactivos = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
@@ -184,12 +184,65 @@ public class GestorCuentasComunidades implements Serializable
 			String sMsg = "";
 			
 			borrarCamposComunidad();
+			
+			try
+			{
+				Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
+				
+				if (comunidad.getsNUDCOM().equals(""))
+				{
+					sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+				else
+				{
+					Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+					
+					this.sCOCLDO = comunidad.getsCOCLDO();
+					this.sNUDCOM = comunidad.getsNUDCOM();
+					this.sNOMCOC = comunidad.getsNOMCOC();
+					this.sNODCCO = comunidad.getsNODCCO();
 
-			Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES);
+					this.sPais = cuenta.getsPais();
+					this.sDCIBAN = cuenta.getsDCIBAN();
+					this.sNUCCEN = cuenta.getsNUCCEN();
+					this.sNUCCOF = cuenta.getsNUCCOF();
+					this.sNUCCDI = cuenta.getsNUCCDI();
+					this.sNUCCNT = cuenta.getsNUCCNT();
+					this.sDescripcion = cuenta.getsDescripcion();
+					
+					this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
+					
+					sMsg = "La comunidad se ha cargado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}		
+	}
+	
+	public void cargarComunidad(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = ""; 
+			
+			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
 			
 			if (comunidad.getsNUDCOM().equals(""))
 			{
-				sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+				sMsg = "ERROR: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
@@ -212,49 +265,9 @@ public class GestorCuentasComunidades implements Serializable
 				
 				this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
 				
-				sMsg = "La comunidad se ha cargado correctamente.";
+				sMsg = "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
-			}
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}		
-	}
-	
-	public void cargarComunidad(ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-			
-			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-			
-			if (comunidad.getsNUDCOM().equals(""))
-			{
-				msg = Utils.pfmsgError("ERROR: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
-				logger.error("ERROR: La comunidad '{}' no esta registrada en el sistema.","+sNUDCOM.toUpperCase()+");
-			}
-			else
-			{
-				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
-				
-				this.sCOCLDO = comunidad.getsCOCLDO();
-				this.sNUDCOM = comunidad.getsNUDCOM();
-				this.sNOMCOC = comunidad.getsNOMCOC();
-				this.sNODCCO = comunidad.getsNODCCO();
-
-				this.sPais = cuenta.getsPais();
-				this.sDCIBAN = cuenta.getsDCIBAN();
-				this.sNUCCEN = cuenta.getsNUCCEN();
-				this.sNUCCOF = cuenta.getsNUCCOF();
-				this.sNUCCDI = cuenta.getsNUCCDI();
-				this.sNUCCNT = cuenta.getsNUCCNT();
-				this.sDescripcion = cuenta.getsDescripcion();
-				
-				this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
-				
-				msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
-				logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);

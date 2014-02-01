@@ -158,7 +158,7 @@ public class GestorListaActivos implements Serializable {
 	
 	public void encuentraActivos()
 	{
-		ActivoTabla buscaactivos = new ActivoTabla(
+		ActivoTabla filtro = new ActivoTabla(
 				sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 				sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 				sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
@@ -167,11 +167,11 @@ public class GestorListaActivos implements Serializable {
 		
 		if (sCOACES.equals(""))
 		{
-			this.setTablaactivos(CLActivos.buscarActivos(buscaactivos));
+			this.setTablaactivos(CLActivos.buscarActivos(filtro));
 		}
 		else
 		{
-			this.setTablaactivos(CLActivos.buscarActivoUnico(buscaactivos));
+			this.setTablaactivos(CLActivos.buscarActivoUnico(filtro));
 		}		
 
 		logger.debug("Encontrados "+getTablaactivos().size()+" activos relacionados.");
@@ -184,21 +184,32 @@ public class GestorListaActivos implements Serializable {
 		{
 			FacesMessage msg;
 			
-			encuentraActivos();
+			try
+			{
+				Integer.parseInt(sCOACES);
+				
+				encuentraActivos();
 
-			if (getTablaactivos().size() == 0)
-			{
-				msg = Utils.pfmsgWarning("No se encontraron activos con los criterios solicitados.");
+				if (getTablaactivos().size() == 0)
+				{
+					msg = Utils.pfmsgWarning("No se encontraron activos con los criterios solicitados.");
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					msg = Utils.pfmsgInfo("Encontrado un activo relacionado.");
+				}
+				else
+				{
+					msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+				}
 			}
-			else if (getTablaactivos().size() == 1)
+			catch(NumberFormatException nfe)
 			{
-				msg = Utils.pfmsgInfo("Encontrado un activo relacionado.");
+				String sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
-			else
-			{
-				msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			}
-
+			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		
@@ -209,12 +220,15 @@ public class GestorListaActivos implements Serializable {
 		if (ConnectionManager.comprobarConexion())
 		{
 	    	FacesMessage msg;
+	    	
+	    	String sMsg = "";
 
 	    	this.sCOACES  = activoseleccionado.getCOACES();
 	    	
-	    	msg = new FacesMessage("Activo "+ sCOACES +" Seleccionado.");
 	    	
-	    	logger.debug("Activo seleccionado:|{}|",sCOACES);
+	    	sMsg = "Activo "+ sCOACES +" Seleccionado.";
+	    	msg = new FacesMessage(sMsg);
+	    	logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -311,7 +325,7 @@ public class GestorListaActivos implements Serializable {
 			if (activoseleccionado != null)
 			{
 		    	this.sCOACES = activoseleccionado.getCOACES();
-		    	logger.debug("sCOACES:|{}|",sCOACES);
+		    	logger.debug("sCOACES:|"+sCOACES+"|");
 		    			    	
 		    	Sesion.guardaDetalle(sCOACES);
 		    	Sesion.limpiarHistorial();

@@ -58,13 +58,13 @@ public final class QMGastos
 	public static final String CAMPO32 = "feaufa";     
 	public static final String CAMPO33 = "valor_total";
 	public static final String CAMPO34 = "cod_estado";
-	public static final String CAMPO35 = "comentario";
+	public static final String CAMPO35 = "nota";
 	
 	private QMGastos(){}
 	
-	public static int addGasto(Connection conexion, Gasto NuevoGasto, String sEstado) 
+	public static long addGasto(Connection conexion, Gasto NuevoGasto, String sEstado) 
 	{
-		int iCodigo = 0;
+		long iCodigo = 0;
 
 		if (conexion != null)
 		{
@@ -144,7 +144,9 @@ public final class QMGastos
 				       + NuevoGasto.getBIAUTO() + "','"  
 				       + NuevoGasto.getFEAUFA() + "','"  
 				       + NuevoGasto.getValor_total() + "','"
-				       + sEstado + "','' )";
+				       + sEstado + "','"
+				       + ValoresDefecto.CAMPO_SIN_INFORMAR + 
+				       "')";
 			
 			logger.debug(sQuery);
 
@@ -158,7 +160,7 @@ public final class QMGastos
 				
 				if (resulset.next()) 
 				{
-					iCodigo= resulset.getInt(1);
+					iCodigo= resulset.getLong(1);
 				} 
 
 				logger.debug("Ejecutada con exito!");
@@ -267,7 +269,7 @@ public final class QMGastos
 		return bSalida;
 	}
 
-	public static boolean delGasto(Connection conexion, String sGastoID)
+	public static boolean delGasto(Connection conexion, long liGastoID)
 	{
 		boolean bSalida = false;
 
@@ -280,7 +282,7 @@ public final class QMGastos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1  + " = '"+ sGastoID +"'";
+					+ CAMPO1  + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 
@@ -297,7 +299,7 @@ public final class QMGastos
 			{
 				bSalida = false;
 
-				logger.error("ERROR GASTO:|"+sGastoID+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -310,7 +312,7 @@ public final class QMGastos
 		return bSalida;
 	}
 
-	public static Gasto getGasto(Connection conexion, String sGastoID)
+	public static Gasto getGasto(Connection conexion, long liGastoID)
 	{
 		String sCOACES = "";
 		String sCOGRUG = "";
@@ -390,7 +392,7 @@ public final class QMGastos
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1  + " = '"+ sGastoID +"'";
+				       + CAMPO1  + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 
@@ -486,7 +488,7 @@ public final class QMGastos
 				sBIAUTO = "";
 				sFEAUFA = "";
 
-				logger.error("ERROR GASTO:|"+sGastoID+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -505,7 +507,7 @@ public final class QMGastos
 	}
 	
 	
-	public static Gasto getDetallesGasto(Connection conexion, String sGastoID)
+	public static Gasto getDetallesGasto(Connection conexion, long liGastoID)
 	{
 		String sCOACES = "";
 		String sCOGRUG = "";
@@ -585,7 +587,7 @@ public final class QMGastos
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1  + " = '"+ sGastoID +"'";
+				       + CAMPO1  + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 
@@ -615,7 +617,7 @@ public final class QMGastos
 						sFEDEVE = rs.getString(CAMPO7);
 						sFFGTVP = rs.getString(CAMPO8);  
 						sFELIPG = rs.getString(CAMPO9);  
-						sCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST, QMCodigosControl.IESGAST,getEstado(conexion,sGastoID)); 
+						sCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST, QMCodigosControl.IESGAST,getEstado(conexion,liGastoID)); 
 						sFEEESI = rs.getString(CAMPO11); 
 						sFEECOI = rs.getString(CAMPO12); 
 						sFEEAUI = rs.getString(CAMPO13); 
@@ -683,7 +685,7 @@ public final class QMGastos
 				sBIAUTO = "";
 				sFEAUFA = "";
 
-				logger.error("ERROR GASTO:|"+sGastoID+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -701,9 +703,9 @@ public final class QMGastos
 				sCOIMPT, sCOTNEG, sFEAGTO, sCOMONA, sBIAUTO, sFEAUFA);
 	}
 	
-	public static String getGastoID(Connection conexion, String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
+	public static long getGastoID(Connection conexion, int iCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
-		String sGastoID = "";
+		long liGastoID = 0;
 
 		if (conexion != null)
 		{
@@ -722,7 +724,7 @@ public final class QMGastos
 				       + TABLA + 
 				       " WHERE "+
 				       "("	
-				       + CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+				       + CAMPO2  + " = '"+ iCodCOACES +"' AND " 
 				       + CAMPO3  + " = '"+ sCodCOGRUG +"' AND "
 				       + CAMPO4  + " = '"+ sCodCOTPGA +"' AND "
 				       + CAMPO5  + " = '"+ sCodCOSBGA +"' AND "
@@ -746,9 +748,9 @@ public final class QMGastos
 					{
 						bEncontrado = true;
 
-						sGastoID = rs.getString(CAMPO1);  
+						liGastoID = rs.getLong(CAMPO1);  
 						
-						logger.debug(CAMPO1+":|"+sGastoID+"|");
+						logger.debug(CAMPO1+":|"+liGastoID+"|");
 						
 						logger.debug("Encontrado el registro!");
 
@@ -762,9 +764,9 @@ public final class QMGastos
 			} 
 			catch (SQLException ex) 
 			{
-				sGastoID = "";
+				liGastoID = 0;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
 				logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
 				logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
@@ -779,10 +781,10 @@ public final class QMGastos
 			}
 		}
 
-		return sGastoID;
+		return liGastoID;
 	}
 	
-	public static boolean existeGasto(Connection conexion, String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
+	public static boolean existeGasto(Connection conexion, int iCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		boolean bEncontrado = false;
 
@@ -800,7 +802,7 @@ public final class QMGastos
 						" FROM " 
 						+ TABLA + 
 						" WHERE ("	
-						+ CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+						+ CAMPO2  + " = '"+ iCodCOACES +"' AND " 
 						+ CAMPO3  + " = '"+ sCodCOGRUG +"' AND " 
 						+ CAMPO4  + " = '"+ sCodCOTPGA +"' AND " 
 						+ CAMPO5  + " = '"+ sCodCOSBGA +"' AND " 
@@ -836,7 +838,7 @@ public final class QMGastos
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
 				logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
 				logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
@@ -854,7 +856,7 @@ public final class QMGastos
 		return bEncontrado;
 	}
 	
-	public static boolean gastoAnulado(Connection conexion, String sCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
+	public static boolean gastoAnulado(Connection conexion, int iCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		boolean bEncontrado = false;
 
@@ -872,7 +874,7 @@ public final class QMGastos
 						" FROM " 
 						+ TABLA + 
 						" WHERE ("	
-						+ CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+						+ CAMPO2  + " = '"+ iCodCOACES +"' AND " 
 						+ CAMPO3  + " = '"+ sCodCOGRUG +"' AND " 
 						+ CAMPO4  + " = '"+ sCodCOTPGA +"' AND " 
 						+ CAMPO5  + " = '"+ sCodCOSBGA +"' AND " 
@@ -910,7 +912,7 @@ public final class QMGastos
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				logger.error("ERROR COGRUG:|"+sCodCOGRUG+"|");
 				logger.error("ERROR COTPGA:|"+sCodCOTPGA+"|");
 				logger.error("ERROR COSBGA:|"+sCodCOSBGA+"|");
@@ -928,7 +930,7 @@ public final class QMGastos
 		return bEncontrado;
 	}
 	
-	public static boolean setFechaAnulado(Connection conexion, String sCodGasto, String sFEAGTO)
+	public static boolean setFechaAnulado(Connection conexion, long liGastoID, String sFEAGTO)
 	{
 		boolean bSalida = false;
 
@@ -943,7 +945,7 @@ public final class QMGastos
 					" SET " 
 					+ CAMPO29 + " = '"+ sFEAGTO + "' "+
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodGasto +"'";
+					+ CAMPO1  + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -961,7 +963,7 @@ public final class QMGastos
 			{
 				bSalida = false;
 
-				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -974,7 +976,7 @@ public final class QMGastos
 		return bSalida;
 	}
 	
-	public static boolean setAutorizado(Connection conexion, String sCodGasto, String sFEEAUI, String sFEAUFA)
+	public static boolean setAutorizado(Connection conexion, long liGastoID, String sFEEAUI, String sFEAUFA)
 	{
 		boolean bSalida = false;
 
@@ -992,7 +994,7 @@ public final class QMGastos
 					+ CAMPO32 + " = '"+ sFEAUFA + "', "
 					+ CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO + "' "+
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodGasto +"'";
+					+ CAMPO1  + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -1010,7 +1012,7 @@ public final class QMGastos
 			{
 				bSalida = false;
 
-				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1024,7 +1026,7 @@ public final class QMGastos
 	}
 	
 
-	public static boolean setEstado(Connection conexion, String sCodGasto, String sEstado)
+	public static boolean setEstado(Connection conexion, long liGastoID, String sEstado)
 	{
 		boolean bSalida = false;
 
@@ -1039,7 +1041,7 @@ public final class QMGastos
 					" SET " 
 					+ CAMPO34 + " = '"+ sEstado + "' "+
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodGasto +"'";
+					+ CAMPO1  + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -1056,7 +1058,7 @@ public final class QMGastos
 			{
 				bSalida = false;
 
-				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1069,7 +1071,7 @@ public final class QMGastos
 		return bSalida;
 	}
 	
-	public static String getEstado(Connection conexion, String sCodGasto)
+	public static String getEstado(Connection conexion, long liGastoID)
 	{
 		String sEstado = "";
 
@@ -1089,7 +1091,7 @@ public final class QMGastos
 					" FROM "
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodGasto +"'";
+					+ CAMPO1  + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 
@@ -1127,7 +1129,7 @@ public final class QMGastos
 			{
 				sEstado = "";
 
-				logger.error("ERROR GASTO:|"+sCodGasto);
+				logger.error("ERROR GASTO:|"+liGastoID);
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1141,7 +1143,126 @@ public final class QMGastos
 		return sEstado;
 	}
 	
-	public static long getValor(Connection conexion, String sGastoID)
+	public static boolean setNota(Connection conexion, long liComunidadID, String sNota)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO35 + " = '"+ sNota +"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ liComunidadID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static String getNota(Connection conexion, long liComunidadID)
+	{
+		String sNota = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO35 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liComunidadID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNota = rs.getString(CAMPO35);
+						
+						logger.debug(CAMPO1+":|"+liComunidadID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO35+":|"+sNota+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNota = "";
+				
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNota;
+	}
+	
+	public static long getValor(Connection conexion, long liGastoID)
 	{
 		long liIMNGAS = 0;
 		String sYCOS02 = "";
@@ -1186,7 +1307,7 @@ public final class QMGastos
 				       "  FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1  + " = '"+ sGastoID +"'";
+				       + CAMPO1  + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 
@@ -1245,7 +1366,7 @@ public final class QMGastos
 				liIMDTGA = 0;
 				liIMIMGA = 0;
 
-				logger.error("ERROR GASTO:|"+sGastoID+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1300,7 +1421,7 @@ public final class QMGastos
 		return liValor;
 	}
 	
-	public static ArrayList<String>  getGastosPorActivo(Connection conexion, String sCodCOACES) 
+	public static ArrayList<String>  getGastosPorActivo(Connection conexion, int iCodCOACES) 
 	{
 		ArrayList<String> resultado = new ArrayList<String>(); 
 
@@ -1320,7 +1441,7 @@ public final class QMGastos
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO2 + " = '" + sCodCOACES + "'";
+					+ CAMPO2 + " = '" + iCodCOACES + "'";
 			
 			logger.debug(sQuery);
 
@@ -1346,7 +1467,7 @@ public final class QMGastos
 											
 						logger.debug("Encontrado el registro!");
 
-						logger.debug("{}:|"+CAMPO2,sCodCOACES);
+						logger.debug("{}:|"+CAMPO2,iCodCOACES);
 						logger.debug("{}:|"+CAMPO1,resultado.get(i));
 					
 						i++;
@@ -1362,7 +1483,7 @@ public final class QMGastos
 			{
 				resultado = new ArrayList<String>(); 
 
-				logger.error("ERROR COACES:|"+sCodCOACES);
+				logger.error("ERROR COACES:|"+iCodCOACES);
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1488,7 +1609,7 @@ public final class QMGastos
 
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosNuevosPorActivo(Connection conexion, String sCodCOACES)
+	public static ArrayList<GastoTabla> buscaGastosNuevosPorActivo(Connection conexion, int iCodCOACES)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -1557,7 +1678,7 @@ public final class QMGastos
 					{
 						bEncontrado = true;
 						
-						sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getString(QMGastos.CAMPO1));
+						sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
 						sCOACES  = rs.getString(QMGastos.CAMPO2);
 						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
 						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
@@ -1588,7 +1709,7 @@ public final class QMGastos
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO2+":|"+sCodCOACES+"|");
+						logger.debug(CAMPO2+":|"+iCodCOACES+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -1613,7 +1734,7 @@ public final class QMGastos
 		return resultado;
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosPorActivo(Connection conexion, String sCodCOACES)
+	public static ArrayList<GastoTabla> buscaGastosPorActivo(Connection conexion, int iCodCOACES)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -1656,7 +1777,7 @@ public final class QMGastos
 						   " FROM " 
 						   + TABLA + 
 						   " WHERE "
-						   + CAMPO2 + " = '"+sCodCOACES+"'";					   
+						   + CAMPO2 + " = '"+iCodCOACES+"'";					   
 						   
 			
 			logger.debug(sQuery);
@@ -1677,7 +1798,7 @@ public final class QMGastos
 					{
 						bEncontrado = true;
 						
-						sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getString(QMGastos.CAMPO1));
+						sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
 						sCOACES  = rs.getString(QMGastos.CAMPO2);
 						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
 						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
@@ -1708,7 +1829,7 @@ public final class QMGastos
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO2+":|"+sCodCOACES+"|");
+						logger.debug(CAMPO2+":|"+iCodCOACES+"|");
 					}
 				}
 				if (!bEncontrado) 

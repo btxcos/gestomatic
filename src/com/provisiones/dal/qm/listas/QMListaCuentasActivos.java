@@ -27,7 +27,7 @@ public class QMListaCuentasActivos
 
 	private QMListaCuentasActivos(){}
 
-	public static boolean addRelacionActivo(Connection conexion, long liCodCuenta, String sCodCOACES)
+	public static boolean addRelacionActivo(Connection conexion, long liCodCuenta, int iCodCOACES)
 	{
 		boolean bSalida = false;
 		
@@ -44,7 +44,7 @@ public class QMListaCuentasActivos
 				       + CAMPO2  +    
 				       ") VALUES ('"
 				       + liCodCuenta + "','" 
-				       + sCodCOACES + "' )";
+				       + iCodCOACES + "' )";
 			
 			logger.debug(sQuery);
 
@@ -62,7 +62,7 @@ public class QMListaCuentasActivos
 				bSalida = false;
 
 				logger.error("ERROR CUENTA:|"+liCodCuenta+"|");
-				logger.error("ERROR ACTIVO:|"+sCodCOACES+"|");
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -75,7 +75,7 @@ public class QMListaCuentasActivos
 		return bSalida;
 	}
 
-	public static boolean delRelacionActivo(Connection conexion, long liCodCuenta, String sCodCOACES)
+	public static boolean delRelacionActivo(Connection conexion, long liCodCuenta, int iCodCOACES)
 	{
 		boolean bSalida = false;
 		
@@ -89,7 +89,7 @@ public class QMListaCuentasActivos
 					+ TABLA + 
 					" WHERE ("
 					+ CAMPO1 + " = '" + liCodCuenta	+ "' AND "
-					+ CAMPO2 + " = '" + sCodCOACES	+ "' )";
+					+ CAMPO2 + " = '" + iCodCOACES	+ "' )";
 			
 			logger.debug(sQuery);
 
@@ -107,7 +107,7 @@ public class QMListaCuentasActivos
 				bSalida = false;
 
 				logger.error("ERROR CUENTA:|"+liCodCuenta+"|");
-				logger.error("ERROR ACTIVO:|"+sCodCOACES+"|");
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -120,7 +120,7 @@ public class QMListaCuentasActivos
 		return bSalida;
 	}
 
-	public static boolean existeRelacionActivo(Connection conexion, long liCodCuenta, String sCodCOACES)
+	public static boolean existeRelacionActivo(Connection conexion, long liCodCuenta, int iCodCOACES)
 	{
 		boolean bEncontrado = false;
 		
@@ -139,7 +139,7 @@ public class QMListaCuentasActivos
 				       + TABLA + 
 				       " WHERE (" 
 				       + CAMPO1 + " = '" + liCodCuenta + "' AND "
-				       + CAMPO2 + " = '" + sCodCOACES + "')";
+				       + CAMPO2 + " = '" + iCodCOACES + "')";
 			
 			logger.debug(sQuery);
 
@@ -171,7 +171,7 @@ public class QMListaCuentasActivos
 				bEncontrado = false;
 
 				logger.error("ERROR CUENTA:|"+liCodCuenta+"|");
-				logger.error("ERROR ACTIVO:|"+sCodCOACES+"|");
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -187,7 +187,7 @@ public class QMListaCuentasActivos
 	
 
 	
-	public static ArrayList<Cuenta> buscaListaCuentas(Connection conexion, String sCodCOACES)
+	public static ArrayList<Cuenta> buscaListaCuentas(Connection conexion, int iCodCOACES)
 	{
 		ArrayList<Cuenta> resultado = new ArrayList<Cuenta>();
 
@@ -230,7 +230,7 @@ public class QMListaCuentasActivos
 						   " FROM " 
 						   + TABLA + 
 						   " WHERE " 
-						   + CAMPO2 + " = '"+ sCodCOACES + "'))";					   
+						   + CAMPO2 + " = '"+ iCodCOACES + "'))";					   
 						   
 			
 			logger.debug(sQuery);
@@ -271,7 +271,7 @@ public class QMListaCuentasActivos
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+						logger.debug(CAMPO1+":|"+iCodCOACES+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -283,7 +283,7 @@ public class QMListaCuentasActivos
 			{
 				resultado = new ArrayList<Cuenta>();
 				
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

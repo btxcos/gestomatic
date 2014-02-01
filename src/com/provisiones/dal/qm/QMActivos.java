@@ -344,7 +344,7 @@ public final class QMActivos
 
 		return bSalida;
 	}
-	public static boolean modActivo(Connection conexion, Activo NuevoActivo, String sCodCOACES)
+	public static boolean modActivo(Connection conexion, Activo NuevoActivo, int iCOACES)
 	{
 		boolean bSalida = false;
 
@@ -449,7 +449,7 @@ public final class QMActivos
 					+ CAMPO91 + " = '"+ NuevoActivo.getBIOBNU() + "', "
 					+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sCodCOACES +"'";
+					+ CAMPO1 + " = '"+ iCOACES +"'";
 			
 			//logger.debug(sQuery);
 			
@@ -483,7 +483,7 @@ public final class QMActivos
 		return bSalida;
 	}
 
-	public static boolean delActivo(Connection conexion, String sCodCOACES)
+	public static boolean delActivo(Connection conexion, int iCOACES)
 	{
 		boolean bSalida = false;
 
@@ -496,7 +496,7 @@ public final class QMActivos
 			String sQuery = "DELETE FROM " 
 							+ TABLA + 
 							" WHERE " 
-							+ CAMPO1 + " = '" + sCodCOACES + "'";
+							+ CAMPO1 + " = '" + iCOACES + "'";
 
 			logger.debug(sQuery);
 
@@ -514,7 +514,7 @@ public final class QMActivos
 			{
 				bSalida = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -527,7 +527,7 @@ public final class QMActivos
 		return bSalida;
 	}
 
-	public static Activo getActivo(Connection conexion, String sCodCOACES)
+	public static Activo getActivo(Connection conexion, int iCOACES)
 	{
 		String sCOACES = "";
 		String sNUINMU = "";
@@ -729,7 +729,7 @@ public final class QMActivos
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1 + " = '" + sCodCOACES	+ "'";
+				       + CAMPO1 + " = '" + iCOACES	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -742,7 +742,7 @@ public final class QMActivos
 				
 				logger.debug("Ejecutada con éxito!");
 
-				logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+				logger.debug(CAMPO1+":|"+iCOACES+"|");
 
 				if (rs != null) 
 				{
@@ -949,7 +949,7 @@ public final class QMActivos
 				sBIOBNU = "";
 				sPOBRAR = "";
 				
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -977,7 +977,7 @@ public final class QMActivos
 				sBIOBNU, sPOBRAR);
 	}
 	
-	public static Activo getDetallesActivo(Connection conexion, String sCodCOACES)
+	public static Activo getDetallesActivo(Connection conexion, int iCOACES)
 	{
 		String sCOACES = "";
 		String sNUINMU = "";
@@ -1179,7 +1179,7 @@ public final class QMActivos
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1 + " = '" + sCodCOACES	+ "'";
+				       + CAMPO1 + " = '" + iCOACES	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -1192,7 +1192,7 @@ public final class QMActivos
 				
 				logger.debug("Ejecutada con éxito!");
 
-				logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+				logger.debug(CAMPO1+":|"+iCOACES+"|");
 
 				if (rs != null) 
 				{
@@ -1399,7 +1399,7 @@ public final class QMActivos
 				sBIOBNU = "";
 				sPOBRAR = "";
 				
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1428,7 +1428,7 @@ public final class QMActivos
 	}
 	
 
-	public static boolean existeActivo(Connection conexion, String sCodCOACES)
+	public static boolean existeActivo(Connection conexion, int iCOACES)
 	{
 		boolean bEncontrado = false;
 
@@ -1440,16 +1440,16 @@ public final class QMActivos
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 
-			//logger.debug("Ejecutando Query...");
+			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
 					   + CAMPO1  +        
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE " 
-					   + CAMPO1 + " = '" + sCodCOACES	+ "'";
+					   + CAMPO1 + " = '" + iCOACES	+ "'";
 			
-			//logger.debug(sQuery);
+			logger.debug(sQuery);
 
 			try 
 			{
@@ -1458,7 +1458,7 @@ public final class QMActivos
 				pstmt = conexion.prepareStatement(sQuery);
 				rs = pstmt.executeQuery();
 				
-				//logger.debug("Ejecutada con éxito!");
+				logger.debug("Ejecutada con éxito!");
 
 				
 
@@ -1469,13 +1469,13 @@ public final class QMActivos
 					{
 						bEncontrado = true;
 
-						//logger.debug("Encontrado el registro!");
-						//logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+rs.getString(CAMPO1)+"|");
 					}
 				}
 				if (!bEncontrado) 
 				{
-					//logger.debug("No se encontro la información.");
+					logger.debug("No se encontro la información.");
 				}
 
 			} 
@@ -1483,7 +1483,7 @@ public final class QMActivos
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1655,7 +1655,7 @@ public final class QMActivos
 		return bEncontrado;
 	}
 
-	public static String getReferenciaCatastral(Connection conexion, String sCodCOACES)
+	public static String getReferenciaCatastral(Connection conexion, int iCOACES)
 	{
 		String sReferencia = "";
 
@@ -1675,7 +1675,7 @@ public final class QMActivos
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE " 
-					   + CAMPO1 + " = '" + sCodCOACES	+ "'";
+					   + CAMPO1 + " = '" + iCOACES	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -1712,7 +1712,7 @@ public final class QMActivos
 			{
 				sReferencia = "";
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1727,7 +1727,7 @@ public final class QMActivos
 		return sReferencia;
 	}
 	
-	public static String getCOTSINActivo(Connection conexion, String sCodCOACES)
+	public static String getCOTSINActivo(Connection conexion, int iCOACES)
 	{
 		String sCOTSIN = "";
 
@@ -1747,7 +1747,7 @@ public final class QMActivos
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE " 
-					   + CAMPO1 + " = '" + sCodCOACES	+ "'";
+					   + CAMPO1 + " = '" + iCOACES	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -1784,7 +1784,7 @@ public final class QMActivos
 			{
 				sCOTSIN = "";
 				
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1798,7 +1798,7 @@ public final class QMActivos
 		return sCOTSIN;
 	}
 
-	public static String getBIARREActivo(Connection conexion, String sCodCOACES)
+	public static String getBIARREActivo(Connection conexion, int iCOACES)
 	{
 		String sBIARRE = "";
 
@@ -1818,7 +1818,7 @@ public final class QMActivos
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE " 
-					   + CAMPO1 + " = '" + sCodCOACES + "'";
+					   + CAMPO1 + " = '" + iCOACES + "'";
 			
 			logger.debug(sQuery);
 
@@ -1852,7 +1852,7 @@ public final class QMActivos
 			{
 				sBIARRE = "";
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1866,7 +1866,7 @@ public final class QMActivos
 		return sBIARRE;
 	}
 	
-	public static String getSociedadPatrimonial(Connection conexion, String sCodCOACES)
+	public static String getSociedadPatrimonial(Connection conexion, int iCOACES)
 	{
 		String sCodCOSPAT = "0";
 		
@@ -1886,7 +1886,7 @@ public final class QMActivos
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE " 
-					   + CAMPO1 + " = '" + sCodCOACES + "'";
+					   + CAMPO1 + " = '" + iCOACES + "'";
 			
 			logger.debug(sQuery);
 
@@ -1920,7 +1920,7 @@ public final class QMActivos
 			{
 				sCodCOSPAT = "0";
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

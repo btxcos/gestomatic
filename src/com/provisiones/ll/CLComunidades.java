@@ -36,7 +36,7 @@ public final class CLComunidades
 	}
 	
 	//Conversion
-	public static MovimientoComunidad convierteComunidadenMovimiento(Comunidad comunidad, String sCodCOACES, String sCodCOACCI)
+	public static MovimientoComunidad convierteComunidadenMovimiento(Comunidad comunidad, int iCodCOACES, String sCodCOACCI)
 	{
 		logger.debug("Convirtiendo...");
 		
@@ -50,7 +50,7 @@ public final class CLComunidades
 				comunidad.getsCOCLDO(),
 				comunidad.getsNUDCOM(),
 				"",
-				sCodCOACES,
+				Integer.toString(iCodCOACES),
 				"",
 				comunidad.getsNOMCOC(),
 				"",
@@ -120,9 +120,9 @@ public final class CLComunidades
 		return QMListaComunidadesActivos.buscaActivosSinComunidad(ConnectionManager.getDBConnection(),activofiltro);
 	}
 	
-	public static Comunidad buscarComunidad (String sCodCOACES)
+	public static Comunidad buscarComunidad (int iCodCOACES)
 	{
-		return QMListaComunidadesActivos.buscaComunidadPorActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMListaComunidadesActivos.buscaComunidadPorActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
 	public static MovimientoComunidad buscarMovimientoComunidad (String sCodMovimiento)
@@ -136,13 +136,13 @@ public final class CLComunidades
 				+ QMListaComunidades.buscaCantidadValidado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
 	}
 	
-	public static int comprobarActivo (String sCOCLDO, String sNUDCOM, String sCOACES)
+	public static int comprobarComunidadActivo (String sCOCLDO, String sNUDCOM, int iCodCOACES)
 	{
 		int iCodigo = 0;
 		
-		if (CLActivos.existeActivo(sCOACES))
+		if (CLActivos.existeActivo(iCodCOACES))
 		{
-			if (CLComunidades.comprobarRelacion(sCOCLDO, sNUDCOM, sCOACES))
+			if (CLComunidades.comprobarRelacion(sCOCLDO, sNUDCOM, iCodCOACES))
 			{
 				iCodigo = 0;
 			}
@@ -161,9 +161,9 @@ public final class CLComunidades
 		return iCodigo;
 	}
 	
-	public static boolean comprobarRelacion (String sCodCOCLDO, String sCodNUDCOM, String sCodCOACES)
+	public static boolean comprobarRelacion (String sCodCOCLDO, String sCodNUDCOM, int iCodCOACES)
 	{
-		return QMListaComunidadesActivos.compruebaRelacionComunidadActivo(ConnectionManager.getDBConnection(),buscarCodigoComunidad (sCodCOCLDO, sCodNUDCOM), sCodCOACES);
+		return QMListaComunidadesActivos.compruebaRelacionComunidadActivo(ConnectionManager.getDBConnection(),buscarCodigoComunidad (sCodCOCLDO, sCodNUDCOM), iCodCOACES);
 	}
 	
 	public static Comunidad consultarComunidad (String sCOCLDO, String sNUDCOM)
@@ -171,9 +171,9 @@ public final class CLComunidades
 		return QMComunidades.getComunidad(ConnectionManager.getDBConnection(),buscarCodigoComunidad(sCOCLDO,sNUDCOM));
 	}
 	
-	public static boolean esActivoVinculadoAComunidad (String sCOACES)
+	public static boolean esActivoVinculadoAComunidad (int iCodCOACES)
 	{
-		return QMListaComunidadesActivos.activoVinculadoComunidad(ConnectionManager.getDBConnection(),sCOACES);
+		return QMListaComunidadesActivos.activoVinculadoComunidad(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
 	public static boolean existeComunidad (String sCodCOCLDO, String sCodNUDCOM)
@@ -199,7 +199,7 @@ public final class CLComunidades
 			
 			MovimientoComunidad comunidad = Parser.leerComunidad(linea);
 
-			if (CLActivos.existeActivo(comunidad.getCOACES()))
+			if (CLActivos.existeActivo(Integer.parseInt(comunidad.getCOACES())))
 			{
 				logger.debug(comunidad.logMovimientoComunidad());
 				
@@ -263,7 +263,7 @@ public final class CLComunidades
 						switch (COACCI)
 						{
 						case X:case E:
-							if (QMListaComunidadesActivos.existeRelacionComunidad(conexion,comunidad.getCOACES(), liCodComunidad, sCodMovimiento))
+							if (QMListaComunidadesActivos.existeRelacionComunidad(conexion,Integer.parseInt(comunidad.getCOACES()), liCodComunidad, sCodMovimiento))
 							{
 								if (QMListaComunidadesActivos.setValidado(conexion,sCodMovimiento, sValidado))
 								{
@@ -299,7 +299,7 @@ public final class CLComunidades
 						case A:
 							if (QMListaComunidades.existeRelacionComunidad(conexion,liCodComunidad, sCodMovimiento))
 							{
-								if (QMListaComunidadesActivos.existeRelacionComunidad(conexion, comunidad.getCOACES(), liCodComunidad, sCodMovimiento))
+								if (QMListaComunidadesActivos.existeRelacionComunidad(conexion, Integer.parseInt(comunidad.getCOACES()), liCodComunidad, sCodMovimiento))
 								{
 									if (QMListaComunidades.setValidado(conexion,sCodMovimiento, sValidado))
 									{
@@ -418,7 +418,7 @@ public final class CLComunidades
 		return iCodigo;
 	}
 	
-	public static int comprobarActivo (String sCOACES)
+	public static int comprobarActivo (int iCodCOACES)
 	{
 		int iCodigo = -3;
 		
@@ -428,9 +428,9 @@ public final class CLComunidades
 		{
 			iCodigo = 0;
 			
-			if (CLActivos.existeActivo(sCOACES))
+			if (CLActivos.existeActivo(iCodCOACES))
 			{
-				if (CLComunidades.esActivoVinculadoAComunidad(sCOACES))
+				if (CLComunidades.esActivoVinculadoAComunidad(iCodCOACES))
 				{
 					//error - ya vinculado
 					iCodigo = -1;
@@ -520,7 +520,7 @@ public final class CLComunidades
 														iCodigo = 0;
 													}
 													else*/ 
-													if (QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), liCodComunidad, Integer.toString(indice)))
+													if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, Integer.toString(indice)))
 													{
 														//OK 
 														iCodigo = 0;
@@ -706,7 +706,7 @@ public final class CLComunidades
 									}
 									break;
 								case X:
-										String sMovimientoAlta = QMListaComunidadesActivos.getMovimientoDeActivoVinculadoComunidad(conexion,liCodComunidad, movimiento_revisado.getCOACES());
+										String sMovimientoAlta = QMListaComunidadesActivos.getMovimientoDeActivoVinculadoComunidad(conexion,liCodComunidad, Integer.parseInt(movimiento_revisado.getCOACES()));
 										if (!sMovimientoAlta.equals(""))
 										{
 											//error y rollback - el activo ya esta vinculado
@@ -716,7 +716,7 @@ public final class CLComunidades
 										}
 										else
 										{							
-											if (QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), liCodComunidad, Integer.toString(indice)))
+											if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, Integer.toString(indice)))
 											{
 												//OK 
 												iCodigo = 0;
@@ -732,7 +732,7 @@ public final class CLComunidades
 										}
 									break;
 								case E:
-										String sMovimientoBaja = QMListaComunidadesActivos.getMovimientoDeActivoVinculadoComunidad(conexion,liCodComunidad, movimiento_revisado.getCOACES());
+										String sMovimientoBaja = QMListaComunidadesActivos.getMovimientoDeActivoVinculadoComunidad(conexion,liCodComunidad, Integer.parseInt(movimiento_revisado.getCOACES()));
 										
 										if (sMovimientoBaja.equals(""))
 										{
@@ -1173,12 +1173,12 @@ public final class CLComunidades
 				//Error 022 - NO SE PUEDE DAR ALTA SI CONTROL DE ACTIVO NO ES S
 				iCodigo = -22;
 			}		
-			else if ( !movimiento.getCOACES().equals("") && !CLActivos.existeActivo(movimiento.getCOACES()))
+			else if ( !movimiento.getCOACES().equals("") && !CLActivos.existeActivo(Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 003 - NO EXISTE EL ACTIVO
 				iCodigo = -3;
 			}
-			else if ((movimiento.getCOACCI().equals("A") || movimiento.getCOACCI().equals("X")) && CLComunidades.esActivoVinculadoAComunidad(movimiento.getCOACES()))
+			else if ((movimiento.getCOACCI().equals("A") || movimiento.getCOACCI().equals("X")) && CLComunidades.esActivoVinculadoAComunidad(Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
 				iCodigo = -8;
@@ -1188,7 +1188,7 @@ public final class CLComunidades
 				//Error 009 - YA EXISTE ESTA COMUNIDAD
 				iCodigo = -9;
 			}		
-			else if (sEstado.equals("A") && movimiento.getCOACCI().equals("X") && comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(), movimiento.getCOACES()))
+			else if (sEstado.equals("A") && movimiento.getCOACCI().equals("X") && comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(), Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
 				iCodigo = -10;
@@ -1208,7 +1208,7 @@ public final class CLComunidades
 				//Error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
 				iCodigo = -26;
 			}
-			else if (movimiento.getCOACCI().equals("B") && CLCuotas.tieneCuotas(movimiento.getCOACES(),movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+			else if (movimiento.getCOACCI().equals("B") && CLCuotas.tieneCuotas(Integer.parseInt(movimiento.getCOACES()),movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 			{
 				//Error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
 				iCodigo = -27;			

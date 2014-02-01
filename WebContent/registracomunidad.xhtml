@@ -12,8 +12,12 @@
 	</h:head>
 
 	<h:body>
-		<h:form id="form" onkeypress="return event.keyCode != 13">
+		<h:form id="form">
 			<p:layout fullPage="true">
+
+<style type="text/css">
+.ui-expand { width: 100%;overflow-y: scroll;}
+</style>
 
 				<p:layoutUnit position="north" size="auto" header="Registrar Comunidad">
 					<h:panelGrid columns="4" cellpadding="5">
@@ -73,6 +77,24 @@
 
 				<p:layoutUnit position="west" size="20%" header="Operativas">
 					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="east" size="25%" header="Notas">  
+					<h:panelGrid columns="1" cellpadding="1">
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
+
+								<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorComunidades.limpiarNota}"/>
+
+							</h:panelGrid>
+						</p:panel>
+
+						<h:panelGrid columns="1" cellpadding="5">
+							<h:outputText id="counternota"/>
+							<p:inputTextarea id="NOTA" value="#{GestorComunidades.sNota}" cols="200" rows="10" counter="counternota" maxlength="500"
+								counterTemplate="{0} carácteres restantes." autoResize="false" styleClass="ui-expand"/>
+						</h:panelGrid>
+					</h:panelGrid>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">

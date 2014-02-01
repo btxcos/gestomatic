@@ -36,7 +36,7 @@ public final class QMReferencias
 	
 	//Campos de control
 	public static final String CAMPO10 = "cod_estado";
-	public static final String CAMPO11 = "comentario";
+	public static final String CAMPO11 = "nota";
 
 	private QMReferencias(){}
 	
@@ -76,7 +76,9 @@ public final class QMReferencias
 				       + NuevaReferenciaCatastral.getIMCATA() + "','"
 				       + NuevaReferenciaCatastral.getFERECA() + "','"
 
-				       + ValoresDefecto.DEF_ALTA + "','' )";
+				       + ValoresDefecto.DEF_ALTA + "','"
+				       + ValoresDefecto.CAMPO_SIN_INFORMAR + 
+				       "')";
 			
 			logger.debug(sQuery);
 
@@ -111,7 +113,7 @@ public final class QMReferencias
 
 		return liCodigo;
 	}
-	public static boolean modReferenciaCatastral(Connection conexion, ReferenciaCatastral NuevaReferenciaCatastral, String sCodReferencia)
+	public static boolean modReferenciaCatastral(Connection conexion, ReferenciaCatastral NuevaReferenciaCatastral, long liReferenciaID)
 	{
 		boolean bSalida = false;
 		
@@ -136,7 +138,7 @@ public final class QMReferencias
 					+ CAMPO9  + " = '"+ NuevaReferenciaCatastral.getFERECA() +
 					"' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sCodReferencia +"'";
+					+ CAMPO1 + " = '"+ liReferenciaID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -153,7 +155,7 @@ public final class QMReferencias
 			{
 				bSalida = false;
 				
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR Referencia:|"+liReferenciaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -167,7 +169,7 @@ public final class QMReferencias
 		return bSalida;
 	}
 
-	public static boolean delReferenciaCatastral(Connection conexion, String sCodReferencia)
+	public static boolean delReferenciaCatastral(Connection conexion, long liReferenciaID)
 	{
 		boolean bSalida = false;
 
@@ -180,7 +182,7 @@ public final class QMReferencias
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sCodReferencia + "'";
+					+ CAMPO1 + " = '" + liReferenciaID + "'";
 			
 			logger.debug(sQuery);
 
@@ -197,7 +199,7 @@ public final class QMReferencias
 			{
 				bSalida = false;
 
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR Referencia:|"+liReferenciaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -210,7 +212,7 @@ public final class QMReferencias
 		return bSalida;
 	}
 
-	public static ReferenciaCatastral getReferenciaCatastral(Connection conexion, String sCodReferencia)
+	public static ReferenciaCatastral getReferenciaCatastral(Connection conexion, long liReferenciaID)
 	{
 		String sNURCAT = "";
 		String sTIRCAT = "";
@@ -249,7 +251,7 @@ public final class QMReferencias
 
 				       " FROM " 
 				       + TABLA + 
-				       " WHERE " + CAMPO1 + " = '" + sCodReferencia	+ "'";
+				       " WHERE " + CAMPO1 + " = '" + liReferenciaID	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -303,7 +305,7 @@ public final class QMReferencias
 				sIMCATA = "";
 				sFERECA = "";
 				
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR Referencia:|"+liReferenciaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -317,9 +319,9 @@ public final class QMReferencias
 		return new ReferenciaCatastral(sNURCAT, sTIRCAT, sENEMIS, sCOTEXA, sOBTEXC, sIMVSUE, sIMCATA, sFERECA);
 	}
 	
-	public static String getReferenciaCatastralID(Connection conexion, String sCodNURCAT)
+	public static long getReferenciaCatastralID(Connection conexion, String sCodNURCAT)
 	{
-		String sReferenciaID = "";
+		long liReferenciaID = 0;
 		
 		if (conexion != null)
 		{
@@ -356,11 +358,11 @@ public final class QMReferencias
 					{
 						bEncontrado = true;
 
-						sReferenciaID = rs.getString(CAMPO1);
+						liReferenciaID = rs.getLong(CAMPO1);
 
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sReferenciaID+"|");
+						logger.debug(CAMPO1+":|"+liReferenciaID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -370,7 +372,7 @@ public final class QMReferencias
 			} 
 			catch (SQLException ex) 
 			{
-				sReferenciaID = "";
+				liReferenciaID = 0;
 
 				logger.error("ERROR NURCAT:|"+sCodNURCAT+"|");
 
@@ -383,10 +385,10 @@ public final class QMReferencias
 			}
 		}
 
-		return sReferenciaID;
+		return liReferenciaID;
 	}
 	
-	public static boolean existeReferenciaCatastral(Connection conexion, String sCodReferencia)
+	public static boolean existeReferenciaCatastral(Connection conexion, long liReferenciaID)
 	{
 		boolean bEncontrado = false;
 		
@@ -404,7 +406,7 @@ public final class QMReferencias
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE " 
-				       + CAMPO1 + " = '" + sCodReferencia	+ "'";
+				       + CAMPO1 + " = '" + liReferenciaID	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -425,7 +427,7 @@ public final class QMReferencias
 
 	  					logger.debug("Encontrado el registro!");
 
-	  					logger.debug(CAMPO1+":|"+sCodReferencia+"|");
+	  					logger.debug(CAMPO1+":|"+liReferenciaID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -437,7 +439,7 @@ public final class QMReferencias
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR Referencia:|"+liReferenciaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -451,7 +453,7 @@ public final class QMReferencias
 		return bEncontrado;
 	}
 
-	public static boolean setEstado(Connection conexion, String sCodReferencia, String sEstado)
+	public static boolean setEstado(Connection conexion, long liReferenciaID, String sEstado)
 	{
 		boolean bSalida = false;
 		
@@ -467,7 +469,7 @@ public final class QMReferencias
 					+ CAMPO10 + " = '"+ sEstado + 
 					"' "+
 					" WHERE "
-					+ CAMPO1 + " = '" + sCodReferencia + "'";
+					+ CAMPO1 + " = '" + liReferenciaID + "'";
 			
 			logger.debug(sQuery);
 			
@@ -484,7 +486,7 @@ public final class QMReferencias
 			{
 				bSalida = false;
 
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR Referencia:|"+liReferenciaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -497,7 +499,7 @@ public final class QMReferencias
 		return bSalida;
 	}
 	
-	public static String getEstado(Connection conexion, String sCodReferencia)
+	public static String getEstado(Connection conexion, long liReferenciaID)
 	{
 		String sEstado = "";
 
@@ -517,7 +519,7 @@ public final class QMReferencias
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sCodReferencia + "'";
+					+ CAMPO1 + " = '" + liReferenciaID + "'";
 			
 			logger.debug(sQuery);
 
@@ -552,7 +554,7 @@ public final class QMReferencias
 			{
 				sEstado = "";
 
-				logger.error("ERROR Referencia:|"+sCodReferencia+"|");
+				logger.error("ERROR Referencia:|"+liReferenciaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -564,5 +566,124 @@ public final class QMReferencias
 		}
 
 		return sEstado;
+	}
+	
+	public static boolean setNota(Connection conexion, long liReferenciaID, String sNota)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO11 + " = '"+ sNota +"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ liReferenciaID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COMUNIDAD:|"+liReferenciaID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static String getNota(Connection conexion, long liReferenciaID)
+	{
+		String sNota = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO11 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liReferenciaID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNota = rs.getString(CAMPO11);
+						
+						logger.debug(CAMPO1+":|"+liReferenciaID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO11+":|"+sNota+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNota = "";
+				
+				logger.error("ERROR COMUNIDAD:|"+liReferenciaID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNota;
 	}
 }

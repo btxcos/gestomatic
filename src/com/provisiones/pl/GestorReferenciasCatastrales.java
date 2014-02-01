@@ -140,19 +140,34 @@ public class GestorReferenciasCatastrales implements Serializable
 		{
 	    	FacesMessage msg;
 
-	    	this.sCOACES  = activoseleccionado.getCOACES();
-	    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
+	    	String sMsg = "";
 	    	
-	    	if (sNURCAT.equals(""))
-	    	{
-	    		msg = Utils.pfmsgWarning("No existe un numero de referencia catastral asociado disponible.");
-	    		logger.warn("No existe un numero de referencia catastral asociado disponible.");
-	    	}
-	    	else
-	    	{
-	    		msg = Utils.pfmsgInfo("La Referencia '"+sNURCAT+"' se ha cargado correctamente.");
-	    		logger.info("La Referencia '{}' se ha cargado correctamente.",sNURCAT);
-	    	}
+	    	this.sCOACES  = activoseleccionado.getCOACES();
+
+			try
+			{
+		    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(Integer.parseInt(sCOACES));
+		    	
+		    	if (sNURCAT.equals(""))
+		    	{
+		    		sMsg = "No existe un numero de referencia catastral asociado disponible.";
+		    		msg = Utils.pfmsgWarning(sMsg);
+		    		logger.warn(sMsg);
+		    	}
+		    	else
+		    	{
+		    		sMsg = "La Referencia '"+sNURCAT+"' se ha cargado correctamente.";
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+		    	}
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+
 	 		FacesContext.getCurrentInstance().addMessage(null, msg);
 			
 		}
@@ -164,27 +179,40 @@ public class GestorReferenciasCatastrales implements Serializable
 		{
 			FacesMessage msg;
 			
-	    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(sCOACES);
-	    	
-	    	if (sNURCAT.equals(""))
-	    	{
-	    		msg = Utils.pfmsgWarning("No existe un numero de referencia catastral asociado disponible.");
-	    		logger.warn("No existe un numero de referencia catastral asociado disponible.");
-	    		FacesContext.getCurrentInstance().addMessage(null, msg);
-	    	}
+	    	String sMsg ="";
+			
+			try
+			{
+		    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(Integer.parseInt(sCOACES));
+		    	
+		    	if (sNURCAT.equals(""))
+		    	{
+		    		sMsg = "No existe un numero de referencia catastral asociado disponible.";
+		    		msg = Utils.pfmsgWarning(sMsg);
+		    		logger.warn(sMsg);
+		    		FacesContext.getCurrentInstance().addMessage(null, msg);
+		    	}
 
-			if (CLActivos.existeActivo(sCOACES))
-			{
-				msg = Utils.pfmsgInfo("El activo '"+sCOACES.toUpperCase()+"' esta disponible.");
-				logger.info("El activo '{}' esta disponible.",sCOACES.toUpperCase());
+				if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+				{
+					sMsg = "El activo '"+sCOACES+"' esta disponible.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "ERROR: El activo '"+sCOACES+"' no esta registrado en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 			}
-			else
+			catch(NumberFormatException nfe)
 			{
-				msg = Utils.pfmsgError("ERROR: El activo '"+sCOACES.toUpperCase()+"' no esta registrado en el sistema. Por favor, revise los datos.");
-				logger.error("ERROR: El activo '{}' no esta registrado en el sistema. Por favor, revise los datos.",sCOACES.toUpperCase());
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
-			
-			
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);	
 		}		
 	}
@@ -204,202 +232,214 @@ public class GestorReferenciasCatastrales implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = "";
-			
-			if (CLReferencias.existeReferenciaCatastral(sNURCAT.toUpperCase()) && !CLReferencias.estaDeBaja(sNURCAT.toUpperCase()))
+
+			try
 			{
-				sMsg = "ERROR:049 - La referencia catastral propocionada ya esta dada de alta en el sistema. Por favor, revise los datos.";
+				Integer.parseInt(sCOACES);
+				
+				if (CLReferencias.existeReferenciaCatastral(sNURCAT.toUpperCase()) && !CLReferencias.estaDeBaja(sNURCAT.toUpperCase()))
+				{
+					sMsg = "ERROR:049 - La referencia catastral propocionada ya esta dada de alta en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+				else
+				{
+					MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
+							sCODTRN.toUpperCase(), 
+							sCOTDOR.toUpperCase(), 
+							sIDPROV.toUpperCase(), 
+							"A",
+							sCOENGP.toUpperCase(), 
+							sCOACES, 
+							sNURCAT.toUpperCase(),
+							"", 
+							sTIRCAT.toUpperCase(),
+							"", 
+							sENEMIS.toUpperCase(),
+							sCOTEXA.toUpperCase(),
+							"", 
+							sOBTEXC.toUpperCase(), 
+							sOBDEER.toUpperCase(),
+							"", 
+							Utils.compruebaImporte(sIMVSUE.toUpperCase()),
+							"", 
+							Utils.compruebaImporte(sIMCATA.toUpperCase()),
+							"", 
+							Utils.compruebaFecha(sFERECA.toUpperCase()));
+					
+					int iSalida = CLReferencias.registraMovimiento(movimiento);
+					
+					switch (iSalida) 
+					{
+					case 0: //Sin errores
+						sMsg = "La referencia catastral se ha creado correctamente.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+						break;
+
+					case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
+						sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -3: //Error 003 - NO EXISTE EL ACTIVO
+						sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					/*case -49: //Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
+						sMsg = "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;*/
+
+					case -50: //Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
+						sMsg = "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;			
+
+					case -51: //Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
+						sMsg = "ERROR:051 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -52: //Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
+						sMsg = "ERROR:052 - El titular catastral es obligatorio. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -53: //Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
+						sMsg = "ERROR:053 - Existen recursos o impuestos pendientes de esta referencia. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
+						sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					//Ampliacion de valor catastral
+					case -82: //Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
+						sMsg = "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -83: //Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
+						sMsg = "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
+						sMsg = "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -700: //Error 700 - No existe realcion con ese activo
+						sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -701: //Error 701 - Valor del suelo incorrecto
+						sMsg = "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -702: //Error 702 - Valor catastral incorrecto
+						sMsg = "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -801: //Error 801 - alta de una referencia en alta
+						sMsg = "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -802: //Error 802 - referencia catastral de baja no puede recibir movimientos
+						sMsg = "ERROR:802 - La referencia catastral esta baja y no puede recibir movimientos. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -803: //Error 803 - estado no disponible
+						sMsg = "ERROR:803 - El estado de la referencia catastral informada no esta disponible. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -804: //Error 804 - modificacion sin cambios
+						sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -900: //Error 900 - al crear un movimiento
+						sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -901: //Error 901 - error y rollback - error al crear la cuota
+						sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la referencia catastral. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -902: //Error 902 - error y rollback - error al registrar la relaccion
+						sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -903: //Error 903 - error y rollback - error al cambiar el estado
+						sMsg = "[FATAL] ERROR:903 - Se ha producido un error al cambiar el estado de la referencia catastral. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -904: //Error 904 - error y rollback - error al modificar la cuota
+						sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
+						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					default: //error generico
+						sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+					}
+				}
+				
+				logger.debug("Finalizadas las comprobaciones.");
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-			}
-			else
-			{
-				MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
-						sCODTRN.toUpperCase(), 
-						sCOTDOR.toUpperCase(), 
-						sIDPROV.toUpperCase(), 
-						"A",
-						sCOENGP.toUpperCase(), 
-						sCOACES.toUpperCase(), 
-						sNURCAT.toUpperCase(),
-						"", 
-						sTIRCAT.toUpperCase(),
-						"", 
-						sENEMIS.toUpperCase(),
-						sCOTEXA.toUpperCase(),
-						"", 
-						sOBTEXC.toUpperCase(), 
-						sOBDEER.toUpperCase(),
-						"", 
-						Utils.compruebaImporte(sIMVSUE.toUpperCase()),
-						"", 
-						Utils.compruebaImporte(sIMCATA.toUpperCase()),
-						"", 
-						Utils.compruebaFecha(sFERECA.toUpperCase()));
-				
-				int iSalida = CLReferencias.registraMovimiento(movimiento);
-				
-				switch (iSalida) 
-				{
-				case 0: //Sin errores
-					sMsg = "La referencia catastral se ha creado correctamente.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-					break;
+			}			
 
-				case -1: //Error 001 - CODIGO DE ACCION DEBE SER A,M o B
-					sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -3: //Error 003 - NO EXISTE EL ACTIVO
-					sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-
-				/*case -49: //Error 049 - LA REFERENCIA CATASTRAL YA EXISTE NO SE PUEDE DAR DE ALTA
-					sMsg = "ERROR:049 - La referencia catastral propocionada ya esta registrada en el sistema. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;*/
-
-				case -50: //Error 050 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE MODIFICAR
-					sMsg = "ERROR:050 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;			
-
-				case -51: //Error 051 - LA REFERENCIA CATASTRAL NO EXISTE NO SE PUEDE DAR DE BAJA
-					sMsg = "ERROR:051 - La referencia catastral propocionada no esta registrada en el sistema. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -52: //Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
-					sMsg = "ERROR:052 - El titular catastral es obligatorio. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -53: //Error 053 - EXISTEN DATOS EN GMAE57. NO SE PUEDE REALIZAR LA BAJA
-					sMsg = "ERROR:053 - Existen recursos o impuestos pendientes de esta referencia. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -54: //Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
-					sMsg = "ERROR:054 - La referencia catastral es obligatoria. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				//Ampliacion de valor catastral
-				case -82: //Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
-					sMsg = "ERROR:082 - El valor del suelo debe de ser mayor que 0. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -83: //Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
-					sMsg = "ERROR:083 - El valor catastral debe de ser mayor que 0. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -85: //Error 085 - FECHA REVISION DEL VALOR CATASTRAL NO TRAE UN VALOR LOGICO
-					sMsg = "ERROR:085 - La fecha de revision del valor catastral no esta bien informada. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -700: //Error 700 - No existe realcion con ese activo
-					sMsg = "ERROR:700 - El activo suministrado no esta relacionado con la referencia catastral informada. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -701: //Error 701 - Valor del suelo incorrecto
-					sMsg = "ERROR:701 - El valor del suelo no esta correctamente informado. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -702: //Error 702 - Valor catastral incorrecto
-					sMsg = "ERROR:702 - El valor catastral no esta correctamente informado. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -801: //Error 801 - alta de una referencia en alta
-					sMsg = "ERROR:801 - La referencia ya esta dada de alta. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -802: //Error 802 - referencia catastral de baja no puede recibir movimientos
-					sMsg = "ERROR:802 - La referencia catastral esta baja y no puede recibir movimientos. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -803: //Error 803 - estado no disponible
-					sMsg = "ERROR:803 - El estado de la referencia catastral informada no esta disponible. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -804: //Error 804 - modificacion sin cambios
-					sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -900: //Error 900 - al crear un movimiento
-					sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -901: //Error 901 - error y rollback - error al crear la cuota
-					sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la referencia catastral. Por favor, revise los datos y avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -902: //Error 902 - error y rollback - error al registrar la relaccion
-					sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -903: //Error 903 - error y rollback - error al cambiar el estado
-					sMsg = "[FATAL] ERROR:903 - Se ha producido un error al cambiar el estado de la referencia catastral. Por favor, revise los datos y avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
-					break;
-
-				case -904: //Error 904 - error y rollback - error al modificar la cuota
-					sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos y avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
-					break;
-					
-				case -910: //Error 910 - error y rollback - error al conectar con la base de datos
-					sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
-					break;
-
-				default: //error generico
-					sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
-					break;
-				}
-			}
-			
-			logger.debug("Finalizadas las comprobaciones.");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}

@@ -22,19 +22,19 @@ public final class CLActivos
 	private CLActivos(){}
 
 	//Interfaz básico
-	public static Activo buscarActivo (String sCodCOACES)
+	public static Activo buscarActivo (int iCodCOACES)
 	{
-		return QMActivos.getActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMActivos.getActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
-	public static Activo buscarDetallesActivo (String sCodCOACES)
+	public static Activo buscarDetallesActivo (int iCodCOACES)
 	{
-		return QMActivos.getDetallesActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMActivos.getDetallesActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 
-	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla activobuscado)
+	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla filtro)
 	{
-		return QMActivos.buscaListaActivos(ConnectionManager.getDBConnection(),activobuscado);
+		return QMActivos.buscaListaActivos(ConnectionManager.getDBConnection(),filtro);
 	}
 
 	public static ArrayList<ActivoTabla> buscarActivosConFichaInmovilizado (ActivoTabla activobuscado)
@@ -57,19 +57,19 @@ public final class CLActivos
 		return QMActivos.buscaListaActivosReferencias(ConnectionManager.getDBConnection(),activo);
 	}
 	
-	public static boolean existeActivo (String sCodCOACES)
+	public static boolean existeActivo (int iCodCOACES)
 	{
-		return QMActivos.existeActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMActivos.existeActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 
-	public static String referenciaCatastralAsociada (String sCodCOACES)
+	public static String referenciaCatastralAsociada (int iCodCOACES)
 	{
-		return QMActivos.getReferenciaCatastral(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMActivos.getReferenciaCatastral(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
-	public static String sociedadPatrimonialAsociada (String sCodCOACES)
+	public static String sociedadPatrimonialAsociada (int iCodCOACES)
 	{
-		return QMActivos.getSociedadPatrimonial(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMActivos.getSociedadPatrimonial(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
 	//Interfaz avanzado
@@ -85,7 +85,7 @@ public final class CLActivos
 			
 			Activo activo = Parser.leerActivo(linea);
 			
-			String sCodActivo =  activo.getCOACES();
+			int iCodCOACES =  Integer.parseInt(activo.getCOACES());
 			
 			//logger.debug("sCodActivo:|"+sCodActivo+"|");
 
@@ -93,12 +93,12 @@ public final class CLActivos
 			{
 				conexion.setAutoCommit(false);
 				
-				if (!QMActivos.existeActivo(conexion,sCodActivo))
+				if (!QMActivos.existeActivo(conexion,iCodCOACES))
 				{
 					if (QMActivos.addActivo(conexion,activo))
 					{
 						//logger.info("Nuevo Activo registrado.");
-						if (QMRegistroActivos.addRegistroActivo(conexion, sCodActivo))
+						if (QMRegistroActivos.addRegistroActivo(conexion, iCodCOACES))
 						{
 							conexion.commit();
 						}
@@ -119,10 +119,10 @@ public final class CLActivos
 				{
 					if (!QMActivos.compruebaActivo(conexion,activo))
 					{
-						if (QMActivos.modActivo(conexion,activo,sCodActivo))
+						if (QMActivos.modActivo(conexion,activo,iCodCOACES))
 						{
 							//logger.info("Activo actualizado.");
-							if (QMRegistroActivos.modRegistroActivo(conexion, sCodActivo))
+							if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES))
 							{
 								iCodigo = 1;
 								conexion.commit();
@@ -181,7 +181,7 @@ public final class CLActivos
 		return iCodigo;
 	}	
 	
-	public static String compruebaTipoActivoSAREB (String sCodCOACES)
+	public static String compruebaTipoActivoSAREB (int iCodCOACES)
 	{
 		String sTipo = "";
 
@@ -191,18 +191,18 @@ public final class CLActivos
 		{
 			sTipo = "#";
 			
-			logger.debug("sCodCOACES:|"+sCodCOACES+"|");
+			logger.debug("iCodCOACES:|"+iCodCOACES+"|");
 			
-			String sCOSPAT = QMActivos.getSociedadPatrimonial(conexion,sCodCOACES);
+			String sCOSPAT = QMActivos.getSociedadPatrimonial(conexion,iCodCOACES);
 
 			if (sCOSPAT.equals("9999") || sCOSPAT.equals("9998"))
 			{
-				if (QMActivos.getCOTSINActivo(conexion,sCodCOACES).startsWith("SU"))
+				if (QMActivos.getCOTSINActivo(conexion,iCodCOACES).startsWith("SU"))
 				{
 					//SUELOS Y OBRA EN CURSO
 					sTipo = "S";
 				}
-				else if (QMActivos.getBIARREActivo(conexion,sCodCOACES).equals("S"))
+				else if (QMActivos.getBIARREActivo(conexion,iCodCOACES).equals("S"))
 				{
 					//ARRENDAMIENTOS
 					sTipo = "A";

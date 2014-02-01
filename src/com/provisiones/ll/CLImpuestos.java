@@ -28,13 +28,13 @@ public final class CLImpuestos
 	private CLImpuestos(){}
 	
 	//ID
-	public static String buscarCodigoImpuesto (String sCodNURCAT,String sCodCOSBAC)
+	public static long buscarCodigoImpuesto (String sCodNURCAT,String sCodCOSBAC)
 	{
 
 		return QMImpuestos.getImpuestoRecursoID(ConnectionManager.getDBConnection(),sCodNURCAT, sCodCOSBAC);
 	}
 	
-	public static MovimientoImpuestoRecurso convierteImpuestoenMovimiento(ImpuestoRecurso impuesto, String sCodCOACES, String sCodCOACCI)
+	public static MovimientoImpuestoRecurso convierteImpuestoenMovimiento(ImpuestoRecurso impuesto, int iCodCOACES, String sCodCOACCI)
 	{
 		logger.debug("Convirtiendo...");
 		
@@ -44,7 +44,7 @@ public final class CLImpuestos
 				ValoresDefecto.DEF_IDPROV,
 				sCodCOACCI,
 				ValoresDefecto.DEF_COENGP,
-				sCodCOACES,
+				Integer.toString(iCodCOACES),
 				impuesto.getNURCAT(),
 				ValoresDefecto.DEF_COGRUG_E4, 
 				ValoresDefecto.DEF_COTACA_E4, 
@@ -91,14 +91,14 @@ public final class CLImpuestos
 		return QMListaImpuestos.buscaActivosAsociadosResueltos(ConnectionManager.getDBConnection(),activo);
 	}
 
-	public static ArrayList<ImpuestoRecursoTabla> buscarDevolucionesDelActivo (String sCodCOACES)
+	public static ArrayList<ImpuestoRecursoTabla> buscarDevolucionesDelActivo (int iCodCOACES)
 	{
-		return QMListaImpuestos.buscaDevolucionesActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMListaImpuestos.buscaDevolucionesActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 
-	public static ArrayList<ImpuestoRecursoTabla> buscarImpuestosActivos (String sCodCOACES)
+	public static ArrayList<ImpuestoRecursoTabla> buscarImpuestosActivos (int iCodCOACES)
 	{
-		return QMListaImpuestos.buscaImpuestosActivo(ConnectionManager.getDBConnection(),sCodCOACES);
+		return QMListaImpuestos.buscaImpuestosActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
 	public static MovimientoImpuestoRecurso buscarMovimientoImpuestoRecurso (String sCodMovimiento)
@@ -111,9 +111,9 @@ public final class CLImpuestos
 		return (QMListaImpuestos.buscaCantidadValidado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
 	}	
 	
-	public static boolean comprobarRelacion (String sCodNURCAT,String sCodCOSBAC, String sCodCOACES)
+	public static boolean comprobarRelacion (String sCodNURCAT,String sCodCOSBAC, int iCodCOACES)
 	{
-		return QMListaImpuestos.compruebaRelacionImpuestoActivo(ConnectionManager.getDBConnection(),sCodCOACES, buscarCodigoImpuesto(sCodNURCAT, sCodCOSBAC));
+		return QMListaImpuestos.compruebaRelacionImpuestoActivo(ConnectionManager.getDBConnection(),iCodCOACES, buscarCodigoImpuesto(sCodNURCAT, sCodCOSBAC));
 	}	
 
 	public static boolean estaDeBaja (String sCodNURCAT,String sCodCOSBAC)
@@ -143,7 +143,7 @@ public final class CLImpuestos
 			
 			MovimientoImpuestoRecurso impuesto = Parser.leerImpuestoRecurso(linea);
 
-			if (CLActivos.existeActivo(impuesto.getCOACES()))
+			if (CLActivos.existeActivo(Integer.parseInt(impuesto.getCOACES())))
 			{
 				logger.debug(impuesto.logMovimientoImpuestoRecurso());
 				
@@ -190,7 +190,7 @@ public final class CLImpuestos
 						switch (COACCI)
 						{
 						case A: case M: case B:
-							if (QMListaImpuestos.existeRelacionImpuesto(conexion,impuesto.getCOACES(), buscarCodigoImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC()), sCodMovimiento))
+							if (QMListaImpuestos.existeRelacionImpuesto(conexion,Integer.parseInt(impuesto.getCOACES()), buscarCodigoImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC()), sCodMovimiento))
 							{
 								if(QMListaImpuestos.setValidado(conexion,sCodMovimiento, sValidado))
 								{
@@ -269,14 +269,14 @@ public final class CLImpuestos
 		
 		if (conexion != null)
 		{
-			String sCodImpuesto = buscarCodigoImpuesto(movimiento.getNURCAT(), movimiento.getCOSBAC());
+			long liCodImpuesto = buscarCodigoImpuesto(movimiento.getNURCAT(), movimiento.getCOSBAC());
 			
-			iCodigo = validaMovimiento(movimiento, sCodImpuesto);
+			iCodigo = validaMovimiento(movimiento, liCodImpuesto);
 			
 
 			if (iCodigo == 0)
 			{
-				MovimientoImpuestoRecurso movimiento_revisado = revisaCodigosControl(movimiento,sCodImpuesto);
+				MovimientoImpuestoRecurso movimiento_revisado = revisaCodigosControl(movimiento,liCodImpuesto);
 				if (movimiento_revisado.getCOACCI().equals("#"))
 				{	
 					//error modificacion sin cambios
@@ -310,11 +310,11 @@ public final class CLImpuestos
 
 									if (estaDeBaja (movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC())) //Alta de baja
 									{
-										if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
+										if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, Integer.toString(indice)))
 										{
-											if (QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_ALTA))
+											if (QMImpuestos.setEstado(conexion,liCodImpuesto,ValoresDefecto.DEF_ALTA))
 											{
-												if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento),sCodImpuesto))
+												if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento),liCodImpuesto))
 												{
 													//OK 
 													iCodigo = 0;
@@ -323,7 +323,7 @@ public final class CLImpuestos
 												else
 												{
 													//error modificacion impuesto - Rollback
-													//QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_BAJA);
+													//QMImpuestos.setEstado(conexion,liCodImpuesto,ValoresDefecto.DEF_BAJA);
 													//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
 													//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
 													iCodigo = -904;
@@ -350,12 +350,12 @@ public final class CLImpuestos
 									}
 									else //Alta nueva
 									{
-										sCodImpuesto = Long.toString(QMImpuestos.addImpuesto(conexion,impuestodealta));
-										if (!sCodImpuesto.equals("0"))
+										liCodImpuesto = QMImpuestos.addImpuesto(conexion,impuestodealta);
+										if (liCodImpuesto != 0)
 										{
 											//OK - impuesto creado
 											logger.debug("Hecho!");
-											if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
+											if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, Integer.toString(indice)))
 											{
 												//OK 
 												iCodigo = 0;
@@ -364,7 +364,7 @@ public final class CLImpuestos
 											else
 											{
 												//error relacion impuesto no creada - Rollback
-												//QMImpuestos.delImpuestoRecurso(conexion,sCodImpuesto);
+												//QMImpuestos.delImpuestoRecurso(conexion,liCodImpuesto);
 												//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
 												iCodigo = -902;
 												conexion.rollback();
@@ -382,10 +382,10 @@ public final class CLImpuestos
 								
 									break;
 								case B:
-									if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
+									if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, Integer.toString(indice)))
 									{
 									
-										if (QMImpuestos.setEstado(conexion,sCodImpuesto,ValoresDefecto.DEF_BAJA))
+										if (QMImpuestos.setEstado(conexion,liCodImpuesto,ValoresDefecto.DEF_BAJA))
 										{
 											//OK 
 											iCodigo = 0;
@@ -410,10 +410,10 @@ public final class CLImpuestos
 									}
 									break;
 								case M:
-									if (QMListaImpuestos.addRelacionImpuestos(conexion,movimiento_revisado.getCOACES(), sCodImpuesto, Integer.toString(indice)))
+									if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, Integer.toString(indice)))
 									{
 										//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
-										if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento), sCodImpuesto))
+										if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento), liCodImpuesto))
 										{
 											//OK 
 											iCodigo = 0;
@@ -480,7 +480,7 @@ public final class CLImpuestos
 		return iCodigo;
 	}
 	
-	public static MovimientoImpuestoRecurso revisaCodigosControl(MovimientoImpuestoRecurso movimiento, String sCodImpuesto)
+	public static MovimientoImpuestoRecurso revisaCodigosControl(MovimientoImpuestoRecurso movimiento, long liCodImpuesto)
 	{
 		MovimientoImpuestoRecurso movimiento_revisado = new MovimientoImpuestoRecurso("","0","0","","0","0","","0","0","0","","0","","0","","0","","#","","#","0","","","");
 
@@ -488,7 +488,7 @@ public final class CLImpuestos
 		
 		if (conexion != null)
 		{
-			ImpuestoRecurso impuesto = QMImpuestos.getImpuestoRecurso(conexion,sCodImpuesto);
+			ImpuestoRecurso impuesto = QMImpuestos.getImpuestoRecurso(conexion,liCodImpuesto);
 			
 			
 			logger.debug(impuesto.logImpuestoRecurso());
@@ -672,7 +672,7 @@ public final class CLImpuestos
 
 	}
 	
-	public static int validaMovimiento(MovimientoImpuestoRecurso movimiento, String sCodImpuesto)
+	public static int validaMovimiento(MovimientoImpuestoRecurso movimiento, long liCodImpuesto)
 	{
 		int iCodigo = 0;
 
@@ -682,7 +682,7 @@ public final class CLImpuestos
 		{
 			logger.debug("Comprobando estado...");
 			
-			String sEstado = QMImpuestos.getEstado(conexion,sCodImpuesto);
+			String sEstado = QMImpuestos.getEstado(conexion,liCodImpuesto);
 			
 			logger.debug(movimiento.logMovimientoImpuestoRecurso());
 			
@@ -694,7 +694,7 @@ public final class CLImpuestos
 				//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 				iCodigo = -1;
 			}
-			else if (movimiento.getCOACES().equals("") || !CLActivos.existeActivo(movimiento.getCOACES()))
+			else if (movimiento.getCOACES().equals("") || !CLActivos.existeActivo(Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 003 - NO EXISTE EL ACTIVO
 				iCodigo = -3;
@@ -704,7 +704,7 @@ public final class CLImpuestos
 				//Error 054 - LA REFERENCIA CATASTRAL ES OBLIGATORIA
 				iCodigo = -54;
 			}
-			else if (!CLReferencias.comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOACES()))
+			else if (!CLReferencias.comprobarRelacion(movimiento.getNURCAT(), Integer.parseInt(movimiento.getCOACES())))
 			{
 			
 				//error no existe relacion con el activo.
@@ -809,12 +809,12 @@ public final class CLImpuestos
 				iCodigo = -61;
 			}
 			
-			else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),movimiento.getCOACES()) && !estaDeBaja(movimiento.getNURCAT(), movimiento.getCOSBAC()))
+			else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),Integer.parseInt(movimiento.getCOACES())) && !estaDeBaja(movimiento.getNURCAT(), movimiento.getCOSBAC()))
 			{
 				//Error 064 - NO SE PUEDE REALIZAR EL ALTA PORQUE YA EXISTE EL REGISTRO EN GMAE57
 				iCodigo = -64;
 			}
-			else if (movimiento.getCOACCI().equals("M") && !comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),movimiento.getCOACES()))
+			else if (movimiento.getCOACCI().equals("M") && !comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 066 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE EL REGISTRO EN GMAE57
 				iCodigo = -66;
@@ -824,7 +824,7 @@ public final class CLImpuestos
 				//Error 067 - NO SE PUEDE ACTUALIZAR PORQUE NO EXISTE REFERENCIA CATASTRAL EN GMAE13
 				iCodigo = -67;
 			}
-			else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA) && !comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),movimiento.getCOACES()))
+			else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA) && !comprobarRelacion(movimiento.getNURCAT(), movimiento.getCOSBAC(),Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 068 - NO SE PUEDE ELIMINAR PORQUE NO EXISTE REGISTRO EN GMAE57
 				iCodigo = -68;

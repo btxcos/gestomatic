@@ -438,6 +438,8 @@ public class GestorErroresGastos implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			logger.debug("Buscando Gastos con errores...");
 			
 			ErrorGastoTabla filtro = new ErrorGastoTabla(
@@ -446,11 +448,10 @@ public class GestorErroresGastos implements Serializable
 
 			this.setTablagastoserror(CLErrores.buscarGastosConErrores(filtro));
 
-
+			sMsg = "Encontrados "+getTablagastoserror().size()+" Gastos relacionados.";
 			
-			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablagastoserror().size()+" Gastos relacionados.");
-			logger.debug("Encontrados {} gastos relacionados.",getTablagastoserror().size());
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -462,12 +463,16 @@ public class GestorErroresGastos implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
 			this.setTablaerrores(CLErrores.buscarErroresGasto(sCodMovimiento));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
-			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
+			
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
@@ -522,7 +527,7 @@ public class GestorErroresGastos implements Serializable
 			this.sNUCONE = movimiento.getNUCONE();
 			
 			//this.sNUPROF = movimiento.getNUPROF();
-	    	this.sNUPROF = CLProvisiones.provisionAsignada(sCOACES);
+	    	this.sNUPROF = CLProvisiones.provisionAsignada(Integer.parseInt(sCOACES));
 
 			this.sCOTERR = movimiento.getCOTERR();
 			this.sFMPAGN = Utils.recuperaFecha(movimiento.getFMPAGN());
@@ -532,9 +537,9 @@ public class GestorErroresGastos implements Serializable
 			this.sCOSPII = movimiento.getCOSPII();
 			this.sNUCLII = movimiento.getNUCLII();
 					
-	        	
-	    	msg = Utils.pfmsgInfo("Datos del movimiento cargados.");
-	    	logger.debug("Datos del movimiento cargados.");
+			sMsg = "Datos del movimiento cargados.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -551,7 +556,7 @@ public class GestorErroresGastos implements Serializable
 	    	int iCodError  = Integer.parseInt(sCodError);
 	    	
 	    	
-	    	logger.debug("Error seleccionado:|{}|",iCodError);
+	    	logger.debug("Error seleccionado:|"+iCodError+"|");
 	    	
 	    	String sMsg ="";
 	    	
@@ -580,15 +585,18 @@ public class GestorErroresGastos implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla buscaactivos = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+			String sMsg = "";
+			
+			ActivoTabla filtro = new ActivoTabla(
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLGastos.buscarActivosConGastos(buscaactivos));
+			this.setTablaactivos(CLGastos.buscarActivosConGastos(filtro));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -599,11 +607,14 @@ public class GestorErroresGastos implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 	    	FacesMessage msg;
-	    	 
+	    	
+	    	String sMsg = "";
+
 	    	this.sCOACES  = activoseleccionado.getCOACES();
 	    	
-	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
-	    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+	    	sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 	    	
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -615,18 +626,23 @@ public class GestorErroresGastos implements Serializable
 		{
 			FacesMessage msg;
 			
-			if (CLActivos.existeActivo(sCOACES))
-			{
-				this.tablagastos = CLGastos.buscarGastosNuevosActivo(sCOACES);
+			String sMsg = "";
 			
-				msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos en curso.");
-				logger.info("Encontrados {} gastos en curso.",getTablagastos().size());
+			if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+			{
+				this.tablagastos = CLGastos.buscarGastosNuevosActivo(Integer.parseInt(sCOACES));
+			
+				sMsg = "Encontrados "+getTablagastos().size()+" gastos en curso.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
 			}
 			else
 			{
-				msg = Utils.pfmsgError("ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.");
-				logger.error("ERROR: No exite el activo '{}'. Por favor, revise los datos.",sCOACES);
+				sMsg = "ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
+			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -643,58 +659,72 @@ public class GestorErroresGastos implements Serializable
 	    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA().replaceFirst("Devolucion ", "");
 	    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
 	    	
-		  	Gasto gasto = CLGastos.buscarGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+	    	String sMsg = "";
 	    	
-	    	logger.debug(gasto.logGasto());
-	 
-	    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
+			try
+			{
+				Gasto gasto = CLGastos.buscarGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+		    	
+		    	logger.debug(gasto.logGasto());
+		 
+		    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
 
-			this.sPTPAGO = gasto.getPTPAGO();
+				this.sPTPAGO = gasto.getPTPAGO();
 
-			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
-			//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
-			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
-			this.sCOSIGA = gasto.getCOSIGA();
-			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
-			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
-			this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
-			this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
-			this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
-			this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
-			this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
-			this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
-			this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
-			this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
-			this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
-			this.sCOIMPT = gasto.getCOIMPT();
+				this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
+				//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+				this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
+				this.sCOSIGA = gasto.getCOSIGA();
+				this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
+				this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
+				this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
+				this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+				this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
+				this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
+				this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
+				this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
+				this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
+				this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
+				this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
+				this.sCOIMPT = gasto.getCOIMPT();
+				
+				this.sCOTNEG = gasto.getCOTNEG();
+				this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
+				this.sCOMONA = gasto.getCOMONA();
+				this.sBIAUTO = gasto.getBIAUTO();
+				this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
+				//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+				
+				this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
+				
+				this.sCOENCX = ValoresDefecto.DEF_COENCX;
+				this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+				this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+				
+				this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
+				
+				this.sCOTERR = ValoresDefecto.DEF_COTERR;
+				this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
 			
-			this.sCOTNEG = gasto.getCOTNEG();
-			this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
-			this.sCOMONA = gasto.getCOMONA();
-			this.sBIAUTO = gasto.getBIAUTO();
-			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-			//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
-			
-			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
-			
-			this.sCOENCX = ValoresDefecto.DEF_COENCX;
-			this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-			this.sNUCONE = ValoresDefecto.DEF_NUCONE;
-			
-			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
-			
-			this.sCOTERR = ValoresDefecto.DEF_COTERR;
-			this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
-		
-			this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
-			this.sCOAPII = ValoresDefecto.DEF_COAPII;
-			this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-			this.sNUCLII = ValoresDefecto.DEF_NUCLII;
-			
-			String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
-			
-			msg = Utils.pfmsgInfo(sTipo+" de '"+sDCOSBGA+"' se ha cargado.");
-			logger.info("{} de '{}' se ha cargado.",sTipo,sDCOSBGA);
+				this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+				this.sCOAPII = ValoresDefecto.DEF_COAPII;
+				this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+				this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+				
+				String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
+				
+				sMsg = sTipo+" de '"+sDCOSBGA+"' se ha cargado.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+	    	
+		  	
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -906,14 +936,14 @@ public class GestorErroresGastos implements Serializable
 			}
 			else
 			{
-				logger.debug("sCOACES:|{}|",sCOACES);
-				logger.debug("sCOGRUG:|{}|",sCOGRUG);
-				logger.debug("sCOTPGA:|{}|",sCOTPGA);
-				logger.debug("sCOSBGA:|{}|",sCOSBGA);
-				logger.debug("sFEDEVE:|{}|",sFEDEVE);
+				logger.debug("sCOACES:|"+sCOACES+"|");
+				logger.debug("sCOGRUG:|"+sCOGRUG+"|");
+				logger.debug("sCOTPGA:|"+sCOTPGA+"|");
+				logger.debug("sCOSBGA:|"+sCOSBGA+"|");
+				logger.debug("sFEDEVE:|"+sFEDEVE+"|");
 				
 				MovimientoGasto nuevomovimiento = new MovimientoGasto (
-						sCOACES.toUpperCase(),
+						sCOACES,
 						sCOGRUG.toUpperCase(),
 						sCOTPGA.toUpperCase(),
 						Utils.compruebaCodigoPago(false, sCOSBGA.toUpperCase()),

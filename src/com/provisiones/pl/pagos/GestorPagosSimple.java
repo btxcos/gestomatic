@@ -288,15 +288,15 @@ public class GestorPagosSimple implements Serializable
 			FacesMessage msg;
 			
 			ActivoTabla filtro = new ActivoTabla(
-					sCOACESB.toUpperCase(), sCOPOINB.toUpperCase(), sNOMUINB.toUpperCase(),
+					"", sCOPOINB.toUpperCase(), sNOMUINB.toUpperCase(),
 					sNOPRACB.toUpperCase(), sNOVIASB.toUpperCase(), sNUPIACB.toUpperCase(), 
 					sNUPOACB.toUpperCase(), sNUPUACB.toUpperCase(), "");
 			
 			this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
 
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			
-			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -309,13 +309,10 @@ public class GestorPagosSimple implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
-	    	String sMsg = ""; 
-	    	
 	    	this.sCOACESB  = activoseleccionado.getCOACES();
 	    	
-	    	sMsg = "Activo '"+sCOACESB+"' seleccionado.";
+	    	String sMsg = "Activo '"+sCOACESB+"' seleccionado.";
 	    	msg = Utils.pfmsgInfo(sMsg);
-	    	
 	    	logger.info(sMsg);
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -336,7 +333,6 @@ public class GestorPagosSimple implements Serializable
 			{
 				sMsg = "La fecha proporcionada no es válida. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
-				
 				logger.error(sMsg);
 			}
 			else
@@ -345,11 +341,8 @@ public class GestorPagosSimple implements Serializable
 
 				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
-				
 				logger.info(sMsg);
 			}
-
-
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -362,13 +355,10 @@ public class GestorPagosSimple implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
-	    	String sMsg = "";
-
 	    	this.sNUPROFB  = provisionseleccionada.getNUPROF();
 	    	
-	    	sMsg = "Provision '"+sNUPROFB+"' seleccionada.";
+	    	String sMsg = "Provision '"+sNUPROFB+"' seleccionada.";
 	    	msg = Utils.pfmsgInfo(sMsg);
-	    	
 	    	logger.info(sMsg);
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -384,20 +374,31 @@ public class GestorPagosSimple implements Serializable
 
 			if (!sCOACESB.equals(""))
 			{
-				this.setTablagastos(CLGastos.buscarGastosActivo(sCOACESB));
+				try
+				{
+					this.setTablagastos(CLGastos.buscarGastosActivo(Integer.parseInt(sCOACESB)));
+					
+					if (getTablagastos().size() == 0)
+					{
+						msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
+					}
+					else if (getTablagastos().size() == 1)
+					{
+						msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
+					}
+					else
+					{
+						msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					String sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				
-				if (getTablagastos().size() == 0)
-				{
-					msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
-				}
-				else if (getTablagastos().size() == 1)
-				{
-					msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
-				}
-				else
-				{
-					msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
-				}
+				
 			}
 			else
 			{
@@ -466,9 +467,9 @@ public class GestorPagosSimple implements Serializable
 	    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA();
 	    	
 	    	
-	    	this.sCodGastoB = CLGastos.buscarCodigoGasto(sCOACES,sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
+	    	this.sCodGastoB = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
 
-		  	Gasto gasto = CLGastos.buscarGastoConCodigo(sCodGastoB);
+		  	Gasto gasto = CLGastos.buscarGastoConCodigo(Long.parseLong(sCodGastoB));
 
 	    	logger.debug(gasto.logGasto());
 	    	
@@ -484,7 +485,7 @@ public class GestorPagosSimple implements Serializable
 			//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
 			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
 
-			this.sEstado = CLDescripciones.descripcionEstadoGasto(CLGastos.estadoGasto(sCodGastoB));
+			this.sEstado = CLDescripciones.descripcionEstadoGasto(CLGastos.estadoGasto(Long.parseLong(sCodGastoB)));
 			
 			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
 			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
@@ -509,7 +510,7 @@ public class GestorPagosSimple implements Serializable
 			//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 			//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
-			this.sNUPROF = CLGastos.buscarProvisionGasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
+			this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
 
 	    	
 	    	sMsg = "Gasto cargado.";
@@ -530,39 +531,48 @@ public class GestorPagosSimple implements Serializable
 			String sMsg = "";
 			
 			borrarCamposComunidad();
-
-			Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES);
 			
-			Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
-			
-			this.sCOCLDO = comunidad.getsCOCLDO();
-			this.sNUDCOM = comunidad.getsNUDCOM();
-
-			this.sNOMCOC = comunidad.getsNOMCOC();
-			this.sNODCCO = comunidad.getsNODCCO();
-			this.sNOMPRC = comunidad.getsNOMPRC();
-			this.sNUTPRC = comunidad.getsNUTPRC();
-			this.sNOMADC = comunidad.getsNOMADC();
-			this.sNUTADC = comunidad.getsNUTADC();
-			this.sNODCAD = comunidad.getsNODCAD();
-
-			this.sNUCCEN = cuenta.getsNUCCEN();
-			this.sNUCCOF = cuenta.getsNUCCOF();
-			this.sNUCCDI = cuenta.getsNUCCDI();
-			this.sNUCCNT = cuenta.getsNUCCNT();
-
-			
-			if (comunidad.getsNUDCOM().equals(""))
+			try
 			{
-				sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+				Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
+				
+				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+				
+				this.sCOCLDO = comunidad.getsCOCLDO();
+				this.sNUDCOM = comunidad.getsNUDCOM();
+
+				this.sNOMCOC = comunidad.getsNOMCOC();
+				this.sNODCCO = comunidad.getsNODCCO();
+				this.sNOMPRC = comunidad.getsNOMPRC();
+				this.sNUTPRC = comunidad.getsNUTPRC();
+				this.sNOMADC = comunidad.getsNOMADC();
+				this.sNUTADC = comunidad.getsNUTADC();
+				this.sNODCAD = comunidad.getsNODCAD();
+
+				this.sNUCCEN = cuenta.getsNUCCEN();
+				this.sNUCCOF = cuenta.getsNUCCOF();
+				this.sNUCCDI = cuenta.getsNUCCDI();
+				this.sNUCCNT = cuenta.getsNUCCNT();
+
+				
+				if (comunidad.getsNUDCOM().equals(""))
+				{
+					sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+				else
+				{
+					sMsg = "La comunidad se ha cargado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-			}
-			else
-			{
-				sMsg = "La comunidad se ha cargado correctamente.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -590,19 +600,34 @@ public class GestorPagosSimple implements Serializable
 		    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
 		    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
 		    	
-		    	this.sCodGastoB = CLGastos.buscarCodigoGasto(sCOACES,sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
-		    	
-		    	logger.debug("sCodGasto:|"+sCodGastoB+"|");
-		    	
-		    	logger.debug("sCOACES:|"+sCOACES+"|");
-		    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");
-		    	logger.debug("sCOTPGA:|"+sCOTPGA+"|");
-		    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
-		    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
-		    	
-		    	logger.debug("Redirigiendo...");
+				try
+				{
+					this.sCodGastoB = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
+			    	
+			    	logger.debug("sCodGasto:|"+sCodGastoB+"|");
+			    	
+			    	logger.debug("sCOACES:|"+sCOACES+"|");
+			    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");
+			    	logger.debug("sCOTPGA:|"+sCOTPGA+"|");
+			    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
+			    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
+			    	
+			    	logger.debug("Redirigiendo...");
 
-		    	sPagina = "detallesgasto.xhtml";
+			    	sPagina = "detallesgasto.xhtml";
+				}
+				catch(NumberFormatException nfe)
+				{
+					FacesMessage msg;
+					
+					String sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
+		    	
+		    	
 			}
 			else
 			{

@@ -115,14 +115,15 @@ public class GestorTablaComunidadActivo implements Serializable
 			FacesMessage msg;
 			
 			ActivoTabla buscaactivos = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 
 			this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(buscaactivos));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -136,8 +137,9 @@ public class GestorTablaComunidadActivo implements Serializable
 
 	    	this.sCOACES  = activoseleccionadoalta.getCOACES();
 	    	
-	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
-	    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+	    	String sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -156,24 +158,28 @@ public class GestorTablaComunidadActivo implements Serializable
 			this.sNOMCOC = comunidad.getsNOMCOC();
 			this.sNODCCO = comunidad.getsNODCCO();
 		
+			String sMsg = "";
 			
 			if (comunidad.getsNUDCOM().equals(""))
 			{
-				msg = Utils.pfmsgError("ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.");
-				logger.error("ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.");
+				sMsg = "ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
 			else
 			{
 			
 				this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
 			
-				msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
-				logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
+				sMsg = "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				
-				msg = Utils.pfmsgInfo("Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.");
-				logger.info("Encontrados {} activos relacionados.",getTablaactivoscomunidad().size());
+				sMsg = "Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -203,7 +209,7 @@ public class GestorTablaComunidadActivo implements Serializable
 	    			sCOCLDO.toUpperCase(), 
 	    			sNUDCOM.toUpperCase(), 
 	    			"S", 
-	    			sCOACES.toUpperCase(), 
+	    			sCOACES, 
 	    			"#", "", 
 	    			"#", "", 
 	    			"#", "", 
@@ -442,34 +448,48 @@ public class GestorTablaComunidadActivo implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 	    	FacesMessage msg;
-
-	    	//comprobar el activo
-			int iSalida = CLComunidades.comprobarActivo(sCOACES.toUpperCase());
-
-			switch (iSalida) 
+	    	
+	    	String sMsg = "";
+	    	
+			try
 			{
-				case 0: //Sin errores
-					msg = nuevoMovimiento("X");
-					logger.debug("Activo dado de alta:|{}|",sCOACES);
-			    	this.sCOACES  = "";
-					break;
+		    	//comprobar el activo
+				int iSalida = CLComunidades.comprobarActivo(Integer.parseInt(sCOACES));
 
-				case -1: //error - ya vinculado
-					msg = Utils.pfmsgError("ERROR: El activo '"+sCOACES.toUpperCase()+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.");
-					logger.error("ERROR: El activo '{}' ya esta vinculado a otra comunidada. Por favor, revise los datos.",sCOACES.toUpperCase());
-					break;
+				switch (iSalida) 
+				{
+					case 0: //Sin errores
+						msg = nuevoMovimiento("X");
+						logger.debug("Activo dado de alta:|"+sCOACES+"|");
+				    	this.sCOACES  = "";
+						break;
 
-				case -2: //error - no existe
-					msg = Utils.pfmsgError("ERROR: El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado en el sistema. Por favor, revise los datos.");
-					logger.error("ERROR: El activo '{}' no se encuentra registrado en el sistema. Por favor, revise los datos.",sCOACES.toUpperCase());
-					break;
+					case -1: //error - ya vinculado
+						sMsg = "ERROR: El activo '"+sCOACES+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
 
-				default: //error generico
-					msg = Utils.pfmsgFatal("[FATAL] ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.");
-					logger.error("[FATAL] ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.");
-					break;
+					case -2: //error - no existe
+						sMsg = "ERROR: El activo '"+sCOACES+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					default: //error generico
+						sMsg = "[FATAL] ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+				}
 			}
-			
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}	
     }
@@ -491,7 +511,7 @@ public class GestorTablaComunidadActivo implements Serializable
 	        	
 	        	msg = nuevoMovimiento("E");
 	        	
-	        	logger.debug("Activo de baja:|{}|",activoseleccionadobaja.getCOACES());
+	        	logger.debug("Activo de baja:|"+activoseleccionadobaja.getCOACES()+"|");
 	    	}
 	    	
 	    	

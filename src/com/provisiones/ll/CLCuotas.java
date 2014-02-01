@@ -28,13 +28,13 @@ public final class CLCuotas
 	private CLCuotas(){}
 	
 	//ID
-	public static String buscarCodigoCuota (String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static long buscarCodigoCuota (int iCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		return QMCuotas.getCuotaID(ConnectionManager.getDBConnection(),sCodCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC);
+		return QMCuotas.getCuotaID(ConnectionManager.getDBConnection(),iCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC);
 	}
 
 	//Conversion
-	public static MovimientoCuota convierteCuotaenMovimiento(Cuota cuota, String sCodCOACES, String sCodCOACCI)
+	public static MovimientoCuota convierteCuotaenMovimiento(Cuota cuota, int iCOACES, String sCodCOACCI)
 	{
 		logger.debug("Convirtiendo...");
 		
@@ -46,7 +46,7 @@ public final class CLCuotas
 				cuota.getCOCLDO(),
 				cuota.getNUDCOM(),
 				ValoresDefecto.DEF_COENGP,
-				sCodCOACES,
+				Integer.toString(iCOACES),
 				ValoresDefecto.DEF_COGRUG_E2,
 				ValoresDefecto.DEF_COTACA_E2,
 				cuota.getCOSBAC(),
@@ -89,9 +89,9 @@ public final class CLCuotas
 		return QMListaCuotas.buscaActivosConCuotas(ConnectionManager.getDBConnection(),activo);
 	}
 
-	public static ArrayList<CuotaTabla> buscarCuotasActivo (String sCOACES)
+	public static ArrayList<CuotaTabla> buscarCuotasActivo (int iCOACES)
 	{
-		return QMCuotas.buscaCuotasActivo(ConnectionManager.getDBConnection(),sCOACES);
+		return QMCuotas.buscaCuotasActivo(ConnectionManager.getDBConnection(),iCOACES);
 	}
 	
 	public static MovimientoCuota buscarMovimientoCuota (String sCodMovimiento)
@@ -104,14 +104,14 @@ public final class CLCuotas
 		return (QMListaCuotas.buscaCantidadValidado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
 	}
 
-	public static boolean estaDeBaja (String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static boolean estaDeBaja (int iCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		return QMCuotas.getEstado(ConnectionManager.getDBConnection(),buscarCodigoCuota(sCodCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC)).equals(ValoresDefecto.DEF_BAJA);
+		return QMCuotas.getEstado(ConnectionManager.getDBConnection(),buscarCodigoCuota(iCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC)).equals(ValoresDefecto.DEF_BAJA);
 	}
 	
-	public static boolean existeCuota(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static boolean existeCuota(int iCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		return QMCuotas.existeCuota(ConnectionManager.getDBConnection(),buscarCodigoCuota(sCodCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC));
+		return QMCuotas.existeCuota(ConnectionManager.getDBConnection(),buscarCodigoCuota(iCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC));
 	}
 
 	public static boolean existeMovimientoCuota (String sCodMovimiento)
@@ -119,9 +119,9 @@ public final class CLCuotas
 		return QMMovimientosCuotas.existeMovimientoCuota(ConnectionManager.getDBConnection(),sCodMovimiento);
 	}
 	
-	public static boolean tieneCuotas(String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM)
+	public static boolean tieneCuotas(int iCOACES, String sCodCOCLDO, String sCodNUDCOM)
 	{
-		return QMCuotas.tieneCuotas(ConnectionManager.getDBConnection(),sCodCOACES,sCodCOCLDO, sCodNUDCOM);
+		return QMCuotas.tieneCuotas(ConnectionManager.getDBConnection(),iCOACES,sCodCOCLDO, sCodNUDCOM);
 	}
 	
 	public static int actualizarCuotaLeida(String linea)
@@ -134,7 +134,7 @@ public final class CLCuotas
 		{
 			MovimientoCuota cuota = Parser.leerCuota(linea);
 
-			if (CLActivos.existeActivo(cuota.getCOACES()))
+			if (CLActivos.existeActivo(Integer.parseInt(cuota.getCOACES())))
 			{
 				logger.debug(cuota.logMovimientoCuota());
 				
@@ -181,7 +181,7 @@ public final class CLCuotas
 						switch (COACCI)
 						{
 						case A: case M: case B:
-							if (QMListaCuotas.existeRelacionCuota(conexion,buscarCodigoCuota(cuota.getCOCLDO(),cuota.getNUDCOM(),cuota.getCOSBAC(),cuota.getCOACES()), sCodMovimiento))
+							if (QMListaCuotas.existeRelacionCuota(conexion,buscarCodigoCuota(Integer.parseInt(cuota.getCOACES()),cuota.getCOCLDO(),cuota.getNUDCOM(),cuota.getCOSBAC()), sCodMovimiento))
 							{
 								if(QMListaCuotas.setValidado(conexion,sCodMovimiento, sValidado))
 								{
@@ -262,13 +262,13 @@ public final class CLCuotas
 		if (conexion != null)
 		{
 			
-			String sCodCuota = buscarCodigoCuota(movimiento.getCOACES(), movimiento.getCOCLDO(),movimiento.getNUDCOM(), movimiento.getCOSBAC());
+			long liCodCuota = buscarCodigoCuota(Integer.parseInt(movimiento.getCOACES()), movimiento.getCOCLDO(),movimiento.getNUDCOM(), movimiento.getCOSBAC());
 			
-			iCodigo = validaMovimiento(movimiento,sCodCuota);
+			iCodigo = validaMovimiento(movimiento,liCodCuota);
 
 			if (iCodigo == 0)
 			{
-				MovimientoCuota movimiento_revisado = revisaCodigosControl(movimiento,sCodCuota);
+				MovimientoCuota movimiento_revisado = revisaCodigosControl(movimiento,liCodCuota);
 				
 				if (movimiento_revisado.getCOACCI().equals("#"))
 				{	
@@ -302,15 +302,15 @@ public final class CLCuotas
 
 									logger.debug(cuotadealta.logCuota());
 									
-									if (estaDeBaja(movimiento_revisado.getCOACES(), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
+									if (estaDeBaja(Integer.parseInt(movimiento_revisado.getCOACES()), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
 									{
-										if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
+										if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, Integer.toString(indice)))
 										{
 											//OK 
-											if (QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_ALTA))
+											if (QMCuotas.setEstado(conexion,liCodCuota, ValoresDefecto.DEF_ALTA))
 											{
 												//Se cambian los valores de la antigua cuota
-												if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), sCodCuota))
+												if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), liCodCuota))
 												{
 													//OK 
 													iCodigo = 0;
@@ -347,12 +347,12 @@ public final class CLCuotas
 									}
 									else
 									{
-										sCodCuota = Long.toString(QMCuotas.addCuota(conexion,cuotadealta));
-										if (!sCodCuota.equals("0"))
+										liCodCuota = QMCuotas.addCuota(conexion,cuotadealta);
+										if (liCodCuota != 0)
 										{
 											//OK - Cuota creada
 											logger.debug("Hecho!");
-											if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
+											if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, Integer.toString(indice)))
 											{
 												//OK 
 												iCodigo = 0;
@@ -378,9 +378,9 @@ public final class CLCuotas
 
 									break;
 								case B:
-									if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
+									if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, Integer.toString(indice)))
 									{
-										if (QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_BAJA))
+										if (QMCuotas.setEstado(conexion,liCodCuota, ValoresDefecto.DEF_BAJA))
 										{
 											//OK 
 											iCodigo = 0;
@@ -404,10 +404,10 @@ public final class CLCuotas
 									}
 									break;
 								case M:
-									if (QMListaCuotas.addRelacionCuotas(conexion,movimiento_revisado.getCOACES(), sCodCuota, Integer.toString(indice)))
+									if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, Integer.toString(indice)))
 									{
 										//Cuota cuotamodificada = QMCuotas.getCuota( movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC());
-										if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), sCodCuota))
+										if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), liCodCuota))
 										{
 											//OK 
 											iCodigo = 0;
@@ -471,7 +471,7 @@ public final class CLCuotas
 		return iCodigo;
 	}
 	
-	public static MovimientoCuota revisaCodigosControl(MovimientoCuota movimiento, String sCodCuota)
+	public static MovimientoCuota revisaCodigosControl(MovimientoCuota movimiento, long liCodCuota)
 	{
 		MovimientoCuota movimiento_revisado = new MovimientoCuota("", "", "", "", "", "", "", "0", "", "", "", "", "0", "", "0", "", "0", "", "0", "", "0", "", "", "");
 
@@ -479,7 +479,7 @@ public final class CLCuotas
 		
 		if (conexion != null)
 		{
-			Cuota cuota = QMCuotas.getCuota(conexion,sCodCuota);
+			Cuota cuota = QMCuotas.getCuota(conexion,liCodCuota);
 			
 			logger.debug(cuota.logCuota());
 			
@@ -683,7 +683,7 @@ public final class CLCuotas
 
 	}
 	
-	public static int validaMovimiento(MovimientoCuota movimiento, String sCodCuota)
+	public static int validaMovimiento(MovimientoCuota movimiento, long liCodCuota)
 	{
 		int iCodigo = 0;
 
@@ -695,7 +695,7 @@ public final class CLCuotas
 			
 			logger.debug("Comprobando estado...");
 			
-			String sEstado = QMCuotas.getEstado(conexion,sCodCuota);
+			String sEstado = QMCuotas.getEstado(conexion,liCodCuota);
 			
 			logger.debug("Estado:|"+sEstado+"|");
 			logger.debug("Acción:|"+movimiento.getCOACCI()+"|");
@@ -706,7 +706,7 @@ public final class CLCuotas
 				//Error 001 - CODIGO DE ACCION DEBE SER A,M o B
 				iCodigo = -1;
 			}
-			else if (movimiento.getCOACES().equals("") || !CLActivos.existeActivo(movimiento.getCOACES()))
+			else if (movimiento.getCOACES().equals("") || !CLActivos.existeActivo(Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 003 - NO EXISTE EL ACTIVO
 				iCodigo = -3;
@@ -779,20 +779,20 @@ public final class CLCuotas
 			
 
 			else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_ALTA) && 
-					CLComunidades.esActivoVinculadoAComunidad(movimiento.getCOACES()) && 
-					!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+					CLComunidades.esActivoVinculadoAComunidad(Integer.parseInt(movimiento.getCOACES())) && 
+					!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 042 - LA RELACION ACTIVO-COMUNIDAD YA EXISTE EN GMAE12. NO SE PUEDE REALIZAR EL ALTA
 				iCodigo = -42;
 			}
 			else if (movimiento.getCOACCI().equals("M") &&  
-					!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+					!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 043 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA MODIFICACION
 				iCodigo = -43;
 			}
 			else if (movimiento.getCOACCI().equals(ValoresDefecto.DEF_BAJA) &&  
-					!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),movimiento.getCOACES()))
+					!CLComunidades.comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(),Integer.parseInt(movimiento.getCOACES())))
 			{
 				//Error 045 - LA RELACION ACTIVO-COMUNIDAD NO EXISTE EN GMAE12. NO SE PUEDE REALIZAR LA BAJA
 				iCodigo = -45;

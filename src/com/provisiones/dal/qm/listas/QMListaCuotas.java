@@ -35,7 +35,7 @@ public final class QMListaCuotas
 
 	private QMListaCuotas(){}
 	
-	public static boolean addRelacionCuotas(Connection conexion, String sCodCOACES, String sCodCuota, String sCodMovimiento) 
+	public static boolean addRelacionCuotas(Connection conexion, int iCOACES, long liCodCuota, String sCodMovimiento) 
 	{
 		boolean bSalida = true;
 		
@@ -57,8 +57,8 @@ public final class QMListaCuotas
 					+ CAMPO5 + ","
 					+ CAMPO6 +
 					") VALUES ('" 
-					+ sCodCOACES + "','"
-					+ sCodCuota + "','"
+					+ iCOACES + "','"
+					+ liCodCuota + "','"
 					+ sCodMovimiento + "','"
 					+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				    + sUsuario + "','"
@@ -78,8 +78,8 @@ public final class QMListaCuotas
 			{
 				bSalida = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
-				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
+				logger.error("ERROR Cuota:|"+liCodCuota+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -134,7 +134,7 @@ public final class QMListaCuotas
 		return bSalida;
 	}
 	
-	public static boolean existeRelacionCuota(Connection conexion, String sCodCuota, String sCodMovimiento)
+	public static boolean existeRelacionCuota(Connection conexion, long liCodCuota, String sCodMovimiento)
 	{
 		boolean bEncontrado = false;
 
@@ -152,7 +152,7 @@ public final class QMListaCuotas
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO2 + " = '" + sCodCuota + "' AND " 
+					+ CAMPO2 + " = '" + liCodCuota + "' AND " 
 					+ CAMPO3 + " = '" + sCodMovimiento + 
 					"' )";
 
@@ -181,7 +181,7 @@ public final class QMListaCuotas
 			} 
 			catch (SQLException ex) 
 			{
-				logger.error("ERROR Couta:|"+sCodCuota+"|");
+				logger.error("ERROR Couta:|"+liCodCuota+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -272,7 +272,7 @@ public final class QMListaCuotas
 		return resultado;
 	}
 	
-	public static ArrayList<String>  getCuotasPendientes(Connection conexion, String sCodCuota) 
+	public static ArrayList<String>  getCuotasPendientes(Connection conexion, long liCodCuota) 
 	{
 		ArrayList<String> resultado = new ArrayList<String>(); 
 		
@@ -292,7 +292,7 @@ public final class QMListaCuotas
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO2 + " = '" + sCodCuota + "' AND " 
+					+ CAMPO2 + " = '" + liCodCuota + "' AND " 
 					+ CAMPO4 + " = '" + "P" + 
 					"' )";
 			
@@ -319,7 +319,7 @@ public final class QMListaCuotas
 
 						logger.debug("Encontrado el registro!");
 						
-						logger.debug(CAMPO2+":|"+sCodCuota+"|");
+						logger.debug(CAMPO2+":|"+liCodCuota+"|");
 						logger.debug(CAMPO3+":|"+resultado.get(i)+"|");
 
 						i++;
@@ -334,7 +334,7 @@ public final class QMListaCuotas
 			{
 				resultado = new ArrayList<String>();
 
-				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR Cuota:|"+liCodCuota+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -645,7 +645,7 @@ public final class QMListaCuotas
 		return resultado;
 	}
 	
-	public static ArrayList<String> buscarDependencias(Connection conexion, String sCodCuota, String sCodMovimiento)
+	public static ArrayList<String> buscarDependencias(Connection conexion, long liCodCuota, String sCodMovimiento)
 	{
 		ArrayList<String> resultado = new ArrayList<String>();
 
@@ -665,7 +665,7 @@ public final class QMListaCuotas
 					"  FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO2 + " = '" + sCodCuota + "' AND "
+					+ CAMPO2 + " = '" + liCodCuota + "' AND "
 					+ CAMPO3 + " >=  '" + sCodMovimiento + 
 					"')";
 			
@@ -700,7 +700,7 @@ public final class QMListaCuotas
 			{
 				resultado = new ArrayList<String>();
 
-				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR Cuota:|"+liCodCuota+"|");
 				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());

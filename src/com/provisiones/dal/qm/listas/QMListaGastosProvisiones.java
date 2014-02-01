@@ -31,7 +31,7 @@ public final class QMListaGastosProvisiones
 
 	private QMListaGastosProvisiones(){}
 
-	public static boolean addRelacionGastoProvision(Connection conexion, String sCodGasto, String sCodNUPROF) 
+	public static boolean addRelacionGastoProvision(Connection conexion, long liCodGasto, String sCodNUPROF) 
 	{
 		boolean bSalida = false;
 		
@@ -52,7 +52,7 @@ public final class QMListaGastosProvisiones
 					+ CAMPO4 + "," 
 					+ CAMPO5 +						
 					") VALUES ('" 
-					+ sCodGasto + "','"
+					+ liCodGasto + "','"
 					+ sCodNUPROF + "','"
 					+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				    + sUsuario + "','"
@@ -74,7 +74,7 @@ public final class QMListaGastosProvisiones
 			{
 				bSalida = false;
 				
-				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -88,7 +88,7 @@ public final class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
-	public static boolean addRelacionGastoProvisionInyectado(Connection conexion, String sCodGasto, String sCodNUPROF) 
+	public static boolean addRelacionGastoProvisionInyectado(Connection conexion, long liCodGasto, String sCodNUPROF) 
 	{
 		boolean bSalida = false;
 		
@@ -109,7 +109,7 @@ public final class QMListaGastosProvisiones
 					+ CAMPO4 + "," 
 					+ CAMPO5 +						
 					") VALUES ('" 
-					+ sCodGasto + "','"
+					+ liCodGasto + "','"
 					+ sCodNUPROF + "','"
 					+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "','"
 				    + sUsuario + "','"
@@ -131,7 +131,7 @@ public final class QMListaGastosProvisiones
 			{
 				bSalida = false;
 				
-				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -145,7 +145,7 @@ public final class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
-	public static boolean delRelacionGastoProvision(Connection conexion, String sCodGasto) 
+	public static boolean delRelacionGastoProvision(Connection conexion, long liCodGasto) 
 	{
 		boolean bSalida = false;
 
@@ -158,7 +158,7 @@ public final class QMListaGastosProvisiones
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1 + " = '" + sCodGasto +"'";
+					+ CAMPO1 + " = '" + liCodGasto +"'";
 			
 			logger.debug(sQuery);
 
@@ -175,7 +175,7 @@ public final class QMListaGastosProvisiones
 			{
 				bSalida = false;
 
-				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 				
@@ -190,7 +190,7 @@ public final class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
-	public static boolean existeRelacionGastoProvision(Connection conexion, String sCodGasto, String sCodNUPROF)
+	public static boolean existeRelacionGastoProvision(Connection conexion, long liCodGasto, String sCodNUPROF)
 	{
 		boolean bEncontrado = false;
 
@@ -208,7 +208,7 @@ public final class QMListaGastosProvisiones
 					" FROM " 
 					+ TABLA + 
 					" WHERE ("	
-					+ CAMPO1  + " = '"+ sCodGasto +"' AND "
+					+ CAMPO1  + " = '"+ liCodGasto +"' AND "
 					+ CAMPO2  + " = '"+ sCodNUPROF + 
 					"' )";
 			
@@ -239,7 +239,7 @@ public final class QMListaGastosProvisiones
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -254,7 +254,7 @@ public final class QMListaGastosProvisiones
 		return bEncontrado;
 	}
 	
-	public static boolean setRevisado(Connection conexion, String sCodGasto, String sRevisado)
+	public static boolean setRevisado(Connection conexion, long liCodGasto, String sRevisado)
 	{
 		boolean bSalida = false;
 		
@@ -269,7 +269,7 @@ public final class QMListaGastosProvisiones
 					" SET " 
 					+ CAMPO3 + " = '"+ sRevisado + "' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sCodGasto +"'";
+					+ CAMPO1 + " = '"+ liCodGasto +"'";
 			
 			logger.debug(sQuery);
 			
@@ -286,7 +286,7 @@ public final class QMListaGastosProvisiones
 			{
 				bSalida = false;
 
-				logger.error("ERROR Gasto:|"+sCodGasto+"|");
+				logger.error("ERROR Gasto:|"+liCodGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -299,7 +299,7 @@ public final class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
-	public static String getRevisado(Connection conexion, String sCodGasto)
+	public static String getRevisado(Connection conexion, long liCodGasto)
 	{
 		String sRevisado = "";
 
@@ -319,7 +319,7 @@ public final class QMListaGastosProvisiones
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sCodGasto + "'";
+					+ CAMPO1 + " = '" + liCodGasto + "'";
 			
 			logger.debug(sQuery);
 
@@ -341,7 +341,7 @@ public final class QMListaGastosProvisiones
 						sRevisado = rs.getString(CAMPO3);
 
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO1+":|"+sCodGasto+"|");
+						logger.debug(CAMPO1+":|"+liCodGasto+"|");
 						logger.debug(CAMPO3+":|"+sRevisado+"|");
 					}
 				}
@@ -355,7 +355,7 @@ public final class QMListaGastosProvisiones
 			{
 				sRevisado = "";
 
-				logger.error("ERROR Gasto:|"+sCodGasto+"|");
+				logger.error("ERROR Gasto:|"+liCodGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -370,7 +370,7 @@ public final class QMListaGastosProvisiones
 	}
 	
 	
-	public static String getProvisionDeGasto(Connection conexion, String sCodGasto)
+	public static String getProvisionDeGasto(Connection conexion, long liCodGasto)
 	{
 		String sNUPROF = "";
 
@@ -390,7 +390,7 @@ public final class QMListaGastosProvisiones
 					" FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodGasto +"'";
+					+ CAMPO1  + " = '"+ liCodGasto +"'";
 			
 			logger.debug(sQuery);
 
@@ -425,7 +425,7 @@ public final class QMListaGastosProvisiones
 			{
 				sNUPROF = "";
 
-				logger.error("ERROR GASTO:|"+sCodGasto+"|");
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

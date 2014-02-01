@@ -243,6 +243,8 @@ public class GestorErroresCuotas implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			logger.debug("Buscando Cuotas con errores...");
 			
 			ErrorCuotaTabla filtro = new ErrorCuotaTabla(
@@ -251,8 +253,9 @@ public class GestorErroresCuotas implements Serializable
 
 			this.setTablacuotaserror(CLErrores.buscarCuotasConErrores(filtro));
 			
-			msg = Utils.pfmsgInfo("Encontradas "+getTablacuotaserror().size()+" Cuotas relacionadas.");
-			logger.debug("Encontradas {} Cuotas relacionadas.",getTablacuotaserror().size());
+			sMsg = "Encontradas "+getTablacuotaserror().size()+" Cuotas relacionadas.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -264,12 +267,15 @@ public class GestorErroresCuotas implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
 			this.setTablaerrores(CLErrores.buscarErroresCuota(sCodMovimiento));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
-			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
@@ -287,9 +293,9 @@ public class GestorErroresCuotas implements Serializable
 	    	this.sPTPAGO = movimiento.getPTPAGO();
 	    	this.sOBTEXC = movimiento.getOBTEXC();
 					
-	        	
-	    	msg = Utils.pfmsgInfo("Errores de Cuota cargados.");
-	    	logger.debug("Errores de Cuota cargados.");
+	    	sMsg = "Errores de Cuota cargados.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -333,15 +339,18 @@ public class GestorErroresCuotas implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			ActivoTabla buscaactivos = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
 			this.setTablaactivos(CLCuotas.buscarActivosConCuotas(buscaactivos));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+			sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -352,11 +361,14 @@ public class GestorErroresCuotas implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
+			
+			String sMsg = "";
 	    	
 	    	this.sCOACES  = activoseleccionado.getCOACES();
 	    	
-	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
-	    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+	    	sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -368,10 +380,22 @@ public class GestorErroresCuotas implements Serializable
 		{
 			FacesMessage msg;
 			
-			this.tablacuotas = CLCuotas.buscarCuotasActivo(sCOACES.toUpperCase());
-			
-			msg = Utils.pfmsgInfo("Encontradas "+getTablacuotas().size()+" cuotas relacionadas.");
-			logger.info("Encontradas {} cuotas relacionadas.",getTablacuotas().size());
+			String sMsg = "";
+
+			try
+			{
+				this.tablacuotas = CLCuotas.buscarCuotasActivo(Integer.parseInt(sCOACES));
+				
+				sMsg = "Encontradas "+getTablacuotas().size()+" cuotas relacionadas.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -382,6 +406,8 @@ public class GestorErroresCuotas implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 	    	FacesMessage msg;
+	    	
+	    	String sMsg = "";
 	    	
 	    	this.sCOCLDO = cuotaseleccionada.getCOCLDO(); 
 	    	this.sDesCOCLDO = cuotaseleccionada.getDCOCLDO();
@@ -396,8 +422,9 @@ public class GestorErroresCuotas implements Serializable
 	    	this.sDesPTPAGO = cuotaseleccionada.getDPTPAGO();
 	    	this.sOBTEXC = cuotaseleccionada.getOBTEXC();
 	    	
-	    	msg = Utils.pfmsgInfo("Cuota de '"+ sDesCOSBAC +"' Seleccionada.");
-	    	logger.info("Cuota de '{}' Seleccionada.",sDesCOSBAC);
+	    	sMsg = "Cuota de '"+ sDesCOSBAC +"' Seleccionada.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -445,7 +472,7 @@ public class GestorErroresCuotas implements Serializable
 						sCOCLDO.toUpperCase(), 
 						sNUDCOM.toUpperCase(), 
 						sCOENGP.toUpperCase(), 
-						sCOACES.toUpperCase(), 
+						sCOACES, 
 						ValoresDefecto.DEF_COGRUG_E2, 
 						ValoresDefecto.DEF_COTACA_E2, 
 						Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 

@@ -118,7 +118,7 @@ public class GestorCuentasActivos implements Serializable
 			String sMsg = "";
 			
 			ActivoTabla filtro = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 
@@ -160,13 +160,21 @@ public class GestorCuentasActivos implements Serializable
 			
 			String sMsg = "";
 			
-
-			this.setTablacuentas(CLCuentas.buscarCuentasActivo(sCOACES));
-			
-			sMsg = "Encontradas "+getTablacuentas().size()+" cuentas.";
-					
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			try
+			{
+				this.setTablacuentas(CLCuentas.buscarCuentasActivo(Integer.parseInt(sCOACES)));
+				
+				sMsg = "Encontradas "+getTablacuentas().size()+" cuentas.";
+						
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -204,86 +212,96 @@ public class GestorCuentasActivos implements Serializable
 		FacesMessage msg;
 		
 		String sMsg = "";
-
 		
-		if (!CLActivos.existeActivo(sCOACES))
+		try
 		{
-			sMsg = "ERROR: No se puede operar sobre la cuenta, el activo no pertenece a la cartera. Por favor, revise los datos.";
+			if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+			{
+				sMsg = "ERROR: No se puede operar sobre la cuenta, el activo no pertenece a la cartera. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else
+			{
+				
+				int iSalida = CLCuentas.registraMovimientoActivo(bAlta, Integer.parseInt(sCOACES), cuenta);
+				
+				switch (iSalida) 
+				{
+				case 0: //Sin errores
+					if (bAlta)
+					{
+						tablacuentas.add(cuenta);
+				    	borrarCamposNuevaCuenta();
+					}
+					else
+					{
+						
+						this.sPais = cuenta.getsPais();
+						this.sDCIBAN = cuenta.getsDCIBAN();
+						this.sNUCCEN = cuenta.getsNUCCEN();
+						this.sNUCCOF = cuenta.getsNUCCOF();
+						this.sNUCCDI = cuenta.getsNUCCDI();
+						this.sNUCCNT = cuenta.getsNUCCNT();
+						this.sDescripcion = cuenta.getsDescripcion();
+						
+						tablacuentas.remove(cuentaseleccionada);
+					}
+
+					sMsg = "Operación de "+(bAlta? "Alta":"Baja")+" realizada.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					break;
+
+				case -901: //Error 901 - error y rollback - error al crear la Cuenta
+					sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la cuenta. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -902: //Error 902 - error y rollback - error al registrar la relaccion
+					sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -903: //Error 903 - error y rollback - error al borrar la cuenta
+					sMsg = "[FATAL] ERROR:903 - Se ha producido un error al borrar la cuenta. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -904: //Error 904 - error y rollback - error al eliminar la relaccion
+					sMsg = "[FATAL] ERROR:904 - Se ha producido un error al eliminar la relacion. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;				
+
+				case -910: //Error 910 - error y rollback - error al conectar con la base de datos
+					sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				default: //error generico
+					sMsg = "[FATAL] ERROR: Se ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+				}		
+			}
+
+			
+			logger.debug("Finalizadas las comprobaciones.");
+		}
+		catch(NumberFormatException nfe)
+		{
+			sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 			msg = Utils.pfmsgError(sMsg);
 			logger.error(sMsg);
 		}
-		else
-		{
-			
-			int iSalida = CLCuentas.registraMovimientoActivo(bAlta, sCOACES, cuenta);
-			
-			switch (iSalida) 
-			{
-			case 0: //Sin errores
-				if (bAlta)
-				{
-					tablacuentas.add(cuenta);
-			    	borrarCamposNuevaCuenta();
-				}
-				else
-				{
-					
-					this.sPais = cuenta.getsPais();
-					this.sDCIBAN = cuenta.getsDCIBAN();
-					this.sNUCCEN = cuenta.getsNUCCEN();
-					this.sNUCCOF = cuenta.getsNUCCOF();
-					this.sNUCCDI = cuenta.getsNUCCDI();
-					this.sNUCCNT = cuenta.getsNUCCNT();
-					this.sDescripcion = cuenta.getsDescripcion();
-					
-					tablacuentas.remove(cuentaseleccionada);
-				}
 
-				sMsg = "Operación de "+(bAlta? "Alta":"Baja")+" realizada.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-				break;
 
-			case -901: //Error 901 - error y rollback - error al crear la Cuenta
-				sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la cuenta. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -902: //Error 902 - error y rollback - error al registrar la relaccion
-				sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -903: //Error 903 - error y rollback - error al borrar la cuenta
-				sMsg = "[FATAL] ERROR:903 - Se ha producido un error al borrar la cuenta. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			case -904: //Error 904 - error y rollback - error al eliminar la relaccion
-				sMsg = "[FATAL] ERROR:904 - Se ha producido un error al eliminar la relacion. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;				
-
-			case -910: //Error 910 - error y rollback - error al conectar con la base de datos
-				sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-
-			default: //error generico
-				sMsg = "[FATAL] ERROR: Se ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
-				break;
-			}		
-		}
-
-		
-		logger.debug("Finalizadas las comprobaciones.");
 		
 		return msg;
 	}

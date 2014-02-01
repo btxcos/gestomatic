@@ -384,34 +384,43 @@ public class GestorErroresComunidades implements Serializable
 			
 			String sMsg = "";
 			
-			int iSalida = CLComunidades.comprobarActivo(sCOACES.toUpperCase());
-
-			switch (iSalida) 
+			try
 			{
-				case 0: //Sin errores
-					sMsg = "El activo '"+sCOACES.toUpperCase()+"' esta disponible.";
-					logger.debug(sMsg);
-					msg = new FacesMessage(sMsg,null);
-					break;
+				int iSalida = CLComunidades.comprobarActivo(Integer.parseInt(sCOACES));
 
-				case -1: //error - ya vinculado
-					sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' ya esta vinculado a otra comunidada. Por favor, revise los datos."; 
-					logger.debug(sMsg);
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
-					break;
+				switch (iSalida) 
+				{
+					case 0: //Sin errores
+						sMsg = "El activo '"+sCOACES+"' esta disponible.";
+						logger.debug(sMsg);
+						msg = new FacesMessage(sMsg,null);
+						break;
 
-				case -2: //error - no existe
-					sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
-					logger.debug(sMsg);
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
-					break;
+					case -1: //error - ya vinculado
+						sMsg = "ERROR: El activo '"+sCOACES+"' ya esta vinculado a otra comunidada. Por favor, revise los datos."; 
+						logger.debug(sMsg);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+						break;
 
-				default: //error generico
-					sMsg = "ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.";
-					logger.debug(sMsg);
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
-					break;
+					case -2: //error - no existe
+						sMsg = "ERROR: El activo '"+sCOACES+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
+						logger.debug(sMsg);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+						break;
+
+					default: //error generico
+						sMsg = "ERROR: El activo '"+sCOACES+"' ha producido un error desconocido. Por favor, revise los datos.";
+						logger.debug(sMsg);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,sMsg,null);
+						break;
+				}
 			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}			
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}		
@@ -425,35 +434,50 @@ public class GestorErroresComunidades implements Serializable
 			
 			borrarCampos();
 
-			Comunidad comunidad = CLComunidades.buscarComunidad(sCOACES.toUpperCase());
+			String sMsg = "";
 			
-			Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
-			
-			this.sCOCLDO = comunidad.getsCOCLDO();
-			this.sNUDCOM = comunidad.getsNUDCOM();
-			this.sNOMCOC = comunidad.getsNOMCOC();
-			this.sNODCCO = comunidad.getsNODCCO();
-			this.sNOMPRC = comunidad.getsNOMPRC();
-			this.sNUTPRC = comunidad.getsNUTPRC();
-			this.sNOMADC = comunidad.getsNOMADC();
-			this.sNUTADC = comunidad.getsNUTADC();
-			this.sNODCAD = comunidad.getsNODCAD();
-			this.sNUCCEN = cuenta.getsNUCCEN();
-			this.sNUCCOF = cuenta.getsNUCCOF();
-			this.sNUCCDI = cuenta.getsNUCCDI();
-			this.sNUCCNT = cuenta.getsNUCCNT();
-			this.sOBTEXC = comunidad.getsOBTEXC();
-			
-			if (comunidad.getsNUDCOM().equals(""))
+			try
 			{
-				msg = Utils.pfmsgError("ERROR: El Activo '"+sCOACES.toUpperCase()+"' no esta asociado a ninguna comunidad.");
-				logger.error("ERROR: El Activo '{}' no esta asociado a ninguna comunidad.",sCOACES.toUpperCase());
+				Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
+				
+				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+				
+				this.sCOCLDO = comunidad.getsCOCLDO();
+				this.sNUDCOM = comunidad.getsNUDCOM();
+				this.sNOMCOC = comunidad.getsNOMCOC();
+				this.sNODCCO = comunidad.getsNODCCO();
+				this.sNOMPRC = comunidad.getsNOMPRC();
+				this.sNUTPRC = comunidad.getsNUTPRC();
+				this.sNOMADC = comunidad.getsNOMADC();
+				this.sNUTADC = comunidad.getsNUTADC();
+				this.sNODCAD = comunidad.getsNODCAD();
+				this.sNUCCEN = cuenta.getsNUCCEN();
+				this.sNUCCOF = cuenta.getsNUCCOF();
+				this.sNUCCDI = cuenta.getsNUCCDI();
+				this.sNUCCNT = cuenta.getsNUCCNT();
+				this.sOBTEXC = comunidad.getsOBTEXC();
+				
+				if (comunidad.getsNUDCOM().equals(""))
+				{
+					sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+				else
+				{
+					sMsg = "La comunidad se ha cargado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			}
-			else
+			catch(NumberFormatException nfe)
 			{
-				msg = Utils.pfmsgInfo("La comunidad se ha cargado correctamente.");
-				logger.info("La comunidad se ha cargado correctamente.");
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
+			
+
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}		
@@ -470,6 +494,8 @@ public class GestorErroresComunidades implements Serializable
 			
 			Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
 			
+			String sMsg = "";
+			
 			this.sCOCLDO = comunidad.getsCOCLDO();
 			this.sNUDCOM = comunidad.getsNUDCOM();
 			this.sNOMCOC = comunidad.getsNOMCOC();
@@ -487,13 +513,15 @@ public class GestorErroresComunidades implements Serializable
 
 			if (comunidad.getsNUDCOM().equals(""))
 			{
-				msg = Utils.pfmsgError("Error: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.");
-				logger.error("Error: La comunidad '{}' no esta registrada en el sistema.",sNUDCOM.toUpperCase());
+				sMsg = "Error: La comunidad consultada no esta registrada en el sistema.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
 			else
 			{
-				msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
-				logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());			
+				sMsg = "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);			
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -516,7 +544,38 @@ public class GestorErroresComunidades implements Serializable
 			}
 			else
 			{
-				MovimientoComunidad nuevomovimiento = new MovimientoComunidad (sCODTRN.toUpperCase(), sCOTDOR.toUpperCase(), sIDPROV.toUpperCase(), sCOACCI.toUpperCase(), sCOENGP.toUpperCase(), sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase(), "", sCOACES.toUpperCase(), "", sNOMCOC.toUpperCase(), "", sNODCCO.toUpperCase(), "", sNOMPRC.toUpperCase(), "", sNUTPRC.toUpperCase(), "", sNOMADC.toUpperCase(), "", sNUTADC.toUpperCase(), "", sNODCAD.toUpperCase(), "", sNUCCEN.toUpperCase(), sNUCCOF.toUpperCase(), sNUCCDI.toUpperCase(), sNUCCNT.toUpperCase(), "", sOBTEXC.toUpperCase(), sOBDEER.toUpperCase());
+				MovimientoComunidad nuevomovimiento = new MovimientoComunidad (
+						sCODTRN.toUpperCase(), 
+						sCOTDOR.toUpperCase(), 
+						sIDPROV.toUpperCase(), 
+						sCOACCI.toUpperCase(), 
+						sCOENGP.toUpperCase(), 
+						sCOCLDO.toUpperCase(), 
+						sNUDCOM.toUpperCase(), 
+						"", 
+						sCOACES, 
+						"", 
+						sNOMCOC.toUpperCase(), 
+						"", 
+						sNODCCO.toUpperCase(), 
+						"", 
+						sNOMPRC.toUpperCase(), 
+						"", 
+						sNUTPRC.toUpperCase(), 
+						"", 
+						sNOMADC.toUpperCase(), 
+						"", 
+						sNUTADC.toUpperCase(), 
+						"", 
+						sNODCAD.toUpperCase(), 
+						"", 
+						sNUCCEN.toUpperCase(), 
+						sNUCCOF.toUpperCase(), 
+						sNUCCDI.toUpperCase(), 
+						sNUCCNT.toUpperCase(), 
+						"", 
+						sOBTEXC.toUpperCase(), 
+						sOBDEER.toUpperCase());
 				
 				int iSalida = CLErrores.reparaMovimientoComunidad(nuevomovimiento,sCodMovimiento,sCodError);
 				
@@ -554,8 +613,9 @@ public class GestorErroresComunidades implements Serializable
 					break;
 
 				default: //error generico
-					msg = Utils.pfmsgFatal("[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.");
-					logger.error("[FATAL] ERROR:{} - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.",iSalida);
+					sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error inesperado. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
 					break;
 				}
 			}

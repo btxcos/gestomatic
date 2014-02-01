@@ -40,7 +40,7 @@ public final class QMCuotas
 	
 	//Campos de control
 	public static final String CAMPO12 = "cod_estado";
-	public static final String CAMPO13 = "comentario";
+	public static final String CAMPO13 = "nota";
 
 	private QMCuotas(){}
 	
@@ -79,7 +79,9 @@ public final class QMCuotas
 				       + NuevaCuota.getFAACTA() + "','"
 				       + NuevaCuota.getPTPAGO() + "','"
 				       + NuevaCuota.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "','' )";
+				       + ValoresDefecto.DEF_ALTA + "','"
+				       + ValoresDefecto.CAMPO_SIN_INFORMAR + 
+				       "')";
 
 			logger.debug(sQuery);
 
@@ -119,7 +121,7 @@ public final class QMCuotas
 
 		return liCodigo;
 	}
-	public static boolean modCuota(Connection conexion, Cuota NuevaCuota, String sCodCuota)
+	public static boolean modCuota(Connection conexion, Cuota NuevaCuota, long liCuotaID)
 	{
 		boolean bSalida = false;
 
@@ -139,7 +141,7 @@ public final class QMCuotas
 					+ CAMPO10  + " = '"+ NuevaCuota.getPTPAGO() + "', "
 					+ CAMPO11 + " = '"+ NuevaCuota.getOBTEXC() + "' "+
 					" WHERE " 
-					+ CAMPO1  + " = '"+ sCodCuota +"'";
+					+ CAMPO1  + " = '"+ liCuotaID +"'";
 			
 			logger.debug(sQuery);
 
@@ -172,7 +174,7 @@ public final class QMCuotas
 		return bSalida;
 	}
 
-	public static boolean delCuota(Connection conexion, String sCodCuota)
+	public static boolean delCuota(Connection conexion, long liCuotaID)
 	{
 		boolean bSalida = false;
 
@@ -185,7 +187,7 @@ public final class QMCuotas
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodCuota +"'";
+					+ CAMPO1  + " = '"+ liCuotaID +"'";
 
 			logger.debug(sQuery);
 			
@@ -203,7 +205,7 @@ public final class QMCuotas
 			{
 				bSalida = false;
 
-				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR Cuota:|"+liCuotaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -216,7 +218,7 @@ public final class QMCuotas
 		return bSalida;
 	}
 	
-	public static boolean existeCuota(Connection conexion, String sCodCuota)
+	public static boolean existeCuota(Connection conexion, long liCuotaID)
 	{
 		boolean bEncontrado = false;
 		
@@ -234,7 +236,7 @@ public final class QMCuotas
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1  + " = '"+ sCodCuota +"'";
+					+ CAMPO1  + " = '"+ liCuotaID +"'";
 
 			logger.debug(sQuery);
 			
@@ -265,7 +267,7 @@ public final class QMCuotas
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR Cuota:|"+liCuotaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -279,7 +281,7 @@ public final class QMCuotas
 		return bEncontrado;
 	}
 
-	public static Cuota getCuota(Connection conexion, String sCodCuota)
+	public static Cuota getCuota(Connection conexion, long liCuotaID)
 	{
 		String sCOACES = "";
 		String sCOCLDO = "";
@@ -317,7 +319,7 @@ public final class QMCuotas
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE " 
-				       + CAMPO1  + " = '"+ sCodCuota +"'";
+				       + CAMPO1  + " = '"+ liCuotaID +"'";
 
 			logger.debug(sQuery);
 
@@ -369,7 +371,7 @@ public final class QMCuotas
 				sPTPAGO = "";
 				sOBTEXC = "";
 
-				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR Cuota:|"+liCuotaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -383,9 +385,9 @@ public final class QMCuotas
 		return new Cuota(sCOACES, sCOCLDO, sNUDCOM, sCOSBAC, sFIPAGO, sFFPAGO, sIMCUCO, sFAACTA, sPTPAGO, sOBTEXC);
 	}
 	
-	public static String getCuotaID(Connection conexion, String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static long getCuotaID(Connection conexion, int iCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
-		String sCuotaID = "";
+		long liCuotaID = 0;
 
 		if (conexion != null)
 		{
@@ -403,7 +405,7 @@ public final class QMCuotas
 				       " FROM " 
 					   + TABLA + 
 					   " WHERE ("	
-					   + CAMPO2  + " = '"+ sCodCOACES +"' AND " 
+					   + CAMPO2  + " = '"+ iCOACES +"' AND " 
 					   + CAMPO3  + " = '"+ sCodCOCLDO +"' AND " 
 					   + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
 					   + CAMPO5  + " = '"+ sCodCOSBAC + "')";
@@ -425,7 +427,7 @@ public final class QMCuotas
 					{
 						bEncontrado = true;
 
-						sCuotaID = rs.getString(CAMPO1);
+						liCuotaID = rs.getLong(CAMPO1);
 						
 						logger.debug("Encontrado el registro!");
 					}
@@ -437,9 +439,9 @@ public final class QMCuotas
 			} 
 			catch (SQLException ex) 
 			{
-				sCuotaID = "";
+				liCuotaID = 0;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 				logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
 				logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 				logger.error("ERROR COSBAC:|"+sCodCOSBAC+"|");
@@ -453,10 +455,10 @@ public final class QMCuotas
 			}
 		}
 
-		return sCuotaID;
+		return liCuotaID;
 	}
 	
-	public static boolean tieneCuotas(Connection conexion, String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM)
+	public static boolean tieneCuotas(Connection conexion, int iCOACES, String sCodCOCLDO, String sCodNUDCOM)
 	{
 		boolean bEncontrado = false;
 
@@ -474,7 +476,7 @@ public final class QMCuotas
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE ("
-				       + CAMPO2  + " = '"+ sCodCOACES +"' AND "
+				       + CAMPO2  + " = '"+ iCOACES +"' AND "
 				       + CAMPO3  + " = '"+ sCodCOCLDO +"' AND "
 				       + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
 				       + CAMPO12  + " <> 'B')";
@@ -509,7 +511,7 @@ public final class QMCuotas
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR COACES:|"+sCodCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 				logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
 				logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 
@@ -525,7 +527,7 @@ public final class QMCuotas
 		return bEncontrado;
 	}
 	
-	public static ArrayList<CuotaTabla> buscaCuotasActivo(Connection conexion, String sCodCOACES)
+	public static ArrayList<CuotaTabla> buscaCuotasActivo(Connection conexion, int iCOACES)
 	{
 		ArrayList<CuotaTabla> resultado = new ArrayList<CuotaTabla>();
 
@@ -568,7 +570,7 @@ public final class QMCuotas
 						   + TABLA + 
 						   " WHERE ("
 						   + CAMPO12 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
-						   + CAMPO2 + " = '" + sCodCOACES	+ "')";
+						   + CAMPO2 + " = '" + iCOACES	+ "')";
 			
 			logger.debug(sQuery);
 
@@ -620,7 +622,7 @@ public final class QMCuotas
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sCodCOACES+"|");
+						logger.debug(CAMPO1+":|"+iCOACES+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -645,7 +647,7 @@ public final class QMCuotas
 		return resultado;
 	}
 	
-	public static boolean setEstado(Connection conexion, String sCodCuota, String sEstado)
+	public static boolean setEstado(Connection conexion, long liCuotaID, String sEstado)
 	{
 		boolean bSalida = false;
 
@@ -660,7 +662,7 @@ public final class QMCuotas
 					" SET " 
 					+ CAMPO12 + " = '"+ sEstado +"' "+
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodCuota +"'";
+					+ CAMPO1  + " = '"+ liCuotaID +"'";
 			
 			try 
 			{
@@ -676,7 +678,7 @@ public final class QMCuotas
 			{
 				bSalida = false;
 
-				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR Cuota:|"+liCuotaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -689,7 +691,7 @@ public final class QMCuotas
 		return bSalida;
 	}
 	
-	public static String getEstado(Connection conexion, String sCodCuota)
+	public static String getEstado(Connection conexion, long liCuotaID)
 	{
 		String sEstado = "";
 
@@ -709,7 +711,7 @@ public final class QMCuotas
 					" FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1  + " = '"+ sCodCuota +"'"; 
+					+ CAMPO1  + " = '"+ liCuotaID +"'"; 
 
 			logger.debug(sQuery);
 
@@ -744,7 +746,7 @@ public final class QMCuotas
 			{
 				sEstado = "";
 
-				logger.error("ERROR Cuota:|"+sCodCuota+"|");
+				logger.error("ERROR Cuota:|"+liCuotaID+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -758,4 +760,122 @@ public final class QMCuotas
 		return sEstado;
 	}
 	
+	public static boolean setNota(Connection conexion, long liCuotaID, String sNota)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO13 + " = '"+ sNota +"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ liCuotaID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR CUOTA:|"+liCuotaID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static String getNota(Connection conexion, long liCuotaID)
+	{
+		String sNota = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO13 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liCuotaID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNota = rs.getString(CAMPO13);
+						
+						logger.debug(CAMPO1+":|"+liCuotaID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO13+":|"+sNota+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNota = "";
+				
+				logger.error("ERROR CUOTA:|"+liCuotaID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNota;
+	}
 }

@@ -233,6 +233,8 @@ public class GestorErroresImpuestosRecursos implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			logger.debug("Buscando Impuestos y Recursos con errores...");
 			
 			ErrorImpuestoTabla filtro = new ErrorImpuestoTabla(
@@ -241,8 +243,9 @@ public class GestorErroresImpuestosRecursos implements Serializable
 
 			this.setTablaimpuestoserror(CLErrores.buscarImpuestosConErrores(filtro));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaimpuestoserror().size()+" Impuestos y Recursos relacionados.");
-			logger.debug("Encontrados {} Impuestos y Recursos relacionados.",getTablaimpuestoserror().size());
+			sMsg = "Encontrados "+getTablaimpuestoserror().size()+" Impuestos y Recursos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -254,12 +257,15 @@ public class GestorErroresImpuestosRecursos implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
 			this.setTablaerrores(CLErrores.buscarErroresImpuesto(sCodMovimiento));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
-			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
+			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.debug(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
@@ -280,8 +286,9 @@ public class GestorErroresImpuestosRecursos implements Serializable
 	    	this.sDesBIRESO = movimiento.getBIRESO();
 	    	this.sOBTEXC = movimiento.getOBTEXC();
 			
-	    	msg = Utils.pfmsgInfo("Errores de Impuestos y Recursos cargados.");
-	    	logger.debug("Errores de Impuestos y Recursos cargados.");
+	    	sMsg = "Errores de Impuestos y Recursos cargados.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -297,7 +304,7 @@ public class GestorErroresImpuestosRecursos implements Serializable
 			
 	    	int iCodError  = Integer.parseInt(sCodError);
 	    	
-	    	logger.debug("Error seleccionado:|{}|",iCodError);
+	    	logger.debug("Error seleccionado:|"+iCodError+"|");
 	    	
 	    	String sMsg ="";
 	    	
@@ -325,15 +332,18 @@ public class GestorErroresImpuestosRecursos implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
 			ActivoTabla buscaactivos = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
 			this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(buscaactivos));
 			
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			logger.info("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+			sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -346,7 +356,8 @@ public class GestorErroresImpuestosRecursos implements Serializable
 			FacesMessage msg;
 
 	    	this.sCOACES  = activoseleccionado.getCOACES();
-	    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
+	    	
+	    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(Integer.parseInt(sCOACES));
 	    	
 	    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
 	    	{
@@ -372,21 +383,34 @@ public class GestorErroresImpuestosRecursos implements Serializable
 		{
 			FacesMessage msg;
 			
-	    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(sCOACES);
-	    	
-	    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+			String sMsg = "";
+			
+			try
 			{
-	    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(sCOACES.toUpperCase());
-	    		
-				msg = Utils.pfmsgInfo("Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.");
-				logger.info("Encontrados {} impuestos relacionados.",getTablaimpuestos().size());
+		    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(Integer.parseInt(sCOACES));
+		    	
+		    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+				{
+		    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(Integer.parseInt(sCOACES));
+		    		
+		    		sMsg = "Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+		    	else
+		    	{
+		    		sMsg = "ERROR: No existe referencia catastral de alta para el activo consultado.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+		        }
 			}
-	    	else
-	    	{
-				msg = Utils.pfmsgError("ERROR: No existe referencia catastral de alta para el activo consultado.");
-				logger.error("ERROR: No existe referencia catastral de alta para el activo consultado.");
-	        }
-	    	
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 
 		}
@@ -397,6 +421,8 @@ public class GestorErroresImpuestosRecursos implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 	    	FacesMessage msg;
+	    	
+	    	String sMsg = "";
 	    	
 	    	this.sCOSBAC = impuestoseleccionado.getCOSBAC();
 	    	this.sDesCOSBAC = impuestoseleccionado.getDCOSBAC();
@@ -409,8 +435,9 @@ public class GestorErroresImpuestosRecursos implements Serializable
 	    	this.sDesBIRESO = impuestoseleccionado.getBIRESO();
 	    	this.sOBTEXC = impuestoseleccionado.getOBTEXC();
 	    	
-			msg = Utils.pfmsgInfo("Recurso de '"+sDesCOSBAC +"' Seleccionado.");
-			logger.info("Recurso de '{}' Seleccionado.",sDesCOSBAC);
+	    	sMsg = "Recurso de '"+sDesCOSBAC +"' Seleccionado.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -456,7 +483,7 @@ public class GestorErroresImpuestosRecursos implements Serializable
 						sIDPROV.toUpperCase(), 
 						sCOACCI.toUpperCase(), 
 						sCOENGP.toUpperCase(), 
-						sCOACES.toUpperCase(),
+						sCOACES,
 						sNURCAT.toUpperCase(),
 						ValoresDefecto.DEF_COGRUG_E4, 
 						ValoresDefecto.DEF_COTACA_E4, 
@@ -476,8 +503,9 @@ public class GestorErroresImpuestosRecursos implements Serializable
 						sOBTEXC.toUpperCase(), 
 						sOBDEER.toUpperCase());
 				
-				logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
-				logger.debug("sCodError:|{}|",sCodError);			
+				logger.debug("sCodMovimiento:|"+sCodMovimiento+"|");
+				logger.debug("sCodError:|"+sCodError+"|");			
+
 				int iSalida = CLErrores.reparaMovimientoImpuesto(movimiento,sCodMovimiento, sCodError);
 				
 				logger.debug("Codigo de salida:"+iSalida);
