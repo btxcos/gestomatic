@@ -12,7 +12,7 @@
 	</h:head>
 
 	<h:body>
-		<h:form id="form" onkeypress="return event.keyCode != 13">
+		<h:form id="form">
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="auto" header="Alta Referencia Catastral">
@@ -53,6 +53,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
 
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -163,6 +164,24 @@
 							</h:panelGrid>
 						</p:panel>
 					</h:panelGrid>
+
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+						<h:panelGrid columns="1" cellpadding="1">
+							<p:panel>
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorReferenciasCatastrales.limpiarNota}"/>
+
+								</h:panelGrid>
+							</p:panel>
+
+							<h:panelGrid columns="1" cellpadding="5">
+								<h:outputText id="counternota"/>
+								<p:inputTextarea id="NOTA" value="#{GestorReferenciasCatastrales.sNota}" cols="40" rows="10" counter="counternota" maxlength="500"
+									counterTemplate="{0} carácteres restantes." autoResize="false"/>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:dialog>
 
 					<p:dialog header="Activos sin Referencias asociadas: " widgetVar="dlgTabla" resizable="false">
 

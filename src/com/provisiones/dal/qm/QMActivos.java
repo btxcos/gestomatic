@@ -2070,7 +2070,7 @@ public final class QMActivos
 
 			logger.debug("Ejecutando Query...");
 			
-			String sInmovilizado = CAMPO2 + (bInmovilizado ?  " <> '"+ ValoresDefecto.CAMPO_SIN_INFORMAR : " = '"+ ValoresDefecto.CAMPO_SIN_INFORMAR)+ "' AND ";
+			String sInmovilizado = CAMPO2 + (bInmovilizado ?  " <> '"+ ValoresDefecto.CAMPO_NUME_SIN_INFORMAR : " = '"+ ValoresDefecto.CAMPO_NUME_SIN_INFORMAR)+ "' AND ";
 			
 			
 			String sQuery = "SELECT "

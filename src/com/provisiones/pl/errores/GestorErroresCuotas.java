@@ -271,7 +271,7 @@ public class GestorErroresCuotas implements Serializable
 			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
-			this.setTablaerrores(CLErrores.buscarErroresCuota(sCodMovimiento));
+			this.setTablaerrores(CLErrores.buscarErroresCuota(Integer.parseInt(sCodMovimiento)));
 			
 			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);
@@ -279,7 +279,7 @@ public class GestorErroresCuotas implements Serializable
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			MovimientoCuota movimiento = CLCuotas.buscarMovimientoCuota(sCodMovimiento);
+			MovimientoCuota movimiento = CLCuotas.buscarMovimientoCuota(Integer.parseInt(sCodMovimiento));
 			
 			this.sCOACCI = movimiento.getCOACCI();
 			this.sCOACES = movimiento.getCOACES();
@@ -456,7 +456,7 @@ public class GestorErroresCuotas implements Serializable
 			
 			String sMsg = "";
 			
-			if (!CLCuotas.existeMovimientoCuota(sCodMovimiento))
+			if (!CLCuotas.existeMovimientoCuota(Integer.parseInt(sCodMovimiento)))
 			{
 				sMsg = "[FATAL] ERROR:911 - No se puede modificar la cuota, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgFatal(sMsg);
@@ -493,7 +493,7 @@ public class GestorErroresCuotas implements Serializable
 				
 				logger.debug("sCodMovimiento:|{}|",sCodMovimiento);
 				logger.debug("sCodError:|{}|",sCodError);
-				int iSalida = CLErrores.reparaMovimientoCuota(movimiento,sCodMovimiento, sCodError);
+				int iSalida = CLErrores.reparaMovimientoCuota(movimiento,Integer.parseInt(sCodMovimiento), sCodError);
 				
 				switch (iSalida) 
 				{

@@ -392,8 +392,8 @@ public class GestorCuentasComunidades implements Serializable
 				else
 				{
 					Cuenta cuenta = new Cuenta(
-							sPaisN, 
-							sDCIBANN, 
+							sPaisN.toUpperCase(), 
+							Utils.calculaDCIBAN(sPaisN.toUpperCase(), sNUCCENN, sNUCCOFN, sNUCCDIN, sNUCCNTN), 
 							sNUCCENN, 
 							sNUCCOFN, 
 							sNUCCDIN, 

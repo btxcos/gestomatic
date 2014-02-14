@@ -1,5 +1,6 @@
 package com.provisiones.dal.qm.movimientos;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
 
@@ -43,18 +44,24 @@ public final class QMMovimientosImpuestos
 	public static final String CAMPO22 = "cotexa";    
 	public static final String CAMPO23 = "cod_bitc09";
 	public static final String CAMPO24 = "obtexc";    
-	public static final String CAMPO25 = "obdeer";		
+	public static final String CAMPO25 = "obdeer";
+	
+	//Campos de control
+	public static final String CAMPO26  = "usuario_movimiento";
+	public static final String CAMPO27  = "fecha_movimiento";
 
 	private QMMovimientosImpuestos(){}
 	
-	public static int addMovimientoImpuestoRecurso(Connection conexion, MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso)
+	public static long addMovimientoImpuestoRecurso(Connection conexion, MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso)
 	{
-		int iCodigo = 0;
+		long liCodigo = 0;
 
 		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
+			
+			String sUsuario = ConnectionManager.getUser();
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -83,8 +90,10 @@ public final class QMMovimientosImpuestos
 				       + CAMPO21 + ","              
 				       + CAMPO22 + ","              
 				       + CAMPO23 + ","
-				       + CAMPO24 + "," 
-				       + CAMPO25 +  
+				       + CAMPO24 + ","
+				       + CAMPO25 + "," 
+				       + CAMPO26 + "," 
+				       + CAMPO27 +  
 				       ") VALUES ('" 
 				       + NuevoMovimientoImpuestoRecurso.getCODTRN() + "','" 
 				       + NuevoMovimientoImpuestoRecurso.getCOTDOR() + "','"
@@ -109,7 +118,9 @@ public final class QMMovimientosImpuestos
 				       + NuevoMovimientoImpuestoRecurso.getCOTEXA() + "','"
 				       + NuevoMovimientoImpuestoRecurso.getBITC09() + "','"
 				       + NuevoMovimientoImpuestoRecurso.getOBTEXC() + "','"
-				       + NuevoMovimientoImpuestoRecurso.getOBDEER() + 
+				       + NuevoMovimientoImpuestoRecurso.getOBDEER() + "','"
+				       + sUsuario + "','"
+				       + Utils.timeStamp() +
 				       "' )";
 			
 			logger.debug(sQuery);
@@ -125,12 +136,12 @@ public final class QMMovimientosImpuestos
 				
 				if (resulset.next()) 
 				{
-					iCodigo= resulset.getInt(1);
+					liCodigo= resulset.getLong(1);
 				} 
 			} 
 			catch (SQLException ex) 
 			{
-				iCodigo = 0;
+				liCodigo = 0;
 				
 				logger.error("ERROR COACES:|"+NuevoMovimientoImpuestoRecurso.getCOACES()+"|");
 				logger.error("ERROR NURCAT:|"+NuevoMovimientoImpuestoRecurso.getNURCAT()+"|");
@@ -145,9 +156,9 @@ public final class QMMovimientosImpuestos
 			}
 		}
 
-		return iCodigo;
+		return liCodigo;
 	}
-	public static boolean modMovimientoImpuestoRecurso(Connection conexion, MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso, String sMovimientoImpuestoRecursoID)
+	public static boolean modMovimientoImpuestoRecurso(Connection conexion, MovimientoImpuestoRecurso NuevoMovimientoImpuestoRecurso, long liMovimientoImpuestoRecursoID)
 	{
 		boolean bSalida = false;
 
@@ -185,7 +196,7 @@ public final class QMMovimientosImpuestos
 					+ CAMPO24 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBTEXC() + "', "
 					+ CAMPO25 + " = '"+ NuevoMovimientoImpuestoRecurso.getOBDEER() + "' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sMovimientoImpuestoRecursoID +"'";
+					+ CAMPO1 + " = '"+ liMovimientoImpuestoRecursoID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -202,7 +213,7 @@ public final class QMMovimientosImpuestos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR MovimientoImpuestoRecursoID:|"+sMovimientoImpuestoRecursoID+"|");
+				logger.error("ERROR MovimientoImpuestoRecursoID:|"+liMovimientoImpuestoRecursoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -215,7 +226,7 @@ public final class QMMovimientosImpuestos
 		return bSalida;
 	}
 
-	public static boolean delMovimientoImpuestoRecurso(Connection conexion, String sMovimientoImpuestoRecursoID)
+	public static boolean delMovimientoImpuestoRecurso(Connection conexion, long liMovimientoImpuestoRecursoID)
 	{
 		boolean bSalida = false;
 
@@ -228,7 +239,7 @@ public final class QMMovimientosImpuestos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimientoImpuestoRecursoID + "'";
+					+ CAMPO1 + " = '" + liMovimientoImpuestoRecursoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -245,7 +256,7 @@ public final class QMMovimientosImpuestos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR MovimientoImpuestoRecursoID:|"+sMovimientoImpuestoRecursoID+"|");
+				logger.error("ERROR MovimientoImpuestoRecursoID:|"+liMovimientoImpuestoRecursoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -258,7 +269,7 @@ public final class QMMovimientosImpuestos
 		return bSalida;
 	}
 
-	public static MovimientoImpuestoRecurso getMovimientoImpuestoRecurso(Connection conexion, String sMovimientoImpuestoRecursoID)
+	public static MovimientoImpuestoRecurso getMovimientoImpuestoRecurso(Connection conexion, long liMovimientoImpuestoRecursoID)
 	{
 		String sCODTRN = "";
 		String sCOTDOR = "";
@@ -324,7 +335,7 @@ public final class QMMovimientosImpuestos
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1 + " = '" + sMovimientoImpuestoRecursoID	+ "'";
+				       + CAMPO1 + " = '" + liMovimientoImpuestoRecursoID	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -370,7 +381,7 @@ public final class QMMovimientosImpuestos
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sMovimientoImpuestoRecursoID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoImpuestoRecursoID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -406,7 +417,7 @@ public final class QMMovimientosImpuestos
 				sOBTEXC = "";
 				sOBDEER = "";
 				
-				logger.error("ERROR MovimientoImpuestoRecursoID:|"+sMovimientoImpuestoRecursoID+"|");
+				logger.error("ERROR MovimientoImpuestoRecursoID:|"+liMovimientoImpuestoRecursoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -423,9 +434,9 @@ public final class QMMovimientosImpuestos
 				sBIRESO, sCOTEXA, sBITC09, sOBTEXC, sOBDEER);
 	}
 
-	public static String getMovimientoImpuestoRecursoID(Connection conexion, MovimientoImpuestoRecurso impuesto)
+	public static long getMovimientoImpuestoRecursoID(Connection conexion, MovimientoImpuestoRecurso impuesto)
 	{
-		String sMovimientoImpuestoRecursoID = "";
+		long liMovimientoImpuestoRecursoID = 0;
 		
 		if (conexion != null)
 		{
@@ -486,11 +497,11 @@ public final class QMMovimientosImpuestos
 					{
 						bEncontrado = true;
 
-						sMovimientoImpuestoRecursoID = rs.getString(CAMPO1);
+						liMovimientoImpuestoRecursoID = rs.getLong(CAMPO1);
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sMovimientoImpuestoRecursoID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoImpuestoRecursoID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -500,7 +511,7 @@ public final class QMMovimientosImpuestos
 			} 
 			catch (SQLException ex) 
 			{
-				sMovimientoImpuestoRecursoID = "";
+				liMovimientoImpuestoRecursoID = 0;
 				
 				logger.error("ERROR COACES:|"+impuesto.getCOACES()+"|");
 				logger.error("ERROR NURCAT:|"+impuesto.getNURCAT()+"|");
@@ -515,10 +526,10 @@ public final class QMMovimientosImpuestos
 			}
 		}
 
-		return sMovimientoImpuestoRecursoID;
+		return liMovimientoImpuestoRecursoID;
 	}
 	
-	public static boolean existeMovimientoImpuestoRecurso(Connection conexion, String sMovimientoImpuestoID)
+	public static boolean existeMovimientoImpuestoRecurso(Connection conexion, long liMovimientoImpuestoRecursoID)
 	{
 		boolean bEncontrado = false;
 
@@ -536,7 +547,7 @@ public final class QMMovimientosImpuestos
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimientoImpuestoID + "'";
+					+ CAMPO1 + " = '" + liMovimientoImpuestoRecursoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -568,7 +579,7 @@ public final class QMMovimientosImpuestos
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR sMovimientoImpuestoID:|"+sMovimientoImpuestoID+"|");
+				logger.error("ERROR sMovimientoImpuestoID:|"+liMovimientoImpuestoRecursoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

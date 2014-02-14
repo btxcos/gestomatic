@@ -1,5 +1,7 @@
 package com.provisiones.test;
 
+import java.math.BigInteger;
+
 import com.provisiones.misc.Utils;
 
 
@@ -11,18 +13,32 @@ public class TestConstantes
 
 	public static void main(String[] args) 
 	{
-		String sImporte = "123231321321";
 		
-		
-		String sEuros = sImporte.substring(0, sImporte.length()-2);
-		String sCentimos = sImporte.substring(sImporte.length()-2,sImporte.length());
-		
-		System.out.println(sEuros);
-		System.out.println(sCentimos);
-			
-		System.out.println(Utils.recuperaImporte(true,sImporte));
-		
-		System.out.println(Utils.compruebaImporte(Utils.recuperaImporte(true,sImporte)));
+		String sPais = "ES";
+		String sNUCCEN = "0012";
+		String sNUCCOF = "0345";
+		String sNUCCDI = "03";
+		String sNUCCNT = "0000067890";
+        
+        String sValorCompleto = sNUCCEN+sNUCCOF+sNUCCDI+sNUCCNT+(sPais.charAt(0)-55)+(sPais.charAt(1)-55)+"00";
+ 
+        BigInteger biValorCompleto = new BigInteger(sValorCompleto);
+       
+        BigInteger biISO7604 = new BigInteger("97");
+
+        int iDCIBAN = 98 - biValorCompleto.mod(biISO7604).intValue();
+        
+        System.out.println("iDCIBAN:"+iDCIBAN);
+        
+        String sPrefijo = (iDCIBAN > 9) ? "":"0";
+        
+        String sDCIBAN =  sPrefijo+iDCIBAN;
+        
+        System.out.println("sDCIBAN:"+sDCIBAN);
+        
+        
+        System.out.println("SEPA:"+sPais+sDCIBAN+sNUCCEN+sNUCCOF+sNUCCDI+sNUCCNT);
+
 	}
 
 }

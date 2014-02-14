@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -579,6 +580,31 @@ public final class Utils
 		
 		return sFechaFormateada;
 	}
+	
+    public static String calculaDCIBAN(String sPais, String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT) 
+    {
+        String sValorCompleto = sNUCCEN+sNUCCOF+sNUCCDI+sNUCCNT+(sPais.charAt(0)-55)+(sPais.charAt(1)-55)+"00";
+        
+        BigInteger biValorCompleto = new BigInteger(sValorCompleto);
+       
+        BigInteger biISO7604 = new BigInteger("97");
+
+        int iDCIBAN = 98 - biValorCompleto.mod(biISO7604).intValue();
+        
+        logger.debug("iDCIBAN:"+iDCIBAN);
+        
+        String sPrefijo = (iDCIBAN > 9) ? "":"0";
+        
+        String sDCIBAN =  sPrefijo+iDCIBAN;
+        
+        logger.debug("sDCIBAN:"+sDCIBAN);
+        
+        
+        logger.debug("SEPA:"+sPais+sDCIBAN+sNUCCEN+sNUCCOF+sNUCCDI+sNUCCNT);
+    	
+    	return sDCIBAN;
+    }
+	
     public static String calculaDC(String sNUCCEN, String sNUCCOF, String sNUCCNT) 
     {
     	String sDC = "";

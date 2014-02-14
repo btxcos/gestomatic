@@ -1,6 +1,8 @@
 package com.provisiones.dal.qm.movimientos;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.movimientos.MovimientoComunidad;
 
 import java.sql.Connection;
@@ -52,16 +54,22 @@ public final class QMMovimientosComunidades
 	public static final String CAMPO31 = "obtexc";
 	public static final String CAMPO32 = "obdeer";         
 
+	//Campos de control
+	public static final String CAMPO33  = "usuario_movimiento";
+	public static final String CAMPO34  = "fecha_movimiento";
+	
 	private QMMovimientosComunidades(){}
 	
-	public static int addMovimientoComunidad(Connection conexion, MovimientoComunidad NuevoMovimientoComunidad)
+	public static long addMovimientoComunidad(Connection conexion, MovimientoComunidad NuevoMovimientoComunidad)
 	{
-		int iCodigo = 0;
+		long liCodigo = 0;
 
 		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
+			
+			String sUsuario = ConnectionManager.getUser();
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -98,8 +106,14 @@ public final class QMMovimientosComunidades
 				       + CAMPO29 + ","
 				       + CAMPO30 + ","
 				       + CAMPO31 + ","
-				       + CAMPO32 +               
+				       + CAMPO32 + ","
+				       + CAMPO33 + ","
+				       + CAMPO34 +               
 				       ") VALUES ('" 
+				       
+				       
+				       				       
+				       
 				       + NuevoMovimientoComunidad.getCODTRN() + "','" 
 				       + NuevoMovimientoComunidad.getCOTDOR() + "','"
 				       + NuevoMovimientoComunidad.getIDPROV() + "','"
@@ -109,29 +123,49 @@ public final class QMMovimientosComunidades
 				       + NuevoMovimientoComunidad.getNUDCOM() + "','"
 				       + NuevoMovimientoComunidad.getBITC10() + "','"
 				       + NuevoMovimientoComunidad.getCOACES() + "','"
-				       + NuevoMovimientoComunidad.getBITC01() + "','"
-				       + NuevoMovimientoComunidad.getNOMCOC() + "','"
-				       + NuevoMovimientoComunidad.getBITC02() + "','"
-				       + NuevoMovimientoComunidad.getNODCCO() + "','"
-				       + NuevoMovimientoComunidad.getBITC03() + "','"
-				       + NuevoMovimientoComunidad.getNOMPRC() + "','"
-				       + NuevoMovimientoComunidad.getBITC04() + "','"
-				       + NuevoMovimientoComunidad.getNUTPRC() + "','"
-				       + NuevoMovimientoComunidad.getBITC05() + "','"
-				       + NuevoMovimientoComunidad.getNOMADC() + "','"
-				       + NuevoMovimientoComunidad.getBITC06() + "','"
-				       + NuevoMovimientoComunidad.getNUTADC() + "','"
-				       + NuevoMovimientoComunidad.getBITC07() + "','"
-				       + NuevoMovimientoComunidad.getNODCAD() + "','"
-				       + NuevoMovimientoComunidad.getBITC08() + "','"
-				       + NuevoMovimientoComunidad.getNUCCEN() + "','"
-				       + NuevoMovimientoComunidad.getNUCCOF() + "','"
-				       + NuevoMovimientoComunidad.getNUCCDI() + "','"
-				       + NuevoMovimientoComunidad.getNUCCNT() + "','"
+				       + NuevoMovimientoComunidad.getBITC01() + "',"
+				       //+ NuevoMovimientoComunidad.getNOMCOC() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNOMCOC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoMovimientoComunidad.getBITC02() + "',"
+				       //+ NuevoMovimientoComunidad.getNODCCO() + "',"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNODCCO()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoMovimientoComunidad.getBITC03() + "',"
+				       //+ NuevoMovimientoComunidad.getNOMPRC() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNOMPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoMovimientoComunidad.getBITC04() + "',"
+				       //+ NuevoMovimientoComunidad.getNUTPRC() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNUTPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoMovimientoComunidad.getBITC05() + "',"
+				       //+ NuevoMovimientoComunidad.getNOMADC() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNOMADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoMovimientoComunidad.getBITC06() + "',"
+				       //+ NuevoMovimientoComunidad.getNUTADC() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNUTADC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoMovimientoComunidad.getBITC07() + "',"
+				       //+ NuevoMovimientoComunidad.getNODCAD() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNODCAD()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoMovimientoComunidad.getBITC08() + "',"
+				       //+ NuevoMovimientoComunidad.getNUCCEN() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       //+ NuevoMovimientoComunidad.getNUCCOF() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       //+ NuevoMovimientoComunidad.getNUCCDI() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       //+ NuevoMovimientoComunidad.getNUCCNT() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoComunidad.getNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
 				       + NuevoMovimientoComunidad.getBITC09() + "','"
 				       + NuevoMovimientoComunidad.getOBTEXC() + "','"
-				       + NuevoMovimientoComunidad.getOBDEER() + 
+				       + NuevoMovimientoComunidad.getOBDEER() + "','"
+				       + sUsuario + "','"
+				       + Utils.timeStamp() +
 				       "' )";
+			
+			
+			 
+			 
+			 
+			
+
 			
 			logger.debug(sQuery);
 
@@ -147,12 +181,12 @@ public final class QMMovimientosComunidades
 				
 				if (resulset.next()) 
 				{
-					iCodigo= resulset.getInt(1);
+					liCodigo= resulset.getLong(1);
 				} 
 			} 
 			catch (SQLException ex) 
 			{
-				iCodigo = 0;
+				liCodigo = 0;
 
 				logger.error("ERROR COCLDO:|"+NuevoMovimientoComunidad.getCOCLDO()+"|");
 				logger.error("ERROR NUDCOM:|"+NuevoMovimientoComunidad.getNUDCOM()+"|");
@@ -167,11 +201,11 @@ public final class QMMovimientosComunidades
 			}	
 		}
 
-		logger.error("iCodigo: |" + iCodigo +"|");
+		logger.debug("iCodigo: |" + liCodigo +"|");
 
-		return iCodigo;
+		return liCodigo;
 	}
-	public static boolean modMovimientoComunidad(Connection conexion, MovimientoComunidad NuevoMovimientoComunidad, String sMovimientoComunidadID)
+	public static boolean modMovimientoComunidad(Connection conexion, MovimientoComunidad NuevoMovimientoComunidad, long liMovimientoComunidadID)
 	{
 		boolean bSalida = false;
 		
@@ -184,6 +218,9 @@ public final class QMMovimientosComunidades
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
+					
+					
+					
 					+ CAMPO2  + " = '"+ NuevoMovimientoComunidad.getCODTRN() + "', " 
 					+ CAMPO3  + " = '"+ NuevoMovimientoComunidad.getCOTDOR() + "', " 
 					+ CAMPO4  + " = '"+ NuevoMovimientoComunidad.getIDPROV() + "', " 
@@ -194,7 +231,7 @@ public final class QMMovimientosComunidades
 					+ CAMPO9  + " = '"+ NuevoMovimientoComunidad.getBITC10() + "', " 
 					+ CAMPO10 + " = '"+ NuevoMovimientoComunidad.getCOACES() + "', " 
 					+ CAMPO11 + " = '"+ NuevoMovimientoComunidad.getBITC01() + "', " 
-					+ CAMPO12 + " = '"+ NuevoMovimientoComunidad.getNOMCOC() + "', " 
+					/*+ CAMPO12 + " = '"+ NuevoMovimientoComunidad.getNOMCOC() + "', " 
 					+ CAMPO13 + " = '"+ NuevoMovimientoComunidad.getBITC02() + "', " 
 					+ CAMPO14 + " = '"+ NuevoMovimientoComunidad.getNODCCO() + "', " 
 					+ CAMPO15 + " = '"+ NuevoMovimientoComunidad.getBITC03() + "', " 
@@ -211,13 +248,32 @@ public final class QMMovimientosComunidades
 					+ CAMPO26 + " = '"+ NuevoMovimientoComunidad.getNUCCEN() + "', " 
 					+ CAMPO27 + " = '"+ NuevoMovimientoComunidad.getNUCCOF() + "', " 
 					+ CAMPO28 + " = '"+ NuevoMovimientoComunidad.getNUCCDI() + "', " 
-					+ CAMPO29 + " = '"+ NuevoMovimientoComunidad.getNUCCNT() + "', " 
+					+ CAMPO29 + " = '"+ NuevoMovimientoComunidad.getNUCCNT() + "', " */
+					+ CAMPO12 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNOMCOC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+					+ CAMPO13 + " = '"+ NuevoMovimientoComunidad.getBITC02() + "', " 
+					+ CAMPO14 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNODCCO() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO15 + " = '"+ NuevoMovimientoComunidad.getBITC03() + "', " 
+					+ CAMPO16 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNOMPRC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO17 + " = '"+ NuevoMovimientoComunidad.getBITC04() + "', " 
+					+ CAMPO18 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNUTPRC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO19 + " = '"+ NuevoMovimientoComunidad.getBITC05() + "', " 
+					+ CAMPO20 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNOMADC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO21 + " = '"+ NuevoMovimientoComunidad.getBITC06() + "', " 
+					+ CAMPO22 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNUTADC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO23 + " = '"+ NuevoMovimientoComunidad.getBITC07() + "', " 
+					+ CAMPO24 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNODCAD() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO25 + " = '"+ NuevoMovimientoComunidad.getBITC08() + "', " 
+					+ CAMPO26 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNUCCEN() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+					+ CAMPO27 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNUCCOF() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+					+ CAMPO28 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNUCCDI() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+					+ CAMPO29 + " = AES_ENCRYPT('"+ NuevoMovimientoComunidad.getNUCCNT() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
+					
 					+ CAMPO30 + " = '"+ NuevoMovimientoComunidad.getBITC09() + "', " 
 					+ CAMPO31 + " = '"+ NuevoMovimientoComunidad.getOBTEXC() + "', " 
 					+ CAMPO32 + " = '"+ NuevoMovimientoComunidad.getOBDEER() +
 					"' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sMovimientoComunidadID +"'";
+					+ CAMPO1 + " = '"+ liMovimientoComunidadID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -234,7 +290,7 @@ public final class QMMovimientosComunidades
 			{
 				bSalida = false;
 				
-				logger.error("ERROR MovimientoComunidadID:|"+sMovimientoComunidadID+"|");
+				logger.error("ERROR MovimientoComunidadID:|"+liMovimientoComunidadID+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -247,7 +303,7 @@ public final class QMMovimientosComunidades
 		return bSalida;
 	}
 
-	public static boolean delMovimientoComunidad(Connection conexion, String sMovimientoComunidadID)
+	public static boolean delMovimientoComunidad(Connection conexion, long liMovimientoComunidadID)
 	{
 		boolean bSalida = false;
 
@@ -260,7 +316,7 @@ public final class QMMovimientosComunidades
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1 + " = '" + sMovimientoComunidadID + "'";
+					+ CAMPO1 + " = '" + liMovimientoComunidadID + "'";
 			
 			logger.debug(sQuery);
 
@@ -277,7 +333,7 @@ public final class QMMovimientosComunidades
 			{
 				bSalida = false;
 
-				logger.error("ERROR MovimientoComunidadID:|"+sMovimientoComunidadID+"|");
+				logger.error("ERROR MovimientoComunidadID:|"+liMovimientoComunidadID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -290,7 +346,7 @@ public final class QMMovimientosComunidades
 		return bSalida;
 	}
 	
-	public static MovimientoComunidad getMovimientoComunidad(Connection conexion, String sMovimientoComunidadID)
+	public static MovimientoComunidad getMovimientoComunidad(Connection conexion, long liMovimientoComunidadID)
 	{
 		String sCODTRN = "";
 		String sCOTDOR = "";
@@ -346,7 +402,7 @@ public final class QMMovimientosComunidades
 				       + CAMPO9  + ","              
 				       + CAMPO10 + ","              
 				       + CAMPO11 + ","              
-				       + CAMPO12 + ","              
+				       /*+ CAMPO12 + ","              
 				       + CAMPO13 + ","              
 				       + CAMPO14 + ","              
 				       + CAMPO15 + ","              
@@ -363,14 +419,33 @@ public final class QMMovimientosComunidades
 				       + CAMPO26 + ","              
 				       + CAMPO27 + ","              
 				       + CAMPO28 + ","              
-				       + CAMPO29 + ","
+				       + CAMPO29 + ","*/
+				       + "AES_DECRYPT("+ CAMPO12 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + CAMPO13 + ","              
+				       + "AES_DECRYPT("+ CAMPO14 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + CAMPO15 + ","              
+				       + "AES_DECRYPT("+ CAMPO16 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + CAMPO17 + ","              
+				       + "AES_DECRYPT("+ CAMPO18 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + CAMPO19 + ","              
+				       + "AES_DECRYPT("+ CAMPO20 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + CAMPO21 + ","              
+				       + "AES_DECRYPT("+ CAMPO22 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + CAMPO23 + ","              
+				       + "AES_DECRYPT("+ CAMPO24 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + CAMPO25 + ","              
+				       + "AES_DECRYPT("+ CAMPO26 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+ CAMPO27 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+ CAMPO28 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+ CAMPO29 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       
 				       + CAMPO30 + ","
 				       + CAMPO31 + ","
 				       + CAMPO32 +               
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE " 
-				       + CAMPO1 + " = '" + sMovimientoComunidadID + "'";
+				       + CAMPO1 + " = '" + liMovimientoComunidadID + "'";
 			
 			logger.debug(sQuery);
 
@@ -399,31 +474,31 @@ public final class QMMovimientosComunidades
 						sBITC10 = rs.getString(CAMPO9);  
 						sCOACES = rs.getString(CAMPO10); 
 						sBITC01 = rs.getString(CAMPO11); 
-						sNOMCOC = rs.getString(CAMPO12); 
+						sNOMCOC = rs.getString("AES_DECRYPT("+ CAMPO12 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sBITC02 = rs.getString(CAMPO13); 
-						sNODCCO = rs.getString(CAMPO14); 
+						sNODCCO = rs.getString("AES_DECRYPT("+ CAMPO14 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sBITC03 = rs.getString(CAMPO15); 
-						sNOMPRC = rs.getString(CAMPO16); 
+						sNOMPRC = rs.getString("AES_DECRYPT("+ CAMPO16 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sBITC04 = rs.getString(CAMPO17); 
-						sNUTPRC = rs.getString(CAMPO18); 
+						sNUTPRC = rs.getString("AES_DECRYPT("+ CAMPO18 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sBITC05 = rs.getString(CAMPO19); 
-						sNOMADC = rs.getString(CAMPO20); 
+						sNOMADC = rs.getString("AES_DECRYPT("+ CAMPO20 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sBITC06 = rs.getString(CAMPO21); 
-						sNUTADC = rs.getString(CAMPO22); 
+						sNUTADC = rs.getString("AES_DECRYPT("+ CAMPO22 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sBITC07 = rs.getString(CAMPO23); 
-						sNODCAD = rs.getString(CAMPO24); 
+						sNODCAD = rs.getString("AES_DECRYPT("+ CAMPO24 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sBITC08 = rs.getString(CAMPO25); 
-						sNUCCEN = rs.getString(CAMPO26); 
-						sNUCCOF = rs.getString(CAMPO27); 
-						sNUCCDI = rs.getString(CAMPO28); 
-						sNUCCNT = rs.getString(CAMPO29); 
+						sNUCCEN = rs.getString("AES_DECRYPT("+ CAMPO26 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUCCOF = rs.getString("AES_DECRYPT("+ CAMPO27 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUCCDI = rs.getString("AES_DECRYPT("+ CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUCCNT = rs.getString("AES_DECRYPT("+ CAMPO29 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						sBITC09 = rs.getString(CAMPO30); 
 						sOBTEXC = rs.getString(CAMPO31); 
 						sOBDEER = rs.getString(CAMPO32); 
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sMovimientoComunidadID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoComunidadID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -465,7 +540,7 @@ public final class QMMovimientosComunidades
 				sOBTEXC = "";
 				sOBDEER = "";
 				
-				logger.error("ERROR MovimientoComunidadID:|"+sMovimientoComunidadID+"|");
+				logger.error("ERROR MovimientoComunidadID:|"+liMovimientoComunidadID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -483,9 +558,9 @@ public final class QMMovimientosComunidades
 				sNUCCDI, sNUCCNT, sBITC09, sOBTEXC, sOBDEER);
 	}
 	
-	public static String getMovimientoComunidadID(Connection conexion, MovimientoComunidad comunidad)
+	public static long getMovimientoComunidadID(Connection conexion, MovimientoComunidad comunidad)
 	{
-		String sMovimientoComunidadID = "";
+		long liMovimientoComunidadID = 0;
 		
 		if (conexion != null)
 		{
@@ -512,24 +587,24 @@ public final class QMMovimientosComunidades
 					+ CAMPO9  +" = '" + comunidad.getBITC10() + "' AND "
 					+ CAMPO10 +" = '" + comunidad.getCOACES() + "' AND "
 					+ CAMPO11 +" = '" + comunidad.getBITC01() + "' AND "
-					+ CAMPO12 +" = '" + comunidad.getNOMCOC() + "' AND "
+					+ CAMPO12 +" = AES_ENCRYPT('" + comunidad.getNOMCOC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
 					+ CAMPO13 +" = '" + comunidad.getBITC02() + "' AND "
-					+ CAMPO14 +" = '" + comunidad.getNODCCO() + "' AND "
+					+ CAMPO14 +" = AES_ENCRYPT('" + comunidad.getNODCCO() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
 					+ CAMPO15 +" = '" + comunidad.getBITC03() + "' AND "
-					+ CAMPO16 +" = '" + comunidad.getNOMPRC() + "' AND "
+					+ CAMPO16 +" = AES_ENCRYPT('" + comunidad.getNOMPRC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
 					+ CAMPO17 +" = '" + comunidad.getBITC04() + "' AND "
-					+ CAMPO18 +" = '" + comunidad.getNUTPRC() + "' AND "
+					+ CAMPO18 +" = AES_ENCRYPT('" + comunidad.getNUTPRC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
 					+ CAMPO19 +" = '" + comunidad.getBITC05() + "' AND "
-					+ CAMPO20 +" = '" + comunidad.getNOMADC() + "' AND "
+					+ CAMPO20 +" = AES_ENCRYPT('" + comunidad.getNOMADC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
 					+ CAMPO21 +" = '" + comunidad.getBITC06() + "' AND "
-					+ CAMPO22 +" = '" + comunidad.getNUTADC() + "' AND "
+					+ CAMPO22 +" = AES_ENCRYPT('" + comunidad.getNUTADC() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
 					+ CAMPO23 +" = '" + comunidad.getBITC07() + "' AND "
-					+ CAMPO24 +" = '" + comunidad.getNODCAD() + "' AND "
+					+ CAMPO24 +" = AES_ENCRYPT('" + comunidad.getNODCAD() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
 					+ CAMPO25 +" = '" + comunidad.getBITC08() + "' AND "
-					+ CAMPO26 +" = '" + comunidad.getNUCCEN() + "' AND "
-					+ CAMPO27 +" = '" + comunidad.getNUCCOF() + "' AND "
-					+ CAMPO28 +" = '" + comunidad.getNUCCDI() + "' AND "
-					+ CAMPO29 +" = '" + comunidad.getNUCCNT() + "' AND "
+					+ CAMPO26 +" = AES_ENCRYPT('" + comunidad.getNUCCEN() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
+					+ CAMPO27 +" = AES_ENCRYPT('" + comunidad.getNUCCOF() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
+					+ CAMPO28 +" = AES_ENCRYPT('" + comunidad.getNUCCDI() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
+					+ CAMPO29 +" = AES_ENCRYPT('" + comunidad.getNUCCNT() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), AND "
 					+ CAMPO30 +" = '" + comunidad.getBITC09() + "' AND "
 					+ CAMPO31 +" = '" + comunidad.getOBTEXC() + 
 					"')";
@@ -551,11 +626,11 @@ public final class QMMovimientosComunidades
 					{
 						bEncontrado = true;
 
-						sMovimientoComunidadID = rs.getString(CAMPO1);
+						liMovimientoComunidadID = rs.getLong(CAMPO1);
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sMovimientoComunidadID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoComunidadID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -565,7 +640,7 @@ public final class QMMovimientosComunidades
 			} 
 			catch (SQLException ex) 
 			{
-				sMovimientoComunidadID = "";
+				liMovimientoComunidadID = 0;
 				
 				logger.error("ERROR COCLDO:|"+comunidad.getCOCLDO()+"|");
 				logger.error("ERROR NUDCOM:|"+comunidad.getNUDCOM()+"|");
@@ -580,10 +655,10 @@ public final class QMMovimientosComunidades
 			}
 		}
 
-		return sMovimientoComunidadID;
+		return liMovimientoComunidadID;
 	}
 	
-	public static boolean existeMovimientoComunidad(Connection conexion, String sMovimientoComunidadID)
+	public static boolean existeMovimientoComunidad(Connection conexion, long liMovimientoComunidadID)
 	{
 		boolean bEncontrado = false;
 		
@@ -599,7 +674,7 @@ public final class QMMovimientosComunidades
 				" FROM " 
 				+ TABLA + 
 				" WHERE " 
-				+ CAMPO1 + " = '" + sMovimientoComunidadID + "'";
+				+ CAMPO1 + " = '" + liMovimientoComunidadID + "'";
 		
 		logger.debug(sQuery);
 
@@ -632,7 +707,7 @@ public final class QMMovimientosComunidades
 		{
 			bEncontrado = false;
 
-			logger.error("ERROR MovimientoComunidadID:|"+sMovimientoComunidadID+"|");
+			logger.error("ERROR MovimientoComunidadID:|"+liMovimientoComunidadID+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 

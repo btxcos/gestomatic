@@ -2,6 +2,8 @@ package com.provisiones.pl.pagos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -17,6 +19,7 @@ import com.provisiones.ll.CLDescripciones;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLPagos;
 import com.provisiones.ll.CLProvisiones;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
@@ -38,10 +41,16 @@ public class GestorPagosSimple implements Serializable
 	private String sCOACESB = "";
 	private String sNUPROFB = "";
 	
-	private String sCOGRUGB = "";
-	private String sCOTPGAB = "";
-	private String sCOSBGAB = "";
-	private String sFEDEVEB = "";
+	private String sCOGRUGBA = "";
+	private String sCOTPGABA = "";
+	private String sCOSBGABA = "";
+	private String sFEDEVEBA = "";
+
+	private String sCOGRUGBP = "";
+	private String sCOTPGABP = "";
+	private String sCOSBGABP = "";
+	private String sFEDEVEBP = "";
+	private String sCOACESBP = "";
 	
 	private String sCodGastoB = "";
 	
@@ -52,6 +61,8 @@ public class GestorPagosSimple implements Serializable
 	private String sNUPIACB = "";
 	private String sNUPOACB = "";
 	private String sNUPUACB = "";
+	
+	private String sNURCATB = "";
 	
 	private String sFEPFONB = "";
 	
@@ -100,6 +111,8 @@ public class GestorPagosSimple implements Serializable
 	//private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
 	//private String sNUCONE = ValoresDefecto.DEF_NUCONE;
 	private String sNUPROF = "";
+	
+	private String sFEPGPR = "";
 	//private String sCOMONA = ValoresDefecto.DEF_COMONA;
 	//private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
 	//private String sFEAUFA = ValoresDefecto.DEF_FEAUFA;
@@ -114,21 +127,35 @@ public class GestorPagosSimple implements Serializable
 	//private String sNUCLII = ValoresDefecto.DEF_NUCLII;
 	
 	
-	//Comunidad
-	private String sCOCLDO = "";
-	private String sNUDCOM = "";
-
-	private String sNOMCOC = "";
-	private String sNODCCO = "";
-	private String sNOMPRC = "";
-	private String sNUTPRC = "";
-	private String sNOMADC = "";
-	private String sNUTADC = "";
-	private String sNODCAD = "";
+	//Cuenta
+	private String sPais = "ES";	
+	private String sDCIBAN = "#";
 	private String sNUCCEN = "";
 	private String sNUCCOF = "";
 	private String sNUCCDI = "";
 	private String sNUCCNT = "";
+	
+	private String sDescripcion = "";
+	
+	private Map<String,String> tiposcogrugHM = new LinkedHashMap<String, String>();
+
+	private Map<String,String> tiposcotpgaHMA = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbgaHMA = new LinkedHashMap<String, String>();
+
+	private Map<String,String> tiposcotpgaHMP = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbgaHMP = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcotpga_g1HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpga_g2HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpga_g3HM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcosbga_t11HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t12HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t21HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t22HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t23HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
 
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -138,12 +165,65 @@ public class GestorPagosSimple implements Serializable
 	
 	private transient GastoTabla gastoseleccionado = null;
 	private transient ArrayList<GastoTabla> tablagastos = null;
+	
+	private transient Cuenta cuentaactivoseleccionada = null;
+	
+	private transient Cuenta cuentacomunidadseleccionada = null;
+	
+	private transient ArrayList<Cuenta> tablacuentasactivo = null;
+	
+	private transient ArrayList<Cuenta> tablacuentascomunidad = null;
 
 	public GestorPagosSimple()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorListaGastos...");	
+			logger.debug("Iniciando GestorPagosSimple...");
+
+			tiposcogrugHM.put("Compraventa",      "1");
+			tiposcogrugHM.put("Pendientes",       "2");
+			tiposcogrugHM.put("Acciones",         "3");
+
+			tiposcotpga_g1HM.put("Plusvalia", "1");
+			tiposcotpga_g1HM.put("Notaria",   "2");
+
+			tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
+			tiposcotpga_g2HM.put("Comunidades",     "2");
+			tiposcotpga_g2HM.put("Suministros",     "3");
+			
+			tiposcotpga_g3HM.put("Honorarios","2");
+			tiposcotpga_g3HM.put("Licencias", "3");
+			
+			tiposcosbga_t11HM.put("Plusvalia", "0");
+			tiposcosbga_t12HM.put("Notaria",   "1");
+
+			tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
+			tiposcosbga_t21HM.put("IBIS",                                 "1");
+			tiposcosbga_t21HM.put("Tasas basura",                         "2");
+			tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
+			tiposcosbga_t21HM.put("Tasas agua",                           "4");
+			tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
+			tiposcosbga_t21HM.put("Otras tasas",                          "6");
+			
+			tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
+			tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
+			tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
+			tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
+			tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
+			tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
+			
+			tiposcosbga_t23HM.put("Suministros",               "0");
+			tiposcosbga_t23HM.put("Suministro luz",            "1");
+			tiposcosbga_t23HM.put("Suministro agua",           "2");
+			tiposcosbga_t23HM.put("Suministro gas",            "3");
+			
+			tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
+			tiposcosbga_t32HM.put("Prescripcion",            "1");  
+			tiposcosbga_t32HM.put("Colaboracion",            "2");  
+			tiposcosbga_t32HM.put("Otros honorarios",        "3");  
+			tiposcosbga_t32HM.put("Servicios varios",        "4");
+			
+			tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
 		}
 	}
 	
@@ -156,7 +236,7 @@ public class GestorPagosSimple implements Serializable
     	this.setTablagastos(null);
 	}
 	
-	public void borrarCamposActivo()
+	public void borrarCamposBuscarActivo()
 	{
 		this.sCOPOINB = "";
 		this.sNOMUINB = "";
@@ -165,6 +245,8 @@ public class GestorPagosSimple implements Serializable
 		this.sNUPIACB = "";
 		this.sNUPOACB = "";
 		this.sNUPUACB = "";
+		
+		this.sNURCATB = "";
     	
     	this.setActivoseleccionado(null);
     	this.setTablaactivos(null);
@@ -172,11 +254,11 @@ public class GestorPagosSimple implements Serializable
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
-    	borrarCamposActivo();
+    	borrarCamposBuscarActivo();
     }
     
     
-	public void borrarCamposProvision()
+	public void borrarCamposBuscarProvision()
 	{
 		this.sFEPFONB = "";
     	
@@ -186,7 +268,46 @@ public class GestorPagosSimple implements Serializable
 	
     public void limpiarPlantillaProvision(ActionEvent actionEvent) 
     {  
-    	borrarCamposProvision();
+    	borrarCamposBuscarProvision();
+    }
+    
+	public void borrarCamposBuscarGastoActivo()
+	{
+		this.sCOGRUGBA = "";
+		this.sCOTPGABA = "";
+		this.sCOSBGABA = "";
+		this.sFEDEVEBA = "";
+		
+		cambiaGrupoActivo();
+	
+    	this.setGastoseleccionado(null);
+    	this.setTablagastos(null);
+	}
+	
+    public void limpiarPlantillaBuscarGastoActivo(ActionEvent actionEvent) 
+    {  
+    	borrarCamposBuscarGastoActivo();
+    }
+    
+    
+	public void borrarCamposBuscarGastoProvision()
+	{
+		this.sCOGRUGBP = "";
+		this.sCOTPGABP = "";
+		this.sCOSBGABP = "";
+		this.sFEDEVEBP = "";
+	
+		this.sCOACESBP = "";
+		
+		cambiaGrupoProvision();
+		
+    	this.setGastoseleccionado(null);
+    	this.setTablagastos(null);
+	}
+	
+    public void limpiarPlantillaBuscarGastoProvision(ActionEvent actionEvent) 
+    {  
+    	borrarCamposBuscarGastoProvision();
     }
     
 	public void borrarCamposGasto()
@@ -202,7 +323,7 @@ public class GestorPagosSimple implements Serializable
 
 		this.sFEDEVE = "";
 		this.sFFGTVP = "";
-		//this.sFEPAGA = ValoresDefecto.DEF_FEPAGA;
+
 		this.sFELIPG = "";
 
 		this.sCOSIGA = "";
@@ -228,44 +349,16 @@ public class GestorPagosSimple implements Serializable
 		this.sCOIMPT = "";
 		this.sDCOIMPT = "";
 
-		//this.sCOTNEG = ValoresDefecto.DEF_COTNEG;
-
-		//this.sCOENCX = ValoresDefecto.DEF_COENCX;
-		//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-		//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
-
 		this.sNUPROF = "";
-
-		//this.sFEAGTO = ValoresDefecto.DEF_FEAGTO;
-
-		//this.sCOMONA = ValoresDefecto.DEF_COMONA;
-		//this.sBIAUTO = ValoresDefecto.DEF_BIAUTO;
-		//this.sFEAUFA = ValoresDefecto.DEF_FEAUFA;
-		//this.sCOTERR = ValoresDefecto.DEF_COTERR;
-
-		//this.sFMPAGN = ValoresDefecto.DEF_FMPAGN;
-		//this.sFEPGPR = "";
-		
-		//this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
-		
-		//this.sCOAPII = ValoresDefecto.DEF_COAPII;
-		//this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-		//this.sNUCLII = ValoresDefecto.DEF_NUCLII;
 
 	}
 	
-	public void borrarCamposComunidad()
+	public void borrarCamposPago()
 	{
-		this.sCOCLDO = "";
-		this.sNUDCOM = "";
-		this.sNOMCOC = "";
-		this.sNODCCO = "";
-		this.sNOMPRC = "";
-		this.sNUTPRC = "";
-		this.sNOMADC = "";
-		this.sNUTADC = "";
-		this.sNODCAD = "";
+		this.sFEPGPR = "";
 		
+		this.sPais = "";
+		this.sDCIBAN = "";
 		this.sNUCCEN = "";
 		this.sNUCCOF = "";
 		this.sNUCCDI = "";
@@ -276,10 +369,173 @@ public class GestorPagosSimple implements Serializable
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
     	borrarCamposBuscar();
-    	borrarCamposActivo();
-    	borrarCamposProvision();
+    	borrarCamposBuscarActivo();
+    	borrarCamposBuscarProvision();
+    	borrarCamposBuscarGastoActivo();
+    	borrarCamposBuscarGastoProvision();
+    	borrarCamposPago();
     	borrarCamposGasto();
     }
+    
+	public void cambiaGrupoActivo()
+	{
+		tiposcotpgaHMA = new LinkedHashMap<String, String>();
+		tiposcosbgaHMA = new LinkedHashMap<String, String>();
+	}
+	
+	public void cambiaTipoActivo()
+	{
+
+		logger.debug("sCOGRUGBA:|"+sCOGRUGBA+"|");
+
+		if (sCOGRUGBA !=null && !sCOGRUGBA.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUGBA)) 
+			{
+				case 1:
+					tiposcotpgaHMA = tiposcotpga_g1HM;
+					break;
+				case 2:
+					tiposcotpgaHMA = tiposcotpga_g2HM;
+					break;
+				case 3:
+					tiposcotpgaHMA = tiposcotpga_g3HM;
+					break;
+				default:
+					tiposcotpgaHMA = new LinkedHashMap<String, String>();
+					break;
+			}
+			tiposcosbgaHMA = new LinkedHashMap<String, String>();
+			sCOTPGABA = "";
+			sCOSBGABA = "";
+		}
+	}
+	
+	public void cambiaSubtipoActivo()
+	{
+		logger.debug("sCOTPGABA:|"+sCOGRUGBA+"| sCOTPGABA:|"+sCOTPGABA+"|");
+		
+		if (sCOTPGABA !=null && !sCOTPGABA.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUGBA+sCOTPGABA)) 
+			{
+				case 11:
+					tiposcosbgaHMA = tiposcosbga_t11HM;
+					break;
+				case 12:
+					tiposcosbgaHMA = tiposcosbga_t12HM;
+					break;
+				case 21:
+					tiposcosbgaHMA = tiposcosbga_t21HM;
+					break;
+				case 22:
+					tiposcosbgaHMA = tiposcosbga_t22HM;
+					break;
+				case 23:
+					tiposcosbgaHMA = tiposcosbga_t23HM;
+					break;
+				case 32:
+					tiposcosbgaHMA = tiposcosbga_t32HM;
+					break;
+				case 33:
+					tiposcosbgaHMA = tiposcosbga_t33HM;
+					break;
+				default:
+					tiposcosbgaHMA = new LinkedHashMap<String, String>();
+					break;
+			}
+			sCOSBGABA = "";
+		}
+	}
+	
+	public void cambiaGrupoProvision()
+	{
+		tiposcotpgaHMP = new LinkedHashMap<String, String>();
+		tiposcosbgaHMP = new LinkedHashMap<String, String>();
+	}
+	
+	public void cambiaTipoProvision()
+	{
+
+		logger.debug("sCOGRUGB:|"+sCOGRUGBP+"|");
+
+		if (sCOGRUGBP !=null && !sCOGRUGBP.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUGBP)) 
+			{
+				case 1:
+					tiposcotpgaHMP = tiposcotpga_g1HM;
+					break;
+				case 2:
+					tiposcotpgaHMP = tiposcotpga_g2HM;
+					break;
+				case 3:
+					tiposcotpgaHMP = tiposcotpga_g3HM;
+					break;
+				default:
+					tiposcotpgaHMP = new LinkedHashMap<String, String>();
+					break;
+			}
+			tiposcosbgaHMP = new LinkedHashMap<String, String>();
+			sCOTPGABP = "";
+			sCOSBGABP = "";
+		}
+	}
+	
+	public void cambiaSubtipoProvision()
+	{
+		logger.debug("sCOTPGABP:|"+sCOGRUGBP+"| sCOTPGABP:|"+sCOTPGABP+"|");
+		
+		if (sCOTPGABP !=null && !sCOTPGABP.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUGBP+sCOTPGABP)) 
+			{
+				case 11:
+					tiposcosbgaHMP = tiposcosbga_t11HM;
+					break;
+				case 12:
+					tiposcosbgaHMP = tiposcosbga_t12HM;
+					break;
+				case 21:
+					tiposcosbgaHMP = tiposcosbga_t21HM;
+					break;
+				case 22:
+					tiposcosbgaHMP = tiposcosbga_t22HM;
+					break;
+				case 23:
+					tiposcosbgaHMP = tiposcosbga_t23HM;
+					break;
+				case 32:
+					tiposcosbgaHMP = tiposcosbga_t32HM;
+					break;
+				case 33:
+					tiposcosbgaHMP = tiposcosbga_t33HM;
+					break;
+				default:
+					tiposcosbgaHMP = new LinkedHashMap<String, String>();
+					break;
+			}
+			sCOSBGABP = "";
+		}
+	}
+	
+	public void hoyFEDEVEBA (ActionEvent actionEvent)
+	{
+		this.setsFEDEVEBA(Utils.fechaDeHoy(true));
+		logger.debug("sFEDEVEBA:|"+sFEDEVEBA+"|");
+	}
+	
+	public void hoyFEDEVEBP (ActionEvent actionEvent)
+	{
+		this.setsFEDEVEBP(Utils.fechaDeHoy(true));
+		logger.debug("sFEDEVEBP:|"+sFEDEVEBP+"|");
+	}
+    
+	public void hoyFEPGPR (ActionEvent actionEvent)
+	{
+		this.setsFEPGPR(Utils.fechaDeHoy(true));
+		logger.debug("sFEPGPR:|"+sFEPGPR+"|");
+	}
     
 	public void buscarActivos (ActionEvent actionEvent)
 	{
@@ -287,12 +543,21 @@ public class GestorPagosSimple implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOINB.toUpperCase(), sNOMUINB.toUpperCase(),
-					sNOPRACB.toUpperCase(), sNOVIASB.toUpperCase(), sNUPIACB.toUpperCase(), 
-					sNUPOACB.toUpperCase(), sNUPUACB.toUpperCase(), "");
-			
-			this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
+			if (sNURCATB.equals(""))
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", sCOPOINB.toUpperCase(), sNOMUINB.toUpperCase(),
+						sNOPRACB.toUpperCase(), sNOVIASB.toUpperCase(), sNUPIACB.toUpperCase(), 
+						sNUPOACB.toUpperCase(), sNUPUACB.toUpperCase(), "");
+				
+				this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
+
+			}
+			else
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCATB));
+				
+			}
 
 			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);
@@ -372,28 +637,51 @@ public class GestorPagosSimple implements Serializable
 		{
 			FacesMessage msg;
 
+			String sMsg = "";
 			if (!sCOACESB.equals(""))
 			{
 				try
 				{
-					this.setTablagastos(CLGastos.buscarGastosActivo(Integer.parseInt(sCOACESB)));
+					GastoTabla filtro = new GastoTabla(
+							"",   
+							sCOACESB,   
+							sCOGRUGBA,   
+							sCOTPGABA,   
+							sCOSBGABA,   
+							"",  
+							"",   
+							"",  
+							sFEDEVEBA,   
+							"",   
+							"",  
+							"");
+					
+					
+					
+					this.setTablagastos(CLGastos.buscarGastosActivoConFiltro(filtro));
 					
 					if (getTablagastos().size() == 0)
 					{
-						msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
+						sMsg = "No se encontraron gastos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
 					}
 					else if (getTablagastos().size() == 1)
 					{
-						msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
+						sMsg = "Encontrado un gasto relacionado.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
 					}
 					else
 					{
-						msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
+						sMsg = "Encontrados "+getTablagastos().size()+" gastos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
 					}
 				}
 				catch(NumberFormatException nfe)
 				{
-					String sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
@@ -402,7 +690,9 @@ public class GestorPagosSimple implements Serializable
 			}
 			else
 			{
-				msg = Utils.pfmsgWarning("No se informó el campo 'Activo'. Por favor, revise los datos.");
+				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
 			}
 
 
@@ -420,7 +710,21 @@ public class GestorPagosSimple implements Serializable
 
 			if (!sNUPROFB.equals(""))
 			{
-				this.setTablagastos(CLGastos.buscarGastosProvision(sNUPROFB));
+				GastoTabla filtro = new GastoTabla(
+						sNUPROFB,   
+						sCOACESBP,   
+						sCOGRUGBP,   
+						sCOTPGABP,   
+						sCOSBGABP,   
+						"",  
+						"",   
+						"",  
+						sFEDEVEBP,   
+						"",   
+						"",  
+						"");
+				
+				this.setTablagastos(CLGastos.buscarGastosProvisionConFiltro(filtro));
 				
 				if (getTablagastos().size() == 0)
 				{
@@ -522,7 +826,7 @@ public class GestorPagosSimple implements Serializable
 		}
     }
 	
-	public void buscarComunidad(ActionEvent actionEvent)
+	public void buscaCuentas (ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
@@ -530,42 +834,228 @@ public class GestorPagosSimple implements Serializable
 			
 			String sMsg = "";
 			
-			borrarCamposComunidad();
-			
 			try
 			{
+				this.setTablacuentasactivo(CLCuentas.buscarCuentasActivo(Integer.parseInt(sCOACES)));
+				
+				sMsg = "Encontradas "+getTablacuentasactivo().size()+" cuentas del activo.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+
 				Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
 				
-				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
-				
-				this.sCOCLDO = comunidad.getsCOCLDO();
-				this.sNUDCOM = comunidad.getsNUDCOM();
-
-				this.sNOMCOC = comunidad.getsNOMCOC();
-				this.sNODCCO = comunidad.getsNODCCO();
-				this.sNOMPRC = comunidad.getsNOMPRC();
-				this.sNUTPRC = comunidad.getsNUTPRC();
-				this.sNOMADC = comunidad.getsNOMADC();
-				this.sNUTADC = comunidad.getsNUTADC();
-				this.sNODCAD = comunidad.getsNODCAD();
-
-				this.sNUCCEN = cuenta.getsNUCCEN();
-				this.sNUCCOF = cuenta.getsNUCCOF();
-				this.sNUCCDI = cuenta.getsNUCCDI();
-				this.sNUCCNT = cuenta.getsNUCCNT();
-
-				
-				if (comunidad.getsNUDCOM().equals(""))
+				if (!comunidad.getsNUDCOM().equals(""))
 				{
-					sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
+					this.setTablacuentascomunidad(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
+
+					sMsg = "Encontradas "+getTablacuentascomunidad().size()+" cuentas de la comunidad.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
 				}
 				else
 				{
-					sMsg = "La comunidad se ha cargado correctamente.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					sMsg = "El activo no esta asociado a una comunidad.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
+	public void seleccionarCuentaActivo(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+		
+			String sMsg = "";
+			
+			if (cuentaactivoseleccionada == null)
+			{
+				logger.debug("NULACO!!");
+			}
+			
+	    	logger.debug("getsPais:|"+cuentaactivoseleccionada.getsPais()+"|");
+	    	logger.debug("getsDCIBAN:|"+cuentaactivoseleccionada.getsDCIBAN()+"|");
+	    	logger.debug("getsNUCCEN:|"+cuentaactivoseleccionada.getsNUCCEN()+"|");
+	    	logger.debug("getsNUCCOF:|"+cuentaactivoseleccionada.getsNUCCOF()+"|");
+	    	logger.debug("getsNUCCDI:|"+cuentaactivoseleccionada.getsNUCCDI()+"|");
+	    	logger.debug("getsNUCCNT:|"+cuentaactivoseleccionada.getsNUCCNT()+"|");
+			
+			this.sPais = cuentaactivoseleccionada.getsPais();
+			this.sDCIBAN = cuentaactivoseleccionada.getsDCIBAN();
+			this.sNUCCEN = cuentaactivoseleccionada.getsNUCCEN();
+			this.sNUCCOF = cuentaactivoseleccionada.getsNUCCOF();
+			this.sNUCCDI = cuentaactivoseleccionada.getsNUCCDI();
+			this.sNUCCNT = cuentaactivoseleccionada.getsNUCCNT();
+			
+			this.setsDescripcion(cuentaactivoseleccionada.getsDescripcion());
+			
+			sMsg = "Cuenta cargada.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
+	
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}				
+	}
+	
+	public void seleccionarCuentaComunidad(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+		
+			String sMsg = "";
+			
+			if (cuentacomunidadseleccionada == null)
+			{
+				logger.debug("NULACO!!");
+			}
+			
+	    	logger.debug("getsPais:|"+cuentacomunidadseleccionada.getsPais()+"|");
+	    	logger.debug("getsDCIBAN:|"+cuentacomunidadseleccionada.getsDCIBAN()+"|");
+	    	logger.debug("getsNUCCEN:|"+cuentacomunidadseleccionada.getsNUCCEN()+"|");
+	    	logger.debug("getsNUCCOF:|"+cuentacomunidadseleccionada.getsNUCCOF()+"|");
+	    	logger.debug("getsNUCCDI:|"+cuentacomunidadseleccionada.getsNUCCDI()+"|");
+	    	logger.debug("getsNUCCNT:|"+cuentacomunidadseleccionada.getsNUCCNT()+"|");
+			
+			this.sPais = cuentacomunidadseleccionada.getsPais();
+			this.sDCIBAN = cuentacomunidadseleccionada.getsDCIBAN();
+			this.sNUCCEN = cuentacomunidadseleccionada.getsNUCCEN();
+			this.sNUCCOF = cuentacomunidadseleccionada.getsNUCCOF();
+			this.sNUCCDI = cuentacomunidadseleccionada.getsNUCCDI();
+			this.sNUCCNT = cuentacomunidadseleccionada.getsNUCCNT();
+			
+			this.setsDescripcion(cuentacomunidadseleccionada.getsDescripcion());
+			
+			sMsg = "Cuenta cargada.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
+	
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}				
+	}
+
+	public void registrarPago()
+	{
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			try
+			{
+				if (!CLGastos.existeGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
+				{
+					sMsg = "ERROR: El gasto informado no existe en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+				else if (sFEPGPR.equals(""))
+				{
+					sMsg = "ERROR: La fecha de pago no se ha informado. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+				else if (sPais.equals("") ||
+						sDCIBAN.equals("") ||
+						sNUCCEN.equals("") ||
+						sNUCCOF.equals("") ||
+						sNUCCDI.equals("") ||
+						sNUCCNT.equals("") ||
+						sDescripcion.equals(""))
+				{
+					sMsg = "ERROR: Faltan campos en la cuenta de pago por informar. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}					
+				else
+				{
+					Pago pago = new Pago(sCodGastoB,ValoresDefecto.DEF_PAGO_SIMPLE, Utils.compruebaFecha(sFEPGPR),sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT);
+					
+					int iSalida = CLPagos.registraPagoSimple(pago, true);
+					
+					switch (iSalida) 
+					{
+					case 0: //Sin errores
+						sMsg = "El pago se ha registrado correctamente.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+						break;
+
+					case -1: //ERROR 001 - El gasto no esta autorizado.
+						sMsg = "ERROR:001 - El gasto no esta autorizado. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -2: //Error 002 - Datos de cuenta incorrectos
+						sMsg = "ERROR:002 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -3: //Error 003 - La fecha de pago no es correcta
+						sMsg = "ERROR:004 - La fecha de pago no es correcta. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -900: //Error 900 - al registrar el pago
+						sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el pago. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -903: //Error 903 - error y rollback - error al cambiar el estado
+						sMsg = "[FATAL] ERROR:903 - Se ha producido un error al resolver la relación con el gasto. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -904: //Error 904 - error y rollback - error al revisar el gasto
+						sMsg = "[FATAL] ERROR:904 - Se ha producido un error al resolver la relación gasto-provision. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -905: //Error 905 - error y rollback - error al modificar el gasto
+						sMsg = "[FATAL] ERROR:905 - Se ha producido un error al establecer el nuevo estado del gasto. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
+						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					default: //error generico
+						sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+					}
+
+					logger.debug("Finalizadas las comprobaciones.");
 				}
 			}
 			catch(NumberFormatException nfe)
@@ -575,73 +1065,11 @@ public class GestorPagosSimple implements Serializable
 				logger.error(sMsg);
 			}
 			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}		
-	}
-	
-	public void pagar()
-	{
-		Pago pago = new Pago(sCodGastoB,ValoresDefecto.DEF_PAGO_SIMPLE, Utils.fechaDeHoy(false),"ES","",sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT);
-		
-		CLPagos.pagaGasto(pago);
-	}
-	
-	public String cargarDetalles() 
-    { 
-		String sPagina = ".";
-		
-		if (ConnectionManager.comprobarConexion())
-		{
-			if (gastoseleccionado != null)
-			{
-				this.sCOACES = gastoseleccionado.getCOACES();
-		    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
-		    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
-		    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
-		    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
-		    	
-				try
-				{
-					this.sCodGastoB = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
-			    	
-			    	logger.debug("sCodGasto:|"+sCodGastoB+"|");
-			    	
-			    	logger.debug("sCOACES:|"+sCOACES+"|");
-			    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");
-			    	logger.debug("sCOTPGA:|"+sCOTPGA+"|");
-			    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
-			    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
-			    	
-			    	logger.debug("Redirigiendo...");
-
-			    	sPagina = "detallesgasto.xhtml";
-				}
-				catch(NumberFormatException nfe)
-				{
-					FacesMessage msg;
-					
-					String sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					
-					FacesContext.getCurrentInstance().addMessage(null, msg);
-				}
-		    	
-		    	
-			}
-			else
-			{
-				FacesMessage msg;
-
-				msg = Utils.pfmsgWarning("No se ha seleccionado ningún gasto.");
-				
-				FacesContext.getCurrentInstance().addMessage(null, msg);
-			}
-
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 
-		return sPagina;
-    }
+	}
+
 	
 	public String getsCOACES() {
 		return sCOACES;
@@ -923,36 +1351,76 @@ public class GestorPagosSimple implements Serializable
 		this.sNUPROFB = sNUPROFB;
 	}
 
-	public String getsCOGRUGB() {
-		return sCOGRUGB;
+	public String getsCOGRUGBA() {
+		return sCOGRUGBA;
 	}
 
-	public void setsCOGRUGB(String sCOGRUGB) {
-		this.sCOGRUGB = sCOGRUGB;
+	public void setsCOGRUGBA(String sCOGRUGBA) {
+		this.sCOGRUGBA = sCOGRUGBA;
 	}
 
-	public String getsCOTPGAB() {
-		return sCOTPGAB;
+	public String getsCOTPGABA() {
+		return sCOTPGABA;
 	}
 
-	public void setsCOTPGAB(String sCOTPGAB) {
-		this.sCOTPGAB = sCOTPGAB;
+	public void setsCOTPGABA(String sCOTPGABA) {
+		this.sCOTPGABA = sCOTPGABA;
 	}
 
-	public String getsCOSBGAB() {
-		return sCOSBGAB;
+	public String getsCOSBGABA() {
+		return sCOSBGABA;
 	}
 
-	public void setsCOSBGAB(String sCOSBGAB) {
-		this.sCOSBGAB = sCOSBGAB;
+	public void setsCOSBGABA(String sCOSBGABA) {
+		this.sCOSBGABA = sCOSBGABA;
 	}
 
-	public String getsFEDEVEB() {
-		return sFEDEVEB;
+	public String getsFEDEVEBA() {
+		return sFEDEVEBA;
 	}
 
-	public void setsFEDEVEB(String sFEDEVEB) {
-		this.sFEDEVEB = sFEDEVEB;
+	public void setsFEDEVEBA(String sFEDEVEBA) {
+		this.sFEDEVEBA = sFEDEVEBA;
+	}
+
+	public String getsCOGRUGBP() {
+		return sCOGRUGBP;
+	}
+
+	public void setsCOGRUGBP(String sCOGRUGBP) {
+		this.sCOGRUGBP = sCOGRUGBP;
+	}
+
+	public String getsCOTPGABP() {
+		return sCOTPGABP;
+	}
+
+	public void setsCOTPGABP(String sCOTPGABP) {
+		this.sCOTPGABP = sCOTPGABP;
+	}
+
+	public String getsCOSBGABP() {
+		return sCOSBGABP;
+	}
+
+	public void setsCOSBGABP(String sCOSBGABP) {
+		this.sCOSBGABP = sCOSBGABP;
+	}
+
+	public String getsFEDEVEBP() {
+		return sFEDEVEBP;
+	}
+
+	public void setsFEDEVEBP(String sFEDEVEBP) {
+		this.sFEDEVEBP = sFEDEVEBP;
+	}
+
+	public String getsCOACESBP() {
+		return sCOACESBP;
+	}
+
+	public void setsCOACESBP(String sCOACESBP) {
+		this.sCOACESBP = sCOACESBP;
 	}
 
 	public String getsCodGastoB() {
@@ -1019,12 +1487,140 @@ public class GestorPagosSimple implements Serializable
 		this.sNUPUACB = sNUPUACB;
 	}
 
+	public String getsNURCATB() {
+		return sNURCATB;
+	}
+
+	public void setsNURCATB(String sNURCATB) {
+		this.sNURCATB = sNURCATB;
+	}
+
 	public String getsFEPFONB() {
 		return sFEPFONB;
 	}
 
 	public void setsFEPFONB(String sFEPFONB) {
 		this.sFEPFONB = sFEPFONB;
+	}
+
+	public Map<String, String> getTiposcogrugHM() {
+		return tiposcogrugHM;
+	}
+
+	public void setTiposcogrugHM(Map<String, String> tiposcogrugHM) {
+		this.tiposcogrugHM = tiposcogrugHM;
+	}
+
+	public Map<String, String> getTiposcotpgaHMA() {
+		return tiposcotpgaHMA;
+	}
+
+	public void setTiposcotpgaHMA(Map<String, String> tiposcotpgaHMA) {
+		this.tiposcotpgaHMA = tiposcotpgaHMA;
+	}
+
+	public Map<String, String> getTiposcosbgaHMA() {
+		return tiposcosbgaHMA;
+	}
+
+	public void setTiposcosbgaHMA(Map<String, String> tiposcosbgaHMA) {
+		this.tiposcosbgaHMA = tiposcosbgaHMA;
+	}
+
+	public Map<String, String> getTiposcotpgaHMP() {
+		return tiposcotpgaHMP;
+	}
+
+	public void setTiposcotpgaHMP(Map<String, String> tiposcotpgaHMP) {
+		this.tiposcotpgaHMP = tiposcotpgaHMP;
+	}
+
+	public Map<String, String> getTiposcosbgaHMP() {
+		return tiposcosbgaHMP;
+	}
+
+	public void setTiposcosbgaHMP(Map<String, String> tiposcosbgaHMP) {
+		this.tiposcosbgaHMP = tiposcosbgaHMP;
+	}
+
+	public Map<String, String> getTiposcotpga_g1HM() {
+		return tiposcotpga_g1HM;
+	}
+
+	public void setTiposcotpga_g1HM(Map<String, String> tiposcotpga_g1HM) {
+		this.tiposcotpga_g1HM = tiposcotpga_g1HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g2HM() {
+		return tiposcotpga_g2HM;
+	}
+
+	public void setTiposcotpga_g2HM(Map<String, String> tiposcotpga_g2HM) {
+		this.tiposcotpga_g2HM = tiposcotpga_g2HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g3HM() {
+		return tiposcotpga_g3HM;
+	}
+
+	public void setTiposcotpga_g3HM(Map<String, String> tiposcotpga_g3HM) {
+		this.tiposcotpga_g3HM = tiposcotpga_g3HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t11HM() {
+		return tiposcosbga_t11HM;
+	}
+
+	public void setTiposcosbga_t11HM(Map<String, String> tiposcosbga_t11HM) {
+		this.tiposcosbga_t11HM = tiposcosbga_t11HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t12HM() {
+		return tiposcosbga_t12HM;
+	}
+
+	public void setTiposcosbga_t12HM(Map<String, String> tiposcosbga_t12HM) {
+		this.tiposcosbga_t12HM = tiposcosbga_t12HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t21HM() {
+		return tiposcosbga_t21HM;
+	}
+
+	public void setTiposcosbga_t21HM(Map<String, String> tiposcosbga_t21HM) {
+		this.tiposcosbga_t21HM = tiposcosbga_t21HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t22HM() {
+		return tiposcosbga_t22HM;
+	}
+
+	public void setTiposcosbga_t22HM(Map<String, String> tiposcosbga_t22HM) {
+		this.tiposcosbga_t22HM = tiposcosbga_t22HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t23HM() {
+		return tiposcosbga_t23HM;
+	}
+
+	public void setTiposcosbga_t23HM(Map<String, String> tiposcosbga_t23HM) {
+		this.tiposcosbga_t23HM = tiposcosbga_t23HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t32HM() {
+		return tiposcosbga_t32HM;
+	}
+
+	public void setTiposcosbga_t32HM(Map<String, String> tiposcosbga_t32HM) {
+		this.tiposcosbga_t32HM = tiposcosbga_t32HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t33HM() {
+		return tiposcosbga_t33HM;
+	}
+
+	public void setTiposcosbga_t33HM(Map<String, String> tiposcosbga_t33HM) {
+		this.tiposcosbga_t33HM = tiposcosbga_t33HM;
 	}
 
 	public GastoTabla getGastoseleccionado() {
@@ -1074,5 +1670,101 @@ public class GestorPagosSimple implements Serializable
 	public void setTablaprovisiones(ArrayList<ProvisionTabla> tablaprovisiones) {
 		this.tablaprovisiones = tablaprovisiones;
 	}
-	
+
+	public String getsFEPGPR() {
+		return sFEPGPR;
+	}
+
+	public void setsFEPGPR(String sFEPGPR) {
+		this.sFEPGPR = sFEPGPR;
+	}
+
+	public String getsPais() {
+		return sPais;
+	}
+
+	public void setsPais(String sPais) {
+		this.sPais = sPais;
+	}
+
+	public String getsDCIBAN() {
+		return sDCIBAN;
+	}
+
+	public void setsDCIBAN(String sDCIBAN) {
+		this.sDCIBAN = sDCIBAN;
+	}
+
+	public String getsNUCCEN() {
+		return sNUCCEN;
+	}
+
+	public void setsNUCCEN(String sNUCCEN) {
+		this.sNUCCEN = sNUCCEN;
+	}
+
+	public String getsNUCCOF() {
+		return sNUCCOF;
+	}
+
+	public void setsNUCCOF(String sNUCCOF) {
+		this.sNUCCOF = sNUCCOF;
+	}
+
+	public String getsNUCCDI() {
+		return sNUCCDI;
+	}
+
+	public void setsNUCCDI(String sNUCCDI) {
+		this.sNUCCDI = sNUCCDI;
+	}
+
+	public String getsNUCCNT() {
+		return sNUCCNT;
+	}
+
+	public void setsNUCCNT(String sNUCCNT) {
+		this.sNUCCNT = sNUCCNT;
+	}
+
+	public ArrayList<Cuenta> getTablacuentasactivo() {
+		return tablacuentasactivo;
+	}
+
+	public void setTablacuentasactivo(ArrayList<Cuenta> tablacuentasactivo) {
+		this.tablacuentasactivo = tablacuentasactivo;
+	}
+
+	public ArrayList<Cuenta> getTablacuentascomunidad() {
+		return tablacuentascomunidad;
+	}
+
+	public void setTablacuentascomunidad(ArrayList<Cuenta> tablacuentascomunidad) {
+		this.tablacuentascomunidad = tablacuentascomunidad;
+	}
+
+	public String getsDescripcion() {
+		return sDescripcion;
+	}
+
+	public void setsDescripcion(String sDescripcion) {
+		this.sDescripcion = sDescripcion;
+	}
+
+	public Cuenta getCuentaactivoseleccionada() {
+		return cuentaactivoseleccionada;
+	}
+
+	public void setCuentaactivoseleccionada(Cuenta cuentaactivoseleccionada) {
+		this.cuentaactivoseleccionada = cuentaactivoseleccionada;
+	}
+
+	public Cuenta getCuentacomunidadseleccionada() {
+		return cuentacomunidadseleccionada;
+	}
+
+	public void setCuentacomunidadseleccionada(
+			Cuenta cuentacomunidadseleccionada) {
+		this.cuentacomunidadseleccionada = cuentacomunidadseleccionada;
+	}	
 }

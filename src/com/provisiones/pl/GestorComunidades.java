@@ -282,7 +282,7 @@ public class GestorComunidades implements Serializable
 					
 					logger.debug(movimiento.logMovimientoComunidad());
 					
-					int iSalida = CLComunidades.registraMovimiento(movimiento);
+					int iSalida = CLComunidades.registraMovimiento(movimiento, sNota);
 					
 					
 					
@@ -390,7 +390,7 @@ public class GestorComunidades implements Serializable
 						logger.error(sMsg);
 						break;
 						
-					case -701: //Error 701 - datos de cuenta incorrectos
+					case -701: //Error 701 - Datos de cuenta incorrectos
 						sMsg = "ERROR:701 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
 						msg = Utils.pfmsgError(sMsg);
 						logger.error(sMsg);
@@ -508,6 +508,24 @@ public class GestorComunidades implements Serializable
 						
 					case -912: //Error 912 - error y rollback - error al crear la cuenta de la comunidad
 						sMsg = "[FATAL] ERROR:912 - Se ha producido un error al crear la relacion cuenta-comunidad. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -913: //Error 913 - error y rollback - error al borrar la cuenta de la comunidad
+						sMsg = "[FATAL] ERROR:913 - Se ha producido un error al borrar la cuenta de la comunidad. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -914: //Error 914 - error y rollback - error la cuenta nueva ya existe
+						sMsg = "[FATAL] ERROR:914 - Se ha producido un error al crear la cuenta de la comunidad, ya existe. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -915: //Error 915 - error y rollback - error al guardar la nota
+						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota de la comunidad. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

@@ -58,6 +58,8 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+
+	private String sNota = "";
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	private transient ActivoTabla activoseleccionado = null;
@@ -136,7 +138,10 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
    	
     }
     
-
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
 	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
@@ -810,6 +815,14 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
 	public void setsDesBIRESO(String sDesBIRESO) {
 		this.sDesBIRESO = sDesBIRESO;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 	
 	

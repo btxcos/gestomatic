@@ -101,9 +101,9 @@ public final class CLImpuestos
 		return QMListaImpuestos.buscaImpuestosActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
-	public static MovimientoImpuestoRecurso buscarMovimientoImpuestoRecurso (String sCodMovimiento)
+	public static MovimientoImpuestoRecurso buscarMovimientoImpuestoRecurso (long liCodMovimiento)
 	{
-		return QMMovimientosImpuestos.getMovimientoImpuestoRecurso(ConnectionManager.getDBConnection(),sCodMovimiento);
+		return QMMovimientosImpuestos.getMovimientoImpuestoRecurso(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
 	public static long buscarNumeroMovimientosImpuestosPendientes()
@@ -126,9 +126,9 @@ public final class CLImpuestos
 		return QMImpuestos.existeImpuestoRecurso(ConnectionManager.getDBConnection(),buscarCodigoImpuesto(sCodNURCAT, sCodCOSBAC));
 	}
 
-	public static boolean existeMovimientoImpuestoRecurso (String sCodMovimiento)
+	public static boolean existeMovimientoImpuestoRecurso (long liCodMovimiento)
 	{
-		return QMMovimientosImpuestos.existeMovimientoImpuestoRecurso(ConnectionManager.getDBConnection(),sCodMovimiento);
+		return QMMovimientosImpuestos.existeMovimientoImpuestoRecurso(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
 	public static int actualizarImpuestoLeido(String linea)
@@ -147,15 +147,15 @@ public final class CLImpuestos
 			{
 				logger.debug(impuesto.logMovimientoImpuestoRecurso());
 				
-				String sCodMovimiento = QMMovimientosImpuestos.getMovimientoImpuestoRecursoID(conexion,impuesto);
+				long liCodMovimiento = QMMovimientosImpuestos.getMovimientoImpuestoRecursoID(conexion,impuesto);
 				
-				logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+				logger.debug("liCodMovimiento|"+liCodMovimiento+"|");
 				
-				if (!(sCodMovimiento.equals("")))
+				if (liCodMovimiento != 0)
 				{
 
 					
-					String sEstado = QMListaImpuestos.getValidado(conexion,sCodMovimiento);
+					String sEstado = QMListaImpuestos.getValidado(conexion,liCodMovimiento);
 					
 					if (sEstado.equals("P"))
 					{
@@ -190,20 +190,20 @@ public final class CLImpuestos
 						switch (COACCI)
 						{
 						case A: case M: case B:
-							if (QMListaImpuestos.existeRelacionImpuesto(conexion,Integer.parseInt(impuesto.getCOACES()), buscarCodigoImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC()), sCodMovimiento))
+							if (QMListaImpuestos.existeRelacionImpuesto(conexion,Integer.parseInt(impuesto.getCOACES()), buscarCodigoImpuesto(impuesto.getNURCAT(), impuesto.getCOSBAC()), liCodMovimiento))
 							{
-								if(QMListaImpuestos.setValidado(conexion,sCodMovimiento, sValidado))
+								if(QMListaImpuestos.setValidado(conexion,liCodMovimiento, sValidado))
 								{
 									if (sValidado.equals("X"))
 									{
 										//recibido error
-										if (QMListaErroresImpuestos.addErrorImpuesto(conexion,sCodMovimiento, impuesto.getCOTDOR()))
+										if (QMListaErroresImpuestos.addErrorImpuesto(conexion,liCodMovimiento, impuesto.getCOTDOR()))
 										{
 											iCodigo = 1;
 										}
 										else
 										{
-											QMListaImpuestos.setValidado(conexion,sCodMovimiento, "E");
+											QMListaImpuestos.setValidado(conexion,liCodMovimiento, "E");
 											iCodigo = -4;
 										}
 									}
@@ -231,7 +231,7 @@ public final class CLImpuestos
 						
 						}
 						
-						//bSalida = QMMovimientosImpuestos.modMovimientoImpuesto(impuesto, sCodMovimiento);
+						//bSalida = QMMovimientosImpuestos.modMovimientoImpuesto(impuesto, liCodMovimiento);
 						//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
 						//recuperaremos el codigo de error de la tabla pertinente.
 					}
@@ -288,7 +288,7 @@ public final class CLImpuestos
 					{
 						conexion.setAutoCommit(false);
 
-						int indice = QMMovimientosImpuestos.addMovimientoImpuestoRecurso(conexion,movimiento_revisado);
+						long indice = QMMovimientosImpuestos.addMovimientoImpuestoRecurso(conexion,movimiento_revisado);
 						
 						if (indice == 0)
 						{
@@ -310,7 +310,7 @@ public final class CLImpuestos
 
 									if (estaDeBaja (movimiento_revisado.getNURCAT(), movimiento_revisado.getCOSBAC())) //Alta de baja
 									{
-										if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, Integer.toString(indice)))
+										if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, indice))
 										{
 											if (QMImpuestos.setEstado(conexion,liCodImpuesto,ValoresDefecto.DEF_ALTA))
 											{
@@ -355,7 +355,7 @@ public final class CLImpuestos
 										{
 											//OK - impuesto creado
 											logger.debug("Hecho!");
-											if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, Integer.toString(indice)))
+											if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, indice))
 											{
 												//OK 
 												iCodigo = 0;
@@ -382,7 +382,7 @@ public final class CLImpuestos
 								
 									break;
 								case B:
-									if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, Integer.toString(indice)))
+									if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, indice))
 									{
 									
 										if (QMImpuestos.setEstado(conexion,liCodImpuesto,ValoresDefecto.DEF_BAJA))
@@ -410,7 +410,7 @@ public final class CLImpuestos
 									}
 									break;
 								case M:
-									if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, Integer.toString(indice)))
+									if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, indice))
 									{
 										//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
 										if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento), liCodImpuesto))

@@ -37,7 +37,7 @@ public final class QMListaImpuestos
 
 	private QMListaImpuestos(){}
 
-	public static boolean addRelacionImpuestos(Connection conexion, int iCodCOACES, long liCodImpuesto, String sCodMovimiento) 
+	public static boolean addRelacionImpuestos(Connection conexion, int iCodCOACES, long liCodImpuesto, long liCodMovimiento) 
 	{
 		boolean bSalida = true;
 
@@ -61,7 +61,7 @@ public final class QMListaImpuestos
 					") VALUES ('" 
 					+ iCodCOACES + "','"
 					+ liCodImpuesto + "','"
-					+ sCodMovimiento + "','"
+					+ liCodMovimiento + "','"
 					+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				    + sUsuario + "','"
 				    + Utils.timeStamp() +
@@ -84,7 +84,7 @@ public final class QMListaImpuestos
 				
 				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				logger.error("ERROR Impuesto:|"+liCodImpuesto+"|");
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -97,7 +97,7 @@ public final class QMListaImpuestos
 		return bSalida;
 	}
 
-	public static boolean delRelacionImpuestos(Connection conexion, String sCodMovimiento) 
+	public static boolean delRelacionImpuestos(Connection conexion, long liCodMovimiento) 
 	{
 		boolean bSalida = false;
 		
@@ -110,7 +110,7 @@ public final class QMListaImpuestos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO3 + " = '" + sCodMovimiento +"'";
+					+ CAMPO3 + " = '" + liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 
@@ -127,7 +127,7 @@ public final class QMListaImpuestos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR CodMovimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR CodMovimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -140,7 +140,7 @@ public final class QMListaImpuestos
 		return bSalida;
 	}
 	
-	public static boolean existeRelacionImpuesto(Connection conexion, int iCodCOACES, long liCodImpuesto, String sCodMovimiento)
+	public static boolean existeRelacionImpuesto(Connection conexion, int iCodCOACES, long liCodImpuesto, long liCodMovimiento)
 	{
 		boolean bEncontrado = false;
 		
@@ -158,7 +158,7 @@ public final class QMListaImpuestos
 				" WHERE (" 
 				+ CAMPO1 + " = '" + iCodCOACES + "' AND "
 				+ CAMPO2 + " = '" + liCodImpuesto + "' AND " 
-				+ CAMPO3 + " = '" + sCodMovimiento +
+				+ CAMPO3 + " = '" + liCodMovimiento +
 				"')";
 		
 		logger.debug(sQuery);
@@ -192,7 +192,7 @@ public final class QMListaImpuestos
 
 			logger.error("ERROR COACES:|"+iCodCOACES+"|");
 			logger.error("ERROR Impuesto:|"+liCodImpuesto+"|");
-			logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+			logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 
@@ -273,9 +273,9 @@ public final class QMListaImpuestos
 		return bEncontrado;
 	}
 	
-	public static ArrayList<String>  getImpuestosPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getImpuestosPorEstado(Connection conexion, String sEstado) 
 	{
-		ArrayList<String> resultado = new ArrayList<String>(); 
+		ArrayList<Long> resultado = new ArrayList<Long>(); 
 
 		if (conexion != null)
 		{
@@ -306,22 +306,16 @@ public final class QMListaImpuestos
 				
 				logger.debug("Ejecutada con exito!");
 				
-				int i = 0;
-				
 				if (rs != null) 
 				{
 					while (rs.next()) 
 					{
 						bEncontrado = true;
 
-						resultado.add(rs.getString(CAMPO3));
+						resultado.add(rs.getLong(CAMPO3));
 											
 						logger.debug("Encontrado el registro!");
-						
-						logger.debug(CAMPO4+":|"+sEstado+"|");
-						logger.debug(CAMPO3+":|"+resultado.get(i)+"|");
 
-						i++;
 					}
 				}
 				if (!bEncontrado) 
@@ -331,7 +325,7 @@ public final class QMListaImpuestos
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<String>(); 
+				resultado = new ArrayList<Long>(); 
 
 				logger.error("ERROR Validado:|"+sEstado+"|");
 
@@ -838,7 +832,7 @@ public final class QMListaImpuestos
 		return resultado;
 	}
 
-	public static boolean setValidado(Connection conexion, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(Connection conexion, long liCodMovimiento, String sValidado)
 	{
 		boolean bSalida = false;
 
@@ -853,7 +847,7 @@ public final class QMListaImpuestos
 					" SET " 
 					+ CAMPO4 + " = '"+ sValidado + "' "+
 					" WHERE "
-					+ CAMPO3 + " = '" + sCodMovimiento +"'";
+					+ CAMPO3 + " = '" + liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 			
@@ -871,7 +865,7 @@ public final class QMListaImpuestos
 			{
 				bSalida = false;
 
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -884,7 +878,7 @@ public final class QMListaImpuestos
 		return bSalida;
 	}
 	
-	public static String getValidado(Connection conexion, String sCodMovimiento)
+	public static String getValidado(Connection conexion, long liCodMovimiento)
 	{
 		String sValidado = "";
 
@@ -904,7 +898,7 @@ public final class QMListaImpuestos
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO3 + " = '" + sCodMovimiento +"'";
+					+ CAMPO3 + " = '" + liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 
@@ -939,7 +933,7 @@ public final class QMListaImpuestos
 			{
 				sValidado = "";
 
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1020,9 +1014,9 @@ public final class QMListaImpuestos
 		return liNumero;
 	}
 	
-	public static ArrayList<String> buscarDependencias(Connection conexion, int iCodCOACES, long liCodImpuesto, String sCodMovimiento)
+	public static ArrayList<Long> buscarDependencias(Connection conexion, int iCodCOACES, long liCodImpuesto, long liCodMovimiento)
 	{
-		ArrayList<String> resultado = new ArrayList<String>();
+		ArrayList<Long> resultado = new ArrayList<Long>();
 
 		if (conexion != null)
 		{
@@ -1042,7 +1036,7 @@ public final class QMListaImpuestos
 					" WHERE (" 
 					+ CAMPO1 + " = '" + iCodCOACES + "' AND "
 					+ CAMPO2 + " = '" + liCodImpuesto + "' AND "
-					+ CAMPO3 + " >=  '" + sCodMovimiento + 
+					+ CAMPO3 + " >=  '" + liCodMovimiento + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -1062,7 +1056,7 @@ public final class QMListaImpuestos
 					{
 						bEncontrado = true;
 						
-						resultado.add(rs.getString(CAMPO3));
+						resultado.add(rs.getLong(CAMPO3));
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -1074,11 +1068,11 @@ public final class QMListaImpuestos
 			} 
 			catch (SQLException ex) 
 			{
-				bEncontrado = false;
+				resultado = new ArrayList<Long>();
 				
 				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				logger.error("ERROR Impuesto:|"+liCodImpuesto+"|");
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

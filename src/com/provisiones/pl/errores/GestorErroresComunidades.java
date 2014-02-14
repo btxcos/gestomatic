@@ -252,7 +252,7 @@ public class GestorErroresComunidades implements Serializable
 			}
 			else
 			{
-				this.setTablacomunidadeserror(CLErrores.buscarComunidadesActivoConErrores(sCOACESB));
+				this.setTablacomunidadeserror(CLErrores.buscarComunidadesActivoConErrores(Integer.parseInt(sCOACESB)));
 			}
 			
 			
@@ -271,14 +271,14 @@ public class GestorErroresComunidades implements Serializable
 			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
-			this.setTablaerrores(CLErrores.buscarErroresComunidad(sCodMovimiento));
+			this.setTablaerrores(CLErrores.buscarErroresComunidad(Integer.parseInt(sCodMovimiento)));
 			
 			msg = Utils.pfmsgInfo("Encontrados "+getTablaerrores().size()+" errores relacionados.");
 			logger.debug("Encontrados {} errores relacionados.",getTablaerrores().size());
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			MovimientoComunidad movimiento = CLComunidades.buscarMovimientoComunidad(sCodMovimiento);
+			MovimientoComunidad movimiento = CLComunidades.buscarMovimientoComunidad(Integer.parseInt(sCodMovimiento));
 			
 			this.sCOACCI = movimiento.getCOACCI();
 			this.sCOACES = movimiento.getCOACES();
@@ -536,7 +536,7 @@ public class GestorErroresComunidades implements Serializable
 			
 			String sMsg = "";
 			
-			if (!CLComunidades.existeMovimientoComunidad(sCodMovimiento))
+			if (!CLComunidades.existeMovimientoComunidad(Integer.parseInt(sCodMovimiento)))
 			{
 				sMsg = "[FATAL] ERROR:911 - No se puede modificar la comunidad, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgFatal(sMsg);
@@ -577,7 +577,7 @@ public class GestorErroresComunidades implements Serializable
 						sOBTEXC.toUpperCase(), 
 						sOBDEER.toUpperCase());
 				
-				int iSalida = CLErrores.reparaMovimientoComunidad(nuevomovimiento,sCodMovimiento,sCodError);
+				int iSalida = CLErrores.reparaMovimientoComunidad(nuevomovimiento,Integer.parseInt(sCodMovimiento),sCodError);
 				
 				switch (iSalida) 
 				{

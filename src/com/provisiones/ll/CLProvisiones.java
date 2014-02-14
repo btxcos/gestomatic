@@ -29,7 +29,7 @@ public final class CLProvisiones
 		return QMListaGastosProvisiones.buscaCantidadGastos(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
-	public static ArrayList<String> buscarGastosProvision(String sNUPROF)
+	public static ArrayList<Long> buscarGastosProvision(String sNUPROF)
 	{
 		return QMListaGastosProvisiones.buscaGastosIDPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
@@ -124,7 +124,7 @@ public final class CLProvisiones
 			
 			if (!QMProvisiones.existeProvision(conexion, cierre.getsNUPROF()))
 			{
-				Provision provision = new Provision (cierre.getsNUPROF(), "0", "#", "0","0","0","0",cierre.getsFEPFON(),cierre.getsFEPFON(),"0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
+				Provision provision = new Provision (cierre.getsNUPROF(), "0", "#", "0","0",cierre.getsFEPFON(),"0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
 				provision.setsFEPFON(cierre.getsFEPFON());
 				provision.setsFechaEnvio(Utils.fechaDeHoy(false));
@@ -351,8 +351,7 @@ public final class CLProvisiones
 			logger.info("Inicializando provisiones...");
 			if (!existeProvision("0"))
 			{
-				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
-				
+				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				QMProvisiones.addProvision(conexion,provision);
 			}
 			logger.info("Provisiones inicializadas.");
@@ -449,7 +448,7 @@ public final class CLProvisiones
 					logger.debug("sProvision:|"+sProvision+"|");
 				}			
 				
-				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
+				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}

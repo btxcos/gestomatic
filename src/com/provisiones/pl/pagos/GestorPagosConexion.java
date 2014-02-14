@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLPagos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
@@ -698,7 +699,7 @@ public class GestorPagosConexion implements Serializable
 					//movimiento.pintaMovimientoGasto();
 					
 					//movimiento.setIMNGAS("-"+movimiento.getIMNGAS());
-					int iSalida = CLGastos.registraPagoConexion(movimiento);
+					int iSalida = CLPagos.registraPagoConexion(movimiento);
 					
 					logger.debug("Codigo de salida:"+iSalida);
 					

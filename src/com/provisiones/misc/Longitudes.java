@@ -200,6 +200,11 @@ public final class Longitudes
 	public static final int YCOS10_L = 1;
 	public static final int YNOCUR_L = 30;
 	public static final int YNOLEC_L = 30;
+
+	
+	//Ampliacion SEPA
+	public static final int PAIS_L = 2;
+	public static final int DCIBAN_L = 2;
 	
 	//Tamaño de los registros
 	

@@ -77,7 +77,7 @@ public final class QMReferencias
 				       + NuevaReferenciaCatastral.getFERECA() + "','"
 
 				       + ValoresDefecto.DEF_ALTA + "','"
-				       + ValoresDefecto.CAMPO_SIN_INFORMAR + 
+				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
 				       "')";
 			
 			logger.debug(sQuery);

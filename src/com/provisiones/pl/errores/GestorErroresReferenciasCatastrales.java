@@ -250,7 +250,7 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
-			this.setTablaerrores(CLErrores.buscarErroresReferencia(sCodMovimiento));
+			this.setTablaerrores(CLErrores.buscarErroresReferencia(Integer.parseInt(sCodMovimiento)));
 			
 			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);
@@ -258,7 +258,7 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			MovimientoReferenciaCatastral movimiento = CLReferencias.buscarMovimientoReferenciaCatastral(sCodMovimiento);
+			MovimientoReferenciaCatastral movimiento = CLReferencias.buscarMovimientoReferenciaCatastral(Integer.parseInt(sCodMovimiento));
 			
 			this.sCOACCI = movimiento.getCOACCI();
 			this.sCOACES = movimiento.getCOACES();
@@ -423,7 +423,7 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 			
 			String sMsg = "";
 			
-			if (!CLReferencias.existeMovimientoReferenciaCatastral(sCodMovimiento))
+			if (!CLReferencias.existeMovimientoReferenciaCatastral(Integer.parseInt(sCodMovimiento)))
 			{
 				sMsg = "[FATAL] ERROR:911 - No se puede modificar la Referencia, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgError(sMsg);
@@ -457,7 +457,7 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 				logger.debug("sCodMovimiento:|"+sCodMovimiento+"|");
 				logger.debug("sCodError:|"+sCodError+"|");			
 
-				int iSalida = CLErrores.reparaMovimientoReferencia(movimiento,sCodMovimiento, sCodError);
+				int iSalida = CLErrores.reparaMovimientoReferencia(movimiento,Integer.parseInt(sCodMovimiento), sCodError);
 				
 				logger.debug("Codigo de salida:"+iSalida);
 				

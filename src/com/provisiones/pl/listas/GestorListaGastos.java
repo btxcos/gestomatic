@@ -172,7 +172,7 @@ public class GestorListaGastos implements Serializable
 			}
 			else
 			{
-				this.setTablaprovisiones(CLProvisiones.buscarProvisionesFecha(sFecha));
+				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasFecha(sFecha));
 
 				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);

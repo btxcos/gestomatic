@@ -60,7 +60,7 @@ public class QMRegistroActivos implements Serializable
 				       + sTimeStamp + "','"
 				       + sUsuario + "','"
 				       + sTimeStamp + "','"
-				       + ValoresDefecto.CAMPO_SIN_INFORMAR + 
+				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
 				       "')";
 			
 			logger.debug(sQuery);

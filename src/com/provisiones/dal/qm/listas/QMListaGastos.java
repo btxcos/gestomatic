@@ -35,7 +35,7 @@ public final class QMListaGastos
 
 	private QMListaGastos(){}
 
-	public static boolean addRelacionGasto(Connection conexion, long liCodGasto, String sCodMovimiento) 
+	public static boolean addRelacionGasto(Connection conexion, long liCodGasto, long liCodMovimiento) 
 	{
 		boolean bSalida = false;
 
@@ -57,7 +57,7 @@ public final class QMListaGastos
 					+ CAMPO5 +						
 					") VALUES ('" 
 					+ liCodGasto + "','"
-					+ sCodMovimiento + "','"
+					+ liCodMovimiento + "','"
 					+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				    + sUsuario + "','"
 				    + Utils.timeStamp() +
@@ -79,7 +79,7 @@ public final class QMListaGastos
 				bSalida = false;
 				
 				logger.error("ERROR GASTO:|"+liCodGasto+"|");
-				logger.error("ERROR MOVIMIENTO:|"+sCodMovimiento+"|");
+				logger.error("ERROR MOVIMIENTO:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -92,7 +92,7 @@ public final class QMListaGastos
 		return bSalida;
 	}
 	
-	public static boolean addRelacionGastoInyectado(Connection conexion, long liCodGasto, String sCodMovimiento) 
+	public static boolean addRelacionGastoInyectado(Connection conexion, long liCodGasto, long liCodMovimiento) 
 	{
 		boolean bSalida = false;
 
@@ -114,7 +114,7 @@ public final class QMListaGastos
 					+ CAMPO5 +						
 					") VALUES ('" 
 					+ liCodGasto + "','"
-					+ sCodMovimiento + "','"
+					+ liCodMovimiento + "','"
 					+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "','"
 				    + sUsuario + "','"
 				    + Utils.timeStamp() +
@@ -136,7 +136,7 @@ public final class QMListaGastos
 				bSalida = false;
 				
 				logger.error("ERROR GASTO:|"+liCodGasto+"|");
-				logger.error("ERROR MOVIMIENTO:|"+sCodMovimiento+"|");
+				logger.error("ERROR MOVIMIENTO:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -149,7 +149,7 @@ public final class QMListaGastos
 		return bSalida;
 	}
 
-	public static boolean delRelacionGasto(Connection conexion, String sCodMovimiento) 
+	public static boolean delRelacionGasto(Connection conexion, long liCodMovimiento) 
 	{
 		boolean bSalida = false;
 
@@ -162,7 +162,7 @@ public final class QMListaGastos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO2 + " = '" + sCodMovimiento +"'";
+					+ CAMPO2 + " = '" + liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 
@@ -179,7 +179,7 @@ public final class QMListaGastos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR MOVIMIENTO:|"+sCodMovimiento+"|");
+				logger.error("ERROR MOVIMIENTO:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -193,7 +193,7 @@ public final class QMListaGastos
 		return bSalida;
 	}
 	
-	public static boolean existeRelacionGasto(Connection conexion, long liCodGasto, String sCodMovimiento)
+	public static boolean existeRelacionGasto(Connection conexion, long liCodGasto, long liCodMovimiento)
 	{
 		boolean bEncontrado = false;
 
@@ -212,7 +212,7 @@ public final class QMListaGastos
 					+ TABLA + 
 					" WHERE ("
 					+ CAMPO1  + " = '"+ liCodGasto +"' AND " 
-					+ CAMPO2  + " = '"+ sCodMovimiento + 
+					+ CAMPO2  + " = '"+ liCodMovimiento + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -244,7 +244,7 @@ public final class QMListaGastos
 				bEncontrado = false;
 
 				logger.error("ERROR GASTO:|"+liCodGasto+"|");
-				logger.error("ERROR MOVIMIENTO:|"+sCodMovimiento+"|");
+				logger.error("ERROR MOVIMIENTO:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -258,9 +258,9 @@ public final class QMListaGastos
 		return bEncontrado;
 	}
 	
-	public static ArrayList<String>  getGastosPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getGastosPorEstado(Connection conexion, String sEstado) 
 	{
-		ArrayList<String> resultado = new ArrayList<String>(); 
+		ArrayList<Long> resultado = new ArrayList<Long>(); 
 
 		if (conexion != null)
 		{
@@ -299,7 +299,7 @@ public final class QMListaGastos
 					{
 						bEncontrado = true;
 
-						resultado.add(rs.getString(CAMPO2));
+						resultado.add(rs.getLong(CAMPO2));
 											
 						logger.debug("Encontrado el registro!");
 
@@ -311,12 +311,13 @@ public final class QMListaGastos
 				}
 				if (!bEncontrado) 
 				{
-					resultado = new ArrayList<String>(); 
 					logger.debug("No se encontró la información.");
 				}
 			} 
 			catch (SQLException ex) 
 			{
+				resultado = new ArrayList<Long>();
+				
 				logger.error("ERROR Validado:|"+sEstado+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -332,7 +333,7 @@ public final class QMListaGastos
 	}
 	
 
-	public static boolean setValidado(Connection conexion, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(Connection conexion, long liCodMovimiento, String sValidado)
 	{
 		boolean bSalida = false;
 
@@ -347,7 +348,7 @@ public final class QMListaGastos
 					" SET " 
 					+ CAMPO3 + " = '"+ sValidado + "' "+
 					" WHERE "
-					+ CAMPO2 + " = '"+ sCodMovimiento +"'";
+					+ CAMPO2 + " = '"+ liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 			
@@ -364,7 +365,7 @@ public final class QMListaGastos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
+				logger.error("ERROR Gasto:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -377,7 +378,7 @@ public final class QMListaGastos
 		return bSalida;
 	}
 
-	public static String getValidado(Connection conexion, String sCodMovimiento)
+	public static String getValidado(Connection conexion, long liCodMovimiento)
 	{
 		String sValidado = "";
 		if (conexion != null)
@@ -396,7 +397,7 @@ public final class QMListaGastos
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO2 + " = '" + sCodMovimiento + "'";
+					+ CAMPO2 + " = '" + liCodMovimiento + "'";
 			
 			logger.debug(sQuery);
 
@@ -419,7 +420,7 @@ public final class QMListaGastos
 						sValidado = rs.getString(CAMPO3);
 
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO2+":|"+sCodMovimiento+"|");
+						logger.debug(CAMPO2+":|"+liCodMovimiento+"|");
 						logger.debug(CAMPO3+":|"+sValidado+"|");
 					}
 				}
@@ -432,7 +433,7 @@ public final class QMListaGastos
 			{
 				sValidado = "";
 
-				logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
+				logger.error("ERROR Gasto:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -762,9 +763,9 @@ public final class QMListaGastos
 		return resultado;
 	}
 	
-	public static ArrayList<String> buscarDependencias(Connection conexion, long liCodGasto, String sCodMovimiento)
+	public static ArrayList<Long> buscarDependencias(Connection conexion, long liCodGasto, long liCodMovimiento)
 	{
-		ArrayList<String> resultado = new ArrayList<String>();
+		ArrayList<Long> resultado = new ArrayList<Long>();
 
 		if (conexion != null)
 		{
@@ -783,7 +784,7 @@ public final class QMListaGastos
 					+ TABLA + 
 					" WHERE (" 
 					+ CAMPO1 + " = '" + liCodGasto + "' AND "
-					+ CAMPO2 + " >=  '" + sCodMovimiento + 
+					+ CAMPO2 + " >=  '" + liCodMovimiento + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -803,7 +804,7 @@ public final class QMListaGastos
 					{
 						bEncontrado = true;
 						
-						resultado.add(rs.getString(CAMPO2));
+						resultado.add(rs.getLong(CAMPO2));
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -815,10 +816,10 @@ public final class QMListaGastos
 			} 
 			catch (SQLException ex) 
 			{
-				bEncontrado = false;
+				resultado = new ArrayList<Long>();
 				
 				logger.error("ERROR GASTO:|"+liCodGasto+"|");
-				logger.error("ERROR MOVIMIENTO:|"+sCodMovimiento+"|");
+				logger.error("ERROR MOVIMIENTO:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -832,9 +833,9 @@ public final class QMListaGastos
 		return resultado;
 	}
 	
-	public static ArrayList<String> buscarMovimientosGasto(Connection conexion, long liCodGasto)
+	public static ArrayList<Long> buscarMovimientosGasto(Connection conexion, long liCodGasto)
 	{
-		ArrayList<String> resultado = new ArrayList<String>();
+		ArrayList<Long> resultado = new ArrayList<Long>();
 
 		if (conexion != null)
 		{
@@ -870,7 +871,7 @@ public final class QMListaGastos
 					{
 						bEncontrado = true;
 						
-						resultado.add(rs.getString(CAMPO2));
+						resultado.add(rs.getLong(CAMPO2));
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -882,7 +883,7 @@ public final class QMListaGastos
 			} 
 			catch (SQLException ex) 
 			{
-				bEncontrado = false;
+				resultado = new ArrayList<Long>();
 				
 				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 
@@ -898,9 +899,9 @@ public final class QMListaGastos
 		return resultado;
 	}
 	
-	public static ArrayList<String> buscarMovimientosValidadosGasto(Connection conexion, long liCodGasto)
+	public static ArrayList<Long> buscarMovimientosValidadosGasto(Connection conexion, long liCodGasto)
 	{
-		ArrayList<String> resultado = new ArrayList<String>();
+		ArrayList<Long> resultado = new ArrayList<Long>();
 
 		if (conexion != null)
 		{
@@ -917,8 +918,9 @@ public final class QMListaGastos
 					   + CAMPO1 + 
 					   " FROM " 
 					   + TABLA + 
-					   " WHERE " 
-					   + CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "'";
+					   " WHERE (" 
+					   + CAMPO1 + " = '"+ liCodGasto + "' AND "
+					   + CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "')";
 			
 			logger.debug(sQuery);
 
@@ -937,7 +939,7 @@ public final class QMListaGastos
 					{
 						bEncontrado = true;
 						
-						resultado.add(rs.getString(CAMPO2));
+						resultado.add(rs.getLong(CAMPO2));
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -949,11 +951,11 @@ public final class QMListaGastos
 			} 
 			catch (SQLException ex) 
 			{
+				resultado = new ArrayList<Long>();
+				
 				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
-
-				bEncontrado = false;
 			} 
 			finally 
 			{

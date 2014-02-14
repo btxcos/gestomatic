@@ -107,14 +107,14 @@ public final class FileManager
 		{
 			//Los movimientos de las comunidades estan repartidos entre las comunidades y los activos incluidos
 			
-			ArrayList<String> resultcomunidades = QMListaComunidades.getComunidadesPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-			ArrayList<String> resultactivos = QMListaComunidadesActivos.getMovimientosComunidadesActivoPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultcomunidades = QMListaComunidades.getComunidadesPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultactivos = QMListaComunidadesActivos.getMovimientosComunidadesActivoPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 
-			ArrayList<String> resultcomunidadesactivos = new ArrayList<String>(resultcomunidades);
+			ArrayList<Long> resultcomunidadesactivos = new ArrayList<Long>(resultcomunidades);
 			
 			resultcomunidadesactivos.addAll(resultactivos);
 			
-			HashSet<String> hslimpia = new HashSet<String>(resultcomunidadesactivos);
+			HashSet<Long> hslimpia = new HashSet<Long>(resultcomunidadesactivos);
 
 		   resultcomunidadesactivos.clear();
 		   resultcomunidadesactivos.addAll(hslimpia);
@@ -212,7 +212,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<String> resultcuotas =  QMListaCuotas.getCuotasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultcuotas =  QMListaCuotas.getCuotasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			
 			FileWriter ficheroE2 = null;
 			
@@ -287,7 +287,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<String> resultreferencias = QMListaReferencias.getReferenciasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultreferencias = QMListaReferencias.getReferenciasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			
 			FileWriter ficheroE3 = null;
 			
@@ -357,7 +357,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<String> resultimpuestos = QMListaImpuestos.getImpuestosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultimpuestos = QMListaImpuestos.getImpuestosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			
 			FileWriter ficheroE4 = null;
 			
@@ -428,7 +428,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<String> resultgastos = QMListaGastos.getGastosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultgastos = QMListaGastos.getGastosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 	        
 	        FileWriter ficheroGA = null;
 	        
@@ -1372,6 +1372,272 @@ public final class FileManager
         return resultadocarga;
 	}
 	
+	public static ResultadoCarga leerComunidadesVolcadas(String sNombre)
+	{
+		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
+		
+		ResultadoCarga resultadocarga;
+		
+		//logger.debug( "Fichero:|"+ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre+"|");
+
+		File archivo = new File (ValoresDefecto.DEF_PATH_BACKUP_CARGADOS+sNombre);
+		
+		FileReader fr;
+
+		long contador= 0 ;
+		long registros = 0;
+		int iSalida = 0;
+		
+		String sDuracion = "0";
+		
+		try 
+		{
+			long liTiempo = System.currentTimeMillis();
+			
+			fr = new FileReader (archivo);
+			
+			BufferedReader br = new BufferedReader(fr);
+			
+			String linea = "";
+
+			String sFinFichero = ValoresDefecto.DEF_FIN_FICHERO;
+			
+			logger.debug("Leyendo fichero..");
+
+			int iLongitudValida = Longitudes.COMUNIDADES_L-Longitudes.FILLER_COMUNIDADES_L-Longitudes.OBDEER_L;
+				
+			while((linea=br.readLine())!=null)
+	        {
+				contador++;
+
+				logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+				logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+
+	    		if (linea.equals(sFinFichero))
+	    		{
+	    			contador--;
+	    			logger.info("Lectura finalizada.");
+	    		}
+	    		else if (linea.length()< iLongitudValida )
+	    		{
+	    			iSalida = -1;
+	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
+	    		}
+	    		else
+	    		{
+	    			int iCodigo = CLComunidades.inyectarComunidadVolcada(linea);
+
+	    			String sResultado = "";
+	    			String sDescripcion = "";
+	    			
+	    			switch (iCodigo)
+	    			{
+	    			case 0:
+	    				sDescripcion = "Movimiento validado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_VALIDADO;
+	    				break;
+	    			case 1:
+	    				sDescripcion = "Movimento de Comunidad pendiente de revisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_REVISAR;
+	    				break;
+	    			case -1:
+	    				sDescripcion = "El movimiento cargado ya se encontraba en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
+	    				break;
+	    			case -2:
+	    				sDescripcion = "No existe relación con la Comunidad.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
+	    			case -3:
+	    				sDescripcion = "No existe relación Activo-Comunidad.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
+	    			case -4:
+	    				sDescripcion = "[FATAL] Error al validar la reclación con la Comunidad.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -5:
+	    				sDescripcion = "[FATAL] Error al validar la relación Activo-Comunidad.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -6:
+	    				sDescripcion = "[FATAL] Error al registrar el movimiento pendiente.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -8:
+	    				sDescripcion = "El activo no pertenece a la cartera.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
+	    			case -9:
+	    				sDescripcion = "[FATAL] Accion desconocida.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -10:
+	    				sDescripcion = "[FATAL] Estado del movimiento desconocido.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -11:
+	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'no enviado'.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -12:
+	    				sDescripcion = "El movimiento recibido ya ha sido revisado.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
+	    				break;
+	    			case -13:
+	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'enviado'.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+
+					case -801: //Error 801 - alta de una comunidad en alta
+						sDescripcion = "La comunidad ya esta dada de alta. Por favor, revise los datos.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+						break;
+
+					case -802: //Error 802 - comunidad de baja no puede recibir mas movimientos
+						sDescripcion = "La comunidad esta de baja y no puede recibir más movimientos.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+						break;
+						
+					case -803: //Error 803 - comunidad no disponible
+						sDescripcion = "Error al modificar. La comunidad leida no está registrada.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+						break;
+	    				
+	    			case -900: //Error 900 - al crear un movimiento
+						sDescripcion = "[FATAL] Se ha producido un error al registrar el movimiento.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -901: //Error 901 - error y rollback - error al crear la comuidad
+						sDescripcion = "[FATAL] Se ha producido un error al registrar la comunidad.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+						
+					case -902: //Error 902 - error y rollback - error al registrar la relaccion
+						sDescripcion = "[FATAL] Se ha producido un error al registrar la relacion.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -903: //Error 903 - error y rollback - error al registrar el activo durante el alta
+						sDescripcion = "[FATAL] Se ha producido un error al asociar el activo durante el alta.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -904: //Error 904 - error y rollback - error al cambiar el estado
+						sDescripcion = "[FATAL] Se ha producido un error al cambiar el estado de la comunidad.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -905: //Error 905 - error y rollback - error al modificar la comunidad
+						sDescripcion = "[FATAL] Se ha producido un error al modificar la comunidad.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -906: //Error 906 - error y rollback - el activo ya esta vinculado
+						sDescripcion = "[FATAL] El activo ya ha sido vinculado.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -907: //Error 907 - error y rollback - error al asociar el activo en la comunidad
+						sDescripcion = "[FATAL] Se ha producido un error al asociar el activo a la comunidad.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -908: //Error 908 - error y rollback - el activo no esta vinculado
+						sDescripcion = "[FATAL] El activo no ha sido vinculado.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -909: //Error 909 - error y rollback - error al desasociar el activo en la comunidad
+						sDescripcion = "[FATAL] Se ha producido un error al desasociar el activo a la comunidad.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+						
+					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
+						sDescripcion = "[FATAL] Se ha producido un error al conectar con la base de datos.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+						
+					case -911: //Error 911 - error y rollback - error al crear la cuenta de la comunidad
+						sDescripcion = "[FATAL] Se ha producido un error al crear la cuenta de la comunidad.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+						
+					case -912: //Error 912 - error y rollback - error al crear la cuenta de la comunidad
+						sDescripcion = "[FATAL] Se ha producido un error al crear la relacion cuenta-comunidad.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -913: //Error 913 - error y rollback - error al crear la cuenta de la comunidad
+						sDescripcion = "[FATAL] Se ha producido un error al crear la cuenta de la comunidad, ya esta dada de alta.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+
+					case -914: //Error 914 - error y rollback - error la cuenta nueva ya existe
+						sDescripcion = "[FATAL] Se ha producido un error al crear la cuenta de la comunidad, ya existe. Por favor, revise los datos y avise a soporte.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+						
+					default: //error generico
+						sDescripcion = "[FATAL] La operacion solicitada ha producido un error desconocido("+iCodigo+"). Por favor, revise los datos y avise a soporte.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
+	    			}
+
+	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
+	    			if ( iCodigo >= 0 )
+	    			{
+	    				logger.info(sMensaje);
+	    				registros++;
+	    			}
+	    			else
+	    			{
+	    				iSalida = -1;
+	    				logger.error(sMensaje);
+	    			}
+
+	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+	    			tabla.add(resultadolectura);
+	    		}
+	        }
+
+			sDuracion = Utils.duracion(liTiempo,System.currentTimeMillis());
+			
+			br.close();
+			
+			//logger.debug("Registros procesados:|"+contador+"|");
+			//logger.debug("Registros correctos:|"+registros+"|");
+			
+			if (iSalida != 0)
+			{
+				logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+			}
+			
+			logger.info("Duración de la carga: "+sDuracion);
+		}
+		catch (FileNotFoundException e)
+		{
+			logger.error("No se encontró el fichero recibido.");
+			iSalida = -2;
+		}
+		catch (IOException e)
+		{
+			logger.error("Ocurrió un error al acceder al fichero recibido.");
+			iSalida = -3;
+		}
+
+		resultadocarga = new ResultadoCarga(iSalida,tabla,sNombre,sDuracion,contador,registros);
+		
+		logger.info( "Lectura de "+sNombre+" finalizada.\n");
+		
+	
+		//logger.debug("tabla.size():|"+tabla.size()+"|");
+		
+        return resultadocarga;
+	}
+	
 	public static ResultadoCarga leerCuotasRevisadas(String sNombre) 
 	{
 		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
@@ -2081,7 +2347,7 @@ public final class FileManager
 					else
 					{
 						//inyectar
-						carga.setiCodigo(6);
+						carga = leerComunidadesVolcadas(sNombre);
 					}
 					break;
 				case E2:

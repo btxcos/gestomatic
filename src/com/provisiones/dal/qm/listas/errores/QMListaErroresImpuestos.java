@@ -28,7 +28,7 @@ public final class QMListaErroresImpuestos
 
 	private QMListaErroresImpuestos(){}
 	
-	public static boolean addErrorImpuesto(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
+	public static boolean addErrorImpuesto(Connection conexion, long liCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = false;
 
@@ -44,7 +44,7 @@ public final class QMListaErroresImpuestos
 					+ CAMPO1  + "," 
 				    + CAMPO2  +             
 				    ") VALUES ('"
-				    + sCodMovimiento + "','" 
+				    + liCodMovimiento + "','" 
 				    + sCodCOTDOR +  
 				    "')";
 			
@@ -63,7 +63,7 @@ public final class QMListaErroresImpuestos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 				logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -77,7 +77,7 @@ public final class QMListaErroresImpuestos
 		return bSalida;
 	}
 
-	public static boolean delErrorImpuesto(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
+	public static boolean delErrorImpuesto(Connection conexion, long liCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = true;
 		
@@ -90,7 +90,7 @@ public final class QMListaErroresImpuestos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE ("
-					+ CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+					+ CAMPO1 + " = '" + liCodMovimiento	+ "' AND "
 					+ CAMPO2 + " = '" + sCodCOTDOR	+ 
 					"')";
 			
@@ -109,7 +109,7 @@ public final class QMListaErroresImpuestos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 				logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -123,7 +123,7 @@ public final class QMListaErroresImpuestos
 		return bSalida;
 	}
 	
-	public static long buscaCantidadErrores(Connection conexion, String sMovimiento)
+	public static long buscaCantidadErrores(Connection conexion, long liCodMovimiento)
 	{
 		long liNumero = 0;
 
@@ -141,7 +141,7 @@ public final class QMListaErroresImpuestos
 			String sQuery = "SELECT COUNT(*) FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimiento + "'";
+					+ CAMPO1 + " = '" + liCodMovimiento + "'";
 			
 			logger.debug(sQuery);
 
@@ -177,7 +177,7 @@ public final class QMListaErroresImpuestos
 			{
 				liNumero = 0;
 				
-				logger.error("ERROR Movimiento:|"+sMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -257,7 +257,7 @@ public final class QMListaErroresImpuestos
 						COSBAC = rs.getString(QMMovimientosImpuestos.CAMPO11);
 						DCOSBAC = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,COSBAC);
 						MOVIMIENTO = rs.getString(QMMovimientosImpuestos.CAMPO1);
-						ERRORES = Long.toString(buscaCantidadErrores(conexion,MOVIMIENTO));
+						ERRORES = Long.toString(buscaCantidadErrores(conexion,Long.parseLong(MOVIMIENTO)));
 						
 						ErrorImpuestoTabla errorencontrado = new ErrorImpuestoTabla(COACES, NURCAT, COSBAC, DCOSBAC, MOVIMIENTO, ERRORES);
 						
@@ -289,7 +289,7 @@ public final class QMListaErroresImpuestos
 		return resultado;
 	}
 	
-	public static ArrayList<ErrorTabla> buscaErrores(Connection conexion, String sMovimiento)
+	public static ArrayList<ErrorTabla> buscaErrores(Connection conexion, long liCodMovimiento)
 	{
 		ArrayList<ErrorTabla> resultado = new ArrayList<ErrorTabla>();
 		
@@ -310,7 +310,7 @@ public final class QMListaErroresImpuestos
 				" FROM " 
 				+ TABLA + 
 				" WHERE "
-				+ CAMPO1 +" = '"+ sMovimiento +"'";
+				+ CAMPO1 +" = '"+ liCodMovimiento +"'";
 		
 		logger.debug(sQuery);
 
@@ -351,7 +351,7 @@ public final class QMListaErroresImpuestos
 		{
 			resultado = new ArrayList<ErrorTabla>();
 			
-			logger.error("ERROR Movimiento:|"+sMovimiento+"|");
+			logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 			logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 		} 

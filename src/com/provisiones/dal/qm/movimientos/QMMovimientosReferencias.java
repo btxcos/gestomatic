@@ -1,5 +1,6 @@
 package com.provisiones.dal.qm.movimientos;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 
@@ -42,17 +43,23 @@ public final class QMMovimientosReferencias
 	public static final String CAMPO20 = "imcata";  
 	public static final String CAMPO21 = "cod_bitc25";    
 	public static final String CAMPO22 = "fereca";
+	
+	//Campos de control
+	public static final String CAMPO23  = "usuario_movimiento";
+	public static final String CAMPO24  = "fecha_movimiento";
 
 	private QMMovimientosReferencias(){}
 	
-	public static int addMovimientoReferenciaCatastral(Connection conexion, MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
+	public static long addMovimientoReferenciaCatastral(Connection conexion, MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral)
 	{
-		int iCodigo = 0;
+		long liCodigo = 0;
 
 		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
+			
+			String sUsuario = ConnectionManager.getUser();
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -81,7 +88,9 @@ public final class QMMovimientosReferencias
 				       + CAMPO19 + ","
 				       + CAMPO20 + ","
 				       + CAMPO21 + ","
-				       + CAMPO22 +
+				       + CAMPO22 + ","
+				       + CAMPO23 + ","
+				       + CAMPO24 +
 				       
 				       ") VALUES ('" 
 				       + NuevoMovimientoReferenciaCatastral.getCODTRN() + "','" 
@@ -107,7 +116,9 @@ public final class QMMovimientosReferencias
 				       + NuevoMovimientoReferenciaCatastral.getBITC24() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getIMCATA() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getBITC25() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getFERECA() + 
+				       + NuevoMovimientoReferenciaCatastral.getFERECA() + "','"
+				       + sUsuario + "','"
+				       + Utils.timeStamp() + 
 				       "' )";
 			
 			logger.debug(sQuery);
@@ -123,12 +134,12 @@ public final class QMMovimientosReferencias
 				
 				if (resulset.next()) 
 				{
-					iCodigo= resulset.getInt(1);
+					liCodigo= resulset.getLong(1);
 				} 
 			} 
 			catch (SQLException ex) 
 			{
-				iCodigo = 0;
+				liCodigo = 0;
 
 				logger.error("ERROR NURCAT:|"+NuevoMovimientoReferenciaCatastral.getNURCAT()+"|");
 				logger.error("ERROR COACES:|"+NuevoMovimientoReferenciaCatastral.getCOACES()+"|");
@@ -142,9 +153,9 @@ public final class QMMovimientosReferencias
 			}
 		}
 
-		return iCodigo;
+		return liCodigo;
 	}
-	public static boolean modMovimientoReferenciaCatastral(Connection conexion, MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral, String sMovimientoReferenciaCatastralID)
+	public static boolean modMovimientoReferenciaCatastral(Connection conexion, MovimientoReferenciaCatastral NuevoMovimientoReferenciaCatastral, long liMovimientoReferenciaCatastralID)
 	{
 		boolean bSalida = false;
 
@@ -184,7 +195,7 @@ public final class QMMovimientosReferencias
 					
 					"' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sMovimientoReferenciaCatastralID +"'";
+					+ CAMPO1 + " = '"+ liMovimientoReferenciaCatastralID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -201,7 +212,7 @@ public final class QMMovimientosReferencias
 			{
 				bSalida = false;
 				
-				logger.error("ERROR MovimientoReferenciaCatastralID:|"+sMovimientoReferenciaCatastralID+"|");
+				logger.error("ERROR MovimientoReferenciaCatastralID:|"+liMovimientoReferenciaCatastralID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -214,7 +225,7 @@ public final class QMMovimientosReferencias
 		return bSalida;
 	}
 
-	public static boolean delMovimientoReferenciaCatastral(Connection conexion, String sMovimientoReferenciaCatastralID)
+	public static boolean delMovimientoReferenciaCatastral(Connection conexion, long liMovimientoReferenciaCatastralID)
 	{
 		boolean bSalida = false;
 		
@@ -227,7 +238,7 @@ public final class QMMovimientosReferencias
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1 + " = '" + sMovimientoReferenciaCatastralID + "'";
+					+ CAMPO1 + " = '" + liMovimientoReferenciaCatastralID + "'";
 			
 			logger.debug(sQuery);
 
@@ -244,7 +255,7 @@ public final class QMMovimientosReferencias
 			{
 				bSalida = false;
 				
-				logger.error("ERROR MovimientoReferenciaCatastralID:|"+sMovimientoReferenciaCatastralID+"|");
+				logger.error("ERROR MovimientoReferenciaCatastralID:|"+liMovimientoReferenciaCatastralID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -257,9 +268,9 @@ public final class QMMovimientosReferencias
 		return bSalida;
 	}
 
-	public static String getMovimientoReferenciaCatastralID(Connection conexion, MovimientoReferenciaCatastral referencia)
+	public static long getMovimientoReferenciaCatastralID(Connection conexion, MovimientoReferenciaCatastral referencia)
 	{
-		String sMovimientoReferenciaCatastralID = "";
+		long liMovimientoReferenciaCatastralID = 0;
 
 		if (conexion != null)
 		{
@@ -320,11 +331,11 @@ public final class QMMovimientosReferencias
 					{
 						bEncontrado = true;
 
-						sMovimientoReferenciaCatastralID = rs.getString(CAMPO1); 
+						liMovimientoReferenciaCatastralID = rs.getLong(CAMPO1); 
 	  					
 	  					logger.debug("Encontrado el registro!");
 
-	  					logger.debug(CAMPO1+":|"+sMovimientoReferenciaCatastralID+"|");
+	  					logger.debug(CAMPO1+":|"+liMovimientoReferenciaCatastralID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -334,7 +345,7 @@ public final class QMMovimientosReferencias
 			} 
 			catch (SQLException ex) 
 			{
-				sMovimientoReferenciaCatastralID = "";
+				liMovimientoReferenciaCatastralID = 0;
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -345,10 +356,10 @@ public final class QMMovimientosReferencias
 			}
 		}
 
-		return sMovimientoReferenciaCatastralID;
+		return liMovimientoReferenciaCatastralID;
 	}
 	
-	public static MovimientoReferenciaCatastral getMovimientoReferenciaCatastral(Connection conexion, String sMovimientoReferenciaCatastralID)
+	public static MovimientoReferenciaCatastral getMovimientoReferenciaCatastral(Connection conexion, long liMovimientoReferenciaCatastralID)
 	{
 		String sCODTRN = "";
 		String sCOTDOR = "";
@@ -414,7 +425,7 @@ public final class QMMovimientosReferencias
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE " 
-				       + CAMPO1 + " = '" + sMovimientoReferenciaCatastralID	+ "'";
+				       + CAMPO1 + " = '" + liMovimientoReferenciaCatastralID	+ "'";
 			
 			logger.debug(sQuery);
 			
@@ -458,7 +469,7 @@ public final class QMMovimientosReferencias
 	  					
 	  					logger.debug("Encontrado el registro!");
 
-	  					logger.debug(CAMPO1+":|"+sMovimientoReferenciaCatastralID+"|");
+	  					logger.debug(CAMPO1+":|"+liMovimientoReferenciaCatastralID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -492,7 +503,7 @@ public final class QMMovimientosReferencias
 				sBITC25 = "";
 				sFERECA = "";
 				
-				logger.error("ERROR MovimientoReferenciaCatastralID:|"+sMovimientoReferenciaCatastralID+"|");
+				logger.error("ERROR MovimientoReferenciaCatastralID:|"+liMovimientoReferenciaCatastralID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -513,7 +524,7 @@ public final class QMMovimientosReferencias
 	}
 
 
-	public static boolean existeMovimientoReferenciaCatastral(Connection conexion, String sMovimientoReferenciaID)
+	public static boolean existeMovimientoReferenciaCatastral(Connection conexion, long liMovimientoReferenciaCatastralID)
 	{
 		boolean bEncontrado = false;
 
@@ -531,7 +542,7 @@ public final class QMMovimientosReferencias
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimientoReferenciaID + "'";
+					+ CAMPO1 + " = '" + liMovimientoReferenciaCatastralID + "'";
 			
 			logger.debug(sQuery);
 
@@ -563,7 +574,7 @@ public final class QMMovimientosReferencias
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR sMovimientoReferenciaID:|"+sMovimientoReferenciaID+"|");
+				logger.error("ERROR sMovimientoReferenciaID:|"+liMovimientoReferenciaCatastralID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

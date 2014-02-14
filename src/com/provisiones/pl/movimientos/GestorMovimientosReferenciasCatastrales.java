@@ -54,6 +54,8 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+
+	private String sNota = "";
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	private transient ActivoTabla activoseleccionado = null;
@@ -129,18 +131,23 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	borrarResultadosReferencia();
     }
 
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
+    
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
 			
-			ActivoTabla buscaactivos = new ActivoTabla(
+			ActivoTabla filtro = new ActivoTabla(
 					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(),"");
 			
-			this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
+			this.setTablaactivos(CLReferencias.buscarActivosConReferencias(filtro));
 			
 			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);
@@ -651,6 +658,14 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 
 	public void setsFERECA(String sFERECA) {
 		this.sFERECA = sFERECA;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 	
 	

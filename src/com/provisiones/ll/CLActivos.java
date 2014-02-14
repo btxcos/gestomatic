@@ -141,9 +141,17 @@ public final class CLActivos
 					}
 					else
 					{
-						//logger.warn("El siguiente registro ya se encuentre en el sistema:");
-						//logger.warn("|"+linea+"|");
-						iCodigo = 2;
+						//logger.warn("El siguiente registro ya se encuentra en el sistema:");
+						if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES))
+						{
+							iCodigo = 2;
+							conexion.commit();
+						}
+						else
+						{
+							iCodigo = -4;
+							conexion.rollback();
+						}
 					}
 				}
 				conexion.setAutoCommit(true);

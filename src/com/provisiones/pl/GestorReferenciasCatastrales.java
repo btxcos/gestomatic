@@ -54,6 +54,8 @@ public class GestorReferenciasCatastrales implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+
+	private String sNota = "";
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	
@@ -113,7 +115,12 @@ public class GestorReferenciasCatastrales implements Serializable
 
    	
     }
-	
+
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
+    
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -625,5 +632,13 @@ public class GestorReferenciasCatastrales implements Serializable
 
 	public void setsFERECA(String sFERECA) {
 		this.sFERECA = sFERECA;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 }

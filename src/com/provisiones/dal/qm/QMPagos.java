@@ -65,7 +65,7 @@ public class QMPagos
 					") VALUES ('" 
 					+ NuevoPago.getsGasto() + "','"
 					+ NuevoPago.getsTP() + "','"
-					+ NuevoPago.getsFEPGPR() + "','"
+					+ NuevoPago.getsFEPGPR() + "',"
 					+ "AES_ENCRYPT('"+NuevoPago.getsPais()  +"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevoPago.getsDCIBAN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 

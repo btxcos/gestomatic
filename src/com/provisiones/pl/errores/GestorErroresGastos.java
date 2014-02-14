@@ -467,7 +467,7 @@ public class GestorErroresGastos implements Serializable
 			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
-			this.setTablaerrores(CLErrores.buscarErroresGasto(sCodMovimiento));
+			this.setTablaerrores(CLErrores.buscarErroresGasto(Integer.parseInt(sCodMovimiento)));
 			
 			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
 			
@@ -476,7 +476,7 @@ public class GestorErroresGastos implements Serializable
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			MovimientoGasto movimiento = CLGastos.buscarMovimientoGasto(sCodMovimiento);
+			MovimientoGasto movimiento = CLGastos.buscarMovimientoGasto(Integer.parseInt(sCodMovimiento));
 			
 			this.sCOACES = movimiento.getCOACES();
 		   	this.sCOGRUG = movimiento.getCOGRUG();
@@ -928,7 +928,7 @@ public class GestorErroresGastos implements Serializable
 			
 			String sMsg = "";
 			
-			if (!CLGastos.existeMovimientoGasto(sCodMovimiento))
+			if (!CLGastos.existeMovimientoGasto(Integer.parseInt(sCodMovimiento)))
 			{
 				sMsg = "[FATAL] ERROR:911 - No se puede modificar el gasto, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgFatal(sMsg);

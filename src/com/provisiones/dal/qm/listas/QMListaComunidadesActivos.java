@@ -38,14 +38,14 @@ public final class QMListaComunidadesActivos
 
 	private QMListaComunidadesActivos(){}
 	
-	public static boolean addRelacionComunidad(Connection conexion, int iCodCOACES, long liCodComunidad, String sCodMovimiento)
+	public static boolean addRelacionComunidad(Connection conexion, int iCodCOACES, long liCodComunidad, long liCodMovimiento)
 	{
 		boolean bSalida = false;
-		
-		String sUsuario = ConnectionManager.getUser();
 
 		if (conexion != null)
 		{
+			String sUsuario = ConnectionManager.getUser();
+			
 			Statement stmt = null;
 			
 			logger.debug("Ejecutando Query...");
@@ -62,7 +62,7 @@ public final class QMListaComunidadesActivos
 				       ") VALUES ('"
 				       + iCodCOACES + "','" 
 				       + liCodComunidad + "','"
-				       + sCodMovimiento + "','"
+				       + liCodMovimiento + "','"
 				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				       + sUsuario  + "','"
 				       + Utils.timeStamp() + 
@@ -85,7 +85,7 @@ public final class QMListaComunidadesActivos
 
 				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -98,20 +98,35 @@ public final class QMListaComunidadesActivos
 		return bSalida;
 	}
 
-	public static boolean delRelacionComunidad(Connection conexion, String sCodMovimiento)
+	public static boolean addRelacionComunidadInyectada(Connection conexion, int iCodCOACES, long liCodComunidad, long liCodMovimiento)
 	{
 		boolean bSalida = false;
-		
+
 		if (conexion != null)
 		{
+			String sUsuario = ConnectionManager.getUser();
+			
 			Statement stmt = null;
 			
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "DELETE FROM " 
-					+ TABLA + 
-					" WHERE "
-					+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+			String sQuery = "INSERT INTO " 
+					   + TABLA + 
+					   " ("
+					   + CAMPO1  + "," 
+				       + CAMPO2  + ","              
+				       + CAMPO3  + ","
+				       + CAMPO4  + ","
+				       + CAMPO5  + ","
+				       + CAMPO6  +    
+				       ") VALUES ('"
+				       + iCodCOACES + "','" 
+				       + liCodComunidad + "','"
+				       + liCodMovimiento + "','"
+				       + ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "','"
+				       + sUsuario  + "','"
+				       + Utils.timeStamp() + 
+				       "' )";
 			
 			logger.debug(sQuery);
 
@@ -128,7 +143,52 @@ public final class QMListaComunidadesActivos
 			{
 				bSalida = false;
 
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean delRelacionComunidad(Connection conexion, long liCodMovimiento)
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO3 + " = '" + liCodMovimiento	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -141,7 +201,7 @@ public final class QMListaComunidadesActivos
 		return bSalida;
 	}
 
-	public static boolean existeRelacionComunidad(Connection conexion, int iCodCOACES, long liCodComunidad, String sCodMovimiento)
+	public static boolean existeRelacionComunidad(Connection conexion, int iCodCOACES, long liCodComunidad, long liCodMovimiento)
 	{
 		boolean bEncontrado = false;
 		
@@ -161,7 +221,7 @@ public final class QMListaComunidadesActivos
 				       " WHERE (" 
 				       + CAMPO1 + " = '" + iCodCOACES + "' AND "
 				       + CAMPO2 + " = '" + liCodComunidad + "' AND "
-				       + CAMPO3 + " = '" + sCodMovimiento	+ 
+				       + CAMPO3 + " = '" + liCodMovimiento	+ 
 				       "')";
 			
 			logger.debug(sQuery);
@@ -195,7 +255,7 @@ public final class QMListaComunidadesActivos
 
 				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -351,9 +411,9 @@ public final class QMListaComunidadesActivos
 		return bEncontrado;
 	}
 	
-	public static String getMovimientoDeActivoVinculadoComunidad(Connection conexion, long liCodComunidad, int iCodCOACES)
+	public static long getMovimientoDeActivoVinculadoComunidad(Connection conexion, long liCodComunidad, int iCodCOACES)
 	{
-		String sMovimiento = "";
+		long liMovimiento = 0;
 
 		if (conexion != null)
 		{
@@ -392,7 +452,7 @@ public final class QMListaComunidadesActivos
 					{
 						bEncontrado = true;
 
-						sMovimiento = rs.getString(CAMPO3);
+						liMovimiento = rs.getLong(CAMPO3);
 						
 						logger.debug("Encontrado el registro!");
 					}
@@ -404,7 +464,7 @@ public final class QMListaComunidadesActivos
 			} 
 			catch (SQLException ex) 
 			{
-				sMovimiento = "";
+				liMovimiento = 0;
 
 				logger.error("ERROR COACES:|"+iCodCOACES+"|");
 				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
@@ -418,10 +478,10 @@ public final class QMListaComunidadesActivos
 			}
 		}
 
-		return sMovimiento;
+		return liMovimiento;
 	}
 	
-	public static boolean setValidado(Connection conexion, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(Connection conexion, long liCodMovimiento, String sValidado)
 	{
 		boolean bSalida = false;
 		
@@ -436,7 +496,7 @@ public final class QMListaComunidadesActivos
 					" SET " 
 					+ CAMPO4 + " = '"+ sValidado + "' "+
 					" WHERE " 
-					+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+					+ CAMPO3 + " = '" + liCodMovimiento	+ "'";
 			
 			logger.debug(sQuery);
 			
@@ -453,7 +513,7 @@ public final class QMListaComunidadesActivos
 			{
 				bSalida = false;
 
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -466,7 +526,7 @@ public final class QMListaComunidadesActivos
 		return bSalida;
 	}
 	
-	public static String getValidado(Connection conexion, String sCodMovimiento)
+	public static String getValidado(Connection conexion, long liCodMovimiento)
 	{
 		String sValidado = "";
 
@@ -486,7 +546,7 @@ public final class QMListaComunidadesActivos
 					" FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO3 + " = '" + sCodMovimiento	+ "'";
+					+ CAMPO3 + " = '" + liCodMovimiento	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -520,7 +580,7 @@ public final class QMListaComunidadesActivos
 			{
 				sValidado = "";
 
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1054,9 +1114,9 @@ public final class QMListaComunidadesActivos
 		return resultado;
 	}
 	
-	public static ArrayList<String>  getMovimientosComunidadesActivoPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getMovimientosComunidadesActivoPorEstado(Connection conexion, String sEstado) 
 	{
-		ArrayList<String> resultado = new ArrayList<String>(); 
+		ArrayList<Long> resultado = new ArrayList<Long>(); 
 
 		if (conexion != null)
 		{
@@ -1095,7 +1155,7 @@ public final class QMListaComunidadesActivos
 					{
 						bEncontrado = true;
 
-						resultado.add(rs.getString(CAMPO3));
+						resultado.add(rs.getLong(CAMPO3));
 											
 						logger.debug("Encontrado el registro!");
 						logger.debug(CAMPO4+":|"+sEstado+"|");
@@ -1106,13 +1166,12 @@ public final class QMListaComunidadesActivos
 				}
 				if (!bEncontrado) 
 				{
-					resultado = new ArrayList<String>(); 
 					logger.debug("No se encontró la información.");
 				}
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<String>(); 
+				resultado = new ArrayList<Long>(); 
 
 				logger.error("ERROR Validado:|"+sEstado+"|");
 
@@ -1380,9 +1439,9 @@ public final class QMListaComunidadesActivos
 				sOBTEXC);
 	}
 	
-	public static ArrayList<String> buscarDependencias(Connection conexion, long liCodComunidad, String sCodMovimiento)
+	public static ArrayList<Long> buscarDependencias(Connection conexion, long liCodComunidad, long liCodMovimiento)
 	{
-		ArrayList<String> resultado = new ArrayList<String>();
+		ArrayList<Long> resultado = new ArrayList<Long>();
 		
 		if (conexion != null)
 		{
@@ -1401,7 +1460,7 @@ public final class QMListaComunidadesActivos
 					+ TABLA + 
 					" WHERE (" 
 					+ CAMPO2 + " = '" + liCodComunidad + "' AND "
-					+ CAMPO3 + " >=  '" + sCodMovimiento + 
+					+ CAMPO3 + " >=  '" + liCodMovimiento + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -1421,7 +1480,7 @@ public final class QMListaComunidadesActivos
 					{
 						bEncontrado = true;
 						
-						resultado.add(rs.getString(CAMPO3));
+						resultado.add(rs.getLong(CAMPO3));
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -1433,10 +1492,10 @@ public final class QMListaComunidadesActivos
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<String>();
+				resultado = new ArrayList<Long>();
 
 				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

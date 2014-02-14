@@ -7,25 +7,37 @@ public class ProvisionTabla
 	private String DCOSPAT = "";
 	private String TAS = "";
 	private String DTAS = "";	
+	private String COGRUG = "";
+	private String DCOGRUG = "";	
+	private String COTPGA = "";
+	private String DCOTPGA = "";
+	private String FEPFON = "";
 	private String VALOR = "";
 	private String GASTOS = "";
 
 	//Constructor de clase
 	
 	public ProvisionTabla(String nUPROF, String cOSPAT, String dCOSPAT,
-			String tAS, String dTAS, String vALOR, String gASTOS) {
+			String tAS, String dTAS, String cOGRUG, String dCOGRUG,
+			String cOTPGA, String dCOTPGA, String fEPFON, String vALOR,
+			String gASTOS) {
 		super();
 		NUPROF = nUPROF;
 		COSPAT = cOSPAT;
 		DCOSPAT = dCOSPAT;
 		TAS = tAS;
 		DTAS = dTAS;
+		COGRUG = cOGRUG;
+		DCOGRUG = dCOGRUG;
+		COTPGA = cOTPGA;
+		DCOTPGA = dCOTPGA;
+		setFEPFON(fEPFON);
 		VALOR = vALOR;
 		GASTOS = gASTOS;
 	}
 
 	//Métodos de acceso
-
+	
 	public String getNUPROF() {
 		return NUPROF;
 	}
@@ -64,6 +76,46 @@ public class ProvisionTabla
 
 	public void setDTAS(String dTAS) {
 		DTAS = dTAS;
+	}
+
+	public String getCOGRUG() {
+		return COGRUG;
+	}
+
+	public void setCOGRUG(String cOGRUG) {
+		COGRUG = cOGRUG;
+	}
+
+	public String getDCOGRUG() {
+		return DCOGRUG;
+	}
+
+	public void setDCOGRUG(String dCOGRUG) {
+		DCOGRUG = dCOGRUG;
+	}
+
+	public String getCOTPGA() {
+		return COTPGA;
+	}
+
+	public void setCOTPGA(String cOTPGA) {
+		COTPGA = cOTPGA;
+	}
+
+	public String getDCOTPGA() {
+		return DCOTPGA;
+	}
+
+	public void setDCOTPGA(String dCOTPGA) {
+		DCOTPGA = dCOTPGA;
+	}
+
+	public String getFEPFON() {
+		return FEPFON;
+	}
+
+	public void setFEPFON(String fEPFON) {
+		FEPFON = fEPFON;
 	}
 
 	public String getVALOR() {

@@ -62,6 +62,7 @@ public class GestorMovimientosCuotas implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNota = "";
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -133,7 +134,10 @@ public class GestorMovimientosCuotas implements Serializable
     	borrarResultadosCuota();
     }
     
-
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
     
 	public void buscaActivos (ActionEvent actionEvent)
 	{
@@ -287,10 +291,15 @@ public class GestorMovimientosCuotas implements Serializable
 							"", 
 							sOBTEXC.toUpperCase(), 
 							sOBDEER.toUpperCase());
+
+					String sNotaAntigua = CLCuotas.buscarNota(CLCuotas.buscarCodigoCuota(Integer.parseInt(sCOACES), sCOCLDO, sNUDCOM, sCOSBAC));
 					
+					if (sNotaAntigua.equals(sNota))
+					{
+						sNota = "";
+					}
 					
-					
-					int iSalida = CLCuotas.registraMovimiento(movimiento);
+					int iSalida = CLCuotas.registraMovimiento(movimiento, sNota);
 					
 					switch (iSalida) 
 					{
@@ -747,6 +756,14 @@ public class GestorMovimientosCuotas implements Serializable
 
 	public void setsDesCOCLDO(String sDesCOCLDO) {
 		this.sDesCOCLDO = sDesCOCLDO;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 	
 	

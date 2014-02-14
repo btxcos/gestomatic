@@ -53,17 +53,17 @@ public final class CLErrores
 		return QMListaErroresComunidades.buscaComunidadesConError(ConnectionManager.getDBConnection(),filtro);
 	}
 	
-	public static ArrayList<ErrorComunidadTabla> buscarComunidadesActivoConErrores(String sCOACES)
+	public static ArrayList<ErrorComunidadTabla> buscarComunidadesActivoConErrores(int iCOACES)
 	{
-		return QMListaErroresComunidades.buscaComunidadesActivoConError(ConnectionManager.getDBConnection(),sCOACES);
+		return QMListaErroresComunidades.buscaComunidadesActivoConError(ConnectionManager.getDBConnection(),iCOACES);
 	}
 	
-	public static ArrayList<ErrorTabla> buscarErroresComunidad(String sMovimiento)
+	public static ArrayList<ErrorTabla> buscarErroresComunidad(long liCodMovimiento)
 	{
-		return QMListaErroresComunidades.buscaErrores(ConnectionManager.getDBConnection(),sMovimiento);
+		return QMListaErroresComunidades.buscaErrores(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 
-	public static int reparaMovimientoComunidad(MovimientoComunidad movimiento, String sCodMovimiento, String sCodError)
+	public static int reparaMovimientoComunidad(MovimientoComunidad movimiento, long liCodMovimiento, String sCodError)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -84,26 +84,26 @@ public final class CLErrores
 			}
 			else
 			{
-				//MovimientoComunidad movimiento_antiguo = QMMovimientosComunidades.getMovimientoComunidad(conexion,sCodMovimiento);
+				//MovimientoComunidad movimiento_antiguo = QMMovimientosComunidades.getMovimientoComunidad(conexion,liCodMovimiento);
 				
 				try 
 				{
 					conexion.setAutoCommit(false);
 
-					if (!QMMovimientosComunidades.modMovimientoComunidad(conexion,movimiento_revisado,sCodMovimiento))
+					if (!QMMovimientosComunidades.modMovimientoComunidad(conexion,movimiento_revisado,liCodMovimiento))
 					{
 						//Error al crear un movimiento
 						iCodigo = -900;
 					}
 					else
 					{
-						if(QMListaErroresComunidades.delErrorComunidad(conexion,sCodMovimiento, sCodError))
+						if(QMListaErroresComunidades.delErrorComunidad(conexion,liCodMovimiento, sCodError))
 						{	
 							
 							if (QMComunidades.modComunidad(conexion,CLComunidades.convierteMovimientoenComunidad(movimiento), liCodComunidad))	
 							{
-								ArrayList<String> dependenciascomunidades = QMListaComunidades.buscarDependencias(conexion,liCodComunidad, sCodMovimiento);
-								ArrayList<String> dependenciasactivoscomunidades = QMListaComunidadesActivos.buscarDependencias(conexion,liCodComunidad, sCodMovimiento);
+								ArrayList<Long> dependenciascomunidades = QMListaComunidades.buscarDependencias(conexion,liCodComunidad, liCodMovimiento);
+								ArrayList<Long> dependenciasactivoscomunidades = QMListaComunidadesActivos.buscarDependencias(conexion,liCodComunidad, liCodMovimiento);
 
 								boolean bError = false;
 								
@@ -140,8 +140,8 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la comunidad
 								iCodigo = -905;
-								//QMListaErroresComunidades.addErrorComunidad(conexion,sCodMovimiento, sCodError);
-								//QMMovimientosComunidades.modMovimientoComunidad(conexion,movimiento_antiguo,sCodMovimiento);
+								//QMListaErroresComunidades.addErrorComunidad(conexion,liCodMovimiento, sCodError);
+								//QMMovimientosComunidades.modMovimientoComunidad(conexion,movimiento_antiguo,liCodMovimiento);
 								conexion.rollback();
 							}
 
@@ -150,7 +150,7 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -905;
-							//QMMovimientosComunidades.modMovimientoComunidad(conexion,movimiento_antiguo,sCodMovimiento);
+							//QMMovimientosComunidades.modMovimientoComunidad(conexion,movimiento_antiguo,liCodMovimiento);
 							conexion.rollback();
 						}
 					}
@@ -194,12 +194,12 @@ public final class CLErrores
 		return QMListaErroresCuotas.buscaCuotasConError(ConnectionManager.getDBConnection(),filtro);
 	}
 
-	public static ArrayList<ErrorTabla> buscarErroresCuota(String sMovimiento)
+	public static ArrayList<ErrorTabla> buscarErroresCuota(long liCodMovimiento)
 	{
-		return QMListaErroresCuotas.buscaErrores(ConnectionManager.getDBConnection(),sMovimiento);
+		return QMListaErroresCuotas.buscaErrores(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
-	public static int reparaMovimientoCuota(MovimientoCuota movimiento, String sCodMovimiento, String sCodError)
+	public static int reparaMovimientoCuota(MovimientoCuota movimiento, long liCodMovimiento, String sCodError)
 	{
 		int iCodigo = -910;//Error de conexion
 		
@@ -220,26 +220,26 @@ public final class CLErrores
 			}
 			else
 			{
-				MovimientoCuota movimiento_antiguo = QMMovimientosCuotas.getMovimientoCuota(conexion,sCodMovimiento);
+				MovimientoCuota movimiento_antiguo = QMMovimientosCuotas.getMovimientoCuota(conexion,liCodMovimiento);
 				
 				try 
 				{
 					conexion.setAutoCommit(false);
 
-					if (!QMMovimientosCuotas.modMovimientoCuota(conexion,movimiento_revisado,sCodMovimiento))
+					if (!QMMovimientosCuotas.modMovimientoCuota(conexion,movimiento_revisado,liCodMovimiento))
 					{
 						//Error al crear un movimiento
 						iCodigo = -900;
 					}
 					else
 					{
-						if(QMListaErroresCuotas.delErrorCuota(conexion,sCodMovimiento, sCodError))
+						if(QMListaErroresCuotas.delErrorCuota(conexion,liCodMovimiento, sCodError))
 						{	
 
 							if (QMCuotas.modCuota(conexion,CLCuotas.convierteMovimientoenCuota(movimiento), liCodCuota))	
 							{
 								
-								ArrayList<String> dependenciascuotas = QMListaCuotas.buscarDependencias(conexion,liCodCuota, sCodMovimiento);
+								ArrayList<Long> dependenciascuotas = QMListaCuotas.buscarDependencias(conexion,liCodCuota, liCodMovimiento);
 
 								boolean bError = false;
 								
@@ -264,8 +264,8 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la cuota
 								iCodigo = -904;
-								QMListaErroresCuotas.addErrorCuota(conexion,sCodMovimiento, sCodError);
-								QMMovimientosCuotas.modMovimientoCuota(conexion,movimiento_antiguo,sCodMovimiento);
+								QMListaErroresCuotas.addErrorCuota(conexion,liCodMovimiento, sCodError);
+								QMMovimientosCuotas.modMovimientoCuota(conexion,movimiento_antiguo,liCodMovimiento);
 							}
 
 						}
@@ -273,7 +273,7 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -904;
-							QMMovimientosCuotas.modMovimientoCuota(conexion,movimiento_antiguo,sCodMovimiento);
+							QMMovimientosCuotas.modMovimientoCuota(conexion,movimiento_antiguo,liCodMovimiento);
 						}
 					}
 					
@@ -316,12 +316,12 @@ public final class CLErrores
 		return QMListaErroresReferencias.buscaReferenciasConError(ConnectionManager.getDBConnection(),filtro);
 	}
 
-	public static ArrayList<ErrorTabla> buscarErroresReferencia(String sMovimiento)
+	public static ArrayList<ErrorTabla> buscarErroresReferencia(long liCodMovimiento)
 	{
-		return QMListaErroresReferencias.buscaErrores(ConnectionManager.getDBConnection(),sMovimiento);
+		return QMListaErroresReferencias.buscaErrores(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
-	public static int reparaMovimientoReferencia(MovimientoReferenciaCatastral movimiento, String sCodMovimiento, String sCodError)
+	public static int reparaMovimientoReferencia(MovimientoReferenciaCatastral movimiento, long liCodMovimiento, String sCodError)
 	{
 		int iCodigo = -910;//Error de conexion
 		
@@ -342,25 +342,25 @@ public final class CLErrores
 			}
 			else
 			{
-				//MovimientoReferenciaCatastral movimiento_antiguo = QMMovimientosReferencias.getMovimientoReferenciaCatastral(conexion,sCodMovimiento);
+				//MovimientoReferenciaCatastral movimiento_antiguo = QMMovimientosReferencias.getMovimientoReferenciaCatastral(conexion,liCodMovimiento);
 	
 				try 
 				{
 					conexion.setAutoCommit(false);
 
-					if (!QMMovimientosReferencias.modMovimientoReferenciaCatastral(conexion,movimiento_revisado,sCodMovimiento))
+					if (!QMMovimientosReferencias.modMovimientoReferenciaCatastral(conexion,movimiento_revisado,liCodMovimiento))
 					{
 						//Error al crear un movimiento
 						iCodigo = -900;
 					}
 					else
 					{
-						if(QMListaErroresReferencias.delErrorReferencia(conexion,sCodMovimiento, sCodError))
+						if(QMListaErroresReferencias.delErrorReferencia(conexion,liCodMovimiento, sCodError))
 						{	
 
 							if (QMReferencias.modReferenciaCatastral(conexion,CLReferencias.convierteMovimientoenReferencia(movimiento), liCodReferencia))	
 							{
-								ArrayList<String> dependenciascuotas = QMListaReferencias.buscarDependencias(conexion,Integer.parseInt(movimiento.getCOACES()), liCodReferencia, sCodMovimiento);
+								ArrayList<Long> dependenciascuotas = QMListaReferencias.buscarDependencias(conexion,Integer.parseInt(movimiento.getCOACES()), liCodReferencia, liCodMovimiento);
 
 								boolean bError = false;
 
@@ -386,8 +386,8 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la referencia
 								iCodigo = -904;
-								//QMListaErroresReferencias.addErrorReferencia(conexion,sCodMovimiento, sCodError);
-								//QMMovimientosReferencias.modMovimientoReferenciaCatastral(conexion,movimiento_antiguo,sCodMovimiento);
+								//QMListaErroresReferencias.addErrorReferencia(conexion,liCodMovimiento, sCodError);
+								//QMMovimientosReferencias.modMovimientoReferenciaCatastral(conexion,movimiento_antiguo,liCodMovimiento);
 								conexion.rollback();
 							}
 
@@ -396,7 +396,7 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -904;
-							//QMMovimientosReferencias.modMovimientoReferenciaCatastral(conexion,movimiento_antiguo,sCodMovimiento);
+							//QMMovimientosReferencias.modMovimientoReferenciaCatastral(conexion,movimiento_antiguo,liCodMovimiento);
 							conexion.rollback();
 						}
 					}
@@ -441,12 +441,12 @@ public final class CLErrores
 		return QMListaErroresImpuestos.buscaImpuestosConError(ConnectionManager.getDBConnection(),filtro);
 	}
 
-	public static ArrayList<ErrorTabla> buscarErroresImpuesto(String sMovimiento)
+	public static ArrayList<ErrorTabla> buscarErroresImpuesto(long liCodMovimiento)
 	{
-		return QMListaErroresImpuestos.buscaErrores(ConnectionManager.getDBConnection(),sMovimiento);
+		return QMListaErroresImpuestos.buscaErrores(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
-	public static int reparaMovimientoImpuesto(MovimientoImpuestoRecurso movimiento, String sCodMovimiento, String sCodError)
+	public static int reparaMovimientoImpuesto(MovimientoImpuestoRecurso movimiento, long liCodMovimiento, String sCodError)
 	{
 		int iCodigo = -910;//Error de conexion
 		
@@ -467,25 +467,25 @@ public final class CLErrores
 			}
 			else
 			{
-				//MovimientoImpuestoRecurso movimiento_antiguo = QMMovimientosImpuestos.getMovimientoImpuestoRecurso(conexion,sCodMovimiento);
+				//MovimientoImpuestoRecurso movimiento_antiguo = QMMovimientosImpuestos.getMovimientoImpuestoRecurso(conexion,liCodMovimiento);
 				
 				try 
 				{
 					conexion.setAutoCommit(false);
 
-					if (!QMMovimientosImpuestos.modMovimientoImpuestoRecurso(conexion,movimiento_revisado,sCodMovimiento))
+					if (!QMMovimientosImpuestos.modMovimientoImpuestoRecurso(conexion,movimiento_revisado,liCodMovimiento))
 					{
 						//Error al crear un movimiento
 						iCodigo = -900;
 					}
 					else
 					{
-						if(QMListaErroresImpuestos.delErrorImpuesto(conexion,sCodMovimiento, sCodError))
+						if(QMListaErroresImpuestos.delErrorImpuesto(conexion,liCodMovimiento, sCodError))
 						{	
 
 							if (QMImpuestos.modImpuestoRecurso(conexion,CLImpuestos.convierteMovimientoenImpuesto(movimiento), liCodImpuesto))	
 							{
-								ArrayList<String> dependenciasimpuestos = QMListaImpuestos.buscarDependencias(conexion,Integer.parseInt(movimiento.getCOACES()), liCodImpuesto, sCodMovimiento);
+								ArrayList<Long> dependenciasimpuestos = QMListaImpuestos.buscarDependencias(conexion,Integer.parseInt(movimiento.getCOACES()), liCodImpuesto, liCodMovimiento);
 
 								boolean bError = false;
 
@@ -511,8 +511,8 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la impuesto
 								iCodigo = -904;
-								//QMListaErroresImpuestos.addErrorImpuesto(conexion,sCodMovimiento, sCodError);
-								//QMMovimientosImpuestos.modMovimientoImpuestoRecurso(conexion,movimiento_antiguo,sCodMovimiento);
+								//QMListaErroresImpuestos.addErrorImpuesto(conexion,liCodMovimiento, sCodError);
+								//QMMovimientosImpuestos.modMovimientoImpuestoRecurso(conexion,movimiento_antiguo,liCodMovimiento);
 								conexion.rollback();
 							}
 
@@ -521,7 +521,7 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -904;
-							//QMMovimientosImpuestos.modMovimientoImpuestoRecurso(conexion,movimiento_antiguo,sCodMovimiento);
+							//QMMovimientosImpuestos.modMovimientoImpuestoRecurso(conexion,movimiento_antiguo,liCodMovimiento);
 							conexion.rollback();
 						}
 					}
@@ -564,12 +564,12 @@ public final class CLErrores
 		return QMListaErroresGastos.buscaGastosConError(ConnectionManager.getDBConnection(),filtro);
 	}
 
-	public static ArrayList<ErrorTabla> buscarErroresGasto(String sMovimiento)
+	public static ArrayList<ErrorTabla> buscarErroresGasto(long liCodMovimiento)
 	{
-		return QMListaErroresGastos.buscaErrores(ConnectionManager.getDBConnection(),sMovimiento);
+		return QMListaErroresGastos.buscaErrores(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
-	public static int reparaMovimientoGasto(MovimientoGasto movimiento, String sCodMovimiento, String sCodError)
+	public static int reparaMovimientoGasto(MovimientoGasto movimiento, long liCodMovimiento, String sCodError)
 	{
 		
 		int iCodigo = -910;//Error de conexion
@@ -596,7 +596,7 @@ public final class CLErrores
 			}
 			else
 			{
-				//MovimientoGasto movimiento_antiguo = QMMovimientosGastos.getMovimientoGasto(conexion,sCodMovimiento);
+				//MovimientoGasto movimiento_antiguo = QMMovimientosGastos.getMovimientoGasto(conexion,liCodMovimiento);
 				
 				try 
 				{
@@ -604,21 +604,21 @@ public final class CLErrores
 
 					logger.debug(movimiento_revisado.logMovimientoGasto());
 					
-					if (!QMMovimientosGastos.modMovimientoGasto(conexion,movimiento_revisado,sCodMovimiento))
+					if (!QMMovimientosGastos.modMovimientoGasto(conexion,movimiento_revisado,liCodMovimiento))
 					{
 						//Error al crear un movimiento
 						iCodigo = -900;
 					}
 					else
 					{
-						if(QMListaErroresGastos.delErrorGasto(conexion,sCodMovimiento, sCodError))
+						if(QMListaErroresGastos.delErrorGasto(conexion,liCodMovimiento, sCodError))
 						{	
 
 							if (QMGastos.modGasto(conexion,CLGastos.convierteMovimientoenGasto(movimiento_revisado)))
 							{
 								long liCodGasto = QMGastos.getGastoID(conexion,Integer.parseInt(movimiento.getCOACES()), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE());
 								
-								ArrayList<String> dependenciasgastos = QMListaGastos.buscarDependencias(conexion,liCodGasto, sCodMovimiento);
+								ArrayList<Long> dependenciasgastos = QMListaGastos.buscarDependencias(conexion,liCodGasto, liCodMovimiento);
 
 								boolean bError = false;
 
@@ -644,8 +644,8 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la gasto
 								iCodigo = -904;
-								//QMListaErroresGastos.addErrorGasto(conexion,sCodMovimiento, sCodError);
-								//QMMovimientosGastos.modMovimientoGasto(conexion,movimiento_antiguo,sCodMovimiento);
+								//QMListaErroresGastos.addErrorGasto(conexion,liCodMovimiento, sCodError);
+								//QMMovimientosGastos.modMovimientoGasto(conexion,movimiento_antiguo,liCodMovimiento);
 								conexion.rollback();
 							}
 
@@ -654,7 +654,7 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -904;
-							//QMMovimientosGastos.modMovimientoGasto(conexion,movimiento_antiguo,sCodMovimiento);
+							//QMMovimientosGastos.modMovimientoGasto(conexion,movimiento_antiguo,liCodMovimiento);
 							conexion.rollback();
 						}
 					}

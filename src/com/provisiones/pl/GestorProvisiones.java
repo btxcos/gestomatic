@@ -96,15 +96,19 @@ public class GestorProvisiones implements Serializable
 			
 			Provision provision = new Provision(sNUPROF, 
 					sCOSPAT, 
-					sTAS, 
-					Utils.compruebaImporte(sValorTolal), 
-					sNumGastos,
-					ValoresDefecto.CAMPO_SIN_INFORMAR,
-					ValoresDefecto.CAMPO_SIN_INFORMAR, 
+					sTAS,
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
 					Utils.fechaDeHoy(false),
-					ValoresDefecto.CAMPO_SIN_INFORMAR,
-					ValoresDefecto.CAMPO_SIN_INFORMAR, 
-					ValoresDefecto.CAMPO_SIN_INFORMAR, 
+					sNumGastos,
+					Utils.compruebaImporte(sValorTolal),
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
+					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
 					ValoresDefecto.DEF_PROVISION_PENDIENTE);
 			
 					

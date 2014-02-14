@@ -29,9 +29,14 @@ public final class CLReferencias
 	private CLReferencias(){}
 	
 	//ID	
-	public static long buscarCodigoReferencia (String sCodNURCAT)
+	public static long buscarCodigoReferencia (String sNURCAT)
 	{
-		return QMReferencias.getReferenciaCatastralID(ConnectionManager.getDBConnection(),sCodNURCAT);
+		return QMReferencias.getReferenciaCatastralID(ConnectionManager.getDBConnection(),sNURCAT);
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivoAsociado (String sNURCAT)
+	{
+		return QMListaReferencias.getActivo(ConnectionManager.getDBConnection(),sNURCAT);
 	}
 	
 	public static MovimientoReferenciaCatastral convierteCuotaenMovimiento(ReferenciaCatastral referencia, int iCodCOACES, String sCodCOACCI)
@@ -90,9 +95,9 @@ public final class CLReferencias
 		return QMListaReferencias.buscaActivosNoAsociados(ConnectionManager.getDBConnection(),activo);
 	}
 	
-	public static MovimientoReferenciaCatastral buscarMovimientoReferenciaCatastral (String sCodMovimiento)
+	public static MovimientoReferenciaCatastral buscarMovimientoReferenciaCatastral (long liCodMovimiento)
 	{
-		return QMMovimientosReferencias.getMovimientoReferenciaCatastral(ConnectionManager.getDBConnection(),sCodMovimiento);
+		return QMMovimientosReferencias.getMovimientoReferenciaCatastral(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
 	public static long buscarNumeroMovimientosReferenciasPendientes()
@@ -100,9 +105,9 @@ public final class CLReferencias
 		return (QMListaReferencias.buscaCantidadValidado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
 	}
 	
-	public static ReferenciaCatastral buscarReferencia (String sCodNURCAT)
+	public static ReferenciaCatastral buscarReferencia (String sNURCAT)
 	{
-		return QMReferencias.getReferenciaCatastral(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sCodNURCAT));
+		return QMReferencias.getReferenciaCatastral(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sNURCAT));
 	}
 	
 	public static ArrayList<ReferenciaTabla> buscarReferenciasActivo(int iCodCOACES)
@@ -110,9 +115,9 @@ public final class CLReferencias
 		return QMListaReferencias.buscaReferenciasActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
-	public static boolean comprobarRelacion(String sCodNURCAT, int iCodCOACES)
+	public static boolean comprobarRelacion(String sNURCAT, int iCodCOACES)
 	{
-		return QMListaReferencias.compruebaRelacionReferenciaActivo(ConnectionManager.getDBConnection(),iCodCOACES, buscarCodigoReferencia(sCodNURCAT));
+		return QMListaReferencias.compruebaRelacionReferenciaActivo(ConnectionManager.getDBConnection(),iCodCOACES, buscarCodigoReferencia(sNURCAT));
 	}
 
 	public static boolean estaAsociado(int iCodCOACES)
@@ -120,24 +125,24 @@ public final class CLReferencias
 		return QMListaReferencias.activoAsociado(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
-	public static boolean estaDeBaja(String sCodNURCAT)
+	public static boolean estaDeBaja(String sNURCAT)
 	{
-		return QMReferencias.getEstado(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sCodNURCAT)).equals(ValoresDefecto.DEF_BAJA);
+		return QMReferencias.getEstado(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sNURCAT)).equals(ValoresDefecto.DEF_BAJA);
 	}
 
-	public static String estadoReferencia(String sCodNURCAT)
+	public static String estadoReferencia(String sNURCAT)
 	{
-		return QMReferencias.getEstado(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sCodNURCAT));
+		return QMReferencias.getEstado(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sNURCAT));
 	}
 	
-	public static boolean existeMovimientoReferenciaCatastral (String sCodMovimiento)
+	public static boolean existeMovimientoReferenciaCatastral (long liCodMovimiento)
 	{
-		return QMMovimientosReferencias.existeMovimientoReferenciaCatastral(ConnectionManager.getDBConnection(),sCodMovimiento);
+		return QMMovimientosReferencias.existeMovimientoReferenciaCatastral(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
-	public static boolean existeReferenciaCatastral (String sCodNURCAT)
+	public static boolean existeReferenciaCatastral (String sNURCAT)
 	{
-		return QMReferencias.existeReferenciaCatastral(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sCodNURCAT));
+		return QMReferencias.existeReferenciaCatastral(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sNURCAT));
 	}
 		
 	public static String referenciaCatastralActivo(int iCodCOACES)
@@ -172,13 +177,13 @@ public final class CLReferencias
 			{
 				logger.debug(referencia.logMovimientoReferenciaCatastral());
 
-				String sCodMovimiento = QMMovimientosReferencias.getMovimientoReferenciaCatastralID(conexion,referencia);
+				long liCodMovimiento = QMMovimientosReferencias.getMovimientoReferenciaCatastralID(conexion,referencia);
 				
-				logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+				logger.debug("liCodMovimiento|"+liCodMovimiento+"|");
 				
-				if (!(sCodMovimiento.equals("")))
+				if (liCodMovimiento != 0)
 				{
-					String sEstado = QMListaReferencias.getValidado(conexion,sCodMovimiento);
+					String sEstado = QMListaReferencias.getValidado(conexion,liCodMovimiento);
 					
 					if (sEstado.equals("P"))
 					{
@@ -213,20 +218,20 @@ public final class CLReferencias
 						switch (COACCI)
 						{
 						case A: case M: case B:
-							if (QMListaReferencias.existeRelacionReferencia(conexion,Integer.parseInt(referencia.getCOACES()), buscarCodigoReferencia(referencia.getNURCAT()), sCodMovimiento))
+							if (QMListaReferencias.existeRelacionReferencia(conexion,Integer.parseInt(referencia.getCOACES()), buscarCodigoReferencia(referencia.getNURCAT()), liCodMovimiento))
 							{
-								if(QMListaReferencias.setValidado(conexion,sCodMovimiento, sValidado))
+								if(QMListaReferencias.setValidado(conexion,liCodMovimiento, sValidado))
 								{
 									if (sValidado.equals("X"))
 									{
 										//recibido error
-										if (QMListaErroresReferencias.addErrorReferencia(conexion,sCodMovimiento, referencia.getCOTDOR()))
+										if (QMListaErroresReferencias.addErrorReferencia(conexion,liCodMovimiento, referencia.getCOTDOR()))
 										{
 											iCodigo = 1;
 										}
 										else
 										{
-											QMListaReferencias.setValidado(conexion,sCodMovimiento, "E");
+											QMListaReferencias.setValidado(conexion,liCodMovimiento, "E");
 											iCodigo = -4;
 										}
 									}
@@ -253,7 +258,7 @@ public final class CLReferencias
 							break;
 						}
 						
-						//bSalida = QMMovimientosReferencias.modMovimientoReferencia(referencia, sCodMovimiento);
+						//bSalida = QMMovimientosReferencias.modMovimientoReferencia(referencia, liCodMovimiento);
 						//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
 						//recuperaremos el codigo de error de la tabla pertinente.
 					}
@@ -310,7 +315,7 @@ public final class CLReferencias
 					{
 						conexion.setAutoCommit(false);
 
-						int indice = QMMovimientosReferencias.addMovimientoReferenciaCatastral(conexion,movimiento_revisado);
+						long indice = QMMovimientosReferencias.addMovimientoReferenciaCatastral(conexion,movimiento_revisado);
 						
 						if (indice == 0)
 						{
@@ -332,7 +337,7 @@ public final class CLReferencias
 								
 									if (estaDeBaja(movimiento_revisado.getNURCAT()))
 									{
-										if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()),liCodReferencia, Integer.toString(indice)))
+										if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()),liCodReferencia, indice))
 										{
 											//OK 
 											if (QMReferencias.setEstado(conexion,liCodReferencia, ValoresDefecto.DEF_ALTA))
@@ -379,7 +384,7 @@ public final class CLReferencias
 										{
 											//OK - referencia creada
 											logger.debug("Hecho!");
-											if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodReferencia, Integer.toString(indice)))
+											if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodReferencia, indice))
 											{
 												//OK 
 												iCodigo = 0;
@@ -405,7 +410,7 @@ public final class CLReferencias
 									
 									break;
 								case B:
-									if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodReferencia, Integer.toString(indice)))
+									if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodReferencia, indice))
 									{
 										if (QMReferencias.setEstado(conexion,liCodReferencia, ValoresDefecto.DEF_BAJA))
 										{
@@ -433,7 +438,7 @@ public final class CLReferencias
 									}
 									break;
 								case M:
-									if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodReferencia, Integer.toString(indice)))
+									if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodReferencia, indice))
 									{
 										//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
 										if(QMReferencias.modReferenciaCatastral(conexion,convierteMovimientoenReferencia(movimiento), liCodReferencia))

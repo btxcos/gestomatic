@@ -28,7 +28,7 @@ public final class QMListaErroresComunidades
 
 	private QMListaErroresComunidades(){}
 	
-	public static boolean addErrorComunidad(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
+	public static boolean addErrorComunidad(Connection conexion, long liCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = false;
 
@@ -44,7 +44,7 @@ public final class QMListaErroresComunidades
 						+ CAMPO1  + "," 
 						+ CAMPO2  +             
 						") VALUES ('"
-						+ sCodMovimiento + "','" 
+						+ liCodMovimiento + "','" 
 						+ sCodCOTDOR +  "' )";
 			
 			logger.debug(sQuery);
@@ -62,7 +62,7 @@ public final class QMListaErroresComunidades
 			{
 				bSalida = false;
 				
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 				logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -76,7 +76,7 @@ public final class QMListaErroresComunidades
 		return bSalida;
 	}
 
-	public static boolean delErrorComunidad(Connection conexion, String sCodMovimiento, String sCodCOTDOR)
+	public static boolean delErrorComunidad(Connection conexion, long liCodMovimiento, String sCodCOTDOR)
 	{
 		boolean bSalida = false;
 
@@ -89,7 +89,7 @@ public final class QMListaErroresComunidades
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO1 + " = '" + sCodMovimiento	+ "' AND "
+					+ CAMPO1 + " = '" + liCodMovimiento	+ "' AND "
 					+ CAMPO2 + " = '" + sCodCOTDOR	+ 
 					"')";
 			
@@ -108,7 +108,7 @@ public final class QMListaErroresComunidades
 			{
 				bSalida = false;
 
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 				logger.error("ERROR COTDOR:|"+sCodCOTDOR+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
@@ -122,7 +122,7 @@ public final class QMListaErroresComunidades
 		return bSalida;
 	}
 	
-	public static long buscaCantidadErrores(Connection conexion, String sMovimiento)
+	public static long buscaCantidadErrores(Connection conexion, long liCodMovimiento)
 	{
 		long liNumero = 0;
 
@@ -140,7 +140,7 @@ public final class QMListaErroresComunidades
 			String sQuery = "SELECT COUNT(*) FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimiento + "'";
+					+ CAMPO1 + " = '" + liCodMovimiento + "'";
 			
 			logger.debug(sQuery);
 
@@ -175,7 +175,7 @@ public final class QMListaErroresComunidades
 			{
 				liNumero = 0;
 				
-				logger.error("ERROR sMovimiento:|"+sMovimiento+"|");
+				logger.error("ERROR liCodMovimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -253,7 +253,7 @@ public final class QMListaErroresComunidades
 						NUDCOM = rs.getString(QMMovimientosComunidades.CAMPO8);
 						NOMCOC = rs.getString(QMMovimientosComunidades.CAMPO12);
 						MOVIMIENTO = rs.getString(QMMovimientosComunidades.CAMPO1);
-						ERRORES = Long.toString(buscaCantidadErrores(conexion,MOVIMIENTO));
+						ERRORES = Long.toString(buscaCantidadErrores(conexion,Long.parseLong(MOVIMIENTO)));
 						
 						ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, DCOCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
 						
@@ -285,7 +285,7 @@ public final class QMListaErroresComunidades
 		return resultado;
 	}
 	
-	public static ArrayList<ErrorComunidadTabla> buscaComunidadesActivoConError(Connection conexion, String sCOACES)
+	public static ArrayList<ErrorComunidadTabla> buscaComunidadesActivoConError(Connection conexion, int iCOACES)
 	{
 		ArrayList<ErrorComunidadTabla> resultado = new ArrayList<ErrorComunidadTabla>();
 		
@@ -317,7 +317,7 @@ public final class QMListaErroresComunidades
 						   "  FROM " 
 						   + QMMovimientosComunidades.TABLA + 
 						   " WHERE ( "
-						   + QMMovimientosComunidades.CAMPO10 +" LIKE '%"+ sCOACES +"%' AND "
+						   + QMMovimientosComunidades.CAMPO10 +" LIKE '%"+ iCOACES +"%' AND "
 						   
 						   + QMMovimientosComunidades.CAMPO1 +" IN (SELECT DISTINCT "
 						   +  CAMPO1 + 
@@ -346,7 +346,7 @@ public final class QMListaErroresComunidades
 						NUDCOM = rs.getString(QMMovimientosComunidades.CAMPO8);
 						NOMCOC = rs.getString(QMMovimientosComunidades.CAMPO12);
 						MOVIMIENTO = rs.getString(QMMovimientosComunidades.CAMPO1);
-						ERRORES = Long.toString(buscaCantidadErrores(conexion,MOVIMIENTO));
+						ERRORES = Long.toString(buscaCantidadErrores(conexion,Long.parseLong(MOVIMIENTO)));
 						
 						ErrorComunidadTabla errorencontrado = new ErrorComunidadTabla(COCLDO, DCOCLDO, NUDCOM, NOMCOC, MOVIMIENTO, ERRORES);
 						
@@ -366,7 +366,7 @@ public final class QMListaErroresComunidades
 			{
 				resultado = new ArrayList<ErrorComunidadTabla>();
 				
-				logger.error("ERROR COACES:|"+sCOACES+"|");
+				logger.error("ERROR COACES:|"+iCOACES+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -380,7 +380,7 @@ public final class QMListaErroresComunidades
 		return resultado;
 	}
 	
-	public static ArrayList<ErrorTabla> buscaErrores(Connection conexion, String sMovimiento)
+	public static ArrayList<ErrorTabla> buscaErrores(Connection conexion, long liCodMovimiento)
 	{
 		ArrayList<ErrorTabla> resultado = new ArrayList<ErrorTabla>();
 		
@@ -403,7 +403,7 @@ public final class QMListaErroresComunidades
 					" FROM "
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1 +" = '"+ sMovimiento +"'";
+					+ CAMPO1 +" = '"+ liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 
@@ -443,7 +443,7 @@ public final class QMListaErroresComunidades
 			{
 				resultado = new ArrayList<ErrorTabla>();
 				
-				logger.error("ERROR Movimiento:|",sMovimiento+"|");
+				logger.error("ERROR Movimiento:|",liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

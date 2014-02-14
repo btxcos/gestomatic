@@ -439,7 +439,7 @@ public final class QMListaGastosProvisiones
 		return sNUPROF;
 	}
 	
-	public static String getProvisionDeMovimiento(Connection conexion, String sCodMovimiento)
+	public static String getProvisionDeMovimiento(Connection conexion, String sCodMovimientoGasto)
 	{
 		String sNUPROF = "";
 		
@@ -465,7 +465,7 @@ public final class QMListaGastosProvisiones
 					" FROM " 
 					+ QMListaGastos.TABLA +
 					" WHERE "
-					+ QMListaGastos.CAMPO2  + " = '"+ sCodMovimiento +"' )";
+					+ QMListaGastos.CAMPO2  + " = '"+ sCodMovimientoGasto +"' )";
 			
 			logger.debug(sQuery);
 
@@ -487,7 +487,7 @@ public final class QMListaGastosProvisiones
 						sNUPROF = rs.getString(CAMPO2);
 
 						logger.debug("Encontrado el registro!");
-						logger.debug(QMListaGastos.CAMPO2+":|"+sCodMovimiento+"|");
+						logger.debug(QMListaGastos.CAMPO2+":|"+sCodMovimientoGasto+"|");
 						logger.debug(CAMPO2+":|"+sNUPROF+"|");
 					}
 				}
@@ -501,7 +501,7 @@ public final class QMListaGastosProvisiones
 			{
 				sNUPROF = "";
 
-				logger.error("ERROR Gasto:|"+sCodMovimiento+"|");
+				logger.error("ERROR Gasto:|"+sCodMovimientoGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -515,9 +515,9 @@ public final class QMListaGastosProvisiones
 		return sNUPROF;
 	}
 
-	public static ArrayList<String>  buscaGastosIDPorProvision(Connection conexion, String sCodNUPROF) 
+	public static ArrayList<Long>  buscaGastosIDPorProvision(Connection conexion, String sCodNUPROF) 
 	{
-		ArrayList<String> resultado = new ArrayList<String>(); 
+		ArrayList<Long> resultado = new ArrayList<Long>(); 
 
 		if (conexion != null)
 		{
@@ -548,32 +548,25 @@ public final class QMListaGastosProvisiones
 				
 				logger.debug("Ejecutada con exito!");
 				
-				int i = 0;
-				
 				if (rs != null) 
 				{
 					while (rs.next()) 
 					{
 						bEncontrado = true;
 
-						resultado.add(rs.getString(CAMPO1));
+						resultado.add(rs.getLong(CAMPO1));
 
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO2+":|"+sCodNUPROF+"|");
-						logger.debug(CAMPO1+":|"+resultado.get(i)+"|");
-						
-						i++;
 					}
 				}
 				if (!bEncontrado) 
 				{
-					resultado = new ArrayList<String>(); 
 					logger.debug("No se encontró la información.");
 				}
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<String>();
+				resultado = new ArrayList<Long>();
 
 				logger.error("ERROR NUPROF:|"+sCodNUPROF+"|");
 
@@ -589,9 +582,9 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 
-	public static ArrayList<String> buscaGastosSinValidarEnProvision(Connection conexion, String sNUPROF) 
+	public static ArrayList<Long> buscaGastosSinValidarEnProvision(Connection conexion, String sNUPROF) 
 	{
-		ArrayList<String> resultado = new ArrayList<String>();
+		ArrayList<Long> resultado = new ArrayList<Long>();
 
 		if (conexion != null)
 		{
@@ -600,8 +593,6 @@ public final class QMListaGastosProvisiones
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 			
-			String sGastoID = "0";
-
 			boolean bEncontrado = false;
 
 			logger.debug("Ejecutando Query...");
@@ -639,13 +630,9 @@ public final class QMListaGastosProvisiones
 					{
 						bEncontrado = true;
 
-						sGastoID =  rs.getString(CAMPO1);
-						
-						resultado.add(sGastoID);
+						resultado.add(rs.getLong(CAMPO1));
 						
 						logger.debug("Encontrado el registro!");
-
-						logger.debug(CAMPO1+":|"+sGastoID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -655,7 +642,7 @@ public final class QMListaGastosProvisiones
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<String>();
+				resultado = new ArrayList<Long>();
 
 				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
@@ -793,7 +780,131 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 	
-	
+	public static ArrayList<GastoTabla> buscaGastosProvisionPorFiltro(Connection conexion, GastoTabla filtro)
+	{
+		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			String sCOACES = "";
+			String sCOGRUG = "";
+			String sCOTPGA = "";
+			String sCOSBGA = "";
+			String sDCOSBGA = "";
+			String sPTPAGO = "";
+			String sDPTPAGO = "";
+			String sFEDEVE = "";
+			String sCOSIGA = "";
+			String sDCOSIGA = "";
+			String sIMNGAS = "";
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						   + QMGastos.CAMPO1 + "," 
+						   + QMGastos.CAMPO2 + ","        
+						   + QMGastos.CAMPO3 + ","
+						   + QMGastos.CAMPO4 + ","
+						   + QMGastos.CAMPO5 + ","
+						   + QMGastos.CAMPO6 + ","
+						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO10 + ","
+						   + QMGastos.CAMPO15 + ","
+						   + QMGastos.CAMPO16 +
+
+						   " FROM " 
+						   + QMGastos.TABLA + 
+						   " WHERE ("
+						   + QMGastos.CAMPO1 + 
+						   " IN (SELECT "
+						   +  CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE " 
+						   + CAMPO2 + " = '"+ filtro.getNUPROF() + "') AND "
+						   + QMGastos.CAMPO2 + " LIKE '%" + filtro.getCOACES() + "%' AND "  
+						   + QMGastos.CAMPO3 + " LIKE '%" + filtro.getCOGRUG() + "%' AND "  
+						   + QMGastos.CAMPO4 + " LIKE '%" + filtro.getCOTPGA() + "%' AND "  
+						   + QMGastos.CAMPO5 + " LIKE '%" + filtro.getCOSBGA() + "%' AND "  
+						   + QMGastos.CAMPO7 + " LIKE '%" + filtro.getFEDEVE() + "%')";					   
+						   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES  = rs.getString(QMGastos.CAMPO2);
+						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						sDPTPAGO = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
+						sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						
+						GastoTabla gastoencontrado = new GastoTabla(
+								filtro.getNUPROF(),
+								sCOACES,
+								sCOGRUG,
+								sCOTPGA,
+								sCOSBGA,
+								sDCOSBGA,
+								sPTPAGO,
+								sDPTPAGO,
+								sFEDEVE,
+								sCOSIGA,
+								sDCOSIGA,
+								sIMNGAS);
+						
+						resultado.add(gastoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				logger.error("ERROR NUPROF:|"+filtro.getNUPROF()+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
 
 	
 	public static boolean resuelveGastos(Connection conexion, String sNUPROF) 

@@ -261,7 +261,7 @@ public class GestorErroresImpuestosRecursos implements Serializable
 			
 			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
 	    	
-			this.setTablaerrores(CLErrores.buscarErroresImpuesto(sCodMovimiento));
+			this.setTablaerrores(CLErrores.buscarErroresImpuesto(Integer.parseInt(sCodMovimiento)));
 			
 			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);
@@ -269,7 +269,7 @@ public class GestorErroresImpuestosRecursos implements Serializable
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			MovimientoImpuestoRecurso movimiento = CLImpuestos.buscarMovimientoImpuestoRecurso(sCodMovimiento);
+			MovimientoImpuestoRecurso movimiento = CLImpuestos.buscarMovimientoImpuestoRecurso(Integer.parseInt(sCodMovimiento));
 			
 			this.sCOACCI = movimiento.getCOACCI();
 			this.sCOACES = movimiento.getCOACES();
@@ -469,7 +469,7 @@ public class GestorErroresImpuestosRecursos implements Serializable
 			
 			String sMsg = "";
 			
-			if (!CLImpuestos.existeMovimientoImpuestoRecurso(sCodMovimiento))
+			if (!CLImpuestos.existeMovimientoImpuestoRecurso(Integer.parseInt(sCodMovimiento)))
 			{
 				sMsg = "[FATAL] ERROR:911 - No se puede modificar el Impuesto, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgError(sMsg);
@@ -506,7 +506,7 @@ public class GestorErroresImpuestosRecursos implements Serializable
 				logger.debug("sCodMovimiento:|"+sCodMovimiento+"|");
 				logger.debug("sCodError:|"+sCodError+"|");			
 
-				int iSalida = CLErrores.reparaMovimientoImpuesto(movimiento,sCodMovimiento, sCodError);
+				int iSalida = CLErrores.reparaMovimientoImpuesto(movimiento,Integer.parseInt(sCodMovimiento), sCodError);
 				
 				logger.debug("Codigo de salida:"+iSalida);
 				

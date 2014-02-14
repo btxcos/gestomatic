@@ -35,7 +35,7 @@ public final class QMListaCuotas
 
 	private QMListaCuotas(){}
 	
-	public static boolean addRelacionCuotas(Connection conexion, int iCOACES, long liCodCuota, String sCodMovimiento) 
+	public static boolean addRelacionCuotas(Connection conexion, int iCOACES, long liCodCuota, long liCodMovimiento) 
 	{
 		boolean bSalida = true;
 		
@@ -59,7 +59,7 @@ public final class QMListaCuotas
 					") VALUES ('" 
 					+ iCOACES + "','"
 					+ liCodCuota + "','"
-					+ sCodMovimiento + "','"
+					+ liCodMovimiento + "','"
 					+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				    + sUsuario + "','"
 				    + Utils.timeStamp() + 
@@ -80,7 +80,7 @@ public final class QMListaCuotas
 
 				logger.error("ERROR COACES:|"+iCOACES+"|");
 				logger.error("ERROR Cuota:|"+liCodCuota+"|");
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -93,7 +93,7 @@ public final class QMListaCuotas
 		return bSalida;
 	}
 
-	public static boolean delRelacionCuotas(Connection conexion, String sCodMovimiento)
+	public static boolean delRelacionCuotas(Connection conexion, long liCodMovimiento)
 	{
 		boolean bSalida = true;
 
@@ -106,7 +106,7 @@ public final class QMListaCuotas
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO3 + " = '" + sCodMovimiento +"'";
+					+ CAMPO3 + " = '" + liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 
@@ -121,7 +121,7 @@ public final class QMListaCuotas
 			{
 				bSalida = false;
 
-				logger.error("ERROR CodMovimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR CodMovimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -134,7 +134,7 @@ public final class QMListaCuotas
 		return bSalida;
 	}
 	
-	public static boolean existeRelacionCuota(Connection conexion, long liCodCuota, String sCodMovimiento)
+	public static boolean existeRelacionCuota(Connection conexion, long liCodCuota, long liCodMovimiento)
 	{
 		boolean bEncontrado = false;
 
@@ -153,7 +153,7 @@ public final class QMListaCuotas
 					+ TABLA + 
 					" WHERE (" 
 					+ CAMPO2 + " = '" + liCodCuota + "' AND " 
-					+ CAMPO3 + " = '" + sCodMovimiento + 
+					+ CAMPO3 + " = '" + liCodMovimiento + 
 					"' )";
 
 			try 
@@ -182,7 +182,7 @@ public final class QMListaCuotas
 			catch (SQLException ex) 
 			{
 				logger.error("ERROR Couta:|"+liCodCuota+"|");
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -198,9 +198,9 @@ public final class QMListaCuotas
 	
 
 	
-	public static ArrayList<String>  getCuotasPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getCuotasPorEstado(Connection conexion, String sEstado) 
 	{
-		ArrayList<String> resultado = new ArrayList<String>(); 
+		ArrayList<Long> resultado = new ArrayList<Long>(); 
 
 		if (conexion != null)
 		{
@@ -239,7 +239,7 @@ public final class QMListaCuotas
 					{
 						bEncontrado = true;
 
-						resultado.add(rs.getString(CAMPO3));
+						resultado.add(rs.getLong(CAMPO3));
 											
 						logger.debug("Encontrado el registro!");
 
@@ -256,7 +256,7 @@ public final class QMListaCuotas
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<String>(); 
+				resultado = new ArrayList<Long>(); 
 
 				logger.error("ERROR Validado:|"+sEstado+"|");
 
@@ -272,9 +272,9 @@ public final class QMListaCuotas
 		return resultado;
 	}
 	
-	public static ArrayList<String>  getCuotasPendientes(Connection conexion, long liCodCuota) 
+	public static ArrayList<Long>  getCuotasPendientes(Connection conexion, long liCodCuota) 
 	{
-		ArrayList<String> resultado = new ArrayList<String>(); 
+		ArrayList<Long> resultado = new ArrayList<Long>(); 
 		
 		if (conexion != null)
 		{
@@ -315,7 +315,7 @@ public final class QMListaCuotas
 					{
 						bEncontrado = true;
 
-						resultado.add(rs.getString(CAMPO3));
+						resultado.add(rs.getLong(CAMPO3));
 
 						logger.debug("Encontrado el registro!");
 						
@@ -332,7 +332,7 @@ public final class QMListaCuotas
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<String>();
+				resultado = new ArrayList<Long>();
 
 				logger.error("ERROR Cuota:|"+liCodCuota+"|");
 
@@ -348,7 +348,7 @@ public final class QMListaCuotas
 		return resultado;
 	}
 
-	public static boolean setValidado(Connection conexion, String sCodMovimiento, String sValidado)
+	public static boolean setValidado(Connection conexion, long liCodMovimiento, String sValidado)
 	{
 		boolean bSalida = false;
 
@@ -363,7 +363,7 @@ public final class QMListaCuotas
 					" SET " 
 					+ CAMPO4 + " = '"+ sValidado + "' "+
 					" WHERE " 
-					+ CAMPO3 + " = '" + sCodMovimiento +"'";
+					+ CAMPO3 + " = '" + liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 			
@@ -380,7 +380,7 @@ public final class QMListaCuotas
 			{
 				bSalida = false;
 
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -393,7 +393,7 @@ public final class QMListaCuotas
 		return bSalida;
 	}
 	
-	public static String getValidado(Connection conexion, String sCodMovimiento)
+	public static String getValidado(Connection conexion, long liCodMovimiento)
 	{
 		String sValidado = "";
 
@@ -413,7 +413,7 @@ public final class QMListaCuotas
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO3 + " = '" + sCodMovimiento +"'";
+					+ CAMPO3 + " = '" + liCodMovimiento +"'";
 			
 			logger.debug(sQuery);
 			
@@ -436,7 +436,7 @@ public final class QMListaCuotas
 						
 						logger.debug("Encontrado el registro!");
 						
-						logger.debug(CAMPO3+":|"+sCodMovimiento+"|");
+						logger.debug(CAMPO3+":|"+liCodMovimiento+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -448,7 +448,7 @@ public final class QMListaCuotas
 			{
 				sValidado = "";
 
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -645,9 +645,9 @@ public final class QMListaCuotas
 		return resultado;
 	}
 	
-	public static ArrayList<String> buscarDependencias(Connection conexion, long liCodCuota, String sCodMovimiento)
+	public static ArrayList<Long> buscarDependencias(Connection conexion, long liCodCuota, long liCodMovimiento)
 	{
-		ArrayList<String> resultado = new ArrayList<String>();
+		ArrayList<Long> resultado = new ArrayList<Long>();
 
 		if (conexion != null)
 		{
@@ -666,7 +666,7 @@ public final class QMListaCuotas
 					+ TABLA + 
 					" WHERE (" 
 					+ CAMPO2 + " = '" + liCodCuota + "' AND "
-					+ CAMPO3 + " >=  '" + sCodMovimiento + 
+					+ CAMPO3 + " >=  '" + liCodMovimiento + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -686,7 +686,7 @@ public final class QMListaCuotas
 					{
 						bEncontrado = true;
 						
-						resultado.add(rs.getString(CAMPO3));
+						resultado.add(rs.getLong(CAMPO3));
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -698,10 +698,10 @@ public final class QMListaCuotas
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<String>();
+				resultado = new ArrayList<Long>();
 
 				logger.error("ERROR Cuota:|"+liCodCuota+"|");
-				logger.error("ERROR Movimiento:|"+sCodMovimiento+"|");
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 

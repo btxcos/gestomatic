@@ -1,5 +1,6 @@
 package com.provisiones.dal.qm.movimientos;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.movimientos.MovimientoGasto;
 
@@ -65,16 +66,22 @@ public final class QMMovimientosGastos
 	public static final String CAMPO44 = "cospii";    
 	public static final String CAMPO45 = "nuclii";
 
+	//Campos de control
+	public static final String CAMPO46  = "usuario_movimiento";
+	public static final String CAMPO47  = "fecha_movimiento";
+	
 	private QMMovimientosGastos(){}
 	
-	public static int addMovimientoGasto(Connection conexion, MovimientoGasto NuevoGasto) 
+	public static long addMovimientoGasto(Connection conexion, MovimientoGasto NuevoGasto) 
 	{
-		int iCodigo = 0;
+		long liCodigo = 0;
 	
 		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
+			
+			String sUsuario = ConnectionManager.getUser();
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -124,7 +131,9 @@ public final class QMMovimientosGastos
 					 	+ CAMPO42 + ","              
 					 	+ CAMPO43 + ","
 					 	+ CAMPO44 + ","
-					 	+ CAMPO45 +                 
+					 	+ CAMPO45 + ","
+					 	+ CAMPO46 + ","
+					 	+ CAMPO47 +                 
 				       ") VALUES ('"        
 				 	    + NuevoGasto.getCOACES() + "','"
 				 		+ NuevoGasto.getCOGRUG() + "','"
@@ -169,7 +178,9 @@ public final class QMMovimientosGastos
 						+ NuevoGasto.getFEAPLI() + "','"  
 						+ NuevoGasto.getCOAPII() + "','"  
 						+ NuevoGasto.getCOSPII() + "','"
-						+ NuevoGasto.getNUCLII() + 
+						+ NuevoGasto.getNUCLII() + "','"
+						+ sUsuario + "','"
+						+ Utils.timeStamp() +
 						"')";
 			
 			logger.debug(sQuery);
@@ -183,14 +194,14 @@ public final class QMMovimientosGastos
 				
 				if (resulset.next()) 
 				{
-					iCodigo= resulset.getInt(1);
+					liCodigo= resulset.getInt(1);
 				} 
 				
 				logger.debug("Ejecutada con exito!");
 			} 
 			catch (SQLException ex) 
 			{
-				iCodigo = 0;
+				liCodigo = 0;
 				
 				logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
 				logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
@@ -206,9 +217,9 @@ public final class QMMovimientosGastos
 			}
 		}
 		
-		return iCodigo;
+		return liCodigo;
 	}
-	public static boolean modMovimientoGasto(Connection conexion, MovimientoGasto NuevoGasto, String sGastoID)
+	public static boolean modMovimientoGasto(Connection conexion, MovimientoGasto NuevoGasto, long liMovimientoGastoID)
 	{
 		boolean bSalida = false;
 
@@ -266,7 +277,7 @@ public final class QMMovimientosGastos
 					+ CAMPO44 + " = '"+ NuevoGasto.getCOSPII() + "', "
 					+ CAMPO45 + " = '"+ NuevoGasto.getNUCLII() + "' " +
 					"WHERE "
-					+ CAMPO1 + " = '"+ sGastoID +"'";
+					+ CAMPO1 + " = '"+ liMovimientoGastoID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -283,7 +294,7 @@ public final class QMMovimientosGastos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR GastoID:|"+sGastoID+"|");
+				logger.error("ERROR GastoID:|"+liMovimientoGastoID+"|");
 				
 				logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
 				logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
@@ -301,7 +312,7 @@ public final class QMMovimientosGastos
 		return bSalida;
 	}
 
-	public static boolean delMovimientoGasto(Connection conexion, String sGastoID)
+	public static boolean delMovimientoGasto(Connection conexion, long liMovimientoGastoID)
 	{
 		boolean bSalida = false;
 
@@ -314,7 +325,7 @@ public final class QMMovimientosGastos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1 + " = '" + sGastoID + "'";
+					+ CAMPO1 + " = '" + liMovimientoGastoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -331,7 +342,7 @@ public final class QMMovimientosGastos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR GastoID:|"+sGastoID+"|");
+				logger.error("ERROR GastoID:|"+liMovimientoGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -344,7 +355,7 @@ public final class QMMovimientosGastos
 		return bSalida;
 	}
 	
-	public static MovimientoGasto getMovimientoGasto(Connection conexion, String sGastoID)
+	public static MovimientoGasto getMovimientoGasto(Connection conexion, long liMovimientoGastoID)
 	{
 		String sCOACES = "";
 		String sCOGRUG = "";
@@ -450,7 +461,7 @@ public final class QMMovimientosGastos
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE " 
-				       + CAMPO1 + " = '" + sGastoID	+ "'";
+				       + CAMPO1 + " = '" + liMovimientoGastoID	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -516,7 +527,7 @@ public final class QMMovimientosGastos
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sGastoID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoGastoID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -571,7 +582,7 @@ public final class QMMovimientosGastos
 				sCOSPII = "";
 				sNUCLII = "";
 				
-				logger.error("ERROR GastoID:|"+sGastoID+"|");
+				logger.error("ERROR GastoID:|"+liMovimientoGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -591,9 +602,9 @@ public final class QMMovimientosGastos
 				sCOAPII, sCOSPII, sNUCLII);
 	}
 
-	public static String getMovimientoGastoID(Connection conexion, MovimientoGasto gasto)
+	public static long getMovimientoGastoID(Connection conexion, MovimientoGasto gasto)
 	{
-		String sGastoID = "";
+		long liMovimientoGastoID = 0;
 		
 		if (conexion != null)
 		{
@@ -672,11 +683,11 @@ public final class QMMovimientosGastos
 					{
 						bEncontrado = true;
 
-						sGastoID = rs.getString(CAMPO1);
+						liMovimientoGastoID = rs.getLong(CAMPO1);
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sGastoID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoGastoID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -686,7 +697,7 @@ public final class QMMovimientosGastos
 			} 
 			catch (SQLException ex) 
 			{
-				sGastoID = "";
+				liMovimientoGastoID = 0;
 				
 				logger.error("ERROR COACES:|"+gasto.getCOACES()+"|");
 				logger.error("ERROR COGRUG:|"+gasto.getCOGRUG()+"|");
@@ -702,12 +713,12 @@ public final class QMMovimientosGastos
 			}
 		}
 
-		return sGastoID;
+		return liMovimientoGastoID;
 	}
 	
-	public static String getMovimientoGastoIDAutorizado(Connection conexion, MovimientoGasto gasto)
+	public static long getMovimientoGastoIDAutorizado(Connection conexion, MovimientoGasto gasto)
 	{
-		String sGastoID = "";
+		long liMovimientoGastoID = 0;
 		
 		if (conexion != null)
 		{
@@ -787,11 +798,11 @@ public final class QMMovimientosGastos
 					{
 						bEncontrado = true;
 
-						sGastoID = rs.getString(CAMPO1);
+						liMovimientoGastoID = rs.getLong(CAMPO1);
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO1+":|"+sGastoID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoGastoID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -801,7 +812,7 @@ public final class QMMovimientosGastos
 			} 
 			catch (SQLException ex) 
 			{
-				sGastoID = "";
+				liMovimientoGastoID = 0;
 				
 				logger.error("ERROR COACES:|"+gasto.getCOACES()+"|");
 				logger.error("ERROR COGRUG:|"+gasto.getCOGRUG()+"|");
@@ -817,10 +828,10 @@ public final class QMMovimientosGastos
 			}
 		}
 
-		return sGastoID;
+		return liMovimientoGastoID;
 	}
 
-	public static boolean existeMovimientoGasto(Connection conexion, String sMovimientoGastoID)
+	public static boolean existeMovimientoGasto(Connection conexion, long liMovimientoGastoID)
 	{
 		boolean bEncontrado = false;
 		
@@ -838,7 +849,7 @@ public final class QMMovimientosGastos
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimientoGastoID + "'";
+					+ CAMPO1 + " = '" + liMovimientoGastoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -870,7 +881,7 @@ public final class QMMovimientosGastos
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR sMovimientoGastoID:|"+sMovimientoGastoID+"|");
+				logger.error("ERROR liMovimientoGastoID:|"+liMovimientoGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

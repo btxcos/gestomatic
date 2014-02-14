@@ -58,6 +58,8 @@ public class GestorCuotas implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNota = "";
+	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	
 	private transient ActivoTabla activoseleccionado = null;
@@ -124,27 +126,32 @@ public class GestorCuotas implements Serializable
   	
     }
     
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
+    
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
 			
-			ActivoTabla buscaactivos = new ActivoTabla(
+			ActivoTabla filtro = new ActivoTabla(
 					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
 			if (!sCOCLDO.equals("") && !sNUDCOM.equals(""))
 			{
-				this.setTablaactivos(CLComunidades.buscarActivosComunidadDisponibles(buscaactivos, sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()));
+				this.setTablaactivos(CLComunidades.buscarActivosComunidadDisponibles(filtro, sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()));
 
 				msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados con la comunidad '"+sNUDCOM.toUpperCase()+"'.");
 				logger.info("Encontrados {} activos relacionados con la comunidad '{}'.",getTablaactivos().size(),sNUDCOM.toUpperCase());
 			}
 			else
 			{
-				this.setTablaactivos(CLComunidades.buscarActivosConComunidad(buscaactivos));
+				this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
 				
 				msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 				logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
@@ -373,7 +380,7 @@ public class GestorCuotas implements Serializable
 							sOBTEXC.toUpperCase(), 
 							sOBDEER.toUpperCase());
 					
-					int iSalida = CLCuotas.registraMovimiento(movimiento);
+					int iSalida = CLCuotas.registraMovimiento(movimiento, sNota);
 					
 					switch (iSalida) 
 					{
@@ -547,6 +554,12 @@ public class GestorCuotas implements Serializable
 						
 					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
 						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -915: //Error 915 - error y rollback - error al guardar la nota
+						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota de la cuota. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;
@@ -770,5 +783,13 @@ public class GestorCuotas implements Serializable
 
 	public void setsNODCCO(String sNODCCO) {
 		this.sNODCCO = sNODCCO;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 }

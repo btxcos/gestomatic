@@ -1,5 +1,6 @@
 package com.provisiones.dal.qm.movimientos;
 
+import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.movimientos.MovimientoCuota;
 
@@ -43,18 +44,24 @@ public final class QMMovimientosCuotas
 	public static final String CAMPO22 = "cod_ptpago";     
 	public static final String CAMPO23 = "cod_bitc09"; 
 	public static final String CAMPO24 = "obtexc";     
-	public static final String CAMPO25 = "obdeer";     
+	public static final String CAMPO25 = "obdeer";
 
+	//Campos de control
+	public static final String CAMPO26  = "usuario_movimiento";
+	public static final String CAMPO27  = "fecha_movimiento";
+	
 	private QMMovimientosCuotas(){}
 	
-	public static int addMovimientoCuota(Connection conexion, MovimientoCuota NuevoMovimientoCuota)
+	public static long addMovimientoCuota(Connection conexion, MovimientoCuota NuevoMovimientoCuota)
 	{
-		int iCodigo = 0;
+		long liCodigo = 0;
 		
 		if (conexion != null)
 		{
 			Statement stmt = null;
 			ResultSet resulset = null;
+			
+			String sUsuario = ConnectionManager.getUser();
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -84,7 +91,9 @@ public final class QMMovimientosCuotas
 				       + CAMPO22 + ","              
 				       + CAMPO23 + ","              
 				       + CAMPO24 + ","
-				       + CAMPO25 + 
+				       + CAMPO25 + ","
+				       + CAMPO26 + ","
+				       + CAMPO27 + 
 				       ") VALUES ('" 
 				       + NuevoMovimientoCuota.getCODTRN() + "','" 
 				       + NuevoMovimientoCuota.getCOTDOR() + "','"
@@ -109,7 +118,9 @@ public final class QMMovimientosCuotas
 				       + NuevoMovimientoCuota.getPTPAGO() + "','"
 				       + NuevoMovimientoCuota.getBITC09() + "','"
 				       + NuevoMovimientoCuota.getOBTEXC() + "','"
-				       + NuevoMovimientoCuota.getOBDEER() + 
+				       + NuevoMovimientoCuota.getOBDEER() + "','"
+				       + sUsuario + "','"
+				       + Utils.timeStamp() +
 				       "')";
 			
 			logger.debug(sQuery);
@@ -125,12 +136,12 @@ public final class QMMovimientosCuotas
 				
 				if (resulset.next()) 
 				{
-					iCodigo= resulset.getInt(1);
+					liCodigo= resulset.getLong(1);
 				}
 			} 
 			catch (SQLException ex) 
 			{
-				iCodigo = 0;
+				liCodigo = 0;
 				
 				logger.error("ERROR COACES:|"+NuevoMovimientoCuota.getCOACES()+"|");
 				logger.error("ERROR COCLDO:|"+NuevoMovimientoCuota.getCOCLDO()+"|");
@@ -146,9 +157,9 @@ public final class QMMovimientosCuotas
 			}
 		}
 
-		return iCodigo;
+		return liCodigo;
 	}
-	public static boolean modMovimientoCuota(Connection conexion, MovimientoCuota NuevoMovimientoCuota, String sMovimientoCuotaID)
+	public static boolean modMovimientoCuota(Connection conexion, MovimientoCuota NuevoMovimientoCuota, long liMovimientoCuotaID)
 	{
 		boolean bSalida = false;
 		
@@ -186,7 +197,7 @@ public final class QMMovimientosCuotas
 					+ CAMPO24 + " = '"+ NuevoMovimientoCuota.getOBTEXC() + "', "
 					+ CAMPO25 + " = '"+ NuevoMovimientoCuota.getOBDEER() + "' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ sMovimientoCuotaID +"'";
+					+ CAMPO1 + " = '"+ liMovimientoCuotaID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -203,7 +214,7 @@ public final class QMMovimientosCuotas
 			{
 				bSalida = false;
 				
-				logger.error("ERROR MovimientoCuotaID:|"+sMovimientoCuotaID+"|");
+				logger.error("ERROR MovimientoCuotaID:|"+liMovimientoCuotaID+"|");
 				logger.error("ERROR COACES:|"+NuevoMovimientoCuota.getCOACES()+"|");
 				logger.error("ERROR COCLDO:|"+NuevoMovimientoCuota.getCOCLDO()+"|");
 				logger.error("ERROR NUDCOM:|"+NuevoMovimientoCuota.getNUDCOM()+"|");
@@ -220,7 +231,7 @@ public final class QMMovimientosCuotas
 		return bSalida;
 	}
 
-	public static boolean delMovimientoCuota(Connection conexion, String sMovimientoCuotaID)
+	public static boolean delMovimientoCuota(Connection conexion, long liMovimientoCuotaID)
 	{
 		boolean bSalida = false;
 
@@ -233,7 +244,7 @@ public final class QMMovimientosCuotas
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimientoCuotaID + "'";
+					+ CAMPO1 + " = '" + liMovimientoCuotaID + "'";
 			
 			logger.debug(sQuery);
 
@@ -250,7 +261,7 @@ public final class QMMovimientosCuotas
 			{
 				bSalida = false;
 				
-				logger.error("ERROR MovimientoCuotaID:|"+sMovimientoCuotaID+"|");
+				logger.error("ERROR MovimientoCuotaID:|"+liMovimientoCuotaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -263,7 +274,7 @@ public final class QMMovimientosCuotas
 		return bSalida;
 	}
 	
-	public static MovimientoCuota getMovimientoCuota(Connection conexion, String sMovimientoCuotaID)
+	public static MovimientoCuota getMovimientoCuota(Connection conexion, long liMovimientoCuotaID)
 	{
 		String sCODTRN = "";
 		String sCOTDOR = "";
@@ -329,7 +340,7 @@ public final class QMMovimientosCuotas
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1 + " = '" + sMovimientoCuotaID	+ "'";
+				       + CAMPO1 + " = '" + liMovimientoCuotaID	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -374,7 +385,7 @@ public final class QMMovimientosCuotas
 						sOBDEER = rs.getString(CAMPO25);
 
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO1+":|"+sMovimientoCuotaID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoCuotaID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -409,7 +420,7 @@ public final class QMMovimientosCuotas
 				sOBTEXC = "";
 				sOBDEER = "";
 				
-				logger.error("ERROR MovimientoCuotaID:|"+sMovimientoCuotaID+"|");
+				logger.error("ERROR MovimientoCuotaID:|"+liMovimientoCuotaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -426,9 +437,9 @@ public final class QMMovimientosCuotas
 				sPTPAGO, sBITC09, sOBTEXC, sOBDEER);
 	}
 	
-	public static String getMovimientoCuotaID(Connection conexion, MovimientoCuota cuota)
+	public static long getMovimientoCuotaID(Connection conexion, MovimientoCuota cuota)
 	{
-		String sMovimientoCuotaID = "";
+		long liMovimientoCuotaID = 0;
 
 		if (conexion != null)
 		{
@@ -489,10 +500,10 @@ public final class QMMovimientosCuotas
 					{
 						bEncontrado = true;
 
-						sMovimientoCuotaID = rs.getString(CAMPO1);
+						liMovimientoCuotaID = rs.getLong(CAMPO1);
 						
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO1+":|"+sMovimientoCuotaID+"|");
+						logger.debug(CAMPO1+":|"+liMovimientoCuotaID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -502,7 +513,7 @@ public final class QMMovimientosCuotas
 			} 
 			catch (SQLException ex) 
 			{
-				sMovimientoCuotaID = "";
+				liMovimientoCuotaID = 0;
 				
 				logger.error("ERROR COACES:|"+cuota.getCOACES()+"|");
 				logger.error("ERROR COCLDO:|"+cuota.getCOCLDO()+"|");
@@ -518,10 +529,10 @@ public final class QMMovimientosCuotas
 			}
 		}
 
-		return sMovimientoCuotaID;
+		return liMovimientoCuotaID;
 	}
 	
-	public static boolean existeMovimientoCuota(Connection conexion, String sMovimientoCuotaID)
+	public static boolean existeMovimientoCuota(Connection conexion, long liMovimientoCuotaID)
 	{
 		boolean bEncontrado = false;
 
@@ -539,7 +550,7 @@ public final class QMMovimientosCuotas
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sMovimientoCuotaID + "'";
+					+ CAMPO1 + " = '" + liMovimientoCuotaID + "'";
 			
 			logger.debug(sQuery);
 
@@ -571,7 +582,7 @@ public final class QMMovimientosCuotas
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR sMovimientoCuotaID:|"+sMovimientoCuotaID+"|");
+				logger.error("ERROR liMovimientoCuotaID:|"+liMovimientoCuotaID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

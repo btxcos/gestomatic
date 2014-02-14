@@ -223,7 +223,7 @@ public class GestorTablaComunidadActivo implements Serializable
 	    	
 
 			
-			int iSalida = CLComunidades.registraMovimiento(movimiento);
+			int iSalida = CLComunidades.registraMovimiento(movimiento,"");
 			
 			switch (iSalida) 
 			{

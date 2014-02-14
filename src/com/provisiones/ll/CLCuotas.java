@@ -94,9 +94,14 @@ public final class CLCuotas
 		return QMCuotas.buscaCuotasActivo(ConnectionManager.getDBConnection(),iCOACES);
 	}
 	
-	public static MovimientoCuota buscarMovimientoCuota (String sCodMovimiento)
+	public static MovimientoCuota buscarMovimientoCuota (long liCodMovimiento)
 	{
-		return QMMovimientosCuotas.getMovimientoCuota(ConnectionManager.getDBConnection(),sCodMovimiento);
+		return QMMovimientosCuotas.getMovimientoCuota(ConnectionManager.getDBConnection(),liCodMovimiento);
+	}
+	
+	public static String buscarNota (long liCodCuota)
+	{
+		return QMCuotas.getNota(ConnectionManager.getDBConnection(),liCodCuota);
 	}
 	
 	public static long buscarNumeroMovimientosCuotasPendientes()
@@ -114,9 +119,9 @@ public final class CLCuotas
 		return QMCuotas.existeCuota(ConnectionManager.getDBConnection(),buscarCodigoCuota(iCOACES, sCodCOCLDO, sCodNUDCOM, sCodCOSBAC));
 	}
 
-	public static boolean existeMovimientoCuota (String sCodMovimiento)
+	public static boolean existeMovimientoCuota (long liCodMovimiento)
 	{
-		return QMMovimientosCuotas.existeMovimientoCuota(ConnectionManager.getDBConnection(),sCodMovimiento);
+		return QMMovimientosCuotas.existeMovimientoCuota(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
 	public static boolean tieneCuotas(int iCOACES, String sCodCOCLDO, String sCodNUDCOM)
@@ -138,15 +143,15 @@ public final class CLCuotas
 			{
 				logger.debug(cuota.logMovimientoCuota());
 				
-				String sCodMovimiento = QMMovimientosCuotas.getMovimientoCuotaID(conexion,cuota);
+				long liCodMovimiento = QMMovimientosCuotas.getMovimientoCuotaID(conexion,cuota);
 				
-				logger.debug("sCodMovimiento|"+sCodMovimiento+"|");
+				logger.debug("liCodMovimiento|"+liCodMovimiento+"|");
 				
-				if (!(sCodMovimiento.equals("")))
+				if (liCodMovimiento != 0)
 				{
 
 					
-					String sEstado = QMListaCuotas.getValidado(conexion,sCodMovimiento);
+					String sEstado = QMListaCuotas.getValidado(conexion,liCodMovimiento);
 					
 					if (sEstado.equals("P"))
 					{
@@ -181,20 +186,20 @@ public final class CLCuotas
 						switch (COACCI)
 						{
 						case A: case M: case B:
-							if (QMListaCuotas.existeRelacionCuota(conexion,buscarCodigoCuota(Integer.parseInt(cuota.getCOACES()),cuota.getCOCLDO(),cuota.getNUDCOM(),cuota.getCOSBAC()), sCodMovimiento))
+							if (QMListaCuotas.existeRelacionCuota(conexion,buscarCodigoCuota(Integer.parseInt(cuota.getCOACES()),cuota.getCOCLDO(),cuota.getNUDCOM(),cuota.getCOSBAC()), liCodMovimiento))
 							{
-								if(QMListaCuotas.setValidado(conexion,sCodMovimiento, sValidado))
+								if(QMListaCuotas.setValidado(conexion,liCodMovimiento, sValidado))
 								{
 									if (sValidado.equals("X"))
 									{
 										//recibido error
-										if (QMListaErroresCuotas.addErrorCuota(conexion,sCodMovimiento, cuota.getCOTDOR()))
+										if (QMListaErroresCuotas.addErrorCuota(conexion,liCodMovimiento, cuota.getCOTDOR()))
 										{
 											iCodigo = 1;
 										}
 										else
 										{
-											QMListaCuotas.setValidado(conexion,sCodMovimiento, "E");
+											QMListaCuotas.setValidado(conexion,liCodMovimiento, "E");
 											iCodigo = -4;
 										}
 									}
@@ -222,7 +227,7 @@ public final class CLCuotas
 						
 						}
 						
-						//bSalida = QMMovimientosCuotas.modMovimientoCuota(cuota, sCodMovimiento);
+						//bSalida = QMMovimientosCuotas.modMovimientoCuota(cuota, liCodMovimiento);
 						//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
 						//recuperaremos el codigo de error de la tabla pertinente.
 					}
@@ -253,7 +258,7 @@ public final class CLCuotas
 		
 	}
 	
-	public static int registraMovimiento(MovimientoCuota movimiento)
+	public static int registraMovimiento(MovimientoCuota movimiento, String sNota)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -272,8 +277,24 @@ public final class CLCuotas
 				
 				if (movimiento_revisado.getCOACCI().equals("#"))
 				{	
-					//error modificacion sin cambios
-					iCodigo = -804;	
+					if (sNota.equals(""))
+					{
+						//Error modificacion sin cambios
+						iCodigo = -804;
+					}
+					else
+					{
+						if (QMCuotas.setNota(conexion, liCodCuota, sNota))
+						{
+							iCodigo = 0;
+						}
+						else
+						{
+							//Error al guardar la nota
+							iCodigo = -915;
+						}
+						
+					}
 				}
 				else
 				{
@@ -281,7 +302,7 @@ public final class CLCuotas
 					{
 						conexion.setAutoCommit(false);
 
-						int indice = QMMovimientosCuotas.addMovimientoCuota(conexion,movimiento_revisado);
+						long indice = QMMovimientosCuotas.addMovimientoCuota(conexion,movimiento_revisado);
 						
 						if (indice == 0)
 						{
@@ -304,7 +325,7 @@ public final class CLCuotas
 									
 									if (estaDeBaja(Integer.parseInt(movimiento_revisado.getCOACES()), movimiento_revisado.getCOCLDO(),movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC()))
 									{
-										if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, Integer.toString(indice)))
+										if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, indice))
 										{
 											//OK 
 											if (QMCuotas.setEstado(conexion,liCodCuota, ValoresDefecto.DEF_ALTA))
@@ -312,9 +333,30 @@ public final class CLCuotas
 												//Se cambian los valores de la antigua cuota
 												if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), liCodCuota))
 												{
-													//OK 
-													iCodigo = 0;
-													conexion.commit();
+													
+													if (sNota.equals(""))
+													{
+														//OK 
+														iCodigo = 0;
+														conexion.commit();
+													}
+													else
+													{
+														if (QMCuotas.setNota(conexion, liCodCuota, sNota))
+														{
+															//OK 
+															iCodigo = 0;
+															conexion.commit();
+														}
+														else
+														{
+															//Error al guardar la nota
+															iCodigo = -915;
+															conexion.rollback();
+														}
+														
+													}
+													
 												}
 												else
 												{
@@ -352,11 +394,30 @@ public final class CLCuotas
 										{
 											//OK - Cuota creada
 											logger.debug("Hecho!");
-											if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, Integer.toString(indice)))
+											if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, indice))
 											{
-												//OK 
-												iCodigo = 0;
-												conexion.commit();
+												if (sNota.equals(""))
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													if (QMCuotas.setNota(conexion, liCodCuota, sNota))
+													{
+														//OK 
+														iCodigo = 0;
+														conexion.commit();
+													}
+													else
+													{
+														//Error al guardar la nota
+														iCodigo = -915;
+														conexion.rollback();
+													}
+													
+												}
 											}
 											else
 											{
@@ -378,13 +439,32 @@ public final class CLCuotas
 
 									break;
 								case B:
-									if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, Integer.toString(indice)))
+									if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, indice))
 									{
 										if (QMCuotas.setEstado(conexion,liCodCuota, ValoresDefecto.DEF_BAJA))
 										{
-											//OK 
-											iCodigo = 0;
-											conexion.commit();
+											if (sNota.equals(""))
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												if (QMCuotas.setNota(conexion, liCodCuota, sNota))
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													//Error al guardar la nota
+													iCodigo = -915;
+													conexion.rollback();
+												}
+												
+											}
 										}
 										else
 										{
@@ -404,14 +484,33 @@ public final class CLCuotas
 									}
 									break;
 								case M:
-									if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, Integer.toString(indice)))
+									if (QMListaCuotas.addRelacionCuotas(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodCuota, indice))
 									{
 										//Cuota cuotamodificada = QMCuotas.getCuota( movimiento_revisado.getCOCLDO(), movimiento_revisado.getNUDCOM(), movimiento_revisado.getCOSBAC());
 										if(QMCuotas.modCuota(conexion,convierteMovimientoenCuota(movimiento), liCodCuota))
 										{
-											//OK 
-											iCodigo = 0;
-											conexion.rollback();
+											if (sNota.equals(""))
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												if (QMCuotas.setNota(conexion, liCodCuota, sNota))
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													//Error al guardar la nota
+													iCodigo = -915;
+													conexion.rollback();
+												}
+												
+											}
 										}
 										else
 										{

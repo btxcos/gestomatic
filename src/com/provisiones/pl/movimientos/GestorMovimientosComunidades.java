@@ -262,6 +262,8 @@ public class GestorMovimientosComunidades implements Serializable
 					this.sNUCCNT = cuenta.getsNUCCNT();
 					this.sOBTEXC = comunidad.getsOBTEXC();
 					
+					this.sNota = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
+					
 					sMsg = "La comunidad se ha cargado correctamente.";
 					msg = Utils.pfmsgInfo(sMsg);
 					logger.info(sMsg);
@@ -313,6 +315,8 @@ public class GestorMovimientosComunidades implements Serializable
 				this.sNUCCDI = cuenta.getsNUCCDI();
 				this.sNUCCNT = cuenta.getsNUCCNT();
 				this.sOBTEXC = comunidad.getsOBTEXC();
+				
+				this.sNota = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
 				
 				msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
 				logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
@@ -375,7 +379,14 @@ public class GestorMovimientosComunidades implements Serializable
 							sOBTEXC.toUpperCase(), 
 							sOBDEER.toUpperCase());
 					
-					int iSalida = CLComunidades.registraMovimiento(movimiento);
+					String sNotaAntigua = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
+					
+					if (sNotaAntigua.equals(sNota))
+					{
+						sNota = "";
+					}
+					
+					int iSalida = CLComunidades.registraMovimiento(movimiento,sNota);
 					
 					switch (iSalida) 
 					{
@@ -581,6 +592,36 @@ public class GestorMovimientosComunidades implements Serializable
 						
 					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
 						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -911: //Error 911 - error y rollback - error al crear la cuenta de la comunidad
+						sMsg = "[FATAL] ERROR:911 - Se ha producido un error al crear la cuenta de la comunidad. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -912: //Error 912 - error y rollback - error al crear la cuenta de la comunidad
+						sMsg = "[FATAL] ERROR:912 - Se ha producido un error al crear la relacion cuenta-comunidad. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+
+					case -913: //Error 913 - error y rollback - error al borrar la cuenta de la comunidad
+						sMsg = "[FATAL] ERROR:913 - Se ha producido un error al borrar la cuenta de la comunidad. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -914: //Error 914 - error y rollback - error la cuenta nueva ya existe
+						sMsg = "[FATAL] ERROR:914 - Se ha producido un error al crear la cuenta de la comunidad, ya existe. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -915: //Error 915 - error y rollback - error al guardar la nota
+						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota de la comunidad. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

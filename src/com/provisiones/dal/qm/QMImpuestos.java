@@ -75,7 +75,7 @@ public final class QMImpuestos
 				       + NuevoImpuestoRecurso.getCOTEXA() + "','"
 				       + NuevoImpuestoRecurso.getOBTEXC() + "','" 
 				       + ValoresDefecto.DEF_ALTA + "','"
-				       + ValoresDefecto.CAMPO_SIN_INFORMAR + 
+				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
 				       "')";
 
 			try 

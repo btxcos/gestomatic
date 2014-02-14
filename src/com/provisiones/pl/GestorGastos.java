@@ -101,6 +101,7 @@ public class GestorGastos implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNota = "";
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -295,7 +296,13 @@ public class GestorGastos implements Serializable
     	borrarResultadosCuota();
     	borrarResultadosDevolucion();
     }
-	
+
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
+
+    
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 
@@ -1641,6 +1648,14 @@ public class GestorGastos implements Serializable
 	}
 	public void setbDevolucion(boolean bDevolucion) {
 		this.bDevolucion = bDevolucion;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 
 

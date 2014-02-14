@@ -12,7 +12,7 @@
 	</h:head>
 
 	<h:body>
-		<h:form id="form" onkeypress="return event.keyCode != 13">
+		<h:form id="form">
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="auto" header="Modificar Comunidades">
@@ -59,6 +59,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
 
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -94,7 +95,7 @@
 											<h:outputText for="COACES" value="Código de activo: "/>
 											<p:inputText id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" size="9" maxlength="9"/>
 
-											<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel" actionListener="#{GestorMovimientosComunidades.buscarComunidad}"/>	
+											<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel, NOTA" actionListener="#{GestorMovimientosComunidades.buscarComunidad}"/>	
 
 										</h:panelGrid>
 									</p:panel>
@@ -119,7 +120,7 @@
 											<h:outputText for="NUDCOM" value="Número: "/>
 											<p:inputText id="NUDCOM" value="#{GestorMovimientosComunidades.sNUDCOM}" size="10" maxlength="10"/>
 
-											<p:commandButton value="Cargar" update="panel, msgs, popup" actionListener="#{GestorMovimientosComunidades.cargarComunidad}"/>
+											<p:commandButton value="Cargar" update="panel, msgs, popup, NOTA" actionListener="#{GestorMovimientosComunidades.cargarComunidad}"/>
 
 										</h:panelGrid>
 								  </p:panel>
@@ -202,6 +203,24 @@
 
 						</h:panelGrid>
 					</p:panel>
+
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+						<h:panelGrid columns="1" cellpadding="1">
+							<p:panel>
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorMovimientosComunidades.limpiarNota}"/>
+
+								</h:panelGrid>
+							</p:panel>
+
+							<h:panelGrid columns="1" cellpadding="5">
+								<h:outputText id="counternota"/>
+								<p:inputTextarea id="NOTA" value="#{GestorMovimientosComunidades.sNota}" cols="40" rows="10" counter="counternota" maxlength="500"
+									counterTemplate="{0} carácteres restantes." autoResize="false"/>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:dialog>
 
 					<p:dialog header="Activos con Comunidad: " widgetVar="dlgTabla" resizable="false">
 
