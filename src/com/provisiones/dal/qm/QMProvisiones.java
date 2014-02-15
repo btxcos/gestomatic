@@ -404,7 +404,11 @@ public final class QMProvisiones
 					+ CAMPO9 + ","
 					+ CAMPO10 + "," 
 					+ CAMPO11 + "," 
-					+ CAMPO12 +  
+					+ CAMPO12 + "," 
+					+ CAMPO13 + "," 
+					+ CAMPO14 + "," 
+					+ CAMPO15 + "," 
+					+ CAMPO16 +  
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
@@ -429,8 +433,18 @@ public final class QMProvisiones
 
 						sCOSPAT = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSPAT, QMCodigosControl.ICOSPAT, rs.getString(CAMPO2));
 						sTAS = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA, QMCodigosControl.ITIACSA, rs.getString(CAMPO3));
-						sCOGRUG = rs.getString(CAMPO4);
-						sCOTPGA = rs.getString(CAMPO5);
+						
+						if (rs.getInt(CAMPO4) == 0)
+						{
+							sCOGRUG = "SIN INFORMACION";
+							sCOTPGA = "SIN INFORMACION";
+						}
+						else
+						{
+							sCOGRUG = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOGRUG, QMCodigosControl.ICOGRUG, rs.getString(CAMPO4));
+							sCOTPGA = (rs.getInt(CAMPO5) == 0)? "VARIOS": QMCodigosControl.getDesCOTPGA(conexion, sCOGRUG, rs.getString(CAMPO5));
+						}
+
 						sFEPFON = rs.getString(CAMPO6);
 						sNumGastos = rs.getString(CAMPO7);
 						sValorTolal = rs.getString(CAMPO8);

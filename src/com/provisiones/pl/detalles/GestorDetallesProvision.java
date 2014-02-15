@@ -29,22 +29,35 @@ public class GestorDetallesProvision implements Serializable
 	private String sNUPROF = "";
 	private String sCOSPAT = "";
 	private String sTAS = "";
-	private String sValorTolal = "";
-	private String sNumGastos = "";	
-	private String sValorAutorizado = "";
-	private String sGastosAutorizados = "";	
+
+	private String sCOGRUG = "";
+	private String sCOTPGA = "";
+	
 	private String sFEPFON = "";
+	private String sNumGastos = "";	
+	private String sValorTolal = "";
 	private String sFechaEnvio = "";
+
+	private String sGastosAutorizados = "";
+	private String sValorAutorizado = "";
 	private String sFechaAutorizado = "";
+
+	private String sGastosPagados = "";
+	private String sValorPagado = "";
 	private String sFechaPagado = "";
 	private String sCodEstado = "";
 	
-	private String sCOACES = "";
 	
-	private String sCOGRUG = "";
-	private String sCOTPGA = "";
-	private String sCOSBGA = "";
-	private String sFEDEVE = "";
+	
+
+	private String sCOACES = "";
+
+	
+	//Gasto
+	private String sCOGRUGG = "";
+	private String sCOTPGAG = "";
+	private String sCOSBGAG = "";
+	private String sFEDEVEG = "";
 	
 	private String sCodGasto = ""; 
 
@@ -105,14 +118,23 @@ public class GestorDetallesProvision implements Serializable
 		  	
 	    	this.sCOSPAT = provision.getsCOSPAT();
 	    	this.sTAS = provision.getsTAS();
-	    	this.sValorTolal = Utils.recuperaImporte(false,provision.getsValorTolal());
-	    	this.sNumGastos = provision.getsNumGastos();	
+	    	
+	    	this.sCOGRUG = provision.getsCOGRUG();
+	    	this.sCOTPGA = provision.getsCOTPGA();
+
 	    	this.sFEPFON = Utils.recuperaFecha(provision.getsFEPFON());
+	    	this.sNumGastos = provision.getsNumGastos();
+	    	this.sValorTolal = Utils.recuperaImporte(false,provision.getsValorTolal());
 	    	this.sFechaEnvio = Utils.recuperaFecha(provision.getsFechaEnvio());
-	    	this.sFechaAutorizado = Utils.recuperaFecha(provision.getsFechaAutorizado());
+
+	    	this.sGastosAutorizados = provision.getsGastosAutorizados();
 	    	this.sValorAutorizado = Utils.recuperaImporte(false,provision.getsValorAutorizado());
-	    	this.sGastosAutorizados = provision.getsGastosAutorizados();	
+	    	this.sFechaAutorizado = Utils.recuperaFecha(provision.getsFechaAutorizado());
+
+	    	this.sGastosPagados = provision.getsGastosPagados();
+	    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
 	    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
+
 	    	this.sCodEstado = provision.getsCodEstado();
 	    	
 	    	
@@ -138,12 +160,12 @@ public class GestorDetallesProvision implements Serializable
 			{
 
 				this.sCOACES = gastoseleccionado.getCOACES();
-		    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
-		    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
-		    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
-		    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
+		    	this.sCOGRUGG = gastoseleccionado.getCOGRUG();
+		    	this.sCOTPGAG = gastoseleccionado.getCOTPGA();
+		    	this.sCOSBGAG = gastoseleccionado.getCOSBGA();
+		    	this.sFEDEVEG = gastoseleccionado.getFEDEVE();
 		    	
-		    	this.sCodGasto = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
+		    	this.sCodGasto = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUGG,sCOTPGAG,sCOSBGAG,Utils.compruebaFecha(sFEDEVEG)));
 		    	
 		    	
 		    	Sesion.guardaDetalle(sCodGasto);
@@ -151,10 +173,10 @@ public class GestorDetallesProvision implements Serializable
 		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
 		    	
 		    	logger.debug("sCOACES:|"+sCOACES+"|");
-		    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");
-		    	logger.debug("sCOTPGA:|"+sCOTPGA+"|");
-		    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
-		    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
+		    	logger.debug("sCOGRUGG:|"+sCOGRUGG+"|");
+		    	logger.debug("sCOTPGAG:|"+sCOTPGAG+"|");
+		    	logger.debug("sCOSBGAG:|"+sCOSBGAG+"|");
+		    	logger.debug("sFEDEVEG:|"+sFEDEVEG+"|");
 		    	
 		    	logger.debug("Redirigiendo...");
 		    	
@@ -220,36 +242,20 @@ public class GestorDetallesProvision implements Serializable
 		this.sTAS = sTAS;
 	}
 
-	public String getsValorTolal() {
-		return sValorTolal;
+	public String getsCOGRUG() {
+		return sCOGRUG;
 	}
 
-	public void setsValorTolal(String sValorTolal) {
-		this.sValorTolal = sValorTolal;
+	public void setsCOGRUG(String sCOGRUG) {
+		this.sCOGRUG = sCOGRUG;
 	}
 
-	public String getsNumGastos() {
-		return sNumGastos;
+	public String getsCOTPGA() {
+		return sCOTPGA;
 	}
 
-	public void setsNumGastos(String sNumGastos) {
-		this.sNumGastos = sNumGastos;
-	}
-
-	public String getsValorAutorizado() {
-		return sValorAutorizado;
-	}
-
-	public void setsValorAutorizado(String sValorAutorizado) {
-		this.sValorAutorizado = sValorAutorizado;
-	}
-
-	public String getsGastosAutorizados() {
-		return sGastosAutorizados;
-	}
-
-	public void setsGastosAutorizados(String sGastosAutorizados) {
-		this.sGastosAutorizados = sGastosAutorizados;
+	public void setsCOTPGA(String sCOTPGA) {
+		this.sCOTPGA = sCOTPGA;
 	}
 
 	public String getsFEPFON() {
@@ -260,6 +266,22 @@ public class GestorDetallesProvision implements Serializable
 		this.sFEPFON = sFEPFON;
 	}
 
+	public String getsNumGastos() {
+		return sNumGastos;
+	}
+
+	public void setsNumGastos(String sNumGastos) {
+		this.sNumGastos = sNumGastos;
+	}
+
+	public String getsValorTolal() {
+		return sValorTolal;
+	}
+
+	public void setsValorTolal(String sValorTolal) {
+		this.sValorTolal = sValorTolal;
+	}
+
 	public String getsFechaEnvio() {
 		return sFechaEnvio;
 	}
@@ -268,12 +290,44 @@ public class GestorDetallesProvision implements Serializable
 		this.sFechaEnvio = sFechaEnvio;
 	}
 
+	public String getsGastosAutorizados() {
+		return sGastosAutorizados;
+	}
+
+	public void setsGastosAutorizados(String sGastosAutorizados) {
+		this.sGastosAutorizados = sGastosAutorizados;
+	}
+
+	public String getsValorAutorizado() {
+		return sValorAutorizado;
+	}
+
+	public void setsValorAutorizado(String sValorAutorizado) {
+		this.sValorAutorizado = sValorAutorizado;
+	}
+
 	public String getsFechaAutorizado() {
 		return sFechaAutorizado;
 	}
 
 	public void setsFechaAutorizado(String sFechaAutorizado) {
 		this.sFechaAutorizado = sFechaAutorizado;
+	}
+
+	public String getsGastosPagados() {
+		return sGastosPagados;
+	}
+
+	public void setsGastosPagados(String sGastosPagados) {
+		this.sGastosPagados = sGastosPagados;
+	}
+
+	public String getsValorPagado() {
+		return sValorPagado;
+	}
+
+	public void setsValorPagado(String sValorPagado) {
+		this.sValorPagado = sValorPagado;
 	}
 
 	public String getsFechaPagado() {
@@ -300,36 +354,36 @@ public class GestorDetallesProvision implements Serializable
 		this.sCOACES = sCOACES;
 	}
 
-	public String getsCOGRUG() {
-		return sCOGRUG;
+	public String getsCOGRUGG() {
+		return sCOGRUGG;
 	}
 
-	public void setsCOGRUG(String sCOGRUG) {
-		this.sCOGRUG = sCOGRUG;
+	public void setsCOGRUGG(String sCOGRUGG) {
+		this.sCOGRUGG = sCOGRUGG;
 	}
 
-	public String getsCOTPGA() {
-		return sCOTPGA;
+	public String getsCOTPGAG() {
+		return sCOTPGAG;
 	}
 
-	public void setsCOTPGA(String sCOTPGA) {
-		this.sCOTPGA = sCOTPGA;
+	public void setsCOTPGAG(String sCOTPGAG) {
+		this.sCOTPGAG = sCOTPGAG;
 	}
 
-	public String getsCOSBGA() {
-		return sCOSBGA;
+	public String getsCOSBGAG() {
+		return sCOSBGAG;
 	}
 
-	public void setsCOSBGA(String sCOSBGA) {
-		this.sCOSBGA = sCOSBGA;
+	public void setsCOSBGAG(String sCOSBGAG) {
+		this.sCOSBGAG = sCOSBGAG;
 	}
 
-	public String getsFEDEVE() {
-		return sFEDEVE;
+	public String getsFEDEVEG() {
+		return sFEDEVEG;
 	}
 
-	public void setsFEDEVE(String sFEDEVE) {
-		this.sFEDEVE = sFEDEVE;
+	public void setsFEDEVEG(String sFEDEVEG) {
+		this.sFEDEVEG = sFEDEVEG;
 	}
 
 	public String getsCodGasto() {
@@ -355,5 +409,5 @@ public class GestorDetallesProvision implements Serializable
 	public void setTablagastos(ArrayList<GastoTabla> tablagastos) {
 		this.tablagastos = tablagastos;
 	}
-	
+
 }

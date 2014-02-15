@@ -69,6 +69,8 @@
 											<h:outputText for="Estado" value="Estado: " />
 											<p:inputText id="Estado" value="#{GestorDetallesProvision.sCodEstado}" size="12" disabled="true"/>
 
+											<h:outputText for="FEPFON" value="Fecha de cierre: " />
+											<p:inputText id="FEPFON" value="#{GestorDetallesProvision.sFEPFON}" size="9" disabled="true"/>
 
 										</h:panelGrid>
 									</p:panel>
@@ -81,8 +83,11 @@
 											<h:outputText for="COSPAT" value="Sociedad patrimonial: " />
 											<p:inputText id="COSPAT" value="#{GestorDetallesProvision.sCOSPAT}" size="60" disabled="true"/>
 
-											<h:outputText for="FEPFON" value="Fecha de cierre: " />
-											<p:inputText id="FEPFON" value="#{GestorDetallesProvision.sFEPFON}" size="9" disabled="true"/>
+											<h:outputText for="COGRUG" value="Grupo de gastos contenidos: " />
+											<p:inputText id="COGRUG" value="#{GestorDetallesProvision.sCOGRUG}" size="25" disabled="true"/>
+
+											<h:outputText for="COTPGA" value="Tipo de gastos contenidos: " />
+											<p:inputText id="COTPGA" value="#{GestorDetallesProvision.sCOTPGA}" size="25" disabled="true"/>
 
 										</h:panelGrid>
 									</p:panel>
@@ -107,7 +112,7 @@
 											<h:outputText for="GastosAutorizados" value="Gastos autorizados: " />
 											<p:inputText id="GastosAutorizados" value="#{GestorDetallesProvision.sGastosAutorizados}" size="6" disabled="true"/>
 
-											<h:outputText for="ValorAutorizado" value="Valor de autorizado: " />
+											<h:outputText for="ValorAutorizado" value="Valor autorizado: " />
 											<p:inputText id="ValorAutorizado" value="#{GestorDetallesProvision.sValorAutorizado}" size="20" disabled="true"/>
 											<h:outputText value="¤"/>
 
@@ -119,7 +124,14 @@
 									</p:panel>
 
 									<p:panel >
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="5" cellpadding="5">
+
+											<h:outputText for="GastosPagados" value="Gastos pagados: " />
+											<p:inputText id="GastosPagados" value="#{GestorDetallesProvision.sGastosPagados}" size="6" disabled="true"/>
+
+											<h:outputText for="ValorPagado" value="Valor pagado: " />
+											<p:inputText id="ValorPagado" value="#{GestorDetallesProvision.sValorPagado}" size="20" disabled="true"/>
+											<h:outputText value="¤"/>
 
 											<h:outputText for="FechaPagado" value="Fecha de pago: " />
 											<p:inputText id="FechaPagado" value="#{GestorDetallesProvision.sFechaPagado}" size="9" disabled="true"/>
