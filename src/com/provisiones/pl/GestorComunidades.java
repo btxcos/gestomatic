@@ -540,7 +540,7 @@ public class GestorComunidades implements Serializable
 				}
 				
 				logger.debug("Finalizadas las comprobaciones.");
-				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
 				
 				borrarResultadosActivo();
 			}
@@ -550,7 +550,7 @@ public class GestorComunidades implements Serializable
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
-			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 
 		}
 	}

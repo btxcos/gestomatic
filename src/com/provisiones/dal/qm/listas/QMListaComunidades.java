@@ -342,7 +342,7 @@ public final class QMListaComunidades
 				       " WHERE ("
 				       + QMMovimientosComunidades.CAMPO5 + " = '" + ValoresDefecto.DEF_COACCI_COMUNIDAD_ALTA + "' AND  "
 				       + QMMovimientosComunidades.CAMPO1 + " IN (SELECT "
-				       + CAMPO3  +
+				       + CAMPO2  +
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE (" 
