@@ -429,8 +429,14 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 						logger.error(sMsg);
 						break;
 
-					case -904: //Error 904 - error y rollback - error al modificar la cuota
+					case -904: //Error 904 - error y rollback - error al modificar la referencia
 						sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar la referencia catastral. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -905: //Error 905 - error y rollback - error al eliminar la referencia
+						sMsg = "[FATAL] ERROR:905 - Se ha producido un error al eliminar la referencia catastral. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

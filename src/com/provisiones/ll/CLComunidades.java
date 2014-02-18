@@ -1154,31 +1154,13 @@ public final class CLComunidades
 									{
 										if (QMComunidades.delComunidad(conexion, liCodComunidad))
 										{
-											if (nota.isbInvalida())
-											{
-												//OK 
-												iCodigo = 0;
-												conexion.commit();
-											}
-											else
-											{
-												if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
-												{
-													//OK 
-													iCodigo = 0;
-													conexion.commit();
-												}
-												else
-												{
-													//Error al guardar la nota
-													iCodigo = -915;
-													conexion.rollback();
-												}
-											}
+											//OK 
+											iCodigo = 0;
+											conexion.commit();
 										}
 										else
 										{
-											//Error al guardar la nota
+											//Error al eliminar la comunidad
 											iCodigo = -916;
 											conexion.rollback();
 										}

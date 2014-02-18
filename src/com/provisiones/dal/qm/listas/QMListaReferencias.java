@@ -3,6 +3,7 @@ package com.provisiones.dal.qm.listas;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMReferencias;
+import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -203,6 +204,78 @@ public final class QMListaReferencias
 				Utils.closeStatement(stmt);
 			}
 		}
+
+		return bEncontrado;
+	}
+
+	public static boolean existeAltaPendienteReferencia(Connection conexion, long liCodReferencia)
+	{
+		boolean bEncontrado = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + QMMovimientosReferencias.CAMPO1  +
+				       " FROM " 
+				       + QMMovimientosReferencias.TABLA + 
+				       " WHERE ("
+				       + QMMovimientosReferencias.CAMPO5 + " = '" + ValoresDefecto.DEF_COACCI_REFERENCIA_ALTA + "' AND  "
+				       + QMMovimientosReferencias.CAMPO1 + " IN (SELECT "
+				       + CAMPO3  +
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE (" 
+				       + CAMPO2 + " = '" + liCodReferencia + "' AND  "
+				       + CAMPO4 + " = '" + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE +
+				       "')))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR REFERENCIA:|"+liCodReferencia+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+		
 
 		return bEncontrado;
 	}
