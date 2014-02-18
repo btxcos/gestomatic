@@ -118,6 +118,10 @@ public class GestorDetallesActivo implements Serializable
 	private String sBIOBNU = "";
 	private String sPOBRAR = "";
 	
+	private String sNota = "";
+	
+	private int iCOACES = 0;
+	
 	public GestorDetallesActivo()
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -152,22 +156,18 @@ public class GestorDetallesActivo implements Serializable
 	
 	public void cargarDetallesActivo()
 	{
-		
 
-		
-		//String sValor = ((GestorListaActivos)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaActivos")).getsCOACES();
-
-		//logger.debug("sCOACESnB:|{}|",sValor);
-		
 		this.sCOACES  = Sesion.cargarDetalle();
 		
-		logger.debug("sCOACES:|{}|",sCOACES);
+		logger.debug("sCOACES:|"+sCOACES+"|");
 		
 		
 		if (!sCOACES.equals(""))
 		{
 		
-			Activo activo = CLActivos.buscarDetallesActivo(Integer.parseInt(sCOACES));
+			this.iCOACES = Integer.parseInt(sCOACES);
+			
+			Activo activo = CLActivos.buscarDetallesActivo(iCOACES);
 			
 			//this.sCOACES = activo.getCOACES();
 			this.sNUINMU = activo.getNUINMU();
@@ -267,11 +267,44 @@ public class GestorDetallesActivo implements Serializable
 			this.sPOBRAR = Parser.formateaCampoNumerico(activo.getPOBRAR(), 6);
 			
 			this.sPOBRAR = Utils.recuperaImporte(false,sPOBRAR.substring(0,5));
+			
+			this.sNota = CLActivos.buscarNota(iCOACES);
 
 		}
 		
 	}
 
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
+	
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+
+			String sMsg = "";
+			
+			if (CLActivos.guardarNota(iCOACES, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrio un error al guardar la nota de la comunidad. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
+	}
+	
 	public String getsCOACES() {
 		return sCOACES;
 	}
@@ -1006,6 +1039,14 @@ public class GestorDetallesActivo implements Serializable
 
 	public void setsPOBRAR(String sPOBRAR) {
 		this.sPOBRAR = sPOBRAR;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 	
 }

@@ -18,6 +18,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuenta;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoComunidad;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -119,6 +120,7 @@ public class GestorMovimientosComunidades implements Serializable
 	public void limpiarPlantilla(ActionEvent actionEvent)
 	{
 		this.sCOACES = "";
+		this.sCOACCI = "";
 		
 		borrarResultadosActivo();
 		borrarCamposComunidad();
@@ -336,7 +338,7 @@ public class GestorMovimientosComunidades implements Serializable
 			
 			try
 			{
-				Integer.parseInt(sCOACES);
+				//Integer.parseInt(sCOACES);
 				
 				if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
 				{
@@ -354,8 +356,8 @@ public class GestorMovimientosComunidades implements Serializable
 							sCOENGP.toUpperCase(), 
 							sCOCLDO.toUpperCase(), 
 							sNUDCOM.toUpperCase(), 
+							"",
 							"", 
-							sCOACES, 
 							"", 
 							sNOMCOC.toUpperCase(), 
 							"", 
@@ -381,12 +383,14 @@ public class GestorMovimientosComunidades implements Serializable
 					
 					String sNotaAntigua = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
 					
-					if (sNotaAntigua.equals(sNota))
+					Nota nota = new Nota (sNotaAntigua.equals(sNota),sNota);
+					
+					if (nota.isbInvalida())
 					{
-						sNota = "";
+						nota.setsContenido("");
 					}
 					
-					int iSalida = CLComunidades.registraMovimiento(movimiento,sNota);
+					int iSalida = CLComunidades.registraMovimiento(movimiento,nota);
 					
 					switch (iSalida) 
 					{

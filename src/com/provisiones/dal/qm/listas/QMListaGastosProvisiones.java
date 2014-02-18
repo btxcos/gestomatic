@@ -967,7 +967,7 @@ public final class QMListaGastosProvisiones
 		
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "SELECT COUNT(*) FROM " 
+			String sQuery = "SELECT COUNT("+CAMPO1+") FROM " 
 					+ TABLA + 
 					" WHERE "
 					+ CAMPO2 + " = '" + sNUPROF + "'";
@@ -987,7 +987,7 @@ public final class QMListaGastosProvisiones
 					{
 						bEncontrado = true;
 
-						liNumero = rs.getLong("COUNT(*)");
+						liNumero = rs.getLong("COUNT("+CAMPO1+")");
 						
 						logger.debug("Encontrado el registro!");
 

@@ -66,11 +66,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>GestorListaActivos</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.listas.GestorListaActivos</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>GestorGastos</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.GestorGastos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -168,6 +163,31 @@
 	<managed-bean>
 		<managed-bean-name>GestorListaProvisiones</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.listas.GestorListaProvisiones</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesComunidad</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.detalles.GestorDetallesComunidad</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaComunidades</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaComunidades</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaReferencias</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaReferencias</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesReferencia</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.detalles.GestorDetallesReferencia</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaActivos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaActivos</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

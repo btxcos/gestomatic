@@ -43,11 +43,11 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosComunidades.limpiarPlantilla}"/>
+								<p:commandButton value="Limpiar Plantilla" update="panel, COACCI" actionListener="#{GestorMovimientosComunidades.limpiarPlantilla}"/>
 
 								<p:commandButton value="Registrar Datos" update="panel, msgs, popup" actionListener="#{GestorMovimientosComunidades.registraDatos}"/>
 
-								<p:selectOneRadio id="options" value="#{GestorMovimientosComunidades.sCOACCI}">
+								<p:selectOneRadio id="COACCI" value="#{GestorMovimientosComunidades.sCOACCI}">
 									<f:selectItem itemLabel="Baja" itemValue="B"/>
 									<f:selectItem itemLabel="Modificación" itemValue="M"/>
 								</p:selectOneRadio>

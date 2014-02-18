@@ -3,12 +3,14 @@ package com.provisiones.dal.qm;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ReferenciaCatastral;
+import com.provisiones.types.tablas.ReferenciaTabla;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,6 +215,114 @@ public final class QMReferencias
 	}
 
 	public static ReferenciaCatastral getReferenciaCatastral(Connection conexion, long liReferenciaID)
+	{
+		String sNURCAT = "";
+		String sTIRCAT = "";
+		String sENEMIS = "";
+		String sCOTEXA = "";
+		String sOBTEXC = "";
+		
+		//Ampliacion de valor catastral
+		String sIMVSUE = "";
+		String sIMCATA = "";
+		String sFERECA = "";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + CAMPO2  + ","
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  +  
+
+				       //Ampliacion de valor catastral
+				       ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  +
+
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " + CAMPO1 + " = '" + liReferenciaID	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+	  					sNURCAT = rs.getString(CAMPO2); 
+	  					sTIRCAT = rs.getString(CAMPO3); 
+	  					sENEMIS = rs.getString(CAMPO4);
+	  					sCOTEXA = rs.getString(CAMPO5);
+	  					sOBTEXC = rs.getString(CAMPO6);
+
+	  					//Ampliacion de valor catastral
+	  					sIMVSUE = rs.getString(CAMPO7);
+	  					sIMCATA = rs.getString(CAMPO8);
+	  					sFERECA = rs.getString(CAMPO9);
+	  					
+	  					logger.debug("Encontrado el registro!");
+
+	  					logger.debug(CAMPO2+":|"+sNURCAT+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNURCAT = "";
+				sTIRCAT = "";
+				sENEMIS = "";
+				sCOTEXA = "";
+				sOBTEXC = "";
+				
+				//Ampliacion de valor catastral
+				sIMVSUE = "";
+				sIMCATA = "";
+				sFERECA = "";
+				
+				logger.error("ERROR Referencia:|"+liReferenciaID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return new ReferenciaCatastral(sNURCAT, sTIRCAT, sENEMIS, sCOTEXA, sOBTEXC, sIMVSUE, sIMCATA, sFERECA);
+	}
+	
+	
+	public static ReferenciaCatastral getDetallesReferenciaCatastral(Connection conexion, long liReferenciaID)
 	{
 		String sNURCAT = "";
 		String sTIRCAT = "";
@@ -686,4 +796,98 @@ public final class QMReferencias
 
 		return sNota;
 	}
+
+	public static ArrayList<ReferenciaTabla> buscaReferenciaCatastral(Connection conexion, long liReferenciaID)
+	{
+		
+		ArrayList<ReferenciaTabla> resultado = new ArrayList<ReferenciaTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + CAMPO2  + ","
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       //+ CAMPO5  + ","              
+				       + CAMPO6  +  
+
+				       //Ampliacion de valor catastral
+				       ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","              
+				       + CAMPO9  +
+
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " + CAMPO1 + " = '" + liReferenciaID	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+	  					String sNURCAT = rs.getString(CAMPO2); 
+	  					String sTIRCAT = rs.getString(CAMPO3); 
+	  					String sENEMIS = rs.getString(CAMPO4);
+	  					String sOBTEXC = rs.getString(CAMPO6);
+
+	  					//Ampliacion de valor catastral
+	  					String sIMVSUE = rs.getString(CAMPO7);
+	  					String sIMCATA = rs.getString(CAMPO8);
+	  					String sFERECA = rs.getString(CAMPO9);
+	  					
+	  					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(sNURCAT, sTIRCAT, sENEMIS, sOBTEXC, sIMVSUE, sIMCATA, sFERECA);
+	  					
+	  					resultado.add(referenciaencontrada);
+	  					
+	  					logger.debug("Encontrado el registro!");
+
+	  					logger.debug(CAMPO1+":|"+liReferenciaID+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ReferenciaTabla>();
+				
+				logger.error("ERROR Referencia:|"+liReferenciaID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
 }

@@ -7,22 +7,24 @@ public class ComunidadTabla
 	private String NOMCOC = "";
 	private String NOMPRC = "";
 	private String NOMADC = "";
+
+	private String sActivos = "";
 	
 	//Constructor de clase
 
 	public ComunidadTabla(String cOCLDO, String nUDCOM, String nOMCOC,
-			String nOMPRC, String nOMADC) {
+			String nOMPRC, String nOMADC, String sActivos) {
 		super();
 		COCLDO = cOCLDO;
 		NUDCOM = nUDCOM;
 		NOMCOC = nOMCOC;
 		NOMPRC = nOMPRC;
 		NOMADC = nOMADC;
+		this.sActivos = sActivos;
 	}
 
 	//Métodos de acceso
-
-
+	
 	public String getCOCLDO() {
 		return COCLDO;
 	}
@@ -63,6 +65,12 @@ public class ComunidadTabla
 		NOMADC = nOMADC;
 	}
 
-	
+	public String getsActivos() {
+		return sActivos;
+	}
+
+	public void setsActivos(String sActivos) {
+		this.sActivos = sActivos;
+	}
 
 }

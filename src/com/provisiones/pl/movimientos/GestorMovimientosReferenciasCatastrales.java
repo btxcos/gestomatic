@@ -15,6 +15,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ReferenciaTabla;
@@ -273,8 +274,17 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 							Utils.compruebaImporte(sIMCATA.toUpperCase()),
 							"", 
 							Utils.compruebaFecha(sFERECA.toUpperCase()));
+
+					String sNotaAntigua = CLReferencias.buscarNota(CLReferencias.buscarCodigoReferencia(sNURCAT));
 					
-					int iSalida = CLReferencias.registraMovimiento(movimiento);
+					Nota nota = new Nota (sNotaAntigua.equals(sNota),sNota);
+					
+					if (nota.isbInvalida())
+					{
+						nota.setsContenido("");
+					}
+					
+					int iSalida = CLReferencias.registraMovimiento(movimiento, nota);
 					
 					logger.debug("Codigo de salida:"+iSalida);
 					
@@ -427,6 +437,12 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 						
 					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
 						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -915: //Error 915 - error y rollback - error al guardar la nota
+						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota de la referencia catastral. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

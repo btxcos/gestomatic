@@ -17,6 +17,7 @@ import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.ImpuestoRecurso;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ImpuestoRecursoTabla;
@@ -109,7 +110,17 @@ public final class CLImpuestos
 	public static long buscarNumeroMovimientosImpuestosPendientes()
 	{
 		return (QMListaImpuestos.buscaCantidadValidado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
-	}	
+	}
+	
+	public static String buscarNota (long liCodImpuesto)
+	{
+		return QMImpuestos.getNota(ConnectionManager.getDBConnection(),liCodImpuesto);
+	}
+	
+	public static boolean guardarNota (long liCodImpuesto, String sNota)
+	{
+		return QMImpuestos.setNota(ConnectionManager.getDBConnection(),liCodImpuesto, sNota);
+	}
 	
 	public static boolean comprobarRelacion (String sCodNURCAT,String sCodCOSBAC, int iCodCOACES)
 	{
@@ -261,7 +272,7 @@ public final class CLImpuestos
 		return iCodigo;
 	}
 	
-	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento)
+	public static int registraMovimiento(MovimientoImpuestoRecurso movimiento, Nota nota)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -279,8 +290,24 @@ public final class CLImpuestos
 				MovimientoImpuestoRecurso movimiento_revisado = revisaCodigosControl(movimiento,liCodImpuesto);
 				if (movimiento_revisado.getCOACCI().equals("#"))
 				{	
-					//error modificacion sin cambios
-					iCodigo = -804;	
+					if (nota.isbInvalida())
+					{
+						//Error modificacion sin cambios
+						iCodigo = -804;
+					}
+					else
+					{
+						if (QMImpuestos.setNota(conexion, liCodImpuesto, nota.getsContenido()))
+						{
+							iCodigo = 0;
+						}
+						else
+						{
+							//Error al guardar la nota
+							iCodigo = -915;
+						}
+						
+					}
 				}
 				else
 				{
@@ -316,9 +343,28 @@ public final class CLImpuestos
 											{
 												if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento),liCodImpuesto))
 												{
-													//OK 
-													iCodigo = 0;
-													conexion.commit();
+													if (nota.isbInvalida())
+													{
+														//OK 
+														iCodigo = 0;
+														conexion.commit();
+													}
+													else
+													{
+														if (QMImpuestos.setNota(conexion, liCodImpuesto, nota.getsContenido()))
+														{
+															//OK 
+															iCodigo = 0;
+															conexion.commit();
+														}
+														else
+														{
+															//Error al guardar la nota
+															iCodigo = -915;
+															conexion.rollback();
+														}
+														
+													}
 												}
 												else
 												{
@@ -357,9 +403,28 @@ public final class CLImpuestos
 											logger.debug("Hecho!");
 											if (QMListaImpuestos.addRelacionImpuestos(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodImpuesto, indice))
 											{
-												//OK 
-												iCodigo = 0;
-												conexion.commit();
+												if (nota.isbInvalida())
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													if (QMImpuestos.setNota(conexion, liCodImpuesto, nota.getsContenido()))
+													{
+														//OK 
+														iCodigo = 0;
+														conexion.commit();
+													}
+													else
+													{
+														//Error al guardar la nota
+														iCodigo = -915;
+														conexion.rollback();
+													}
+													
+												}
 											}
 											else
 											{
@@ -415,9 +480,28 @@ public final class CLImpuestos
 										//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
 										if(QMImpuestos.modImpuestoRecurso(conexion,convierteMovimientoenImpuesto(movimiento), liCodImpuesto))
 										{
-											//OK 
-											iCodigo = 0;
-											conexion.commit();
+											if (nota.isbInvalida())
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												if (QMImpuestos.setNota(conexion, liCodImpuesto, nota.getsContenido()))
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													//Error al guardar la nota
+													iCodigo = -915;
+													conexion.rollback();
+												}
+												
+											}
 										}
 										else
 										{

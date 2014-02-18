@@ -193,6 +193,16 @@ public final class CLGastos
 		return QMGastos.getDetallesGasto(ConnectionManager.getDBConnection(),liCodGasto);
 	}
 	
+	public static String buscarNota (long liCodGasto)
+	{
+		return QMGastos.getNota(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+	
+	public static boolean guardarNota (long liCodGasto, String sNota)
+	{
+		return QMGastos.setNota(ConnectionManager.getDBConnection(),liCodGasto, sNota);
+	}
+	
 	public static MovimientoGasto buscarMovimientoGasto (long liCodMovimiento)
 	{
 		return QMMovimientosGastos.getMovimientoGasto(ConnectionManager.getDBConnection(),liCodMovimiento);

@@ -16,6 +16,7 @@ import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoComunidad;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -221,9 +222,9 @@ public class GestorTablaComunidadActivo implements Serializable
 	    			"#", "", 
 	    			"");
 	    	
-
+	    	Nota nota = new Nota (true,"");
 			
-			int iSalida = CLComunidades.registraMovimiento(movimiento,"");
+			int iSalida = CLComunidades.registraMovimiento(movimiento,nota);
 			
 			switch (iSalida) 
 			{

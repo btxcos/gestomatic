@@ -73,6 +73,16 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesAutorizadasPorFecha(ConnectionManager.getDBConnection(),sFecha);
 	}
 	
+	public static String buscarNota (String sNUPROF)
+	{
+		return QMProvisiones.getNota(ConnectionManager.getDBConnection(),sNUPROF);
+	}
+	
+	public static boolean guardarNota (String sNUPROF, String sNota)
+	{
+		return QMProvisiones.setNota(ConnectionManager.getDBConnection(),sNUPROF, sNota);
+	}
+	
 	public static String calcularValorProvision (String sNUPROF)
 	{
 		long liValor = QMListaGastosProvisiones.calculaValorProvision(ConnectionManager.getDBConnection(),sNUPROF);

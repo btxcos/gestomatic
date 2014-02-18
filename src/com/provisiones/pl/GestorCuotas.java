@@ -17,6 +17,7 @@ import com.provisiones.ll.CLCuotas;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoCuota;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -380,7 +381,9 @@ public class GestorCuotas implements Serializable
 							sOBTEXC.toUpperCase(), 
 							sOBDEER.toUpperCase());
 					
-					int iSalida = CLCuotas.registraMovimiento(movimiento, sNota);
+					Nota nota = new Nota (false,sNota);
+					
+					int iSalida = CLCuotas.registraMovimiento(movimiento, nota);
 					
 					switch (iSalida) 
 					{

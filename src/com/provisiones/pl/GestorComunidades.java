@@ -15,6 +15,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoComunidad;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -281,10 +282,10 @@ public class GestorComunidades implements Serializable
 							sOBDEER.toUpperCase());
 					
 					logger.debug(movimiento.logMovimientoComunidad());
+
+					Nota nota = new Nota (false,sNota);
 					
-					int iSalida = CLComunidades.registraMovimiento(movimiento, sNota);
-					
-					
+					int iSalida = CLComunidades.registraMovimiento(movimiento, nota);
 					
 					switch (iSalida) 
 					{

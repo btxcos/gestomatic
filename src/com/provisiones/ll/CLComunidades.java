@@ -20,8 +20,10 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuenta;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoComunidad;
 import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.ComunidadTabla;
 
 public final class CLComunidades 
 {
@@ -93,9 +95,26 @@ public final class CLComunidades
 	}
 	
 	//Interfaz básico
+
+	
+	public static ArrayList<ComunidadTabla> buscarComunidad (String sCodCOCLDO, String sCodNUDCOM)
+	{
+		return QMComunidades.buscaComunidad(ConnectionManager.getDBConnection(),buscarCodigoComunidad (sCodCOCLDO, sCodNUDCOM));
+	}
+
+	public static ArrayList<ComunidadTabla> buscarComunidadActivo (int iCOACES)
+	{
+		return QMListaComunidadesActivos.buscaComunidadActivo(ConnectionManager.getDBConnection(),iCOACES);
+	}
+	
 	public static ArrayList<ActivoTabla> buscarActivosComunidad (String sCodCOCLDO, String sCodNUDCOM)
 	{
 		return QMListaComunidadesActivos.buscaActivosComunidad(ConnectionManager.getDBConnection(),buscarCodigoComunidad (sCodCOCLDO, sCodNUDCOM));
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivosCodigoComunidad (long liCodComunidad)
+	{
+		return QMListaComunidadesActivos.buscaActivosComunidad(ConnectionManager.getDBConnection(),liCodComunidad);
 	}
 	
 	public static ArrayList<ActivoTabla> buscarActivosComunidadDisponibles (ActivoTabla filtro, String sCodCOCLDO, String sCodNUDCOM)
@@ -124,6 +143,11 @@ public final class CLComunidades
 	{
 		return QMListaComunidadesActivos.buscaComunidadPorActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
+
+	public static Comunidad buscarDetallesComunidad (long liCodComunidad)
+	{
+		return QMComunidades.getDetallesComunidad(ConnectionManager.getDBConnection(),liCodComunidad);
+	}
 	
 	public static MovimientoComunidad buscarMovimientoComunidad (long liCodMovimiento)
 	{
@@ -135,10 +159,20 @@ public final class CLComunidades
 		return QMComunidades.getNota(ConnectionManager.getDBConnection(),liCodComunidad);
 	}
 	
+	public static boolean guardarNota (long liCodComunidad, String sNota)
+	{
+		return QMComunidades.setNota(ConnectionManager.getDBConnection(),liCodComunidad, sNota);
+	}
+	
 	public static long buscarNumeroMovimientosComunidadesPendientes()
 	{
 		return (QMListaComunidadesActivos.buscaCantidadValidado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE) 
 				+ QMListaComunidades.buscaCantidadValidado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
+	}
+	
+	public static long buscarNumeroActivosComunidad(long liCodComunidad)
+	{
+		return QMListaComunidadesActivos.buscaNumeroActivos(ConnectionManager.getDBConnection(), liCodComunidad);
 	}
 	
 	public static int comprobarComunidadActivo (String sCOCLDO, String sNUDCOM, int iCodCOACES)
@@ -934,7 +968,7 @@ public final class CLComunidades
 	
 	
 	
-	public static int registraMovimiento(MovimientoComunidad movimiento, String sNota)
+	public static int registraMovimiento(MovimientoComunidad movimiento, Nota nota)
 	{
 		int iCodigo = -910;//Error de conexion
 		
@@ -954,14 +988,14 @@ public final class CLComunidades
 				
 				if (movimiento_revisado.getCOACCI().equals("#"))
 				{	
-					if (sNota.equals(""))
+					if (nota.isbInvalida())
 					{
 						//Error modificacion sin cambios
 						iCodigo = -804;
 					}
 					else
 					{
-						if (QMComunidades.setNota(conexion, liCodComunidad, sNota))
+						if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
 						{
 							iCodigo = 0;
 						}
@@ -980,9 +1014,9 @@ public final class CLComunidades
 					{
 						conexion.setAutoCommit(false);
 						
-						long indice = QMMovimientosComunidades.addMovimientoComunidad(conexion,movimiento_revisado);
+						long liCodMovimiento = QMMovimientosComunidades.addMovimientoComunidad(conexion,movimiento_revisado);
 						
-						if (indice == 0)
+						if (liCodMovimiento == 0)
 						{
 							//Error al crear un movimiento
 							iCodigo = -900;
@@ -1017,7 +1051,7 @@ public final class CLComunidades
 												//relacion cuenta-Comunidad
 												if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad))
 												{
-													if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, indice))
+													if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
 													{	
 																					
 
@@ -1028,9 +1062,9 @@ public final class CLComunidades
 															iCodigo = 0;
 														}
 														else*/ 
-														if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, indice))
+														if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, liCodMovimiento))
 														{
-															if (sNota.equals(""))
+															if (nota.isbInvalida())
 															{
 																//OK 
 																iCodigo = 0;
@@ -1038,7 +1072,7 @@ public final class CLComunidades
 															}
 															else
 															{
-																if (QMComunidades.setNota(conexion, liCodComunidad, sNota))
+																if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
 																{
 																	//OK 
 																	iCodigo = 0;
@@ -1113,13 +1147,13 @@ public final class CLComunidades
 
 									break;
 								case B:
-									if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, indice))
+									if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
 									{
 										
 										logger.debug("Dando de Baja...");
 										if (QMComunidades.setEstado(conexion,liCodComunidad, "B"))
 										{
-											if (sNota.equals(""))
+											if (nota.isbInvalida())
 											{
 												//OK 
 												iCodigo = 0;
@@ -1127,7 +1161,7 @@ public final class CLComunidades
 											}
 											else
 											{
-												if (QMComunidades.setNota(conexion, liCodComunidad, sNota))
+												if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
 												{
 													//OK 
 													iCodigo = 0;
@@ -1162,7 +1196,7 @@ public final class CLComunidades
 									}
 									break;
 								case M:
-									if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, indice))
+									if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
 									{
 										logger.debug("Modificando...");
 											
@@ -1177,7 +1211,7 @@ public final class CLComunidades
 										{
 											if (QMComunidades.modComunidad(conexion,convierteMovimientoenComunidad(movimiento), liCodComunidad))
 											{	
-												if (sNota.equals(""))
+												if (nota.isbInvalida())
 												{
 													//OK 
 													iCodigo = 0;
@@ -1185,7 +1219,7 @@ public final class CLComunidades
 												}
 												else
 												{
-													if (QMComunidades.setNota(conexion, liCodComunidad, sNota))
+													if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
 													{
 														//OK 
 														iCodigo = 0;
@@ -1228,7 +1262,7 @@ public final class CLComunidades
 														{
 															if (QMCuentas.delCuenta(conexion, liCodCuentaAntigua))
 															{
-																if (sNota.equals(""))
+																if (nota.isbInvalida())
 																{
 																	//OK 
 																	iCodigo = 0;
@@ -1236,7 +1270,7 @@ public final class CLComunidades
 																}
 																else
 																{
-																	if (QMComunidades.setNota(conexion, liCodComunidad, sNota))
+																	if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
 																	{
 																		//OK 
 																		iCodigo = 0;
@@ -1314,9 +1348,9 @@ public final class CLComunidades
 										}
 										else
 										{							
-											if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, indice))
+											if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, liCodMovimiento))
 											{
-												if (sNota.equals(""))
+												if (nota.isbInvalida())
 												{
 													//OK 
 													iCodigo = 0;
@@ -1324,7 +1358,7 @@ public final class CLComunidades
 												}
 												else
 												{
-													if (QMComunidades.setNota(conexion, liCodComunidad, sNota))
+													if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
 													{
 														//OK 
 														iCodigo = 0;
@@ -1360,9 +1394,10 @@ public final class CLComunidades
 										}
 										else
 										{	
-											if (QMListaComunidadesActivos.delRelacionComunidad(conexion,liCodMovimientoBaja))
+											if (QMListaComunidadesActivos.delRelacionComunidad(conexion,liCodMovimientoBaja))//.setValidado(conexion, liCodMovimientoBaja, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+													
 											{
-												if (sNota.equals(""))
+												if (nota.isbInvalida())
 												{
 													//OK 
 													iCodigo = 0;
@@ -1370,7 +1405,7 @@ public final class CLComunidades
 												}
 												else
 												{
-													if (QMComunidades.setNota(conexion, liCodComunidad, sNota))
+													if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
 													{
 														//OK 
 														iCodigo = 0;

@@ -72,6 +72,17 @@ public final class CLActivos
 		return QMActivos.getSociedadPatrimonial(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
+	//Gestion de Notas
+	public static String buscarNota (int iCodCOACES)
+	{
+		return QMRegistroActivos.getNota(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
+	
+	public static boolean guardarNota (int iCodCOACES, String sNota)
+	{
+		return QMRegistroActivos.setNota(ConnectionManager.getDBConnection(),iCodCOACES, sNota);
+	}
+	
 	//Interfaz avanzado
 	public static int actualizaActivoLeido(String linea)
 	{

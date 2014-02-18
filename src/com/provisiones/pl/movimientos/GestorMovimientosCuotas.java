@@ -15,6 +15,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLCuotas;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoCuota;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.CuotaTabla;
@@ -294,12 +295,14 @@ public class GestorMovimientosCuotas implements Serializable
 
 					String sNotaAntigua = CLCuotas.buscarNota(CLCuotas.buscarCodigoCuota(Integer.parseInt(sCOACES), sCOCLDO, sNUDCOM, sCOSBAC));
 					
-					if (sNotaAntigua.equals(sNota))
+					Nota nota = new Nota (sNotaAntigua.equals(sNota),sNota);
+					
+					if (nota.isbInvalida())
 					{
-						sNota = "";
+						nota.setsContenido("");
 					}
 					
-					int iSalida = CLCuotas.registraMovimiento(movimiento, sNota);
+					int iSalida = CLCuotas.registraMovimiento(movimiento, nota);
 					
 					switch (iSalida) 
 					{

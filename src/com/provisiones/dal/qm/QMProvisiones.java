@@ -750,7 +750,7 @@ public final class QMProvisiones
 		return sValidado;
 	}
 
-	public static boolean setNota(Connection conexion, long liComunidadID, String sNota)
+	public static boolean setNota(Connection conexion, String sNUPROF, String sNota)
 	{
 		boolean bSalida = false;
 
@@ -765,7 +765,7 @@ public final class QMProvisiones
 					" SET " 
 					+ CAMPO19 + " = '"+ sNota +"' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ liComunidadID +"'";
+					+ CAMPO1 + " = '"+ sNUPROF +"'";
 			
 			logger.debug(sQuery);
 			
@@ -783,7 +783,7 @@ public final class QMProvisiones
 			{
 				bSalida = false;
 
-				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 
@@ -798,7 +798,7 @@ public final class QMProvisiones
 		return bSalida;
 	}
 	
-	public static String getNota(Connection conexion, long liComunidadID)
+	public static String getNota(Connection conexion, String sNUPROF)
 	{
 		String sNota = "";
 
@@ -818,7 +818,7 @@ public final class QMProvisiones
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
-						+ CAMPO1 + " = '"+ liComunidadID +"'";
+						+ CAMPO1 + " = '"+ sNUPROF +"'";
 			
 			logger.debug(sQuery);
 
@@ -839,7 +839,7 @@ public final class QMProvisiones
 
 						sNota = rs.getString(CAMPO19);
 						
-						logger.debug(CAMPO1+":|"+liComunidadID+"|");
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 						
 						logger.debug("Encontrado el registro!");
 
@@ -855,7 +855,7 @@ public final class QMProvisiones
 			{
 				sNota = "";
 				
-				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -888,7 +888,7 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE " +
 					"("
-					+ CAMPO6 + " <> '0' AND"
+					+ CAMPO6 + " <> '0' AND "
 					+ CAMPO9 + " = '0' AND "
 					+ CAMPO16 + " = '" + sEstado + "'"
 					+")";

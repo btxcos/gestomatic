@@ -325,6 +325,7 @@ public class GestorListaActivos implements Serializable {
 			if (activoseleccionado != null)
 			{
 		    	this.sCOACES = activoseleccionado.getCOACES();
+
 		    	logger.debug("sCOACES:|"+sCOACES+"|");
 		    			    	
 		    	Sesion.guardaDetalle(sCOACES);

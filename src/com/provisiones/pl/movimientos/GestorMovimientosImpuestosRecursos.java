@@ -15,6 +15,7 @@ import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ImpuestoRecursoTabla;
@@ -323,7 +324,16 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 							sOBTEXC.toUpperCase(), 
 							sOBDEER.toUpperCase());
 					
-					int iSalida = CLImpuestos.registraMovimiento(movimiento);
+					String sNotaAntigua = CLImpuestos.buscarNota(CLImpuestos.buscarCodigoImpuesto(sNURCAT, sCOSBAC));
+					
+					Nota nota = new Nota (sNotaAntigua.equals(sNota),sNota);
+					
+					if (nota.isbInvalida())
+					{
+						nota.setsContenido("");
+					}
+					
+					int iSalida = CLImpuestos.registraMovimiento(movimiento, nota);
 					
 					switch (iSalida) 
 					{
@@ -551,6 +561,12 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 						
 					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
 						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -915: //Error 915 - error y rollback - error al guardar la nota
+						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota del impuesto o recurso. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

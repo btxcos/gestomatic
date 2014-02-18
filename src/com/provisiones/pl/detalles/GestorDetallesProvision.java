@@ -61,9 +61,11 @@ public class GestorDetallesProvision implements Serializable
 	
 	private String sCodGasto = ""; 
 
+	private String sNota = "";
+	
 	private transient GastoTabla gastoseleccionado = null;
 	private transient ArrayList<GastoTabla> tablagastos = null;
-	
+
 	public GestorDetallesProvision()
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -140,6 +142,37 @@ public class GestorDetallesProvision implements Serializable
 	    	
 		}
 		
+	}
+	
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
+	
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+
+			String sMsg = "";
+			
+			if (CLProvisiones.guardarNota(sNUPROF, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrió un error al guardar la Nota de la Referencia Catastral. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
 	}
 	
 	public void buscarGastos()
@@ -392,6 +425,14 @@ public class GestorDetallesProvision implements Serializable
 
 	public void setsCodGasto(String sCodGasto) {
 		this.sCodGasto = sCodGasto;
+	}
+	
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 
 	public GastoTabla getGastoseleccionado() {

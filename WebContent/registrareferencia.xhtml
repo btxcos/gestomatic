@@ -183,7 +183,7 @@
 						</h:panelGrid>
 					</p:dialog>
 
-					<p:dialog header="Activos sin Referencias asociadas: " widgetVar="dlgTabla" resizable="false">
+					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">
 
 						<p:contextMenu for="activos">
 							<p:menuitem value="Seleccionar" update="form:COACES, form:NURCAT, form:msgs, form:popup" icon="ui-icon-check" actionListener="#{GestorReferenciasCatastrales.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
@@ -230,7 +230,7 @@
 						</p:dataTable>
 					</p:dialog>
 
-					<p:dialog header="Buscar Activos sin Referencias asociadas" widgetVar="dlgBuscar" resizable="false">
+					<p:dialog header="Buscar Activos disponibles" widgetVar="dlgBuscar" resizable="false">
 						<p:fieldset legend="Criterios de Búsqueda">
 							<h:panelGrid columns="1" cellpadding="5">
 

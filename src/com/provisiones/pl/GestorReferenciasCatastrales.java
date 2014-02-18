@@ -16,6 +16,7 @@ import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -103,6 +104,11 @@ public class GestorReferenciasCatastrales implements Serializable
         this.sTIRCAT = "";
         this.sENEMIS = "";
         this.sOBTEXC = "";
+        
+        //Ampliacion de valor catastral
+        this.sIMVSUE = "";
+        this.sIMCATA = "";
+        this.sFERECA = "";
 	}
     
     public void limpiarPlantillaReferencia(ActionEvent actionEvent) 
@@ -153,11 +159,21 @@ public class GestorReferenciasCatastrales implements Serializable
 
 			try
 			{
-		    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(Integer.parseInt(sCOACES));
+				int iCOACES = Integer.parseInt(sCOACES);
+				
+		    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(iCOACES);
 		    	
 		    	if (sNURCAT.equals(""))
 		    	{
-		    		sMsg = "No existe un numero de referencia catastral asociado disponible.";
+		    		if (CLReferencias.estaAsociado(iCOACES))
+		    		{
+			    		sMsg = "El número de Referencia Catastral asociado ya fue registrado.";
+		    		}
+		    		else
+		    		{
+			    		sMsg = "El Activo carece de una Referencia Catastral asociada.";
+		    		}
+		    		
 		    		msg = Utils.pfmsgWarning(sMsg);
 		    		logger.warn(sMsg);
 		    	}
@@ -190,11 +206,22 @@ public class GestorReferenciasCatastrales implements Serializable
 			
 			try
 			{
-		    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(Integer.parseInt(sCOACES));
+				int iCOACES = Integer.parseInt(sCOACES);
+				
+		    	this.sNURCAT  = CLReferencias.referenciaCatastralActivo(iCOACES);
 		    	
 		    	if (sNURCAT.equals(""))
 		    	{
-		    		sMsg = "No existe un numero de referencia catastral asociado disponible.";
+		    		
+		    		if (CLReferencias.estaAsociado(iCOACES))
+		    		{
+			    		sMsg = "El número de Referencia Catastral asociado ya fue registrado.";
+		    		}
+		    		else
+		    		{
+			    		sMsg = "El Activo carece de una Referencia Catastral asociada.";
+		    		}
+		    		
 		    		msg = Utils.pfmsgWarning(sMsg);
 		    		logger.warn(sMsg);
 		    		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -275,7 +302,9 @@ public class GestorReferenciasCatastrales implements Serializable
 							"", 
 							Utils.compruebaFecha(sFERECA.toUpperCase()));
 					
-					int iSalida = CLReferencias.registraMovimiento(movimiento);
+					Nota nota = new Nota (false,sNota);
+					
+					int iSalida = CLReferencias.registraMovimiento(movimiento, nota);
 					
 					switch (iSalida) 
 					{
@@ -430,6 +459,12 @@ public class GestorReferenciasCatastrales implements Serializable
 						logger.error(sMsg);
 						break;
 
+					case -915: //Error 915 - error y rollback - error al guardar la nota
+						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota de la referencia catastral. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
 					default: //error generico
 						sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);

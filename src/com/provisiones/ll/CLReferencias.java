@@ -17,6 +17,7 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 
+import com.provisiones.types.Nota;
 import com.provisiones.types.ReferenciaCatastral;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -110,9 +111,34 @@ public final class CLReferencias
 		return QMReferencias.getReferenciaCatastral(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sNURCAT));
 	}
 	
+	public static ReferenciaCatastral buscarDetallesReferencia (long liCodReferencia)
+	{
+		return QMReferencias.getDetallesReferenciaCatastral(ConnectionManager.getDBConnection(),liCodReferencia);
+	}
+	
+	public static ArrayList<ReferenciaTabla> buscarReferenciaCatastralTabla(String sNURCAT)
+	{
+		return QMReferencias.buscaReferenciaCatastral(ConnectionManager.getDBConnection(),buscarCodigoReferencia(sNURCAT));
+	}
+	
 	public static ArrayList<ReferenciaTabla> buscarReferenciasActivo(int iCodCOACES)
 	{
 		return QMListaReferencias.buscaReferenciasActivo(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
+	
+	public static String buscarNota (long liCodReferencia)
+	{
+		return QMReferencias.getNota(ConnectionManager.getDBConnection(),liCodReferencia);
+	}
+	
+	public static boolean guardarNota (long liCodReferencia, String sNota)
+	{
+		return QMReferencias.setNota(ConnectionManager.getDBConnection(),liCodReferencia, sNota);
+	}
+	
+	public static String activoAsociadoRefereciaCatastralID(long liCodReferencia)
+	{
+		return QMListaReferencias.getCodigoActivoAsociado(ConnectionManager.getDBConnection(),liCodReferencia);
 	}
 	
 	public static boolean comprobarRelacion(String sNURCAT, int iCodCOACES)
@@ -289,7 +315,7 @@ public final class CLReferencias
 		return iCodigo;
 	}
 	
-	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento)
+	public static int registraMovimiento(MovimientoReferenciaCatastral movimiento, Nota nota)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -306,8 +332,24 @@ public final class CLReferencias
 				MovimientoReferenciaCatastral movimiento_revisado = revisaCodigosControl(movimiento, liCodReferencia);
 				if (movimiento_revisado.getCOACCI().equals("#"))
 				{	
-					//error modificacion sin cambios
-					iCodigo = -804;
+					if (nota.isbInvalida())
+					{
+						//Error modificacion sin cambios
+						iCodigo = -804;
+					}
+					else
+					{
+						if (QMReferencias.setNota(conexion, liCodReferencia, nota.getsContenido()))
+						{
+							iCodigo = 0;
+						}
+						else
+						{
+							//Error al guardar la nota
+							iCodigo = -915;
+						}
+						
+					}
 				}
 				else
 				{
@@ -345,9 +387,28 @@ public final class CLReferencias
 												//Se cambian los valores de la antigua referencia
 												if(QMReferencias.modReferenciaCatastral(conexion,convierteMovimientoenReferencia(movimiento), liCodReferencia))
 												{
-													//OK 
-													iCodigo = 0;
-													conexion.commit();
+													if (nota.isbInvalida())
+													{
+														//OK 
+														iCodigo = 0;
+														conexion.commit();
+													}
+													else
+													{
+														if (QMReferencias.setNota(conexion, liCodReferencia, nota.getsContenido()))
+														{
+															//OK 
+															iCodigo = 0;
+															conexion.commit();
+														}
+														else
+														{
+															//Error al guardar la nota
+															iCodigo = -915;
+															conexion.rollback();
+														}
+														
+													}
 												}
 												else
 												{
@@ -386,9 +447,28 @@ public final class CLReferencias
 											logger.debug("Hecho!");
 											if (QMListaReferencias.addRelacionReferencia(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodReferencia, indice))
 											{
-												//OK 
-												iCodigo = 0;
-												conexion.commit();
+												if (nota.isbInvalida())
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													if (QMReferencias.setNota(conexion, liCodReferencia, nota.getsContenido()))
+													{
+														//OK 
+														iCodigo = 0;
+														conexion.commit();
+													}
+													else
+													{
+														//Error al guardar la nota
+														iCodigo = -915;
+														conexion.rollback();
+													}
+													
+												}
 											}
 											else
 											{
@@ -443,9 +523,28 @@ public final class CLReferencias
 										//ReferenciaCatastral referenciamodificada = QMReferencias.getReferenciaCatastral( movimiento_revisado.getNURCAT());
 										if(QMReferencias.modReferenciaCatastral(conexion,convierteMovimientoenReferencia(movimiento), liCodReferencia))
 										{
-											//OK 
-											iCodigo = 0;
-											conexion.commit();
+											if (nota.isbInvalida())
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												if (QMReferencias.setNota(conexion, liCodReferencia, nota.getsContenido()))
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													//Error al guardar la nota
+													iCodigo = -915;
+													conexion.rollback();
+												}
+												
+											}
 										}
 										else
 										{

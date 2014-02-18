@@ -481,6 +481,54 @@ public final class QMListaComunidadesActivos
 		return liMovimiento;
 	}
 	
+	public static boolean resuelveActivo(Connection conexion, int iCOACES, long liCodComunidad)
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO4 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "' "+
+					" WHERE (" 
+					+ CAMPO1 + " = '" + iCOACES	+ "' AND "
+					+ CAMPO2 + " = '" + liCodComunidad + "' AND "
+					+ CAMPO4 + " = '" + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE	+ "')";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COACES:|"+iCOACES+"|");
+				logger.error("ERROR COMUNIDAD:|"+liCodComunidad+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static boolean setValidado(Connection conexion, long liCodMovimiento, String sValidado)
 	{
 		boolean bSalida = false;
@@ -609,7 +657,7 @@ public final class QMListaComunidadesActivos
 			
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "SELECT COUNT(*) FROM " 
+			String sQuery = "SELECT COUNT("+CAMPO1+") FROM " 
 					+ TABLA + 
 					" WHERE "
 					+ CAMPO4 + " = '" + sCodValidado + "'";
@@ -631,7 +679,7 @@ public final class QMListaComunidadesActivos
 					{
 						bEncontrado = true;
 
-						liNumero = rs.getLong("COUNT(*)");
+						liNumero = rs.getLong("COUNT("+CAMPO1+")");
 						
 						logger.debug("Encontrado el registro!");
 
@@ -648,6 +696,73 @@ public final class QMListaComunidadesActivos
 				liNumero = 0;
 
 				logger.error("ERROR CodValidado:|"+sCodValidado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liNumero;
+	}
+	
+	public static long buscaNumeroActivos(Connection conexion, long liCodComunidad)
+	{
+		long liNumero = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT("+CAMPO1+") FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO2 + " = '" + liCodComunidad + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liNumero = rs.getLong("COUNT("+CAMPO1+")");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug( "Numero de registros:|"+liNumero+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liNumero = 0;
+
+				logger.error("ERROR liCodComunidad:|"+liCodComunidad+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1203,20 +1318,16 @@ public final class QMListaComunidadesActivos
 
 			boolean bEncontrado = false;
 
-			String sCOCLDO = "";
-			String sNUDCOM = "";
-			String sNOMCOC = "";
-			String sNOMPRC = "";
-			String sNOMADC = "";
-
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
+					   + QMComunidades.CAMPO1 + "," 
 					   + QMComunidades.CAMPO2 + ","        
 					   + QMComunidades.CAMPO3 + ","
-					   + QMComunidades.CAMPO4 + ","
-					   + QMComunidades.CAMPO6 + ","
-					   + QMComunidades.CAMPO8 + 
+					   + "AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" +
+
 					   
 					   "  FROM " 
 					   + QMComunidades.TABLA + 
@@ -1246,13 +1357,17 @@ public final class QMListaComunidadesActivos
 					{
 						bEncontrado = true;
 						
-						sCOCLDO = rs.getString(QMActivos.CAMPO2);
-						sNUDCOM = rs.getString(QMActivos.CAMPO3);
-						sNOMCOC = rs.getString(QMActivos.CAMPO4);
-						sNOMPRC = rs.getString(QMActivos.CAMPO6);
-						sNOMADC = rs.getString(QMActivos.CAMPO8);
+						String sCOCLDO = rs.getString(QMComunidades.CAMPO2);
+						String sNUDCOM = rs.getString(QMComunidades.CAMPO3);
+
+						String sNOMCOC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						String sNOMPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						String sNOMADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+
 						
-						ComunidadTabla comunidadencontrada = new ComunidadTabla(sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC);
+						String sActivos = ""+buscaNumeroActivos(conexion, rs.getLong(QMComunidades.CAMPO1));
+						
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, sActivos);
 						
 						resultado.add(comunidadencontrada);
 						

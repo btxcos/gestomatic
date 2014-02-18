@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -70,6 +71,10 @@ public class GestorDetallesGasto implements Serializable
 	private String sCOSPII = "";
 	private String sNUCLII = "";
 	
+	private long liCodGasto = 0;
+
+	private String sNota = "";
+	
 	public GestorDetallesGasto()
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -107,75 +112,135 @@ public class GestorDetallesGasto implements Serializable
 	{
 		logger.debug("Cargando Gasto...");
 
-		String sGastoID = Sesion.cargarDetalle();
+		String sCodGasto = Sesion.cargarDetalle();
 		
-		logger.debug("sGastoID:|"+sGastoID+"|");
+		logger.debug("sCodGasto:|"+sCodGasto+"|");
+
+		FacesMessage msg;
 		
-		if (!sGastoID.equals(""))
+		String sMsg = "";
+
+		if (!sCodGasto.equals(""))
 		{
-
-		  	Gasto gasto = CLGastos.buscarDetallesGasto(Integer.parseInt(sGastoID));
-
-	    	logger.debug(gasto.logGasto());
-	    	
-	    	this.sCOACES = gasto.getCOACES();
-		  	
-	    	this.sCOGRUG = gasto.getCOGRUG();
-	    	this.sCOTPGA = gasto.getCOTPGA();
-	    	this.sCOSBGA = gasto.getCOSBGA();
-	    	this.sFEDEVE = Utils.recuperaFecha(gasto.getFEDEVE());
-	 
-
-			this.sPTPAGO = gasto.getPTPAGO();
-
-			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
 			
-			//TODO sacar de datos de pago
-			//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
-			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
-			this.sCOSIGA = gasto.getCOSIGA();
-			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
-			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
-			this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
-			this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
-			this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
-			this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
-			this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
-			this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
-			this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
-			this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
-			this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
-			this.sCOIMPT = gasto.getCOIMPT();
-			
-			this.sCOTNEG = gasto.getCOTNEG();
-			this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
-			this.sCOMONA = gasto.getCOMONA();
-			this.sBIAUTO = gasto.getBIAUTO();
-			this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-			//TODO sacar de datos de pago
-			//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
-			
-			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
-			
-			//TODO sacar de datos de pago
-			//this.sCOENCX = ValoresDefecto.DEF_COENCX;
-			//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-			//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
-			
-			this.sNUPROF = CLGastos.buscarProvisionGastoID(Integer.parseInt(sGastoID));
+			try
+			{
+				
+				this.liCodGasto = Long.parseLong(sCodGasto);
+				
+			  	Gasto gasto = CLGastos.buscarDetallesGasto(liCodGasto);
 
-			this.sCOTERR = ValoresDefecto.DEF_COTERR;
-			
-			//TODO sacar de datos de pago
-			//this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
-		
-			//this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
-			this.sCOAPII = ValoresDefecto.DEF_COAPII;
-			this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-			this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+		    	logger.debug(gasto.logGasto());
+		    	
+		    	this.sCOACES = gasto.getCOACES();
+			  	
+		    	this.sCOGRUG = gasto.getCOGRUG();
+		    	this.sCOTPGA = gasto.getCOTPGA();
+		    	this.sCOSBGA = gasto.getCOSBGA();
+		    	this.sFEDEVE = Utils.recuperaFecha(gasto.getFEDEVE());
+		 
 
+				this.sPTPAGO = gasto.getPTPAGO();
+
+				this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
+				
+				//TODO sacar de datos de pago
+				//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+				this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
+				this.sCOSIGA = gasto.getCOSIGA();
+				this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
+				this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
+				this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
+				this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+				this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
+				this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
+				this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
+				this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
+				this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
+				this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
+				this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
+				this.sCOIMPT = gasto.getCOIMPT();
+				
+				this.sCOTNEG = gasto.getCOTNEG();
+				this.sFEAGTO = Utils.recuperaFecha(gasto.getFEAGTO());
+				this.sCOMONA = gasto.getCOMONA();
+				this.sBIAUTO = gasto.getBIAUTO();
+				this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
+				//TODO sacar de datos de pago
+				//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+				
+				this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
+				
+				//TODO sacar de datos de pago
+				//this.sCOENCX = ValoresDefecto.DEF_COENCX;
+				//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+				//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+				
+				this.sNUPROF = CLGastos.buscarProvisionGastoID(liCodGasto);
+
+				this.sCOTERR = ValoresDefecto.DEF_COTERR;
+				
+				//TODO sacar de datos de pago
+				//this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
+			
+				//this.sFEAPLI = ValoresDefecto.DEF_FEAPLI;
+				this.sCOAPII = ValoresDefecto.DEF_COAPII;
+				this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
+				this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+				
+				this.sNota = CLGastos.buscarNota(liCodGasto);
+				
+				sMsg = "El Gasto se cargó correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: Ocurrió un error al cargar los datos del Gasto. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+		}
+		else
+		{
+			sMsg = "ERROR: Ocurrió un error al recuperar el Gasto. Por favor, revise los datos y avise a soporte.";
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
 		}
 		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+	}
+	
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
+	
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+
+			String sMsg = "";
+			
+			if (CLProvisiones.guardarNota(sNUPROF, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrió un error al guardar la Nota de la Referencia Catastral. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
 	}
 	
 	public void cargarDetallesActivo(ActionEvent actionEvent) 
@@ -548,6 +613,14 @@ public class GestorDetallesGasto implements Serializable
 	}
 	public void setsNUCLII(String sNUCLII) {
 		this.sNUCLII = sNUCLII;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 	
 	

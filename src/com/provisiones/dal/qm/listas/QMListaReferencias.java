@@ -563,6 +563,76 @@ public final class QMListaReferencias
 		return resultado;
 	}
 	
+	public static String getCodigoActivoAsociado(Connection conexion, long liCodReferencia)
+	{
+		String sCOACES = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						   + CAMPO1 +   
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE " 
+						   + CAMPO2 + " = '" + liCodReferencia + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sCOACES = rs.getString(CAMPO1);
+						
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+	 
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sCOACES = "";
+
+				logger.error("ERROR liCodReferencia:|"+liCodReferencia+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}	
+		}
+
+		return sCOACES;
+	}
+	
 	public static long buscaCantidadValidado(Connection conexion, String sCodValidado)
 	{
 		long liNumero = 0;

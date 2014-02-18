@@ -68,11 +68,9 @@ public class GestorCuentasComunidades implements Serializable
 	}
 	
 	private transient ActivoTabla activoseleccionado = null;
-	
-	private transient Cuenta cuentaseleccionada = null;
-
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
+	private transient Cuenta cuentaseleccionada = null;
 	private transient ArrayList<Cuenta> tablacuentas = null;
 	
 	public void borrarCamposActivo()
