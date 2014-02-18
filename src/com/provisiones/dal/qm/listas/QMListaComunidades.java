@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -321,6 +322,78 @@ public final class QMListaComunidades
 		return bEncontrado;
 	}
 
+	public static boolean existeAltaPendienteComunidad(Connection conexion, long liCodComunidad)
+	{
+		boolean bEncontrado = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + QMMovimientosComunidades.CAMPO1  +
+				       " FROM " 
+				       + QMMovimientosComunidades.TABLA + 
+				       " WHERE ("
+				       + QMMovimientosComunidades.CAMPO5 + " = '" + ValoresDefecto.DEF_COACCI_COMUNIDAD_ALTA + "' AND  "
+				       + QMMovimientosComunidades.CAMPO1 + " IN (SELECT "
+				       + CAMPO3  +
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE (" 
+				       + CAMPO1 + " = '" + liCodComunidad + "' AND  "
+				       + CAMPO3 + " = '" + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE +
+				       "')))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+		
+
+		return bEncontrado;
+	}
+	
 	public static ArrayList<Long>  getComunidadesPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>(); 

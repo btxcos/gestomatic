@@ -64,7 +64,13 @@ public final class ValoresDefecto
 	
 	public static final String DEF_ALTA = "A";
 	public static final String DEF_BAJA = "B";
-
+	
+	public static final String DEF_COACCI_COMUNIDAD_ALTA = "A";
+	public static final String DEF_COACCI_COMUNIDAD_MODIFICACION = "M";
+	public static final String DEF_COACCI_COMUNIDAD_ALTA_ACTIVO = "X";
+	public static final String DEF_COACCI_COMUNIDAD_BAJA_ACTIVO = "E";
+	public static final String DEF_COACCI_COMUNIDAD_BAJA = "B";
+	
 	public static final String DEF_MOVIMIENTO_PENDIENTE = "P";
 	public static final String DEF_MOVIMIENTO_ENVIADO = "E";
 	public static final String DEF_MOVIMIENTO_VALIDADO = "V";

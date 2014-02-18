@@ -458,7 +458,7 @@ public final class QMCuotas
 		return liCuotaID;
 	}
 	
-	public static boolean tieneCuotas(Connection conexion, int iCOACES, String sCodCOCLDO, String sCodNUDCOM)
+	public static boolean tieneCuotas(Connection conexion, String sCodCOCLDO, String sCodNUDCOM)
 	{
 		boolean bEncontrado = false;
 
@@ -476,7 +476,6 @@ public final class QMCuotas
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE ("
-				       + CAMPO2  + " = '"+ iCOACES +"' AND "
 				       + CAMPO3  + " = '"+ sCodCOCLDO +"' AND "
 				       + CAMPO4  + " = '"+ sCodNUDCOM +"' AND " 
 				       + CAMPO12  + " <> 'B')";
@@ -511,7 +510,6 @@ public final class QMCuotas
 			{
 				bEncontrado = false;
 
-				logger.error("ERROR COACES:|"+iCOACES+"|");
 				logger.error("ERROR COCLDO:|"+sCodCOCLDO+"|");
 				logger.error("ERROR NUDCOM:|"+sCodNUDCOM+"|");
 

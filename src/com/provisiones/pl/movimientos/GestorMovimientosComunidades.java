@@ -338,7 +338,7 @@ public class GestorMovimientosComunidades implements Serializable
 			
 			try
 			{
-				//Integer.parseInt(sCOACES);
+
 				
 				if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
 				{
@@ -357,7 +357,7 @@ public class GestorMovimientosComunidades implements Serializable
 							sCOCLDO.toUpperCase(), 
 							sNUDCOM.toUpperCase(), 
 							"",
-							"", 
+							"",
 							"", 
 							sNOMCOC.toUpperCase(), 
 							"", 
@@ -390,7 +390,10 @@ public class GestorMovimientosComunidades implements Serializable
 						nota.setsContenido("");
 					}
 					
+					logger.debug("Registar...");
 					int iSalida = CLComunidades.registraMovimiento(movimiento,nota);
+					logger.debug("Registrado!");
+					
 					
 					switch (iSalida) 
 					{
@@ -626,6 +629,12 @@ public class GestorMovimientosComunidades implements Serializable
 						
 					case -915: //Error 915 - error y rollback - error al guardar la nota
 						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota de la comunidad. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -916: //Error 916 - error y rollback - error dar de baja la comunidad
+						sMsg = "[FATAL] ERROR:916 - Se ha producido un error al dar de baja la comunidad. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

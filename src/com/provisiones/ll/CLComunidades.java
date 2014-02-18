@@ -984,7 +984,10 @@ public final class CLComunidades
 			{
 				//OK correcto estado y accion
 				
+				logger.debug("Revisar...");
 				MovimientoComunidad movimiento_revisado = revisaCodigosControl(movimiento,liCodComunidad);
+				logger.debug("Revisado!");
+				
 				
 				if (movimiento_revisado.getCOACCI().equals("#"))
 				{	
@@ -1147,11 +1150,9 @@ public final class CLComunidades
 
 									break;
 								case B:
-									if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
+									if (QMListaComunidades.existeAltaPendienteComunidad(conexion, liCodComunidad))
 									{
-										
-										logger.debug("Dando de Baja...");
-										if (QMComunidades.setEstado(conexion,liCodComunidad, "B"))
+										if (QMComunidades.delComunidad(conexion, liCodComunidad))
 										{
 											if (nota.isbInvalida())
 											{
@@ -1173,27 +1174,66 @@ public final class CLComunidades
 													iCodigo = -915;
 													conexion.rollback();
 												}
-												
 											}
 										}
 										else
 										{
-											//error y rollback - error al cambiar el estado
-											iCodigo = -904;
-											//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-											
+											//Error al guardar la nota
+											iCodigo = -916;
 											conexion.rollback();
 										}
 									}
 									else
 									{
-										//error y rollback - error al registrar la relaccion
-										iCodigo = -902;
-										//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-										
-										conexion.rollback();
+										if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
+										{
+											
+											logger.debug("Dando de Baja...");
+											if (QMComunidades.setEstado(conexion,liCodComunidad, "B"))
+											{
+												if (nota.isbInvalida())
+												{
+													//OK 
+													iCodigo = 0;
+													conexion.commit();
+												}
+												else
+												{
+													if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+													{
+														//OK 
+														iCodigo = 0;
+														conexion.commit();
+													}
+													else
+													{
+														//Error al guardar la nota
+														iCodigo = -915;
+														conexion.rollback();
+													}
+												}
+											}
+											else
+											{
+												//error y rollback - error al cambiar el estado
+												iCodigo = -904;
+												//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
+												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+												
+												conexion.rollback();
+											}
+										}
+										else
+										{
+											//error y rollback - error al registrar la relaccion
+											iCodigo = -902;
+											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+											
+											conexion.rollback();
+										}
 									}
+									
+									
 									break;
 								case M:
 									if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
@@ -1393,19 +1433,13 @@ public final class CLComunidades
 											conexion.rollback();
 										}
 										else
-										{	
-											if (QMListaComunidadesActivos.delRelacionComunidad(conexion,liCodMovimientoBaja))//.setValidado(conexion, liCodMovimientoBaja, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
-													
+										{
+											if (QMListaComunidadesActivos.existeAltaPendienteActivo(conexion, Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad))
 											{
-												if (nota.isbInvalida())
+												if (QMListaComunidadesActivos.delRelacionComunidad(conexion,liCodMovimientoBaja))//.setValidado(conexion, liCodMovimientoBaja, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+													
 												{
-													//OK 
-													iCodigo = 0;
-													conexion.commit();
-												}
-												else
-												{
-													if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+													if (nota.isbInvalida())
 													{
 														//OK 
 														iCodigo = 0;
@@ -1413,21 +1447,67 @@ public final class CLComunidades
 													}
 													else
 													{
-														//Error al guardar la nota
-														iCodigo = -915;
-														conexion.rollback();
+														if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+														{
+															//OK 
+															iCodigo = 0;
+															conexion.commit();
+														}
+														else
+														{
+															//Error al guardar la nota
+															iCodigo = -915;
+															conexion.rollback();
+														}
+														
 													}
-													
 												}
+												else
+												{
+													//error y rollback - error al desasociar el activo en la comunidad
+													iCodigo = -909;
+													//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+													//QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), liCodComunidad, sMovimientoBaja);
+													
+													conexion.rollback();
+												}
+
 											}
 											else
 											{
-												//error y rollback - error al desasociar el activo en la comunidad
-												iCodigo = -909;
-												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-												//QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), liCodComunidad, sMovimientoBaja);
+												if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, liCodMovimiento))
+												{
+													if (nota.isbInvalida())
+													{
+														//OK 
+														iCodigo = 0;
+														conexion.commit();
+													}
+													else
+													{
+														if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+														{
+															//OK 
+															iCodigo = 0;
+															conexion.commit();
+														}
+														else
+														{
+															//Error al guardar la nota
+															iCodigo = -915;
+															conexion.rollback();
+														}
+														
+													}
+												}
+												else
+												{
+													//error y rollback - error al asociar el activo en la comunidad
+													iCodigo = -909;
+													//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
+													conexion.rollback();
+												}
 												
-												conexion.rollback();
 											}
 										}
 									break;
@@ -1789,6 +1869,13 @@ public final class CLComunidades
 			
 			logger.debug("Estado:|{}|",sEstado);
 			logger.debug("Accion:|{}|",movimiento.getCOACCI());
+			
+			int iCOACES = 0;
+			
+			if (!movimiento.getCOACES().equals(""))
+			{
+				iCOACES = Integer.parseInt(movimiento.getCOACES());
+			}
 		
 			if (movimiento.getCOACCI().equals(""))
 			{
@@ -1844,12 +1931,12 @@ public final class CLComunidades
 				//Error 022 - NO SE PUEDE DAR ALTA SI CONTROL DE ACTIVO NO ES S
 				iCodigo = -22;
 			}		
-			else if ( !movimiento.getCOACES().equals("") && !CLActivos.existeActivo(Integer.parseInt(movimiento.getCOACES())))
+			else if ( !movimiento.getCOACES().equals("") && !CLActivos.existeActivo(iCOACES))
 			{
 				//Error 003 - NO EXISTE EL ACTIVO
 				iCodigo = -3;
 			}
-			else if ((movimiento.getCOACCI().equals("A") || movimiento.getCOACCI().equals("X")) && CLComunidades.esActivoVinculadoAComunidad(Integer.parseInt(movimiento.getCOACES())))
+			else if ((movimiento.getCOACCI().equals("A") || movimiento.getCOACCI().equals("X")) && CLComunidades.esActivoVinculadoAComunidad(iCOACES))
 			{
 				//Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
 				iCodigo = -8;
@@ -1859,7 +1946,7 @@ public final class CLComunidades
 				//Error 009 - YA EXISTE ESTA COMUNIDAD
 				iCodigo = -9;
 			}		
-			else if (sEstado.equals("A") && movimiento.getCOACCI().equals("X") && comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(), Integer.parseInt(movimiento.getCOACES())))
+			else if (sEstado.equals("A") && movimiento.getCOACCI().equals("X") && comprobarRelacion(movimiento.getCOCLDO(), movimiento.getNUDCOM(), iCOACES))
 			{
 				//Error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
 				iCodigo = -10;
@@ -1879,7 +1966,7 @@ public final class CLComunidades
 				//Error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
 				iCodigo = -26;
 			}
-			else if (movimiento.getCOACCI().equals("B") && CLCuotas.tieneCuotas(Integer.parseInt(movimiento.getCOACES()),movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+			else if (movimiento.getCOACCI().equals("B") && CLCuotas.tieneCuotas(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 			{
 				//Error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
 				iCodigo = -27;			
@@ -1901,6 +1988,8 @@ public final class CLComunidades
 				iCodigo = -803;
 			}
 		}
+
+		logger.debug("Comprobado!");
 		
 		return iCodigo;
 

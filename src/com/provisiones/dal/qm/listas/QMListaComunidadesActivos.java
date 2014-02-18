@@ -3,6 +3,7 @@ package com.provisiones.dal.qm.listas;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMComunidades;
+import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 //import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -481,52 +482,78 @@ public final class QMListaComunidadesActivos
 		return liMovimiento;
 	}
 	
-	public static boolean resuelveActivo(Connection conexion, int iCOACES, long liCodComunidad)
+	public static boolean existeAltaPendienteActivo(Connection conexion, int iCOACES, long liCodComunidad)
 	{
-		boolean bSalida = false;
+		boolean bEncontrado = false;
 		
 		if (conexion != null)
 		{
 			Statement stmt = null;
 
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "UPDATE " 
-					+ TABLA + 
-					" SET " 
-					+ CAMPO4 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "' "+
-					" WHERE (" 
-					+ CAMPO1 + " = '" + iCOACES	+ "' AND "
-					+ CAMPO2 + " = '" + liCodComunidad + "' AND "
-					+ CAMPO4 + " = '" + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE	+ "')";
+			String sQuery = "SELECT "
+				       + QMMovimientosComunidades.CAMPO1  +
+				       " FROM " 
+				       + QMMovimientosComunidades.TABLA + 
+				       " WHERE ("
+				       + QMMovimientosComunidades.CAMPO5 + " = '" + ValoresDefecto.DEF_COACCI_COMUNIDAD_ALTA_ACTIVO + "' AND  "
+				       + QMMovimientosComunidades.CAMPO1 + " IN (SELECT "
+				       + CAMPO3  +
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE (" 
+				       + CAMPO1 + " = '" + iCOACES + "' AND  "
+				       + CAMPO2 + " = '" + liCodComunidad + "' AND  "
+				       + CAMPO4 + " = '" + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE +
+				       "')))";
 			
 			logger.debug(sQuery);
-			
+
 			try 
 			{
 				stmt = conexion.createStatement();
-				stmt.executeUpdate(sQuery);
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
 				
 				logger.debug("Ejecutada con exito!");
-				
-				bSalida = true;
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
 			} 
 			catch (SQLException ex) 
 			{
-				bSalida = false;
+				bEncontrado = false;
 
 				logger.error("ERROR COACES:|"+iCOACES+"|");
-				logger.error("ERROR COMUNIDAD:|"+liCodComunidad+"|");
+				logger.error("ERROR Comunidad:|"+liCodComunidad+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
 			finally 
 			{
+				Utils.closeResultSet(rs);
 				Utils.closeStatement(stmt);
 			}
 		}
+		
 
-		return bSalida;
+		return bEncontrado;
 	}
 	
 	public static boolean setValidado(Connection conexion, long liCodMovimiento, String sValidado)
