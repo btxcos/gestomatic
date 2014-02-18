@@ -88,7 +88,7 @@
 											<h:panelGrid columns="3" cellpadding="5">
 
 												<h:outputText for="COACES" value="Código de activo: "/>
-												<p:inputText id="COACES" value="#{GestorReferenciasCatastrales.sCOACES}" size="9" maxlength="9"/>
+												<p:inputMask id="COACES" value="#{GestorReferenciasCatastrales.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
 												<p:commandButton value="Cargar Referencia disponible" update="msgs, popup, COACES, NURCAT" actionListener="#{GestorReferenciasCatastrales.comprobarActivo}"/>
 

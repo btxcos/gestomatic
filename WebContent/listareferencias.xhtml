@@ -77,7 +77,7 @@
 											<h:panelGrid columns="3" cellpadding="5">
 
 												<h:outputText for="COACES" value="Código de activo: " />
-												<p:inputText id="COACES" value="#{GestorListaReferencias.sCOACES}" size="9" maxlength="9"/>
+												<p:inputMask id="COACES" value="#{GestorListaReferencias.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
 												<p:commandButton value="Carga Referencias" update="msgs, popup, referencias" actionListener="#{GestorListaReferencias.buscarReferenciasActivo}"/>
 

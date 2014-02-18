@@ -854,28 +854,30 @@ public final class CLReferencias
 				//Error 052 - TITULAR CATASTRAL OBLIGATORIO. NO SE PUEDE DAR DE ALTA
 				iCodigo = -52;
 			}
-			
-			else if (Double.parseDouble(movimiento.getIMVSUE()) <= 0)
-			{
-				//Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
-				iCodigo = -82;
-			}
 			else if (movimiento.getIMVSUE().equals("#"))
 			{
 				//Error 701 - valor del suelo incorrecto
 				iCodigo = -701;
 			}
-
-			else if (Double.parseDouble(movimiento.getIMCATA()) <= 0)
+			
+			else if (Long.parseLong(movimiento.getIMVSUE()) <= 0)
 			{
-				//Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
-				iCodigo = -83;
+				//Error 082 - EL VALOR DEL SUELO TIENE QUE SER MAYOR DE CERO
+				iCodigo = -82;
 			}
+
 			else if (movimiento.getIMCATA().equals("#"))
 			{
 				//Error 702 - valor catastral incorrecto
 				iCodigo = -702;
 			}
+
+			else if (Long.parseLong(movimiento.getIMCATA()) <= 0)
+			{
+				//Error 083 - EL VALOR CATASTRAL TIENE QUE SER MAYOR DE CERO
+				iCodigo = -83;
+			}
+
 			
 			else if (movimiento.getFERECA().equals("#"))// || movimiento.getFERECA().equals("0"))
 			{
