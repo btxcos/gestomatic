@@ -117,11 +117,11 @@
 									<h:panelGrid columns="2" cellpadding="5">
 										<p:panel >
 											<h:panelGrid columns="4" cellpadding="5">
+
 												<h:outputText for="COACES" value="Código de activo: " />
-													<p:inputText id="COACES" value="#{GestorTablaComunidadActivo.sCOACES}" size="9" maxlength="9">
-													</p:inputText>
-												<p:message for="COACES" display="icon"/>
+												<p:inputMask id="COACES" value="#{GestorTablaComunidadActivo.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 												<p:commandButton value="Dar de Alta" update="msgs, popup, COACES, activosComunidad" actionListener="#{GestorTablaComunidadActivo.altaActivoComunidad}"/>
+
 											</h:panelGrid>
 										</p:panel>
 									<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>

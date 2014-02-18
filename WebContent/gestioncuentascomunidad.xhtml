@@ -76,7 +76,7 @@
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="COACES" value="Código de activo: "/>
-											<p:inputText id="COACES" value="#{GestorCuentasComunidades.sCOACES}" size="9" maxlength="9"/>
+											<p:inputMask id="COACES" value="#{GestorCuentasComunidades.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
 											<p:commandButton value="Buscar Comunidad" update="cuentas, msgs, popup, panel" actionListener="#{GestorCuentasComunidades.buscarComunidad}"/>	
 

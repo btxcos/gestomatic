@@ -28,17 +28,6 @@
 								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
 							</h:panelGrid>
 						</p:fieldset>
-						<p:panel>
-							<h:panelGrid columns="2" cellpadding="5">
-
-								<h:outputText value="CODTRN: "/>
-								<p:inputText id="CODTRN" value="#{GestorMovimientosComunidades.sCODTRN}" disabled="true"/>
-
-								<h:outputText value="IDPROV: "/>
-								<p:inputText id="IDPROV" value="#{GestorMovimientosComunidades.sIDPROV}" disabled="true"/>
-
-							</h:panelGrid>
-						</p:panel>
 
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
@@ -93,7 +82,7 @@
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="COACES" value="Código de activo: "/>
-											<p:inputText id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" size="9" maxlength="9"/>
+											<p:inputMask id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
 											<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel, NOTA" actionListener="#{GestorMovimientosComunidades.buscarComunidad}"/>	
 
@@ -147,7 +136,7 @@
 									<p:inputText id="NOMPRC" value="#{GestorMovimientosComunidades.sNOMPRC}" size="55" maxlength="55"/>
 
 									<h:outputText for="NUTPRC" value="Número de contacto: "/>
-									<p:inputText id="NUTPRC" value="#{GestorMovimientosComunidades.sNUTPRC}" size="14" maxlength="14"/>
+									<p:inputMask id="NUTPRC" value="#{GestorMovimientosComunidades.sNUTPRC}" mask="9?9999999999999" placeHolder=" " size="14" maxlength="14"/>
 
 								</h:panelGrid>
 							</p:fieldset>
@@ -159,7 +148,8 @@
 									<p:inputText id="NOMADC" value="#{GestorMovimientosComunidades.sNOMADC}" size="55" maxlength="55"/>
 
 									<h:outputText for="NUTADC" value="Número de contacto: "/>
-									<p:inputText id="NUTADC" value="#{GestorMovimientosComunidades.sNUTADC}" size="14" maxlength="14"/>
+									<p:inputMask id="NUTADC" value="#{GestorMovimientosComunidades.sNUTADC}" mask="9?9999999999999" placeHolder=" " size="14" maxlength="14"/>
+
 
 									<h:outputText for="NODCAD" value="Correo electrónico: "/>
 									<p:inputText id="NODCAD" value="#{GestorMovimientosComunidades.sNODCAD}" size="60" maxlength="60"/>

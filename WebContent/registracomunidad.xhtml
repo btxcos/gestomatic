@@ -120,7 +120,7 @@
 										<p:inputText id="NOMPRC" value="#{GestorComunidades.sNOMPRC}" size="55" maxlength="55"/>
 
 										<h:outputText for="NUTPRC" value="Número de contacto: "/>
-										<p:inputText id="NUTPRC" value="#{GestorComunidades.sNUTPRC}" size="14" maxlength="14"/>
+										<p:inputMask id="NUTPRC" value="#{GestorComunidades.sNUTPRC}" mask="9?9999999999999" placeHolder=" " size="14" maxlength="14"/>
 
 									</h:panelGrid>
 								</p:fieldset>
@@ -132,7 +132,7 @@
 										<p:inputText id="NOMADC" value="#{GestorComunidades.sNOMADC}" size="55" maxlength="55"/>
 
 										<h:outputText for="NUTADC" value="Número de contacto: "/>
-										<p:inputText id="NUTADC" value="#{GestorComunidades.sNUTADC}" size="14" maxlength="14"/>
+										<p:inputMask id="NUTADC" value="#{GestorComunidades.sNUTADC}" mask="9?9999999999999" placeHolder=" " size="14" maxlength="14"/>
 
 										<h:outputText for="NODCAD" value="Correo electrónico: "/>
 										<p:inputText id="NODCAD" value="#{GestorComunidades.sNODCAD}" size="60" maxlength="60"/>
@@ -170,7 +170,7 @@
 											<h:panelGrid columns="4" cellpadding="5">
 
 												<h:outputText for="COACES" value="Código de activo: "/>
-												<p:inputText id="COACES" value="#{GestorComunidades.sCOACES}" size="9" maxlength="9"/>
+												<p:inputMask id="COACES" value="#{GestorComunidades.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
 												<p:commandButton value="Comprobar" update="msgs, popup, COACES, activos" actionListener="#{GestorComunidades.comprobarActivo}"/>
 
