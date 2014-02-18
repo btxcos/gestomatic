@@ -55,7 +55,7 @@ public class CLPagos
 				//ERROR 001 - El gasto no esta autorizado.
 				iCodigo = -1;
 			}
-			else if (Utils.compruebaCC(pago.getsNUCCEN(), pago.getsNUCCOF(), pago.getsNUCCDI(), pago.getsNUCCNT()))
+			else if (!pago.getsTP().equals(ValoresDefecto.DEF_PAGO_VENTANILLA) && Utils.compruebaCC(pago.getsNUCCEN(), pago.getsNUCCOF(), pago.getsNUCCDI(), pago.getsNUCCNT()))
 			{
 				//ERROR 002 - Datos de cuenta incorrectos.
 				iCodigo = -2;

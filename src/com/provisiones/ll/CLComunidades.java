@@ -260,7 +260,7 @@ public final class CLComunidades
 					case X:case E:
 						sEstado = QMListaComunidadesActivos.getValidado(conexion,liCodMovimiento);
 						break;
-
+						
 					case M: case B: case A:
 						sEstado = QMListaComunidades.getValidado(conexion,liCodMovimiento);
 						break;
@@ -329,6 +329,11 @@ public final class CLComunidades
 									}
 									else
 									{
+										//TODO borrar activo validado con COACCI E
+										if (comunidad.getCOACCI().equals(ValoresDefecto.DEF_COACCI_COMUNIDAD_BAJA_ACTIVO))
+										{
+											QMListaComunidadesActivos.delRelacionComunidad(conexion, liCodMovimiento);
+										}
 										//recibido un OK
 										logger.info("Movimiento validado.");
 									}

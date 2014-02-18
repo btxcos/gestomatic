@@ -126,10 +126,11 @@ public class GestorPagosSimple implements Serializable
 	//private String sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 	//private String sNUCLII = ValoresDefecto.DEF_NUCLII;
 	
+	private String sTipoPago = ValoresDefecto.DEF_PAGO_SIMPLE;
 	
 	//Cuenta
-	private String sPais = "ES";	
-	private String sDCIBAN = "#";
+	private String sPais = "";	
+	private String sDCIBAN = "";
 	private String sNUCCEN = "";
 	private String sNUCCOF = "";
 	private String sNUCCDI = "";
@@ -352,19 +353,38 @@ public class GestorPagosSimple implements Serializable
 		this.sNUPROF = "";
 
 	}
-	
-	public void borrarCamposPago()
+
+	public void borrarCamposCuenta()
 	{
-		this.sFEPGPR = "";
-		
+
 		this.sPais = "";
 		this.sDCIBAN = "";
 		this.sNUCCEN = "";
 		this.sNUCCOF = "";
 		this.sNUCCDI = "";
 		this.sNUCCNT = "";
+		this.sDescripcion = "";
+		
+		this.sTipoPago = ValoresDefecto.DEF_PAGO_SIMPLE;
 
 	}
+	
+	
+    public void limpiarPlantillaCuenta(ActionEvent actionEvent) 
+    {  
+    	borrarCamposCuenta();
+    }
+	
+	
+	public void borrarCamposPago()
+	{
+		this.sFEPGPR = "";
+		
+		borrarCamposCuenta();
+
+	}
+	
+	
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
@@ -874,6 +894,20 @@ public class GestorPagosSimple implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
+	public void seleccionarPagoPorVentanilla(ActionEvent actionEvent)
+	{
+		this.sPais = "ES";
+		this.sDCIBAN = "00";
+		this.sNUCCEN = "0000";
+		this.sNUCCOF = "0000";
+		this.sNUCCDI = "00";
+		this.sNUCCNT = "0000000000";
+		
+		this.setsDescripcion("POR VENTANILLA");
+		
+		this.sTipoPago = ValoresDefecto.DEF_PAGO_VENTANILLA;
+	}
+	
 	
 	public void seleccionarCuentaActivo(ActionEvent actionEvent)
 	{
@@ -974,13 +1008,10 @@ public class GestorPagosSimple implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-				else if (sPais.equals("") ||
-						sDCIBAN.equals("") ||
-						sNUCCEN.equals("") ||
+				else if (sNUCCEN.equals("") ||
 						sNUCCOF.equals("") ||
 						sNUCCDI.equals("") ||
-						sNUCCNT.equals("") ||
-						sDescripcion.equals(""))
+						sNUCCNT.equals(""))
 				{
 					sMsg = "ERROR: Faltan campos en la cuenta de pago por informar. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
@@ -988,7 +1019,20 @@ public class GestorPagosSimple implements Serializable
 				}					
 				else
 				{
-					Pago pago = new Pago(sCodGastoB,ValoresDefecto.DEF_PAGO_SIMPLE, Utils.compruebaFecha(sFEPGPR),sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT);
+					if (sNUCCEN.equals("0000") ||
+					sNUCCOF.equals("0000") ||
+					sNUCCDI.equals("00") ||
+					sNUCCNT.equals("0000000000"))
+					{
+						this.sTipoPago= ValoresDefecto.DEF_PAGO_VENTANILLA; 
+					}
+					else
+					{
+						this.sTipoPago= ValoresDefecto.DEF_PAGO_SIMPLE;
+					}
+					
+					
+					Pago pago = new Pago(sCodGastoB,sTipoPago, Utils.compruebaFecha(sFEPGPR),sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT);
 					
 					int iSalida = CLPagos.registraPagoSimple(pago, true);
 					

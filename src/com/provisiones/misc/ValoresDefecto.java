@@ -96,7 +96,7 @@ public final class ValoresDefecto
 	public static final String DEF_PAGO_CONEXION = "C";
 	public static final String DEF_PAGO_MULTIPLE = "M";
 	public static final String DEF_PAGO_SIMPLE = "S";
-	
+	public static final String DEF_PAGO_VENTANILLA = "V";	
 	
 	public static final String DEF_PROVISION_ABIERTA = "A";
 	public static final String DEF_PROVISION_PENDIENTE = "P";

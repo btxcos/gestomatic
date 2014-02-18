@@ -1964,7 +1964,7 @@ public final class QMGastos
 						   " FROM " 
 						   + TABLA + 
 						   " WHERE "
-						   + CAMPO2 + " LIKE '%" + filtro.getCOACES() + "%' AND "  
+						   + CAMPO2 + " = '" + filtro.getCOACES() + "' AND "
 						   + CAMPO3 + " LIKE '%" + filtro.getCOGRUG() + "%' AND "  
 						   + CAMPO4 + " LIKE '%" + filtro.getCOTPGA() + "%' AND "  
 						   + CAMPO5 + " LIKE '%" + filtro.getCOSBGA() + "%' AND "  

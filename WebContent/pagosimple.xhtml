@@ -71,7 +71,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACESB" value="Activo: " />
-													<p:inputText id="COACESB" value="#{GestorPagosSimple.sCOACESB}" size="9" maxlength="9"/>
+													<p:inputMask id="COACESB" value="#{GestorPagosSimple.sCOACESB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
 													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" oncomplete="dlgBuscarGastosActivo.show()"/>	
 												</h:panelGrid>
@@ -85,7 +85,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NUPROFB" value="Provisión: " />
-													<p:inputText id="NUPROFB" value="#{GestorPagosSimple.sNUPROFB}" size="9" maxlength="9"/>
+													<p:inputMask id="NUPROFB" value="#{GestorPagosSimple.sNUPROFB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
 													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" oncomplete="dlgBuscarGastosProvision.show()"/>	
 												</h:panelGrid>
@@ -139,7 +139,7 @@
 											</h:panelGrid>
 									  </p:panel>
 
-										<p:commandButton value="Buscar Cuenta" update="cuentasactivo, cuentascomunidad, msgs, popup, NUCCEN, NUCCOF, NUCCDI, NUCCNT" actionListener="#{GestorPagosSimple.buscaCuentas}" oncomplete="dlgTablaCuentas.show()"/>	
+										<p:commandButton value="Buscar Cuenta" update="cuentasactivo, cuentascomunidad, msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.buscaCuentas}" oncomplete="dlgTablaCuentas.show()"/>	
 
 										<p:panel>
 											<h:panelGrid columns="2" cellpadding="5">
@@ -147,6 +147,10 @@
 												<p:inputText id="DESCRIPCION" value="#{GestorPagosSimple.sDescripcion}" size="66" maxlength="60" disabled="true"/>
 											</h:panelGrid>
 									  </p:panel>
+
+									 <p:commandButton value="Sin Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.seleccionarPagoPorVentanilla}"/>
+									 
+									 <p:commandButton value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.limpiarPlantillaCuenta}"/>
 
 											</h:panelGrid>
 									  </p:panel>

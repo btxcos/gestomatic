@@ -61,7 +61,10 @@ public class QMPagos
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO9 +
+					+ CAMPO9 + ","
+					+ CAMPO10 + ","
+					+ CAMPO11 + ","
+					+ CAMPO12 +
 					") VALUES ('" 
 					+ NuevoPago.getsGasto() + "','"
 					+ NuevoPago.getsTP() + "','"
@@ -71,7 +74,7 @@ public class QMPagos
 					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
-					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
 					+ sUsuario + "','"
 					+ Utils.timeStamp() + 
 					"')";
