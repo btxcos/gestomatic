@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+	</h:head>head>
+	<h:body>
+		<h:form id="form" onkeypress="return event.keyCode != 13">
+			<p:layout fullPage="true">
+				<p:layoutUnit position="north" size="auto" header="Lista de Comunidades Disponibles">
+					<h:panelGrid columns="4" cellpadding="5">
+						<p:fieldset legend="Sesión" id="sesion">
+							<h:panelGrid columns="1" cellpadding="1">
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="1">
+										<h:outputText value="Usuario: "/>
+										<p:inputText id="USUARIO" value="#{GestorSesion.sUsuario}" size="10" disabled="true"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
+							</h:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Detalles" update="msgs, popup, activos" actionListener="#{GestorListaComunidades.cargarDetallesComunidad}"/>
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, activos, comunidades, COACES" actionListener="#{GestorListaComunidades.limpiarPlantilla}" />	
+
+							</h:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+				</p:layoutUnit>
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+				<p:layoutUnit position="center">
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+							<p:fieldset legend="Criterios de Busqueda">
+								<h:panelGrid columns="1" cellpadding="5">
+									<p:fieldset legend="Activo">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="COACES" value="Activo: " />
+														<p:inputText id="COACES" value="#{GestorListaComunidades.sCOACES}" size="9" maxlength="9">
+														</p:inputText>
+													<p:message for="COACES" display="icon"/>
+													<p:commandButton value="Buscar Comunidad" update="comunidades, msgs, popup" actionListener="#{GestorListaComunidades.buscarComunidadActivo}"/>	
+												</h:panelGrid>
+											</p:panel>
+											<p:commandButton value="Buscar Activo" update="COACES, form:activos, msgs, popup" oncomplete="dlgBuscar.show()"/>		
+										</h:panelGrid>
+									</p:fieldset>
+									<p:fieldset legend="Comunidad de proprietarios">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="6" cellpadding="5">
+													<h:outputText for="COCLDO" value="Documento: "/>
+													<p:selectOneMenu id="COCLDO" value="#{GestorListaComunidades.sCOCLDO}">
+														<f:selectItem itemLabel="Elija..." itemValue=""/>
+														<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}"/>
+													</p:selectOneMenu>
+													<h:outputText for="NUDCOM" value="Número: "/>
+													<p:inputText id="NUDCOM" value="#{GestorListaComunidades.sNUDCOM}" size="10" maxlength="10"/>
+													<p:commandButton value="Buscar Comunidad" update="panel, msgs, popup" actionListener="#{GestorListaComunidades.buscarComunidad}"/>
+											</h:panelGrid>
+									  </p:panel>
+									</h:panelGrid>
+								</p:fieldset>
+								<p:contextMenu for="comunidades">
+									<p:menuitem value="Detalles" update="form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorListaComunidades.cargarDetallesComunidad}"/>
+								</p:contextMenu>
+								<p:dataTable id="comunidades" var="comunidad" value="#{GestorListaComunidades.tablacomunidades}" rowKey="#{comunidad.NUDCOM}"
+															selection="#{GestorListaComunidades.comunidadseleccionada}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15">
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Documento" />
+															</f:facet>
+															<h:outputText value="#{comunidad.COCLDO}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Número" />
+															</f:facet>
+															<h:outputText value="#{comunidad.NUDCOM}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Nombre" />
+															</f:facet>
+															<h:outputText value="#{comunidad.NOMCOC}" />
+														</p:column>
+														
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Presidente" />
+															</f:facet>
+															<h:outputText value="#{comunidad.NOMPRC}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Administrador" />
+															</f:facet>
+															<h:outputText value="#{comunidad.NOMADC}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activos" />
+															</f:facet>
+															<h:outputText value="#{comunidad.sActivos}" />
+														</p:column>
+
+								<f:facet name="footer">
+									<h:commandLink>
+										<p:graphicImage value="recursos/excel.png" />  
+										<p:dataExporter type="xls" target="comunidades" fileName="listacomunidades" encoding="ISO-8859-15"/>  
+									</h:commandLink>
+								</f:facet> 
+
+							</p:dataTable>
+						</h:panelGrid>
+					</p:fieldset>
+
+					<p:dialog header="Activos con Comunidades: " widgetVar="dlgTabla" resizable="false">  
+    				
+							<p:contextMenu for="activos">  
+								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorListaComunidades.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="activos" var="activo" value="#{GestorListaComunidades.tablaactivos}" rowKey="#{activo.COACES}"  
+									              selection="#{GestorListaComunidades.activoseleccionado}" selectionMode="single"
+									              paginator="true" paginatorPosition="bottom" rows="10"
+												  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												  rowsPerPageTemplate="5,10,15">	  
+									
+								<p:column headerText="Codigo Activo">  
+								    #{activo.COACES}  
+								</p:column>  
+								
+								<p:column headerText="Comunidad Autonoma">  
+								    #{activo.NOPRAC}  
+								</p:column>  
+
+								<p:column headerText="Municipio">  
+								    #{activo.NOMUIN}  
+								</p:column>  
+								
+								<p:column headerText="Via">  
+								    #{activo.NOVIAS}  
+								</p:column>  
+								
+								<p:column headerText="Portal">  
+								    #{activo.NUPOAC}  
+								</p:column>  
+								
+								<p:column headerText="Piso">  
+								    #{activo.NUPIAC}  
+								</p:column>  
+								
+								<p:column headerText="Puerta">  
+								    #{activo.NUPUAC}  
+								</p:column>  
+									
+							</p:dataTable> 
+					</p:dialog>
+					<p:dialog header="Buscar Activos con Comunidades: " widgetVar="dlgBuscar" resizable="false">  
+						<p:fieldset legend="Criterios de Busqueda">
+							<h:panelGrid columns="1" cellpadding="5">
+								<p:panel id="panelBuscar" >
+									<h:panelGrid columns="3" cellpadding="5">
+										<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
+											<p:inputText id="NOPRAC" value="#{GestorListaComunidades.sNOPRAC}" size="18" maxlength="18">
+											</p:inputText>
+										<p:message for="NOPRAC" display="icon"/>
+
+										<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
+											<p:inputText id="NOMUIN" value="#{GestorListaComunidades.sNOMUIN}" size="30" maxlength="30">
+											</p:inputText>
+										<p:message for="NOMUIN" display="icon"/>
+
+										<h:outputText for="COPOIN" value="Codigo Postal: " />
+											<p:inputText id="COPOIN" value="#{GestorListaComunidades.sCOPOIN}" size="5" maxlength="5">
+											</p:inputText>
+										<p:message for="COPOIN" display="icon"/>
+
+										<h:outputText for="NOVIAS" value="Nombre de la Via: " />
+											<p:inputText id="NOVIAS" value="#{GestorListaComunidades.sNOVIAS}" size="60" maxlength="60">
+											</p:inputText>
+										<p:message for="NOVIAS" display="icon"/>
+
+										<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
+											<p:inputText id="NUPOAC" value="#{GestorListaComunidades.sNUPOAC}" size="17" maxlength="17">
+											</p:inputText>
+										<p:message for="NUPOAC" display="icon"/>
+
+										<h:outputText for="NUPIAC" value="Piso: " />
+											<p:inputText id="NUPIAC" value="#{GestorListaComunidades.sNUPIAC}" size="11" maxlength="11">
+											</p:inputText>
+										<p:message for="NUPIAC" display="icon"/>
+
+										<h:outputText for="NUPUAC" value="Puerta: " />
+											<p:inputText id="NUPUAC" value="#{GestorListaComunidades.sNUPUAC}" size="17" maxlength="17">
+											</p:inputText>
+										<p:message for="NUPUAC" display="icon"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:panel >
+									<h:panelGrid columns="3" cellpadding="5">
+										
+										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorListaComunidades.buscarActivos}" oncomplete="dlgTabla.show()"/>	
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorListaComunidades.limpiarPlantillaActivo}" />	
+
+									</h:panelGrid>
+								</p:panel>
+
+										
+							</h:panelGrid>
+						</p:fieldset>
+					</p:dialog>
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de cerrar esta sesión?" />
+									<h:outputText value="- Todos los datos no guardados se perderán." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" action="#{GestorSesion.cerrarSesion}" oncomplete="dlgConfirmaSalir.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaSalir.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+						</h:panelGrid>
+							</p:panel>  
+
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

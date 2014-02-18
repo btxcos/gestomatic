@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/>
+	</h:head>
+
+	<h:body>
+		<h:form id="form">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="auto" header="Detalles de la Referencia #{GestorDetallesReferencia.sNURCAT}">
+					<h:panelGrid columns="4" cellpadding="5">
+						<p:fieldset legend="Sesión" id="sesion">
+							<h:panelGrid columns="1" cellpadding="1">
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="1">
+										<h:outputText value="Usuario: "/>
+										<p:inputText id="USUARIO" value="#{GestorSesion.sUsuario}" size="10" disabled="true"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Volver" actionListener="#{GestorDetallesReferencia.volver}"/>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+					</h:panelGrid>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Operativas">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+
+								<p:fieldset legend="Activo relacionado">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText for="COACES" value="Activo: " />
+											<p:inputText id="COACES" value="#{GestorDetallesReferencia.sCOACES}" size="10" readonly="true"/>
+
+											</h:panelGrid>
+										</p:panel>
+
+										<p:commandButton value="Detalles" update="msgs, popup" actionListener="#{GestorDetallesReferencia.cargarDetallesActivo}"/>
+
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Referencia Catastral">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NURCAT" value="Número: " />
+										<p:inputText id="NURCAT" value="#{GestorDetallesReferencia.sNURCAT}" size="23" readonly="true"/>
+
+										<h:outputText for="TIRCAT" value="Titular: " />
+										<p:inputText id="TIRCAT" value="#{GestorDetallesReferencia.sTIRCAT}" size="66" readonly="true"/>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Valor Catastral">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+
+												<h:outputText for="IMVSUE"  value="Valor del suelo: " />
+												<p:inputText id="IMVSUE" value="#{GestorDetallesReferencia.sIMVSUE}" size="16" readonly="true"/>
+												<h:outputText value="€" />
+
+												<h:outputText for="IMCATA" value="Valor catastral: " />
+												<p:inputText id="IMCATA" value="#{GestorDetallesReferencia.sIMCATA}" size="16" readonly="true"/>
+												<h:outputText value="€" />
+
+											</h:panelGrid>
+										</p:panel>
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+
+												<h:outputText for="FERECA" value="Fecha de revisión: " />
+												<p:inputText id="FERECA" value="#{GestorDetallesReferencia.sFERECA}" size="10" readonly="true"/>
+
+											</h:panelGrid>
+										</p:panel>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Emisión">
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="ENEMIS"  value="Entidad de emisión: " />
+										<p:inputText id="ENEMIS" value="#{GestorDetallesReferencia.sENEMIS}" size="60" readonly="true"/>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Observaciones">
+									<h:panelGrid columns="1" cellpadding="5">
+
+										<p:inputTextarea id="OBTEXC" value="#{GestorDetallesReferencia.sOBTEXC}" rows="2" cols="80" counter="counter" maxlength="110"
+											counterTemplate="{0} carácteres restantes." autoResize="false" readonly="true"/>
+										<h:outputText id="counter" />
+
+									</h:panelGrid>
+								</p:fieldset>
+
+
+						</h:panelGrid>
+					</p:panel>
+
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+						<h:panelGrid columns="1" cellpadding="1">
+							<p:panel>
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorDetallesReferencia.limpiarNota}"/>
+									<p:commandButton value="Guardar" update="NOTA" actionListener="#{GestorDetallesReferencia.guardaNota}"/>
+
+								</h:panelGrid>
+							</p:panel>
+
+							<h:panelGrid columns="1" cellpadding="5">
+								<h:outputText id="counternota"/>
+								<p:inputTextarea id="NOTA" value="#{GestorDetallesReferencia.sNota}" cols="40" rows="10" counter="counternota" maxlength="500"
+									counterTemplate="{0} carácteres restantes." autoResize="false"/>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:dialog>
+
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
+						<p:graphicImage value="recursos/loadingBar.gif"/>
+					</p:dialog>
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de cerrar esta sesión?" />
+									<h:outputText value="- Todos los datos no guardados se perderán." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" action="#{GestorSesion.cerrarSesion}" oncomplete="dlgConfirmaSalir.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaSalir.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+				</h:panelGrid>
+				</p:layoutUnit>
+
+			</p:layout>
+		</h:form>
+	</h:body>
+
+</f:view>
+</html>

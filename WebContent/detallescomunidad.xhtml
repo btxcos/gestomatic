@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/>
+	</h:head>
+
+	<h:body>
+		<h:form id="form">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="auto" header="Detalles de la Comunidad #{GestorDetallesComunidad.sNUDCOM}">
+					<h:panelGrid columns="4" cellpadding="5">
+						<p:fieldset legend="Sesión" id="sesion">
+							<h:panelGrid columns="1" cellpadding="1">
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="1">
+										<h:outputText value="Usuario: "/>
+										<p:inputText id="USUARIO" value="#{GestorSesion.sUsuario}" size="10" disabled="true"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Volver" actionListener="#{GestorDetallesComunidad.volver}"/>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+					</h:panelGrid>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Operativas">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+
+							<p:fieldset legend="Comunidad de proprietarios">
+								<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel>
+										<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText for="COCLDO" value="Documento: "/>
+											<p:inputText id="COCLDO" value="#{GestorDetallesComunidad.sCOCLDO}" size="9" readonly="true"/>
+
+											<h:outputText for="NUDCOM" value="Número: "/>
+											<p:inputText id="NUDCOM" value="#{GestorDetallesComunidad.sNUDCOM}" size="10" readonly="true"/>
+
+										</h:panelGrid>
+								  </p:panel>
+
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="NOMCOC" value="Nombre comunidad: "/>
+											<p:inputText id="NOMCOC" value="#{GestorDetallesComunidad.sNOMCOC}" size="60" readonly="true"/>
+
+											<h:outputText for="NODCCO"  value="Correo electrónico: "/>
+											<p:inputText id="NODCCO" value="#{GestorDetallesComunidad.sNODCCO}" size="60"  readonly="true"/>
+
+										</h:panelGrid>
+								  </p:panel>
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Presidente">
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<h:outputText for="NOMPRC" value="Presidente: "/>
+									<p:inputText id="NOMPRC" value="#{GestorDetallesComunidad.sNOMPRC}" size="55" readonly="true"/>
+
+									<h:outputText for="NUTPRC" value="Número de contacto: "/>
+									<p:inputText id="NUTPRC" value="#{GestorDetallesComunidad.sNUTPRC}" size="14" readonly="true"/>
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Administrador">
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<h:outputText for="NOMADC" value="Administrador: "/>
+									<p:inputText id="NOMADC" value="#{GestorDetallesComunidad.sNOMADC}" size="55" readonly="true"/>
+
+									<h:outputText for="NUTADC" value="Número de contacto: "/>
+									<p:inputText id="NUTADC" value="#{GestorDetallesComunidad.sNUTADC}" size="14" readonly="true"/>
+
+									<h:outputText for="NODCAD" value="Correo electrónico: "/>
+									<p:inputText id="NODCAD" value="#{GestorDetallesComunidad.sNODCAD}" size="60" readonly="true"/>
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Cuenta corriente de la Comunidad">
+								<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel>
+										<h:panelGrid columns="8" cellpadding="5">
+
+											<h:outputText for="PAIS" value="Código SEPA: "/>
+
+											<p:inputText id="PAIS" value="#{GestorDetallesComunidad.sPais}" size="2" readonly="true"/>
+											<p:inputText id="DCIBAN" value="#{GestorDetallesComunidad.sDCIBAN}" size="2" readonly="true"/>
+
+											<h:outputText for="NUCCNT" value="Número de Cuenta: "/>
+
+											<p:inputText id="NUCCEN" value="#{GestorDetallesComunidad.sNUCCEN}" size="4" readonly="true"/>
+											<p:inputText id="NUCCOF" value="#{GestorDetallesComunidad.sNUCCOF}" size="4" readonly="true"/>
+											<p:inputText id="NUCCDI" value="#{GestorDetallesComunidad.sNUCCDI}" size="2" readonly="true"/>
+											<p:inputText id="NUCCNT" value="#{GestorDetallesComunidad.sNUCCNT}" size="10" readonly="true"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:commandButton value="Cuentas Adicionales" onclick="dlgCuentas.show()" type="button"/>
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Observaciones">
+								<h:panelGrid columns="1" cellpadding="5">
+
+								<p:inputTextarea id="OBTEXC" value="#{GestorDetallesComunidad.sOBTEXC}" rows="2" cols="80" counter="counter" maxlength="110"
+									counterTemplate="{0} carácteres restantes." autoResize="false" readonly="true"/>
+								<h:outputText id="counter"/>
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Activos Asociados">
+
+								<h:panelGrid columns="3" cellpadding="5">
+
+									<h:outputText for="ACTIVOS" value="Activos asociados: "/>
+									<p:inputText id="ACTIVOS" value="#{GestorDetallesComunidad.sNumActivosComunidad}" size="2" readonly="true"/>
+
+									<p:commandButton value="Activos Asociados" onclick="dlgActivos.show()" type="button" />
+
+								</h:panelGrid>
+
+
+							</p:fieldset>
+
+
+						</h:panelGrid>
+					</p:panel>
+
+					<p:dialog header="Cuentas Adicionales:" widgetVar="dlgCuentas" resizable="false">
+
+								<h:panelGrid columns="1" cellpadding="5">
+	
+									<p:dataTable id="cuentas" var="cuenta" value="#{GestorDetallesComunidad.tablacuentas}" rowKey="#{cuenta.sNUCCEN}"
+																selection="#{GestorDetallesComunidad.cuentaseleccionada}" selectionMode="single"
+																paginator="true" paginatorPosition="bottom" rows="10"
+																paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+																rowsPerPageTemplate="5,10,15" emptyMessage="Sin registros">
+	
+	
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="País" />
+																</f:facet>
+																<h:outputText value="#{cuenta.sPais}" />
+															</p:column>
+	
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="DCIBAN" />
+																</f:facet>
+																<h:outputText value="#{cuenta.sDCIBAN}" />
+															</p:column>
+	
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Entidad" />
+																</f:facet>
+																<h:outputText value="#{cuenta.sNUCCEN}" />
+															</p:column>
+	
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Oficina" />
+																</f:facet>
+																<h:outputText value="#{cuenta.sNUCCOF}" />
+															</p:column>
+	
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="DC" />
+																</f:facet>
+																<h:outputText value="#{cuenta.sNUCCDI}" />
+															</p:column>
+	
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Cuenta" />
+																</f:facet>
+																<h:outputText value="#{cuenta.sNUCCNT}" />
+															</p:column>
+	
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Descripción" />
+																</f:facet>
+																<h:outputText value="#{cuenta.sDescripcion}" />
+															</p:column>
+	
+															<f:facet name="footer">
+																<h:commandLink>
+																	<p:graphicImage value="recursos/excel.png" />  
+																	<p:dataExporter type="xls" target="cuentas" fileName="cuentascomunidad" encoding="ISO-8859-15"/>  
+																</h:commandLink>
+															</f:facet> 
+	
+									</p:dataTable>
+	
+								</h:panelGrid>
+
+					</p:dialog>
+
+					<p:dialog header="Activos asociados:" widgetVar="dlgActivos" resizable="false">
+
+						<h:panelGrid columns="1" cellpadding="5">
+	
+							<p:contextMenu for="activos">
+								<p:menuitem value="Detalles" update="form:msgs, form:popup" icon="ui-icon-check" actionListener="#{GestorDetallesComunidad.cargarDetallesActivo}" oncomplete="dlgActivos.hide();"/>
+							</p:contextMenu>
+
+							<p:dataTable id="activos" var="activo" value="#{GestorDetallesComunidad.tablaactivos}" rowKey="#{activo.COACES}"
+															selection="#{GestorDetallesComunidad.activoseleccionado}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15" emptyMessage="Sin registros">
+
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Código Activo" />
+																</f:facet>
+																<h:outputText value="#{activo.COACES}" />
+															</p:column>
+
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Provincia" />
+																</f:facet>
+																<h:outputText value="#{activo.NOPRAC}" />
+															</p:column>
+
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Municipio" />
+																</f:facet>
+																<h:outputText value="#{activo.NOMUIN}" />
+															</p:column>
+
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Vía" />
+																</f:facet>
+																<h:outputText value="#{activo.NOVIAS}" />
+															</p:column>
+
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Portal" />
+																</f:facet>
+																<h:outputText value="#{activo.NUPOAC}" />
+															</p:column>
+
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Piso" />
+																</f:facet>
+																<h:outputText value="#{activo.NUPIAC}" />
+															</p:column>
+
+															<p:column>
+																<f:facet name="header">
+																	<h:outputText value="Puerta" />
+																</f:facet>
+																<h:outputText value="#{activo.NUPUAC}" />
+															</p:column>
+
+							</p:dataTable>
+
+	
+						</h:panelGrid>
+
+					</p:dialog>
+
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+						<h:panelGrid columns="1" cellpadding="1">
+							<p:panel>
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorDetallesComunidad.limpiarNota}"/>
+									<p:commandButton value="Guardar" update="NOTA" actionListener="#{GestorDetallesComunidad.guardaNota}"/>
+
+								</h:panelGrid>
+							</p:panel>
+
+							<h:panelGrid columns="1" cellpadding="5">
+								<h:outputText id="counternota"/>
+								<p:inputTextarea id="NOTA" value="#{GestorDetallesComunidad.sNota}" cols="40" rows="10" counter="counternota" maxlength="500"
+									counterTemplate="{0} carácteres restantes." autoResize="false"/>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:dialog>
+
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
+						<p:graphicImage value="recursos/loadingBar.gif"/>
+					</p:dialog>
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de cerrar esta sesión?" />
+									<h:outputText value="- Todos los datos no guardados se perderán." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" action="#{GestorSesion.cerrarSesion}" oncomplete="dlgConfirmaSalir.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaSalir.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+				</h:panelGrid>
+				</p:layoutUnit>
+
+			</p:layout>
+		</h:form>
+	</h:body>
+
+</f:view>
+</html>
