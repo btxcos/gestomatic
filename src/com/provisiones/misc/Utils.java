@@ -615,10 +615,10 @@ public final class Utils
         
 
         
-        //logger.debug("sNUCCEN:|{}|",sNUCCEN);
-        //logger.debug("sNUCCOF:|{}|",sNUCCOF);
-        //logger.debug("sNUCCDI:|{}|",sNUCCDI);
-        //logger.debug("sNUCCNT:|{}|",sNUCCNT);
+        logger.debug("sNUCCEN:|"+sNUCCEN+"|");
+        logger.debug("sNUCCOF:|"+sNUCCOF+"|");
+        //logger.debug("sNUCCDI:|"+sNUCCDI+"|");
+        logger.debug("sNUCCNT:|"+sNUCCNT+"|");
 
         
         if ((sNUCCEN.length() == 4)
@@ -747,6 +747,8 @@ public final class Utils
 
             sDC=sCifra1+sCifra2;
         }
+        
+        logger.debug("sNUCCDI:|"+sDC+"|");
         
         return sDC;
     }

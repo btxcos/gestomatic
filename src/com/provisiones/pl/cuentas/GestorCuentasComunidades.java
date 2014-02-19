@@ -387,6 +387,12 @@ public class GestorCuentasComunidades implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (!Utils.compruebaCC(sNUCCENN,sNUCCOFN,sNUCCDIN,sNUCCNTN))
+				{
+					sMsg = "ERROR: El dígito de control es erróneo. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				else
 				{
 					Cuenta cuenta = new Cuenta(
