@@ -70,10 +70,8 @@ public class GestorListaComunidades implements Serializable
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
-    	this.sCOACES = "";
     	borrarCamposActivo();
     }
-    
     
 	public void borrarCamposComunidad()
 	{
@@ -83,11 +81,11 @@ public class GestorListaComunidades implements Serializable
     	this.setComunidadseleccionada(null);
     	this.setTablacomunidades(null);
 	}
-	
-
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
-    {  
+    {
+		this.sCOACES = "";
+    	
     	borrarCamposActivo();
     	borrarCamposComunidad();
     }
@@ -132,7 +130,6 @@ public class GestorListaComunidades implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
-
 	
 	public void buscarComunidadActivo (ActionEvent actionEvent)
 	{
