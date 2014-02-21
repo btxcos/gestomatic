@@ -646,7 +646,7 @@ public class GestorMovimientosGastos implements Serializable
 			{
 				if (!CLGastos.existeGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 				{
-					sMsg = "El gasto informado no se puede tramitar, no existe en el sistema.";
+					sMsg = "El movimiento sobre el Gasto informado no se puede tramitar, no existe en el sistema.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
@@ -990,6 +990,12 @@ public class GestorMovimientosGastos implements Serializable
 						
 					case -907: //Error 906 - error y rollback - error al registrar la fecha de anulacion
 						sMsg = "[FATAL] ERROR:906 - Se ha producido un error al registra la fecha de anulación del gasto. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -908: //Error 908 - error y rollback - error al eliminar el gasto
+						sMsg = "[FATAL] ERROR:908 - Se ha producido un error al eliminar el gasto. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

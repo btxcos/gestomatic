@@ -28,7 +28,7 @@ public final class QMProvisiones
 
 	public static final String CAMPO2 = "cod_cospat";
 	public static final String CAMPO3 = "cod_tas";
-	public static final String CAMPO4 = "cogrug";
+	public static final String CAMPO4 = "cod_cogrug";
 	public static final String CAMPO5 = "cotpga";
 	public static final String CAMPO6 = "fepfon";
 	public static final String CAMPO7 = "numero_gastos";
@@ -884,7 +884,7 @@ public final class QMProvisiones
 
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "SELECT COUNT(*) FROM " 
+			String sQuery = "SELECT COUNT("+CAMPO1+") FROM " 
 					+ TABLA + 
 					" WHERE " +
 					"("
@@ -910,7 +910,7 @@ public final class QMProvisiones
 					{
 						bEncontrado = true;
 
-						liNumero = rs.getLong("COUNT(*)");
+						liNumero = rs.getLong("COUNT("+CAMPO1+")");
 						
 						logger.debug("Encontrado el registro!");
 
@@ -1002,6 +1002,76 @@ public final class QMProvisiones
 		return bEncontrado;
 	}
 	
+	
+	public static boolean provisionCompleta(Connection conexion, String sNUPROF) 
+	{		
+		boolean bCompleta = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO7  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '"+ sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						bCompleta = (rs.getInt(CAMPO7) >= ValoresDefecto.MAX_GASTOS_PROVISION);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bCompleta = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bCompleta;
+	}
+	
+	
 	public static boolean provisionCerrada(Connection conexion, String sNUPROF) 
 	{
 		boolean bEncontrado = false;
@@ -1070,7 +1140,7 @@ public final class QMProvisiones
 	
 	
 	
-	public static String getProvisionAbierta(Connection conexion, String sCodCOSPAT, String sCodTAS) 
+	public static String getProvisionAbierta(Connection conexion, String sCodCOSPAT, String sCodTAS, String sCOGRUG, String sCOTPGA) 
 	{
 		String sNUPROF = "";
 
@@ -1094,6 +1164,8 @@ public final class QMProvisiones
 					+ CAMPO16 + " = '" + ValoresDefecto.DEF_PROVISION_ABIERTA + "' AND "
 					+ CAMPO2 +" = '"+ sCodCOSPAT +"' AND "
 					+ CAMPO3 +" = '"+ sCodTAS + "' AND "
+					+ CAMPO4 +" = '"+ sCOGRUG +"' AND "
+					+ CAMPO5 +" = '"+ sCOTPGA + "' AND "
 					+ CAMPO1 +" <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+"')";
 			
 			logger.debug(sQuery);

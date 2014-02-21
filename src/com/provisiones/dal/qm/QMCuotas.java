@@ -458,7 +458,72 @@ public final class QMCuotas
 		return liCuotaID;
 	}
 	
-	public static boolean tieneCuotas(Connection conexion, String sCodCOCLDO, String sCodNUDCOM)
+	public static boolean tieneCuotasActivo(Connection conexion, int iCOACES)
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "              
+				       + CAMPO3  +       
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE ("
+				       + CAMPO2  + " = '"+ iCOACES +"' AND "
+				       + CAMPO12  + " <> 'B')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR COACES:|"+iCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bEncontrado;
+	}
+	
+	public static boolean tieneCuotasComunidad(Connection conexion, String sCodCOCLDO, String sCodNUDCOM)
 	{
 		boolean bEncontrado = false;
 

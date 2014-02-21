@@ -327,6 +327,12 @@ public class GestorTablaComunidadActivo implements Serializable
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				break;
+
+			case -34: //error 034 - NO SE PUEDE DAR DE BAJA EL ACTIVO PORQUE TIENE CUOTAS
+				sMsg = "ERROR:034 - No se puede dar de baja el Activo, aun tiene cuotas de alta. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+				break;
 				
 			case -701: //Error 701 - datos de cuenta incorrectos
 				sMsg = "ERROR:701 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";

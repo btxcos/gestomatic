@@ -258,6 +258,70 @@ public final class QMListaGastos
 		return bEncontrado;
 	}
 	
+	public static boolean existeMovimientoEnviado(Connection conexion, long liCodGasto)
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE ("
+					+ CAMPO1  + " = '"+ liCodGasto +"' AND " 
+					+ CAMPO3  + " <> '"+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + 
+					"')";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bEncontrado;
+	}
+	
 	public static ArrayList<Long>  getGastosPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>(); 

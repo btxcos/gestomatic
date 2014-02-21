@@ -527,7 +527,7 @@ public class GestorErroresGastos implements Serializable
 			this.sNUCONE = movimiento.getNUCONE();
 			
 			//this.sNUPROF = movimiento.getNUPROF();
-	    	this.sNUPROF = CLProvisiones.provisionAsignada(Integer.parseInt(sCOACES));
+	    	this.sNUPROF = CLProvisiones.provisionAsignada(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA);
 
 			this.sCOTERR = movimiento.getCOTERR();
 			this.sFMPAGN = Utils.recuperaFecha(movimiento.getFMPAGN());

@@ -130,9 +130,14 @@ public final class CLCuotas
 		return QMMovimientosCuotas.existeMovimientoCuota(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
 	
-	public static boolean tieneCuotas (String sCodCOCLDO, String sCodNUDCOM)
+	public static boolean tieneCuotasActivo (int iCOACES)
 	{
-		return QMCuotas.tieneCuotas(ConnectionManager.getDBConnection(),sCodCOCLDO, sCodNUDCOM);
+		return QMCuotas.tieneCuotasActivo(ConnectionManager.getDBConnection(),iCOACES);
+	}
+
+	public static boolean tieneCuotasComunidad (String sCodCOCLDO, String sCodNUDCOM)
+	{
+		return QMCuotas.tieneCuotasComunidad(ConnectionManager.getDBConnection(),sCodCOCLDO, sCodNUDCOM);
 	}
 	
 	public static int actualizarCuotaLeida(String linea)

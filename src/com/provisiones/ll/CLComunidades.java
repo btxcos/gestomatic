@@ -1943,6 +1943,11 @@ public final class CLComunidades
 				//Error 011 - LA COMUNIDAD NO EXISTE. ACTIVO NO SE PUEDE DAR DE ALTA
 				iCodigo = -11;
 			}
+			else if (movimiento.getCOACCI().equals("E") && CLCuotas.tieneCuotasActivo(iCOACES))
+			{
+				//Error 034 - NO SE PUEDE DAR DE BAJA EL ACTIVO PORQUE TIENE CUOTAS
+				iCodigo = -34;			
+			}			
 			else if (movimiento.getCOACCI().equals("M") && !QMComunidades.existeComunidad(conexion,liCodComunidad))
 			{
 				//Error 012 - LA COMUNIDAD NO EXISTE. NO SE PUEDE MODIFICAR
@@ -1953,7 +1958,7 @@ public final class CLComunidades
 				//Error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
 				iCodigo = -26;
 			}
-			else if (movimiento.getCOACCI().equals("B") && CLCuotas.tieneCuotas(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
+			else if (movimiento.getCOACCI().equals("B") && CLCuotas.tieneCuotasComunidad(movimiento.getCOCLDO(), movimiento.getNUDCOM()))
 			{
 				//Error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
 				iCodigo = -27;			

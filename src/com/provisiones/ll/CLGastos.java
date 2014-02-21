@@ -454,10 +454,15 @@ public final class CLGastos
 					
 					if (QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
 					{
-						sCOSPAT = "0";
+						sCOSPAT = ValoresDefecto.CAMPO_NUME_SIN_INFORMAR;
 					}
 					
 					provision.setsCOSPAT(sCOSPAT);
+					
+					if (provision.getsCOGRUG().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+					{
+						provision.setsCOGRUG(movimiento.getCOGRUG());
+					}
 
 					String sTipo = CLActivos.compruebaTipoActivoSAREB(Integer.parseInt(movimiento.getCOACES()));
 					
@@ -687,7 +692,7 @@ public final class CLGastos
 		else if (existeGasto(Integer.parseInt(movimiento.getCOACES()), movimiento.getCOGRUG(), movimiento.getCOTPGA(), movimiento.getCOSBGA(), movimiento.getFEDEVE()))
 		{
 			
-			if (!movimiento.getFEAGTO().equals("0") && (sEstado.equals("1") || sEstado.equals("2")))
+			if (!movimiento.getFEAGTO().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR) && (sEstado.equals("1") || sEstado.equals("2")))
 			{
 				sAccion = "N"; //Anular
 			}
@@ -784,7 +789,7 @@ public final class CLGastos
 				
 				liCodMovimiento = Integer.toString(QMMovimientosGastos.addMovimientoGasto(conexion,movimiento));
 
-				if (liCodMovimiento.equals("0"))
+				if (liCodMovimiento.equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
 				{
 					//error al crear un movimiento
 					iCodigo = -900;
@@ -967,21 +972,83 @@ public final class CLGastos
 										iCodigo = -901;
 									}
 									break;
-								case N:case A:
-									
-									if (QMListaGastos.addRelacionGasto(conexion,liCodGasto,liCodMovimiento))
+								//Anulado
+								case N:
+									if (!QMListaGastos.existeMovimientoEnviado(conexion, liCodGasto))
 									{
-										String sNuevoEstado = "";
-										if (sAccion.equals("N"))
+										if (QMGastos.delGasto(conexion, liCodGasto))
 										{
-											sNuevoEstado = "5"; //Anulado
+											//OK 
+											conexion.commit();
+											iCodigo = 0;
 										}
 										else
 										{
-											sNuevoEstado = "6"; //Abonado
+											//error al borrar el gasto - Rollback
+											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
+											conexion.rollback();
+											iCodigo = -908;
 										}
-
-										if (QMGastos.setEstado(conexion,liCodGasto, sNuevoEstado))
+									}
+									else
+									{
+										if (QMListaGastos.addRelacionGasto(conexion,liCodGasto,liCodMovimiento))
+										{
+											if (QMGastos.setEstado(conexion,liCodGasto, ValoresDefecto.DEF_GASTO_ANULADO))
+											{
+												if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE))
+												{
+													if (QMGastos.setFechaAnulado(conexion,liCodGasto, movimiento.getFEAGTO()))
+													{
+														//OK 
+														conexion.commit();
+														iCodigo = 0;
+													}
+													else
+													{
+														//error fecha de anulacion no registrada - Rollback
+														//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
+														//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
+														//QMGastos.setEstado(conexion,liCodGasto, sEstado);
+														//QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sRevisadoAnterior);
+														conexion.rollback();
+														iCodigo = -907;
+													}
+													
+												}
+												else
+												{
+													//error revision no registrada - Rollback
+													//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
+													//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
+													//QMGastos.setEstado(conexion,liCodGasto, sEstado);
+													conexion.rollback();
+													iCodigo = -904;
+												}
+											}
+											else
+											{
+												//error estado no establecido - Rollback
+												//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
+												//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
+												conexion.rollback();
+												iCodigo = -903;
+											}
+										}
+										else
+										{
+											//error relacion gasto no creada - Rollback
+											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
+											conexion.rollback();
+											iCodigo = -902;
+										}	
+									}
+									break;
+								case A:
+									
+									if (QMListaGastos.addRelacionGasto(conexion,liCodGasto,liCodMovimiento))
+									{
+										if (QMGastos.setEstado(conexion,liCodGasto, ValoresDefecto.DEF_GASTO_ABONADO))
 										{
 											if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE))
 											{
@@ -1563,7 +1630,7 @@ public final class CLGastos
 				//Error 800 - Error, gasto sin provision  
 				iCodigo = -800;
 			}
-			else if (!movimiento_revisado.getFEAGTO().equals("0") && !QMGastos.existeGasto(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE()))
+			else if (!movimiento_revisado.getFEAGTO().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR) && !QMGastos.existeGasto(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), movimiento_revisado.getCOGRUG(), movimiento_revisado.getCOTPGA(), movimiento_revisado.getCOSBGA(), movimiento_revisado.getFEDEVE()))
 			{
 				//Error 002 - Llega fecha de anulación y no existe gasto en la tabla  
 				iCodigo = -2;
@@ -1605,12 +1672,12 @@ public final class CLGastos
 				//Error 013 - Llega un abono de un gasto que ya está abonado, o bien está en la misma provisión sin anular.
 				iCodigo = -13;
 			}
-			else if (movimiento_revisado.getPTPAGO().equals("0") || movimiento_revisado.getPTPAGO().equals(""))
+			else if (movimiento_revisado.getPTPAGO().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR) || movimiento_revisado.getPTPAGO().equals(""))
 			{
 				//Error 019 - Periodicidad del gasto es cero o espacios.
 				iCodigo = -19;
 			}		
-			else if (!movimiento_revisado.getFEAGTO().equals("0") && sEstado.equals("4"))
+			else if (!movimiento_revisado.getFEAGTO().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR) && sEstado.equals("4"))
 			{
 				//Error 023 - Llega anulación de un gasto que YA está pagado
 				iCodigo = -23;
@@ -1722,7 +1789,7 @@ public final class CLGastos
 				iCodigo = -809;
 			}	
 			
-			else if (movimiento_revisado.getFEDEVE().equals("0"))
+			else if (movimiento_revisado.getFEDEVE().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
 			{
 				//Error no se ha informado la fecha de devengo.
 				iCodigo = -801;

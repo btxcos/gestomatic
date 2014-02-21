@@ -110,6 +110,11 @@ public final class CLProvisiones
 		return QMProvisiones.provisionCerrada(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
+	public static boolean estaCompleta (String sNUPROF)
+	{
+		return QMProvisiones.provisionCompleta(ConnectionManager.getDBConnection(),sNUPROF);
+	}
+	
 	public static boolean existeProvision (String sNUPROF)
 	{
 		return QMProvisiones.existeProvision(ConnectionManager.getDBConnection(),sNUPROF);
@@ -368,7 +373,7 @@ public final class CLProvisiones
 		}
 	}
 	
-	public static String provisionAsignada (int iCodCOACES)
+	public static String provisionAsignada (int iCodCOACES, String sCOGRUG, String sCOTPGA)
 	{
 		String sProvision = "";
 
@@ -385,7 +390,7 @@ public final class CLProvisiones
 
 			String sTipo = CLActivos.compruebaTipoActivoSAREB(iCodCOACES);
 
-			sProvision = QMProvisiones.getProvisionAbierta(conexion,sCOSPAT,sTipo);
+			sProvision = QMProvisiones.getProvisionAbierta(conexion,sCOSPAT,sTipo, sCOGRUG, sCOTPGA);
 
 			if (sProvision.equals(""))
 			{
@@ -407,9 +412,9 @@ public final class CLProvisiones
 					int iAño = Integer.parseInt(sProvision.substring(2, 4));
 					int iNumero = Integer.parseInt(sProvision.substring(6));
 					
-					logger.debug("iAmpliacion:|{}|",iAmpliacion);
-					logger.debug("iAño:|{}|",iAño);
-					logger.debug("iNumero:|{}|",iNumero);
+					logger.debug("iAmpliacion:|"+iAmpliacion+"|");
+					logger.debug("iAño:|"+iAño+"|");
+					logger.debug("iNumero:|"+iNumero+"|");
 				
 					if (iAño < fecha.get(Calendar.YEAR)%100)
 					{
@@ -458,7 +463,7 @@ public final class CLProvisiones
 					logger.debug("sProvision:|"+sProvision+"|");
 				}			
 				
-				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , "0","0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
+				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , sCOGRUG, sCOTPGA,"0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}

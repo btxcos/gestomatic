@@ -32,7 +32,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="NUPROF, panel" actionListener="#{GestorGastos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorGastos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 								<p:commandButton value="Registrar Gasto" update="panel, popup, msgs" actionListener="#{GestorGastos.registraGasto}"/>
 
 							</h:panelGrid>
@@ -69,7 +69,7 @@
 						<p:panel id="panel">
 							<h:panelGrid columns="1" cellpadding="1">
 
-								<p:fieldset legend="Activo y Provisión">
+								<p:fieldset legend="Activo">
 									<h:panelGrid columns="4" cellpadding="5">
 										<p:panel>
 											<h:panelGrid columns="2" cellpadding="3">
@@ -89,21 +89,6 @@
 											</h:panelGrid>
 										</p:panel>
 
-										<p:panel>
-											<h:panelGrid columns="2" cellpadding="5">
-
-												<p:panel>
-													<h:panelGrid columns="2" cellpadding="5">
-
-														<h:outputText value="Provisión: "/>
-														<p:inputText id="NUPROF" value="#{GestorGastos.sNUPROF}" disabled="true" size="9" maxlength="9"/>
-
-													</h:panelGrid>
-												</p:panel>
-
-												<p:commandButton value="Asignar" update="NUPROF, msgs, popup" actionListener="#{GestorGastos.asignarProvision}"/>
-											</h:panelGrid>
-										</p:panel>
 									</h:panelGrid>
 								</p:fieldset>
 
@@ -376,7 +361,7 @@
 
 					<p:dialog header="Activos con Gastos pendientes: " widgetVar="dlgTabla" resizable="false">
 						<p:contextMenu for="activos">
-							<p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NUPROF" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+							<p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 						</p:contextMenu>
 
 						<p:dataTable id="activos" var="activo" value="#{GestorGastos.tablaactivos}" rowKey="#{activo.COACES}"

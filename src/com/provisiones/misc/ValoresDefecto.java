@@ -9,6 +9,8 @@ public final class ValoresDefecto
 	
 	public static final int DECIMALES = 2;
 	
+	public static final int MAX_GASTOS_PROVISION = 500;
+	
 	public static final String CAMPO_ALFA_SIN_INFORMAR = "";
 	public static final String CAMPO_NUME_SIN_INFORMAR = "0";
 	

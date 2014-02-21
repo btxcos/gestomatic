@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
@@ -69,6 +70,7 @@ public class GestorListaComunidades implements Serializable
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
+    	this.sCOACES = "";
     	borrarCamposActivo();
     }
     
@@ -142,25 +144,32 @@ public class GestorListaComunidades implements Serializable
 			
 			if (sCOACES.equals(""))
 			{
-				sMsg = "Los datos suministrados no son válidos. Por favor, revise los datos.";
+				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
-				
 				logger.error(sMsg);
 			}
 			else
 			{
 				try
 				{
-					this.setTablacomunidades(CLComunidades.buscarComunidadActivo (Integer.parseInt(sCOACES)));
+					if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					{
+						sMsg = "El Activo informado no pertenece a la cartera. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else
+					{
+						this.setTablacomunidades(CLComunidades.buscarComunidadActivo (Integer.parseInt(sCOACES)));
 
-					sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
-					msg = Utils.pfmsgInfo(sMsg);
-					
-					logger.info(sMsg);
+						sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
 				}
 				catch(NumberFormatException nfe)
 				{
-					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
@@ -182,9 +191,8 @@ public class GestorListaComunidades implements Serializable
 			
 			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
 			{
-				sMsg = "Los datos suministrados no son válidos. Por favor, revise los datos.";
+				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
-				
 				logger.error(sMsg);
 			}
 			else
@@ -193,7 +201,6 @@ public class GestorListaComunidades implements Serializable
 
 				sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
-				
 				logger.info(sMsg);
 			}
 
@@ -210,6 +217,7 @@ public class GestorListaComunidades implements Serializable
 		
 		if (ConnectionManager.comprobarConexion())
 		{
+			String sMsg = "";
 			
 			if (comunidadseleccionada != null)
 			{
@@ -232,14 +240,15 @@ public class GestorListaComunidades implements Serializable
 		    	
 				try 
 				{
-					logger.debug("Redirigiendo...");
+					sMsg = "Redirigiendo hacia '"+sPagina+"'";
+					logger.info(sMsg);
 					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
 				}
 				catch (IOException e)
 				{
 					FacesMessage msg;
 					
-					String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
 					
 					msg = Utils.pfmsgFatal(sMsg);
 					logger.error(sMsg);
@@ -253,7 +262,9 @@ public class GestorListaComunidades implements Serializable
 			{
 				FacesMessage msg;
 
-				msg = Utils.pfmsgWarning("No se ha seleccionado ningún gasto.");
+				sMsg = "No se ha seleccionado una Comunidad.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
