@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuentas;
 import com.provisiones.misc.Utils;
@@ -142,14 +143,14 @@ public class GestorCuentasComunidades implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla buscaactivos = new ActivoTabla(
+			ActivoTabla filtro = new ActivoTabla(
 					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLComunidades.buscarActivosConComunidad(buscaactivos));
+			this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
 
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+			String sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);
 			logger.info(sMsg);
 			
@@ -183,45 +184,63 @@ public class GestorCuentasComunidades implements Serializable
 			
 			borrarCamposComunidad();
 			
-			try
+			if (sCOACES.equals(""))
 			{
-				Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
-				
-				if (comunidad.getsNUDCOM().equals(""))
+				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else
+			{
+				try
 				{
-					sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					{
+						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else
+					{
+						Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
+						
+						if (comunidad.getsNUDCOM().equals(""))
+						{
+							sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a una comunidad.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+						}
+						else
+						{
+							this.sCOCLDO = comunidad.getsCOCLDO();
+							this.sNUDCOM = comunidad.getsNUDCOM();
+							this.sNOMCOC = comunidad.getsNOMCOC();
+							this.sNODCCO = comunidad.getsNODCCO();
+
+							Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+							
+							this.sPais = cuenta.getsPais();
+							this.sDCIBAN = cuenta.getsDCIBAN();
+							this.sNUCCEN = cuenta.getsNUCCEN();
+							this.sNUCCOF = cuenta.getsNUCCOF();
+							this.sNUCCDI = cuenta.getsNUCCDI();
+							this.sNUCCNT = cuenta.getsNUCCNT();
+							this.sDescripcion = cuenta.getsDescripcion();
+							
+							this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
+							
+							sMsg = "La comunidad se ha cargado correctamente.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}	
+					}					
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-				else
-				{
-					Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
-					
-					this.sCOCLDO = comunidad.getsCOCLDO();
-					this.sNUDCOM = comunidad.getsNUDCOM();
-					this.sNOMCOC = comunidad.getsNOMCOC();
-					this.sNODCCO = comunidad.getsNODCCO();
-
-					this.sPais = cuenta.getsPais();
-					this.sDCIBAN = cuenta.getsDCIBAN();
-					this.sNUCCEN = cuenta.getsNUCCEN();
-					this.sNUCCOF = cuenta.getsNUCCOF();
-					this.sNUCCDI = cuenta.getsNUCCDI();
-					this.sNUCCNT = cuenta.getsNUCCNT();
-					this.sDescripcion = cuenta.getsDescripcion();
-					
-					this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
-					
-					sMsg = "La comunidad se ha cargado correctamente.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -235,24 +254,30 @@ public class GestorCuentasComunidades implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = ""; 
-			
-			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-			
-			if (comunidad.getsNUDCOM().equals(""))
+
+			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
 			{
-				sMsg = "ERROR: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.";
+				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
+			else if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
+			{
+				sMsg = "La Comunidad informada no está dada de alta. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 			else
 			{
-				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+				Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO, sNUDCOM.toUpperCase());
 				
 				this.sCOCLDO = comunidad.getsCOCLDO();
 				this.sNUDCOM = comunidad.getsNUDCOM();
 				this.sNOMCOC = comunidad.getsNOMCOC();
 				this.sNODCCO = comunidad.getsNODCCO();
 
+				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+				
 				this.sPais = cuenta.getsPais();
 				this.sDCIBAN = cuenta.getsDCIBAN();
 				this.sNUCCEN = cuenta.getsNUCCEN();
@@ -263,11 +288,18 @@ public class GestorCuentasComunidades implements Serializable
 				
 				this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
 				
-				sMsg = "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.";
+				sMsg = "La Comunidad '"+sNUDCOM+"' se ha cargado correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				sMsg = "Encontradas "+getTablacuentas().size()+" Cuentas relacionadas.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+				
 			}
-			
+					
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}			
 	}
@@ -311,7 +343,7 @@ public class GestorCuentasComunidades implements Serializable
 					tablacuentas.remove(cuentaseleccionada);
 				}
 
-				sMsg = "Operación de "+(bAlta? "Alta":"Baja")+" realizada.";
+				sMsg = "Operación de "+(bAlta? "Alta":"Baja")+" realizada correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;

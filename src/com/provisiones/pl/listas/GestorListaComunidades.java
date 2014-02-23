@@ -149,9 +149,9 @@ public class GestorListaComunidades implements Serializable
 			{
 				try
 				{
-					if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
 					{
-						sMsg = "El Activo informado no pertenece a la cartera. Por favor, revise los datos.";
+						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
 						msg = Utils.pfmsgWarning(sMsg);
 						logger.warn(sMsg);
 					}
@@ -192,9 +192,15 @@ public class GestorListaComunidades implements Serializable
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
+			else if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
+			{
+				sMsg = "La comunidad informada no está dada de alta. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 			else
 			{
-				this.setTablacomunidades(CLComunidades.buscarComunidad (sCOCLDO,sNUDCOM));
+				this.setTablacomunidades(CLComunidades.buscarComunidad (sCOCLDO,sNUDCOM.toUpperCase()));
 
 				sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -259,7 +265,7 @@ public class GestorListaComunidades implements Serializable
 			{
 				FacesMessage msg;
 
-				sMsg = "No se ha seleccionado una Comunidad.";
+				sMsg = "ERROR: No se ha seleccionado una Comunidad.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				

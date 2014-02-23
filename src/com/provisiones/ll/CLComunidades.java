@@ -1884,7 +1884,7 @@ public final class CLComunidades
 				//Error 031 - NUMERO DE DOCUMENTO CIF ERRONEO
 				iCodigo = -31;
 			}
-			else if (movimiento.getCOACCI().equals("A") && movimiento.getNOMCOC().equals(""))
+			else if (movimiento.getNOMCOC().equals(""))
 			{
 				//Error 005 - NO TIENE NOMBRE LA COMUNIDAD
 				iCodigo = -5;

@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuentas;
 import com.provisiones.misc.Utils;
@@ -234,49 +235,69 @@ public class GestorMovimientosComunidades implements Serializable
 			String sMsg = "";
 			
 			borrarCamposComunidad();
-			
-			try
+
+			if (sCOACES.equals(""))
 			{
-				Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
-				
-				if (comunidad.getsNUDCOM().equals(""))
-				{
-					sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-				}
-				else
-				{
-					Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
-					
-					this.sCOCLDO = comunidad.getsCOCLDO();
-					this.sNUDCOM = comunidad.getsNUDCOM();
-					this.sNOMCOC = comunidad.getsNOMCOC();
-					this.sNODCCO = comunidad.getsNODCCO();
-					this.sNOMPRC = comunidad.getsNOMPRC();
-					this.sNUTPRC = comunidad.getsNUTPRC();
-					this.sNOMADC = comunidad.getsNOMADC();
-					this.sNUTADC = comunidad.getsNUTADC();
-					this.sNODCAD = comunidad.getsNODCAD();
-					this.sNUCCEN = cuenta.getsNUCCEN();
-					this.sNUCCOF = cuenta.getsNUCCOF();
-					this.sNUCCDI = cuenta.getsNUCCDI();
-					this.sNUCCNT = cuenta.getsNUCCNT();
-					this.sOBTEXC = comunidad.getsOBTEXC();
-					
-					this.sNota = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
-					
-					sMsg = "La comunidad se ha cargado correctamente.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
+			else
+			{
+				try
+				{
+					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					{
+						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else
+					{
+						Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
+						
+						if (comunidad.getsNUDCOM().equals(""))
+						{
+							sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+						}
+						else
+						{
+							Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+							
+							this.sCOCLDO = comunidad.getsCOCLDO();
+							this.sNUDCOM = comunidad.getsNUDCOM();
+							this.sNOMCOC = comunidad.getsNOMCOC();
+							this.sNODCCO = comunidad.getsNODCCO();
+							this.sNOMPRC = comunidad.getsNOMPRC();
+							this.sNUTPRC = comunidad.getsNUTPRC();
+							this.sNOMADC = comunidad.getsNOMADC();
+							this.sNUTADC = comunidad.getsNUTADC();
+							this.sNODCAD = comunidad.getsNODCAD();
+							this.sNUCCEN = cuenta.getsNUCCEN();
+							this.sNUCCOF = cuenta.getsNUCCOF();
+							this.sNUCCDI = cuenta.getsNUCCDI();
+							this.sNUCCNT = cuenta.getsNUCCNT();
+							this.sOBTEXC = comunidad.getsOBTEXC();
+							
+							this.sNota = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
+							
+							sMsg = "La comunidad '"+sNUDCOM+"' se ha cargado correctamente.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
+			
+
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}		
@@ -289,19 +310,23 @@ public class GestorMovimientosComunidades implements Serializable
 		{
 			FacesMessage msg;
 			
-			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-			
 			String sMsg = "";
-
-			if (comunidad.getsNUDCOM().equals(""))
+			
+			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
 			{
-				sMsg = "ERROR: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta registrada en el sistema.";
+				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
+			else if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
+			{
+				sMsg = "La comunidad informada no está dada de alta. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 			else
 			{
-				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+				Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO, sNUDCOM.toUpperCase());
 				
 				this.sCOCLDO = comunidad.getsCOCLDO();
 				this.sNUDCOM = comunidad.getsNUDCOM();
@@ -312,16 +337,22 @@ public class GestorMovimientosComunidades implements Serializable
 				this.sNOMADC = comunidad.getsNOMADC();
 				this.sNUTADC = comunidad.getsNUTADC();
 				this.sNODCAD = comunidad.getsNODCAD();
+
+				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
+				
 				this.sNUCCEN = cuenta.getsNUCCEN();
 				this.sNUCCOF = cuenta.getsNUCCOF();
 				this.sNUCCDI = cuenta.getsNUCCDI();
 				this.sNUCCNT = cuenta.getsNUCCNT();
+
 				this.sOBTEXC = comunidad.getsOBTEXC();
 				
 				this.sNota = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
 				
-				msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
-				logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
+				sMsg = "La comunidad '"+sNUDCOM+"' se ha cargado correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -339,10 +370,16 @@ public class GestorMovimientosComunidades implements Serializable
 			try
 			{
 
-				
-				if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
+
+		    	if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+		    	{
+					sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la operación. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+		    	}
+				else if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
 				{
-					sMsg = "ERROR:012 - No se puede modificar la comunidad, no se encuentra registrada. Por favor, revise los datos.";
+					sMsg = "ERROR:012 - No se puede operar sobre la Comunidad, no se encuentra registrada. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}

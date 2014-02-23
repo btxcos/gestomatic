@@ -20,11 +20,12 @@ import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoComunidad;
 import com.provisiones.types.tablas.ActivoTabla;
 
-public class GestorTablaComunidadActivo implements Serializable 
+public class GestorActivosComunidad implements Serializable 
 {
-	private static final long serialVersionUID = 3791951733627793686L;
-	
-	private static Logger logger = LoggerFactory.getLogger(GestorTablaComunidadActivo.class.getName());
+
+	private static final long serialVersionUID = 1699274003745770381L;
+
+	private static Logger logger = LoggerFactory.getLogger(GestorActivosComunidad.class.getName());
 	
 	private String sCOACES = "";
 	private String sCOPOIN = "";
@@ -40,11 +41,11 @@ public class GestorTablaComunidadActivo implements Serializable
 	private String sNOMCOC = "";
 	private String sNODCCO = "";
 	
-	public GestorTablaComunidadActivo()
+	public GestorActivosComunidad()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorTablaComunidadActivo...");	
+			logger.debug("Iniciando GestorActivosComunidad...");	
 		}
 	}
 	
@@ -152,33 +153,38 @@ public class GestorTablaComunidadActivo implements Serializable
 		{
 			FacesMessage msg;
 			
-			Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-			
-			this.sCOCLDO = comunidad.getsCOCLDO();
-			this.sNUDCOM = comunidad.getsNUDCOM();
-			this.sNOMCOC = comunidad.getsNOMCOC();
-			this.sNODCCO = comunidad.getsNODCCO();
-		
 			String sMsg = "";
 			
-			if (comunidad.getsNUDCOM().equals(""))
+			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
 			{
-				sMsg = "ERROR: Los datos suministrados no corresponden a ninguna comunidad registrada. Por favor, revise los datos.";
+				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
+			else if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
+			{
+				sMsg = "La Comunidad informada no está dada de alta. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 			else
 			{
-			
-				this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM));
-			
-				sMsg = "La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.";
+				Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO, sNUDCOM.toUpperCase());
+				
+				this.sCOCLDO = comunidad.getsCOCLDO();
+				this.sNUDCOM = comunidad.getsNUDCOM();
+				this.sNOMCOC = comunidad.getsNOMCOC();
+				this.sNODCCO = comunidad.getsNODCCO();
+				
+				this.setTablaactivoscomunidad(CLComunidades.buscarActivosComunidad(sCOCLDO, sNUDCOM.toUpperCase()));
+				
+				sMsg = "La Comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				
-				sMsg = "Encontrados "+getTablaactivoscomunidad().size()+" activos relacionados.";
+				sMsg = "Encontrados "+getTablaactivoscomunidad().size()+" Activos relacionados.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 			}
@@ -238,7 +244,7 @@ public class GestorTablaComunidadActivo implements Serializable
 					tablaactivoscomunidad.remove(activoseleccionadobaja);
 				}
 
-				sMsg = "Cambio realizado correctamente.";
+				sMsg = "Operación realizada correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				break;
@@ -256,7 +262,7 @@ public class GestorTablaComunidadActivo implements Serializable
 				break;
 
 			case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO, NULO O CEROS
-				sMsg = "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.";
+				sMsg = "ERROR:004 - No se ha informado el número de documento. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				break;
@@ -457,45 +463,60 @@ public class GestorTablaComunidadActivo implements Serializable
 	    	FacesMessage msg;
 	    	
 	    	String sMsg = "";
-	    	
-			try
-			{
-		    	//comprobar el activo
-				int iSalida = CLComunidades.comprobarActivo(Integer.parseInt(sCOACES));
 
-				switch (iSalida) 
-				{
-					case 0: //Sin errores
-						msg = nuevoMovimiento("X");
-						logger.debug("Activo dado de alta:|"+sCOACES+"|");
-				    	this.sCOACES  = "";
-						break;
-
-					case -1: //error - ya vinculado
-						sMsg = "ERROR: El activo '"+sCOACES+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -2: //error - no existe
-						sMsg = "ERROR: El activo '"+sCOACES+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					default: //error generico
-						sMsg = "[FATAL] ERROR: El activo '"+sCOACES.toUpperCase()+"' ha producido un error desconocido. Por favor, revise los datos.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-				}
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+	    	if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+	    	{
+				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar el alta de Activo. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-			}
+	    	}
+	    	else if (sCOACES.equals(""))
+	    	{
+				sMsg = "ERROR: Debe informar el campo Activo para darlo de alta en la Comunidad. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+	    	}
+	    	else
+	    	{
+				try
+				{
+			    	//comprobar el activo
+					int iSalida = CLComunidades.comprobarActivo(Integer.parseInt(sCOACES));
+
+					switch (iSalida) 
+					{
+						case 0: //Sin errores
+							msg = nuevoMovimiento("X");
+							logger.debug("Activo dado de alta:|"+sCOACES+"|");
+					    	this.sCOACES  = "";
+							break;
+
+						case -1: //error - ya vinculado
+							sMsg = "ERROR: El Activo '"+sCOACES+"' ya esta vinculado a otra Comunidad. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -2: //error - no existe
+							sMsg = "ERROR: El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+							msg = Utils.pfmsgWarning(sMsg);
+							logger.warn(sMsg);
+							break;
+
+						default: //error generico
+							sMsg = "[FATAL] ERROR: El Activo '"+sCOACES+"' ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+	    	}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}	
@@ -509,8 +530,9 @@ public class GestorTablaComunidadActivo implements Serializable
 
 	    	if (activoseleccionadobaja == null)
 	    	{
-	    		msg = Utils.pfmsgFatal("[FATAL] ERROR: Error al dar de baja el activo, la seleccion ya no esta disponible.");
-	    		logger.error("[FATAL] ERROR: Error al dar de baja el activo, la seleccion ya no esta disponible.");
+	    		String sMsg = "ERROR: No se ha seleccionado un Activo para la baja.";
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
 	    	}
 	    	else
 	    	{

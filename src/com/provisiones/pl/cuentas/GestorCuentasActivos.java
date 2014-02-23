@@ -331,7 +331,7 @@ public class GestorCuentasActivos implements Serializable
 						msg = Utils.pfmsgError(sMsg);
 						logger.error(sMsg);
 					}
-					else if (!Utils.compruebaCC(sNUCCEN,sNUCCOF,sNUCCDI,sNUCCDI))
+					else if (!Utils.compruebaCC(sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT))
 					{
 						sMsg = "ERROR: El dígito de control es erróneo. Por favor, revise los datos.";
 						msg = Utils.pfmsgError(sMsg);

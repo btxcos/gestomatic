@@ -26,11 +26,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>GestorTablaComunidadActivo</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.GestorTablaComunidadActivo</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>GestorCuotas</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.GestorCuotas</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -188,6 +183,11 @@
 	<managed-bean>
 		<managed-bean-name>GestorListaActivos</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.listas.GestorListaActivos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorActivosComunidad</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorActivosComunidad</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

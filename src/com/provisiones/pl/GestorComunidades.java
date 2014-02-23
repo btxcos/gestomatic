@@ -201,9 +201,9 @@ public class GestorComunidades implements Serializable
 						break;
 
 					case -2: //error - no existe
-						sMsg = "ERROR: El activo '"+sCOACES+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
+						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
 						break;
 
 					default: //error generico
@@ -240,6 +240,12 @@ public class GestorComunidades implements Serializable
 			{
 				Integer.parseInt(sCOACES);
 
+		    	if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+		    	{
+					sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar el alta. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+		    	}
 				if (CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
 				{
 					sMsg = "ERROR:009 - La comunidad ya se encuentra registrada. Por favor, revise los datos.";
