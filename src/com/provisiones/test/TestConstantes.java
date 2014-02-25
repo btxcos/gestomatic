@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import com.provisiones.misc.Utils;
 
 
+@SuppressWarnings("unused")
 public class TestConstantes 
 {
 	
