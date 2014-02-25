@@ -3,6 +3,7 @@ package com.provisiones.types.tablas;
 public class ImpuestoRecursoTabla 
 {
 
+	private String NURCAT = "";
 	private String COSBAC = "";
 	private String DCOSBAC = "";
 	private String FEPRRE = "";
@@ -16,10 +17,11 @@ public class ImpuestoRecursoTabla
 	
 	//Constructor de clase
 
-	public ImpuestoRecursoTabla(String cOSBAC, String dCOSBAC, String fEPRRE,
-			String fERERE, String fEDEIN, String bISODE, String dBISODE,
-			String bIRESO, String dBIRESO, String oBTEXC) {
+	public ImpuestoRecursoTabla(String nURCAT, String cOSBAC, String dCOSBAC,
+			String fEPRRE, String fERERE, String fEDEIN, String bISODE,
+			String dBISODE, String bIRESO, String dBIRESO, String oBTEXC) {
 		super();
+		setNURCAT(nURCAT);
 		COSBAC = cOSBAC;
 		DCOSBAC = dCOSBAC;
 		FEPRRE = fEPRRE;
@@ -34,6 +36,14 @@ public class ImpuestoRecursoTabla
 
 	//Métodos de acceso
 	
+	public String getNURCAT() {
+		return NURCAT;
+	}
+
+	public void setNURCAT(String nURCAT) {
+		NURCAT = nURCAT;
+	}
+
 	public String getCOSBAC() {
 		return COSBAC;
 	}

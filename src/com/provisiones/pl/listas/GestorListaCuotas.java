@@ -12,22 +12,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
+import com.provisiones.ll.CLCuotas;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.tablas.ActivoTabla;
-import com.provisiones.types.tablas.ComunidadTabla;
+import com.provisiones.types.tablas.CuotaTabla;
 
-public class GestorListaComunidades implements Serializable
+public class GestorListaCuotas implements Serializable 
 {
-	private static final long serialVersionUID = 3330294042440714420L;
 
-	private static Logger logger = LoggerFactory.getLogger(GestorListaComunidades.class.getName());
+	private static final long serialVersionUID = -3898004614900539442L;
+
+	private static Logger logger = LoggerFactory.getLogger(GestorListaCuotas.class.getName());
 	
-	private String sCOACES = "";
 
-	//Busqueda Activos
+	private String sCOACES = "";
+	
+	private String sCOCLDO = "";
+	private String sNUDCOM = "";
+	
+	private String sCOSBAC = "";
+	
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";
 	private String sNOPRAC = "";
@@ -36,21 +42,17 @@ public class GestorListaComunidades implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
-	private String sCOCLDO = "";
-	private String sNUDCOM = "";
-	private String sNOMCOC = "";
-
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
-	
-	private transient ComunidadTabla comunidadseleccionada = null;
-	private transient ArrayList<ComunidadTabla> tablacomunidades = null;
 
-	public GestorListaComunidades()
+	private transient CuotaTabla cuotaseleccionada = null;
+	private transient ArrayList<CuotaTabla> tablacuotas = null;
+	
+	public GestorListaCuotas()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorListaComunidades...");	
+			logger.debug("Iniciando GestorListaCuotas...");	
 		}
 	}
 	
@@ -73,21 +75,20 @@ public class GestorListaComunidades implements Serializable
     	borrarCamposActivo();
     }
     
-	public void borrarCamposComunidad()
+	public void borrarCamposCuota()
 	{
+		this.sCOACES = "";
     	this.sCOCLDO = "";
     	this.sNUDCOM = "";
     	
-    	this.setComunidadseleccionada(null);
-    	this.setTablacomunidades(null);
+    	this.setCuotaseleccionada(null);
+    	this.setTablacuotas(null);
 	}
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {
-		this.sCOACES = "";
-    	
     	borrarCamposActivo();
-    	borrarCamposComunidad();
+    	borrarCamposCuota();
     }
     
 	public void buscarActivos (ActionEvent actionEvent)
@@ -97,48 +98,43 @@ public class GestorListaComunidades implements Serializable
 			FacesMessage msg;
 			
 			ActivoTabla filtro = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
-
+			this.setTablaactivos(CLCuotas.buscarActivosConCuotas(filtro));
+			
 			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);
-			
 			logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
-    { 
+    {
 		if (ConnectionManager.comprobarConexion())
 		{
-	    	FacesMessage msg;
-	    	
-	    	String sMsg = ""; 
+			FacesMessage msg;
 	    	
 	    	this.sCOACES  = activoseleccionado.getCOACES();
 	    	
-	    	sMsg = "Activo '"+sCOACES+"' seleccionado.";
+	    	String sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
 	    	msg = Utils.pfmsgInfo(sMsg);
-	    	
 	    	logger.info(sMsg);
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
 	
-	public void buscarComunidadActivo (ActionEvent actionEvent)
+	public void buscarCuotasActivo(ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
 			
-			String sMsg = ""; 
+			String sMsg = "";
 			
 			if (sCOACES.equals(""))
 			{
@@ -150,43 +146,32 @@ public class GestorListaComunidades implements Serializable
 			{
 				try
 				{
-					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
-					{
-						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
-						msg = Utils.pfmsgWarning(sMsg);
-						logger.warn(sMsg);
-					}
-					else
-					{
-						this.setTablacomunidades(CLComunidades.buscarComunidadActivo (Integer.parseInt(sCOACES)));
-
-						sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-					}
+					this.tablacuotas = CLCuotas.buscarCuotasActivo(Integer.parseInt(sCOACES));
+					
+					sMsg = "Encontradas "+getTablacuotas().size()+" cuotas relacionadas.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
 				}
 				catch(NumberFormatException nfe)
 				{
-					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
-				}
-
+				}				
 			}
-
+			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		
 	}
 	
-	public void buscarComunidad (ActionEvent actionEvent)
+	public void buscarCuotasComunidad(ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
 			
-			String sMsg = ""; 
-			
+			String sMsg = "";
+
 			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
 			{
 				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
@@ -201,21 +186,18 @@ public class GestorListaComunidades implements Serializable
 			}
 			else
 			{
-				this.setTablacomunidades(CLComunidades.buscarComunidad (sCOCLDO,sNUDCOM.toUpperCase()));
-
-				sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
+				this.tablacuotas = CLCuotas.buscarCuotasComunidad(sCOCLDO,sNUDCOM.toUpperCase());
+				
+				sMsg = "Encontradas "+getTablacuotas().size()+" cuotas relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 			}
 
-
-			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		
 	}
 	
-	public void cargarDetallesComunidad(ActionEvent actionEvent) 
+	public void cargarDetallesCuota(ActionEvent actionEvent) 
     { 
 		String sPagina = ".";
 		
@@ -223,23 +205,28 @@ public class GestorListaComunidades implements Serializable
 		{
 			String sMsg = "";
 			
-			if (comunidadseleccionada != null)
+			if (cuotaseleccionada != null)
 			{
 
-		    	this.sCOCLDO  = comunidadseleccionada.getCOCLDO();
-		    	this.sNUDCOM  = comunidadseleccionada.getNUDCOM();
-
+				this.sCOACES = cuotaseleccionada.getCOACES();
+		    	this.sCOCLDO  = cuotaseleccionada.getCOCLDO();
+		    	this.sNUDCOM  = cuotaseleccionada.getNUDCOM();
+		    	this.sCOSBAC = cuotaseleccionada.getCOSBAC();
+		    	
+		    	logger.debug("sCOACES:|"+sCOACES+"|");
 		    	logger.debug("sCOCLDO:|"+sCOCLDO+"|");
 		    	logger.debug("sNUDCOM:|"+sNUDCOM+"|");
+		    	logger.debug("sCOSBAC:|"+sCOSBAC+"|");
 		    	
-		    	String sCodComunidad = Long.toString(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
-		    	logger.debug("sCodComunidad:|"+sCodComunidad+"|");
 		    	
-		    	Sesion.guardaDetalle(sCodComunidad);
+		    	String sCodCuota = Long.toString(CLCuotas.buscarCodigoCuota(Integer.parseInt(sCOACES),sCOCLDO, sNUDCOM, sCOSBAC));
+		    	logger.debug("sCodCuota:|"+sCodCuota+"|");
+		    	
+		    	Sesion.guardaDetalle(sCodCuota);
 		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listacomunidades.xhtml","GestorDetallesComunidad");
+		    	Sesion.guardarHistorial("listacuotas.xhtml","GestorDetallesCuota");
 
-		    	sPagina = "detallescomunidad.xhtml";
+		    	sPagina = "detallescuota.xhtml";
 		    	
 		    	
 				try 
@@ -266,7 +253,7 @@ public class GestorListaComunidades implements Serializable
 			{
 				FacesMessage msg;
 
-				sMsg = "ERROR: No se ha seleccionado una Comunidad.";
+				sMsg = "ERROR: No se ha seleccionado una Cuota.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				
@@ -286,6 +273,30 @@ public class GestorListaComunidades implements Serializable
 
 	public void setsCOACES(String sCOACES) {
 		this.sCOACES = sCOACES;
+	}
+
+	public String getsCOCLDO() {
+		return sCOCLDO;
+	}
+
+	public void setsCOCLDO(String sCOCLDO) {
+		this.sCOCLDO = sCOCLDO;
+	}
+
+	public String getsCOSBAC() {
+		return sCOSBAC;
+	}
+
+	public void setsCOSBAC(String sCOSBAC) {
+		this.sCOSBAC = sCOSBAC;
+	}
+
+	public String getsNUDCOM() {
+		return sNUDCOM;
+	}
+
+	public void setsNUDCOM(String sNUDCOM) {
+		this.sNUDCOM = sNUDCOM;
 	}
 
 	public String getsCOPOIN() {
@@ -344,30 +355,6 @@ public class GestorListaComunidades implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 
-	public String getsCOCLDO() {
-		return sCOCLDO;
-	}
-
-	public void setsCOCLDO(String sCOCLDO) {
-		this.sCOCLDO = sCOCLDO;
-	}
-
-	public String getsNUDCOM() {
-		return sNUDCOM;
-	}
-
-	public void setsNUDCOM(String sNUDCOM) {
-		this.sNUDCOM = sNUDCOM;
-	}
-
-	public String getsNOMCOC() {
-		return sNOMCOC;
-	}
-
-	public void setsNOMCOC(String sNOMCOC) {
-		this.sNOMCOC = sNOMCOC;
-	}
-
 	public ActivoTabla getActivoseleccionado() {
 		return activoseleccionado;
 	}
@@ -384,20 +371,19 @@ public class GestorListaComunidades implements Serializable
 		this.tablaactivos = tablaactivos;
 	}
 
-	public ComunidadTabla getComunidadseleccionada() {
-		return comunidadseleccionada;
+	public CuotaTabla getCuotaseleccionada() {
+		return cuotaseleccionada;
 	}
 
-	public void setComunidadseleccionada(ComunidadTabla comunidadseleccionada) {
-		this.comunidadseleccionada = comunidadseleccionada;
+	public void setCuotaseleccionada(CuotaTabla cuotaseleccionada) {
+		this.cuotaseleccionada = cuotaseleccionada;
 	}
 
-	public ArrayList<ComunidadTabla> getTablacomunidades() {
-		return tablacomunidades;
+	public ArrayList<CuotaTabla> getTablacuotas() {
+		return tablacuotas;
 	}
 
-	public void setTablacomunidades(ArrayList<ComunidadTabla> tablacomunidades) {
-		this.tablacomunidades = tablacomunidades;
+	public void setTablacuotas(ArrayList<CuotaTabla> tablacuotas) {
+		this.tablacuotas = tablacuotas;
 	}
-
 }

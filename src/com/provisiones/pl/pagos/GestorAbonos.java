@@ -30,12 +30,12 @@ import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
 
-public class GestorPagosSimple implements Serializable 
+public class GestorAbonos implements Serializable 
 {
 
-	private static final long serialVersionUID = 649592960198529152L;
+	private static final long serialVersionUID = 7298222178135920741L;
 
-	private static Logger logger = LoggerFactory.getLogger(GestorPagosSimple.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(GestorAbonos.class.getName());
 
 	//Buscar
 	private String sCOACESB = "";
@@ -175,11 +175,11 @@ public class GestorPagosSimple implements Serializable
 	
 	private transient ArrayList<Cuenta> tablacuentascomunidad = null;
 
-	public GestorPagosSimple()
+	public GestorAbonos()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorPagosSimple...");
+			logger.debug("Iniciando GestorAbonos...");
 
 			tiposcogrugHM.put("Compraventa",      "1");
 			tiposcogrugHM.put("Pendientes",       "2");

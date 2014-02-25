@@ -190,5 +190,30 @@
 		<managed-bean-class>com.provisiones.pl.GestorActivosComunidad</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorAbonos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.pagos.GestorAbonos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaCuotas</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaCuotas</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesCuota</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.detalles.GestorDetallesCuota</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaImpuestos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaImpuestos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorDetallesImpuesto</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.detalles.GestorDetallesImpuesto</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

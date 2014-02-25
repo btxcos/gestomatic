@@ -498,7 +498,7 @@ public class GestorActivosComunidad implements Serializable
 							break;
 
 						case -2: //error - no existe
-							sMsg = "ERROR: El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+							sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
 							msg = Utils.pfmsgWarning(sMsg);
 							logger.warn(sMsg);
 							break;

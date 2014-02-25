@@ -12,45 +12,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.ll.CLActivos;
-import com.provisiones.ll.CLComunidades;
+import com.provisiones.ll.CLImpuestos;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.tablas.ActivoTabla;
-import com.provisiones.types.tablas.ComunidadTabla;
+import com.provisiones.types.tablas.ImpuestoRecursoTabla;
 
-public class GestorListaComunidades implements Serializable
+public class GestorListaImpuestos implements Serializable 
 {
-	private static final long serialVersionUID = 3330294042440714420L;
+	private static final long serialVersionUID = 658962915704318075L;
 
-	private static Logger logger = LoggerFactory.getLogger(GestorListaComunidades.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(GestorListaImpuestos.class.getName());
+
+	private String sNURCAT = "";
+	private String sCOSBAC = "";
 	
+	//Buscar activos
 	private String sCOACES = "";
 
-	//Busqueda Activos
 	private String sCOPOIN = "";
-	private String sNOMUIN = "";
+	private String sNOMUIN = "";	
 	private String sNOPRAC = "";
 	private String sNOVIAS = "";
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
-	
-	private String sCOCLDO = "";
-	private String sNUDCOM = "";
-	private String sNOMCOC = "";
 
-	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
+	private transient ActivoTabla activoseleccionado = null;
 	
-	private transient ComunidadTabla comunidadseleccionada = null;
-	private transient ArrayList<ComunidadTabla> tablacomunidades = null;
-
-	public GestorListaComunidades()
+	private transient ArrayList<ImpuestoRecursoTabla> tablaimpuestos = null;
+	private transient ImpuestoRecursoTabla impuestoseleccionado = null;
+	
+	public GestorListaImpuestos()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorListaComunidades...");	
+			logger.debug("Iniciando GestorListaImpuestos...");	
 		}
 	}
 	
@@ -73,21 +72,18 @@ public class GestorListaComunidades implements Serializable
     	borrarCamposActivo();
     }
     
-	public void borrarCamposComunidad()
+	public void borrarCamposImpuesto()
 	{
-    	this.sCOCLDO = "";
-    	this.sNUDCOM = "";
+		this.sCOACES = "";
     	
-    	this.setComunidadseleccionada(null);
-    	this.setTablacomunidades(null);
+    	this.setImpuestoseleccionado(null);
+    	this.setTablaimpuestos(null);
 	}
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {
-		this.sCOACES = "";
-    	
     	borrarCamposActivo();
-    	borrarCamposComunidad();
+    	borrarCamposImpuesto();
     }
     
 	public void buscarActivos (ActionEvent actionEvent)
@@ -97,48 +93,43 @@ public class GestorListaComunidades implements Serializable
 			FacesMessage msg;
 			
 			ActivoTabla filtro = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
-
+			this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(filtro));
+			
 			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);
-			
 			logger.info(sMsg);
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
-    { 
+    {
 		if (ConnectionManager.comprobarConexion())
 		{
-	    	FacesMessage msg;
-	    	
-	    	String sMsg = ""; 
+			FacesMessage msg;
 	    	
 	    	this.sCOACES  = activoseleccionado.getCOACES();
 	    	
-	    	sMsg = "Activo '"+sCOACES+"' seleccionado.";
+	    	String sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
 	    	msg = Utils.pfmsgInfo(sMsg);
-	    	
 	    	logger.info(sMsg);
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
 	
-	public void buscarComunidadActivo (ActionEvent actionEvent)
+	public void buscarImpuestos(ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
 			
-			String sMsg = ""; 
+			String sMsg = "";
 			
 			if (sCOACES.equals(""))
 			{
@@ -150,72 +141,37 @@ public class GestorListaComunidades implements Serializable
 			{
 				try
 				{
-					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
-					{
-						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
-						msg = Utils.pfmsgWarning(sMsg);
-						logger.warn(sMsg);
-					}
-					else
-					{
-						this.setTablacomunidades(CLComunidades.buscarComunidadActivo (Integer.parseInt(sCOACES)));
+					this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(Integer.parseInt(sCOACES));
+			    	
 
-						sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
+			    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+					{
+			    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(Integer.parseInt(sCOACES));
+			    		
+			    		sMsg = "Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 					}
+			    	else
+			    	{
+			    		sMsg = "ERROR: No existe referencia catastral de alta para el activo consultado.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+			        }
 				}
 				catch(NumberFormatException nfe)
 				{
-					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-
 			}
-
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-		
 	}
 	
-	public void buscarComunidad (ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-			
-			String sMsg = ""; 
-			
-			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
-			{
-				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}
-			else if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
-			{
-				sMsg = "La comunidad informada no está dada de alta. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
-			}
-			else
-			{
-				this.setTablacomunidades(CLComunidades.buscarComunidad (sCOCLDO,sNUDCOM.toUpperCase()));
-
-				sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-			}
-
-
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}
-		
-	}
-	
-	public void cargarDetallesComunidad(ActionEvent actionEvent) 
+	public void cargarDetallesImpuesto(ActionEvent actionEvent) 
     { 
 		String sPagina = ".";
 		
@@ -223,23 +179,24 @@ public class GestorListaComunidades implements Serializable
 		{
 			String sMsg = "";
 			
-			if (comunidadseleccionada != null)
+			if (impuestoseleccionado != null)
 			{
 
-		    	this.sCOCLDO  = comunidadseleccionada.getCOCLDO();
-		    	this.sNUDCOM  = comunidadseleccionada.getNUDCOM();
-
-		    	logger.debug("sCOCLDO:|"+sCOCLDO+"|");
-		    	logger.debug("sNUDCOM:|"+sNUDCOM+"|");
+				this.sNURCAT = impuestoseleccionado.getNURCAT();
+		    	this.sCOSBAC = impuestoseleccionado.getCOSBAC();
 		    	
-		    	String sCodComunidad = Long.toString(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
-		    	logger.debug("sCodComunidad:|"+sCodComunidad+"|");
+		    	logger.debug("sNURCAT:|"+sNURCAT+"|");
+		    	logger.debug("sCOSBAC:|"+sCOSBAC+"|");
 		    	
-		    	Sesion.guardaDetalle(sCodComunidad);
+		    	
+		    	String sCodImpuesto = Long.toString(CLImpuestos.buscarCodigoImpuesto(sNURCAT, sCOSBAC));
+		    	logger.debug("sCodImpuesto:|"+sCodImpuesto+"|");
+		    	
+		    	Sesion.guardaDetalle(sCodImpuesto);
 		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listacomunidades.xhtml","GestorDetallesComunidad");
+		    	Sesion.guardarHistorial("listaimpuestos.xhtml","GestorDetallesImpuesto");
 
-		    	sPagina = "detallescomunidad.xhtml";
+		    	sPagina = "detallesimpuesto.xhtml";
 		    	
 		    	
 				try 
@@ -266,7 +223,7 @@ public class GestorListaComunidades implements Serializable
 			{
 				FacesMessage msg;
 
-				sMsg = "ERROR: No se ha seleccionado una Comunidad.";
+				sMsg = "ERROR: No se ha seleccionado una Cuota.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				
@@ -279,6 +236,22 @@ public class GestorListaComunidades implements Serializable
 
 		//return sPagina;
     }
+
+	public String getsNURCAT() {
+		return sNURCAT;
+	}
+
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT;
+	}
+
+	public String getsCOSBAC() {
+		return sCOSBAC;
+	}
+
+	public void setsCOSBAC(String sCOSBAC) {
+		this.sCOSBAC = sCOSBAC;
+	}
 
 	public String getsCOACES() {
 		return sCOACES;
@@ -344,28 +317,12 @@ public class GestorListaComunidades implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 
-	public String getsCOCLDO() {
-		return sCOCLDO;
+	public ArrayList<ActivoTabla> getTablaactivos() {
+		return tablaactivos;
 	}
 
-	public void setsCOCLDO(String sCOCLDO) {
-		this.sCOCLDO = sCOCLDO;
-	}
-
-	public String getsNUDCOM() {
-		return sNUDCOM;
-	}
-
-	public void setsNUDCOM(String sNUDCOM) {
-		this.sNUDCOM = sNUDCOM;
-	}
-
-	public String getsNOMCOC() {
-		return sNOMCOC;
-	}
-
-	public void setsNOMCOC(String sNOMCOC) {
-		this.sNOMCOC = sNOMCOC;
+	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
+		this.tablaactivos = tablaactivos;
 	}
 
 	public ActivoTabla getActivoseleccionado() {
@@ -376,28 +333,19 @@ public class GestorListaComunidades implements Serializable
 		this.activoseleccionado = activoseleccionado;
 	}
 
-	public ArrayList<ActivoTabla> getTablaactivos() {
-		return tablaactivos;
+	public ArrayList<ImpuestoRecursoTabla> getTablaimpuestos() {
+		return tablaimpuestos;
 	}
 
-	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
-		this.tablaactivos = tablaactivos;
+	public void setTablaimpuestos(ArrayList<ImpuestoRecursoTabla> tablaimpuestos) {
+		this.tablaimpuestos = tablaimpuestos;
 	}
 
-	public ComunidadTabla getComunidadseleccionada() {
-		return comunidadseleccionada;
+	public ImpuestoRecursoTabla getImpuestoseleccionado() {
+		return impuestoseleccionado;
 	}
 
-	public void setComunidadseleccionada(ComunidadTabla comunidadseleccionada) {
-		this.comunidadseleccionada = comunidadseleccionada;
+	public void setImpuestoseleccionado(ImpuestoRecursoTabla impuestoseleccionado) {
+		this.impuestoseleccionado = impuestoseleccionado;
 	}
-
-	public ArrayList<ComunidadTabla> getTablacomunidades() {
-		return tablacomunidades;
-	}
-
-	public void setTablacomunidades(ArrayList<ComunidadTabla> tablacomunidades) {
-		this.tablacomunidades = tablacomunidades;
-	}
-
 }

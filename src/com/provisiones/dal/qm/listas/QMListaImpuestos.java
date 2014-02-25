@@ -602,6 +602,7 @@ public final class QMListaImpuestos
 
 			boolean bEncontrado = false;
 			
+			String sNURCAT = "";
 			String sCOSBAC = "";
 			String sDesCOSBAC = "";
 			String sFEPRRE = "";
@@ -657,6 +658,7 @@ public final class QMListaImpuestos
 					{
 						bEncontrado = true;
 						
+						sNURCAT		= rs.getString(QMImpuestos.CAMPO2);
 						sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
 						sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
 						sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
@@ -669,6 +671,7 @@ public final class QMListaImpuestos
 						sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
 
 						ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
+								sNURCAT,
 								sCOSBAC,
 								sDesCOSBAC,
 								sFEPRRE,
@@ -721,6 +724,7 @@ public final class QMListaImpuestos
 
 			boolean bEncontrado = false;
 			
+			String sNURCAT = "";
 			String sCOSBAC = "";
 			String sDesCOSBAC = "";
 			String sFEPRRE = "";
@@ -781,6 +785,7 @@ public final class QMListaImpuestos
 					{
 						bEncontrado = true;
 						
+						sNURCAT		= rs.getString(QMImpuestos.CAMPO2);
 						sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
 						sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
 						sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
@@ -793,6 +798,7 @@ public final class QMListaImpuestos
 						sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
 						
 						ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
+								sNURCAT,
 								sCOSBAC,
 								sDesCOSBAC,
 								sFEPRRE,

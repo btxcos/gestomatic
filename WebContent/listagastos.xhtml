@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -72,7 +72,7 @@
 														<p:inputText id="COACES" value="#{GestorListaGastos.sCOACES}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastosActivo}"/>	
+													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup"  oncomplete="dlgFiltrarGastoActivo.show()"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar Activo" update="COACES, form:activos, msgs, popup" oncomplete="dlgBuscar.show()"/>		
@@ -87,7 +87,7 @@
 														<p:inputText id="NUPROF" value="#{GestorListaGastos.sNUPROF}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="NUPROF" display="icon"/>
-													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastosProvision}"/>	
+													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" oncomplete="dlgFiltrarGastoProvision.show()"/>
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar Provisión" update="NUPROF, form:provisiones, msgs, popup" oncomplete="dlgBuscarProvision.show()"/>		
@@ -105,7 +105,7 @@
 															selection="#{GestorListaGastos.gastoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-															rowsPerPageTemplate="5,10,15">
+															rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">
 
 														<p:column>
 															<f:facet name="header">
@@ -171,36 +171,64 @@
 									              selection="#{GestorListaGastos.activoseleccionado}" selectionMode="single"
 									              paginator="true" paginatorPosition="bottom" rows="10"
 												  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-												  rowsPerPageTemplate="5,10,15">	  
+												  rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">	  
 									
-								<p:column headerText="Codigo Activo">  
-								    #{activo.COACES}  
-								</p:column>  
-								
-								<p:column headerText="Comunidad Autonoma">  
-								    #{activo.NOPRAC}  
-								</p:column>  
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Activo"/>
+										</f:facet>
+										<h:outputText value="#{activo.COACES}"/>
+									</p:column>
 
-								<p:column headerText="Municipio">  
-								    #{activo.NOMUIN}  
-								</p:column>  
-								
-								<p:column headerText="Via">  
-								    #{activo.NOVIAS}  
-								</p:column>  
-								
-								<p:column headerText="Portal">  
-								    #{activo.NUPOAC}  
-								</p:column>  
-								
-								<p:column headerText="Piso">  
-								    #{activo.NUPIAC}  
-								</p:column>  
-								
-								<p:column headerText="Puerta">  
-								    #{activo.NUPUAC}  
-								</p:column>  
-									
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Comunidad Autonoma"/>
+										</f:facet>
+										<h:outputText value="#{activo.NOPRAC}"/>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Municipio"/>
+										</f:facet>
+										<h:outputText value="#{activo.NOMUIN}"/>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Vía"/>
+										</f:facet>
+										<h:outputText value="#{activo.NOVIAS}"/>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Portal"/>
+										</f:facet>
+										<h:outputText value="#{activo.NUPOAC}"/>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Piso"/>
+										</f:facet>
+										<h:outputText value="#{activo.NUPIAC}"/>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Puerta"/>
+										</f:facet>
+										<h:outputText value="#{activo.NUPUAC}"/>
+									</p:column>
+
+									<f:facet name="footer">
+										<h:commandLink>
+											<p:graphicImage value="recursos/excel.png"/>
+											<p:dataExporter type="xls" target="activos" fileName="listaactivos" encoding="ISO-8859-15"/>
+										</h:commandLink>
+									</f:facet>
+
 							</p:dataTable> 
 					</p:dialog>
 					<p:dialog header="Buscar Activos con Gastos Autorizados: " widgetVar="dlgBuscar" resizable="false">  
@@ -289,21 +317,171 @@
 									            selection="#{GestorListaGastos.provisionseleccionada}" selectionMode="single"  
 												paginator="true" paginatorPosition="bottom" rows="10"
 												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-												rowsPerPageTemplate="5,10,15">									
+												rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">									
 
-								<p:column headerText="Número de Provisión">  
-								    #{provision.NUPROF}  
-								</p:column>  
-								
-								<p:column headerText="Sociedad Patrimonial">  
-								    #{provision.DCOSPAT}  
-								</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Número de Provisión"/>
+										</f:facet>
+										<h:outputText value="#{provision.NUPROF}"/>
+									</p:column>
 
-								<p:column headerText="Tipo de Activos SAREB">  
-								    #{provision.DTAS}  
-								</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Sociedad Patrimonial"/>
+										</f:facet>
+										<h:outputText value="#{provision.DCOSPAT}"/>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Tipo de Activos SAREB"/>
+										</f:facet>
+										<h:outputText value="#{provision.DTAS}"/>
+									</p:column>
+
+									<f:facet name="footer">
+										<h:commandLink>
+											<p:graphicImage value="recursos/excel.png"/>
+											<p:dataExporter type="xls" target="provisiones" fileName="listaprovisiones" encoding="ISO-8859-15"/>
+										</h:commandLink>
+									</f:facet>
 
 							</p:dataTable> 
+					</p:dialog>
+					<p:dialog header="Filtrar Gastos Activo: " widgetVar="dlgFiltrarGastoActivo" resizable="false">  
+									<p:fieldset legend="Filtro">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelFiltrarGastosActivo">
+												<h:panelGrid columns="1" cellpadding="5">
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText value="Grupo de gasto: "/>
+															<p:selectOneMenu id="COGRUGFA" value="#{GestorListaGastos.sCOGRUGFA}">
+																<f:selectItem itemLabel="Grupo..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposcogrugHM}"/>
+																<p:ajax update="COTPGAFA, COSBGAFA" listener="#{GestorListaGastos.cambiaTipoActivo}"/>
+															</p:selectOneMenu>
+
+															<h:outputText value="Tipo de concepto de gasto:  "/>
+															<p:selectOneMenu id="COTPGAFA" value="#{GestorListaGastos.sCOTPGAFA}">
+																<f:selectItem itemLabel="Tipo..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposcotpgaHM}"/>
+																<p:ajax update="COSBGAFA" listener="#{GestorListaGastos.cambiaSubtipoActivo}"/>
+															</p:selectOneMenu>
+
+															<h:outputText value="Concepto de gasto: "/>
+															<p:selectOneMenu id="COSBGAFA" value="#{GestorListaGastos.sCOSBGAFA}">
+																<f:selectItem itemLabel="Subtipo..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposcosbgaHM}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha del devengo: "/>
+															<p:inputMask id="FEDEVEFA" value="#{GestorListaGastos.sFEDEVEFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEVEFA" actionListener="#{GestorListaGastos.hoyFEDEVEFA}"/>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="1">
+															<h:outputText value="Estado del gasto: "/>
+															<p:selectOneMenu id="ESTADOFA" value="#{GestorListaGastos.sEstadoFA}">
+																<f:selectItem itemLabel="Estado..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposestadogastoHM}"/>
+															</p:selectOneMenu>
+														</h:panelGrid>
+													</p:panel>
+
+
+
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, msgs, form:gastos" actionListener="#{GestorListaGastos.buscarGastosActivo}" oncomplete="dlgFiltrarGastoActivo.hide()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelFiltrarGastosActivo" actionListener="#{GestorListaGastos.limpiarPlantillaFiltroGastosActivo}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
+					<p:dialog header="Filtrar Gastos Activo: " widgetVar="dlgFiltrarGastoProvision" resizable="false">  
+									<p:fieldset legend="Filtro">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelFiltrarGastosProvision">
+												<h:panelGrid columns="1" cellpadding="5">
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText value="Grupo de gasto: "/>
+															<p:selectOneMenu id="COGRUGFP" value="#{GestorListaGastos.sCOGRUGFP}">
+																<f:selectItem itemLabel="Grupo..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposcogrugHM}"/>
+																<p:ajax update="COTPGAFP, COSBGAFP" listener="#{GestorListaGastos.cambiaTipoProvision}"/>
+															</p:selectOneMenu>
+
+															<h:outputText value="Tipo de concepto de gasto:  "/>
+															<p:selectOneMenu id="COTPGAFP" value="#{GestorListaGastos.sCOTPGAFP}">
+																<f:selectItem itemLabel="Tipo..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposcotpgaHM}"/>
+																<p:ajax update="COSBGAFP" listener="#{GestorListaGastos.cambiaSubtipoProvision}"/>
+															</p:selectOneMenu>
+
+															<h:outputText value="Concepto de gasto: "/>
+															<p:selectOneMenu id="COSBGAFP" value="#{GestorListaGastos.sCOSBGAFP}">
+																<f:selectItem itemLabel="Subtipo..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposcosbgaHM}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha del devengo: "/>
+															<p:inputMask id="FEDEVEFP" value="#{GestorListaGastos.sFEDEVEFP}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEVEFP" actionListener="#{GestorListaGastos.hoyFEDEVEFP}"/>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="1">
+															<h:outputText value="Estado del gasto: "/>
+															<p:selectOneMenu id="ESTADOFP" value="#{GestorListaGastos.sEstadoFP}">
+																<f:selectItem itemLabel="Estado..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposestadogastoHM}"/>
+															</p:selectOneMenu>
+														</h:panelGrid>
+													</p:panel>
+
+
+
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, msgs, form:gastos" actionListener="#{GestorListaGastos.buscarGastosProvision}" oncomplete="dlgFiltrarGastoProvision.hide()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelFiltrarGastosProvision" actionListener="#{GestorListaGastos.limpiarPlantillaFiltroGastosProvision}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
 					</p:dialog>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
 						<p:graphicImage value="recursos/loadingBar.gif" />

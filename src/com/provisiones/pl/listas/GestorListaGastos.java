@@ -3,6 +3,8 @@ package com.provisiones.pl.listas;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -36,6 +38,7 @@ public class GestorListaGastos implements Serializable
 	
 	private String sCodGasto = "";
 	
+	//Busqueda Activo
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";
 	private String sNOPRAC = "";
@@ -43,6 +46,24 @@ public class GestorListaGastos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	
+	
+	//Filtro Gastos Activo
+	private String sCOGRUGFA = "";
+	private String sCOTPGAFA = "";
+	private String sCOSBGAFA = "";
+	private String sFEDEVEFA = "";
+	private String sIMNGASFA = "";
+	private String sEstadoFA = "";
+	
+	//Filtro Gastos Provision
+	private String sCOGRUGFP = "";
+	private String sCOTPGAFP = "";
+	private String sCOSBGAFP = "";
+	private String sFEDEVEFP = "";
+	private String sIMNGASFP = "";
+	private String sEstadoFP = "";
+	
 	
 	private String sFEPFON = "";
 	
@@ -55,11 +76,82 @@ public class GestorListaGastos implements Serializable
 	private transient GastoTabla gastoseleccionado = null;
 	private transient ArrayList<GastoTabla> tablagastos = null;
 
+	private Map<String,String> tiposcogrugHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcotpga_g1HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpga_g2HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcotpga_g3HM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcosbga_t11HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t12HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t21HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t22HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t23HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposestadogastoHM = new LinkedHashMap<String, String>();
+
 	public GestorListaGastos()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorListaGastos...");	
+			logger.debug("Iniciando GestorListaGastos...");
+			
+			tiposcogrugHM.put("Compraventa",      "1");
+			tiposcogrugHM.put("Pendientes",       "2");
+			tiposcogrugHM.put("Acciones",         "3");
+
+			tiposcotpga_g1HM.put("Plusvalia", "1");
+			tiposcotpga_g1HM.put("Notaria",   "2");
+
+			tiposcotpga_g2HM.put("Tasas-Impuestos", "1");
+			tiposcotpga_g2HM.put("Comunidades",     "2");
+			tiposcotpga_g2HM.put("Suministros",     "3");
+			
+			tiposcotpga_g3HM.put("Honorarios","2");
+			tiposcotpga_g3HM.put("Licencias", "3");
+			
+			tiposcosbga_t11HM.put("Plusvalia", "0");
+			tiposcosbga_t12HM.put("Notaria",   "1");
+
+			tiposcosbga_t21HM.put("Impuestos e IBIS",                     "0");
+			tiposcosbga_t21HM.put("IBIS",                                 "1");
+			tiposcosbga_t21HM.put("Tasas basura",                         "2");
+			tiposcosbga_t21HM.put("Tasas alcantarillado",                 "3");
+			tiposcosbga_t21HM.put("Tasas agua",                           "4");
+			tiposcosbga_t21HM.put("Contribuciones especiales",            "5");
+			tiposcosbga_t21HM.put("Otras tasas",                          "6");
+			
+			tiposcosbga_t22HM.put("Comunidad",	                   	"0");  
+			tiposcosbga_t22HM.put("Ordinaria",                     	"1");  
+			tiposcosbga_t22HM.put("Extras Comunidad",              	"2");  
+			tiposcosbga_t22HM.put("Mancomunidad",                  	"3");  
+			tiposcosbga_t22HM.put("Extras Mancomunidad",           	"4");  
+			tiposcosbga_t22HM.put("Obras comunidad",               	"5");  
+			
+			tiposcosbga_t23HM.put("Suministros",               "0");
+			tiposcosbga_t23HM.put("Suministro luz",            "1");
+			tiposcosbga_t23HM.put("Suministro agua",           "2");
+			tiposcosbga_t23HM.put("Suministro gas",            "3");
+			
+			tiposcosbga_t32HM.put("Honorarios Colaboradores","0");  
+			tiposcosbga_t32HM.put("Prescripcion",            "1");  
+			tiposcosbga_t32HM.put("Colaboracion",            "2");  
+			tiposcosbga_t32HM.put("Otros honorarios",        "3");  
+			tiposcosbga_t32HM.put("Servicios varios",        "4");
+			
+			tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
+			
+			tiposestadogastoHM.put("ESTIMADO",	"1");
+			tiposestadogastoHM.put("CONOCIDO",	"2");
+			tiposestadogastoHM.put("AUTORIZADO","3");
+			tiposestadogastoHM.put("PAGADO",    "4");
+			tiposestadogastoHM.put("ANULADO",	"5");
+			tiposestadogastoHM.put("ABONADO",	"6");
+
 		}
 	}
 	
@@ -91,6 +183,35 @@ public class GestorListaGastos implements Serializable
     	borrarCamposActivo();
     }
     
+	public void borrarCamposFiltroGastosActivo()
+	{
+		this.sCOGRUGFA = "";
+		this.sCOTPGAFA = "";
+		this.sCOSBGAFA = "";
+		this.sFEDEVEFA = "";
+		this.sIMNGASFA = "";
+		this.sEstadoFA = "";
+	}
+	
+    public void limpiarPlantillaFiltroGastosActivo(ActionEvent actionEvent) 
+    {  
+    	borrarCamposFiltroGastosActivo();
+    }
+    
+	public void borrarCamposFiltroGastosProvision()
+	{
+		this.sCOGRUGFP = "";
+		this.sCOTPGAFP = "";
+		this.sCOSBGAFP = "";
+		this.sFEDEVEFP = "";
+		this.sIMNGASFP = "";
+		this.sEstadoFP = "";
+	}
+	
+    public void limpiarPlantillaFiltroGastosProvision(ActionEvent actionEvent) 
+    {  
+    	borrarCamposFiltroGastosProvision();
+    }
     
 	public void borrarCamposProvision()
 	{
@@ -205,8 +326,155 @@ public class GestorListaGastos implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
-    
-    
+
+	public void cambiaGrupo()
+	{
+		tiposcotpgaHM = new LinkedHashMap<String, String>();
+		tiposcosbgaHM = new LinkedHashMap<String, String>();
+	}
+	
+	public void cambiaTipoActivo()
+	{
+
+		logger.debug("sCOGRUGFA:|"+sCOGRUGFA+"|");
+
+		if (sCOGRUGFA !=null && !sCOGRUGFA.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUGFA)) 
+			{
+				case 1:
+					tiposcotpgaHM = tiposcotpga_g1HM;
+					break;
+				case 2:
+					tiposcotpgaHM = tiposcotpga_g2HM;
+					break;
+				case 3:
+					tiposcotpgaHM = tiposcotpga_g3HM;
+					break;
+				default:
+					tiposcotpgaHM = new LinkedHashMap<String, String>();
+					break;
+			}
+			tiposcosbgaHM = new LinkedHashMap<String, String>();
+			sCOTPGAFA = "";
+			sCOSBGAFA = "";
+		}
+	}
+	
+	public void cambiaSubtipoActivo()
+	{
+		logger.debug("sCOGRUGF:|"+sCOGRUGFA+"| sCOTPGAF:|"+sCOTPGAFA+"|");
+		
+		if (sCOTPGAFA !=null && !sCOTPGAFA.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUGFA+sCOTPGAFA)) 
+			{
+				case 11:
+					tiposcosbgaHM = tiposcosbga_t11HM;
+					break;
+				case 12:
+					tiposcosbgaHM = tiposcosbga_t12HM;
+					break;
+				case 21:
+					tiposcosbgaHM = tiposcosbga_t21HM;
+					break;
+				case 22:
+					tiposcosbgaHM = tiposcosbga_t22HM;
+					break;
+				case 23:
+					tiposcosbgaHM = tiposcosbga_t23HM;
+					break;
+				case 32:
+					tiposcosbgaHM = tiposcosbga_t32HM;
+					break;
+				case 33:
+					tiposcosbgaHM = tiposcosbga_t33HM;
+					break;
+				default:
+					tiposcosbgaHM = new LinkedHashMap<String, String>();
+					break;
+			}
+			sCOSBGAFA = "";
+		}
+	}
+	
+	public void cambiaTipoProvision()
+	{
+
+		logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"|");
+
+		if (sCOGRUGFP !=null && !sCOGRUGFP.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUGFP)) 
+			{
+				case 1:
+					tiposcotpgaHM = tiposcotpga_g1HM;
+					break;
+				case 2:
+					tiposcotpgaHM = tiposcotpga_g2HM;
+					break;
+				case 3:
+					tiposcotpgaHM = tiposcotpga_g3HM;
+					break;
+				default:
+					tiposcotpgaHM = new LinkedHashMap<String, String>();
+					break;
+			}
+			tiposcosbgaHM = new LinkedHashMap<String, String>();
+			sCOTPGAFP = "";
+			sCOSBGAFP = "";
+		}
+	}
+	
+	public void cambiaSubtipoProvision()
+	{
+		logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"| sCOTPGAF:|"+sCOTPGAFP+"|");
+		
+		if (sCOTPGAFP !=null && !sCOTPGAFP.equals(""))
+		{
+			switch (Integer.parseInt(sCOGRUGFP+sCOTPGAFP)) 
+			{
+				case 11:
+					tiposcosbgaHM = tiposcosbga_t11HM;
+					break;
+				case 12:
+					tiposcosbgaHM = tiposcosbga_t12HM;
+					break;
+				case 21:
+					tiposcosbgaHM = tiposcosbga_t21HM;
+					break;
+				case 22:
+					tiposcosbgaHM = tiposcosbga_t22HM;
+					break;
+				case 23:
+					tiposcosbgaHM = tiposcosbga_t23HM;
+					break;
+				case 32:
+					tiposcosbgaHM = tiposcosbga_t32HM;
+					break;
+				case 33:
+					tiposcosbgaHM = tiposcosbga_t33HM;
+					break;
+				default:
+					tiposcosbgaHM = new LinkedHashMap<String, String>();
+					break;
+			}
+			sCOSBGAFP = "";
+		}
+	}
+	
+	public void hoyFEDEVEFA (ActionEvent actionEvent)
+	{
+		this.setsFEDEVEFA(Utils.fechaDeHoy(true));
+		logger.debug("sFEDEVEFA:|"+sFEDEVEFP+"|");
+	}
+
+	public void hoyFEDEVEFP (ActionEvent actionEvent)
+	{
+		this.setsFEDEVEFP(Utils.fechaDeHoy(true));
+		logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
+	}
+	
 	public void buscarGastosActivo (ActionEvent actionEvent)
 	{
 
@@ -216,7 +484,28 @@ public class GestorListaGastos implements Serializable
 			
 			try
 			{
-				this.setTablagastos(CLGastos.buscarGastosActivo(Integer.parseInt(sCOACES)));
+				GastoTabla filtro = new GastoTabla(
+						"",   
+						sCOACES,   
+						sCOGRUGFA,   
+						sCOTPGAFA,   
+						sCOSBGAFA,   
+						"",  
+						"",   
+						"",  
+						sFEDEVEFA,   
+						"",   
+						"",  
+						"");
+				
+		    	logger.debug("sCOACES:|"+sCOACES+"|");
+		    	logger.debug("sCOGRUGFA:|"+sCOGRUGFA+"|");
+		    	logger.debug("sCOTPGAFA:|"+sCOTPGAFA+"|");
+		    	logger.debug("sCOSBGAFA:|"+sCOSBGAFA+"|");
+		    	logger.debug("sFEDEVEFA:|"+sFEDEVEFA+"|");
+		    	logger.debug("sEstadoFA:|"+sEstadoFA+"|");
+				
+				this.setTablagastos(CLGastos.buscarGastosActivoConFiltroEstado(filtro, sEstadoFA));
 				
 				if (getTablagastos().size() == 0)
 				{
@@ -250,7 +539,28 @@ public class GestorListaGastos implements Serializable
 		{
 			FacesMessage msg;
 			
-			this.setTablagastos(CLGastos.buscarGastosProvision(sNUPROF));
+			GastoTabla filtro = new GastoTabla(
+					sNUPROF,   
+					"",   
+					sCOGRUGFP,   
+					sCOTPGAFP,   
+					sCOSBGAFP,   
+					"",  
+					"",   
+					"",  
+					sFEDEVEFP,   
+					"",   
+					"",  
+					"");
+			
+	    	logger.debug("sCOACES:|"+sCOACES+"|");
+	    	logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"|");
+	    	logger.debug("sCOTPGAFP:|"+sCOTPGAFP+"|");
+	    	logger.debug("sCOSBGAFP:|"+sCOSBGAFP+"|");
+	    	logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
+	    	logger.debug("sEstadoFP:|"+sEstadoFP+"|");
+			
+			this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoFP));
 			
 			if (getTablagastos().size() == 0)
 			{
@@ -336,7 +646,7 @@ public class GestorListaGastos implements Serializable
 
 		//return sPagina;
     }
-	
+
 	public String getsCOACES() {
 		return sCOACES;
 	}
@@ -385,20 +695,12 @@ public class GestorListaGastos implements Serializable
 		this.sFEDEVE = sFEDEVE;
 	}
 
-	public GastoTabla getGastoseleccionado() {
-		return gastoseleccionado;
+	public String getsCodGasto() {
+		return sCodGasto;
 	}
 
-	public void setGastoseleccionado(GastoTabla gastoseleccionado) {
-		this.gastoseleccionado = gastoseleccionado;
-	}
-
-	public ArrayList<GastoTabla> getTablagastos() {
-		return tablagastos;
-	}
-
-	public void setTablagastos(ArrayList<GastoTabla> tablagastos) {
-		this.tablagastos = tablagastos;
+	public void setsCodGasto(String sCodGasto) {
+		this.sCodGasto = sCodGasto;
 	}
 
 	public String getsCOPOIN() {
@@ -457,20 +759,108 @@ public class GestorListaGastos implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 
+	public String getsCOGRUGFA() {
+		return sCOGRUGFA;
+	}
+
+	public void setsCOGRUGFA(String sCOGRUGFA) {
+		this.sCOGRUGFA = sCOGRUGFA;
+	}
+
+	public String getsCOTPGAFA() {
+		return sCOTPGAFA;
+	}
+
+	public void setsCOTPGAFA(String sCOTPGAFA) {
+		this.sCOTPGAFA = sCOTPGAFA;
+	}
+
+	public String getsCOSBGAFA() {
+		return sCOSBGAFA;
+	}
+
+	public void setsCOSBGAFA(String sCOSBGAFA) {
+		this.sCOSBGAFA = sCOSBGAFA;
+	}
+
+	public String getsFEDEVEFA() {
+		return sFEDEVEFA;
+	}
+
+	public void setsFEDEVEFA(String sFEDEVEFA) {
+		this.sFEDEVEFA = sFEDEVEFA;
+	}
+
+	public String getsIMNGASFA() {
+		return sIMNGASFA;
+	}
+
+	public void setsIMNGASFA(String sIMNGASFA) {
+		this.sIMNGASFA = sIMNGASFA;
+	}
+
+	public String getsEstadoFA() {
+		return sEstadoFA;
+	}
+
+	public void setsEstadoFA(String sEstadoFA) {
+		this.sEstadoFA = sEstadoFA;
+	}
+
+	public String getsCOGRUGFP() {
+		return sCOGRUGFP;
+	}
+
+	public void setsCOGRUGFP(String sCOGRUGFP) {
+		this.sCOGRUGFP = sCOGRUGFP;
+	}
+
+	public String getsCOTPGAFP() {
+		return sCOTPGAFP;
+	}
+
+	public void setsCOTPGAFP(String sCOTPGAFP) {
+		this.sCOTPGAFP = sCOTPGAFP;
+	}
+
+	public String getsCOSBGAFP() {
+		return sCOSBGAFP;
+	}
+
+	public void setsCOSBGAFP(String sCOSBGAFP) {
+		this.sCOSBGAFP = sCOSBGAFP;
+	}
+
+	public String getsFEDEVEFP() {
+		return sFEDEVEFP;
+	}
+
+	public void setsFEDEVEFP(String sFEDEVEFP) {
+		this.sFEDEVEFP = sFEDEVEFP;
+	}
+
+	public String getsIMNGASFP() {
+		return sIMNGASFP;
+	}
+
+	public void setsIMNGASFP(String sIMNGASFP) {
+		this.sIMNGASFP = sIMNGASFP;
+	}
+
+	public String getsEstadoFP() {
+		return sEstadoFP;
+	}
+
+	public void setsEstadoFP(String sEstadoFP) {
+		this.sEstadoFP = sEstadoFP;
+	}
+
 	public String getsFEPFON() {
 		return sFEPFON;
 	}
 
 	public void setsFEPFON(String sFEPFON) {
 		this.sFEPFON = sFEPFON;
-	}
-
-	public String getsCodGasto() {
-		return sCodGasto;
-	}
-
-	public void setsCodGasto(String sCodGasto) {
-		this.sCodGasto = sCodGasto;
 	}
 
 	public ActivoTabla getActivoseleccionado() {
@@ -503,6 +893,134 @@ public class GestorListaGastos implements Serializable
 
 	public void setTablaprovisiones(ArrayList<ProvisionTabla> tablaprovisiones) {
 		this.tablaprovisiones = tablaprovisiones;
+	}
+
+	public GastoTabla getGastoseleccionado() {
+		return gastoseleccionado;
+	}
+
+	public void setGastoseleccionado(GastoTabla gastoseleccionado) {
+		this.gastoseleccionado = gastoseleccionado;
+	}
+
+	public ArrayList<GastoTabla> getTablagastos() {
+		return tablagastos;
+	}
+
+	public void setTablagastos(ArrayList<GastoTabla> tablagastos) {
+		this.tablagastos = tablagastos;
+	}
+
+	public Map<String, String> getTiposcogrugHM() {
+		return tiposcogrugHM;
+	}
+
+	public void setTiposcogrugHM(Map<String, String> tiposcogrugHM) {
+		this.tiposcogrugHM = tiposcogrugHM;
+	}
+
+	public Map<String, String> getTiposcotpgaHM() {
+		return tiposcotpgaHM;
+	}
+
+	public void setTiposcotpgaHM(Map<String, String> tiposcotpgaHM) {
+		this.tiposcotpgaHM = tiposcotpgaHM;
+	}
+
+	public Map<String, String> getTiposcosbgaHM() {
+		return tiposcosbgaHM;
+	}
+
+	public void setTiposcosbgaHM(Map<String, String> tiposcosbgaHM) {
+		this.tiposcosbgaHM = tiposcosbgaHM;
+	}
+
+	public Map<String, String> getTiposcotpga_g1HM() {
+		return tiposcotpga_g1HM;
+	}
+
+	public void setTiposcotpga_g1HM(Map<String, String> tiposcotpga_g1HM) {
+		this.tiposcotpga_g1HM = tiposcotpga_g1HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g2HM() {
+		return tiposcotpga_g2HM;
+	}
+
+	public void setTiposcotpga_g2HM(Map<String, String> tiposcotpga_g2HM) {
+		this.tiposcotpga_g2HM = tiposcotpga_g2HM;
+	}
+
+	public Map<String, String> getTiposcotpga_g3HM() {
+		return tiposcotpga_g3HM;
+	}
+
+	public void setTiposcotpga_g3HM(Map<String, String> tiposcotpga_g3HM) {
+		this.tiposcotpga_g3HM = tiposcotpga_g3HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t11HM() {
+		return tiposcosbga_t11HM;
+	}
+
+	public void setTiposcosbga_t11HM(Map<String, String> tiposcosbga_t11HM) {
+		this.tiposcosbga_t11HM = tiposcosbga_t11HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t12HM() {
+		return tiposcosbga_t12HM;
+	}
+
+	public void setTiposcosbga_t12HM(Map<String, String> tiposcosbga_t12HM) {
+		this.tiposcosbga_t12HM = tiposcosbga_t12HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t21HM() {
+		return tiposcosbga_t21HM;
+	}
+
+	public void setTiposcosbga_t21HM(Map<String, String> tiposcosbga_t21HM) {
+		this.tiposcosbga_t21HM = tiposcosbga_t21HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t22HM() {
+		return tiposcosbga_t22HM;
+	}
+
+	public void setTiposcosbga_t22HM(Map<String, String> tiposcosbga_t22HM) {
+		this.tiposcosbga_t22HM = tiposcosbga_t22HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t23HM() {
+		return tiposcosbga_t23HM;
+	}
+
+	public void setTiposcosbga_t23HM(Map<String, String> tiposcosbga_t23HM) {
+		this.tiposcosbga_t23HM = tiposcosbga_t23HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t32HM() {
+		return tiposcosbga_t32HM;
+	}
+
+	public void setTiposcosbga_t32HM(Map<String, String> tiposcosbga_t32HM) {
+		this.tiposcosbga_t32HM = tiposcosbga_t32HM;
+	}
+
+	public Map<String, String> getTiposcosbga_t33HM() {
+		return tiposcosbga_t33HM;
+	}
+
+	public void setTiposcosbga_t33HM(Map<String, String> tiposcosbga_t33HM) {
+		this.tiposcosbga_t33HM = tiposcosbga_t33HM;
+	}
+
+	public Map<String, String> getTiposestadogastoHM() {
+		return tiposestadogastoHM;
+	}
+
+	public void setTiposestadogastoHM(Map<String, String> tiposestadogastoHM) {
+		this.tiposestadogastoHM = tiposestadogastoHM;
 	}
 	
 }

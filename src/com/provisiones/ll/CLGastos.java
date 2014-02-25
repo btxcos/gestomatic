@@ -148,6 +148,11 @@ public final class CLGastos
 		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
 	
+	public static ArrayList<GastoTabla> buscarGastosActivoConFiltroEstado(GastoTabla filtro, String sEstado)
+	{
+		return QMGastos.buscaGastosPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, sEstado);
+	}	
+	
 	public static ArrayList<ActivoTabla> buscarActivosConGastos(ActivoTabla filtro)
 	{
 		return QMGastos.buscaActivosConGastosPendientes(ConnectionManager.getDBConnection(),filtro);
@@ -233,6 +238,10 @@ public final class CLGastos
 		return QMListaGastosProvisiones.buscaGastosProvisionPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
 	
+	public static ArrayList<GastoTabla> buscarGastosProvisionConFiltroEstado(GastoTabla filtro, String sEstado)
+	{
+		return QMListaGastosProvisiones.buscaGastosProvisionPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, sEstado);
+	}
 	
 	public static String estadoGasto(long liCodGasto)
 	{

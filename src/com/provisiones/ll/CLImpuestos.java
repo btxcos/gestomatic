@@ -112,6 +112,11 @@ public final class CLImpuestos
 		return (QMListaImpuestos.buscaCantidadValidado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE));
 	}
 	
+	public static ImpuestoRecurso buscarImpuestoRecurso (long liCodImpuesto)
+	{
+		return QMImpuestos.getImpuestoRecurso(ConnectionManager.getDBConnection(),liCodImpuesto);
+	}
+	
 	public static String buscarNota (long liCodImpuesto)
 	{
 		return QMImpuestos.getNota(ConnectionManager.getDBConnection(),liCodImpuesto);

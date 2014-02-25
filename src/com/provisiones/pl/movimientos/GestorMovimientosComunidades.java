@@ -254,7 +254,7 @@ public class GestorMovimientosComunidades implements Serializable
 					}
 					else
 					{
-						Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
+						Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
 						
 						if (comunidad.getsNUDCOM().equals(""))
 						{

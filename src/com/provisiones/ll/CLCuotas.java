@@ -95,6 +95,11 @@ public final class CLCuotas
 		return QMCuotas.buscaCuotasActivo(ConnectionManager.getDBConnection(),iCOACES);
 	}
 	
+	public static ArrayList<CuotaTabla> buscarCuotasComunidad (String sCodCOCLDO, String sCodNUDCOM)
+	{
+		return QMCuotas.buscaCuotasComunidad(ConnectionManager.getDBConnection(),sCodCOCLDO,sCodNUDCOM);
+	}
+	
 	public static MovimientoCuota buscarMovimientoCuota (long liCodMovimiento)
 	{
 		return QMMovimientosCuotas.getMovimientoCuota(ConnectionManager.getDBConnection(),liCodMovimiento);
@@ -103,6 +108,16 @@ public final class CLCuotas
 	public static String buscarNota (long liCodCuota)
 	{
 		return QMCuotas.getNota(ConnectionManager.getDBConnection(),liCodCuota);
+	}
+	
+	public static Cuota buscarCuota (long liCodCuota)
+	{
+		return QMCuotas.getCuota(ConnectionManager.getDBConnection(),liCodCuota);
+	}
+	
+	public static Cuota buscarDetallesCuota (long liCodCuota)
+	{
+		return QMCuotas.getDetallesCuota(ConnectionManager.getDBConnection(),liCodCuota);
 	}
 	
 	public static boolean guardarNota (long liCodCuota, String sNota)

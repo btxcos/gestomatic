@@ -42,7 +42,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	private String sBIRESO = "";
 	private String sCOTEXA = ValoresDefecto.DEF_COTEXA;
 	private String sOBTEXC = "";
-	
+
 	private String sDesCOSBAC = "";
 	private String sDesBISODE = "";
 	private String sDesBIRESO = "";

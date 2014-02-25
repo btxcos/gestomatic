@@ -2,6 +2,7 @@ package com.provisiones.types.tablas;
 
 public class CuotaTabla 
 {
+	private String COACES = "";
 	private String COCLDO = "";
 	private String DCOCLDO = "";
 	private String NUDCOM = "";
@@ -17,11 +18,16 @@ public class CuotaTabla
 
 	//Constructor de clase	
 	
-	public CuotaTabla(String cOCLDO, String dCOCLDO, String nUDCOM,
-			String cOSBAC, String dCOSBAC, String fIPAGO, String fFPAGO,
-			String iMCUCO, String fAACTA, String pTPAGO, String dPTPAGO,
-			String oBTEXC) {
+	public String getCOCLDO() {
+		return COCLDO;
+	}
+
+	public CuotaTabla(String cOACES, String cOCLDO, String dCOCLDO,
+			String nUDCOM, String cOSBAC, String dCOSBAC, String fIPAGO,
+			String fFPAGO, String iMCUCO, String fAACTA, String pTPAGO,
+			String dPTPAGO, String oBTEXC) {
 		super();
+		COACES = cOACES;
 		COCLDO = cOCLDO;
 		DCOCLDO = dCOCLDO;
 		NUDCOM = nUDCOM;
@@ -35,15 +41,15 @@ public class CuotaTabla
 		DPTPAGO = dPTPAGO;
 		OBTEXC = oBTEXC;
 	}
-
-	//Métodos de acceso
 	
-	public String getCOCLDO() {
-		return COCLDO;
+	//Métodos de acceso
+
+	public String getCOACES() {
+		return COACES;
 	}
 
-	public void setCOCLDO(String cOCLDO) {
-		COCLDO = cOCLDO;
+	public void setCOACES(String cOACES) {
+		COACES = cOACES;
 	}
 
 	public String getDCOCLDO() {
@@ -134,7 +140,8 @@ public class CuotaTabla
 		OBTEXC = oBTEXC;
 	}
 
-	
-	
-	
+	public void setCOCLDO(String cOCLDO) {
+		COCLDO = cOCLDO;
+	}
+
 }

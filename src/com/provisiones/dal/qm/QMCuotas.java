@@ -385,6 +385,110 @@ public final class QMCuotas
 		return new Cuota(sCOACES, sCOCLDO, sNUDCOM, sCOSBAC, sFIPAGO, sFFPAGO, sIMCUCO, sFAACTA, sPTPAGO, sOBTEXC);
 	}
 	
+	public static Cuota getDetallesCuota(Connection conexion, long liCuotaID)
+	{
+		String sCOACES = "";
+		String sCOCLDO = "";
+		String sNUDCOM = "";
+		String sCOSBAC = "";
+		String sFIPAGO = "";
+		String sFFPAGO = "";
+		String sIMCUCO = "";
+		String sFAACTA = "";
+		String sPTPAGO = "";
+		String sOBTEXC = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+					   + CAMPO2  + ","              
+				       + CAMPO3  + ","              
+				       + CAMPO4  + ","              
+				       + CAMPO5  + ","              
+				       + CAMPO6  + ","              
+				       + CAMPO7  + ","              
+				       + CAMPO8  + ","
+				       + CAMPO9  + ","
+					   + CAMPO10  + ","
+				       + CAMPO11  +       
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1  + " = '"+ liCuotaID +"'";
+
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sCOACES = rs.getString(CAMPO2); 
+						sCOCLDO = rs.getString(CAMPO3); 
+						sNUDCOM = rs.getString(CAMPO4); 
+						sCOSBAC = rs.getString(CAMPO5); 
+						sFIPAGO = rs.getString(CAMPO6); 
+						sFFPAGO = rs.getString(CAMPO7); 
+						sIMCUCO = rs.getString(CAMPO8); 
+						sFAACTA = rs.getString(CAMPO9); 
+						sPTPAGO = rs.getString(CAMPO10);
+						sOBTEXC = rs.getString(CAMPO11);
+						
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				sCOACES = "";
+				sCOCLDO = "";
+				sNUDCOM = "";
+				sCOSBAC = "";
+				sFIPAGO = "";
+				sFFPAGO = "";
+				sIMCUCO = "";
+				sFAACTA = "";
+				sPTPAGO = "";
+				sOBTEXC = "";
+
+				logger.error("ERROR Cuota:|"+liCuotaID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return new Cuota(sCOACES, sCOCLDO, sNUDCOM, sCOSBAC, sFIPAGO, sFFPAGO, sIMCUCO, sFAACTA, sPTPAGO, sOBTEXC);
+	}
+	
 	public static long getCuotaID(Connection conexion, int iCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
 	{
 		long liCuotaID = 0;
@@ -602,7 +706,8 @@ public final class QMCuotas
 			ResultSet rs = null;
 
 			boolean bEncontrado = false;
-			
+	
+			String sCOACES = "";
 			String sCOCLDO = "";
 			String sDesCOCLDO = "";
 			String sNUDCOM = "";
@@ -619,6 +724,7 @@ public final class QMCuotas
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
+						   + CAMPO2 + ","
 						   + CAMPO3 + ","
 						   + CAMPO4 + ","
 						   + CAMPO5 + ","
@@ -653,6 +759,7 @@ public final class QMCuotas
 					{
 						bEncontrado = true;
 						
+						sCOACES		= rs.getString(CAMPO2);
 						sCOCLDO     = rs.getString(CAMPO3);
 						sDesCOCLDO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
 						sNUDCOM     = rs.getString(CAMPO4);
@@ -668,6 +775,7 @@ public final class QMCuotas
 
 						
 						CuotaTabla cuotaencontrada = new CuotaTabla(
+								sCOACES,
 								sCOCLDO,
 								sDesCOCLDO,
 								sNUDCOM,
@@ -697,6 +805,134 @@ public final class QMCuotas
 			catch (SQLException ex) 
 			{
 				resultado = new ArrayList<CuotaTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+
+	public static ArrayList<CuotaTabla> buscaCuotasComunidad(Connection conexion, String sCodCOCLDO, String sCodNUDCOM)
+	{
+		ArrayList<CuotaTabla> resultado = new ArrayList<CuotaTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			String sCOACES = "";
+			String sCOCLDO = "";
+			String sDesCOCLDO = "";
+			String sNUDCOM = "";
+			String sCOSBAC = "";
+			String sDesCOSBAC = "";
+			String sFIPAGO = "";
+			String sFFPAGO = "";
+			String sIMCUCO = "";
+			String sFAACTA = "";
+			String sPTPAGO = "";
+			String sDesPTPAGO = "";
+			String sOBTEXC = "";
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+						   + CAMPO2 + ","
+						   + CAMPO3 + ","
+						   + CAMPO4 + ","
+						   + CAMPO5 + ","
+						   + CAMPO6 + ","
+						   + CAMPO7 + ","
+						   + CAMPO8 + ","
+						   + CAMPO9 + ","
+						   + CAMPO10 + "," 
+						   + CAMPO11 + ","
+						   + CAMPO12 +
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE ("
+						   + CAMPO12 + " = '" + ValoresDefecto.DEF_ALTA + "' AND "
+						   + CAMPO3  + " = '"+ sCodCOCLDO +"' AND "
+						   + CAMPO4  + " = '"+ sCodNUDCOM +"')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES		= rs.getString(CAMPO2);
+						sCOCLDO     = rs.getString(CAMPO3);
+						sDesCOCLDO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
+						sNUDCOM     = rs.getString(CAMPO4);
+						sCOSBAC     = rs.getString(CAMPO5);
+						sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,sCOSBAC);
+						sFIPAGO     = Utils.recuperaFecha(rs.getString(CAMPO6));
+						sFFPAGO     = Utils.recuperaFecha(rs.getString(CAMPO7));
+						sIMCUCO     = Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
+						sPTPAGO     = rs.getString(CAMPO10);
+						sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						sOBTEXC     = rs.getString(CAMPO11);  
+
+						
+						CuotaTabla cuotaencontrada = new CuotaTabla(
+								sCOACES,
+								sCOCLDO,
+								sDesCOCLDO,
+								sNUDCOM,
+								sCOSBAC,
+								sDesCOSBAC,
+								sFIPAGO,
+								sFFPAGO,
+								sIMCUCO,
+								sFAACTA,
+								sPTPAGO,
+								sDesPTPAGO,
+								sOBTEXC);
+						
+						resultado.add(cuotaencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO3+":|"+sDesCOCLDO+"|");
+						logger.debug(CAMPO4+":|"+sNUDCOM+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<CuotaTabla>();
+				
+				logger.error("COMUNIDAD:|"+sCodCOCLDO+"|"+sCodNUDCOM+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

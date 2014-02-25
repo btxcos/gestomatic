@@ -438,7 +438,7 @@ public class GestorErroresComunidades implements Serializable
 			
 			try
 			{
-				Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
+				Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
 				
 				Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
 				

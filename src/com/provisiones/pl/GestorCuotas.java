@@ -285,7 +285,7 @@ public class GestorCuotas implements Serializable
 
 			try
 			{
-				Comunidad comunidad = CLComunidades.buscarComunidad(Integer.parseInt(sCOACES));
+				Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
 				
 				this.sCOCLDO = comunidad.getsCOCLDO();
 				this.sNUDCOM = comunidad.getsNUDCOM();

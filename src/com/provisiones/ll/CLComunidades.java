@@ -139,9 +139,14 @@ public final class CLComunidades
 		return QMListaComunidadesActivos.buscaActivosSinComunidad(ConnectionManager.getDBConnection(),activofiltro);
 	}
 	
-	public static Comunidad buscarComunidad (int iCodCOACES)
+	public static Comunidad buscarComunidadDeActivo (int iCodCOACES)
 	{
 		return QMListaComunidadesActivos.buscaComunidadPorActivo(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
+	
+	public static Comunidad buscarComunidad (long liCodComunidad)
+	{
+		return QMComunidades.getComunidad(ConnectionManager.getDBConnection(),liCodComunidad);
 	}
 
 	public static Comunidad buscarDetallesComunidad (long liCodComunidad)
