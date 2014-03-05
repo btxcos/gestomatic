@@ -2,6 +2,9 @@ package com.provisiones.types.tablas;
 
 public class GastoTabla 
 {
+	//Identificador
+	private String sGastoID = "";
+	
 	private String NUPROF = "";
 	private String COACES = "";
 	private String COGRUG = "";
@@ -17,11 +20,12 @@ public class GastoTabla
 
 	//Constructor de clase
 	
-	public GastoTabla(String nUPROF, String cOACES, String cOGRUG,
-			String cOTPGA, String cOSBGA, String dCOSBGA, String pTPAGO,
-			String dPTPAGO, String fEDEVE, String cOSIGA, String dCOSIGA,
-			String iMNGAS) {
+	public GastoTabla(String sGastoID, String nUPROF, String cOACES,
+			String cOGRUG, String cOTPGA, String cOSBGA, String dCOSBGA,
+			String pTPAGO, String dPTPAGO, String fEDEVE, String cOSIGA,
+			String dCOSIGA, String iMNGAS) {
 		super();
+		this.sGastoID = sGastoID;
 		NUPROF = nUPROF;
 		COACES = cOACES;
 		COGRUG = cOGRUG;
@@ -37,6 +41,14 @@ public class GastoTabla
 	}
 	
 	//Métodos de acceso
+
+	public String getsGastoID() {
+		return sGastoID;
+	}
+
+	public void setsGastoID(String sGastoID) {
+		this.sGastoID = sGastoID;
+	}
 
 	public String getNUPROF() {
 		return NUPROF;

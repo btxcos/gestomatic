@@ -37,23 +37,16 @@ public class GestorPagosSimple implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorPagosSimple.class.getName());
 
-	//Buscar
+	//Buscar Activo
 	private String sCOACESB = "";
-	private String sNUPROFB = "";
-	
+
+	//Filtro Gasto Activo
 	private String sCOGRUGBA = "";
 	private String sCOTPGABA = "";
 	private String sCOSBGABA = "";
 	private String sFEDEVEBA = "";
-
-	private String sCOGRUGBP = "";
-	private String sCOTPGABP = "";
-	private String sCOSBGABP = "";
-	private String sFEDEVEBP = "";
-	private String sCOACESBP = "";
 	
-	private String sCodGastoB = "";
-	
+	//Filtro Activo
 	private String sCOPOINB = "";
 	private String sNOMUINB = "";
 	private String sNOPRACB = "";
@@ -64,7 +57,24 @@ public class GestorPagosSimple implements Serializable
 	
 	private String sNURCATB = "";
 	
+
+	//Buscar Provision
+	private String sNUPROFB = "";
+
+	//Filtro Provision
 	private String sFEPFONB = "";
+
+	
+	//Filtro Gasto provision
+	private String sCOGRUGBP = "";
+	private String sCOTPGABP = "";
+	private String sCOSBGABP = "";
+	private String sFEDEVEBP = "";
+	private String sCOACESBP = "";
+	
+	//Gasto Buscado
+	private String sCodGastoB = "";
+	
 	
 	//Gasto
 	private String sCOACES = "";
@@ -126,7 +136,7 @@ public class GestorPagosSimple implements Serializable
 	//private String sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 	//private String sNUCLII = ValoresDefecto.DEF_NUCLII;
 	
-	private String sTipoPago = ValoresDefecto.DEF_PAGO_SIMPLE;
+	private String sTipoPago = "";
 	
 	//Cuenta
 	private String sPais = "";	
@@ -163,16 +173,17 @@ public class GestorPagosSimple implements Serializable
 
 	private transient ProvisionTabla provisionseleccionada = null;
 	private transient ArrayList<ProvisionTabla> tablaprovisiones = null;
+
+	private transient GastoTabla gastoactivoseleccionado = null;
+	private transient ArrayList<GastoTabla> tablagastosactivo = null;
 	
-	private transient GastoTabla gastoseleccionado = null;
-	private transient ArrayList<GastoTabla> tablagastos = null;
+	private transient GastoTabla gastoprovisionseleccionado = null;
+	private transient ArrayList<GastoTabla> tablagastosprovision = null;
 	
 	private transient Cuenta cuentaactivoseleccionada = null;
-	
-	private transient Cuenta cuentacomunidadseleccionada = null;
-	
 	private transient ArrayList<Cuenta> tablacuentasactivo = null;
-	
+
+	private transient Cuenta cuentacomunidadseleccionada = null;
 	private transient ArrayList<Cuenta> tablacuentascomunidad = null;
 
 	public GestorPagosSimple()
@@ -233,8 +244,10 @@ public class GestorPagosSimple implements Serializable
 		this.sCOACESB = "";
     	this.sNUPROFB = "";
     	
-    	this.setGastoseleccionado(null);
-    	this.setTablagastos(null);
+    	this.setGastoactivoseleccionado(null);
+    	this.setGastoprovisionseleccionado(null);
+    	this.setTablagastosactivo(null);
+    	this.setTablagastosprovision(null);
 	}
 	
 	public void borrarCamposBuscarActivo()
@@ -281,8 +294,9 @@ public class GestorPagosSimple implements Serializable
 		
 		cambiaGrupoActivo();
 	
-    	this.setGastoseleccionado(null);
-    	this.setTablagastos(null);
+    	this.setGastoactivoseleccionado(null);
+
+    	this.setTablagastosactivo(null);
 	}
 	
     public void limpiarPlantillaBuscarGastoActivo(ActionEvent actionEvent) 
@@ -302,8 +316,8 @@ public class GestorPagosSimple implements Serializable
 		
 		cambiaGrupoProvision();
 		
-    	this.setGastoseleccionado(null);
-    	this.setTablagastos(null);
+    	this.setGastoprovisionseleccionado(null);
+    	this.setTablagastosprovision(null);
 	}
 	
     public void limpiarPlantillaBuscarGastoProvision(ActionEvent actionEvent) 
@@ -365,7 +379,7 @@ public class GestorPagosSimple implements Serializable
 		this.sNUCCNT = "";
 		this.sDescripcion = "";
 		
-		this.sTipoPago = ValoresDefecto.DEF_PAGO_SIMPLE;
+		this.sTipoPago = "";
 
 	}
 	
@@ -575,7 +589,7 @@ public class GestorPagosSimple implements Serializable
 			}
 			else
 			{
-				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCATB));
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConGastosAutorizados(sNURCATB));
 				
 			}
 
@@ -663,6 +677,7 @@ public class GestorPagosSimple implements Serializable
 				try
 				{
 					GastoTabla filtro = new GastoTabla(
+							"",
 							"",   
 							sCOACESB,   
 							sCOGRUGBA,   
@@ -678,15 +693,15 @@ public class GestorPagosSimple implements Serializable
 					
 					
 					
-					this.setTablagastos(CLGastos.buscarGastosActivoConFiltro(filtro));
+					this.setTablagastosactivo(CLGastos.buscarGastosAutorizadosActivoConFiltro(filtro));
 					
-					if (getTablagastos().size() == 0)
+					if (getTablagastosactivo().size() == 0)
 					{
 						sMsg = "No se encontraron gastos con los criterios solicitados.";
 						msg = Utils.pfmsgWarning(sMsg);
 						logger.warn(sMsg);
 					}
-					else if (getTablagastos().size() == 1)
+					else if (getTablagastosactivo().size() == 1)
 					{
 						sMsg = "Encontrado un gasto relacionado.";
 						msg = Utils.pfmsgInfo(sMsg);
@@ -694,7 +709,7 @@ public class GestorPagosSimple implements Serializable
 					}
 					else
 					{
-						sMsg = "Encontrados "+getTablagastos().size()+" gastos relacionados.";
+						sMsg = "Encontrados "+getTablagastosactivo().size()+" gastos relacionados.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 					}
@@ -731,6 +746,7 @@ public class GestorPagosSimple implements Serializable
 			if (!sNUPROFB.equals(""))
 			{
 				GastoTabla filtro = new GastoTabla(
+						"",
 						sNUPROFB,   
 						sCOACESBP,   
 						sCOGRUGBP,   
@@ -744,19 +760,19 @@ public class GestorPagosSimple implements Serializable
 						"",  
 						"");
 				
-				this.setTablagastos(CLGastos.buscarGastosProvisionConFiltro(filtro));
+				this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro));
 				
-				if (getTablagastos().size() == 0)
+				if (getTablagastosprovision().size() == 0)
 				{
 					msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
 				}
-				else if (getTablagastos().size() == 1)
+				else if (getTablagastosprovision().size() == 1)
 				{
 					msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
 				}
 				else
 				{
-					msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
+					msg = Utils.pfmsgInfo("Encontrados "+getTablagastosprovision().size()+" gastos relacionados.");
 				}
 			}
 			else
@@ -770,7 +786,67 @@ public class GestorPagosSimple implements Serializable
 		
 	}
 	
-	public void seleccionarGasto(ActionEvent actionEvent) 
+	public void seleccionarGastoActivo(ActionEvent actionEvent) 
+    { 
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	if (gastoactivoseleccionado!=null)
+	    	{
+	    		
+		    	logger.debug("sCOACES:|"+gastoactivoseleccionado.getCOACES()+"|");
+		    	logger.debug("sCOGRUG:|"+gastoactivoseleccionado.getCOGRUG()+"|");
+		    	logger.debug("sCOTPGA:|"+gastoactivoseleccionado.getCOTPGA()+"|");
+		    	logger.debug("sCOSBGA:|"+gastoactivoseleccionado.getCOSBGA()+"|");
+		    	logger.debug("sFEDEVE:|"+gastoactivoseleccionado.getFEDEVE()+"|");
+
+		    	cargarGasto(gastoactivoseleccionado);
+	    	}
+	    	else
+	    	{
+		    	FacesMessage msg;
+		    	
+		    	String sMsg = "";
+	    		
+		    	sMsg = "ERROR: Ocurrio un problema al seleccionar el Gasto del Activo. Por favor, revise los datos y avise a soporte.";
+		    	msg = Utils.pfmsgError(sMsg);
+		    	logger.error(sMsg);
+		    	
+		    	FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+		}
+    }
+
+	public void seleccionarGastoProvision(ActionEvent actionEvent) 
+    { 
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	if (gastoprovisionseleccionado!=null)
+	    	{
+		    	logger.debug("sCOACES:|"+gastoprovisionseleccionado.getCOACES()+"|");
+		    	logger.debug("sCOGRUG:|"+gastoprovisionseleccionado.getCOGRUG()+"|");
+		    	logger.debug("sCOTPGA:|"+gastoprovisionseleccionado.getCOTPGA()+"|");
+		    	logger.debug("sCOSBGA:|"+gastoprovisionseleccionado.getCOSBGA()+"|");
+		    	logger.debug("sFEDEVE:|"+gastoprovisionseleccionado.getFEDEVE()+"|");
+	    		cargarGasto(gastoprovisionseleccionado);
+	    	}
+	    	else
+	    	{
+		    	FacesMessage msg;
+		    	
+		    	String sMsg = "";
+	    		
+		    	sMsg = "ERROR: Ocurrio un problema al seleccionar el Gasto de la Provisión. Por favor, revise los datos y avise a soporte.";
+		    	msg = Utils.pfmsgError(sMsg);
+		    	logger.error(sMsg);
+		    	
+		    	FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+		}
+    }
+
+	
+	
+	public void cargarGasto(GastoTabla gastoseleccionado) 
     { 
 		if (ConnectionManager.comprobarConexion())
 		{
@@ -787,6 +863,13 @@ public class GestorPagosSimple implements Serializable
 	    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
 	    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
 	    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
+	    	
+	    	logger.debug("sCOACES:|"+sCOACES+"|");
+	    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");
+	    	logger.debug("sCOTPGA:|"+sCOTPGA+"|");
+	    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
+	    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
+	    	
 	    	
 	    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA();
 	    	
@@ -842,7 +925,7 @@ public class GestorPagosSimple implements Serializable
 	    	
 	    	logger.info(sMsg);
 	    	
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+  			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
 	
@@ -1034,13 +1117,15 @@ public class GestorPagosSimple implements Serializable
 					}
 					else
 					{
-						this.sTipoPago= ValoresDefecto.DEF_PAGO_SIMPLE;
+						this.sTipoPago= ValoresDefecto.DEF_PAGO_NORMA34;
 					}
 					
 					
-					Pago pago = new Pago(sCodGastoB,sTipoPago, Utils.compruebaFecha(sFEPGPR),sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT);
+					Pago pago = new Pago(sCOACES,sCodGastoB,sTipoPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,Utils.compruebaFecha(sFEPGPR));
 					
-					int iSalida = CLPagos.registraPagoSimple(pago, true);
+					Cuenta cuenta = new Cuenta (sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT,"");
+					
+					int iSalida = CLPagos.registraPagoSimple(pago, cuenta, true);
 					
 					switch (iSalida) 
 					{
@@ -1092,6 +1177,12 @@ public class GestorPagosSimple implements Serializable
 						logger.error(sMsg);
 						break;
 						
+					case -906: //Error 906 - error y rollback - error al crear la transferencia
+						sMsg = "[FATAL] ERROR:906 - Se ha producido un error al registrar la transferencia del pago. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
 					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
 						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
@@ -1120,7 +1211,174 @@ public class GestorPagosSimple implements Serializable
 
 	}
 
-	
+	public String getsCOACESB() {
+		return sCOACESB;
+	}
+
+	public void setsCOACESB(String sCOACESB) {
+		this.sCOACESB = sCOACESB;
+	}
+
+	public String getsCOGRUGBA() {
+		return sCOGRUGBA;
+	}
+
+	public void setsCOGRUGBA(String sCOGRUGBA) {
+		this.sCOGRUGBA = sCOGRUGBA;
+	}
+
+	public String getsCOTPGABA() {
+		return sCOTPGABA;
+	}
+
+	public void setsCOTPGABA(String sCOTPGABA) {
+		this.sCOTPGABA = sCOTPGABA;
+	}
+
+	public String getsCOSBGABA() {
+		return sCOSBGABA;
+	}
+
+	public void setsCOSBGABA(String sCOSBGABA) {
+		this.sCOSBGABA = sCOSBGABA;
+	}
+
+	public String getsFEDEVEBA() {
+		return sFEDEVEBA;
+	}
+
+	public void setsFEDEVEBA(String sFEDEVEBA) {
+		this.sFEDEVEBA = sFEDEVEBA;
+	}
+
+	public String getsCOPOINB() {
+		return sCOPOINB;
+	}
+
+	public void setsCOPOINB(String sCOPOINB) {
+		this.sCOPOINB = sCOPOINB;
+	}
+
+	public String getsNOMUINB() {
+		return sNOMUINB;
+	}
+
+	public void setsNOMUINB(String sNOMUINB) {
+		this.sNOMUINB = sNOMUINB;
+	}
+
+	public String getsNOPRACB() {
+		return sNOPRACB;
+	}
+
+	public void setsNOPRACB(String sNOPRACB) {
+		this.sNOPRACB = sNOPRACB;
+	}
+
+	public String getsNOVIASB() {
+		return sNOVIASB;
+	}
+
+	public void setsNOVIASB(String sNOVIASB) {
+		this.sNOVIASB = sNOVIASB;
+	}
+
+	public String getsNUPIACB() {
+		return sNUPIACB;
+	}
+
+	public void setsNUPIACB(String sNUPIACB) {
+		this.sNUPIACB = sNUPIACB;
+	}
+
+	public String getsNUPOACB() {
+		return sNUPOACB;
+	}
+
+	public void setsNUPOACB(String sNUPOACB) {
+		this.sNUPOACB = sNUPOACB;
+	}
+
+	public String getsNUPUACB() {
+		return sNUPUACB;
+	}
+
+	public void setsNUPUACB(String sNUPUACB) {
+		this.sNUPUACB = sNUPUACB;
+	}
+
+	public String getsNURCATB() {
+		return sNURCATB;
+	}
+
+	public void setsNURCATB(String sNURCATB) {
+		this.sNURCATB = sNURCATB;
+	}
+
+	public String getsNUPROFB() {
+		return sNUPROFB;
+	}
+
+	public void setsNUPROFB(String sNUPROFB) {
+		this.sNUPROFB = sNUPROFB;
+	}
+
+	public String getsFEPFONB() {
+		return sFEPFONB;
+	}
+
+	public void setsFEPFONB(String sFEPFONB) {
+		this.sFEPFONB = sFEPFONB;
+	}
+
+	public String getsCOGRUGBP() {
+		return sCOGRUGBP;
+	}
+
+	public void setsCOGRUGBP(String sCOGRUGBP) {
+		this.sCOGRUGBP = sCOGRUGBP;
+	}
+
+	public String getsCOTPGABP() {
+		return sCOTPGABP;
+	}
+
+	public void setsCOTPGABP(String sCOTPGABP) {
+		this.sCOTPGABP = sCOTPGABP;
+	}
+
+	public String getsCOSBGABP() {
+		return sCOSBGABP;
+	}
+
+	public void setsCOSBGABP(String sCOSBGABP) {
+		this.sCOSBGABP = sCOSBGABP;
+	}
+
+	public String getsFEDEVEBP() {
+		return sFEDEVEBP;
+	}
+
+	public void setsFEDEVEBP(String sFEDEVEBP) {
+		this.sFEDEVEBP = sFEDEVEBP;
+	}
+
+	public String getsCOACESBP() {
+		return sCOACESBP;
+	}
+
+	public void setsCOACESBP(String sCOACESBP) {
+		this.sCOACESBP = sCOACESBP;
+	}
+
+	public String getsCodGastoB() {
+		return sCodGastoB;
+	}
+
+	public void setsCodGastoB(String sCodGastoB) {
+		this.sCodGastoB = sCodGastoB;
+	}
+
 	public String getsCOACES() {
 		return sCOACES;
 	}
@@ -1385,172 +1643,68 @@ public class GestorPagosSimple implements Serializable
 		this.sNUPROF = sNUPROF;
 	}
 
-	public String getsCOACESB() {
-		return sCOACESB;
+	public String getsFEPGPR() {
+		return sFEPGPR;
 	}
 
-	public void setsCOACESB(String sCOACESB) {
-		this.sCOACESB = sCOACESB;
+	public void setsFEPGPR(String sFEPGPR) {
+		this.sFEPGPR = sFEPGPR;
 	}
 
-	public String getsNUPROFB() {
-		return sNUPROFB;
+	public String getsPais() {
+		return sPais;
 	}
 
-	public void setsNUPROFB(String sNUPROFB) {
-		this.sNUPROFB = sNUPROFB;
+	public void setsPais(String sPais) {
+		this.sPais = sPais;
 	}
 
-	public String getsCOGRUGBA() {
-		return sCOGRUGBA;
+	public String getsDCIBAN() {
+		return sDCIBAN;
 	}
 
-	public void setsCOGRUGBA(String sCOGRUGBA) {
-		this.sCOGRUGBA = sCOGRUGBA;
+	public void setsDCIBAN(String sDCIBAN) {
+		this.sDCIBAN = sDCIBAN;
 	}
 
-	public String getsCOTPGABA() {
-		return sCOTPGABA;
+	public String getsNUCCEN() {
+		return sNUCCEN;
 	}
 
-	public void setsCOTPGABA(String sCOTPGABA) {
-		this.sCOTPGABA = sCOTPGABA;
+	public void setsNUCCEN(String sNUCCEN) {
+		this.sNUCCEN = sNUCCEN;
 	}
 
-	public String getsCOSBGABA() {
-		return sCOSBGABA;
+	public String getsNUCCOF() {
+		return sNUCCOF;
 	}
 
-	public void setsCOSBGABA(String sCOSBGABA) {
-		this.sCOSBGABA = sCOSBGABA;
+	public void setsNUCCOF(String sNUCCOF) {
+		this.sNUCCOF = sNUCCOF;
 	}
 
-	public String getsFEDEVEBA() {
-		return sFEDEVEBA;
+	public String getsNUCCDI() {
+		return sNUCCDI;
 	}
 
-	public void setsFEDEVEBA(String sFEDEVEBA) {
-		this.sFEDEVEBA = sFEDEVEBA;
+	public void setsNUCCDI(String sNUCCDI) {
+		this.sNUCCDI = sNUCCDI;
 	}
 
-	public String getsCOGRUGBP() {
-		return sCOGRUGBP;
+	public String getsNUCCNT() {
+		return sNUCCNT;
 	}
 
-	public void setsCOGRUGBP(String sCOGRUGBP) {
-		this.sCOGRUGBP = sCOGRUGBP;
+	public void setsNUCCNT(String sNUCCNT) {
+		this.sNUCCNT = sNUCCNT;
 	}
 
-	public String getsCOTPGABP() {
-		return sCOTPGABP;
+	public String getsDescripcion() {
+		return sDescripcion;
 	}
 
-	public void setsCOTPGABP(String sCOTPGABP) {
-		this.sCOTPGABP = sCOTPGABP;
-	}
-
-	public String getsCOSBGABP() {
-		return sCOSBGABP;
-	}
-
-	public void setsCOSBGABP(String sCOSBGABP) {
-		this.sCOSBGABP = sCOSBGABP;
-	}
-
-	public String getsFEDEVEBP() {
-		return sFEDEVEBP;
-	}
-
-	public void setsFEDEVEBP(String sFEDEVEBP) {
-		this.sFEDEVEBP = sFEDEVEBP;
-	}
-
-	public String getsCOACESBP() {
-		return sCOACESBP;
-	}
-
-	public void setsCOACESBP(String sCOACESBP) {
-		this.sCOACESBP = sCOACESBP;
-	}
-
-	public String getsCodGastoB() {
-		return sCodGastoB;
-	}
-
-	public void setsCodGastoB(String sCodGastoB) {
-		this.sCodGastoB = sCodGastoB;
-	}
-
-	public String getsCOPOINB() {
-		return sCOPOINB;
-	}
-
-	public void setsCOPOINB(String sCOPOINB) {
-		this.sCOPOINB = sCOPOINB;
-	}
-
-	public String getsNOMUINB() {
-		return sNOMUINB;
-	}
-
-	public void setsNOMUINB(String sNOMUINB) {
-		this.sNOMUINB = sNOMUINB;
-	}
-
-	public String getsNOPRACB() {
-		return sNOPRACB;
-	}
-
-	public void setsNOPRACB(String sNOPRACB) {
-		this.sNOPRACB = sNOPRACB;
-	}
-
-	public String getsNOVIASB() {
-		return sNOVIASB;
-	}
-
-	public void setsNOVIASB(String sNOVIASB) {
-		this.sNOVIASB = sNOVIASB;
-	}
-
-	public String getsNUPIACB() {
-		return sNUPIACB;
-	}
-
-	public void setsNUPIACB(String sNUPIACB) {
-		this.sNUPIACB = sNUPIACB;
-	}
-
-	public String getsNUPOACB() {
-		return sNUPOACB;
-	}
-
-	public void setsNUPOACB(String sNUPOACB) {
-		this.sNUPOACB = sNUPOACB;
-	}
-
-	public String getsNUPUACB() {
-		return sNUPUACB;
-	}
-
-	public void setsNUPUACB(String sNUPUACB) {
-		this.sNUPUACB = sNUPUACB;
-	}
-
-	public String getsNURCATB() {
-		return sNURCATB;
-	}
-
-	public void setsNURCATB(String sNURCATB) {
-		this.sNURCATB = sNURCATB;
-	}
-
-	public String getsFEPFONB() {
-		return sFEPFONB;
-	}
-
-	public void setsFEPFONB(String sFEPFONB) {
-		this.sFEPFONB = sFEPFONB;
+	public void setsDescripcion(String sDescripcion) {
+		this.sDescripcion = sDescripcion;
 	}
 
 	public Map<String, String> getTiposcogrugHM() {
@@ -1673,22 +1827,6 @@ public class GestorPagosSimple implements Serializable
 		this.tiposcosbga_t33HM = tiposcosbga_t33HM;
 	}
 
-	public GastoTabla getGastoseleccionado() {
-		return gastoseleccionado;
-	}
-
-	public void setGastoseleccionado(GastoTabla gastoseleccionado) {
-		this.gastoseleccionado = gastoseleccionado;
-	}
-
-	public ArrayList<GastoTabla> getTablagastos() {
-		return tablagastos;
-	}
-
-	public void setTablagastos(ArrayList<GastoTabla> tablagastos) {
-		this.tablagastos = tablagastos;
-	}
-
 	public ActivoTabla getActivoseleccionado() {
 		return activoseleccionado;
 	}
@@ -1721,84 +1859,36 @@ public class GestorPagosSimple implements Serializable
 		this.tablaprovisiones = tablaprovisiones;
 	}
 
-	public String getsFEPGPR() {
-		return sFEPGPR;
+	public GastoTabla getGastoactivoseleccionado() {
+		return gastoactivoseleccionado;
 	}
 
-	public void setsFEPGPR(String sFEPGPR) {
-		this.sFEPGPR = sFEPGPR;
+	public void setGastoactivoseleccionado(GastoTabla gastoactivoseleccionado) {
+		this.gastoactivoseleccionado = gastoactivoseleccionado;
 	}
 
-	public String getsPais() {
-		return sPais;
+	public ArrayList<GastoTabla> getTablagastosactivo() {
+		return tablagastosactivo;
 	}
 
-	public void setsPais(String sPais) {
-		this.sPais = sPais;
+	public void setTablagastosactivo(ArrayList<GastoTabla> tablagastosactivo) {
+		this.tablagastosactivo = tablagastosactivo;
 	}
 
-	public String getsDCIBAN() {
-		return sDCIBAN;
+	public GastoTabla getGastoprovisionseleccionado() {
+		return gastoprovisionseleccionado;
 	}
 
-	public void setsDCIBAN(String sDCIBAN) {
-		this.sDCIBAN = sDCIBAN;
+	public void setGastoprovisionseleccionado(GastoTabla gastoprovisionseleccionado) {
+		this.gastoprovisionseleccionado = gastoprovisionseleccionado;
 	}
 
-	public String getsNUCCEN() {
-		return sNUCCEN;
+	public ArrayList<GastoTabla> getTablagastosprovision() {
+		return tablagastosprovision;
 	}
 
-	public void setsNUCCEN(String sNUCCEN) {
-		this.sNUCCEN = sNUCCEN;
-	}
-
-	public String getsNUCCOF() {
-		return sNUCCOF;
-	}
-
-	public void setsNUCCOF(String sNUCCOF) {
-		this.sNUCCOF = sNUCCOF;
-	}
-
-	public String getsNUCCDI() {
-		return sNUCCDI;
-	}
-
-	public void setsNUCCDI(String sNUCCDI) {
-		this.sNUCCDI = sNUCCDI;
-	}
-
-	public String getsNUCCNT() {
-		return sNUCCNT;
-	}
-
-	public void setsNUCCNT(String sNUCCNT) {
-		this.sNUCCNT = sNUCCNT;
-	}
-
-	public ArrayList<Cuenta> getTablacuentasactivo() {
-		return tablacuentasactivo;
-	}
-
-	public void setTablacuentasactivo(ArrayList<Cuenta> tablacuentasactivo) {
-		this.tablacuentasactivo = tablacuentasactivo;
-	}
-
-	public ArrayList<Cuenta> getTablacuentascomunidad() {
-		return tablacuentascomunidad;
-	}
-
-	public void setTablacuentascomunidad(ArrayList<Cuenta> tablacuentascomunidad) {
-		this.tablacuentascomunidad = tablacuentascomunidad;
-	}
-
-	public String getsDescripcion() {
-		return sDescripcion;
-	}
-
-	public void setsDescripcion(String sDescripcion) {
-		this.sDescripcion = sDescripcion;
+	public void setTablagastosprovision(ArrayList<GastoTabla> tablagastosprovision) {
+		this.tablagastosprovision = tablagastosprovision;
 	}
 
 	public Cuenta getCuentaactivoseleccionada() {
@@ -1809,12 +1899,27 @@ public class GestorPagosSimple implements Serializable
 		this.cuentaactivoseleccionada = cuentaactivoseleccionada;
 	}
 
+	public ArrayList<Cuenta> getTablacuentasactivo() {
+		return tablacuentasactivo;
+	}
+
+	public void setTablacuentasactivo(ArrayList<Cuenta> tablacuentasactivo) {
+		this.tablacuentasactivo = tablacuentasactivo;
+	}
+
 	public Cuenta getCuentacomunidadseleccionada() {
 		return cuentacomunidadseleccionada;
 	}
 
-	public void setCuentacomunidadseleccionada(
-			Cuenta cuentacomunidadseleccionada) {
+	public void setCuentacomunidadseleccionada(Cuenta cuentacomunidadseleccionada) {
 		this.cuentacomunidadseleccionada = cuentacomunidadseleccionada;
-	}	
+	}
+
+	public ArrayList<Cuenta> getTablacuentascomunidad() {
+		return tablacuentascomunidad;
+	}
+
+	public void setTablacuentascomunidad(ArrayList<Cuenta> tablacuentascomunidad) {
+		this.tablacuentascomunidad = tablacuentascomunidad;
+	}
 }

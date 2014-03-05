@@ -78,7 +78,7 @@ public class GestorProvisiones implements Serializable
 	    	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
 	    	this.sTAS  = provisionseleccionada.getTAS();
 	    	this.sDTAS  = provisionseleccionada.getDTAS();
-	    	this.sValorTolal  = Utils.recuperaImporte(false, provisionseleccionada.getVALOR());//CLProvisiones.calcularValorProvision(sNUPROF);
+	    	this.sValorTolal  = provisionseleccionada.getVALOR();//CLProvisiones.calcularValorProvision(sNUPROF);
 	    	this.sNumGastos  = provisionseleccionada.getGASTOS();//Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
 	    	
 	    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");

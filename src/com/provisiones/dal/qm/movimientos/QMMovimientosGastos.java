@@ -772,9 +772,10 @@ public final class QMMovimientosGastos
 					       + CAMPO35 +" = '" + gasto.getFEAGTO() + "' AND "
 					      // + CAMPO37 +" = '" + gasto.getBIAUTO() + "' AND "
 					      // + CAMPO38 +" = '" + gasto.getFEAUFA() + "' AND "
-					       + CAMPO40 +" = '" + gasto.getFMPAGN() + "' AND "
-					       + CAMPO41 +" = '" + gasto.getFEPGPR() + "') ";
-					       /*AND "
+					       + CAMPO40 +" = '" + gasto.getFMPAGN() + "')";
+					       /* AND "
+					       + CAMPO41 +" = '" + gasto.getFEPGPR() + "')";
+					        AND "
 					       + CAMPO42 +" = '" + gasto.getFEAPLI() + "' AND "
 					       + CAMPO43 +" = '" + gasto.getCOAPII() + "' AND "
 					       + CAMPO44 +" = '" + gasto.getCOSPII() + "' AND "

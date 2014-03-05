@@ -21,6 +21,9 @@ public final class ValoresDefecto
 	public static final byte CUENTA_COMUNIDAD = 1;
 	public static final byte CUENTA_CONVENCIONAL = 0;	
 	
+	public static final byte PAGO_ENVIADO = 1;
+	public static final byte PAGO_EMITIDO = 0;	
+
 	public static final String DEF_COAPII = "168";
 	public static final String DEF_NUCLII = "2306894218400";
 	public static final String DEF_IDPROV = "68942184";
@@ -95,16 +98,16 @@ public final class ValoresDefecto
 	
 	public static final String DEF_GASTO_PROVISION_CONEXION = "0";
 	
-	public static final String DEF_PAGO_CONEXION = "C";
-	public static final String DEF_PAGO_MULTIPLE = "M";
-	public static final String DEF_PAGO_SIMPLE = "S";
-	public static final String DEF_PAGO_VENTANILLA = "V";	
+	public static final String DEF_PAGO_CONEXION = "0";
+	public static final String DEF_PAGO_VENTANILLA = "1";	
+	public static final String DEF_PAGO_NORMA34 = "2";
 	
 	public static final String DEF_PROVISION_ABIERTA = "A";
-	public static final String DEF_PROVISION_PENDIENTE = "P";
 	public static final String DEF_PROVISION_ENVIADA = "E";
+	public static final String DEF_PROVISION_PAGADA = "G";
+	public static final String DEF_PROVISION_PENDIENTE = "P";
+	public static final String DEF_PROVISION_RESUELTA = "R";	
 	public static final String DEF_PROVISION_AUTORIZADA = "T";
-	public static final String DEF_PROVISION_FACTURADA = "F";
 	
 	public static final String DEF_COTERR = "0";
 	public static final String DEF_COTDOR = "0";
@@ -147,7 +150,51 @@ public final class ValoresDefecto
 	public enum TIPOSACCIONESGASTO 
 	{
 		G, M, N, D, A
-	}	
+	}
+	
+	
+	public static final String DEF_CODIGO_REGOPER_ORDENANTE = "0356"; 
+	public static final String DEF_CODIGO_REGOPER_BENEFICIARIO = "0656"; 
+	public static final String DEF_CODIGO_REGOPER_RESUMEN = "0856"; 
+	
+	
+	public static final String DEF_CODIGO_ORDENANTE = "B79012860";
+	
+	public static final String DEF_ORDENANTE = "GUTIERREZ LABRADOR SL";
+	public static final String DEF_ORDENANTE_DOMICILIO = "Calle Andres Mellado, 114, 1 Iz";
+	public static final String DEF_ORDENANTE_PLAZA = "28003 MADRID";
+	
+	public static final String DEF_ORDENANTE_ENTIDAD = "2038";
+	public static final String DEF_ORDENANTE_OFICINA = "1859";
+	public static final String DEF_ORDENANTE_CUENTA = "6003842008";
+	public static final String DEF_ORDENANTE_DETALLE_CARGO = "1";
+	public static final String DEF_ORDENANTE_DIGITO_CONTROL = "50";
+	
+	
+	public static final String NUMERO_DATO_CABECERA_ORDENANTE = "001";
+	public static final String NUMERO_DATO_NOMBRE_ORDENANTE = "002";
+	public static final String NUMERO_DATO_DOMICILIO_ORDENANTE = "003";
+	public static final String NUMERO_DATO_PLAZA_ORDENANTE = "004";
+
+	public static final String NUMERO_DATO_CABECERA_TRANSFERENCIA = "010";
+	public static final String NUMERO_DATO_NOMBRE_BENEFICIARIO = "011";
+	public static final String NUMERO_DATO_DOMICILIO1_BENEFICIARIO = "012";
+	public static final String NUMERO_DATO_DOMICILIO2_BENEFICIARIO = "013";
+	public static final String NUMERO_DATO_PLAZA_BENEFICIARIO = "014";
+	public static final String NUMERO_DATO_PROVINCIA_BENEFICIARIO = "015";
+	public static final String NUMERO_DATO_CONCEPTO1_TRANSFERENCIA = "016";
+	public static final String NUMERO_DATO_CONCEPTO2_TRANSFERENCIA = "017";
+	
+	public static final String LIBRE12 = "            ";
+	public static final String LIBRE7 = "       ";
+	public static final String LIBRE6 = "      ";
+	public static final String LIBRE3 = "   ";
+	public static final String LIBRE2 = "  ";
+	
+	public static final String DEF_CODIGO_GASTOCONCEPTO = "19";
+	
+	public static final String DEF_DELEGADO_ = "";
+	public static final String DEF_DELEGADO_DOMICILIO = "";
 
 	public static final String DEF_CODIFICACION = "ISO-8859-15";
 	public static final String DEF_FIN_FICHERO = new Character((char) CHAR_FIN).toString();

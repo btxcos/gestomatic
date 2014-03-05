@@ -234,5 +234,17 @@ public final class Longitudes
 	public static final int FILLER_REFERENCIAS_L = 126;//124
 	public static final int FILLER_IMPUESTOS_L = 111;//109
 	
+	//Tamaños N34
+	public static final int N34_REGISTRO_L = 12;
+	public static final int N34_CODIGO_ORDENANTE_L = 10;
+	public static final int N34_CAMPO_L = 36;
+	public static final int N34_REFERENCIA_BENEFICIARIO_L = 12;
+	public static final int N34_IMPORTE_L = 12;
+	
+	public static final int N34_SUMA_IMPORTES_L = 12;
+	public static final int N34_NUM_TRANSFERENCIAS_L = 8;
+	public static final int N34_NUM_REGISTROS_L = 10;
+
+	
 	private Longitudes(){}
 }

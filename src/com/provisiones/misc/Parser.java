@@ -1,5 +1,7 @@
 package com.provisiones.misc;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +12,9 @@ import com.provisiones.types.movimientos.MovimientoCuota;
 import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.movimientos.MovimientoImpuestoRecurso;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
+import com.provisiones.types.transferencias.N34.OrdenanteN34;
+import com.provisiones.types.transferencias.N34.ResumenN34;
+import com.provisiones.types.transferencias.N34.TransferenciaN34;
 
 public final class Parser {
 
@@ -769,5 +774,127 @@ public final class Parser {
 
 		return formateaCampoNumerico(sNUPROF,Longitudes.NUPROF_L) + formateaCampoNumerico(sFEPFON,Longitudes.FEPFON_L) + sFILLER;
 	}
+
+	public static String escribirCampoOrdenanteN34 (String sCodOrdenante, String sNumeroDato, String sCampo)
+	{
+
+		return ValoresDefecto.DEF_CODIGO_REGOPER_ORDENANTE 
+				+ formateaCampoAlfanumerico(sCodOrdenante,Longitudes.N34_CODIGO_ORDENANTE_L) 
+				+ ValoresDefecto.LIBRE12 
+				+ sNumeroDato 
+				+ formateaCampoAlfanumerico(sCampo,Longitudes.N34_CAMPO_L)
+				+ ValoresDefecto.LIBRE7;
+	}
 	
+	public static ArrayList<String> escribirOrdenanteN34 (OrdenanteN34 ordenante)
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+		
+		resultado.add(ValoresDefecto.DEF_CODIGO_REGOPER_ORDENANTE 
+				+ formateaCampoAlfanumerico(ordenante.getsCodOrdenante(),Longitudes.N34_CODIGO_ORDENANTE_L) 
+				+ ValoresDefecto.LIBRE12 
+				+ ValoresDefecto.NUMERO_DATO_CABECERA_ORDENANTE 
+				+ ordenante.getsFechaEnvio() 
+				+ ordenante.getsFechaEmision() 
+				+ ordenante.getsNUCCEN() 
+				+ ordenante.getsNUCCOF() 
+				+ ordenante.getsNUCCNT() 
+				+ ordenante.getsDetalleCargo()
+				+ ValoresDefecto.LIBRE3
+				+ ordenante.getsNUCCDI()
+				+ ValoresDefecto.LIBRE7);
+		
+		resultado.add(escribirCampoOrdenanteN34(ordenante.getsCodOrdenante(),ValoresDefecto.NUMERO_DATO_NOMBRE_ORDENANTE,ordenante.getsNombre()));
+		resultado.add(escribirCampoOrdenanteN34(ordenante.getsCodOrdenante(),ValoresDefecto.NUMERO_DATO_DOMICILIO_ORDENANTE,ordenante.getsDomicilio()));
+		resultado.add(escribirCampoOrdenanteN34(ordenante.getsCodOrdenante(),ValoresDefecto.NUMERO_DATO_PLAZA_ORDENANTE,ordenante.getsPlaza()));
+		
+		return resultado;
+	}
+	
+	public static String escribirCampoTransferenciaN34 (String sCodOrdenante,String sCodReferencia, String sNumeroDato, String sCampo)
+	{
+
+		return ValoresDefecto.DEF_CODIGO_REGOPER_BENEFICIARIO 
+				+ formateaCampoAlfanumerico(sCodOrdenante,Longitudes.N34_CODIGO_ORDENANTE_L) 
+				+ formateaCampoAlfanumerico(sCodReferencia,Longitudes.N34_REFERENCIA_BENEFICIARIO_L)
+				+ sNumeroDato 
+				+ formateaCampoAlfanumerico(sCampo,Longitudes.N34_CAMPO_L)
+				+ ValoresDefecto.LIBRE7;
+	}
+	
+	public static ArrayList<String> escribirTransferenciaN34 (TransferenciaN34 transferencia)
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+		
+		resultado.add(ValoresDefecto.DEF_CODIGO_REGOPER_BENEFICIARIO 
+				+ formateaCampoAlfanumerico(transferencia.getsCodOrdenante(),Longitudes.N34_CODIGO_ORDENANTE_L) 
+				+ formateaCampoAlfanumerico(transferencia.getsReferenciaBeneficiario(),Longitudes.N34_REFERENCIA_BENEFICIARIO_L) 
+				+ ValoresDefecto.NUMERO_DATO_CABECERA_TRANSFERENCIA 
+				+ formateaCampoNumerico(transferencia.getsImporte(),Longitudes.N34_IMPORTE_L)
+				+ transferencia.getsNUCCEN() 
+				+ transferencia.getsNUCCOF() 
+				+ transferencia.getsNUCCNT() 
+				+ ValoresDefecto.DEF_CODIGO_GASTOCONCEPTO
+				+ ValoresDefecto.LIBRE2
+				+ transferencia.getsNUCCDI()
+				+ ValoresDefecto.LIBRE7);
+		resultado.add(escribirCampoTransferenciaN34(transferencia.getsCodOrdenante(), transferencia.getsReferenciaBeneficiario(),ValoresDefecto.NUMERO_DATO_NOMBRE_BENEFICIARIO,transferencia.getsNombreBeneficiario()));
+		resultado.add(escribirCampoTransferenciaN34(transferencia.getsCodOrdenante(), transferencia.getsReferenciaBeneficiario(),ValoresDefecto.NUMERO_DATO_DOMICILIO1_BENEFICIARIO,transferencia.getsDomicilio1Beneficiario()));
+		
+			
+		if (!transferencia.getsDomicilio2Beneficiario().isEmpty())
+		{
+			resultado.add(escribirCampoTransferenciaN34(transferencia.getsCodOrdenante(), transferencia.getsReferenciaBeneficiario(),ValoresDefecto.NUMERO_DATO_DOMICILIO2_BENEFICIARIO,transferencia.getsDomicilio2Beneficiario()));
+		}
+
+		resultado.add(escribirCampoTransferenciaN34(transferencia.getsCodOrdenante(), transferencia.getsReferenciaBeneficiario(),ValoresDefecto.NUMERO_DATO_PLAZA_BENEFICIARIO,transferencia.getsPlazaBeneficiario()));
+
+		if (!transferencia.getsProvinciaBeneficiario().isEmpty())
+		{
+			resultado.add(escribirCampoTransferenciaN34(transferencia.getsCodOrdenante(), transferencia.getsReferenciaBeneficiario(),ValoresDefecto.NUMERO_DATO_PROVINCIA_BENEFICIARIO,transferencia.getsProvinciaBeneficiario()));
+		}
+		
+		resultado.add(escribirCampoTransferenciaN34(transferencia.getsCodOrdenante(), transferencia.getsReferenciaBeneficiario(),ValoresDefecto.NUMERO_DATO_CONCEPTO1_TRANSFERENCIA,transferencia.getsConcepto1Transferencia()));
+		
+		if (!transferencia.getsConcepto2Transferencia().isEmpty())
+		{
+			resultado.add(escribirCampoTransferenciaN34(transferencia.getsCodOrdenante(), transferencia.getsReferenciaBeneficiario(),ValoresDefecto.NUMERO_DATO_CONCEPTO2_TRANSFERENCIA,transferencia.getsConcepto2Transferencia()));
+
+		}
+		
+		return resultado;
+	}
+	
+	public static String escribirResumenN34 (ResumenN34 resumen)
+	{
+
+		return ValoresDefecto.DEF_CODIGO_REGOPER_RESUMEN 
+				+ formateaCampoAlfanumerico(resumen.getsCodOrdenante(),Longitudes.N34_CODIGO_ORDENANTE_L) 
+				+ ValoresDefecto.LIBRE12
+				+ ValoresDefecto.LIBRE3
+				+ formateaCampoNumerico(resumen.getsSumaImportes(),Longitudes.N34_SUMA_IMPORTES_L)
+				+ formateaCampoNumerico(resumen.getsNumeroTransferencias(),Longitudes.N34_NUM_TRANSFERENCIAS_L)
+				+ formateaCampoNumerico(resumen.getsNumeroRegistros(),Longitudes.N34_NUM_REGISTROS_L)
+				+ ValoresDefecto.LIBRE6
+				+ ValoresDefecto.LIBRE7;
+	}
+	
+	public static String escribirCabeceraOrdenante (String sFechaEnvio, String sFechaEmision)
+	{
+
+		return ValoresDefecto.DEF_CODIGO_REGOPER_ORDENANTE 
+				+ formateaCampoAlfanumerico(ValoresDefecto.DEF_CODIGO_ORDENANTE,Longitudes.N34_CODIGO_ORDENANTE_L) 
+				+ ValoresDefecto.LIBRE12 
+				+ ValoresDefecto.NUMERO_DATO_CABECERA_TRANSFERENCIA 
+				+ sFechaEnvio 
+				+ sFechaEmision 
+				+ ValoresDefecto.DEF_ORDENANTE_ENTIDAD 
+				+ ValoresDefecto.DEF_ORDENANTE_OFICINA 
+				+ ValoresDefecto.DEF_ORDENANTE_CUENTA 
+				+ ValoresDefecto.DEF_ORDENANTE_DETALLE_CARGO
+				+ ValoresDefecto.LIBRE3
+				+ ValoresDefecto.DEF_ORDENANTE_DIGITO_CONTROL
+				+ ValoresDefecto.LIBRE7;
+	}
+
 }

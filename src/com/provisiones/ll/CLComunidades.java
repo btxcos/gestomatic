@@ -534,7 +534,7 @@ public final class CLComunidades
 					{
 						iCodigo = -13;
 					}
-					else if (sEstado.equals("") || sEstado.equals("V"))
+					else if (sEstado.isEmpty() || sEstado.equals("V"))
 					{
 						try 
 						{
@@ -587,7 +587,7 @@ public final class CLComunidades
 																							
 
 																logger.debug("COACES:|{}|",movimiento.getCOACES());
-																/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().equals(""))
+																/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().isEmpty())
 																{
 																	//OK 
 																	iCodigo = 0;
@@ -1069,7 +1069,7 @@ public final class CLComunidades
 																					
 
 														logger.debug("COACES:|{}|",movimiento_revisado.getCOACES());
-														/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().equals(""))
+														/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().isEmpty())
 														{
 															//OK 
 															iCodigo = 0;
@@ -1578,7 +1578,7 @@ public final class CLComunidades
 				if (movimiento.getCOACCI().equals("A"))
 				{
 					
-					if (movimiento.getNOMCOC().equals(""))
+					if (movimiento.getNOMCOC().isEmpty())
 					{
 						movimiento_revisado.setBITC01("#");
 					}
@@ -1588,7 +1588,7 @@ public final class CLComunidades
 						movimiento_revisado.setNOMCOC(movimiento.getNOMCOC());
 					}
 
-					if (movimiento.getNODCCO().equals(""))
+					if (movimiento.getNODCCO().isEmpty())
 					{
 						movimiento_revisado.setBITC02("#");
 					}
@@ -1598,7 +1598,7 @@ public final class CLComunidades
 						movimiento_revisado.setNODCCO(movimiento.getNODCCO());
 					}
 
-					if (movimiento.getNOMPRC().equals(""))
+					if (movimiento.getNOMPRC().isEmpty())
 					{
 						movimiento_revisado.setBITC03("#");
 					}
@@ -1608,7 +1608,7 @@ public final class CLComunidades
 						movimiento_revisado.setNOMPRC(movimiento.getNOMPRC());
 					}
 					
-					if (movimiento.getNUTPRC().equals(""))
+					if (movimiento.getNUTPRC().isEmpty())
 					{
 						movimiento_revisado.setBITC04("#");
 					}
@@ -1618,7 +1618,7 @@ public final class CLComunidades
 						movimiento_revisado.setNUTPRC(movimiento.getNUTPRC());
 					}
 					
-					if (movimiento.getNOMADC().equals(""))
+					if (movimiento.getNOMADC().isEmpty())
 					{
 						movimiento_revisado.setBITC05("#");
 					}
@@ -1628,7 +1628,7 @@ public final class CLComunidades
 						movimiento_revisado.setNOMADC(movimiento.getNOMADC());
 					}
 					
-					if (movimiento.getNUTADC().equals(""))
+					if (movimiento.getNUTADC().isEmpty())
 					{
 						movimiento_revisado.setBITC06("#");
 					}
@@ -1638,7 +1638,7 @@ public final class CLComunidades
 						movimiento_revisado.setNUTADC(movimiento.getNUTADC());
 					}
 					
-					if (movimiento.getNODCAD().equals(""))
+					if (movimiento.getNODCAD().isEmpty())
 					{
 						movimiento_revisado.setBITC07("#");
 					}
@@ -1648,7 +1648,7 @@ public final class CLComunidades
 						movimiento_revisado.setNODCAD(movimiento.getNODCAD());
 					}
 					
-					if (movimiento.getNUCCEN().equals("") && movimiento.getNUCCOF().equals("") && movimiento.getNUCCDI().equals("") && movimiento.getNUCCNT().equals(""))
+					if (movimiento.getNUCCEN().isEmpty() && movimiento.getNUCCOF().isEmpty() && movimiento.getNUCCDI().isEmpty() && movimiento.getNUCCNT().isEmpty())
 					{
 						movimiento_revisado.setBITC08("#");
 					}
@@ -1661,7 +1661,7 @@ public final class CLComunidades
 						movimiento_revisado.setNUCCNT(movimiento.getNUCCNT());
 					}
 					
-					if (movimiento.getOBTEXC().equals(""))
+					if (movimiento.getOBTEXC().isEmpty())
 					{
 						movimiento_revisado.setBITC09("#");
 					}
@@ -1671,7 +1671,7 @@ public final class CLComunidades
 						movimiento_revisado.setOBTEXC(movimiento.getOBTEXC());
 					}
 					
-					if (movimiento.getCOACES().equals(""))
+					if (movimiento.getCOACES().isEmpty())
 					{
 						movimiento_revisado.setBITC10("#");
 					}
@@ -1786,13 +1786,13 @@ public final class CLComunidades
 					{
 						movimiento_revisado.setBITC09("#");
 					}
-					else if (movimiento.getOBTEXC().equals("") && !comunidad.getsOBTEXC().equals(""))
+					else if (movimiento.getOBTEXC().isEmpty() && !comunidad.getsOBTEXC().isEmpty())
 					{
 						movimiento_revisado.setBITC09("B");
 						movimiento_revisado.setOBTEXC("");
 						bCambio = true;
 					}
-					else if (!movimiento.getOBTEXC().equals("") &&  comunidad.getsOBTEXC().equals(""))
+					else if (!movimiento.getOBTEXC().isEmpty() &&  comunidad.getsOBTEXC().isEmpty())
 					{
 						movimiento_revisado.setBITC09("A");
 						movimiento_revisado.setOBTEXC(movimiento.getOBTEXC());
@@ -1864,22 +1864,22 @@ public final class CLComunidades
 			
 			int iCOACES = 0;
 			
-			if (!movimiento.getCOACES().equals(""))
+			if (!movimiento.getCOACES().isEmpty())
 			{
 				iCOACES = Integer.parseInt(movimiento.getCOACES());
 			}
 		
-			if (movimiento.getCOACCI().equals(""))
+			if (movimiento.getCOACCI().isEmpty())
 			{
 				//Error 001 - CODIGO DE ACCION DEBE SER A,M,B,X o E
 				iCodigo = -1;
 			}
-			else if (movimiento.getCOCLDO().equals(""))
+			else if (movimiento.getCOCLDO().isEmpty())
 			{
 				//Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
 				iCodigo = -30;
 			}
-			else if (movimiento.getNUDCOM().equals(""))
+			else if (movimiento.getNUDCOM().isEmpty())
 			{
 				//Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO, NULO O CEROS
 				iCodigo = -4;
@@ -1889,25 +1889,25 @@ public final class CLComunidades
 				//Error 031 - NUMERO DE DOCUMENTO CIF ERRONEO
 				iCodigo = -31;
 			}
-			else if (movimiento.getNOMCOC().equals(""))
+			else if (movimiento.getCOACCI().equals("A") && movimiento.getNOMCOC().isEmpty())
 			{
 				//Error 005 - NO TIENE NOMBRE LA COMUNIDAD
 				iCodigo = -5;
 			}
-			else if (!movimiento.getNODCCO().equals("") && !Utils.compruebaCorreo(movimiento.getNODCCO()))
+			else if (!movimiento.getNODCCO().isEmpty() && !Utils.compruebaCorreo(movimiento.getNODCCO()))
 			{
 				//Error direccion de correo de comunidad incorrecta
 				iCodigo = -702;
 			}
-			else if (!movimiento.getNODCAD().equals("") && !Utils.compruebaCorreo(movimiento.getNODCAD()))
+			else if (!movimiento.getNODCAD().isEmpty() && !Utils.compruebaCorreo(movimiento.getNODCAD()))
 			{
 				//Error direccion de correo del administrador incorrecta
 				iCodigo = -703;
 			}
-			else if (movimiento.getCOACCI().equals("A") && (movimiento.getNUCCEN().equals("")
-					|| movimiento.getNUCCOF().equals("")
-					|| movimiento.getNUCCDI().equals("")
-					|| movimiento.getNUCCNT().equals("")))
+			else if (movimiento.getCOACCI().equals("A") && (movimiento.getNUCCEN().isEmpty()
+					|| movimiento.getNUCCOF().isEmpty()
+					|| movimiento.getNUCCDI().isEmpty()
+					|| movimiento.getNUCCNT().isEmpty()))
 			{
 				//Error 006 - FALTAN DATOS DE LA CUENTA BANCARIA
 				iCodigo = -6;
@@ -1918,12 +1918,12 @@ public final class CLComunidades
 				iCodigo = -701;
 			}
 			
-			else if (movimiento.getCOACCI().equals("A") && movimiento.getCOACES().equals(""))
+			else if (movimiento.getCOACCI().equals("A") && movimiento.getCOACES().isEmpty())
 			{
 				//Error 022 - NO SE PUEDE DAR ALTA SI CONTROL DE ACTIVO NO ES S
 				iCodigo = -22;
 			}		
-			else if ( !movimiento.getCOACES().equals("") && !CLActivos.existeActivo(iCOACES))
+			else if ( !movimiento.getCOACES().isEmpty() && !CLActivos.existeActivo(iCOACES))
 			{
 				//Error 003 - NO EXISTE EL ACTIVO
 				iCodigo = -3;
@@ -1979,7 +1979,7 @@ public final class CLComunidades
 				//Error comunidad de baja no puede recibir mas movimientos
 				iCodigo = -802;
 			}
-			else if (sEstado.equals("") && !movimiento.getCOACCI().equals("A"))
+			else if (sEstado.isEmpty() && !movimiento.getCOACCI().equals("A"))
 			{
 				//Error estado no disponible
 				iCodigo = -803;

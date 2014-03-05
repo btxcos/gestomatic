@@ -411,8 +411,9 @@ public final class QMListaGastos
 					+ TABLA + 
 					" SET " 
 					+ CAMPO3 + " = '"+ sValidado + "' "+
-					" WHERE "
-					+ CAMPO2 + " = '"+ liCodMovimiento +"'";
+					" WHERE ("
+					+ CAMPO2 + " = '"+ liCodMovimiento +"' AND "
+					+ CAMPO3 + " <> '"+ValoresDefecto.DEF_MOVIMIENTO_RESUELTO+"')";
 			
 			logger.debug(sQuery);
 			
@@ -511,6 +512,76 @@ public final class QMListaGastos
 		return sValidado;
 	}
 	
+	public static long getCodGasto(Connection conexion, long liCodMovimiento)
+	{
+		long liCodGasto = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO2 + " = '" + liCodMovimiento + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liCodGasto = rs.getLong(CAMPO1);
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO2+":|"+liCodMovimiento+"|");
+						logger.debug(CAMPO1+":|"+liCodGasto+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liCodGasto = 0;
+
+				logger.error("ERROR Gasto:|"+liCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liCodGasto;
+	}
+	
 	public static long buscaCantidadValidado(Connection conexion, String sCodValidado)
 	{
 		long liNumero = 0;
@@ -576,7 +647,7 @@ public final class QMListaGastos
 		return liNumero;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosConGastosAutorizados(Connection conexion, ActivoTabla activo)
+	public static ArrayList<ActivoTabla> buscaActivosConGastosAutorizados(Connection conexion, ActivoTabla filtro)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 
@@ -615,13 +686,13 @@ public final class QMListaGastos
 						   + QMActivos.TABLA + 
 						   " WHERE ("
 
-						   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-						   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-						   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-						   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-						   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-						   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-						   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
 
 						   + QMActivos.CAMPO1 +" IN (SELECT "
 						   + QMGastos.CAMPO2 + 
@@ -630,6 +701,122 @@ public final class QMListaGastos
 	   					   " WHERE " 
 	   					   + QMGastos.CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_AUTORIZADO +"' AND "
 
+	   					   + QMGastos.CAMPO1 + " IN (SELECT "
+						   + CAMPO1 + 
+	   					   " FROM " 
+						   + TABLA +
+	   					   " WHERE " 
+	   					   + CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "')))";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(QMActivos.CAMPO1);
+						sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+
+	}
+	
+	public static ArrayList<ActivoTabla> buscaActivosConGastosAbonablesPorFiltro(Connection conexion, ActivoTabla filtro)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						
+						   + QMActivos.CAMPO1 + ","        
+						   + QMActivos.CAMPO14 + ","
+						   + QMActivos.CAMPO11 + ","
+						   + QMActivos.CAMPO13 + ","
+						   + QMActivos.CAMPO6 + ","
+						   + QMActivos.CAMPO9 + ","
+						   + QMActivos.CAMPO7 + ","
+						   + QMActivos.CAMPO10 + 
+
+						   " FROM " 
+						   + QMActivos.TABLA + 
+						   " WHERE ("
+
+						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
+
+						   + QMActivos.CAMPO1 +" IN (SELECT "
+						   + QMGastos.CAMPO2 + 
+	   					   " FROM " 
+						   + QMGastos.TABLA +
+	   					   " WHERE "
+						   + QMGastos.CAMPO33 + " > 0 AND "
+						   + QMGastos.CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_AUTORIZADO + "','" + ValoresDefecto.DEF_GASTO_PAGADO + "') AND "
 	   					   + QMGastos.CAMPO1 + " IN (SELECT "
 						   + CAMPO1 + 
 	   					   " FROM " 
@@ -705,6 +892,7 @@ public final class QMListaGastos
 
 			boolean bEncontrado = false;
 
+			String sGastoID = "";
 			String sNUPROF = "";
 			String sCOACES = "";
 			String sCOGRUG = "";
@@ -770,6 +958,7 @@ public final class QMListaGastos
 					{
 						bEncontrado = true;
 						
+						sGastoID = rs.getString(QMGastos.CAMPO1);
 						sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
 						sCOACES  = rs.getString(QMGastos.CAMPO2);
 						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
@@ -784,6 +973,7 @@ public final class QMListaGastos
 						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
+								sGastoID,
 								sNUPROF,
 								sCOACES,
 								sCOGRUG,

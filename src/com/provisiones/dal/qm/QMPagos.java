@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,21 +24,19 @@ public class QMPagos
 
 	public static final String CAMPO1 = "pago_id";
 
-	public static final String CAMPO2 = "cod_gasto";
-	public static final String CAMPO3 = "cod_tp";
-	public static final String CAMPO4 = "fepgpr";
-	public static final String CAMPO5 = "pais";
-	public static final String CAMPO6 = "dciban";
-	public static final String CAMPO7 = "nuccen";
-	public static final String CAMPO8 = "nuccof";
-	public static final String CAMPO9 = "nuccdi";
-	public static final String CAMPO10 = "nuccnt";
-	public static final String CAMPO11 = "usuario_pago";
-	public static final String CAMPO12 = "fecha_pago";
+	public static final String CAMPO2 = "cod_coaces";
+	public static final String CAMPO3 = "cod_gasto";
+	public static final String CAMPO4 = "cod_tipo_pago";
+	public static final String CAMPO5 = "cod_operacion";
+	public static final String CAMPO6 = "fepgpr";
+	public static final String CAMPO7 = "enviado";
+	public static final String CAMPO8 = "usuario_pago";
+	public static final String CAMPO9 = "fecha_pago";
+
 
 	private QMPagos(){}
 	
-	public static long addPago(Connection conexion, Pago NuevoPago)
+	public static long addPago(Connection conexion, Pago NuevoPago, byte btEnviado)
 	{
 		long liCodigo = 0;
 
@@ -61,20 +60,14 @@ public class QMPagos
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO9 + ","
-					+ CAMPO10 + ","
-					+ CAMPO11 + ","
-					+ CAMPO12 +
-					") VALUES ('" 
+					+ CAMPO9 +
+					") VALUES ('"
+					+ NuevoPago.getsCOACES() + "','"
 					+ NuevoPago.getsGasto() + "','"
-					+ NuevoPago.getsTP() + "','"
+					+ NuevoPago.getsTipoPago() + "','"
+					+ NuevoPago.getsCodOperacion() + "','"
 					+ NuevoPago.getsFEPGPR() + "',"
-					+ "AES_ENCRYPT('"+NuevoPago.getsPais()  +"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
-					+ "AES_ENCRYPT('"+NuevoPago.getsDCIBAN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
-					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
-					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
-					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
-					+ "AES_ENCRYPT('"+NuevoPago.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+					+ btEnviado + ",'"
 					+ sUsuario + "','"
 					+ Utils.timeStamp() + 
 					"')";
@@ -117,7 +110,7 @@ public class QMPagos
 		return liCodigo;
 	}
 
-	public static boolean modPago(Connection conexion, Pago pago, String sPagoID) 
+	public static boolean modPago(Connection conexion, Pago pago, long liPagoID, byte btEnviado) 
 	{
 		boolean bSalida = false;
 		
@@ -131,22 +124,17 @@ public class QMPagos
 			
 			String sQuery = "UPDATE " 
 					+ TABLA + 
-					" SET " 
-					+ CAMPO2 + " = '" + pago.getsGasto() + "', "
-					+ CAMPO3 + " = '" + pago.getsTP() + "', "
-					+ CAMPO4 + " = '" + pago.getsFEPGPR() + "', " 
-
-					+ CAMPO5    + " = AES_ENCRYPT('"+pago.getsPais()  +"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO6    + " = AES_ENCRYPT('"+pago.getsDCIBAN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO7    + " = AES_ENCRYPT('"+pago.getsNUCCEN()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO8    + " = AES_ENCRYPT('"+pago.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO9    + " = AES_ENCRYPT('"+pago.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-					+ CAMPO10   + " = AES_ENCRYPT('"+pago.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), " 
-
-					+ CAMPO11 + " = '" + sUsuario + "', " 
-					+ CAMPO12 + " = '" + Utils.timeStamp() + "' " +					
+					" SET "
+					+ CAMPO2 + " = '" + pago.getsCOACES() + "', "
+					+ CAMPO3 + " = '" + pago.getsGasto() + "', "
+					+ CAMPO4 + " = '" + pago.getsTipoPago() + "', "
+					+ CAMPO5 + " = '" + pago.getsCodOperacion() + "', " 
+					+ CAMPO6 + " = '" + pago.getsFEPGPR() + "', "
+					+ CAMPO7 + " = " + btEnviado + ", " 
+					+ CAMPO8 + " = '" + sUsuario + "', " 
+					+ CAMPO9 + " = '" + Utils.timeStamp() + "' " +					
 					" WHERE " 
-					+ CAMPO1 + " = '" + sPagoID + "'";
+					+ CAMPO1 + " = '" + liPagoID + "'";
 
 
 			logger.debug(sQuery);
@@ -164,7 +152,7 @@ public class QMPagos
 			{
 				bSalida = false;
 
-				logger.error("ERROR PAGO:|"+sPagoID+"|");
+				logger.error("ERROR PAGO:|"+liPagoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -177,7 +165,7 @@ public class QMPagos
 		return bSalida;
 	}
 
-	public static boolean delPago(Connection conexion, String sPagoID) 
+	public static boolean delPago(Connection conexion, long liPagoID) 
 	{
 		boolean bSalida = false;
 
@@ -190,7 +178,7 @@ public class QMPagos
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '" + sPagoID + "'";
+					+ CAMPO1 + " = '" + liPagoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -207,7 +195,7 @@ public class QMPagos
 			{
 				bSalida = false;
 
-				logger.error("ERROR PAGO:|"+sPagoID+"|");
+				logger.error("ERROR PAGO:|"+liPagoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -220,17 +208,15 @@ public class QMPagos
 		return bSalida;
 	}
 	
-	public static Pago getPago(Connection conexion, String sPagoID)
+	public static Pago getPago(Connection conexion, long liPagoID)
 	{
+		String sCOACES = "";
 		String sGasto = "";
-		String sTP = "";
+		String sTipoPago = "";
+		String sCodOperacion = "";
 		String sFEPGPR = "";
-		String sPais = "";	
-		String sDCIBAN = "";
-		String sNUCCEN = "";
-		String sNUCCOF = "";
-		String sNUCCDI = "";
-		String sNUCCNT = "";
+	
+
 
 		if (conexion != null)
 		{
@@ -246,17 +232,13 @@ public class QMPagos
 			String sQuery = "SELECT "
 				       + CAMPO2  + ","
 				       + CAMPO3  + ","    
-				       + CAMPO4  + ","              
-				       + "AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + CAMPO4  + ","
+				       + CAMPO5  + ","  
+				       + CAMPO6
 				       +" FROM " 
 				       + TABLA + 
 				       " WHERE "
-				       + CAMPO1 + " = '"+ sPagoID +"'";
+				       + CAMPO1 + " = '"+ liPagoID +"'";
 			
 			logger.debug(sQuery);
 
@@ -269,7 +251,7 @@ public class QMPagos
 				
 				logger.debug("Ejecutada con exito!");
 
-				logger.debug(CAMPO1 + ":|"+sPagoID+"|");
+				logger.debug(CAMPO1 + ":|"+liPagoID+"|");
 
 				if (rs != null) 
 				{
@@ -278,16 +260,11 @@ public class QMPagos
 					{
 						bEncontrado = true;
 
-						sGasto = rs.getString(CAMPO2);  
-						sTP = rs.getString(CAMPO3); 
-						sFEPGPR = rs.getString(CAMPO4);  
-
-						sPais = rs.getString("AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sDCIBAN = rs.getString("AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCEN = rs.getString("AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCOF = rs.getString("AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCDI = rs.getString("AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCNT = rs.getString("AES_DECRYPT("+CAMPO10+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sCOACES = rs.getString(CAMPO2);
+						sGasto = rs.getString(CAMPO3);  
+						sTipoPago = rs.getString(CAMPO4);
+						sCodOperacion = rs.getString(CAMPO5);
+						sFEPGPR = rs.getString(CAMPO6); 
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -301,17 +278,13 @@ public class QMPagos
 			} 
 			catch (SQLException ex) 
 			{
+				sCOACES = "";
 				sGasto = "";
-				sTP = "";
-				sFEPGPR = "";
-				sPais = "";	
-				sDCIBAN = "";
-				sNUCCEN = "";
-				sNUCCOF = "";
-				sNUCCDI = "";
-				sNUCCNT = "";
+				sTipoPago = "";
+				sCodOperacion = "";
+				sFEPGPR = "";	
 
-				logger.error("ERROR PAGO:|"+sPagoID+"|");
+				logger.error("ERROR PAGO:|"+liPagoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -323,20 +296,16 @@ public class QMPagos
 		}
 
 		return new Pago(
+				sCOACES,
 				sGasto,
-				sTP,
-				sFEPGPR,
-				sPais,
-				sDCIBAN,
-				sNUCCEN,
-				sNUCCOF,
-				sNUCCDI,
-				sNUCCNT);
+				sTipoPago,
+				sCodOperacion,
+				sFEPGPR);
 	}
 
-	public static String getPagoID(Connection conexion, String sGasto, String sFEPGPR)
+	public static long getPagoID(Connection conexion, long liCodGasto)
 	{
-		String sPagoID = "";
+		long liPagoID = 0;
 
 		if (conexion != null)
 		{
@@ -353,9 +322,8 @@ public class QMPagos
 				       	+ CAMPO1  +                
 				       	" FROM " 
 				       	+ TABLA + 
-				       	" WHERE ("
-				       	+ CAMPO2 + " = '"+ sGasto +"' AND "
-				       	+ CAMPO4 + " = '"+ sFEPGPR +"')";
+				       	" WHERE "
+				       	+ CAMPO3 + " = '"+ liCodGasto +"'";
 			
 			logger.debug(sQuery);
 
@@ -368,8 +336,7 @@ public class QMPagos
 				
 				logger.debug("Ejecutada con exito!");
 				
-				logger.debug(CAMPO2 + ":|"+sGasto+"|");
-				logger.debug(CAMPO4 + ":|"+sFEPGPR+"|");
+				logger.debug(CAMPO2 + ":|"+liCodGasto+"|");
 
 				if (rs != null) 
 				{
@@ -378,9 +345,9 @@ public class QMPagos
 					{
 						bEncontrado = true;
 
-						sPagoID = rs.getString(CAMPO1);
+						liPagoID = rs.getLong(CAMPO1);
 						
-						logger.debug(CAMPO1+":|"+sPagoID+"|");
+						logger.debug(CAMPO1+":|"+liPagoID+"|");
 						
 						logger.debug("Encontrado el registro!");
 					}
@@ -393,10 +360,9 @@ public class QMPagos
 			} 
 			catch (SQLException ex) 
 			{
-				sPagoID = "";
+				liPagoID = 0;
 				
-				logger.error("ERROR PAGO:|"+sGasto+"|");
-				logger.error("ERROR FECHA:|"+sFEPGPR+"|");
+				logger.error("ERROR PAGO:|"+liCodGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -407,10 +373,55 @@ public class QMPagos
 			}
 		}
 
-		return sPagoID;
+		return liPagoID;
 	}	
 	
-	public static boolean existePago(Connection conexion, String sGastoID)
+	public static boolean setEnviado(Connection conexion, long liPagoID, byte btEnviado)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO7 + " = "+ btEnviado +
+					" WHERE "
+					+ CAMPO1  + " = '"+ liPagoID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR PAGO:|"+liPagoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+		
+		return bSalida;
+	}
+	
+	public static boolean existePago(Connection conexion, long liCodGasto)
 	{
 		boolean bEncontrado = false;
 
@@ -424,11 +435,11 @@ public class QMPagos
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-				       	+ CAMPO3  +                
+				       	+ CAMPO7  +                
 				       	" FROM " 
 				       	+ TABLA + 
 				       	" WHERE "
-				       	+ CAMPO2 + " = '"+ sGastoID +"'";
+				       	+ CAMPO3 + " = '"+ liCodGasto +"'";
 			
 			logger.debug(sQuery);
 
@@ -459,7 +470,7 @@ public class QMPagos
 			{
 				bEncontrado = false;
 				
-				logger.error("ERROR GASTO:|"+sGastoID+"|");
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -473,7 +484,7 @@ public class QMPagos
 		return bEncontrado;
 	}
 	
-	public static String getFechaPago(Connection conexion, String sPagoID) 
+	public static String getFechaPago(Connection conexion, long liPagoID) 
 	{
 		String sFechaPago = "";
 
@@ -489,11 +500,11 @@ public class QMPagos
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-					+ CAMPO4  +
+					+ CAMPO6  +
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO1 + " = '"+ sPagoID + "'";
+					+ CAMPO1 + " = '"+ liPagoID + "'";
 			
 			logger.debug(sQuery);
 
@@ -512,10 +523,10 @@ public class QMPagos
 					{
 						bEncontrado = true;
 						
-						sFechaPago = rs.getString(CAMPO4);
+						sFechaPago = rs.getString(CAMPO6);
 
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO1+":|"+sPagoID+"|");
+						logger.debug(CAMPO1+":|"+liPagoID+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -527,7 +538,7 @@ public class QMPagos
 			{
 				sFechaPago = "";
 
-				logger.error("ERROR PAGO:|"+sPagoID+"|");
+				logger.error("ERROR PAGO:|"+liPagoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -539,5 +550,371 @@ public class QMPagos
 		}		
 
 		return sFechaPago;
+	}
+	
+	public static String getCodOperacion(Connection conexion, long liPagoID) 
+	{
+		String sCodOperacion = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO5  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '"+ liPagoID + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCodOperacion = rs.getString(CAMPO5);
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+liPagoID+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sCodOperacion = "";
+
+				logger.error("ERROR PAGO:|"+liPagoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return sCodOperacion;
+	}
+	
+	public static ArrayList<Integer> buscarActivosPagoEnvio(Connection conexion, byte btEnviado) 
+	{
+		ArrayList<Integer> resultado = new ArrayList<Integer>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ QMGastos.CAMPO2  +
+					" FROM " 
+					+ QMGastos.TABLA + 
+					" WHERE " 
+					+ QMGastos.CAMPO1 + " IN (SELECT "
+					+ CAMPO3  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO7 + " = "+ btEnviado + "))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						int iCOACES = rs.getInt(QMGastos.CAMPO2);
+						
+						resultado.add(iCOACES);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(QMGastos.CAMPO2+":|"+iCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<Integer>();
+
+				logger.error("ERROR ENVIADO:|"+btEnviado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
+	
+	public static ArrayList<Long> buscarPagoEnvio(Connection conexion, byte btEnviado) 
+	{
+		ArrayList<Long> resultado = new ArrayList<Long>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO1  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO7 + " = "+ btEnviado + 
+					" ORDER BY " + CAMPO2 + " ASC";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						long liPagoID = rs.getLong(CAMPO1);
+						
+						resultado.add(liPagoID);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+liPagoID+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<Long>();
+
+				logger.error("ERROR ENVIADO:|"+btEnviado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
+	
+	public static ArrayList<Long> buscarPagosActivo(Connection conexion, int iCOACES) 
+	{
+		//TODO Lista de pagos
+		
+		String sCOACES = "";
+		String sGasto = "";
+		String sTipoPago = "";
+		String sCodOperacion = "";
+		String sFEPGPR = "";
+		
+		
+		ArrayList<Long> resultado = new ArrayList<Long>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO1  + ","
+					+ CAMPO2  + ","
+					+ CAMPO3  + ","
+					+ CAMPO4  + ","
+					+ CAMPO5  + ","
+					+ CAMPO6  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO2 + " = "+ iCOACES;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						long liPagoID = rs.getLong(CAMPO1);
+						
+						resultado.add(liPagoID);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+liPagoID+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<Long>();
+
+				logger.error("ERROR ACTIVO:|"+iCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
+	
+	public static long buscaCantidadPagosSinEnviarPorTipo(Connection conexion, String sTipoPago)
+	{
+		long liNumero = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT("+CAMPO1+") FROM " 
+					+ TABLA + 
+					" WHERE " +
+					"("
+					+ CAMPO4 + " = '"+sTipoPago+"' AND "
+					+ CAMPO7 + " = "+ValoresDefecto.PAGO_EMITIDO+
+					")";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liNumero = rs.getLong("COUNT("+CAMPO1+")");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug("Numero de registros:|"+liNumero+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liNumero = 0;
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liNumero;
 	}
 }

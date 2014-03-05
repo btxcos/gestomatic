@@ -28,7 +28,7 @@
 						</p:fieldset>
 									<p:fieldset legend="Acciones" id="acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Revisar Movimientos" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos" actionListener="#{GestorEnvios.cargarMovimientosPendientes}"/>	
+											<p:commandButton value="Revisar Movimientos" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos, form:NumTransferenciasN34, form:botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPendientes}"/>	
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -114,6 +114,28 @@
 											<p:commandButton id="botGastos" value="Descargar Gastos" ajax="false" actionListener="#{GestorEnvios.descargarGastos}"
 												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
 												disabled="#{GestorEnvios.bNumGastos}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+										</h:panelGrid>
+									</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Pagos Pendientes" id="pagos">
+										<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel >
+										<h:panelGrid columns="3" cellpadding="5">
+
+
+											<h:outputText for="NumTransferenciasN34" value="Norma 34: " />
+											<p:inputText id="NumTransferenciasN34" value="#{GestorEnvios.sNumTransferenciasN34}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botTransferenciasN34" value="Descargar Norma 34" ajax="false" actionListener="#{GestorEnvios.descargarTransferenciasN34}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumTransferenciasN34}">
 												<p:fileDownload value="#{GestorEnvios.file}" />  
 											</p:commandButton>
 

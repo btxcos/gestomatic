@@ -34,7 +34,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Pagar" update="msgs, popup, activos" action="#{GestorPagosSimple.registrarPago}"/>
-								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastos, panel" actionListener="#{GestorPagosSimple.limpiarPlantilla}" />	
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel" actionListener="#{GestorPagosSimple.limpiarPlantilla}" />	
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -73,7 +73,7 @@
 													<h:outputText for="COACESB" value="Activo: " />
 													<p:inputMask id="COACESB" value="#{GestorPagosSimple.sCOACESB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
-													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" oncomplete="dlgBuscarGastosActivo.show()"/>	
+													<p:commandButton value="Buscar Gastos" update="gastosactivo, msgs, popup" oncomplete="dlgBuscarGastosActivo.show()"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar Activo" update="COACESB, form:activos" oncomplete="dlgBuscar.show()"/>		
@@ -87,7 +87,7 @@
 													<h:outputText for="NUPROFB" value="Provisión: " />
 													<p:inputMask id="NUPROFB" value="#{GestorPagosSimple.sNUPROFB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
-													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" oncomplete="dlgBuscarGastosProvision.show()"/>	
+													<p:commandButton value="Buscar Gastos" update="gastosprovision, msgs, popup" oncomplete="dlgBuscarGastosProvision.show()"/>	
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar Provisión" update="NUPROFB, form:provisiones" oncomplete="dlgBuscarProvision.show()"/>		
@@ -149,7 +149,7 @@
 									  </p:panel>
 
 									 <p:commandButton value="Sin Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.seleccionarPagoPorVentanilla}"/>
-									 
+
 									 <p:commandButton value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.limpiarPlantillaCuenta}"/>
 
 											</h:panelGrid>
@@ -159,7 +159,7 @@
 									</p:fieldset>
 
 
-								<p:fieldset legend="Datos">
+								<p:fieldset legend="Datos" id="panelDatosGasto">
 									<h:panelGrid columns="2" cellpadding="5">
 
 										<p:panel>
@@ -427,7 +427,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="popup, form:provisiones" actionListener="#{GestorPagosSimple.buscarProvisiones}" oncomplete="dlgTablaProvisiones.show()"/>	
+													<p:commandButton value="Buscar" update="popup, :form:provisiones" actionListener="#{GestorPagosSimple.buscarProvisiones}" oncomplete="dlgTablaProvisiones.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscarProvision" actionListener="#{GestorPagosSimple.limpiarPlantillaProvision}" />	
 
 												</h:panelGrid>
@@ -498,7 +498,7 @@
 											<p:panel>
 												<h:panelGrid columns="2" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="msgs, popup, :form:gastos" actionListener="#{GestorPagosSimple.buscarGastosActivo}" oncomplete="dlgTablaGastos.show()"/>	
+													<p:commandButton value="Buscar" update="msgs, popup, :form:gastosactivo" actionListener="#{GestorPagosSimple.buscarGastosActivo}" oncomplete="dlgTablaGastosActivo.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosActivo" actionListener="#{GestorPagosSimple.limpiarPlantillaBuscarGastoActivo}" />	
 
 												</h:panelGrid>
@@ -507,6 +507,64 @@
 													
 										</h:panelGrid>
 									</p:fieldset>
+					</p:dialog>
+
+					<p:dialog header="Gastos Autorizados del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
+
+						<p:contextMenu for="gastosactivo">
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
+						</p:contextMenu>
+
+						<p:dataTable id="gastosactivo" var="gastoactivo" value="#{GestorPagosSimple.tablagastosactivo}" rowKey="#{gastoactivo.sGastoID}"
+															selection="#{GestorPagosSimple.gastoactivoseleccionado}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15">
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Provisión" />
+															</f:facet>
+															<h:outputText value="#{gastoactivo.NUPROF}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activo" />
+															</f:facet>
+															<h:outputText value="#{gastoactivo.COACES}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Gasto" />
+															</f:facet>
+															<h:outputText value="#{gastoactivo.DCOSBGA}" />
+														</p:column>
+														
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Periodicidad" />
+															</f:facet>
+															<h:outputText value="#{gastoactivo.DPTPAGO}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Importe" />
+															</f:facet>
+															<h:outputText value="#{gastoactivo.IMNGAS}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Fecha de Devengo" />
+															</f:facet>
+															<h:outputText value="#{gastoactivo.FEDEVE}" />
+														</p:column>
+
+						</p:dataTable>
+
 					</p:dialog>
 
 					<p:dialog header="Buscar Gastos Autorizados de la Provisión: " widgetVar="dlgBuscarGastosProvision" resizable="false">  
@@ -553,7 +611,7 @@
 											<p:panel>
 												<h:panelGrid columns="2" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="msgs, popup, :form:gastos" actionListener="#{GestorPagosSimple.buscarGastosProvision}" oncomplete="dlgTablaGastos.show()"/>	
+													<p:commandButton value="Buscar" update="msgs, popup, :form:gastosprovision" actionListener="#{GestorPagosSimple.buscarGastosProvision}" oncomplete="dlgTablaGastosProvision.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosProvision" actionListener="#{GestorPagosSimple.limpiarPlantillaBuscarGastoProvision}" />	
 
 												</h:panelGrid>
@@ -564,14 +622,14 @@
 									</p:fieldset>
 					</p:dialog>
 
-					<p:dialog header="Gastos Disponibles: " widgetVar="dlgTablaGastos" resizable="false">  
+					<p:dialog header="Gastos Autorizados de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
 
-						<p:contextMenu for="gastos">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panel" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGasto}" oncomplete="dlgTablaGastos.hide();  dlgBuscarGastosActivo.hide(); dlgBuscarGastosProvision.hide();"/>
+						<p:contextMenu for="gastosprovision">
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
 						</p:contextMenu>
 
-						<p:dataTable id="gastos" var="gasto" value="#{GestorPagosSimple.tablagastos}" rowKey="#{gasto.NUPROF}"
-															selection="#{GestorPagosSimple.gastoseleccionado}" selectionMode="single"
+						<p:dataTable id="gastosprovision" var="gastoprovision" value="#{GestorPagosSimple.tablagastosprovision}" rowKey="#{gastoprovision.sGastoID}"
+															selection="#{GestorPagosSimple.gastoprovisionseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15">
@@ -580,42 +638,42 @@
 															<f:facet name="header">
 																<h:outputText value="Provisión" />
 															</f:facet>
-															<h:outputText value="#{gasto.NUPROF}" />
+															<h:outputText value="#{gastoprovision.NUPROF}" />
 														</p:column>
 
 														<p:column>
 															<f:facet name="header">
 																<h:outputText value="Activo" />
 															</f:facet>
-															<h:outputText value="#{gasto.COACES}" />
+															<h:outputText value="#{gastoprovision.COACES}" />
 														</p:column>
 
 														<p:column>
 															<f:facet name="header">
 																<h:outputText value="Gasto" />
 															</f:facet>
-															<h:outputText value="#{gasto.DCOSBGA}" />
+															<h:outputText value="#{gastoprovision.DCOSBGA}" />
 														</p:column>
 														
 														<p:column>
 															<f:facet name="header">
 																<h:outputText value="Periodicidad" />
 															</f:facet>
-															<h:outputText value="#{gasto.DPTPAGO}" />
+															<h:outputText value="#{gastoprovision.DPTPAGO}" />
 														</p:column>
 
 														<p:column>
 															<f:facet name="header">
 																<h:outputText value="Importe" />
 															</f:facet>
-															<h:outputText value="#{gasto.IMNGAS}" />
+															<h:outputText value="#{gastoprovision.IMNGAS}" />
 														</p:column>
 
 														<p:column>
 															<f:facet name="header">
 																<h:outputText value="Fecha de Devengo" />
 															</f:facet>
-															<h:outputText value="#{gasto.FEDEVE}" />
+															<h:outputText value="#{gastoprovision.FEDEVE}" />
 														</p:column>
 
 						</p:dataTable>

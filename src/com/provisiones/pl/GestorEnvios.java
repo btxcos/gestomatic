@@ -19,6 +19,7 @@ import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuotas;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLImpuestos;
+import com.provisiones.ll.CLPagos;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.ll.FileManager;
@@ -45,6 +46,8 @@ public class GestorEnvios implements Serializable
 	private String sNumGastos = "0";
 	private boolean bNumGastos = true;
 
+	private String sNumTransferenciasN34 = "0";
+	private boolean bNumTransferenciasN34 = true;
 
 	private transient StreamedContent file;
 	
@@ -55,6 +58,8 @@ public class GestorEnvios implements Serializable
 	
 	private String sFicheroCierres = "";
 	private String sFicheroGastos = "";
+	
+	private String sFicheroTransferenciasN34 = "";
 	
 	public GestorEnvios()
 	{
@@ -228,7 +233,33 @@ public class GestorEnvios implements Serializable
 	    		FacesContext.getCurrentInstance().addMessage(null, msg);
 	    	}
 
-	    	if (bNumComunidades && bNumCuotas && bNumReferencias && bNumImpuestos && bNumGastos && bNumProvisiones)
+	    	this.sNumTransferenciasN34  = Long.toString(CLPagos.buscarNumeroPagosTransferenciasN34SinEnviar());
+	    	this.bNumTransferenciasN34 = sNumTransferenciasN34.equals("0");
+	    	if (!bNumTransferenciasN34)
+	    	{
+	    		this.sFicheroTransferenciasN34 = FileManager.escribirNorma34();
+	     		 
+	    		if (!sFicheroTransferenciasN34.equals(""))
+	    		{
+
+		    		sMsg = "Generado el fichero de Transferencias Norma 34.";
+		        	
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+	    			
+	    		}
+	    		else
+	    		{
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Transferencias Norma 34.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+	    		}
+	    		
+	    		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+	    	
+	    	if (bNumComunidades && bNumCuotas && bNumReferencias && bNumImpuestos && bNumGastos && bNumProvisiones && bNumTransferenciasN34)
 	    	{
 	    		sMsg = "No hay movimientos pendientes.";
 	    		msg = Utils.pfmsgWarning(sMsg);
@@ -456,6 +487,41 @@ public class GestorEnvios implements Serializable
 		}		
     }
 	
+	public void descargarTransferenciasN34() 
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	String sMsg = "";
+	    	
+	    	try 
+			{
+				InputStream stream = new FileInputStream(sFicheroTransferenciasN34);
+				
+				this.file = new DefaultStreamedContent(stream, "text/plain", ValoresDefecto.DEF_IDPROV+"_"+Utils.fechaDeHoy(false)+".Q34");
+				
+	    		sMsg = "Descargado el fichero de Pagos por Transferencias Norma 34 a enviar.";
+	        	
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+
+			} 
+			catch (FileNotFoundException e) 
+			{
+				
+				
+	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
+	        	
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
+			}
+
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}		
+    }
+	
 	public String getsNumComunidades() {
 		return sNumComunidades;
 	}
@@ -502,6 +568,14 @@ public class GestorEnvios implements Serializable
 
 	public void setsNumGastos(String sNumGastos) {
 		this.sNumGastos = sNumGastos;
+	}
+	
+		public String getsNumTransferenciasN34() {
+		return sNumTransferenciasN34;
+	}
+
+	public void setsNumTransferenciasN34(String sNumTransferenciasN34) {
+		this.sNumTransferenciasN34 = sNumTransferenciasN34;
 	}
 
 	public StreamedContent getFile() 
@@ -556,6 +630,14 @@ public class GestorEnvios implements Serializable
 	public void setbNumGastos(boolean bNumGastos) {
 		this.bNumGastos = bNumGastos;
 	}
+	
+	public boolean isbNumTransferenciasN34() {
+		return bNumTransferenciasN34;
+	}
+
+	public void setbNumTransferenciasN34(boolean bNumTransferenciasN34) {
+		this.bNumTransferenciasN34 = bNumTransferenciasN34;
+	}
 
 	public String getsFicheroComunidades() {
 		return sFicheroComunidades;
@@ -603,6 +685,14 @@ public class GestorEnvios implements Serializable
 
 	public void setsFicheroGastos(String sFicheroGastos) {
 		this.sFicheroGastos = sFicheroGastos;
+	}
+
+	public String getsFicheroTransferenciasN34() {
+		return sFicheroTransferenciasN34;
+	}
+
+	public void setsFicheroTransferenciasN34(String sFicheroTransferenciasN34) {
+		this.sFicheroTransferenciasN34 = sFicheroTransferenciasN34;
 	}
 
 }

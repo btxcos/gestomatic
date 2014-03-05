@@ -27,6 +27,11 @@ public class CLDescripciones
 		return QMCodigosControl.getDesCampo(ConnectionManager.getDBConnection(), QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
 	}
 	
+	public static String descripcionGasto (String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA)
+	{
+		return QMCodigosControl.getDesCOSBGA(ConnectionManager.getDBConnection(), sCodCOGRUG, sCodCOTPGA, sCodCOSBGA);
+	}
+	
 	public static String descripcionTipoCuota (String sCOSBAC)
 	{
 		return QMCodigosControl.getDesCampo(ConnectionManager.getDBConnection(), QMCodigosControl.TCOSBGAT22, QMCodigosControl.ICOSBGAT22, sCOSBAC);

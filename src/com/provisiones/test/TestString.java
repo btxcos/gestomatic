@@ -1,5 +1,7 @@
 package com.provisiones.test;
 
+import com.provisiones.misc.Utils;
+
 
 
 
@@ -71,7 +73,17 @@ public class TestString{
 	System.out.println("Memoria libre: " + runtime.freeMemory());
     memory = memory-runtime.freeMemory();
     System.out.println("Memoria: " + memory);*/
-    
+    	
+    	int iDias = -1;
+    	
+    	String sImporte = "1";
+    	System.out.println("sImporte: " + sImporte);
+    	System.out.println("sImporte invertido: " + Utils.invierteSigno(sImporte));
+    	
+    	String sFecha = Utils.fechaDeHoy(false);
+    	System.out.println("sFecha: " + sFecha);
+    	System.out.println("sFecha en "+iDias+" dias: " + Utils.sumaDiasFecha(sFecha, iDias));
+    	System.out.println("sFechaN34: " + Utils.aFechaN34(sFecha));
     }
     
     

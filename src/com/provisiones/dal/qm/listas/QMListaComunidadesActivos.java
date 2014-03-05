@@ -269,6 +269,77 @@ public final class QMListaComunidadesActivos
 
 		return bEncontrado;
 	}
+	
+	
+	public static long getCodComunidadActivo(Connection conexion, int iCodCOACES)
+	{
+		long liCodComunidad = 0;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+				       + CAMPO2 + 
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE "
+				       + CAMPO1 + " = '" + iCodCOACES + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liCodComunidad = rs.getLong(CAMPO2);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO2+":|"+liCodComunidad+"|");
+						
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liCodComunidad;
+	}
 
 	public static boolean compruebaRelacionComunidadActivo(Connection conexion, long liCodComunidad, int iCodCOACES)
 	{

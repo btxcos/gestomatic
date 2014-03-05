@@ -2,34 +2,33 @@ package com.provisiones.types;
 
 public class Pago 
 {
+	private String sCOACES = "";
 	private String sGasto = "";
-	private String sTP = "";
+	private String sTipoPago = "";
+	private String sCodOperacion = "";
 	private String sFEPGPR = "";
-	private String sPais = "";	
-	private String sDCIBAN = "";
-	private String sNUCCEN = "";
-	private String sNUCCOF = "";
-	private String sNUCCDI = "";
-	private String sNUCCNT = "";
 
 	//Constructor de clase
 	
-	public Pago(String sGasto, String sTP, String sFEPGPR,
-			String sPais, String sDCIBAN, String sNUCCEN, String sNUCCOF,
-			String sNUCCDI, String sNUCCNT) {
+	public Pago(String sCOACES, String sGasto, String sTipoPago,
+			String sCodOperacion, String sFEPGPR) {
 		super();
+		this.sCOACES = sCOACES;
 		this.sGasto = sGasto;
-		this.sTP = sTP;
+		this.sTipoPago = sTipoPago;
+		this.sCodOperacion = sCodOperacion;
 		this.sFEPGPR = sFEPGPR;
-		this.sPais = sPais;
-		this.sDCIBAN = sDCIBAN;
-		this.sNUCCEN = sNUCCEN;
-		this.sNUCCOF = sNUCCOF;
-		this.sNUCCDI = sNUCCDI;
-		this.sNUCCNT = sNUCCNT;
 	}
-	
+
 	//Métodos de acceso
+
+	public String getsCOACES() {
+		return sCOACES;
+	}
+
+	public void setsCOACES(String sCOACES) {
+		this.sCOACES = sCOACES;
+	}
 
 	public String getsGasto() {
 		return sGasto;
@@ -39,12 +38,20 @@ public class Pago
 		this.sGasto = sGasto;
 	}
 
-	public String getsTP() {
-		return sTP;
+	public String getsTipoPago() {
+		return sTipoPago;
 	}
 
-	public void setsTP(String sTP) {
-		this.sTP = sTP;
+	public void setsTipoPago(String sTipoPago) {
+		this.sTipoPago = sTipoPago;
+	}
+
+	public String getsCodOperacion() {
+		return sCodOperacion;
+	}
+
+	public void setsCodOperacion(String sCodOperacion) {
+		this.sCodOperacion = sCodOperacion;
 	}
 
 	public String getsFEPGPR() {
@@ -55,58 +62,12 @@ public class Pago
 		this.sFEPGPR = sFEPGPR;
 	}
 
-	public String getsPais() {
-		return sPais;
-	}
-
-	public void setsPais(String sPais) {
-		this.sPais = sPais;
-	}
-
-	public String getsDCIBAN() {
-		return sDCIBAN;
-	}
-
-	public void setsDCIBAN(String sDCIBAN) {
-		this.sDCIBAN = sDCIBAN;
-	}
-
-	public String getsNUCCEN() {
-		return sNUCCEN;
-	}
-
-	public void setsNUCCEN(String sNUCCEN) {
-		this.sNUCCEN = sNUCCEN;
-	}
-
-	public String getsNUCCOF() {
-		return sNUCCOF;
-	}
-
-	public void setsNUCCOF(String sNUCCOF) {
-		this.sNUCCOF = sNUCCOF;
-	}
-
-	public String getsNUCCDI() {
-		return sNUCCDI;
-	}
-
-	public void setsNUCCDI(String sNUCCDI) {
-		this.sNUCCDI = sNUCCDI;
-	}
-
-	public String getsNUCCNT() {
-		return sNUCCNT;
-	}
-
-	public void setsNUCCNT(String sNUCCNT) {
-		this.sNUCCNT = sNUCCNT;
-	}
-	
 	//log
 	public String logPago()
 	{
-		return String.format("(PAGO)\nsGasto :|"+sGasto+"|\nsTP    :|"+sTP+"|\nsFEPGPR:|"+sFEPGPR+"|\nsPais  :|"+sPais+"|\nsDCIBAN:|"+sDCIBAN+"|\nsNUCCEN:|"+sNUCCEN+"|\nsNUCCOF:|"+sNUCCOF+"|\nsNUCCDI:|"+sNUCCDI+"|\nsNUCCNT:|"+sNUCCNT+"|");
+		return String.format("(PAGO)\nsGasto :|"+sGasto+"|\nsTipoPago    :|"+sTipoPago+"|\nsCodOperacion  :|"+sCodOperacion+"|\nsFEPGPR:|"+sFEPGPR+"|");
 	}
+
+
 	
 }

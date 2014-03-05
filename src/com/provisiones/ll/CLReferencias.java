@@ -40,6 +40,16 @@ public final class CLReferencias
 		return QMListaReferencias.getActivo(ConnectionManager.getDBConnection(),sNURCAT);
 	}
 	
+	public static ArrayList<ActivoTabla> buscarActivoAsociadoConGastosAutorizados(String sNURCAT)
+	{
+		return QMListaReferencias.getActivoConGastosPorEstado(ConnectionManager.getDBConnection(),sNURCAT, ValoresDefecto.DEF_GASTO_AUTORIZADO);
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivoAsociadoConGastosAbonables(String sNURCAT)
+	{
+		return QMListaReferencias.getActivoConGastosAbonables(ConnectionManager.getDBConnection(),sNURCAT);
+	}
+	
 	public static MovimientoReferenciaCatastral convierteCuotaenMovimiento(ReferenciaCatastral referencia, int iCodCOACES, String sCodCOACCI)
 	{
 		logger.debug("Convirtiendo...");

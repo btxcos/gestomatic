@@ -15,6 +15,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMPagos;
 import com.provisiones.dal.qm.usuarios.QMUsuarios;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Pago;
 import com.provisiones.types.tablas.ResultadosTabla;
 import com.provisiones.types.usuarios.Usuario;
@@ -27,11 +28,11 @@ public class TestActivos
 	
 	public static void main(String[] args) throws IOException 
 	{
-		Pago pago = new Pago("1","1","1","1","1","1","1","1","1");
+		Pago pago = new Pago("1","1","1","1","1");
 		
 		Connection conx = ConnectionManager.openDBConnection();
 		
-		QMPagos.addPago(conx, pago);
+		QMPagos.addPago(conx, pago, ValoresDefecto.PAGO_ENVIADO);
 		
 		ConnectionManager.closeDBConnection(conx);
 	}

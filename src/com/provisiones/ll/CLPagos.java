@@ -2,21 +2,24 @@ package com.provisiones.ll;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.dal.qm.QMCuotas;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMPagos;
+import com.provisiones.dal.qm.QMTransferenciasN34;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Cuenta;
 import com.provisiones.types.Pago;
 import com.provisiones.types.movimientos.MovimientoGasto;
+import com.provisiones.types.transferencias.N34.TransferenciaN34;
 
 public class CLPagos 
 {
@@ -26,17 +29,37 @@ public class CLPagos
 	private CLPagos(){}
 	
 	//ID
-	public static long buscarCodigoPago (String sCodCOACES, String sCodCOCLDO, String sCodNUDCOM, String sCodCOSBAC)
+	public static long buscarCodigoPago (long liCodPago)
 	{
-		return QMCuotas.getCuotaID(ConnectionManager.getDBConnection(),Integer.parseInt(sCodCOACES), sCodCOCLDO, sCodNUDCOM, sCodCOSBAC);
+		return QMPagos.getPagoID(ConnectionManager.getDBConnection(),liCodPago);
 	}
 	
-	public static String buscarFechaPago(String sGastoID)
+	public static String buscarFechaPago(long liPagoID)
 	{
-		return QMPagos.getFechaPago(ConnectionManager.getDBConnection(),sGastoID);
+		return QMPagos.getFechaPago(ConnectionManager.getDBConnection(),liPagoID);
 	}
 	
-	public static int validaPago(Pago pago)
+	public static long buscarNumeroPagosTransferenciasN34SinEnviar()
+	{
+		return QMPagos.buscaCantidadPagosSinEnviarPorTipo(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PAGO_NORMA34);
+	}
+	
+	public static ArrayList<Integer> buscarActivosPagoSinEnviar()
+	{
+		return QMPagos.buscarActivosPagoEnvio(ConnectionManager.getDBConnection(),ValoresDefecto.PAGO_EMITIDO);
+	}
+	
+	public static ArrayList<Long> buscarPagosSinEnviar()
+	{
+		return QMPagos.buscarPagoEnvio(ConnectionManager.getDBConnection(),ValoresDefecto.PAGO_EMITIDO);
+	}
+	
+	public static boolean estaPagado(long liCodGasto)
+	{
+		return QMPagos.existePago(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+	
+	public static int validaPago(Pago pago, Cuenta cuenta)
 	{
 		int iCodigo = 0;
 
@@ -55,7 +78,7 @@ public class CLPagos
 				//ERROR 001 - El gasto no esta autorizado.
 				iCodigo = -1;
 			}
-			else if (!pago.getsTP().equals(ValoresDefecto.DEF_PAGO_VENTANILLA) && Utils.compruebaCC(pago.getsNUCCEN(), pago.getsNUCCOF(), pago.getsNUCCDI(), pago.getsNUCCNT()))
+			else if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_NORMA34) && !Utils.compruebaCC(cuenta.getsNUCCEN(), cuenta.getsNUCCOF(), cuenta.getsNUCCDI(), cuenta.getsNUCCNT()))
 			{
 				//ERROR 002 - Datos de cuenta incorrectos.
 				iCodigo = -2;
@@ -124,7 +147,7 @@ public class CLPagos
 								if (QMListaGastosProvisiones.addRelacionGastoProvision(conexion,liCodGasto, movimiento.getNUPROF()))
 								{
 									//Abonado
-									if (QMGastos.setEstado(conexion,liCodGasto, "6"))
+									if (QMGastos.setPagadoConexion(conexion,liCodGasto, movimiento.getFMPAGN()))
 									{
 										//OK 
 										iCodigo = 0;
@@ -205,7 +228,7 @@ public class CLPagos
 		return iCodigo;
 	}
 
-	public static int registraPagoSimple(Pago pago, boolean bValida)
+	public static int registraPagoSimple(Pago pago, Cuenta cuenta, boolean bValida)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -218,7 +241,7 @@ public class CLPagos
 			
 			if (bValida)
 			{
-				iCodigo = validaPago(pago);
+				iCodigo = validaPago(pago, cuenta);
 				
 				logger.debug("validado.");
 			}
@@ -235,28 +258,50 @@ public class CLPagos
 					{
 						if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
 						{
-							String sEstado = "";
-							if (QMGastos.esAbono(conexion, liCodGasto))
+							if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
 							{
-								sEstado = ValoresDefecto.DEF_GASTO_ABONADO;
-							}
-							else
-							{
-								sEstado = ValoresDefecto.DEF_GASTO_PAGADO;
-							}
-							
-							if (QMGastos.setEstado(conexion, liCodGasto, sEstado))
-							{
-								if (QMPagos.addPago(conexion, pago) == 0)
+								if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_NORMA34))
 								{
-									//error al crear el pago
-									conexion.rollback();
-									iCodigo = -900;
+
+									TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta);
+									long liCodTransferencia = QMTransferenciasN34.addTransferencia(conexion, transferencia);
+									
+									if (liCodTransferencia != 0)
+									{
+										pago.setsCodOperacion(Long.toString(liCodTransferencia));
+
+										if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO) != 0)
+										{
+											conexion.commit();
+											iCodigo = 0;
+										}
+										else
+										{
+											//error al crear el pago
+											conexion.rollback();
+											iCodigo = -900;
+										}
+									}
+									else
+									{
+										//error al crear la transferencia pago
+										conexion.rollback();
+										iCodigo = -906;
+									}
 								}
 								else
 								{
-									conexion.commit();
-									iCodigo = 0;
+									if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_ENVIADO) != 0)
+									{
+										conexion.commit();
+										iCodigo = 0;
+									}
+									else
+									{
+										//error al crear el pago
+										conexion.rollback();
+										iCodigo = -900;
+									}
 								}
 							}
 							else

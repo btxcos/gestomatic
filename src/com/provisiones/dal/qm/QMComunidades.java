@@ -824,6 +824,77 @@ public final class QMComunidades
 		return sEstado;
 	}
 	
+	public static String getNombreComunidad(Connection conexion, long liComunidadID)
+	{
+		String sNombre = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO4 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liComunidadID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNombre = rs.getString(CAMPO4);
+						
+						logger.debug(CAMPO1+":|"+liComunidadID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO4+":|"+sNombre+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNombre = "";
+				
+				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNombre;
+	}
+	
 	public static boolean setNota(Connection conexion, long liComunidadID, String sNota)
 	{
 		boolean bSalida = false;

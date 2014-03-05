@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.crypto.Cipher;
@@ -147,6 +148,59 @@ public final class Utils
 		//logger.debug(sHoy);
 		
 		return sHoy;
+	}
+	
+	public static String fechaDeHoyN34 (boolean bFormato)
+	{
+
+
+		Date fechaHoy = new Date();
+	
+		String sHoy = "";
+		
+		if (bFormato)
+		{
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+			sHoy = format.format(fechaHoy);
+			
+		}
+		else
+		{
+			SimpleDateFormat format = new SimpleDateFormat("ddMMyy");
+			sHoy = format.format(fechaHoy);
+		}
+		
+		
+		//logger.debug(sHoy);
+		
+		return sHoy;
+	}
+	
+	
+	public static String aFechaN34 (String sFecha)
+	{
+		return  sFecha.substring(6, sFecha.length()) + sFecha.substring(4,6) + sFecha.substring(2,4);
+	}
+	
+	public static String sumaDiasFecha (String sFecha,int iDias)
+	{
+		String sFechaNueva = "";
+		
+		try 
+		{
+			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+			Date dtFecha = format.parse(sFecha);
+			Calendar cal = Calendar.getInstance();
+	        cal.setTime(dtFecha);
+	        cal.add(Calendar.DATE, iDias); //minus number would decrement the days
+	        sFechaNueva = format.format(cal.getTime());
+		} 
+		catch (ParseException e) 
+		{
+			sFechaNueva = "#";
+		} 
+        
+		return sFechaNueva;
 	}
 	
 	public static String timeStamp()
@@ -535,6 +589,26 @@ public final class Utils
 		
 		return sImporteReal;
 	}
+	
+	public static String invierteSigno(String sImporte)
+	{
+		String sNuevoImporte = "";
+		
+		if (Long.parseLong(sImporte) == 0)
+		{
+			sNuevoImporte = sImporte;
+		}
+		else if (Long.parseLong(sImporte) < 0)
+		{
+			sNuevoImporte = sImporte.substring(1);
+		}
+		else
+		{
+			sNuevoImporte = "-" + sImporte;
+		}
+		
+		return sNuevoImporte;
+	}
 
 	public static String compruebaFecha(String sFecha)
 	{
@@ -864,6 +938,8 @@ public final class Utils
 	{
 		String sImporteReal = "0";
 		
+		//logger.debug("sImporte:|"+sImporte+"|");
+		
 		if (sImporte.length()>2)
 		{
 			String sEuros = sImporte.substring(0, sImporte.length()-2);
@@ -875,7 +951,7 @@ public final class Utils
 			sImporteReal = bNegativo ? "-"+ sEuros + "," + sCentimos : sEuros + "," + sCentimos;
 		}
 
-		//logger.debug("sImporteReal:|{}|",sImporteReal);
+		//logger.debug("sImporteReal:|"+sImporteReal+"|");
 
 		return sImporteReal;
 	}

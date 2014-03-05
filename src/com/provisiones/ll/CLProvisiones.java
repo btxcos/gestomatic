@@ -73,6 +73,11 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesAutorizadasPorFecha(ConnectionManager.getDBConnection(),sFecha);
 	}
 	
+	public static ArrayList<ProvisionTabla> buscarProvisionesAbonablesFecha(String sFecha)
+	{
+		return QMProvisiones.buscaProvisionesAbonablesPorFecha(ConnectionManager.getDBConnection(),sFecha);
+	}
+	
 	public static String buscarNota (String sNUPROF)
 	{
 		return QMProvisiones.getNota(ConnectionManager.getDBConnection(),sNUPROF);

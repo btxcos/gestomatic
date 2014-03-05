@@ -485,6 +485,7 @@ public class GestorListaGastos implements Serializable
 			try
 			{
 				GastoTabla filtro = new GastoTabla(
+						"",
 						"",   
 						sCOACES,   
 						sCOGRUGFA,   
@@ -540,6 +541,7 @@ public class GestorListaGastos implements Serializable
 			FacesMessage msg;
 			
 			GastoTabla filtro = new GastoTabla(
+					"",
 					sNUPROF,   
 					"",   
 					sCOGRUGFP,   
