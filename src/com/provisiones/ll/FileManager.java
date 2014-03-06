@@ -237,7 +237,7 @@ public final class FileManager
 	        	try 
 		        {
 			       conexion.commit();
-			       conexion.setAutoCommit(false);
+			       conexion.setAutoCommit(true);
 
 		            
 	        	   if (null != ficheroE1)

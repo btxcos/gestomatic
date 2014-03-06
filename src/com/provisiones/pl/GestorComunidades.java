@@ -121,7 +121,8 @@ public class GestorComunidades implements Serializable
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
 		this.sCOACES = "";
-
+		this.sNota = "";
+		
 		borrarResultadosActivo();
 		borrarCamposComunidad();
     }
