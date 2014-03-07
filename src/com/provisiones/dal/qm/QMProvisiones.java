@@ -869,6 +869,77 @@ public final class QMProvisiones
 		return sNota;
 	}
 	
+	public static String getFechaCierre(Connection conexion, String sNUPROF)
+	{
+		String sFEPFON = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO6 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ sNUPROF +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sFEPFON = rs.getString(CAMPO6);
+						
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO6+":|"+sFEPFON+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sFEPFON = "";
+				
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sFEPFON;
+	}
+	
 	public static long buscaCantidadProvisionesCerradasPorEstado(Connection conexion, String sEstado)
 	{
 		long liNumero = 0;

@@ -1015,18 +1015,10 @@ public final class QMListaReferencias
 
 			boolean bEncontrado = false;
 			
-			String sNURCAT = "";
-			String sTIRCAT = "";
-			String sENEMIS = "";
-			String sOBTEXC = "";
-			
-			String sIMVSUE = "";
-			String sIMCATA = "";
-			String sFERECA = "";
-			
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
+					   + QMReferencias.CAMPO1 + "," 
 					   + QMReferencias.CAMPO2 + ","        
 					   + QMReferencias.CAMPO3 + ","
 					   + QMReferencias.CAMPO4 + ","
@@ -1066,17 +1058,23 @@ public final class QMListaReferencias
 					{
 						bEncontrado = true;
 						
-						sNURCAT = rs.getString(QMReferencias.CAMPO2);
-						sTIRCAT = rs.getString(QMReferencias.CAMPO3);
-						sENEMIS = rs.getString(QMReferencias.CAMPO4);
-						sOBTEXC = rs.getString(QMReferencias.CAMPO6);
+						String sReferenciaID = rs.getString(QMReferencias.CAMPO1);
+						String sNURCAT = rs.getString(QMReferencias.CAMPO2);
+						String sTIRCAT = rs.getString(QMReferencias.CAMPO3);
+						String sENEMIS = rs.getString(QMReferencias.CAMPO4);
+						String sOBTEXC = rs.getString(QMReferencias.CAMPO6);
 
 						//Ampliacion de valor catastral
-						sIMVSUE = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO7));
-						sIMCATA = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO8));
-						sFERECA = Utils.recuperaFecha(rs.getString(QMReferencias.CAMPO9));
+						String sIMVSUE = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO7));
+						String sIMCATA = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO8));
+						String sFERECA = Utils.recuperaFecha(rs.getString(QMReferencias.CAMPO9));
 						
-						ReferenciaTabla referenciaencontrada = new ReferenciaTabla(sNURCAT, sTIRCAT, sENEMIS, sOBTEXC
+						ReferenciaTabla referenciaencontrada = new ReferenciaTabla(
+								sReferenciaID,
+								sNURCAT, 
+								sTIRCAT, 
+								sENEMIS, 
+								sOBTEXC
 
 								//Ampliacion de valor catastral
 								, sIMVSUE, sIMCATA, sFERECA

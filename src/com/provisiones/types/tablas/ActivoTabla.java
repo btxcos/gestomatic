@@ -2,8 +2,9 @@ package com.provisiones.types.tablas;
 
 public class ActivoTabla  
 {
-
+	//Identificador
 	private String COACES = "";
+
 	private String COPOIN = "";
 	private String NOMUIN = "";
 	private String NOPRAC = "";

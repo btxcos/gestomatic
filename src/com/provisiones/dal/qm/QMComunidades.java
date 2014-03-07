@@ -840,7 +840,7 @@ public final class QMComunidades
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-						+ CAMPO4 + 
+						+ "AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+ 
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -863,7 +863,7 @@ public final class QMComunidades
 					{
 						bEncontrado = true;
 
-						sNombre = rs.getString(CAMPO4);
+						sNombre = rs.getString("AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						
 						logger.debug(CAMPO1+":|"+liComunidadID+"|");
 						
@@ -1103,7 +1103,6 @@ public final class QMComunidades
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-					   + CAMPO1 + "," 
 					   + CAMPO2 + ","        
 					   + CAMPO3 + ","
 					   + "AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
@@ -1142,7 +1141,14 @@ public final class QMComunidades
 						
 						String sActivos = ""+QMListaComunidadesActivos.buscaNumeroActivos(conexion, rs.getLong(CAMPO1));
 						
-						ComunidadTabla comunidadencontrada = new ComunidadTabla(sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC,sActivos);
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(
+								Long.toString(liCodComunidadID),
+								sCOCLDO,
+								sNUDCOM,
+								sNOMCOC,
+								sNOMPRC,
+								sNOMADC,
+								sActivos);
 						
 						resultado.add(comunidadencontrada);
 						

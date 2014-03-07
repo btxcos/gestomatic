@@ -2,19 +2,24 @@ package com.provisiones.types.tablas;
 
 public class ComunidadTabla 
 {
+	//Identificador
+	private String sComunidadID = "";
+	
 	private String COCLDO = "";
 	private String NUDCOM = "";
 	private String NOMCOC = "";
 	private String NOMPRC = "";
 	private String NOMADC = "";
 
+	//Número de Activos Asociados
 	private String sActivos = "";
 	
 	//Constructor de clase
 
-	public ComunidadTabla(String cOCLDO, String nUDCOM, String nOMCOC,
-			String nOMPRC, String nOMADC, String sActivos) {
+	public ComunidadTabla(String sComunidadID, String cOCLDO, String nUDCOM,
+			String nOMCOC, String nOMPRC, String nOMADC, String sActivos) {
 		super();
+		this.setsComunidadID(sComunidadID);
 		COCLDO = cOCLDO;
 		NUDCOM = nUDCOM;
 		NOMCOC = nOMCOC;
@@ -25,9 +30,19 @@ public class ComunidadTabla
 
 	//Métodos de acceso
 	
+	public String getsComunidadID() {
+		return sComunidadID;
+	}
+
+	public void setsComunidadID(String sComunidadID) {
+		this.sComunidadID = sComunidadID;
+	}
+
 	public String getCOCLDO() {
 		return COCLDO;
 	}
+
+
 
 	public void setCOCLDO(String cOCLDO) {
 		COCLDO = cOCLDO;

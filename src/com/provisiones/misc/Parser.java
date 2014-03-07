@@ -67,7 +67,7 @@ public final class Parser {
         	sResultado="0"+sResultado;
         }
         
-        //logger.debug("sResultado:|{}|",sResultado);
+        //logger.debug("sResultado:|"+sResultado+"|");
         
 		return sResultado;
 	}
@@ -82,7 +82,7 @@ public final class Parser {
         	sResultado = sResultado+" ";
         }
         
-        logger.debug("sResultado:|{}|",sResultado);
+        //logger.debug("sResultado:|"+sResultado+"|");
         
 		return sResultado;
 	}
@@ -102,7 +102,7 @@ public final class Parser {
 			
 		}
 		
-		 logger.debug("sResultado:|{}|",sResultado);
+		//logger.debug("sResultado:|"+sResultado+"|");
 		
 		return sResultado;
 	}

@@ -45,9 +45,8 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Cuenta;
-import com.provisiones.types.Pago;
+import com.provisiones.types.ResultadoEnvio;
 import com.provisiones.types.ResultadoCarga;
-import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.ResultadosTabla;
 import com.provisiones.types.transferencias.N34.OrdenanteN34;
 import com.provisiones.types.transferencias.N34.ResumenN34;
@@ -105,9 +104,10 @@ public final class FileManager
         return sFichero;
 	}
 
-	public static String escribirComunidades() 
+	public static ResultadoEnvio escribirComunidades() 
 	{
 		String sNombreFichero = "";
+		long liEntradas = 0;
 
 		Connection conexion = ConnectionManager.getDBConnection();
 
@@ -124,142 +124,72 @@ public final class FileManager
 			
 			HashSet<Long> hslimpia = new HashSet<Long>(resultcomunidadesactivos);
 
-		   resultcomunidadesactivos.clear();
-		   resultcomunidadesactivos.addAll(hslimpia);
+			resultcomunidadesactivos.clear();
+			resultcomunidadesactivos.addAll(hslimpia);
 			
 			Collections.sort(resultcomunidadesactivos);
+			
+			if (resultcomunidadesactivos.size() > 0)
+			{
+				sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E1+".txt";
+				
+				FileWriter ficheroE1 = null;
+				
+		        PrintWriter pw = null;
+		        
+		        boolean bOK = false;
+		        try
+		        {
+		        	conexion.setAutoCommit(false);
 
-			sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E1+".txt";
-			
-			FileWriter ficheroE1 = null;
-			
-	        PrintWriter pw = null;
-	        try
-	        {
-	        	boolean bOK = false;
-	        	
-	            conexion.setAutoCommit(false);
-	            for (int i = 0; i < resultcomunidades.size() ; i++)
-	            {
-	            	bOK = QMListaComunidades.setValidado(conexion,resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO); 
-	               if (!bOK)
-	               {
-	            	   i = resultcomunidades.size();
-	            	   conexion.rollback();
-	               }
-	            }
-	            
-	            if (bOK)
-	            {
-		            for (int i = 0; i < resultactivos.size() ; i++)
+		            for (int i = 0; i < resultcomunidades.size() ; i++)
 		            {
-		            	bOK = QMListaComunidadesActivos.setValidado(conexion,resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-			            if (!bOK)
+		            	bOK = QMListaComunidades.setValidado(conexion,resultcomunidades.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO); 
+		               if (!bOK)
+		               {
+		            	   i = resultcomunidades.size();
+		               }
+		            }
+		            
+		            if (bOK)
+		            {
+			            for (int i = 0; i < resultactivos.size() ; i++)
 			            {
-			            	i = resultcomunidades.size();
-			            	conexion.rollback();
+			            	bOK = QMListaComunidadesActivos.setValidado(conexion,resultactivos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+				            if (!bOK)
+				            {
+				            	i = resultcomunidades.size();
+				            }
 			            }
 		            }
-	            }
 
-	            if (bOK)
-	            {
-		        	ficheroE1 = new FileWriter(sNombreFichero);
-		        	
-		            pw = new PrintWriter(ficheroE1);
-
-		            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+		            if (bOK)
 		            {
-		                pw.println(Parser.escribirComunidad(CLComunidades.buscarMovimientoComunidad(resultcomunidadesactivos.get(i))));
+			        	ficheroE1 = new FileWriter(sNombreFichero);
+			        	
+			            pw = new PrintWriter(ficheroE1);
+
+			            for (int i = 0; i < resultcomunidadesactivos.size() ; i++)
+			            {
+			                pw.println(Parser.escribirComunidad(CLComunidades.buscarMovimientoComunidad(resultcomunidadesactivos.get(i))));
+			            }
+			            
+			            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+			            liEntradas = resultcomunidadesactivos.size();
 		            }
-
-		            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-	            }
-	            
-	        } 
-	        catch (IOException eEescribirFichero) 
-	        {
-	            sNombreFichero = "";
-	            try
-	            {
-	            	conexion.rollback();
-	            	conexion.setAutoCommit(true);
-	            }
-	            catch (SQLException eDeshacerCambios)
-		        {
-					try 
-					{
-						//reintentamos
-						conexion.rollback();
-						conexion.setAutoCommit(true);
-						conexion.close();
-					} 
-					catch (SQLException eReintentar) 
-					{
-						try 
-						{
-							conexion.close();
-						}
-						catch (SQLException eCerrarConexion) 
-						{
-							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
-						}
-					}
-				}
-
-	            
-	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-	            
-	        }
-	        catch (SQLException eGuardarCambios)
-	        {
-				try 
-				{
-					//reintentamos
-					conexion.rollback();
-					conexion.setAutoCommit(true);
-					conexion.close();
-				} 
-				catch (SQLException eReintentar) 
-				{
-					try 
-					{
-						conexion.close();
-					}
-					catch (SQLException eCerrarConexion) 
-					{
-						logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
-					}
-				}
-			} 
-	        finally 
-	        {
-	        	try 
-		        {
-			       conexion.commit();
-			       conexion.setAutoCommit(true);
-
 		            
-	        	   if (null != ficheroE1)
-	        	   {
-	        		   ficheroE1.close();
-	
-	        		   logger.debug("Generados!");
-	        	   }
-	        	   // distinguir con fich == null para hacer commit o rolback
-	        	   //TODO conexion.commit(); + conexion.setAutoCommit(true);
-		        }
-		        catch (IOException eCerarFichero) 
+		        } 
+		        catch (IOException eEescribirFichero) 
 		        {
-		        	sNombreFichero = "";
-		              
-					try 
-					{
-						conexion.rollback();
-						conexion.setAutoCommit(true);
-					}
-					catch (SQLException eDeshacerCambios) 
-					{
+		            sNombreFichero = "";
+		            liEntradas = 0;
+		            try
+		            {
+		            	conexion.rollback();
+		            	conexion.setAutoCommit(true);
+		            }
+		            catch (SQLException eDeshacerCambios)
+			        {
 						try 
 						{
 							//reintentamos
@@ -279,12 +209,15 @@ public final class FileManager
 							}
 						}
 					}
-					
-		            //TODO conexion.rollback();+ conexion.setAutoCommit(true);
-		            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+
+		            
+		            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+		            
 		        }
-	        	catch (SQLException eDeshacerCambios)
+		        catch (SQLException eGuardarCambios)
 		        {
+		            sNombreFichero = "";
+		            liEntradas = 0;
 					try 
 					{
 						//reintentamos
@@ -303,93 +236,323 @@ public final class FileManager
 							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
 						}
 					}
-				}
+				} 
+		        finally 
+		        {
+		        	try 
+			        {
+			        	if (null != ficheroE1)
+			        	{
+			        		if (bOK)
+			        		{
+				        		conexion.commit();
+
+							    logger.info("Generado:|"+sNombreFichero+"|"); 
+			        		}
+			        		else
+			        		{
+					        	sNombreFichero = "";
+					        	liEntradas = 0;
+
+								conexion.rollback();
+								logger.error("Error al revisar los movimientos.");
+			        		}
+			        		ficheroE1.close();
+
+			        	}
+			        	else
+			        	{
+			        		sNombreFichero = "";
+					        liEntradas = 0;
+
+							conexion.rollback();
+								
+							logger.error("Error de descriptor de fichero.");
+			        	}
+		        		conexion.setAutoCommit(true);
+
+			        }
+			        catch (IOException eCerarFichero) 
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+			              
+						try 
+						{
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+						}
+						catch (SQLException eDeshacerCambios) 
+						{
+							try 
+							{
+								//reintentamos
+								conexion.rollback();
+								conexion.setAutoCommit(true);
+								conexion.close();
+							} 
+							catch (SQLException eReintentar) 
+							{
+								try 
+								{
+									conexion.close();
+								}
+								catch (SQLException eCerrarConexion) 
+								{
+									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+								}
+							}
+						}
+						
+			            //TODO conexion.rollback();+ conexion.setAutoCommit(true);
+			            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+			        }
+		        	catch (SQLException eDeshacerCambios)
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
 
 
-	        }
+		        }
+			}
+
+
 		}
 
-        return sNombreFichero;
+        return new ResultadoEnvio(sNombreFichero,liEntradas);
 	}
 	
-	public static String escribirCuotas() 
+	public static ResultadoEnvio escribirCuotas() 
 	{
 		String sNombreFichero = "";
+		long liEntradas = 0;
 
 		Connection conexion = ConnectionManager.getDBConnection();
 
 		if (conexion != null)
 		{
 			ArrayList<Long> resultcuotas =  QMListaCuotas.getCuotasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+
+			if (resultcuotas.size() > 0)
+			{
+				FileWriter ficheroE2 = null;
+				
+		        PrintWriter pw = null;
+		        
+		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E2+".txt";
+		        
+		        boolean bOK = false;
+		        try
+		        {
+		            ficheroE2 = new FileWriter(sNombreFichero);
+		            pw = new PrintWriter(ficheroE2);
+		            
+		        	conexion.setAutoCommit(false);
+
+		            for (int i = 0; i < resultcuotas.size() ; i++)
+		            {
+		            	bOK = QMListaCuotas.setValidado(conexion,resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+		            	if (bOK)
+		            	{
+		            		pw.println(Parser.escribirCuota(QMMovimientosCuotas.getMovimientoCuota(conexion,resultcuotas.get(i))));
+		            	}
+		            	else
+		            	{
+		            		i = resultcuotas.size();
+		            	}
+		            }
+		            if (bOK)
+		            {
+		            	pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+		            	liEntradas = resultcuotas.size();
+		            }
+		            
+		            
+		        } 
+		        catch (IOException e) 
+		        {
+		        	sNombreFichero = "";
+		        	liEntradas = 0;
+		            
+		        	//En caso de error se devuelven los registros a su estado anterior
+		            try
+		            {
+		            	conexion.rollback();
+		            	conexion.setAutoCommit(true);
+		            }
+		            catch (SQLException eDeshacerCambios)
+			        {
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		            
+		            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+		        }
+		        catch (SQLException eGuardarCambios)
+		        {
+		            sNombreFichero = "";
+		            liEntradas = 0;
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException eReintentar) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException eCerrarConexion) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
+				} 
+		        finally 
+		        {
+		        	try 
+			        {
+			        	if (null != ficheroE2)
+			        	{
+			        		if (bOK)
+			        		{
+				        		conexion.commit();
+
+							    logger.info("Generado:|"+sNombreFichero+"|"); 
+			        		}
+			        		else
+			        		{
+					        	sNombreFichero = "";
+					        	liEntradas = 0;
+
+								conexion.rollback();
+								logger.error("Error al revisar los movimientos.");
+			        		}
+			        		ficheroE2.close();
+
+			        	}
+			        	else
+			        	{
+			        		sNombreFichero = "";
+					        liEntradas = 0;
+
+							conexion.rollback();
+								
+							logger.error("Error de descriptor de fichero.");
+			        	}
+		        		conexion.setAutoCommit(true);
+
+			        }
+			        catch (IOException eCerarFichero) 
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+			              
+						try 
+						{
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+						}
+						catch (SQLException eDeshacerCambios) 
+						{
+							try 
+							{
+								//reintentamos
+								conexion.rollback();
+								conexion.setAutoCommit(true);
+								conexion.close();
+							} 
+							catch (SQLException eReintentar) 
+							{
+								try 
+								{
+									conexion.close();
+								}
+								catch (SQLException eCerrarConexion) 
+								{
+									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+								}
+							}
+						}
+						
+			            //TODO conexion.rollback();+ conexion.setAutoCommit(true);
+			            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+			        }
+		        	catch (SQLException eDeshacerCambios)
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		        }
+			}
 			
-			FileWriter ficheroE2 = null;
-			
-	        PrintWriter pw = null;
-	        
-	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E2+".txt";
-	        
-	        try
-	        {
-	            ficheroE2 = new FileWriter(sNombreFichero);
-	            pw = new PrintWriter(ficheroE2);
-	            
-	            // TODO conexion.setAutoCommit(false);
-	            for (int i = 0; i < resultcuotas.size() ; i++)
-	            {
-	                pw.println(Parser.escribirCuota(QMMovimientosCuotas.getMovimientoCuota(conexion,resultcuotas.get(i))));
-	                QMListaCuotas.setValidado(conexion,resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-	            }
-	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-	            
-	        } 
-	        catch (IOException e) 
-	        {
-	            //En caso de error se devuelven los registros a su estado anterior
-	            sNombreFichero = "";
-	            
-	            //TODO conexion.rollback();
-	            for (int i = 0; i < resultcuotas.size() ; i++)
-	            {
-	            	QMListaCuotas.setValidado(conexion,resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-	            }
-	            
-	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-	        } 
-	        finally 
-	        {
-	           try 
-	           {
-	        	   if (null != ficheroE2)
-	        	   {
-	        		   ficheroE2.close();
-	        		   logger.debug( "Generados!");
-	        	   }
-	        	 //TODO conexion.commit(); + conexion.setAutoCommit(true);
-	            	   
-	           } 
-	           catch (Exception e2) 
-	           {
-	              //En caso de error se devuelven los registros a su estado anterior
-	              sNombreFichero = "";
-	              
-	              //TODO conexion.rollback(); + conexion.setAutoCommit(true);
-	              for (int i = 0; i < resultcuotas.size() ; i++)
-	              {
-	            	  QMListaCuotas.setValidado(conexion,resultcuotas.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-	              }
-	              
-	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-	              
-	           }
-	        }
 		}
  
-        return sNombreFichero;
+        return new ResultadoEnvio(sNombreFichero,liEntradas);
 	}
 	
-	public static String escribirReferencias() 
+	public static ResultadoEnvio escribirReferencias() 
 	{
 		String sNombreFichero = "";
+		long liEntradas = 0;
 
 		Connection conexion = ConnectionManager.getDBConnection();
 
@@ -397,69 +560,203 @@ public final class FileManager
 		{
 			ArrayList<Long> resultreferencias = QMListaReferencias.getReferenciasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			
-			FileWriter ficheroE3 = null;
-			
-	        PrintWriter pw = null;
-	        
-	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E3+".txt";
-	        try
-	        {
-	            ficheroE3 = new FileWriter(sNombreFichero);
-	            pw = new PrintWriter(ficheroE3);
-	            
-	          //TODO conexion.setAutoCommit(false);
-	            for (int i = 0; i < resultreferencias.size() ; i++)
-	            {
-	                pw.println(Parser.escribirReferenciaCatastral(QMMovimientosReferencias.getMovimientoReferenciaCatastral(conexion,resultreferencias.get(i))));
-	                QMListaReferencias.setValidado(conexion,resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-	            }
-	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-	            
-	        } 
-	        catch (IOException e) 
-	        {
-	            //En caso de error se devuelven los registros a su estado anterior
-	            sNombreFichero = "";
-	          //TODO conexion.rollback();
-	            for (int i = 0; i < resultreferencias.size() ; i++)
-	            {
-	            	QMListaReferencias.setValidado(conexion,resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-	            }
-	            
-	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-	        } 
-	        finally 
-	        {
-	           try 
-	           {
-	               if (null != ficheroE3)
-	               {
-	            	   ficheroE3.close();
-	            	   logger.debug( "Generados!");
-	            	 //TODO conexion.commit(); + conexion.setAutoCommit(true);
-	               }
-	           } 
-	           catch (Exception e2) 
-	           {
-	              //En caso de error se devuelven los registros a su estado anterior
-	              sNombreFichero = "";
-	              
-	              for (int i = 0; i < resultreferencias.size() ; i++)
-	              {
-	              	QMListaReferencias.setValidado(conexion,resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-	              }
-	              
-	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-	           }
-	        }
+			if (resultreferencias.size() > 0)
+			{
+				FileWriter ficheroE3 = null;
+				
+		        PrintWriter pw = null;
+		        
+		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E3+".txt";
+		        
+		        boolean bOK = false;
+		        try
+		        {
+		            ficheroE3 = new FileWriter(sNombreFichero);
+		            pw = new PrintWriter(ficheroE3);
+		            
+		        	conexion.setAutoCommit(false);
+
+		            for (int i = 0; i < resultreferencias.size() ; i++)
+		            {
+		            	bOK = QMListaReferencias.setValidado(conexion,resultreferencias.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+		            	if (bOK)
+		            	{
+		            		pw.println(Parser.escribirReferenciaCatastral(QMMovimientosReferencias.getMovimientoReferenciaCatastral(conexion,resultreferencias.get(i))));
+		            	}
+		            	else
+		            	{
+		            		i = resultreferencias.size();
+		            	}
+		            }
+
+		            if (bOK)
+	            	{
+	    	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+	    	            liEntradas = resultreferencias.size();
+	            	}
+		        } 
+		        catch (IOException e) 
+		        {
+		        	sNombreFichero = "";
+		        	liEntradas = 0;
+		            
+		        	//En caso de error se devuelven los registros a su estado anterior
+		            try
+		            {
+		            	conexion.rollback();
+		            	conexion.setAutoCommit(true);
+		            }
+		            catch (SQLException eDeshacerCambios)
+			        {
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		            
+		            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+		        } 
+		        catch (SQLException eGuardarCambios)
+		        {
+		            sNombreFichero = "";
+		            liEntradas = 0;
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException eReintentar) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException eCerrarConexion) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
+				} 
+		        finally 
+		        {
+		        	try 
+			        {
+			        	if (null != ficheroE3)
+			        	{
+			        		if (bOK)
+			        		{
+				        		conexion.commit();
+
+							    logger.info("Generado:|"+sNombreFichero+"|"); 
+			        		}
+			        		else
+			        		{
+					        	sNombreFichero = "";
+					        	liEntradas = 0;
+
+								conexion.rollback();
+								logger.error("Error al revisar los movimientos.");
+			        		}
+			        		ficheroE3.close();
+
+			        	}
+			        	else
+			        	{
+			        		sNombreFichero = "";
+					        liEntradas = 0;
+
+							conexion.rollback();
+								
+							logger.error("Error de descriptor de fichero.");
+			        	}
+		        		conexion.setAutoCommit(true);
+			        }
+			        catch (IOException eCerarFichero) 
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+			              
+						try 
+						{
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+						}
+						catch (SQLException eDeshacerCambios) 
+						{
+							try 
+							{
+								//reintentamos
+								conexion.rollback();
+								conexion.setAutoCommit(true);
+								conexion.close();
+							} 
+							catch (SQLException eReintentar) 
+							{
+								try 
+								{
+									conexion.close();
+								}
+								catch (SQLException eCerrarConexion) 
+								{
+									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+								}
+							}
+						}
+						
+			            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+			        }
+		        	catch (SQLException eDeshacerCambios)
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+
+			        	try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		        }
+			}
+
 		}
         
-        return sNombreFichero;
+        return new ResultadoEnvio(sNombreFichero,liEntradas);
 	}
 	
-	public static String escribirImpuestos() 
+	public static ResultadoEnvio escribirImpuestos() 
 	{
 		String sNombreFichero = "";
+		long liEntradas = 0;
 
 		Connection conexion = ConnectionManager.getDBConnection();
 
@@ -467,70 +764,203 @@ public final class FileManager
 		{
 			ArrayList<Long> resultimpuestos = QMListaImpuestos.getImpuestosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			
-			FileWriter ficheroE4 = null;
+			if (resultimpuestos.size() > 0)
+			{
+				FileWriter ficheroE4 = null;
+				
+		        PrintWriter pw = null;
+		        
+		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E4+".txt";
+		        
+		        boolean bOK = false;
+		        try
+		        {
+		            ficheroE4 = new FileWriter(sNombreFichero);
+		            pw = new PrintWriter(ficheroE4);
+		            
+		            conexion.setAutoCommit(false);
+
+		            for (int i = 0; i < resultimpuestos.size() ; i++)
+		            {
+		            	bOK = QMListaImpuestos.setValidado(conexion,resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
+		            	if (bOK)
+		            	{
+		            		pw.println(Parser.escribirImpuestoRecurso(QMMovimientosImpuestos.getMovimientoImpuestoRecurso(conexion,resultimpuestos.get(i))));	
+		            	}
+		            	else
+		            	{
+		            		i = resultimpuestos.size();
+		            	}
+		            }
+		            if (bOK)
+		            {
+		            	pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+		            	liEntradas = resultimpuestos.size();
+		            }
+		            
+		        } 
+		        catch (IOException e) 
+		        {
+		        	sNombreFichero = "";
+		        	liEntradas = 0;
+		            
+		        	//En caso de error se devuelven los registros a su estado anterior
+		            try
+		            {
+		            	conexion.rollback();
+		            	conexion.setAutoCommit(true);
+		            }
+		            catch (SQLException eDeshacerCambios)
+			        {
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		            
+		            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+		        } 
+		        catch (SQLException eGuardarCambios)
+		        {
+		            sNombreFichero = "";
+		            liEntradas = 0;
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException eReintentar) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException eCerrarConexion) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
+				} 
+		        finally 
+		        {
+		        	try 
+			        {
+			        	if (null != ficheroE4)
+			        	{
+			        		if (bOK)
+			        		{
+				        		conexion.commit();
+
+							    logger.info("Generado:|"+sNombreFichero+"|"); 
+			        		}
+			        		else
+			        		{
+					        	sNombreFichero = "";
+					        	liEntradas = 0;
+
+								conexion.rollback();
+								logger.error("Error al revisar los movimientos.");
+			        		}
+			        		ficheroE4.close();
+
+			        	}
+			        	else
+			        	{
+			        		sNombreFichero = "";
+					        liEntradas = 0;
+
+							conexion.rollback();
+								
+							logger.error("Error de descriptor de fichero.");
+			        	}
+		        		conexion.setAutoCommit(true);
+			        }
+			        catch (IOException eCerarFichero) 
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+			              
+						try 
+						{
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+						}
+						catch (SQLException eDeshacerCambios) 
+						{
+							try 
+							{
+								//reintentamos
+								conexion.rollback();
+								conexion.setAutoCommit(true);
+								conexion.close();
+							} 
+							catch (SQLException eReintentar) 
+							{
+								try 
+								{
+									conexion.close();
+								}
+								catch (SQLException eCerrarConexion) 
+								{
+									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+								}
+							}
+						}
+						
+			            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+			        }
+		        	catch (SQLException eDeshacerCambios)
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+
+			        	try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		        }
+			}
 			
-	        PrintWriter pw = null;
-	        
-	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_E4+".txt";
-	        
-	        try
-	        {
-	            ficheroE4 = new FileWriter(sNombreFichero);
-	            pw = new PrintWriter(ficheroE4);
-	            
-	            for (int i = 0; i < resultimpuestos.size() ; i++)
-	            {
-	                pw.println(Parser.escribirImpuestoRecurso(QMMovimientosImpuestos.getMovimientoImpuestoRecurso(conexion,resultimpuestos.get(i))));
-	                QMListaImpuestos.setValidado(conexion,resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-	            }
-	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-	        } 
-	        catch (IOException e) 
-	        {
-	            
-	            
-	            //En caso de error se devuelven los registros a su estado anterior
-	            sNombreFichero = "";
-	            
-	            for (int i = 0; i < resultimpuestos.size() ; i++)
-	            {
-	            	QMListaImpuestos.setValidado(conexion,resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-	            }
-	            
-	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-	        } 
-	        finally 
-	        {
-	           try 
-	           {
-	               if (null != ficheroE4)
-	               {
-	            	   ficheroE4.close();
-	            	   logger.debug( "Generados!");
-	               }
-	           } 
-	           catch (Exception e2) 
-	           {
-	              //En caso de error se devuelven los registros a su estado anterior
-	              sNombreFichero = "";
-	              
-	              for (int i = 0; i < resultimpuestos.size() ; i++)
-	              {
-	              	QMListaImpuestos.setValidado(conexion,resultimpuestos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-	              }
-	              
-	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-	              
-	           }
-	        }
 		}
         
-        return sNombreFichero;
+        return new ResultadoEnvio(sNombreFichero,liEntradas);
 	}
 	
-	public static String escribirGastos() 
+	public static ResultadoEnvio escribirGastos() 
 	{
 		String sNombreFichero = "";
+		long liEntradas = 0;
 
 		Connection conexion = ConnectionManager.getDBConnection();
 
@@ -538,75 +968,204 @@ public final class FileManager
 		{
 			ArrayList<Long> resultgastos = QMListaGastos.getGastosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 	        
-	        FileWriter ficheroGA = null;
-	        
-	        PrintWriter pw = null;
-	        
-	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_GA+".txt";
-	        
-	        try
-	        {
+			if (resultgastos.size() > 0)
+			{
+		        FileWriter ficheroGA = null;
+		        
+		        PrintWriter pw = null;
+		        
+		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_GA+".txt";
+		        
+		        boolean bOK = false;
+		        try
+		        {
 
-	            ficheroGA = new FileWriter(sNombreFichero);
-	            pw = new PrintWriter(ficheroGA);
-	            
-	            for (int i = 0; i < resultgastos.size(); i++)
-	            {
-	                pw.println(Parser.escribirGasto(QMMovimientosGastos.getMovimientoGasto(conexion,resultgastos.get(i))));
-	                QMListaGastos.setValidado(conexion,resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-	                QMListaGastosProvisiones.setRevisado(conexion, QMListaGastos.getCodGasto(conexion, resultgastos.get(i)), ValoresDefecto.DEF_MOVIMIENTO_ENVIADO);
-	                
-	            }
-	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-	 
-	        } 
-	        catch (IOException e) 
-	        {
-	            //En caso de error se devuelven los registros a su estado anterior
-	            sNombreFichero = "";
-	            
-	            for (int i = 0; i < resultgastos.size() ; i++)
-	            {
-	            	QMListaGastos.setValidado(conexion,resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-	            }
-	            
-	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-			} 
+		            ficheroGA = new FileWriter(sNombreFichero);
+		            pw = new PrintWriter(ficheroGA);
+		            
+		        	conexion.setAutoCommit(false);
+		            
+		            for (int i = 0; i < resultgastos.size(); i++)
+		            {
+		            	bOK = (QMListaGastos.setValidado(conexion,resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_ENVIADO) &&
+		            			QMListaGastosProvisiones.setRevisado(conexion, QMListaGastos.getCodGasto(conexion, resultgastos.get(i)), ValoresDefecto.DEF_MOVIMIENTO_ENVIADO));
+		            	if (bOK)
+		            	{
+		            		pw.println(Parser.escribirGasto(QMMovimientosGastos.getMovimientoGasto(conexion,resultgastos.get(i))));
+		            	}
+		            	else
+		            	{
+		            		i = resultgastos.size();
+		            	}
+		            }
+		            if (bOK)
+		            {
+		            	pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+		            	liEntradas = resultgastos.size();
+		            }
+		        } 
+		        catch (IOException e) 
+		        {
+		        	sNombreFichero = "";
+		        	liEntradas = 0;
+		            
+		        	//En caso de error se devuelven los registros a su estado anterior
+		            try
+		            {
+		            	conexion.rollback();
+		            	conexion.setAutoCommit(true);
+		            }
+		            catch (SQLException eDeshacerCambios)
+			        {
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		            
+		            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+		        } 
+		        catch (SQLException eGuardarCambios)
+		        {
+		            sNombreFichero = "";
+		            liEntradas = 0;
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException eReintentar) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException eCerrarConexion) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
+				} 
+		        finally 
+		        {
+		        	try 
+			        {
+			        	if (null != ficheroGA)
+			        	{
+			        		if (bOK)
+			        		{
+				        		conexion.commit();
 
-	        finally 
-	        {
-	           try 
-	           {
+							    logger.info("Generado:|"+sNombreFichero+"|"); 
+			        		}
+			        		else
+			        		{
+					        	sNombreFichero = "";
+					        	liEntradas = 0;
 
-	        	   if (null != ficheroGA)
-	        	   {
-	        		   ficheroGA.close();
-	        		   logger.debug("Generados!");
-	        	   }
-	              
-	           } 
-	           catch (Exception e2) 
-	           {
-	              e2.printStackTrace();
-	              //En caso de error se devuelven los registros a su estado anterior
-	              sNombreFichero = "";
-	              
-	              for (int i = 0; i < resultgastos.size() ; i++)
-	              {
-	            	  QMListaGastos.setValidado(conexion,resultgastos.get(i),ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
-	              }
-	              
-	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-	           }
-	        }
+								conexion.rollback();
+								logger.error("Error al revisar los movimientos.");
+			        		}
+			        		ficheroGA.close();
+
+			        	}
+			        	else
+			        	{
+			        		sNombreFichero = "";
+					        liEntradas = 0;
+
+							conexion.rollback();
+								
+							logger.error("Error de descriptor de fichero.");
+			        	}
+		        		conexion.setAutoCommit(true);
+			        }
+			        catch (IOException eCerarFichero) 
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+			              
+						try 
+						{
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+						}
+						catch (SQLException eDeshacerCambios) 
+						{
+							try 
+							{
+								//reintentamos
+								conexion.rollback();
+								conexion.setAutoCommit(true);
+								conexion.close();
+							} 
+							catch (SQLException eReintentar) 
+							{
+								try 
+								{
+									conexion.close();
+								}
+								catch (SQLException eCerrarConexion) 
+								{
+									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+								}
+							}
+						}
+						
+			            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+			        }
+		        	catch (SQLException eDeshacerCambios)
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+
+			        	try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		        }
+			}
+
 		}
         
-        return sNombreFichero;
+        return new ResultadoEnvio(sNombreFichero,liEntradas);
 	}
 
-	public static String escribirCierres() 
+	public static ResultadoEnvio escribirCierres() 
 	{
 		String sNombreFichero = "";
+		long liEntradas = 0;
 
 		Connection conexion = ConnectionManager.getDBConnection();
 
@@ -614,84 +1173,213 @@ public final class FileManager
 		{
 			ArrayList<String> resultcierres = QMProvisiones.getProvisionesCerradasPorEstado(conexion,ValoresDefecto.DEF_PROVISION_PENDIENTE);
 	        
-	        FileWriter ficheroPP = null;
-	        
-	        PrintWriter pw = null;
-	        
-	        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_PP+".txt";
-	        
-	        try
-	        {
+			if (resultcierres.size() > 0)
+			{
+		        FileWriter ficheroPP = null;
+		        
+		        PrintWriter pw = null;
+		        
+		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_PP+".txt";
+		        
+		        boolean bOK = false;
+		        try
+		        {
 
-	        	ficheroPP = new FileWriter(sNombreFichero);
-	            pw = new PrintWriter(ficheroPP);
-	            
-	            for (int i = 0; i < resultcierres.size(); i++)
-	            {
-	            	Provision provision = QMProvisiones.getProvision(conexion,resultcierres.get(i));
-	                pw.println(Parser.escribirCierre(provision.getsNUPROF(),provision.getsFEPFON()));
-	                QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),Utils.fechaDeHoy(false));
-	                QMProvisiones.setEstado(conexion, resultcierres.get(i), ValoresDefecto.DEF_PROVISION_ENVIADA);
-	            }
-	            pw.print(ValoresDefecto.DEF_FIN_FICHERO);
-	 
-	        } 
-	        catch (IOException e) 
-	        {
-	            //En caso de error se devuelven los registros a su estado anterior
-	            sNombreFichero = "";
-	            
-	            for (int i = 0; i < resultcierres.size() ; i++)
-	            {
-	            	QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),"0");
-	            	QMProvisiones.setEstado(conexion, resultcierres.get(i), ValoresDefecto.DEF_PROVISION_PENDIENTE);
-	            }
-	            
-	            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
-			} 
+		        	ficheroPP = new FileWriter(sNombreFichero);
+		            pw = new PrintWriter(ficheroPP);
+		        	
+		            conexion.setAutoCommit(false);
+		            
+		            for (int i = 0; i < resultcierres.size(); i++)
+		            {
+		            	bOK = (QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),Utils.fechaDeHoy(false)) && 
+		            			QMProvisiones.setEstado(conexion, resultcierres.get(i), ValoresDefecto.DEF_PROVISION_ENVIADA));
+		            	
+		            	if (bOK)
+		            	{
+		            		pw.println(Parser.escribirCierre(resultcierres.get(i),QMProvisiones.getFechaCierre(conexion, resultcierres.get(i))));	
+		            	}
+		            	else
+		            	{
+		            		i = resultcierres.size();
+		            	}   
+		            }
+	            	if (bOK)
+	            	{
+	            		pw.print(ValoresDefecto.DEF_FIN_FICHERO);
+	            		liEntradas = resultcierres.size();
+	            	}
+		        } 
+		        catch (IOException e) 
+		        {
+		        	sNombreFichero = "";
+		        	liEntradas = 0;
+		            
+		        	//En caso de error se devuelven los registros a su estado anterior
+		            try
+		            {
+		            	conexion.rollback();
+		            	conexion.setAutoCommit(true);
+		            }
+		            catch (SQLException eDeshacerCambios)
+			        {
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		            
+		            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+		        } 
+		        catch (SQLException eGuardarCambios)
+		        {
+		            sNombreFichero = "";
+		            liEntradas = 0;
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException eReintentar) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException eCerrarConexion) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
+				} 
+		        finally 
+		        {
+		        	try 
+			        {
+			        	if (null != ficheroPP)
+			        	{
+			        		if (bOK)
+			        		{
+				        		conexion.commit();
 
-	        finally 
-	        {
-	           try 
-	           {
+							    logger.info("Generado:|"+sNombreFichero+"|"); 
+			        		}
+			        		else
+			        		{
+					        	sNombreFichero = "";
+					        	liEntradas = 0;
 
-	        	   if (null != ficheroPP)
-	        	   {
-	        		   ficheroPP.close();
-	        		   logger.debug( "Generados!");
-	        	   }
-	              
-	           } 
-	           catch (Exception e2) 
-	           {
-	              e2.printStackTrace();
-	              //En caso de error se devuelven los registros a su estado anterior
-	              sNombreFichero = "";
-	              
-	              for (int i = 0; i < resultcierres.size() ; i++)
-	              {
-	            	  QMProvisiones.setFechaEnvio(conexion,resultcierres.get(i),"0");
-	              }
-	              
-	              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-	           }
-	        }
+								conexion.rollback();
+								logger.error("Error al revisar los movimientos.");
+			        		}
+			        		ficheroPP.close();
+
+			        	}
+			        	else
+			        	{
+			        		sNombreFichero = "";
+					        liEntradas = 0;
+
+							conexion.rollback();
+								
+							logger.error("Error de descriptor de fichero.");
+			        	}
+		        		conexion.setAutoCommit(true);
+			        }
+			        catch (IOException eCerarFichero) 
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+			              
+						try 
+						{
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+						}
+						catch (SQLException eDeshacerCambios) 
+						{
+							try 
+							{
+								//reintentamos
+								conexion.rollback();
+								conexion.setAutoCommit(true);
+								conexion.close();
+							} 
+							catch (SQLException eReintentar) 
+							{
+								try 
+								{
+									conexion.close();
+								}
+								catch (SQLException eCerrarConexion) 
+								{
+									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+								}
+							}
+						}
+						
+			            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+			        }
+		        	catch (SQLException eDeshacerCambios)
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+
+			        	try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		        }
+			}
+
 		}
         
-        return sNombreFichero;
+        return new ResultadoEnvio(sNombreFichero,liEntradas);
 	}
 	
-	public static String escribirNorma34() 
+	public static ResultadoEnvio escribirNorma34() 
 	{
 		String sNombreFichero = "";
+		long liEntradas = 0;
 
 		Connection conexion = ConnectionManager.getDBConnection();
 
 		if (conexion != null)
 		{
-			ArrayList<Long> pagos = CLPagos.buscarPagosSinEnviar();
+			ArrayList<Long> resultpagos = CLPagos.buscarPagosSinEnviar();
 
-			if (pagos.size() > 0)
+			if (resultpagos.size() > 0)
 			{
 		        FileWriter ficheroN34 = null;
 		        
@@ -701,6 +1389,7 @@ public final class FileManager
 		        
 		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_PP+".Q34";
 		        
+		        boolean bOK = false;
 		        try
 		        {
 
@@ -717,6 +1406,8 @@ public final class FileManager
 		            OrdenanteN34 ordenante = CLTransferencias.generarOrdenanteN34(cuentaordenante);
 		            
 		            ArrayList<String> camposordenante = Parser.escribirOrdenanteN34(ordenante);
+
+		            
 		            
 		            for (int i = 0; i < camposordenante.size(); i++)
 		            {
@@ -728,77 +1419,201 @@ public final class FileManager
 		            
 		            long liSumaImportes = 0;
 		            
-		            int iNumTransferencias = 0;
+		            conexion.setAutoCommit(false);
 		            
-		            for (int i = 0; i < pagos.size(); i++)
+		            for (int i = 0; i < resultpagos.size(); i++)
 		            {
-		            	iNumTransferencias++;
+		            	bOK = QMPagos.setEnviado(conexion, resultpagos.get(i),ValoresDefecto.PAGO_ENVIADO);
 		            	
-		            	Pago pago = QMPagos.getPago(conexion, pagos.get(i));
-		            	
-		            	TransferenciaN34 transferencia = CLTransferencias.buscarTransferenciaN34(Long.parseLong(pago.getsCodOperacion()));
-		            	
-		            	ArrayList<String> campostransferencia = Parser.escribirTransferenciaN34(transferencia);
-			            
-			            for (int j = 0; j < campostransferencia.size(); j++)
-			            {
-			            	pw.println(campostransferencia.get(j));
-			            }
-			            
-			            iLineas = iLineas + campostransferencia.size();
-			            
-			            liSumaImportes = liSumaImportes + Long.parseLong(transferencia.getsImporte());
-			            
-		                QMPagos.setEnviado(conexion, pagos.get(i),ValoresDefecto.PAGO_ENVIADO);
+		            	if (bOK)
+		            	{
+			            	
+			            	TransferenciaN34 transferencia = CLTransferencias.buscarTransferenciaN34(Long.parseLong(QMPagos.getCodOperacion(conexion, resultpagos.get(i))));
+			            	
+			            	ArrayList<String> campostransferencia = Parser.escribirTransferenciaN34(transferencia);
+				            
+				            for (int j = 0; j < campostransferencia.size(); j++)
+				            {
+				            	pw.println(campostransferencia.get(j));
+				            }
+				            
+				            iLineas = iLineas + campostransferencia.size();
+				            
+				            liSumaImportes = liSumaImportes + Long.parseLong(transferencia.getsImporte());
+		            	}
+		            	else
+		            	{
+		            		i = resultpagos.size();
+		            	}
 		            }
 		            
-		            iLineas++;
-		            
-		            ResumenN34 resumen = CLTransferencias.generarResumenN34(liSumaImportes, iNumTransferencias, iLineas);
-		            
-		            String sResumen = Parser.escribirResumenN34(resumen);
-		            pw.println(sResumen);
+		            if (bOK)
+		            {
+			            iLineas++;
+			            
+			            ResumenN34 resumen = CLTransferencias.generarResumenN34(liSumaImportes, resultpagos.size(), iLineas);
+			            
+			            String sResumen = Parser.escribirResumenN34(resumen);
+			            pw.println(sResumen);
+			            liEntradas = resultpagos.size();
+		            }
 		 
 		        } 
 		        catch (IOException e) 
 		        {
-		            //En caso de error se devuelven los registros a su estado anterior
-		            sNombreFichero = "";
+		        	sNombreFichero = "";
+		        	liEntradas = 0;
 		            
-		            for (int i = 0; i < pagos.size() ; i++)
+		        	//En caso de error se devuelven los registros a su estado anterior
+		            try
 		            {
-		            	QMPagos.setEnviado(conexion, pagos.get(i),ValoresDefecto.PAGO_EMITIDO);
+		            	conexion.rollback();
+		            	conexion.setAutoCommit(true);
 		            }
+		            catch (SQLException eDeshacerCambios)
+			        {
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
 		            
 		            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+		        } 
+		        catch (SQLException eGuardarCambios)
+		        {
+		            sNombreFichero = "";
+		            liEntradas = 0;
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException eReintentar) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException eCerrarConexion) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
 				} 
-
 		        finally 
 		        {
-		           try 
-		           {
+		        	try 
+			        {
+			        	if (null != ficheroN34)
+			        	{
+			        		if (bOK)
+			        		{
+				        		conexion.commit();
 
-		        	   if (null != ficheroN34)
-		        	   {
-		        		   ficheroN34.close();
-		        		   logger.debug( "Generados!");
-		        	   }
-		              
-		           } 
-		           catch (Exception e2) 
-		           {
-		              e2.printStackTrace();
-		              //En caso de error se devuelven los registros a su estado anterior
-		              sNombreFichero = "";
-		              
-		              logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
-		           }
+							    logger.info("Generado:|"+sNombreFichero+"|"); 
+			        		}
+			        		else
+			        		{
+					        	sNombreFichero = "";
+					        	liEntradas = 0;
+
+								conexion.rollback();
+								logger.error("Error al revisar los movimientos.");
+			        		}
+			        		ficheroN34.close();
+
+			        	}
+			        	else
+			        	{
+			        		sNombreFichero = "";
+					        liEntradas = 0;
+
+							conexion.rollback();
+								
+							logger.error("Error de descriptor de fichero.");
+			        	}
+		        		conexion.setAutoCommit(true);
+			        }
+			        catch (IOException eCerarFichero) 
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+			              
+						try 
+						{
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+						}
+						catch (SQLException eDeshacerCambios) 
+						{
+							try 
+							{
+								//reintentamos
+								conexion.rollback();
+								conexion.setAutoCommit(true);
+								conexion.close();
+							} 
+							catch (SQLException eReintentar) 
+							{
+								try 
+								{
+									conexion.close();
+								}
+								catch (SQLException eCerrarConexion) 
+								{
+									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+								}
+							}
+						}
+						
+			            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+			        }
+		        	catch (SQLException eDeshacerCambios)
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+
+			        	try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
 		        }
 			}
-
 		}
         
-        return sNombreFichero;
+        return new ResultadoEnvio(sNombreFichero,liEntradas);
 	}
 	
 	public static ResultadoCarga leerActivos(String sNombre)

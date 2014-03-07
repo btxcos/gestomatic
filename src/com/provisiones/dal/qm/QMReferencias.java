@@ -814,6 +814,7 @@ public final class QMReferencias
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
+					   + CAMPO1  + ","
 				       + CAMPO2  + ","
 				       + CAMPO3  + ","              
 				       + CAMPO4  + ","              
@@ -848,6 +849,7 @@ public final class QMReferencias
 					{
 						bEncontrado = true;
 
+						String sReferenciaID = rs.getString(CAMPO1); 
 	  					String sNURCAT = rs.getString(CAMPO2); 
 	  					String sTIRCAT = rs.getString(CAMPO3); 
 	  					String sENEMIS = rs.getString(CAMPO4);
@@ -858,7 +860,15 @@ public final class QMReferencias
 	  					String sIMCATA = rs.getString(CAMPO8);
 	  					String sFERECA = rs.getString(CAMPO9);
 	  					
-	  					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(sNURCAT, sTIRCAT, sENEMIS, sOBTEXC, sIMVSUE, sIMCATA, sFERECA);
+	  					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(
+	  							sReferenciaID,
+	  							sNURCAT,
+	  							sTIRCAT,
+	  							sENEMIS,
+	  							sOBTEXC,
+	  							sIMVSUE,
+	  							sIMCATA,
+	  							sFERECA);
 	  					
 	  					resultado.add(referenciaencontrada);
 	  					

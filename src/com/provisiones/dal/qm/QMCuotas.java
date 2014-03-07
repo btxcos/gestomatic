@@ -707,23 +707,10 @@ public final class QMCuotas
 
 			boolean bEncontrado = false;
 	
-			String sCOACES = "";
-			String sCOCLDO = "";
-			String sDesCOCLDO = "";
-			String sNUDCOM = "";
-			String sCOSBAC = "";
-			String sDesCOSBAC = "";
-			String sFIPAGO = "";
-			String sFFPAGO = "";
-			String sIMCUCO = "";
-			String sFAACTA = "";
-			String sPTPAGO = "";
-			String sDesPTPAGO = "";
-			String sOBTEXC = "";
-			
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
+						   + CAMPO1 + ","
 						   + CAMPO2 + ","
 						   + CAMPO3 + ","
 						   + CAMPO4 + ","
@@ -759,22 +746,24 @@ public final class QMCuotas
 					{
 						bEncontrado = true;
 						
-						sCOACES		= rs.getString(CAMPO2);
-						sCOCLDO     = rs.getString(CAMPO3);
-						sDesCOCLDO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
-						sNUDCOM     = rs.getString(CAMPO4);
-						sCOSBAC     = rs.getString(CAMPO5);
-						sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,sCOSBAC);
-						sFIPAGO     = Utils.recuperaFecha(rs.getString(CAMPO6));
-						sFFPAGO     = Utils.recuperaFecha(rs.getString(CAMPO7));
-						sIMCUCO     = Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
-						sPTPAGO     = rs.getString(CAMPO10);
-						sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						sOBTEXC     = rs.getString(CAMPO11);  
+						String sCuotaID    = rs.getString(CAMPO1);
+						String sCOACES	   = rs.getString(CAMPO2);
+						String sCOCLDO     = rs.getString(CAMPO3);
+						String sDesCOCLDO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
+						String sNUDCOM     = rs.getString(CAMPO4);
+						String sCOSBAC     = rs.getString(CAMPO5);
+						String sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,sCOSBAC);
+						String sFIPAGO     = Utils.recuperaFecha(rs.getString(CAMPO6));
+						String sFFPAGO     = Utils.recuperaFecha(rs.getString(CAMPO7));
+						String sIMCUCO     = Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						String sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
+						String sPTPAGO     = rs.getString(CAMPO10);
+						String sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						String sOBTEXC     = rs.getString(CAMPO11);  
 
 						
 						CuotaTabla cuotaencontrada = new CuotaTabla(
+								sCuotaID,
 								sCOACES,
 								sCOCLDO,
 								sDesCOCLDO,
@@ -831,23 +820,10 @@ public final class QMCuotas
 
 			boolean bEncontrado = false;
 			
-			String sCOACES = "";
-			String sCOCLDO = "";
-			String sDesCOCLDO = "";
-			String sNUDCOM = "";
-			String sCOSBAC = "";
-			String sDesCOSBAC = "";
-			String sFIPAGO = "";
-			String sFFPAGO = "";
-			String sIMCUCO = "";
-			String sFAACTA = "";
-			String sPTPAGO = "";
-			String sDesPTPAGO = "";
-			String sOBTEXC = "";
-			
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
+						   + CAMPO1 + ","
 						   + CAMPO2 + ","
 						   + CAMPO3 + ","
 						   + CAMPO4 + ","
@@ -884,22 +860,24 @@ public final class QMCuotas
 					{
 						bEncontrado = true;
 						
-						sCOACES		= rs.getString(CAMPO2);
-						sCOCLDO     = rs.getString(CAMPO3);
-						sDesCOCLDO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
-						sNUDCOM     = rs.getString(CAMPO4);
-						sCOSBAC     = rs.getString(CAMPO5);
-						sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,sCOSBAC);
-						sFIPAGO     = Utils.recuperaFecha(rs.getString(CAMPO6));
-						sFFPAGO     = Utils.recuperaFecha(rs.getString(CAMPO7));
-						sIMCUCO     = Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
-						sPTPAGO     = rs.getString(CAMPO10);
-						sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						sOBTEXC     = rs.getString(CAMPO11);  
+						String sCuotaID    = rs.getString(CAMPO1);
+						String sCOACES		= rs.getString(CAMPO2);
+						String sCOCLDO     = rs.getString(CAMPO3);
+						String sDesCOCLDO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
+						String sNUDCOM     = rs.getString(CAMPO4);
+						String sCOSBAC     = rs.getString(CAMPO5);
+						String sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSBGAT22,QMCodigosControl.ICOSBGAT22,sCOSBAC);
+						String sFIPAGO     = Utils.recuperaFecha(rs.getString(CAMPO6));
+						String sFFPAGO     = Utils.recuperaFecha(rs.getString(CAMPO7));
+						String sIMCUCO     = Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						String sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
+						String sPTPAGO     = rs.getString(CAMPO10);
+						String sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						String sOBTEXC     = rs.getString(CAMPO11);  
 
 						
 						CuotaTabla cuotaencontrada = new CuotaTabla(
+								sCuotaID,
 								sCOACES,
 								sCOCLDO,
 								sDesCOCLDO,

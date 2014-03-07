@@ -2,6 +2,8 @@ package com.provisiones.types.tablas;
 
 public class ImpuestoRecursoTabla 
 {
+	//Identificador
+	private String sRecursoID = "";
 
 	private String NURCAT = "";
 	private String COSBAC = "";
@@ -17,11 +19,13 @@ public class ImpuestoRecursoTabla
 	
 	//Constructor de clase
 
-	public ImpuestoRecursoTabla(String nURCAT, String cOSBAC, String dCOSBAC,
-			String fEPRRE, String fERERE, String fEDEIN, String bISODE,
-			String dBISODE, String bIRESO, String dBIRESO, String oBTEXC) {
+	public ImpuestoRecursoTabla(String sRecursoID, String nURCAT,
+			String cOSBAC, String dCOSBAC, String fEPRRE, String fERERE,
+			String fEDEIN, String bISODE, String dBISODE, String bIRESO,
+			String dBIRESO, String oBTEXC) {
 		super();
-		setNURCAT(nURCAT);
+		this.sRecursoID = sRecursoID;
+		NURCAT = nURCAT;
 		COSBAC = cOSBAC;
 		DCOSBAC = dCOSBAC;
 		FEPRRE = fEPRRE;
@@ -35,6 +39,14 @@ public class ImpuestoRecursoTabla
 	}
 
 	//Métodos de acceso
+
+	public String getsRecursoID() {
+		return sRecursoID;
+	}
+
+	public void setsRecursoID(String sRecursoID) {
+		this.sRecursoID = sRecursoID;
+	}
 	
 	public String getNURCAT() {
 		return NURCAT;

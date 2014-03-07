@@ -2,7 +2,9 @@ package com.provisiones.types.tablas;
 
 public class ProvisionTabla 
 {
+	//Identificador
 	private String NUPROF = "";
+	
 	private String COSPAT = "";
 	private String DCOSPAT = "";
 	private String TAS = "";

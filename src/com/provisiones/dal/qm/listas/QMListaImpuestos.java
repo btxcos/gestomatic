@@ -602,22 +602,10 @@ public final class QMListaImpuestos
 
 			boolean bEncontrado = false;
 			
-			String sNURCAT = "";
-			String sCOSBAC = "";
-			String sDesCOSBAC = "";
-			String sFEPRRE = "";
-			String sFERERE = "";
-			String sFEDEIN = "";
-			String sBISODE = "";
-			String sDesBISODE = "";
-			String sBIRESO = "";
-			String sDesBIRESO = "";
-			String sOBTEXC = "";
-
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
-						      
+						   + QMImpuestos.CAMPO1 + ","   
 						   + QMImpuestos.CAMPO2 + ","
 						   + QMImpuestos.CAMPO3 + ","
 						   + QMImpuestos.CAMPO4 + ","
@@ -658,19 +646,21 @@ public final class QMListaImpuestos
 					{
 						bEncontrado = true;
 						
-						sNURCAT		= rs.getString(QMImpuestos.CAMPO2);
-						sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
-						sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
-						sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
-						sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
-						sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO6));
-						sBISODE     = rs.getString(QMImpuestos.CAMPO7);
-						sDesBISODE  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
-						sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
-						sDesBIRESO  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
-						sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
+						String sRecursoID  = rs.getString(QMImpuestos.CAMPO1);
+						String sNURCAT	   = rs.getString(QMImpuestos.CAMPO2);
+						String sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
+						String sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
+						String sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
+						String sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
+						String sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO6));
+						String sBISODE     = rs.getString(QMImpuestos.CAMPO7);
+						String sDesBISODE  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
+						String sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
+						String sDesBIRESO  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
+						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
 
 						ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
+								sRecursoID,
 								sNURCAT,
 								sCOSBAC,
 								sDesCOSBAC,
@@ -724,22 +714,10 @@ public final class QMListaImpuestos
 
 			boolean bEncontrado = false;
 			
-			String sNURCAT = "";
-			String sCOSBAC = "";
-			String sDesCOSBAC = "";
-			String sFEPRRE = "";
-			String sFERERE = "";
-			String sFEDEIN = "";
-			String sBISODE = "";
-			String sDesBISODE = "";
-			String sBIRESO = "";
-			String sDesBIRESO = "";
-			String sOBTEXC = "";
-			
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
-						
+						   + QMImpuestos.CAMPO1 + ","
 						   + QMImpuestos.CAMPO2 + ","
 						   + QMImpuestos.CAMPO3 + ","
 						   + QMImpuestos.CAMPO4 + ","
@@ -785,19 +763,21 @@ public final class QMListaImpuestos
 					{
 						bEncontrado = true;
 						
-						sNURCAT		= rs.getString(QMImpuestos.CAMPO2);
-						sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
-						sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
-						sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
-						sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
-						sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO6));
-						sBISODE     = rs.getString(QMImpuestos.CAMPO7);
-						sDesBISODE  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
-						sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
-						sDesBIRESO  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
-						sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
+						String sRecursoID		= rs.getString(QMImpuestos.CAMPO1);
+						String sNURCAT		= rs.getString(QMImpuestos.CAMPO2);
+						String sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
+						String sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
+						String sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
+						String sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
+						String sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO6));
+						String sBISODE     = rs.getString(QMImpuestos.CAMPO7);
+						String sDesBISODE  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
+						String sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
+						String sDesBIRESO  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
+						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
 						
 						ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
+								sRecursoID,
 								sNURCAT,
 								sCOSBAC,
 								sDesCOSBAC,

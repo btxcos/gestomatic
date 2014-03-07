@@ -2,6 +2,9 @@ package com.provisiones.types.tablas;
 
 public class ReferenciaTabla 
 {
+	//Identificador
+	private String sReferenciaID = "";
+	
 	private String NURCAT = "";
 	private String TIRCAT = "";
 	private String ENEMIS = "";
@@ -13,9 +16,11 @@ public class ReferenciaTabla
 	
 	//Constructor de clase
 
-	public ReferenciaTabla(String nURCAT, String tIRCAT, String eNEMIS,
-			String oBTEXC, String iMVSUE, String iMCATA, String fERECA) {
+	public ReferenciaTabla(String sReferenciaID, String nURCAT, String tIRCAT,
+			String eNEMIS, String oBTEXC, String iMVSUE, String iMCATA,
+			String fERECA) {
 		super();
+		this.setsReferenciaID(sReferenciaID);
 		NURCAT = nURCAT;
 		TIRCAT = tIRCAT;
 		ENEMIS = eNEMIS;
@@ -27,10 +32,17 @@ public class ReferenciaTabla
 
 	//Métodos de acceso
 
+	public String getsReferenciaID() {
+		return sReferenciaID;
+	}
+
+	public void setsReferenciaID(String sReferenciaID) {
+		this.sReferenciaID = sReferenciaID;
+	}
+
 	public String getNURCAT() {
 		return NURCAT;
 	}
-
 
 	public void setNURCAT(String nURCAT) {
 		NURCAT = nURCAT;

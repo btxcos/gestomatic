@@ -15,16 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.ll.CLComunidades;
-import com.provisiones.ll.CLCuotas;
-import com.provisiones.ll.CLGastos;
-import com.provisiones.ll.CLImpuestos;
-import com.provisiones.ll.CLPagos;
-import com.provisiones.ll.CLProvisiones;
-import com.provisiones.ll.CLReferencias;
 import com.provisiones.ll.FileManager;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.ResultadoEnvio;
 
 public class GestorEnvios implements Serializable 
 {
@@ -76,25 +70,26 @@ public class GestorEnvios implements Serializable
 			FacesMessage msg;
 	    	
 	    	String sMsg = "";
-	    	
-	    	this.sNumComunidades  = Long.toString(CLComunidades.buscarNumeroMovimientosComunidadesPendientes());
-	    	this.bNumComunidades = sNumComunidades.equals("0");
+
+	    	ResultadoEnvio resultadocomunidades =  FileManager.escribirComunidades();
+	    	this.sNumComunidades  = Long.toString(resultadocomunidades.getLiEntradas());
+	    	this.bNumComunidades = (resultadocomunidades.getLiEntradas() == 0);
+
+	    	logger.debug("sNumComunidades:|"+sNumComunidades+"|");
 	    	if (!bNumComunidades)
 	    	{
-	    		this.sFicheroComunidades = FileManager.escribirComunidades();
+	    		this.sFicheroComunidades = resultadocomunidades.getsFichero();
 	 
 	    		if (!sFicheroComunidades.equals(""))
 	    		{
-
 		    		sMsg = "Generado el fichero de Comunidades a enviar.";
 		        	
 		    		msg = Utils.pfmsgInfo(sMsg);
 		    		logger.info(sMsg);
-	    			
 	    		}
 	    		else
 	    		{
-		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Comunidades.";
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Comunidades. Por favor, avise a soporte.";
 		        	
 		    		msg = Utils.pfmsgError(sMsg);
 		    		logger.error(sMsg);
@@ -104,11 +99,14 @@ public class GestorEnvios implements Serializable
 
 	    	}
 
-	    	this.sNumCuotas  = Long.toString(CLCuotas.buscarNumeroMovimientosCuotasPendientes());
-	    	this.bNumCuotas = sNumCuotas.equals("0");
+	    	ResultadoEnvio resultadocuotas =  FileManager.escribirCuotas();
+	    	this.sNumCuotas  = Long.toString(resultadocuotas.getLiEntradas());
+	    	this.bNumCuotas = (resultadocuotas.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumCuotas:|"+sNumCuotas+"|");
 	    	if (!bNumCuotas)
 	    	{
-	    		this.sFicheroCuotas = FileManager.escribirCuotas();
+	    		this.sFicheroCuotas = resultadocuotas.getsFichero();
 	    		 
 	    		if (!sFicheroCuotas.equals(""))
 	    		{
@@ -130,11 +128,14 @@ public class GestorEnvios implements Serializable
 	    		FacesContext.getCurrentInstance().addMessage(null, msg);
 	    	}
 
-	    	this.sNumReferencias  = Long.toString(CLReferencias.buscarNumeroMovimientosReferenciasPendientes());
-	    	this.bNumReferencias = sNumReferencias.equals("0");
+	    	ResultadoEnvio resultadoreferencias = FileManager.escribirReferencias();
+	    	this.sNumReferencias  = Long.toString(resultadoreferencias.getLiEntradas());
+	    	this.bNumReferencias = (resultadoreferencias.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumReferencias:|"+sNumReferencias+"|");
 	    	if (!bNumReferencias)
 	    	{
-	    		this.sFicheroReferencias = FileManager.escribirReferencias();
+	    		this.sFicheroReferencias = resultadoreferencias.getsFichero();
 	   		 
 	    		if (!sFicheroReferencias.equals(""))
 	    		{
@@ -155,11 +156,14 @@ public class GestorEnvios implements Serializable
 	    		FacesContext.getCurrentInstance().addMessage(null, msg);
 	    	}
 	    	
-	    	this.sNumImpuestos  = Long.toString(CLImpuestos.buscarNumeroMovimientosImpuestosPendientes());
-	    	this.bNumImpuestos = sNumImpuestos.equals("0");
+	    	ResultadoEnvio resultadorecursos = FileManager.escribirImpuestos();
+	    	this.sNumImpuestos  = Long.toString(resultadorecursos.getLiEntradas());
+	    	this.bNumImpuestos = (resultadorecursos.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumImpuestos:|"+sNumImpuestos+"|");
 	    	if (!bNumImpuestos)
 	    	{
-	    		this.sFicheroImpuestos = FileManager.escribirImpuestos();
+	    		this.sFicheroImpuestos = resultadorecursos.getsFichero();
 	      		 
 	    		if (!sFicheroImpuestos.equals(""))
 	    		{
@@ -181,11 +185,14 @@ public class GestorEnvios implements Serializable
 	    		FacesContext.getCurrentInstance().addMessage(null, msg);	
 	    	}
 
-	    	this.sNumGastos  = Long.toString(CLGastos.buscarNumeroMovimientosGastosPendientes());
-	    	this.bNumGastos = sNumGastos.equals("0");
+	    	ResultadoEnvio resultadogastos = FileManager.escribirGastos();
+	    	this.sNumGastos  = Long.toString(resultadogastos.getLiEntradas());
+	    	this.bNumGastos = (resultadogastos.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumGastos:|"+sNumGastos+"|");
 	    	if (!bNumGastos)
 	    	{
-	    		this.sFicheroGastos = FileManager.escribirGastos();
+	    		this.sFicheroGastos = resultadogastos.getsFichero();
 	    		 
 	    		if (!sFicheroGastos.equals(""))
 	    		{
@@ -207,11 +214,14 @@ public class GestorEnvios implements Serializable
 	    		FacesContext.getCurrentInstance().addMessage(null, msg);
 	    	}
 	    	
-	    	this.sNumProvisiones  = Long.toString(CLProvisiones.buscarNumeroProvisionesCerradasPendientes());
-	    	this.bNumProvisiones = sNumProvisiones.equals("0");
+	    	ResultadoEnvio resultadoprovisiones = FileManager.escribirCierres();
+	    	this.sNumProvisiones  = Long.toString(resultadoprovisiones.getLiEntradas());
+	    	this.bNumProvisiones = (resultadoprovisiones.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumProvisiones:|"+sNumProvisiones+"|");
 	    	if (!bNumProvisiones)
 	    	{
-	    		this.sFicheroCierres = FileManager.escribirCierres();
+	    		this.sFicheroCierres = resultadoprovisiones.getsFichero();
 	     		 
 	    		if (!sFicheroCierres.equals(""))
 	    		{
@@ -233,11 +243,14 @@ public class GestorEnvios implements Serializable
 	    		FacesContext.getCurrentInstance().addMessage(null, msg);
 	    	}
 
-	    	this.sNumTransferenciasN34  = Long.toString(CLPagos.buscarNumeroPagosTransferenciasN34SinEnviar());
-	    	this.bNumTransferenciasN34 = sNumTransferenciasN34.equals("0");
+	    	ResultadoEnvio resultadotransferenciasn34 = FileManager.escribirNorma34();
+	    	this.sNumTransferenciasN34  = Long.toString(resultadotransferenciasn34.getLiEntradas());
+	    	this.bNumTransferenciasN34 = (resultadotransferenciasn34.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumTransferenciasN34:|"+sNumTransferenciasN34+"|");
 	    	if (!bNumTransferenciasN34)
 	    	{
-	    		this.sFicheroTransferenciasN34 = FileManager.escribirNorma34();
+	    		this.sFicheroTransferenciasN34 = resultadotransferenciasn34.getsFichero();
 	     		 
 	    		if (!sFicheroTransferenciasN34.equals(""))
 	    		{

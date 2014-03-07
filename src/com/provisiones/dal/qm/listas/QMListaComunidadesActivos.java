@@ -1455,6 +1455,7 @@ public final class QMListaComunidadesActivos
 					{
 						bEncontrado = true;
 						
+						String sComunidadID = rs.getString(QMComunidades.CAMPO1);
 						String sCOCLDO = rs.getString(QMComunidades.CAMPO2);
 						String sNUDCOM = rs.getString(QMComunidades.CAMPO3);
 
@@ -1465,7 +1466,7 @@ public final class QMListaComunidadesActivos
 						
 						String sActivos = ""+buscaNumeroActivos(conexion, rs.getLong(QMComunidades.CAMPO1));
 						
-						ComunidadTabla comunidadencontrada = new ComunidadTabla(sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, sActivos);
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(sComunidadID, sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, sActivos);
 						
 						resultado.add(comunidadencontrada);
 						
