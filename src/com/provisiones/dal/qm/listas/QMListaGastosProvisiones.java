@@ -1187,6 +1187,138 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 	
+	public static ArrayList<GastoTabla> buscaGastosPagablesProvisionPorComunidad(Connection conexion, String sNUPROF, long iCodComunidad)
+	{
+		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			String sGastoID = "";
+			String sCOACES = "";
+			String sCOGRUG = "";
+			String sCOTPGA = "";
+			String sCOSBGA = "";
+			String sDCOSBGA = "";
+			String sPTPAGO = "";
+			String sDPTPAGO = "";
+			String sFEDEVE = "";
+			String sCOSIGA = "";
+			String sDCOSIGA = "";
+			String sIMNGAS = "";
+
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						   + QMGastos.CAMPO1 + "," 
+						   + QMGastos.CAMPO2 + ","        
+						   + QMGastos.CAMPO3 + ","
+						   + QMGastos.CAMPO4 + ","
+						   + QMGastos.CAMPO5 + ","
+						   + QMGastos.CAMPO6 + ","
+						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO10 + ","
+						   + QMGastos.CAMPO15 + ","
+						   + QMGastos.CAMPO16 +
+
+						   " FROM " 
+						   + QMGastos.TABLA + 
+						   " WHERE ("
+						   + QMGastos.CAMPO1 + 
+						   " IN (SELECT "
+						   +  CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE " 
+						   + CAMPO2 + " = '"+ sNUPROF + "') AND "
+						   + QMGastos.CAMPO2 + 
+						   " IN (SELECT "
+						   +  QMListaComunidadesActivos.CAMPO1 + 
+						   " FROM " 
+						   + QMListaComunidadesActivos.TABLA + 
+						   " WHERE " 
+						   + QMListaComunidadesActivos.CAMPO2 + " = "+ iCodComunidad + "))";
+						   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sGastoID = rs.getString(QMGastos.CAMPO1);
+						sCOACES  = rs.getString(QMGastos.CAMPO2);
+						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						sDPTPAGO = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
+						sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						
+						GastoTabla gastoencontrado = new GastoTabla(
+								sGastoID,
+								sNUPROF,
+								sCOACES,
+								sCOGRUG,
+								sCOTPGA,
+								sCOSBGA,
+								sDCOSBGA,
+								sPTPAGO,
+								sDPTPAGO,
+								sFEDEVE,
+								sCOSIGA,
+								sDCOSIGA,
+								sIMNGAS);
+						
+						resultado.add(gastoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+				logger.error("ERROR COMUNIDAD:|"+iCodComunidad+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
 	public static boolean resuelveGastos(Connection conexion, String sNUPROF) 
 	{
 		boolean bSalida = false;

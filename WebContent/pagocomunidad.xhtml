@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
+	</h:head>head>
+	<h:body>
+		<h:form id="form" onkeypress="return event.keyCode != 13">
+			<p:layout fullPage="true">
+
+				<p:layoutUnit position="north" size="auto" header="Pago Manual">
+
+ 
+								<h:panelGrid columns="4" cellpadding="5">
+						<p:fieldset legend="Sesión" id="sesion">
+							<h:panelGrid columns="1" cellpadding="1">
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="1">
+										<h:outputText value="Usuario: "/>
+										<p:inputText id="USUARIO" value="#{GestorSesion.sUsuario}" size="10" disabled="true"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
+							</h:panelGrid>
+						</p:fieldset>
+
+
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Pagar" update="msgs, popup, panel" action="#{GestorPagosComunidad.registrarPago}"/>
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panel" actionListener="#{GestorPagosComunidad.limpiarPlantilla}" />	
+
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:growl id="popup"/>
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+				</p:layoutUnit>
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+							<p:fieldset legend="Criterios de Busqueda">
+								<h:panelGrid columns="1" cellpadding="5">
+
+								<p:fieldset legend="Provisión">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="NUPROFB" value="Provisión: " />
+													<p:inputMask id="NUPROFB" value="#{GestorPagosComunidad.sNUPROFB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+
+													<p:commandButton value="Cargar" update="provision, msgs, popup" actionListener="#{GestorPagosComunidad.cargarProvision}"/>
+												</h:panelGrid>
+											</p:panel>
+										<p:commandButton value="Buscar Provisión" update="form:provisiones" oncomplete="dlgBuscarProvision.show()"/>
+										</h:panelGrid>
+									</p:fieldset>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+									<p:fieldset legend="Provisión" id="provision">
+										<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel >
+										<h:panelGrid columns="4" cellpadding="5">
+
+											<h:outputText for="NUPROF" value="Provisión de fondos: " />
+											<p:inputText id="NUPROF" value="#{GestorPagosComunidad.sNUPROF}" size="10" readonly="true"/>
+
+											<h:outputText for="FEPFON" value="Fecha de cierre: " />
+											<p:inputText id="FEPFON" value="#{GestorPagosComunidad.sFEPFON}" size="9" disabled="true"/>
+
+										</h:panelGrid>
+									</p:panel>
+									<p:panel >
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="TAS" value="Tipo de activos SAREB: " />
+											<p:inputText id="TAS" value="#{GestorPagosComunidad.sTAS}" size="25" disabled="true"/>
+
+											<h:outputText for="COSPAT" value="Sociedad patrimonial: " />
+											<p:inputText id="COSPAT" value="#{GestorPagosComunidad.sCOSPAT}" size="60" disabled="true"/>
+
+											<h:outputText for="COGRUG" value="Grupo de gastos contenidos: " />
+											<p:inputText id="COGRUG" value="#{GestorPagosComunidad.sCOGRUG}" size="25" disabled="true"/>
+
+											<h:outputText for="COTPGA" value="Tipo de gastos contenidos: " />
+											<p:inputText id="COTPGA" value="#{GestorPagosComunidad.sCOTPGA}" size="25" disabled="true"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel >
+										<h:panelGrid columns="5" cellpadding="5">
+
+											<h:outputText for="GastosAutorizados" value="Gastos autorizados: " />
+											<p:inputText id="GastosAutorizados" value="#{GestorPagosComunidad.sGastosAutorizados}" size="6" disabled="true"/>
+
+											<h:outputText for="ValorAutorizado" value="Valor autorizado: " />
+											<p:inputText id="ValorAutorizado" value="#{GestorPagosComunidad.sValorAutorizado}" size="20" disabled="true"/>
+											<h:outputText value="€"/>
+
+											<h:outputText for="FechaAutorizado" value="Fecha de autorización: " />
+											<p:inputText id="FechaAutorizado" value="#{GestorPagosComunidad.sFechaAutorizado}" size="9" disabled="true"/>
+
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel >
+										<h:panelGrid columns="5" cellpadding="5">
+
+											<h:outputText for="GastosPagados" value="Gastos pagados: " />
+											<p:inputText id="GastosPagados" value="#{GestorPagosComunidad.sGastosPagados}" size="6" disabled="true"/>
+
+											<h:outputText for="ValorPagado" value="Valor pagado: " />
+											<p:inputText id="ValorPagado" value="#{GestorPagosComunidad.sValorPagado}" size="20" disabled="true"/>
+											<h:outputText value="€"/>
+
+											<h:outputText for="FechaPagado" value="Fecha de pago: " />
+											<p:inputText id="FechaPagado" value="#{GestorPagosComunidad.sFechaPagado}" size="9" disabled="true"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+							<p:fieldset legend="Comunidad de proprietarios">
+								<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel>
+										<h:panelGrid columns="5" cellpadding="5">
+
+											<h:outputText for="COCLDO" value="Documento: "/>
+											<p:inputText id="COCLDO" value="#{GestorPagosComunidad.sCOCLDO}" size="9" disabled="true"/>
+
+											<h:outputText for="NUDCOM" value="Número: "/>
+											<p:inputText id="NUDCOM" value="#{GestorPagosComunidad.sNUDCOM}" size="10" disabled="true"/>
+
+											<p:commandButton value="Buscar Comunidad" update="form:comunidades" oncomplete="dlgBuscarComunidad.show()"/>
+
+										</h:panelGrid>
+								  </p:panel>
+
+									<p:panel>
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="NOMCOC" value="Nombre comunidad: "/>
+											<p:inputText id="NOMCOC" value="#{GestorPagosComunidad.sNOMCOC}" size="60" disabled="true"/>
+
+										</h:panelGrid>
+								  </p:panel>
+
+								</h:panelGrid>
+							</p:fieldset>
+
+								<p:fieldset legend="Pago">
+										<h:panelGrid columns="1" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+											<h:outputText for="FEPGPR" value="Fecha de Pago: " />
+											<p:inputMask id="FEPGPR" value="#{GestorPagosComunidad.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
+
+											<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorPagosComunidad.hoyFEPGPR}"/>
+											</h:panelGrid>
+									  </p:panel>
+
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+
+										<p:panel>
+											<h:panelGrid columns="7" cellpadding="5">
+
+										<p:inputText id="PAIS" value="#{GestorPagosComunidad.sPais}" size="3" disabled="true"/>
+
+										<p:inputText id="DCIBAN" value="#{GestorPagosComunidad.sDCIBAN}" size="3" disabled="true"/>
+
+										<h:outputText value="Número de Cuenta: "/>
+
+										<p:inputMask id="NUCCEN" value="#{GestorPagosComunidad.sNUCCEN}" mask="9999" size="4">
+											<f:validateLength minimum="4"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCOF" value="#{GestorPagosComunidad.sNUCCOF}" mask="9999" size="4">
+											<f:validateLength minimum="4"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCDI" value="#{GestorPagosComunidad.sNUCCDI}" mask="99" size="2">
+											<f:validateLength minimum="2"/>
+										</p:inputMask>
+
+										<p:inputMask id="NUCCNT" value="#{GestorPagosComunidad.sNUCCNT}" mask="9999999999" size="10">
+											<f:validateLength minimum="10"/>
+										</p:inputMask>
+											</h:panelGrid>
+									  </p:panel>
+
+										<p:commandButton value="Buscar Cuenta" update="cuentascomunidad, msgs, popup" actionListener="#{GestorPagosComunidad.buscaCuentas}" oncomplete="dlgTablaCuentas.show()"/>	
+
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+												<h:outputText value="Descripción: "/>
+												<p:inputText id="DESCRIPCION" value="#{GestorPagosComunidad.sDescripcion}" size="66" maxlength="60" disabled="true"/>
+											</h:panelGrid>
+									  </p:panel>
+
+									 <p:commandButton value="Sin Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosComunidad.seleccionarPagoPorVentanilla}"/>
+
+									 <p:commandButton value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosComunidad.limpiarPlantillaCuenta}"/>
+
+											</h:panelGrid>
+									  </p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+
+
+					</h:panelGrid>
+				</p:panel>
+					<p:dialog header="Buscar Provisiones: " widgetVar="dlgBuscarProvision" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscarProvision" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="FEPFONB" value="Fecha de provisión: " />
+													<p:inputMask id="FEPFONB" value="#{GestorPagosComunidad.sFEPFONB}" mask="99/99/9999" size="10" maxlength="8"/>
+
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, :form:provisiones" actionListener="#{GestorPagosComunidad.buscarProvisiones}" oncomplete="dlgTablaProvisiones.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscarProvision" actionListener="#{GestorPagosComunidad.limpiarPlantillaProvision}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
+					<p:dialog header="Provisiones disponibles: " widgetVar="dlgTablaProvisiones" resizable="false">  
+    				
+							<p:contextMenu for="provisiones">  
+								<p:menuitem value="Seleccionar" update="form:NUPROFB, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorPagosComunidad.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide(); dlgBuscarProvision.hide();"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="provisiones" var="provision" value="#{GestorPagosComunidad.tablaprovisiones}" rowKey="#{provision.NUPROF}"  
+									            selection="#{GestorPagosComunidad.provisionseleccionada}" selectionMode="single"  
+												paginator="true" paginatorPosition="bottom" rows="10"
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15">									
+
+								<p:column headerText="Número de Provisión">  
+								    #{provision.NUPROF}  
+								</p:column>  
+								
+								<p:column headerText="Sociedad Patrimonial">  
+								    #{provision.DCOSPAT}  
+								</p:column>
+
+								<p:column headerText="Tipo de Activos SAREB">  
+								    #{provision.DTAS}  
+								</p:column>
+
+							</p:dataTable> 
+					</p:dialog>
+
+					<p:dialog header="Buscar Comunidades: " widgetVar="dlgBuscarComunidad" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscarComunidad" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="COACESB" value="Activo: " />
+													<p:inputMask id="COACESB" value="#{GestorPagosComunidad.sCOACESB}" mask="9?99999999" size="10" maxlength="9"/>
+
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="form:popup, form:msgs, form:comunidades" actionListener="#{GestorPagosComunidad.buscarComunidades}" oncomplete="dlgTablaComunidades.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscarComunidad" actionListener="#{GestorPagosComunidad.limpiarPlantillaComunidad}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
+
+					<p:dialog header="Comunidades disponibles: " widgetVar="dlgTablaComunidades" resizable="false">  
+    				
+									<p:contextMenu for="comunidades">
+										<p:menuitem value="cargar" update="form:COCLDO, form:NUDCOM, form:NOMCOC, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorPagosComunidad.cargarComunidad}" oncomplete="dlgTablaComunidades.hide(); dlgBuscarComunidad.hide()"/>
+									</p:contextMenu>
+									<p:dataTable id="comunidades" var="comunidad" value="#{GestorPagosComunidad.tablacomunidades}" rowKey="#{comunidad.sComunidadID}"
+															selection="#{GestorPagosComunidad.comunidadseleccionada}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10" lazy="true"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15" emptyMessage="Sin registros">
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Documento"/>
+											</f:facet>
+											<h:outputText value="#{comunidad.COCLDO}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Número"/>
+											</f:facet>
+											<h:outputText value="#{comunidad.NUDCOM}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Nombre"/>
+											</f:facet>
+											<h:outputText value="#{comunidad.NOMCOC}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Presidente"/>
+											</f:facet>
+											<h:outputText value="#{comunidad.NOMPRC}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Administrador"/>
+											</f:facet>
+											<h:outputText value="#{comunidad.NOMADC}"/>
+										</p:column>
+
+										<f:facet name="footer">
+											<h:commandLink>
+												<p:graphicImage value="recursos/excel.png"/>
+												<p:dataExporter type="xls" target="comunidades" fileName="listacomunidades" encoding="ISO-8859-15"/>
+											</h:commandLink>
+										</f:facet>
+									</p:dataTable>
+
+					</p:dialog>
+
+					<p:dialog header="Cuentas Disponibles: " widgetVar="dlgTablaCuentas" resizable="false">
+
+						<p:contextMenu for="cuentascomunidad">
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" icon="ui-icon-check" actionListener="#{GestorPagosComunidad.seleccionarCuentaPago}" oncomplete="dlgTablaCuentas.hide();"/>
+						</p:contextMenu>
+
+								<p:dataTable id="cuentascomunidad" var="cuentacomunidad" value="#{GestorPagosComunidad.tablacuentascomunidad}" rowKey="#{cuentacomunidad.sNUCCEN}"
+															selection="#{GestorPagosComunidad.cuentacomunidadseleccionada}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15">
+
+															<f:facet name="header">
+																<h:outputText value="Cuentas de la Comunidad" />
+															</f:facet>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="País" />
+															</f:facet>
+															<h:outputText value="#{cuentacomunidad.sPais}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="DCIBAN" />
+															</f:facet>
+															<h:outputText value="#{cuentacomunidad.sDCIBAN}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Entidad" />
+															</f:facet>
+															<h:outputText value="#{cuentacomunidad.sNUCCEN}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Oficina" />
+															</f:facet>
+															<h:outputText value="#{cuentacomunidad.sNUCCOF}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="DC" />
+															</f:facet>
+															<h:outputText value="#{cuentacomunidad.sNUCCDI}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Cuenta" />
+															</f:facet>
+															<h:outputText value="#{cuentacomunidad.sNUCCNT}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Descripción" />
+															</f:facet>
+															<h:outputText value="#{cuentacomunidad.sDescripcion}" />
+														</p:column>
+
+								</p:dataTable>
+
+					</p:dialog>
+
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
+						<p:graphicImage value="recursos/loadingBar.gif" />
+					</p:dialog> 
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de cerrar esta sesión?" />
+									<h:outputText value="- Todos los datos no guardados se perderán." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" action="#{GestorSesion.cerrarSesion}" oncomplete="dlgConfirmaSalir.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaSalir.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

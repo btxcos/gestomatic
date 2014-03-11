@@ -2,7 +2,9 @@ package com.provisiones.dal.qm.listas;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMComunidades;
+import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 //import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.misc.Utils;
@@ -1652,6 +1654,122 @@ public final class QMListaComunidadesActivos
 				sCuenta,
 				sOBTEXC);
 	}
+	
+	public static ArrayList<ComunidadTabla> buscaComunidadesPagablesPorProvision(Connection conexion, String sNUPROF)
+	{
+		ArrayList<ComunidadTabla> resultado = new ArrayList<ComunidadTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + QMComunidades.CAMPO1 + "," 
+					   + QMComunidades.CAMPO2 + ","        
+					   + QMComunidades.CAMPO3 + ","
+					   + "AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" +
+					   " FROM " 
+					   + QMComunidades.TABLA + 
+					   " WHERE "
+					   
+					   + QMComunidades.CAMPO1 + " IN (SELECT DISTINCT " 
+					   + CAMPO2 +
+					   " FROM " 
+					   + TABLA +
+					   " WHERE "
+					   + CAMPO1 +  " IN (SELECT DISTINCT " 
+					   + QMGastos.CAMPO1 +
+					   " FROM " 
+					   + QMGastos.TABLA +
+					   " WHERE "
+					   + QMGastos.CAMPO34 +" = '"+ValoresDefecto.DEF_GASTO_AUTORIZADO+"' AND "
+					   + QMGastos.CAMPO1 +  " IN (SELECT DISTINCT "
+					   + QMListaGastosProvisiones.CAMPO1 +
+					   " FROM " 
+					   + QMListaGastosProvisiones.TABLA +
+					   " WHERE "
+					   + QMListaGastosProvisiones.CAMPO2 +  " = '" +sNUPROF+"')))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sComunidadID = rs.getString(QMComunidades.CAMPO1);
+						String sCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMComunidades.CAMPO2)); 
+						String sNUDCOM = rs.getString(QMComunidades.CAMPO3);
+						
+						/*sNOMCOC = rs.getString(QMComunidades.CAMPO4); 
+						sNODCCO = rs.getString(QMComunidades.CAMPO5); 
+						sNOMPRC = rs.getString(QMComunidades.CAMPO6); 
+						sNUTPRC = rs.getString(QMComunidades.CAMPO7); 
+						sNOMADC = rs.getString(QMComunidades.CAMPO8); 
+						sNUTADC = rs.getString(QMComunidades.CAMPO9); 
+						sNODCAD = rs.getString(QMComunidades.CAMPO10);
+						sNUCCEN = rs.getString(QMComunidades.CAMPO11);
+						sNUCCOF = rs.getString(QMComunidades.CAMPO12);
+						sNUCCDI = rs.getString(QMComunidades.CAMPO13);
+						sNUCCNT = rs.getString(QMComunidades.CAMPO14);*/
+						
+						String sNOMCOC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						String sNOMPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						String sNOMADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+
+
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(sComunidadID, sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, "");
+						
+						resultado.add(comunidadencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(QMListaGastosProvisiones.CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ComunidadTabla>();
+
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
 	
 	public static ArrayList<Long> buscarDependencias(Connection conexion, long liCodComunidad, long liCodMovimiento)
 	{

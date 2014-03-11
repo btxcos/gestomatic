@@ -44,7 +44,12 @@ public class CLCuentas
 	
 	public static ArrayList<Cuenta> buscarCuentasComunidad (long liCodComunidad)
 	{
-		return QMListaCuentasComunidades.buscaCuentasConvnecionales(ConnectionManager.getDBConnection(),liCodComunidad);
+		return QMListaCuentasComunidades.buscaCuentas(ConnectionManager.getDBConnection(),liCodComunidad,ValoresDefecto.CUENTA_TODAS);
+	}
+	
+	public static ArrayList<Cuenta> buscarCuentasConvencionalesComunidad (long liCodComunidad)
+	{
+		return QMListaCuentasComunidades.buscaCuentas(ConnectionManager.getDBConnection(),liCodComunidad,ValoresDefecto.CUENTA_CONVENCIONAL);
 	}
 
 	public static int registraMovimientoActivo (boolean bAlta, int iCodCOACES, Cuenta cuenta)

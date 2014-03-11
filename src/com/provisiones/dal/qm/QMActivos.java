@@ -2162,7 +2162,7 @@ public final class QMActivos
 		return resultado;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivo(Connection conexion, ActivoTabla filtro)
+	public static ArrayList<ActivoTabla> buscaActivo(Connection conexion, int iCOACES)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 
@@ -2199,7 +2199,7 @@ public final class QMActivos
 					   + TABLA + 
 					   " WHERE "
 
-					   + CAMPO1 + " = '" + filtro.getCOACES()	+"'";
+					   + CAMPO1 + " = '" + iCOACES	+"'";
 			
 			logger.debug(sQuery);
 
@@ -2247,14 +2247,7 @@ public final class QMActivos
 			{
 				resultado = new ArrayList<ActivoTabla>();
 
-				logger.error("ERROR COPOIN:|"+filtro.getCOPOIN()+"|");
-				logger.error("ERROR NOMUIN:|"+filtro.getNOMUIN()+"|");
-				logger.error("ERROR NOPRAC:|"+filtro.getNOPRAC()+"|");
-				logger.error("ERROR NOVIAS:|"+filtro.getNOVIAS()+"|");
-				logger.error("ERROR NUPIAC:|"+filtro.getNUPIAC()+"|");
-				logger.error("ERROR NUPOAC:|"+filtro.getNUPOAC()+"|");
-				logger.error("ERROR NUPUAC:|"+filtro.getNUPUAC()+"|");
-				
+				logger.error("ERROR ACTIVO:|"+iCOACES+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

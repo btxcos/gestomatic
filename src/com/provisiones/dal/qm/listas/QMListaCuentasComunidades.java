@@ -185,7 +185,7 @@ public class QMListaCuentasComunidades
 		return bEncontrado;
 	}
 
-	public static ArrayList<Cuenta> buscaCuentasConvnecionales(Connection conexion, long liCodComunidad)
+	public static ArrayList<Cuenta> buscaCuentas(Connection conexion, long liCodComunidad, byte btTipoCuenta)
 	{
 		ArrayList<Cuenta> resultado = new ArrayList<Cuenta>();
 
@@ -206,6 +206,8 @@ public class QMListaCuentasComunidades
 			String sNUCCNT = "";
 			String sDescripcion = "";
 			
+			String sCondicionTipoCuenta = (btTipoCuenta==ValoresDefecto.CUENTA_TODAS)? "":QMCuentas.CAMPO9 + " = "+ btTipoCuenta + " AND ";
+			
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
@@ -223,7 +225,7 @@ public class QMListaCuentasComunidades
 						   + QMCuentas.TABLA + 
 						   " WHERE ("
 
-						   + QMCuentas.CAMPO9 + " = "+ ValoresDefecto.CUENTA_CONVENCIONAL + " AND "
+						   + sCondicionTipoCuenta
 						   + QMCuentas.CAMPO1 +" IN (SELECT "
 						   +  CAMPO1 + 
 						   " FROM " 

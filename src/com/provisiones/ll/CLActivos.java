@@ -47,9 +47,9 @@ public final class CLActivos
 		return QMActivos.buscaListaActivosPorInmovilizado(ConnectionManager.getDBConnection(),activobuscado, false);
 	}
 	
-	public static ArrayList<ActivoTabla> buscarActivoUnico (ActivoTabla activobuscado)
+	public static ArrayList<ActivoTabla> buscarActivoUnico (int iCodCOACES)
 	{
-		return QMActivos.buscaActivo(ConnectionManager.getDBConnection(),activobuscado);
+		return QMActivos.buscaActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 
 	public static ArrayList<ActivoTabla> buscarListaActivosConReferencia (ActivoTabla activo)

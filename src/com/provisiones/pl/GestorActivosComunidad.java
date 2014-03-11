@@ -6,12 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -41,11 +44,17 @@ public class GestorActivosComunidad implements Serializable
 	private String sNOMCOC = "";
 	private String sNODCCO = "";
 	
+	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
+	
 	public GestorActivosComunidad()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorActivosComunidad...");	
+			logger.debug("Iniciando GestorActivosComunidad...");
+			
+			tiposcocldoHM.put("C.I.F.",                     "2");
+			tiposcocldoHM.put("C.I.F país extranjero.",     "5");
+			tiposcocldoHM.put("Otros persona jurídica.",    "J");
 		}
 	}
 	
@@ -237,7 +246,8 @@ public class GestorActivosComunidad implements Serializable
 			case 0: //Sin errores
 				if (sCodCOACCI.equals("X"))
 				{
-					tablaactivoscomunidad.add(activoseleccionadoalta);
+					//TODO ERROR añadir null
+					tablaactivoscomunidad.addAll(CLActivos.buscarActivoUnico(Integer.parseInt(sCOACES)));
 				}
 				else if (sCodCOACCI.equals("E"))
 				{
@@ -657,6 +667,14 @@ public class GestorActivosComunidad implements Serializable
 
 	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
 		this.tablaactivos = tablaactivos;
+	}
+
+	public Map<String,String> getTiposcocldoHM() {
+		return tiposcocldoHM;
+	}
+
+	public void setTiposcocldoHM(Map<String,String> tiposcocldoHM) {
+		this.tiposcocldoHM = tiposcocldoHM;
 	}
 
 }

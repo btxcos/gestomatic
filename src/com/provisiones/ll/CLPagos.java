@@ -19,6 +19,7 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuenta;
 import com.provisiones.types.Pago;
 import com.provisiones.types.movimientos.MovimientoGasto;
+import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
 
 public class CLPagos 
@@ -151,7 +152,7 @@ public class CLPagos
 									{
 										//OK 
 										iCodigo = 0;
-										conexion.commit();
+										
 									}
 									else
 									{
@@ -161,7 +162,7 @@ public class CLPagos
 										//QMListaGastosProvisiones.delRelacionGastoProvision(conexion,liCodGasto);
 										//QMListaGastosProvisiones.addRelacionGastoProvision(conexion,liCodGasto, sNUPROF);
 										iCodigo = -903;
-										conexion.rollback();
+										
 									}
 								}
 								else
@@ -171,7 +172,7 @@ public class CLPagos
 									//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 									//QMListaGastosProvisiones.addRelacionGastoProvision(conexion,liCodGasto, sNUPROF);
 									iCodigo = -905;
-									conexion.rollback();
+									
 								}
 							}
 							else
@@ -180,7 +181,7 @@ public class CLPagos
 								//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 								//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 								iCodigo = -905;
-								conexion.rollback();
+								
 							}
 
 
@@ -190,9 +191,19 @@ public class CLPagos
 							//error relacion gasto no creada - Rollback
 							//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 							iCodigo = -902;
-							conexion.rollback();
+							
 						}
 					}
+					
+					if (iCodigo == 0)
+					{
+						conexion.commit();
+					}
+					else
+					{
+						conexion.rollback();
+					}
+					
 					
 					conexion.setAutoCommit(true);
 				
@@ -272,20 +283,20 @@ public class CLPagos
 
 										if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO) != 0)
 										{
-											conexion.commit();
+											
 											iCodigo = 0;
 										}
 										else
 										{
 											//error al crear el pago
-											conexion.rollback();
+											
 											iCodigo = -900;
 										}
 									}
 									else
 									{
 										//error al crear la transferencia pago
-										conexion.rollback();
+										
 										iCodigo = -906;
 									}
 								}
@@ -293,13 +304,13 @@ public class CLPagos
 								{
 									if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_ENVIADO) != 0)
 									{
-										conexion.commit();
+										
 										iCodigo = 0;
 									}
 									else
 									{
 										//error al crear el pago
-										conexion.rollback();
+										
 										iCodigo = -900;
 									}
 								}
@@ -307,22 +318,31 @@ public class CLPagos
 							else
 							{
 								//error al establecer el estado del gasto - Rollback
-								conexion.rollback();
+								
 								iCodigo = -905;
 							}
 						}
 						else
 						{
 							//error sin revision - Rollback
-							conexion.rollback();
+							
 							iCodigo = -904;
 						}
 					}
 					else
 					{
 						//error estado no establecido - Rollback
-						conexion.rollback();
+						
 						iCodigo = -903;
+					}
+					
+					if (iCodigo == 0)
+					{
+						conexion.commit();
+					}
+					else
+					{
+						conexion.rollback();
 					}
 
 					conexion.setAutoCommit(true);
@@ -356,6 +376,32 @@ public class CLPagos
 
 				
 			}
+		}
+		
+		return iCodigo;
+	}
+	
+	public static int registraPagoComunidad(long iCodComunidad, String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, boolean bValida)
+	{
+		int iCodigo = -910;//Error de conexion
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			ArrayList<GastoTabla> listagastos = CLGastos.buscarGastosPagablesProvisionComunidad(sNUPROF,iCodComunidad);
+			
+            for (int i = 0; i < listagastos.size() ; i++)
+            {
+            	GastoTabla gasto = listagastos.get(i);
+            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sTipoPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR);
+            	iCodigo = registraPagoSimple(pago, cuenta, bValida);
+            	
+            	if (iCodigo != 0)
+            	{
+            		i = listagastos.size();
+            	}
+            }
 		}
 		
 		return iCodigo;

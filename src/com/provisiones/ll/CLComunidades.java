@@ -144,6 +144,11 @@ public final class CLComunidades
 		return QMListaComunidadesActivos.buscaComunidadPorActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
+	public static ArrayList<ComunidadTabla> buscarComunidadesPagablesDeProvision (String sNUPROF)
+	{
+		return QMListaComunidadesActivos.buscaComunidadesPagablesPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
+	}
+	
 	public static Comunidad buscarComunidad (long liCodComunidad)
 	{
 		return QMComunidades.getComunidad(ConnectionManager.getDBConnection(),liCodComunidad);

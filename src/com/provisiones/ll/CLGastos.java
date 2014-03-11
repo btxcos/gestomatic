@@ -202,6 +202,11 @@ public final class CLGastos
 		return QMListaGastos.buscaGastosValidadosActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
+	public static ArrayList<GastoTabla> buscarGastosPagablesProvisionComunidad(String sNUPROF, long iCodComunidad)
+	{
+		return QMListaGastosProvisiones.buscaGastosPagablesProvisionPorComunidad(ConnectionManager.getDBConnection(),sNUPROF,iCodComunidad);
+	}
+	
 	public static Gasto buscarGasto(int iCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		return QMGastos.getGasto(ConnectionManager.getDBConnection(),buscarCodigoGasto(iCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE));

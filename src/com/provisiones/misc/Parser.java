@@ -2,8 +2,8 @@ package com.provisiones.misc;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import com.provisiones.types.Cierre;
 import com.provisiones.types.Activo;
@@ -18,7 +18,7 @@ import com.provisiones.types.transferencias.N34.TransferenciaN34;
 
 public final class Parser {
 
-	private static Logger logger = LoggerFactory.getLogger(Parser.class.getName());
+	//private static Logger logger = LoggerFactory.getLogger(Parser.class.getName());
 
 	private Parser(){}
 	

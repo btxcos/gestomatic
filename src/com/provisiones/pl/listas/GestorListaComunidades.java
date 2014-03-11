@@ -3,6 +3,8 @@ package com.provisiones.pl.listas;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -45,12 +47,18 @@ public class GestorListaComunidades implements Serializable
 	
 	private transient ComunidadTabla comunidadseleccionada = null;
 	private transient ArrayList<ComunidadTabla> tablacomunidades = null;
+	
+	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 
 	public GestorListaComunidades()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorListaComunidades...");	
+			logger.debug("Iniciando GestorListaComunidades...");
+			
+			tiposcocldoHM.put("C.I.F.",                     "2");
+			tiposcocldoHM.put("C.I.F país extranjero.",     "5");
+			tiposcocldoHM.put("Otros persona jurídica.",    "J");
 		}
 	}
 	
@@ -398,6 +406,14 @@ public class GestorListaComunidades implements Serializable
 
 	public void setTablacomunidades(ArrayList<ComunidadTabla> tablacomunidades) {
 		this.tablacomunidades = tablacomunidades;
+	}
+
+	public Map<String,String> getTiposcocldoHM() {
+		return tiposcocldoHM;
+	}
+
+	public void setTiposcocldoHM(Map<String,String> tiposcocldoHM) {
+		this.tiposcocldoHM = tiposcocldoHM;
 	}
 
 }

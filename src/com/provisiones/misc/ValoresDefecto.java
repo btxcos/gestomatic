@@ -19,7 +19,8 @@ public final class ValoresDefecto
 	public static final byte INACTIVO = 0;
 	
 	public static final byte CUENTA_COMUNIDAD = 1;
-	public static final byte CUENTA_CONVENCIONAL = 0;	
+	public static final byte CUENTA_CONVENCIONAL = 0;
+	public static final byte CUENTA_TODAS = 2;
 	
 	public static final byte PAGO_ENVIADO = 1;
 	public static final byte PAGO_EMITIDO = 0;	
@@ -48,6 +49,9 @@ public final class ValoresDefecto
 	public static final String DEF_COSPII_AC = "AC";
 	public static final String DEF_COSPII_PP = "PP";
 	
+	public static final String DEF_PAGOS = "PAGOS";
+	
+	public static final String DEF_NORMA34 = "N34";
 		
 	public static final String DEF_E1_CODTRN = "EE41";
 	public static final String DEF_E2_CODTRN = "EE42";

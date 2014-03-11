@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -59,20 +61,25 @@ public class GestorCuentasComunidades implements Serializable
 	private String sNUCCNTN = "";
 	private String sDescripcionN = "";
 	
-	
-	public GestorCuentasComunidades()
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			logger.debug("Iniciando GestorCuentasComunidades...");	
-		}
-	}
-	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
 	private transient Cuenta cuentaseleccionada = null;
 	private transient ArrayList<Cuenta> tablacuentas = null;
+	
+	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
+
+	public GestorCuentasComunidades()
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			logger.debug("Iniciando GestorCuentasComunidades...");
+			
+			tiposcocldoHM.put("C.I.F.",                     "2");
+			tiposcocldoHM.put("C.I.F país extranjero.",     "5");
+			tiposcocldoHM.put("Otros persona jurídica.",    "J");
+		}
+	}
 	
 	public void borrarCamposActivo()
 	{
@@ -227,7 +234,7 @@ public class GestorCuentasComunidades implements Serializable
 							this.sNUCCNT = cuenta.getsNUCCNT();
 							this.sDescripcion = cuenta.getsDescripcion();
 							
-							this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
+							this.setTablacuentas(CLCuentas.buscarCuentasConvencionalesComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
 							
 							sMsg = "La comunidad se ha cargado correctamente.";
 							msg = Utils.pfmsgInfo(sMsg);
@@ -286,7 +293,7 @@ public class GestorCuentasComunidades implements Serializable
 				this.sNUCCNT = cuenta.getsNUCCNT();
 				this.sDescripcion = cuenta.getsDescripcion();
 				
-				this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
+				this.setTablacuentas(CLCuentas.buscarCuentasConvencionalesComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
 				
 				sMsg = "La Comunidad '"+sNUDCOM+"' se ha cargado correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -713,6 +720,14 @@ public class GestorCuentasComunidades implements Serializable
 
 	public void setTablacuentas(ArrayList<Cuenta> tablacuentas) {
 		this.tablacuentas = tablacuentas;
+	}
+
+	public Map<String,String> getTiposcocldoHM() {
+		return tiposcocldoHM;
+	}
+
+	public void setTiposcocldoHM(Map<String,String> tiposcocldoHM) {
+		this.tiposcocldoHM = tiposcocldoHM;
 	}
 
 }

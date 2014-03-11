@@ -1387,7 +1387,7 @@ public final class FileManager
 		        
 		        int iLineas = 0;
 		        
-		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_COAPII+ValoresDefecto.DEF_COSPII_PP+".Q34";
+		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_PAGOS+"_"+ValoresDefecto.DEF_NORMA34+".Q34";
 		        
 		        boolean bOK = false;
 		        try

@@ -155,7 +155,7 @@ public class GestorDetallesComunidad implements Serializable
 
 		    	this.sNumActivosComunidad = Long.toString(CLComunidades.buscarNumeroActivosComunidad(liCodComunidad));
 
-		    	this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM)));
+		    	this.setTablacuentas(CLCuentas.buscarCuentasConvencionalesComunidad(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM)));
 		    	
 				this.setTablaactivos(CLComunidades.buscarActivosCodigoComunidad(liCodComunidad));
 				
@@ -227,7 +227,7 @@ public class GestorDetallesComunidad implements Serializable
 			
 			logger.debug("Buscando Cuentas adicionales...");
 			
-			this.setTablacuentas(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM)));
+			this.setTablacuentas(CLCuentas.buscarCuentasConvencionalesComunidad(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM)));
 
 
 			if (getTablacuentas().size() == 0)
