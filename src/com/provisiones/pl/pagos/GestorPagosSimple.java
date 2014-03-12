@@ -137,7 +137,7 @@ public class GestorPagosSimple implements Serializable
 	//private String sNUCLII = ValoresDefecto.DEF_NUCLII;
 	
 	private String sTipoPago = "";
-	
+
 	//Cuenta
 	private String sPais = "";	
 	private String sDCIBAN = "";
@@ -883,6 +883,24 @@ public class GestorPagosSimple implements Serializable
 	    	this.sFEDEVE = Utils.recuperaFecha(gasto.getFEDEVE());
 	 
 	    	this.setbDevolucion((Integer.parseInt(sCOSBGA) > 49));
+	    	
+	    	if (bDevolucion)
+	    	{
+	    		this.sPais = "ES";
+	    		this.sDCIBAN = "00";
+	    		this.sNUCCEN = "0000";
+	    		this.sNUCCOF = "0000";
+	    		this.sNUCCDI = "00";
+	    		this.sNUCCNT = "0000000000";
+	    		
+	    		this.setsDescripcion("DEVOLUCION");
+	    		
+	    		this.sTipoPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
+	    	}
+	    	else
+	    	{
+	    		borrarCamposCuenta();
+	    	}
 
 			this.sDPTPAGO = gastoseleccionado.getDPTPAGO();
 
@@ -919,7 +937,6 @@ public class GestorPagosSimple implements Serializable
 			
 			this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
 
-	    	
 	    	sMsg = "Gasto cargado.";
 	    	msg = Utils.pfmsgInfo(sMsg);
 	    	
@@ -1108,7 +1125,11 @@ public class GestorPagosSimple implements Serializable
 				}					
 				else
 				{
-					if (sNUCCEN.equals("0000") ||
+					if (bDevolucion)
+					{
+						this.sTipoPago= ValoresDefecto.DEF_PAGO_DEVOLUCION;
+					}
+					else if (sNUCCEN.equals("0000") ||
 					sNUCCOF.equals("0000") ||
 					sNUCCDI.equals("00") ||
 					sNUCCNT.equals("0000000000"))

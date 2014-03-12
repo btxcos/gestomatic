@@ -650,15 +650,23 @@ public class GestorGastos implements Serializable
 			
 			try
 			{
-				if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+				int iCodCOACES = Integer.parseInt(sCOACES);
+				
+				if (!CLActivos.existeActivo(iCodCOACES))
 				{
 					sMsg = "El activo '"+sCOACES+"' no pertenece a esta cartera. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (Long.parseLong(sFEDEVE) > Long.parseLong(CLActivos.buscarFechaVentaActivo(iCodCOACES)))
+				{
+					sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo es superior a la de venta del Activo. Por favor, revise los datos";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				else if (CLGastos.existeGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE)))
 				{
-					sMsg = "ERROR: El Gasto informado no se puede dar de alta, ya existe en el sistema.";
+					sMsg = "ERROR: El Gasto informado no puede darse de alta, ya existe en el sistema.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}

@@ -194,6 +194,57 @@ public final class QMProvisiones
 
 		return bSalida;
 	}
+	
+	public static boolean setProvisionCerrada(Connection conexion, String sNUPROF, String sFEPFON) 
+	{
+		boolean bSalida = false;
+		
+		String sUsuario = ConnectionManager.getUser();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO6 + " = '" + sFEPFON + "', "
+					+ CAMPO16 + " = '" + ValoresDefecto.DEF_PROVISION_PENDIENTE + "', "
+					+ CAMPO17 + " = '" + sUsuario + "', " 
+					+ CAMPO18 + " = '" + Utils.timeStamp() + "' " +					
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+
+
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
 
 	public static boolean delProvision(Connection conexion, String sNUPROF) 
 	{
@@ -442,7 +493,7 @@ public final class QMProvisiones
 						else
 						{
 							sCOGRUG = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOGRUG, QMCodigosControl.ICOGRUG, rs.getString(CAMPO4));
-							sCOTPGA = (rs.getInt(CAMPO5) == 0)? "VARIOS": QMCodigosControl.getDesCOTPGA(conexion, sCOGRUG, rs.getString(CAMPO5));
+							sCOTPGA = (rs.getInt(CAMPO5) == 0)? "VARIOS": QMCodigosControl.getDesCOTPGA(conexion, rs.getString(CAMPO4), rs.getString(CAMPO5));
 						}
 
 						sFEPFON = rs.getString(CAMPO6);
@@ -604,6 +655,294 @@ public final class QMProvisiones
 					+ TABLA + 
 					" SET " 
 					+ CAMPO15 + " = '" + sFechaPagado + "' " +
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoNuevo(Connection conexion, String sNUPROF, long liValor) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			String sCondicionValor = (liValor > 0)? " + "+liValor:liValor+"";
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO7 + " = " + CAMPO7 + " + 1 ,"
+					+ CAMPO8 + " = " + CAMPO8 + sCondicionValor+
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoModificado(Connection conexion, String sNUPROF, long liValorInicial, long liValorFinal) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			String sCondicionValorInicial = (liValorInicial > 0)? " - "+liValorInicial:" + " + (-liValorInicial);
+			String sCondicionValorFinal = (liValorFinal > 0)? " + "+liValorFinal:liValorFinal+"";
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO8 + " = " + CAMPO8 + sCondicionValorInicial + sCondicionValorFinal +
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoAnuladoConexion(Connection conexion, String sNUPROF, long liValor) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sCondicionValor = (liValor > 0)? " - "+liValor:" + "+(-liValor);
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO7 + " = " + CAMPO7 + " - 1 ,"
+					+ CAMPO8 + " = " + CAMPO8 + sCondicionValor+
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoAutorizado(Connection conexion, String sNUPROF, long liValor) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			String sCondicionValor = (liValor > 0)? " + "+liValor:liValor+"";
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO10 + " = " + CAMPO10 + " + 1 ,"
+					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoAbonado(Connection conexion, String sNUPROF, long liValor) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sCondicionValor = (liValor > 0)? " - "+liValor:" + "+(-liValor);
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO10 + " = " + CAMPO10 + " - 1 ,"
+					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoPagado(Connection conexion, String sNUPROF, long liValor) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			String sCondicionValor = (liValor > 0)? " + "+liValor:liValor+"";
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO13 + " = " + CAMPO13 + " + 1 ,"
+					+ CAMPO14 + " = " + CAMPO14 + sCondicionValor+
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			

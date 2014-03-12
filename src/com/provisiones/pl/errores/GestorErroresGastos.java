@@ -592,7 +592,7 @@ public class GestorErroresGastos implements Serializable
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLGastos.buscarActivosConGastos(filtro));
+			this.setTablaactivos(CLGastos.buscarActivosConGastosPendientes(filtro));
 			
 			sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);

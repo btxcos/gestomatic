@@ -103,8 +103,9 @@ public final class ValoresDefecto
 	public static final String DEF_GASTO_PROVISION_CONEXION = "0";
 	
 	public static final String DEF_PAGO_CONEXION = "0";
-	public static final String DEF_PAGO_VENTANILLA = "1";	
-	public static final String DEF_PAGO_NORMA34 = "2";
+	public static final String DEF_PAGO_VENTANILLA = "1";
+	public static final String DEF_PAGO_DEVOLUCION = "2";
+	public static final String DEF_PAGO_NORMA34 = "3";
 	
 	public static final String DEF_PROVISION_ABIERTA = "A";
 	public static final String DEF_PROVISION_ENVIADA = "E";

@@ -304,7 +304,7 @@ public class GestorMovimientosGastos implements Serializable
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLGastos.buscarActivosConGastos(buscaactivos));
+			this.setTablaactivos(CLGastos.buscarActivosConGastosPendientes(buscaactivos));
 			
 			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
 			msg = Utils.pfmsgInfo(sMsg);

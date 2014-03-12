@@ -14,9 +14,6 @@ import javax.faces.event.ActionEvent;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
-import com.provisiones.misc.ValoresDefecto;
-
-import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.ProvisionTabla;
 
 public class GestorProvisiones implements Serializable 
@@ -28,17 +25,13 @@ public class GestorProvisiones implements Serializable
 	private String sNUPROF = "";
 	private String sCOSPAT = "";
 	private String sDCOSPAT = "";
-	private String sTAS = "";
 	private String sDTAS = "";
+	private String sDCOGRUG = "";	
+	private String sDCOTPGA = "";
 	private String sValorTolal = "";
 	private String sNumGastos = "";
-	private String sValorAutorizado = "";
-	private String sGastosAutorizados = "";	
-	private String sFEPFON = "";
-	private String sFechaEnvio = "";
-	private String sFechaAutorizado = "";
-	private String sFechaFacturado = "";
-	private String sEstado = "";
+	
+	private boolean bLibre = true; 
 
 	private transient ArrayList<ProvisionTabla> tablaprovisiones = null;
 	
@@ -51,6 +44,24 @@ public class GestorProvisiones implements Serializable
 			logger.debug("Iniciando GestorProvisiones...");	
 		}
 	}
+	
+    public void borrarCamposProvision()
+    {
+    	this.sNUPROF = "";
+    	this.sCOSPAT = "";
+    	this.sDCOSPAT = "";
+    	this.sDTAS = "";
+    	this.sDCOGRUG = "";
+    	this.sDCOTPGA = "";
+    	this.sNumGastos = "";
+    	this.sValorTolal = "";
+    	
+    	this.tablaprovisiones = null;
+    	this.provisionseleccionada = null;
+    	
+    	bLibre = true;
+
+    }
 
 	public void cargaProvisionesAbiertas(ActionEvent actionEvent)
 	{
@@ -76,10 +87,13 @@ public class GestorProvisiones implements Serializable
 	    	this.sNUPROF  = provisionseleccionada.getNUPROF();
 	    	this.sCOSPAT  = provisionseleccionada.getCOSPAT();
 	    	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
-	    	this.sTAS  = provisionseleccionada.getTAS();
 	    	this.sDTAS  = provisionseleccionada.getDTAS();
+	    	this.sDCOGRUG  = provisionseleccionada.getDCOGRUG();
+	    	this.sDCOTPGA  = provisionseleccionada.getDCOTPGA();
 	    	this.sValorTolal  = provisionseleccionada.getVALOR();//CLProvisiones.calcularValorProvision(sNUPROF);
 	    	this.sNumGastos  = provisionseleccionada.getGASTOS();//Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
+	    	
+	    	bLibre = false;
 	    	
 	    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
 	    	logger.info("Provision '{}' Seleccionada.",sNUPROF);
@@ -94,7 +108,7 @@ public class GestorProvisiones implements Serializable
 		{
 			FacesMessage msg;
 			
-			Provision provision = new Provision(sNUPROF, 
+			/*Provision provision = new Provision(sNUPROF, 
 					sCOSPAT, 
 					sTAS,
 					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
@@ -109,25 +123,40 @@ public class GestorProvisiones implements Serializable
 					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
 					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
 					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
-					ValoresDefecto.DEF_PROVISION_PENDIENTE);
+					ValoresDefecto.DEF_PROVISION_PENDIENTE);*/
 			
 					
 			//CLProvisiones.detallesProvision(sNUPROF);
 			String sMsg = "";
 
-			if (CLProvisiones.cerrarProvision(provision))
+			//if (CLProvisiones.cerrarProvision(provision))
+			
+			if (sNUPROF.isEmpty())
 			{
-				sMsg = "Provision '"+ sNUPROF +"' cerrada.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-
+				sMsg = "Debe seleccionar una provisión antes. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
 			}
 			else
 			{
-				sMsg = "[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
+				if (CLProvisiones.cerrarProvision(sNUPROF,Utils.fechaDeHoy(false)))
+				{
+					sMsg = "Provision '"+ sNUPROF +"' cerrada.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					borrarCamposProvision();
+
+				}
+				else
+				{
+					sMsg = "[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+				}
 			}
+			
+			
+
 
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);	
@@ -140,38 +169,6 @@ public class GestorProvisiones implements Serializable
 
 	public void setsNUPROF(String sNUPROF) {
 		this.sNUPROF = sNUPROF;
-	}
-
-	public String getsFEPFON() {
-		return sFEPFON;
-	}
-
-	public void setsFEPFON(String sFEPFON) {
-		this.sFEPFON = sFEPFON;
-	}
-
-	public String getsFechaEnvio() {
-		return sFechaEnvio;
-	}
-
-	public void setsFechaEnvio(String sFechaEnvio) {
-		this.sFechaEnvio = sFechaEnvio;
-	}
-
-	public String getsFechaAutorizado() {
-		return sFechaAutorizado;
-	}
-
-	public void setsFechaAutorizado(String sFechaAutorizado) {
-		this.sFechaAutorizado = sFechaAutorizado;
-	}
-
-	public String getsFechaFacturado() {
-		return sFechaFacturado;
-	}
-
-	public void setsFechaFacturado(String sFechaFacturado) {
-		this.sFechaFacturado = sFechaFacturado;
 	}
 
 	public String getsValorTolal() {
@@ -190,30 +187,6 @@ public class GestorProvisiones implements Serializable
 		this.sNumGastos = sNumGastos;
 	}
 	
-	public String getsValorAutorizado() {
-		return sValorAutorizado;
-	}
-
-	public void setsValorAutorizado(String sValorAutorizado) {
-		this.sValorAutorizado = sValorAutorizado;
-	}
-
-	public String getsGastosAutorizados() {
-		return sGastosAutorizados;
-	}
-
-	public void setsGastosAutorizados(String sGastosAutorizados) {
-		this.sGastosAutorizados = sGastosAutorizados;
-	}
-
-	public String getsEstado() {
-		return sEstado;
-	}
-
-	public void setsEstado(String sEstado) {
-		this.sEstado = sEstado;
-	}
-
 	public String getsCOSPAT() {
 		return sCOSPAT;
 	}
@@ -246,20 +219,36 @@ public class GestorProvisiones implements Serializable
 		this.sDCOSPAT = sDCOSPAT;
 	}
 
-	public String getsTAS() {
-		return sTAS;
-	}
-
-	public void setsTAS(String sTAS) {
-		this.sTAS = sTAS;
-	}
-
 	public String getsDTAS() {
 		return sDTAS;
 	}
 
 	public void setsDTAS(String sDTAS) {
 		this.sDTAS = sDTAS;
+	}
+
+	public String getsDCOGRUG() {
+		return sDCOGRUG;
+	}
+
+	public void setsDCOGRUG(String sDCOGRUG) {
+		this.sDCOGRUG = sDCOGRUG;
+	}
+
+	public String getsDCOTPGA() {
+		return sDCOTPGA;
+	}
+
+	public void setsDCOTPGA(String sDCOTPGA) {
+		this.sDCOTPGA = sDCOTPGA;
+	}
+
+	public boolean isbLibre() {
+		return bLibre;
+	}
+
+	public void setbLibre(boolean bLibre) {
+		this.bLibre = bLibre;
 	}
 
 }

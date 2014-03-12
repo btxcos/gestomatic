@@ -277,9 +277,9 @@
 									            selection="#{GestorPagosComunidad.provisionseleccionada}" selectionMode="single"  
 												paginator="true" paginatorPosition="bottom" rows="10"
 												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-												rowsPerPageTemplate="5,10,15">									
+												rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">
 
-								<p:column headerText="Número de Provisión">  
+								<p:column headerText="Provisión">  
 								    #{provision.NUPROF}  
 								</p:column>  
 								
@@ -289,6 +289,18 @@
 
 								<p:column headerText="Tipo de Activos SAREB">  
 								    #{provision.DTAS}  
+								</p:column>
+
+								<p:column headerText="Grupo de Gastos">  
+								    #{provision.DCOGRUG}  
+								</p:column>
+
+								<p:column headerText="Tipo de Gastos">  
+								    #{provision.DCOTPGA}  
+								</p:column>
+
+								<p:column headerText="Fecha de Cierre">  
+								    #{provision.FEPFON}  
 								</p:column>
 
 							</p:dataTable> 

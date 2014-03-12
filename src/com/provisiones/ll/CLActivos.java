@@ -31,7 +31,12 @@ public final class CLActivos
 	{
 		return QMActivos.getDetallesActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
-
+	
+	public static String buscarFechaVentaActivo (int iCodCOACES)
+	{
+		return QMActivos.getFEVACTActivo(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
+	
 	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla filtro)
 	{
 		return QMActivos.buscaListaActivos(ConnectionManager.getDBConnection(),filtro);

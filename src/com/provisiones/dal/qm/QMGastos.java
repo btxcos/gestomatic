@@ -1705,7 +1705,7 @@ public final class QMGastos
 		return resultado;
 	}
 	
-	public static ArrayList<ActivoTabla> buscaActivosConGastosPendientes(Connection conexion, ActivoTabla filtro)
+	public static ArrayList<ActivoTabla> buscaActivosConGastos(Connection conexion, ActivoTabla filtro, String sEstado)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 
@@ -1726,6 +1726,18 @@ public final class QMGastos
 			String sNUPIAC = "";
 			String sNUPOAC = "";
 			String sNUPUAC = "";
+			
+			String sCondicionEstado = "";
+			
+			if (sEstado.equals(ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE))
+			{
+				sCondicionEstado = " WHERE " + CAMPO34 + " IN ("+ ValoresDefecto.DEF_GASTO_ESTIMADO + "," + ValoresDefecto.DEF_GASTO_CONOCIDO + ")"; 
+			}
+			else if (!sCondicionEstado.isEmpty())
+			{
+				sCondicionEstado = " WHERE " + CAMPO34 + " = '" + sEstado + "'";
+			}
+
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1753,10 +1765,9 @@ public final class QMGastos
 
 						   + QMActivos.CAMPO1 +" IN (SELECT "
 						   + CAMPO2 + 
-						   " FROM " + TABLA +
-						   " WHERE " 
-						   + CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_ESTIMADO + "' " + " OR "
-	   					   + CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_CONOCIDO + "' ) )";
+						   " FROM " + TABLA
+						   + sCondicionEstado
+						   + "))";
 			
 			logger.debug(sQuery);
 			

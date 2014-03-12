@@ -28,7 +28,7 @@
 						</p:fieldset>
 									<p:fieldset legend="Acciones" id="acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton type="button" value="Cerrar Provision" onclick="dlgConfirma.show()"/>
+											<p:commandButton id="botCerrar" type="button" value="Cerrar Provision" onclick="dlgConfirma.show()" disabled="#{GestorProvisiones.bLibre}"/>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -57,10 +57,10 @@
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
 
-									<p:fieldset legend="Provisión" id="provision">
-										<h:panelGrid columns="1" cellpadding="5">
+									<p:fieldset legend="Provisión"  id="panelProvision">
+										<h:panelGrid columns="1" cellpadding="1">
 
-									<p:panel >
+									<p:panel>
 										<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText for="NUPROF" value="Provisión de fondos: " />
 												<p:inputText id="NUPROF" value="#{GestorProvisiones.sNUPROF}" size="9" maxlength="9" disabled="true">
@@ -69,23 +69,46 @@
 										</h:panelGrid>
 									</p:panel>
 									<p:panel >
-										<h:panelGrid columns="2" cellpadding="5">
+										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="DCOSPAT" value="Sociedad patrimonial: " />
-											<p:inputText id="DCOSPAT" value="#{GestorProvisiones.sDCOSPAT}" size="20" maxlength="20" disabled="true">
-											</p:inputText>
+											<p:inputText id="COSPAT" value="#{GestorProvisiones.sCOSPAT}" size="5" disabled="true"/>
+											<p:inputText id="DCOSPAT" value="#{GestorProvisiones.sDCOSPAT}" size="20" maxlength="20" disabled="true"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel >
+										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="DTAS" value="Tipo de activos SAREB: " />
-											<p:inputText id="DTAS" value="#{GestorProvisiones.sDTAS}" size="30" maxlength="30" disabled="true">
-											</p:inputText>
+											<p:inputText id="DTAS" value="#{GestorProvisiones.sDTAS}" size="30" maxlength="30" disabled="true"/>
 
-											<h:outputText for="ValorTolal" value="Valor de provisión: " />
-											<p:inputText id="ValorTolal" value="#{GestorProvisiones.sValorTolal}" size="20" maxlength="20" disabled="true">
-											</p:inputText>
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel >
+										<h:panelGrid columns="2" cellpadding="5">
+
+											<h:outputText for="DCOGRUG" value="Grupo de gastos contenidos: " />
+											<p:inputText id="DCOGRUG" value="#{GestorProvisiones.sDCOGRUG}" size="30" maxlength="30" disabled="true"/>
+
+											<h:outputText for="DCOTPGA" value="Tipo de gastos contenidos: " />
+											<p:inputText id="DCOTPGA" value="#{GestorProvisiones.sDCOTPGA}" size="30" maxlength="30" disabled="true"/>
+
 
 											<h:outputText for="NumGastos" value="Gastos en provisión: " />
-											<p:inputText id="NumGastos" value="#{GestorProvisiones.sNumGastos}" size="20" maxlength="20" disabled="true">
-											</p:inputText>
+											<p:inputText id="NumGastos" value="#{GestorProvisiones.sNumGastos}" size="20" maxlength="20" disabled="true"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel >
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText for="ValorTolal" value="Valor de provisión: " />
+											<p:inputText id="ValorTolal" value="#{GestorProvisiones.sValorTolal}" size="20" maxlength="20" disabled="true"/>
+											<h:outputText value="¤"/>
 
 										</h:panelGrid>
 									</p:panel>
@@ -98,16 +121,16 @@
 					<p:dialog header="Provisiones abiertas: " widgetVar="dlgTablaProvisiones" resizable="false">  
     				
 							<p:contextMenu for="provisiones">  
-								<p:menuitem value="Seleccionar" update="form:NUPROF, form:DCOSPAT, form:DTAS, form:ValorTolal, form:NumGastos, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorProvisiones.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide()"/>  
+								<p:menuitem value="Seleccionar" update="form:panelProvision, form:popup, form:msgs, form:botCerrar" icon="ui-icon-check" actionListener="#{GestorProvisiones.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="provisiones" var="provision" value="#{GestorProvisiones.tablaprovisiones}" rowKey="#{provision.NUPROF}"  
 									            selection="#{GestorProvisiones.provisionseleccionada}" selectionMode="single"  
 												paginator="true" paginatorPosition="bottom" rows="10"
 												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-												rowsPerPageTemplate="5,10,15">									
+												rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">
 
-								<p:column headerText="Número de Provisión">  
+								<p:column headerText="Provisión">  
 								    #{provision.NUPROF}  
 								</p:column>  
 								
@@ -117,6 +140,22 @@
 
 								<p:column headerText="Tipo de Activos SAREB">  
 								    #{provision.DTAS}  
+								</p:column>
+
+								<p:column headerText="Grupo de Gastos">  
+								    #{provision.DCOGRUG}  
+								</p:column>
+
+								<p:column headerText="Tipo de Gastos">  
+								    #{provision.DCOTPGA}  
+								</p:column>
+
+								<p:column headerText="Gastos">  
+								    #{provision.GASTOS}  
+								</p:column>
+
+								<p:column headerText="Valor">  
+								    #{provision.VALOR}  
 								</p:column>
 
 							</p:dataTable> 
@@ -131,7 +170,7 @@
 								</h:panelGrid>
 							<p:panel>
 								<h:panelGrid columns="2" cellpadding="5">
-								<p:commandButton value="Si" update="form:popup, form:msgs, form:acciones"  icon="ui-icon-check" actionListener="#{GestorProvisiones.cerrarProvision}" oncomplete="dlgConfirma.hide()"/>  
+								<p:commandButton value="Si" update="form:panelProvision, form:popup, form:msgs, form:botCerrar"  icon="ui-icon-check" actionListener="#{GestorProvisiones.cerrarProvision}" oncomplete="dlgConfirma.hide()"/>  
 								<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirma.hide()"/>
 								</h:panelGrid>
 							</p:panel>

@@ -1687,7 +1687,7 @@ public final class QMListaComunidadesActivos
 					   + TABLA +
 					   " WHERE "
 					   + CAMPO1 +  " IN (SELECT DISTINCT " 
-					   + QMGastos.CAMPO1 +
+					   + QMGastos.CAMPO2 +
 					   " FROM " 
 					   + QMGastos.TABLA +
 					   " WHERE "

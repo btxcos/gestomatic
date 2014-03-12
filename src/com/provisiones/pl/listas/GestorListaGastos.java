@@ -244,7 +244,7 @@ public class GestorListaGastos implements Serializable
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
 					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
 			
-			this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
+			this.setTablaactivos(CLGastos.buscarActivosConGastos(filtro));
 
 			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
 			

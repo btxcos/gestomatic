@@ -822,7 +822,7 @@ public final class QMListaGastos
 	   					   " FROM " 
 						   + TABLA +
 	   					   " WHERE " 
-	   					   + CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "')))";
+	   					   + CAMPO3 + " IN ('"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "','"+ValoresDefecto.DEF_MOVIMIENTO_RESUELTO+"'))))";
 			
 			logger.debug(sQuery);
 			

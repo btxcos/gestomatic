@@ -394,7 +394,17 @@ public class CLPagos
             for (int i = 0; i < listagastos.size() ; i++)
             {
             	GastoTabla gasto = listagastos.get(i);
-            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sTipoPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR);
+            	
+            	String sPago = sTipoPago;
+            	
+            	if (gasto.getIMNGAS().startsWith("-"))
+            	{
+            		sPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
+            	}
+            	
+            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR);
+            	
+            	
             	iCodigo = registraPagoSimple(pago, cuenta, bValida);
             	
             	if (iCodigo != 0)

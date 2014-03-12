@@ -169,7 +169,12 @@ public final class CLGastos
 	
 	public static ArrayList<ActivoTabla> buscarActivosConGastos(ActivoTabla filtro)
 	{
-		return QMGastos.buscaActivosConGastosPendientes(ConnectionManager.getDBConnection(),filtro);
+		return QMGastos.buscaActivosConGastos(ConnectionManager.getDBConnection(),filtro,"");
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivosConGastosPendientes(ActivoTabla filtro)
+	{
+		return QMGastos.buscaActivosConGastos(ConnectionManager.getDBConnection(),filtro,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 	}
 	
 	public static ArrayList<ActivoTabla> buscarActivosConGastosAutorizados(ActivoTabla filtro)
@@ -374,7 +379,6 @@ public final class CLGastos
 											//recibido error
 											if (QMListaErroresGastos.addErrorGasto(conexion,liCodMovimiento, gasto.getCOTERR()))
 											{
-												//TODO Sustituir por PL
 												if (QMGastos.delGasto(conexion, liCodGasto))
 												{
 													iCodigo = 1;
@@ -806,10 +810,6 @@ public final class CLGastos
 			{
 				sAccion = "M"; //Modificacion
 			}
-			/*else if (!movimiento.getIMNGAS().equals("-") && sEstado.equals("3"))
-			{
-				sAccion = "P"; //Pago
-			}*/
 			else
 			{
 				sAccion = "#"; //Error
@@ -1025,7 +1025,7 @@ public final class CLGastos
 							
 							switch (ACCION)
 							{
-								
+								//Nuevo o devolución
 								case D:case G:
 									Gasto gastonuevo = convierteMovimientoenGasto(movimiento_revisado);
 
@@ -1271,6 +1271,8 @@ public final class CLGastos
 								default:
 									break;
 							}
+							
+							//TODO if iCodigo == 0
 							
 							conexion.setAutoCommit(true);
 						

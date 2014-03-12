@@ -109,7 +109,7 @@
 											</h:panelGrid>
 									  </p:panel>
 
-										<p:panel>
+										<p:panel id="panelCuenta">
 											<h:panelGrid columns="2" cellpadding="5">
 
 										<p:panel>
@@ -121,25 +121,25 @@
 
 										<h:outputText value="Número de Cuenta: "/>
 
-										<p:inputMask id="NUCCEN" value="#{GestorPagosSimple.sNUCCEN}" mask="9999" size="4">
+										<p:inputMask id="NUCCEN" value="#{GestorPagosSimple.sNUCCEN}" mask="9999" size="4" disabled="#{GestorPagosSimple.bDevolucion}">
 											<f:validateLength minimum="4"/>
 										</p:inputMask>
 
-										<p:inputMask id="NUCCOF" value="#{GestorPagosSimple.sNUCCOF}" mask="9999" size="4">
+										<p:inputMask id="NUCCOF" value="#{GestorPagosSimple.sNUCCOF}" mask="9999" size="4" disabled="#{GestorPagosSimple.bDevolucion}">
 											<f:validateLength minimum="4"/>
 										</p:inputMask>
 
-										<p:inputMask id="NUCCDI" value="#{GestorPagosSimple.sNUCCDI}" mask="99" size="2">
+										<p:inputMask id="NUCCDI" value="#{GestorPagosSimple.sNUCCDI}" mask="99" size="2" disabled="#{GestorPagosSimple.bDevolucion}">
 											<f:validateLength minimum="2"/>
 										</p:inputMask>
 
-										<p:inputMask id="NUCCNT" value="#{GestorPagosSimple.sNUCCNT}" mask="9999999999" size="10">
+										<p:inputMask id="NUCCNT" value="#{GestorPagosSimple.sNUCCNT}" mask="9999999999" size="10" disabled="#{GestorPagosSimple.bDevolucion}">
 											<f:validateLength minimum="10"/>
 										</p:inputMask>
 											</h:panelGrid>
 									  </p:panel>
 
-										<p:commandButton value="Buscar Cuenta" update="cuentasactivo, cuentascomunidad, msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.buscaCuentas}" oncomplete="dlgTablaCuentas.show()"/>	
+										<p:commandButton id="botBuscaCuenta" value="Buscar Cuenta" update="cuentasactivo, cuentascomunidad, msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.buscaCuentas}" oncomplete="dlgTablaCuentas.show()" disabled="#{GestorPagosSimple.bDevolucion}"/>	
 
 										<p:panel>
 											<h:panelGrid columns="2" cellpadding="5">
@@ -148,9 +148,9 @@
 											</h:panelGrid>
 									  </p:panel>
 
-									 <p:commandButton value="Sin Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.seleccionarPagoPorVentanilla}"/>
+									 <p:commandButton id="botSinCuenta" value="Sin Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.seleccionarPagoPorVentanilla}" disabled="#{GestorPagosSimple.bDevolucion}"/>
 
-									 <p:commandButton value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.limpiarPlantillaCuenta}"/>
+									 <p:commandButton id="botLimpiaCuenta" value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosSimple.limpiarPlantillaCuenta}" disabled="#{GestorPagosSimple.bDevolucion}"/>
 
 											</h:panelGrid>
 									  </p:panel>
@@ -512,7 +512,7 @@
 					<p:dialog header="Gastos Autorizados del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
 
 						<p:contextMenu for="gastosactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelCuenta" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosactivo" var="gastoactivo" value="#{GestorPagosSimple.tablagastosactivo}" rowKey="#{gastoactivo.sGastoID}"
@@ -625,7 +625,7 @@
 					<p:dialog header="Gastos Autorizados de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
 
 						<p:contextMenu for="gastosprovision">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelCuenta" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosprovision" var="gastoprovision" value="#{GestorPagosSimple.tablagastosprovision}" rowKey="#{gastoprovision.sGastoID}"

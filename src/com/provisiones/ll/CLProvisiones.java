@@ -173,7 +173,7 @@ public final class CLProvisiones
 	}
 	
 	
-	public static boolean cerrarProvision (Provision provision)
+	public static boolean cerrarProvision (String sNUPROF, String sFEPFON)
 	{
 		boolean bError = true;
 		
@@ -181,11 +181,13 @@ public final class CLProvisiones
 		
 		if (conexion != null)
 		{
-			logger.debug(provision.logProvision());
 			
+			bError = !QMProvisiones.setProvisionCerrada(conexion,sNUPROF, sFEPFON);
+		
+			/*logger.debug(provision.logProvision());
 			bError = !QMProvisiones.modProvision(conexion,provision);
 			
-	        /*if (!bError)
+	        if (!bError)
 	        {
 	        	long OK = 0;
 	    		//Anular todos los gastos pendientes	

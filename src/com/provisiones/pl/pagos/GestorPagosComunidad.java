@@ -217,7 +217,7 @@ public class GestorPagosComunidad implements Serializable
 			
 			String sMsg = ""; 
 			
-			String sFecha = Utils.compruebaFecha(sFEPFON);
+			String sFecha = Utils.compruebaFecha(sFEPFONB);
 			
 			if (sFecha.equals("#"))
 			{
