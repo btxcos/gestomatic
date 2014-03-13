@@ -331,6 +331,8 @@ public final class CLGastos
 						
 						String sEstadoMovimiento = QMListaGastos.getValidado(conexion,liCodMovimiento);
 						
+						String sEstadoInicialGasto = QMGastos.getEstado(conexion, liCodGasto);
+						
 						if (sEstadoMovimiento.equals("P"))
 						{
 							iCodigo = -11;
@@ -349,7 +351,7 @@ public final class CLGastos
 							
 							if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
 							{
-								if (QMGastos.getEstado(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_ABONADO))
+								if (sEstadoInicialGasto.equals(ValoresDefecto.DEF_GASTO_ABONADO))
 								{
 									sValidado = ValoresDefecto.DEF_MOVIMIENTO_RESUELTO;
 								}
@@ -382,19 +384,16 @@ public final class CLGastos
 												if (QMGastos.delGasto(conexion, liCodGasto))
 												{
 													iCodigo = 1;
-													conexion.commit();
 												}
 												else
 												{
 													iCodigo = -5;
-													conexion.rollback();
 												}
 											}
 											else
 											{
 												QMListaGastos.setValidado(conexion,liCodMovimiento, "E");
 												iCodigo = -4;
-												conexion.rollback();
 											}
 										}
 										else if (sValidado.equals(ValoresDefecto.DEF_MOVIMIENTO_VALIDADO))
@@ -405,14 +404,14 @@ public final class CLGastos
 											{
 												if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado) && autorizaGasto(liCodGasto, gasto.getFEEAUI(), gasto.getFEAUFA()))
 												{
+													//TODO REVISAR autorizacion en provisiones
 													logger.info("Gasto Revisado.");
-													conexion.commit();
+													iCodigo = 0;
 												}
 												else
 												{
 													//QMListaGastos.setValidado(conexion,liCodMovimiento, "E");
 													iCodigo = -5;
-													conexion.rollback();
 												}
 											}
 
@@ -423,37 +422,42 @@ public final class CLGastos
 											if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado) && abonaGasto(liCodGasto, gasto.getFEAUFA()))
 											{
 												logger.info("Gasto resuelto.");
-												conexion.commit();
+												iCodigo = 0;
 											}
 											else
 											{
 												//QMListaGastos.setValidado(conexion,liCodMovimiento, "E");
 												iCodigo = -6;
-												conexion.rollback();
 											}
 										}
 										else
 										{
 											//QMListaGastos.setValidado(conexion,liCodMovimiento, "E");
 											iCodigo = -5;
-											conexion.rollback();
 										}
 									}
 									else
 									{
 										iCodigo = -3;
-										conexion.rollback();
 									}
 								}
 								else
 								{
 									iCodigo = -2;
-									conexion.rollback();
 								}
 								
 								//bSalida = QMMovimientosGastos.modMovimientoGasto(gasto, liCodMovimiento);
 								//nos ahorramos modificar el movimiento y posteriormente en el bean de gestion de errores
 								//recuperaremos el codigo de error de la tabla pertinente.
+								
+								if (iCodigo < 0)
+								{
+									conexion.rollback();
+								}
+								else
+								{
+									conexion.commit();
+								}
 								
 								conexion.setAutoCommit(true);
 								
@@ -554,31 +558,36 @@ public final class CLGastos
 				
 				if (CLProvisiones.existeProvision(movimiento.getNUPROF()))
 				{
-					
-					Provision provision = CLProvisiones.buscarProvision(movimiento.getNUPROF());
-					String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(Integer.parseInt(movimiento.getCOACES()));
-					
-					if (QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
+					if(QMProvisiones.getEstado(conexion, movimiento.getNUPROF()).equals(ValoresDefecto.DEF_PROVISION_ENVIADA))
 					{
-						sCOSPAT = ValoresDefecto.CAMPO_NUME_SIN_INFORMAR;
-					}
-					
-					provision.setsCOSPAT(sCOSPAT);
-					
-					if (provision.getsCOGRUG().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
-					{
-						provision.setsCOGRUG(movimiento.getCOGRUG());
+						Provision provision = CLProvisiones.buscarProvision(movimiento.getNUPROF());
+						String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(Integer.parseInt(movimiento.getCOACES()));
+						
+						if (QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
+						{
+							sCOSPAT = ValoresDefecto.CAMPO_NUME_SIN_INFORMAR;
+						}
+						
+						provision.setsCOSPAT(sCOSPAT);
+						
+						if (provision.getsCOGRUG().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+						{
+							provision.setsCOGRUG(movimiento.getCOGRUG());
+						}
+
+						String sTipo = CLActivos.compruebaTipoActivoSAREB(Integer.parseInt(movimiento.getCOACES()));
+						
+						provision.setsTAS(sTipo);
+						provision.setsFechaAutorizado(movimiento.getFEAUFA());
+						
+						if (!QMProvisiones.modProvision(conexion,provision) 
+							|| !QMProvisiones.setEstado(conexion, movimiento.getNUPROF(),ValoresDefecto.DEF_PROVISION_AUTORIZADA))
+						{
+							//Error: provision no modificada
+							iCodigo = -908;
+						}
 					}
 
-					String sTipo = CLActivos.compruebaTipoActivoSAREB(Integer.parseInt(movimiento.getCOACES()));
-					
-					provision.setsTAS(sTipo);
-					
-					if (!QMProvisiones.modProvision(conexion,provision))
-					{
-						//Error: provision no creada
-						iCodigo = -908;
-					}
 					
 					if (iCodigo == 0)
 					{
@@ -613,7 +622,6 @@ public final class CLGastos
 									{
 										//error al crear un movimiento
 										iCodigo = -900;
-										conexion.rollback();
 									}
 									else
 									{	
@@ -628,9 +636,26 @@ public final class CLGastos
 												if (QMListaGastosProvisiones.addRelacionGastoProvisionInyectado(conexion,liCodGasto,movimiento.getNUPROF()))
 												{
 													//OK 
-													logger.debug("Gasto añadido.");
-													iCodigo = 0;
-													conexion.commit();
+													if (QMProvisiones.setGastoNuevo(conexion, movimiento.getNUPROF(), QMGastos.getValorTotal(conexion,liCodGasto)))
+													{
+														if (QMProvisiones.setGastoAutorizado(conexion, movimiento.getNUPROF(), QMGastos.getValorTotal(conexion,liCodGasto)))
+														{
+															
+															logger.debug("Gasto añadido.");
+															iCodigo = 0;
+														}
+														else
+														{
+															//error al actualizar la provisión
+															iCodigo = -909;
+														}
+													}
+													else
+													{
+														//error al actualizar la provisión
+														iCodigo = -909;
+													}
+
 												}
 												else
 												{
@@ -639,15 +664,21 @@ public final class CLGastos
 													//QMGastos.delGasto(conexion,liCodGasto);
 													//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 													iCodigo = -906;
-													conexion.rollback();
 												}
 											}
-											else if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_ENVIADO))
+											else if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_VALIDADO))
 											{
 												//OK 
-												logger.debug("Gasto añadido.");
-												iCodigo = 0;
-												conexion.commit();
+												if (QMProvisiones.setGastoAutorizado(conexion, movimiento.getNUPROF(), QMGastos.getValorTotal(conexion,liCodGasto)))
+												{
+													logger.debug("Gasto añadido.");
+													iCodigo = 0;
+												}
+												else
+												{
+													//error al actualizar la provisión
+													iCodigo = -909;
+												}
 											}
 											else
 											{
@@ -656,7 +687,6 @@ public final class CLGastos
 												//QMGastos.delGasto(conexion,liCodGasto);
 												//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 												iCodigo = -906;
-												conexion.rollback();
 											}
 											
 										}
@@ -666,7 +696,6 @@ public final class CLGastos
 											//QMGastos.delGasto(conexion,liCodGasto);
 											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 											iCodigo = -902;
-											conexion.rollback();
 										}
 									}
 								}
@@ -682,6 +711,16 @@ public final class CLGastos
 								//error gasto no creado
 								iCodigo = -901;
 							}
+							
+							if (iCodigo == 0)
+							{
+								conexion.commit();
+							}
+							else
+							{
+								conexion.rollback();
+							}
+
 							
 							conexion.setAutoCommit(true);
 						} 
@@ -1013,7 +1052,7 @@ public final class CLGastos
 						iCodigo = -900;
 					}
 					else
-					{	
+					{
 				
 						try 
 						{
@@ -1028,6 +1067,7 @@ public final class CLGastos
 								//Nuevo o devolución
 								case D:case G:
 									Gasto gastonuevo = convierteMovimientoenGasto(movimiento_revisado);
+									gastonuevo.setValor_total();
 
 									logger.debug("Dando de alta el gasto...");
 									logger.debug(gastonuevo.logGasto());
@@ -1044,8 +1084,17 @@ public final class CLGastos
 											if (QMListaGastosProvisiones.addRelacionGastoProvision(conexion,liCodGasto,movimiento_revisado.getNUPROF()))
 											{
 												//OK 
-												conexion.commit();
-												iCodigo = 0;
+												if (QMProvisiones.setGastoNuevo(conexion, movimiento_revisado.getNUPROF(), gastonuevo.getValor_total()))
+												{
+													iCodigo = 0;
+												}
+												else
+												{
+													//error al actualizar la provisión
+													iCodigo = -909;
+												}
+												
+												
 											}
 											else
 											{
@@ -1053,7 +1102,7 @@ public final class CLGastos
 												//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 												//QMGastos.delGasto(conexion,liCodGasto);
 												//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-												conexion.rollback();
+												
 												iCodigo = -906;
 											}
 										}
@@ -1062,7 +1111,7 @@ public final class CLGastos
 											//error relacion gasto no creada - Rollback
 											//QMGastos.delGasto(conexion,liCodGasto);
 											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-											conexion.rollback();
+											
 											iCodigo = -902;
 										}
 									}
@@ -1070,27 +1119,49 @@ public final class CLGastos
 									{
 										//error gasto no creado - Rollback
 										//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-										conexion.rollback();
+										
 										iCodigo = -901;
 									}
 									break;
 								//Anulado
 								case N:
+									long liValorAnulado = QMGastos.getValorTotal(conexion, liCodGasto);
+									
 									if (!QMListaGastos.existeMovimientoEnviado(conexion, liCodGasto))
 									{
-										if (QMGastos.delGasto(conexion, liCodGasto))
+										if (QMListaGastos.delMovimientosGasto(conexion, liCodGasto))
 										{
-											//OK 
-											conexion.commit();
-											iCodigo = 0;
+											if (QMGastos.delGasto(conexion, liCodGasto))
+											{
+												if (QMProvisiones.setGastoAnuladoConexion(conexion, movimiento_revisado.getNUPROF(), liValorAnulado))
+												{
+													//OK 
+													
+													iCodigo = 0;
+												}
+												else
+												{
+													//error al actualizar la provisión
+													iCodigo = -909;
+												}
+
+											}
+											else
+											{
+												//error al borrar el gasto - Rollback
+												//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
+												
+												iCodigo = -908;
+											}
 										}
 										else
 										{
 											//error al borrar el gasto - Rollback
 											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-											conexion.rollback();
+											
 											iCodigo = -908;
 										}
+
 									}
 									else
 									{
@@ -1102,9 +1173,17 @@ public final class CLGastos
 												{
 													if (QMGastos.setFechaAnulado(conexion,liCodGasto, movimiento.getFEAGTO()))
 													{
-														//OK 
-														conexion.commit();
-														iCodigo = 0;
+														if (QMProvisiones.setGastoAnuladoConexion(conexion, movimiento_revisado.getNUPROF(), liValorAnulado))
+														{
+															//OK 
+															
+															iCodigo = 0;
+														}
+														else
+														{
+															//error al actualizar la provisión
+															iCodigo = -909;
+														}
 													}
 													else
 													{
@@ -1113,7 +1192,7 @@ public final class CLGastos
 														//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 														//QMGastos.setEstado(conexion,liCodGasto, sEstado);
 														//QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sRevisadoAnterior);
-														conexion.rollback();
+														
 														iCodigo = -907;
 													}
 													
@@ -1124,7 +1203,7 @@ public final class CLGastos
 													//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 													//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 													//QMGastos.setEstado(conexion,liCodGasto, sEstado);
-													conexion.rollback();
+													
 													iCodigo = -904;
 												}
 											}
@@ -1133,7 +1212,7 @@ public final class CLGastos
 												//error estado no establecido - Rollback
 												//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 												//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
-												conexion.rollback();
+												
 												iCodigo = -903;
 											}
 										}
@@ -1141,7 +1220,7 @@ public final class CLGastos
 										{
 											//error relacion gasto no creada - Rollback
 											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-											conexion.rollback();
+											
 											iCodigo = -902;
 										}	
 									}
@@ -1149,33 +1228,51 @@ public final class CLGastos
 									
 								//Abono	
 								case A:
-									
 									if (QMListaGastos.addRelacionGasto(conexion,liCodGasto,liCodMovimiento))
 									{
+										String sEstadoGastoAbonado = QMGastos.getEstado(conexion,liCodGasto);
+										
 										if (QMGastos.setEstado(conexion,liCodGasto, ValoresDefecto.DEF_GASTO_ABONADO))
 										{
+											String sNUPROFAbono = QMListaGastosProvisiones.getProvisionDeGasto(conexion,liCodGasto);
+											
 											if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
 											{
 												if (QMListaGastosProvisiones.addRelacionGastoProvision(conexion,liCodGasto,movimiento_revisado.getNUPROF()))
 												{
-													conexion.commit();
-													iCodigo = 0;
-													/*if (QMGastos.setFechaAnulado(conexion,liCodGasto, movimiento.getFEAGTO()))
+													//OK
+													long liValorAbonado = QMGastos.getValorTotal(conexion, liCodGasto);
+													
+													if (QMProvisiones.setGastoNuevo(conexion, movimiento_revisado.getNUPROF(), -liValorAbonado))
 													{
-														//OK 
-														conexion.commit();
-														iCodigo = 0;
+														
+														if (sEstadoGastoAbonado.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
+														{
+															if (QMProvisiones.setGastoAbonado(conexion,sNUPROFAbono, liValorAbonado))
+															{
+																//OK 
+																
+																iCodigo = 0;
+															}
+															else
+															{
+																//error al actualizar la provisión
+																iCodigo = -909;
+															}
+														}
+														else
+														{
+															//En gastos pagados no se descuenta de los autorizados
+															iCodigo = 0;
+														}
+														
 													}
 													else
 													{
-														//error fecha de anulacion no registrada - Rollback
-														//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-														//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
-														//QMGastos.setEstado(conexion,liCodGasto, sEstado);
-														//QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sRevisadoAnterior);
-														conexion.rollback();
-														iCodigo = -907;
-													}*/
+														//error al actualizar la provisión
+														iCodigo = -909;
+													}
+
 												}
 												else
 												{
@@ -1183,7 +1280,7 @@ public final class CLGastos
 													//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 													//QMGastos.delGasto(conexion,liCodGasto);
 													//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-													conexion.rollback();
+													
 													iCodigo = -906;
 												}
 												
@@ -1194,7 +1291,7 @@ public final class CLGastos
 												//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 												//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 												//QMGastos.setEstado(conexion,liCodGasto, sEstado);
-												conexion.rollback();
+												
 												iCodigo = -904;
 											}
 										}
@@ -1203,7 +1300,7 @@ public final class CLGastos
 											//error estado no establecido - Rollback
 											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 											//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
-											conexion.rollback();
+											
 											iCodigo = -903;
 										}
 									}
@@ -1211,12 +1308,12 @@ public final class CLGastos
 									{
 										//error relacion gasto no creada - Rollback
 										//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-										conexion.rollback();
+										
 										iCodigo = -902;
 									}
 									break;
 								case M:
-
+									
 									if (QMListaGastos.addRelacionGasto(conexion,liCodGasto,liCodMovimiento))
 									{
 										if (QMGastos.setEstado(conexion,liCodGasto, movimiento_revisado.getCOSIGA()))
@@ -1224,11 +1321,22 @@ public final class CLGastos
 											
 											if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE))
 											{
+												long liValorAntiguo = QMGastos.getValorTotal(conexion, liCodGasto);
+												
 												if(QMGastos.modGasto(conexion,convierteMovimientoenGasto(movimiento_revisado)))
 												{
 													//OK
-													conexion.commit();
-													iCodigo = 0; 
+													movimiento_revisado.setValor_total();
+													
+													if (QMProvisiones.setGastoModificado(conexion, movimiento_revisado.getNUPROF(), liValorAntiguo, movimiento_revisado.getValor_total()))
+													{
+														iCodigo = 0; 
+													}
+													else
+													{
+														//error al actualizar la provisión
+														iCodigo = -909;
+													}													
 												}
 												else
 												{
@@ -1237,7 +1345,7 @@ public final class CLGastos
 													//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 													//QMGastos.setEstado(conexion,liCodGasto, sEstado);
 													//QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sRevisadoAnterior);
-													conexion.rollback();
+													
 													iCodigo = -905;									
 												}
 											}
@@ -1247,7 +1355,7 @@ public final class CLGastos
 												//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 												//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
 												//QMGastos.setEstado(conexion,liCodGasto, sEstado);
-												conexion.rollback();
+												
 												iCodigo = -904;
 											}
 										}
@@ -1256,7 +1364,7 @@ public final class CLGastos
 											//error estado no establecido - Rollback
 											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
 											//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
-											conexion.rollback();
+											
 											iCodigo = -903;
 										}
 									}
@@ -1264,7 +1372,7 @@ public final class CLGastos
 									{
 										//error relacion gasto no creada - Rollback
 										//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-										conexion.rollback();
+										
 										iCodigo = -902;
 									}
 									break;
@@ -1272,7 +1380,14 @@ public final class CLGastos
 									break;
 							}
 							
-							//TODO if iCodigo == 0
+							if (iCodigo == 0)
+							{
+								conexion.commit();
+							}
+							else
+							{
+								conexion.rollback();
+							}
 							
 							conexion.setAutoCommit(true);
 						

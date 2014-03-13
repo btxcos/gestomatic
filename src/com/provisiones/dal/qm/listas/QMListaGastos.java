@@ -14,6 +14,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
+import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -320,6 +321,55 @@ public final class QMListaGastos
 		}
 
 		return bEncontrado;
+	}
+	
+	public static boolean delMovimientosGasto(Connection conexion, long liCodGasto) 
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "DELETE FROM " 
+					+ QMMovimientosGastos.TABLA + 
+					" WHERE " 
+					+ QMMovimientosGastos.CAMPO1 + " IN (SELECT "
+					+  CAMPO2 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '"+ liCodGasto + "')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
 	}
 	
 	public static ArrayList<Long>  getGastosPorEstado(Connection conexion, String sEstado) 

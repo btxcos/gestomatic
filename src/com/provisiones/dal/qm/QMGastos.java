@@ -1351,7 +1351,7 @@ public final class QMGastos
 		return sEstado;
 	}
 	
-	public static boolean setNota(Connection conexion, long liComunidadID, String sNota)
+	public static boolean setNota(Connection conexion, long liGastoID, String sNota)
 	{
 		boolean bSalida = false;
 
@@ -1366,7 +1366,7 @@ public final class QMGastos
 					" SET " 
 					+ CAMPO35 + " = '"+ sNota +"' "+
 					" WHERE "
-					+ CAMPO1 + " = '"+ liComunidadID +"'";
+					+ CAMPO1 + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 			
@@ -1384,7 +1384,7 @@ public final class QMGastos
 			{
 				bSalida = false;
 
-				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 
@@ -1399,7 +1399,7 @@ public final class QMGastos
 		return bSalida;
 	}
 	
-	public static String getNota(Connection conexion, long liComunidadID)
+	public static String getNota(Connection conexion, long liGastoID)
 	{
 		String sNota = "";
 
@@ -1419,7 +1419,7 @@ public final class QMGastos
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
-						+ CAMPO1 + " = '"+ liComunidadID +"'";
+						+ CAMPO1 + " = '"+ liGastoID +"'";
 			
 			logger.debug(sQuery);
 
@@ -1440,7 +1440,7 @@ public final class QMGastos
 
 						sNota = rs.getString(CAMPO35);
 						
-						logger.debug(CAMPO1+":|"+liComunidadID+"|");
+						logger.debug(CAMPO1+":|"+liGastoID+"|");
 						
 						logger.debug("Encontrado el registro!");
 
@@ -1456,7 +1456,7 @@ public final class QMGastos
 			{
 				sNota = "";
 				
-				logger.error("ERROR COMUNIDAD:|"+liComunidadID+"|");
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1468,6 +1468,77 @@ public final class QMGastos
 		}
 
 		return sNota;
+	}
+	
+	public static long getValorTotal(Connection conexion, long liGastoID)
+	{
+		long liValorTotal = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO33 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liGastoID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liValorTotal = rs.getLong(CAMPO33);
+						
+						logger.debug(CAMPO1+":|"+liGastoID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO33+":|"+liValorTotal+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liValorTotal = 0;
+				
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liValorTotal;
 	}
 	
 	public static long getValor(Connection conexion, long liGastoID)

@@ -48,6 +48,8 @@ public class MovimientoGasto
 	private String COSPII = "";
 	private String NUCLII = "";
 	private String FILLER = "                                                                                                                      ";
+
+	private long valor_total = 0;
 	
 	//Constructor de clase
 	public MovimientoGasto(String cOACES, String cOGRUG, String cOTPGA, String cOSBGA,
@@ -552,6 +554,71 @@ public class MovimientoGasto
 	public void setNUCLII(String nUCLII) {
 		NUCLII = nUCLII;
 	}
+	
+	public long getValor_total() {
+		return valor_total;
+	}
+
+	public void setValor_total()
+	{
+		long liIMNGAS = IMNGAS.equals("") ? 0 : Long.parseLong(IMNGAS);
+		long liIMRGAS = IMRGAS.equals("") ? 0 : Long.parseLong(IMRGAS);
+		long liIMDGAS = IMDGAS.equals("") ? 0 : Long.parseLong(IMDGAS);
+		long liIMCOST = IMCOST.equals("") ? 0 : Long.parseLong(IMCOST);
+		long liIMOGAS = IMOGAS.equals("") ? 0 : Long.parseLong(IMOGAS);
+		long liIMDTGA = IMDTGA.equals("") ? 0 : Long.parseLong(IMDTGA);
+		long liIMIMGA = IMIMGA.equals("") ? 0 : Long.parseLong(IMIMGA);
+
+
+		long liValor = 0;
+
+		if (YCOS02.equals("-"))
+		{
+			liIMNGAS = -liIMNGAS;
+		}
+		if (YCOS04.equals("-"))
+		{
+			liIMRGAS = -liIMRGAS;
+		}
+		if (YCOS06.equals("-"))
+		{
+			liIMDGAS = -liIMDGAS;
+		}
+		if (YCOS08.equals("-"))
+		{
+			liIMCOST = -liIMCOST;
+		}
+		if (YCOS10.equals("-"))
+		{
+			liIMOGAS = -liIMOGAS;
+		}
+		
+		liValor = liIMNGAS+liIMRGAS+liIMDGAS+liIMCOST+liIMOGAS;
+		
+		if (liValor < 0)
+		{
+			liValor = liValor + liIMDTGA;
+		}
+		else
+		{
+			liValor = liValor - liIMDTGA;
+		}
+		
+		if (liValor < 0)
+		{
+			liValor = liValor - liIMIMGA;
+		}
+		else
+		{
+			liValor = liValor + liIMIMGA;
+		}
+		
+		
+		this.valor_total = liValor;
+	}
+	
+	
+	
 	public String logMovimientoGasto()
 	{
 		return String.format("(MOVIMIENTO GASTO)\nCOACES:|%s|\nCOGRUG:|%s|\nCOTPGA:|%s|\nCOSBGA:|%s|\nPTPAGO:|%s|\nFEDEVE:|%s|\nFFGTVP:|%s|\nFEPAGA:|%s|\nFELIPG:|%s|\nCOSIGA:|%s|\nFEEESI:|%s|\nFEECOI:|%s|\nFEEAUI:|%s|\nFEEPAI:|%s|\nIMNGAS:|%s|\nYCOS02:|%s|\nIMRGAS:|%s|\nYCOS04:|%s|\nIMDGAS:|%s|\nYCOS06:|%s|\nIMCOST:|%s|\nYCOS08:|%s|\nIMOGAS:|%s|\nYCOS10:|%s|\nIMDTGA:|%s|\nCOUNMO:|%s|\nIMIMGA:|%s|\nCOIMPT:|%s|\nCOTNEG:|%s|\nCOENCX:|%s|\nCOOFCX:|%s|\nNUCONE:|%s|\nNUPROF:|%s|\nFEAGTO:|%s|\nCOMONA:|%s|\nBIAUTO:|%s|\nFEAUFA:|%s|\nCOTERR:|%s|\nFMPAGN:|%s|\nFEPGPR:|%s|\nFEAPLI:|%s|\nCOAPII:|%s|\nCOSPII:|%s|\nNUCLII:|%s|",COACES,COGRUG,COTPGA,COSBGA,PTPAGO,FEDEVE,FFGTVP,FEPAGA,FELIPG,COSIGA,FEEESI,FEECOI,FEEAUI,FEEPAI,IMNGAS,YCOS02,IMRGAS,YCOS04,IMDGAS,YCOS06,IMCOST,YCOS08,IMOGAS,YCOS10,IMDTGA,COUNMO,IMIMGA,COIMPT,COTNEG,COENCX,COOFCX,NUCONE,NUPROF,FEAGTO,COMONA,BIAUTO,FEAUFA,COTERR,FMPAGN,FEPGPR,FEAPLI,COAPII,COSPII,NUCLII);

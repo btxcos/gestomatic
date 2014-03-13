@@ -336,7 +336,7 @@ public final class QMCodigosControl
 					switch (Integer.parseInt(sCodCOTPGA)) 
 					{
 						case 2:
-							sTabla = "pp001_cosbga_32_tbl";
+							sTabla = "pp001_cosbga_t32_tbl";
 							break;
 						case 3:
 							sTabla = "";

@@ -521,12 +521,6 @@ public class GestorAbonos implements Serializable
 		logger.debug("sFEDEVEBP:|"+sFEDEVEBP+"|");
 	}
     
-	public void hoyFEPGPR (ActionEvent actionEvent)
-	{
-		this.setsFEPGPR(Utils.fechaDeHoy(true));
-		logger.debug("sFEPGPR:|"+sFEPGPR+"|");
-	}
-    
 	public void buscarActivos (ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -919,12 +913,6 @@ public class GestorAbonos implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-				else if (sFEPGPR.equals(""))
-				{
-					sMsg = "ERROR: La fecha de pago no se ha informado. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-				}
 				else
 				{
 					this.sNUPROF = CLProvisiones.provisionAsignada(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA);
@@ -945,7 +933,7 @@ public class GestorAbonos implements Serializable
 								sPTPAGO,
 								Utils.compruebaFecha(sFEDEVE),
 								Utils.compruebaFecha(sFFGTVP),
-								sFEPAGA,
+								Utils.compruebaFecha(sFEPAGA),
 								Utils.compruebaFecha(sFELIPG),
 								sCOSIGA,
 								Utils.compruebaFecha(sFEEESI),
@@ -974,10 +962,10 @@ public class GestorAbonos implements Serializable
 								ValoresDefecto.DEF_FEAGTO,
 								ValoresDefecto.DEF_COMONA,
 								sBIAUTO,
-								sFEAUFA,
+								Utils.compruebaFecha(sFEAUFA),
 								ValoresDefecto.DEF_COTERR,
 								ValoresDefecto.DEF_FMPAGN,
-								sFEPGPR,
+								Utils.compruebaFecha(sFEPGPR),
 								ValoresDefecto.DEF_FEAPLI,
 								ValoresDefecto.DEF_COAPII,
 								ValoresDefecto.DEF_COSPII_GA,

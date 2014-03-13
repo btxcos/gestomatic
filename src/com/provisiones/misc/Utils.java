@@ -640,7 +640,7 @@ public final class Utils
 				formatter.setLenient(false);
 				Date myDate = formatter.parse(sFechaFormateada);
 				
-				logger.debug("Fecha reibida:|{}|",myDate);
+				logger.debug("Fecha reibida:|"+myDate+"|");
 			} 
 			catch (ParseException e) 
 			{
