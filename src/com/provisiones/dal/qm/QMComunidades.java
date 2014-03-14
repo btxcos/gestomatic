@@ -1131,7 +1131,7 @@ public final class QMComunidades
 					{
 						bEncontrado = true;
 						
-						String sCOCLDO = rs.getString(CAMPO2);
+						String sCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(CAMPO2));
 						String sNUDCOM = rs.getString(CAMPO3);
 
 						String sNOMCOC = rs.getString("AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
@@ -1139,7 +1139,7 @@ public final class QMComunidades
 						String sNOMADC = rs.getString("AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 
 						
-						String sActivos = ""+QMListaComunidadesActivos.buscaNumeroActivos(conexion, rs.getLong(CAMPO1));
+						String sActivos = ""+QMListaComunidadesActivos.buscaNumeroActivos(conexion, liCodComunidadID);
 						
 						ComunidadTabla comunidadencontrada = new ComunidadTabla(
 								Long.toString(liCodComunidadID),
@@ -1153,7 +1153,6 @@ public final class QMComunidades
 						resultado.add(comunidadencontrada);
 						
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO1+":|"+liCodComunidadID+"|");
 					}
 				}
 				if (!bEncontrado) 

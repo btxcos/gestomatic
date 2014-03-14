@@ -1458,7 +1458,7 @@ public final class QMListaComunidadesActivos
 						bEncontrado = true;
 						
 						String sComunidadID = rs.getString(QMComunidades.CAMPO1);
-						String sCOCLDO = rs.getString(QMComunidades.CAMPO2);
+						String sCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMComunidades.CAMPO2));
 						String sNUDCOM = rs.getString(QMComunidades.CAMPO3);
 
 						String sNOMCOC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");

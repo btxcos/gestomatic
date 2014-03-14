@@ -240,7 +240,10 @@ public class GestorListaComunidades implements Serializable
 		    	logger.debug("sCOCLDO:|"+sCOCLDO+"|");
 		    	logger.debug("sNUDCOM:|"+sNUDCOM+"|");
 		    	
-		    	String sCodComunidad = Long.toString(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
+		    	//String sCodComunidad = Long.toString(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
+		    	
+		    	String sCodComunidad = comunidadseleccionada.getsComunidadID();
+		    	
 		    	logger.debug("sCodComunidad:|"+sCodComunidad+"|");
 		    	
 		    	Sesion.guardaDetalle(sCodComunidad);

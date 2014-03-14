@@ -494,7 +494,7 @@ public class GestorListaGastos implements Serializable
 						"",  
 						"",   
 						"",  
-						sFEDEVEFA,   
+						Utils.compruebaFecha(sFEDEVEFA),   
 						"",   
 						"",  
 						"");
@@ -550,7 +550,7 @@ public class GestorListaGastos implements Serializable
 					"",  
 					"",   
 					"",  
-					sFEDEVEFP,   
+					Utils.compruebaFecha(sFEDEVEFP),   
 					"",   
 					"",  
 					"");
