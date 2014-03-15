@@ -158,7 +158,7 @@ public class GestorListaComunidades implements Serializable
 			{
 				try
 				{
-					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES.trim())))
 					{
 						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
 						msg = Utils.pfmsgWarning(sMsg);
@@ -296,7 +296,7 @@ public class GestorListaComunidades implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOPOIN() {

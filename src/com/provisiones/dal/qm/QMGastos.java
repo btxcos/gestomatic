@@ -2306,7 +2306,7 @@ public final class QMGastos
 			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()?"":CAMPO3 + " = '" + filtro.getCOGRUG() + "' AND ";
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
-			String sCondicionFEDEVE = filtro.getFEDEVE().isEmpty()?"":CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
+			String sCondicionFEDEVE = (filtro.getFEDEVE().isEmpty() || filtro.getFEDEVE().equals("0"))?"":CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
 			String sCondicionEstado = sEstado.isEmpty()?"":CAMPO34 + " = '" + sEstado + "' AND ";
 			
 			logger.debug("Ejecutando Query...");

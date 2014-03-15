@@ -487,7 +487,7 @@ public class GestorCuentasComunidades implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOPOIN() {

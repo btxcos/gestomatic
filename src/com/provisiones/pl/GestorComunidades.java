@@ -561,7 +561,7 @@ public class GestorComunidades implements Serializable
 			}
 			catch(NumberFormatException nfe)
 			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
@@ -735,7 +735,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public ActivoTabla getActivoseleccionado() {

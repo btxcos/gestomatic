@@ -219,7 +219,9 @@ public class GestorListaCuotas implements Serializable
 		    	logger.debug("sCOSBAC:|"+sCOSBAC+"|");
 		    	
 		    	
-		    	String sCodCuota = Long.toString(CLCuotas.buscarCodigoCuota(Integer.parseInt(sCOACES),sCOCLDO, sNUDCOM, sCOSBAC));
+		    	//String sCodCuota = Long.toString(CLCuotas.buscarCodigoCuota(Integer.parseInt(sCOACES),sCOCLDO, sNUDCOM, sCOSBAC));
+		    	String sCodCuota = cuotaseleccionada.getsCuotaID();
+		    	
 		    	logger.debug("sCodCuota:|"+sCodCuota+"|");
 		    	
 		    	Sesion.guardaDetalle(sCodCuota);

@@ -82,9 +82,9 @@
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="COACES" value="Código de activo: "/>
-											<p:inputMask id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+											<p:inputText id="COACES" value="#{GestorMovimientosComunidades.sCOACES}" size="10" maxlength="9"/>
 
-											<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel, NOTA" actionListener="#{GestorMovimientosComunidades.buscarComunidad}"/>	
+											<p:commandButton value="Buscar Comunidad" update="msgs, popup, panel, NOTA,, COACES" actionListener="#{GestorMovimientosComunidades.buscarComunidad}"/>	
 
 										</h:panelGrid>
 									</p:panel>

@@ -59,9 +59,8 @@
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
 													<h:outputText for="COACES" value="Activo: "/>
-													<p:inputMask id="COACES" value="#{GestorListaComunidades.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
-													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Buscar Comunidad" update="comunidades, msgs, popup, panelBuscar, activos" actionListener="#{GestorListaComunidades.buscarComunidadActivo}"/>	
+													<p:inputText id="COACES" value="#{GestorListaComunidades.sCOACES}" size="10" maxlength="9"/>
+													<p:commandButton value="Buscar Comunidad" update="comunidades, msgs, popup, panelBuscar, activos, COACES" actionListener="#{GestorListaComunidades.buscarComunidadActivo}"/>	
 												</h:panelGrid>
 											</p:panel>
 											<p:commandButton value="Buscar Activo" update="COACES, form:activos, msgs, popup" oncomplete="dlgBuscar.show()"/>		

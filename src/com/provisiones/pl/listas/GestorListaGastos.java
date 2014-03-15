@@ -604,7 +604,10 @@ public class GestorListaGastos implements Serializable
 		    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
 		    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
 		    	
-		    	this.sCodGasto = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
+		    	//this.sCodGasto = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
+		    	this.sCodGasto = gastoseleccionado.getsGastoID();
+		    	
+		    	
 		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
 		    	
 		    	Sesion.guardaDetalle(sCodGasto);

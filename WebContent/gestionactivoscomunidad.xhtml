@@ -107,7 +107,7 @@
 											<h:panelGrid columns="4" cellpadding="5">
 
 												<h:outputText for="COACES" value="Activo: " />
-												<p:inputMask id="COACES" value="#{GestorActivosComunidad.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+												<p:inputText id="COACES" value="#{GestorActivosComunidad.sCOACES}" size="10"  maxlength="9"/>
 												<p:commandButton value="Dar de Alta" update="msgs, popup, COACES, activosComunidad" actionListener="#{GestorActivosComunidad.altaActivoComunidad}"/>
 
 											</h:panelGrid>

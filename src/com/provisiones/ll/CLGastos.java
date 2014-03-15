@@ -1040,24 +1040,23 @@ public final class CLGastos
 				}
 				else
 				{
-					long liCodMovimiento = QMMovimientosGastos.addMovimientoGasto(conexion,movimiento_revisado);
-					
-					//String sRevisadoAnterior = QMListaGastosProvisiones.getRevisado(conexion,liCodGasto);
-					
-					logger.debug("Movimiento:|"+liCodMovimiento+"|");
-					
-					if (liCodMovimiento == 0)
+					try 
 					{
-						//error al crear un movimiento
-						iCodigo = -900;
-					}
-					else
-					{
-				
-						try 
-						{
-							conexion.setAutoCommit(false);
+						conexion.setAutoCommit(false);
 
+						long liCodMovimiento = QMMovimientosGastos.addMovimientoGasto(conexion,movimiento_revisado);
+						
+						//String sRevisadoAnterior = QMListaGastosProvisiones.getRevisado(conexion,liCodGasto);
+						
+						logger.debug("Movimiento:|"+liCodMovimiento+"|");
+						
+						if (liCodMovimiento == 0)
+						{
+							//error al crear un movimiento
+							iCodigo = -900;
+						}
+						else
+						{
 							ValoresDefecto.TIPOSACCIONESGASTO ACCION = ValoresDefecto.TIPOSACCIONESGASTO.valueOf(sAccion);
 							
 							logger.debug("sAccion:|"+sAccion+"|");
@@ -1129,6 +1128,8 @@ public final class CLGastos
 									
 									if (!QMListaGastos.existeMovimientoEnviado(conexion, liCodGasto))
 									{
+										conexion.rollback();
+										
 										if (QMListaGastos.delMovimientosGasto(conexion, liCodGasto))
 										{
 											if (QMGastos.delGasto(conexion, liCodGasto))
@@ -1379,45 +1380,50 @@ public final class CLGastos
 								default:
 									break;
 							}
-							
-							if (iCodigo == 0)
-							{
-								conexion.commit();
-							}
-							else
-							{
-								conexion.rollback();
-							}
-							
-							conexion.setAutoCommit(true);
+						}
 						
-						} 
-						catch (SQLException e) 
+						if (iCodigo == 0)
 						{
-							//error de conexion con base de datos.
-							iCodigo = -910;
+							conexion.commit();
+						}
+						else
+						{
+							conexion.rollback();
+						}
+						
+						conexion.setAutoCommit(true);
+					
+					} 
+					catch (SQLException e) 
+					{
+						//error de conexion con base de datos.
+						iCodigo = -910;
 
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException e1) 
+						{
 							try 
 							{
-								//reintentamos
-								conexion.rollback();
-								conexion.setAutoCommit(true);
 								conexion.close();
-							} 
-							catch (SQLException e1) 
+							}
+							catch (SQLException e2) 
 							{
-								try 
-								{
-									conexion.close();
-								}
-								catch (SQLException e2) 
-								{
-									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
-								}
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
 							}
 						}
-
 					}
+					
+					
+				
+						
+
+					
 				}
 			}
 		}		

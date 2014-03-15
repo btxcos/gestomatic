@@ -189,7 +189,9 @@ public class GestorListaImpuestos implements Serializable
 		    	logger.debug("sCOSBAC:|"+sCOSBAC+"|");
 		    	
 		    	
-		    	String sCodImpuesto = Long.toString(CLImpuestos.buscarCodigoImpuesto(sNURCAT, sCOSBAC));
+		    	//String sCodImpuesto = Long.toString(CLImpuestos.buscarCodigoImpuesto(sNURCAT, sCOSBAC));
+		    	String sCodImpuesto = impuestoseleccionado.getsRecursoID();
+		    	
 		    	logger.debug("sCodImpuesto:|"+sCodImpuesto+"|");
 		    	
 		    	Sesion.guardaDetalle(sCodImpuesto);
