@@ -85,7 +85,7 @@
 									<p:contextMenu for="comunidades">
 										<p:menuitem value="Detalles" update="form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorListaComunidades.cargarDetallesComunidad}"/>
 									</p:contextMenu>
-									<p:dataTable id="comunidades" var="comunidad" value="#{GestorListaComunidades.tablacomunidades}" rowKey="#{comunidad.NUDCOM}"
+									<p:dataTable id="comunidades" var="comunidad" value="#{GestorListaComunidades.tablacomunidades}" rowKey="#{comunidad.sComunidadID}"
 															selection="#{GestorListaComunidades.comunidadseleccionada}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10" lazy="true"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

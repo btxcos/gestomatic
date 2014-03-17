@@ -168,7 +168,7 @@ public class GestorListaComunidades implements Serializable
 					{
 						this.setTablacomunidades(CLComunidades.buscarComunidadActivo (Integer.parseInt(sCOACES)));
 
-						sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
+						sMsg = "Comunidad encontrada.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 					}
@@ -203,7 +203,7 @@ public class GestorListaComunidades implements Serializable
 			}
 			else if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
 			{
-				sMsg = "La comunidad informada no está dada de alta. Por favor, revise los datos.";
+				sMsg = "La Comunidad informada no está dada de alta. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 			}
@@ -211,7 +211,7 @@ public class GestorListaComunidades implements Serializable
 			{
 				this.setTablacomunidades(CLComunidades.buscarComunidad (sCOCLDO,sNUDCOM.toUpperCase()));
 
-				sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
+				sMsg = "Comunidad encontrada.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 			}
