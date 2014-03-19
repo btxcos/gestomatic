@@ -323,7 +323,7 @@ public final class QMListaGastos
 		return bEncontrado;
 	}
 	
-	public static boolean delMovimientosGasto(Connection conexion, long liCodGasto) 
+	public static boolean delMovimientosGastoValidado(Connection conexion, long liCodGasto, String sCodValidado) 
 	{
 		boolean bSalida = false;
 
@@ -333,6 +333,8 @@ public final class QMListaGastos
 			
 			logger.debug("Ejecutando Query...");
 			
+			String sCondicionValidado = sCodValidado.isEmpty()? "":CAMPO3 + " = '"+ sCodValidado + "' AND ";
+			
 			String sQuery = "DELETE FROM " 
 					+ QMMovimientosGastos.TABLA + 
 					" WHERE " 
@@ -340,8 +342,9 @@ public final class QMListaGastos
 					+  CAMPO2 + 
 					" FROM " 
 					+ TABLA + 
-					" WHERE " 
-					+ CAMPO1 + " = '"+ liCodGasto + "')";
+					" WHERE ("
+					+ sCondicionValidado
+					+ CAMPO1 + " = '"+ liCodGasto + "'))";
 			
 			logger.debug(sQuery);
 
@@ -632,6 +635,77 @@ public final class QMListaGastos
 		return liCodGasto;
 	}
 	
+	public static String getUltimoMoivimientoGastoValidado(Connection conexion, String sCodGasto, String sCodValidado) 
+	{
+		String sCodMovimiento = "";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO2 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE ( " 
+						+ CAMPO1 + " = '" + sCodGasto + "' AND " 
+						+ CAMPO3 + " = '" + sCodValidado + "') "+
+						" order by " + CAMPO1 + " desc limit 0,1 ";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sCodMovimiento = rs.getString(CAMPO2);
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO2+":|"+sCodMovimiento+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sCodMovimiento = "";
+
+				logger.error("ERROR sCodGasto:|"+sCodGasto+"|");
+				logger.error("ERROR sCodValidado:|"+sCodValidado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sCodMovimiento;
+	}
+	
 	public static long buscaCantidadValidado(Connection conexion, String sCodValidado)
 	{
 		long liNumero = 0;
@@ -647,7 +721,7 @@ public final class QMListaGastos
 			
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "SELECT COUNT(*) FROM " 
+			String sQuery = "SELECT COUNT("+CAMPO1+") FROM " 
 					+ TABLA + 
 					" WHERE "
 					+ CAMPO3 + " = '" + sCodValidado + "'";

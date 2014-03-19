@@ -1861,7 +1861,10 @@ public final class FileManager
 	    				sDescripcion = "[FATAL] Error al actualizar la revisión del Abono.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
-	    			
+	    			case -7:
+	    				sDescripcion = "[FATAL] Error al actualizar la Provisión del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
 	    			case -8:
 	    				sDescripcion = "El activo no pertenece a la cartera.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
@@ -1878,8 +1881,12 @@ public final class FileManager
 	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'no enviado'.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
+					case -910:
+						sDescripcion = "[FATAL] Se ha producido un error al conectar con la base de datos.";
+						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+						break;
 	    			}
-	    			
+
 	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
 
 	    			if ( iCodigo >= 0 )

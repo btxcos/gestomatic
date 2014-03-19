@@ -1204,6 +1204,12 @@ public class GestorPagosSimple implements Serializable
 						logger.error(sMsg);
 						break;
 						
+					case -909: //Error 909 - error y rollback - error al actualizar la provisión
+						sMsg = "[FATAL] ERROR:909 - Se ha producido un error al actualizar la provisión. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
 					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
 						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);

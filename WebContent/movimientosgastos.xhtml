@@ -121,7 +121,7 @@
 													<h:outputText value="Periodicidad de pago: "/>
 													<p:selectOneMenu id="PTPAGO" value="#{GestorMovimientosGastos.sPTPAGO}">
 														<f:selectItem itemLabel="Periodicidad..." itemValue=""/>
-														<f:selectItems value="#{GestorDatosGenerales.tiposptpagoHM}"/>
+														<f:selectItems value="#{GestorMovimientosGastos.tiposptpagoHM}"/>
 														<p:ajax update="PTPAGO, FFGTVP, hFFGTVP" listener="#{GestorMovimientosGastos.cambiaFechaFinPeriodo}"/>
 													</p:selectOneMenu>
 
@@ -262,7 +262,7 @@
 															<h:outputText value="Tipo de impuesto: "/>
 															<p:selectOneMenu id="COIMPT" value="#{GestorMovimientosGastos.sCOIMPT}">
 																<f:selectItem itemLabel="Tipo..." itemValue=""/>
-																<f:selectItems value="#{GestorDatosGenerales.tiposcoimptHM}"/>
+																<f:selectItems value="#{GestorMovimientosGastos.tiposcoimptHM}"/>
 																	<p:ajax update="IMIMGA" listener="#{GestorMovimientosGastos.cambiaImporteImpuesto}"/>
 															</p:selectOneMenu>
 

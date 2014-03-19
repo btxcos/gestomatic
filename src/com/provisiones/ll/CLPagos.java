@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMPagos;
+import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.QMTransferenciasN34;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
@@ -150,9 +151,16 @@ public class CLPagos
 									//Abonado
 									if (QMGastos.setPagadoConexion(conexion,liCodGasto, movimiento.getFMPAGN()))
 									{
-										//OK 
-										iCodigo = 0;
-										
+										if (QMProvisiones.setGastoAnuladoConexion(conexion, movimiento.getNUPROF(), QMGastos.getValorTotal(conexion, liCodGasto)))
+										{
+											//OK 
+											iCodigo = 0;
+										}
+										else
+										{
+											//error al actualizar la provisión
+											iCodigo = -909;
+										}
 									}
 									else
 									{
@@ -194,6 +202,23 @@ public class CLPagos
 							
 						}
 					}
+					
+					if (iCodigo == 0)
+					{
+						//Comprobamos el estado
+						String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, liCodGasto);
+						
+						if(QMProvisiones.provisionPagada(conexion, sNUPROF))
+						{
+							//Cambiamos su estado a pagada.
+							if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, Utils.fechaDeHoy(false))
+								|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_PAGADA))
+							{
+								iCodigo = -909;
+							}
+						}
+					}
+
 					
 					if (iCodigo == 0)
 					{
@@ -265,6 +290,8 @@ public class CLPagos
 					
 					long liCodGasto = Long.parseLong(pago.getsGasto());
 					
+					String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, liCodGasto);
+					
 					if (QMListaGastos.setValidado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
 					{
 						if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
@@ -314,6 +341,20 @@ public class CLPagos
 										iCodigo = -900;
 									}
 								}
+								
+								if (iCodigo == 0)
+								{
+									if (QMProvisiones.setGastoPagado(conexion,sNUPROF, QMGastos.getValorTotal(conexion, liCodGasto)))
+									{
+										//OK 
+										iCodigo = 0;
+									}
+									else
+									{
+										//error al actualizar la provisión
+										iCodigo = -909;
+									}
+								}
 							}
 							else
 							{
@@ -335,6 +376,20 @@ public class CLPagos
 						
 						iCodigo = -903;
 					}
+					if (iCodigo == 0)
+					{
+						
+						if(QMProvisiones.provisionPagada(conexion, sNUPROF))
+						{
+							//Cambiamos su estado a pagada.
+							if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, pago.getsFEPGPR()) 
+								|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_PAGADA))
+							{
+								iCodigo = -909;
+							}
+						}
+					}
+
 					
 					if (iCodigo == 0)
 					{

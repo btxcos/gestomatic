@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -100,12 +102,17 @@ public class GestorErroresComunidades implements Serializable
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	
 
+	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 	
 	public GestorErroresComunidades()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorErroresComunidades...");	
+			logger.debug("Iniciando GestorErroresComunidades...");
+			
+			tiposcocldoHM.put("C.I.F.",                     "2");
+			tiposcocldoHM.put("C.I.F país extranjero.",     "5");
+			tiposcocldoHM.put("Otros persona jurídica.",    "J");
 		}
 	}
 
@@ -1048,5 +1055,13 @@ public class GestorErroresComunidades implements Serializable
 
 	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
 		this.tablaactivos = tablaactivos;
+	}
+
+	public Map<String,String> getTiposcocldoHM() {
+		return tiposcocldoHM;
+	}
+
+	public void setTiposcocldoHM(Map<String,String> tiposcocldoHM) {
+		this.tiposcocldoHM = tiposcocldoHM;
 	}
 }

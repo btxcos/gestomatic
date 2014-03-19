@@ -694,7 +694,7 @@ public final class QMProvisiones
 		{
 			Statement stmt = null;
 			
-			String sCondicionValor = (liValor > 0)? " + "+liValor:liValor+"";
+			String sCondicionValor = (liValor >= 0)? " + "+liValor:liValor+"";
 
 			logger.debug("Ejecutando Query...");
 			
@@ -742,8 +742,8 @@ public final class QMProvisiones
 		{
 			Statement stmt = null;
 			
-			String sCondicionValorInicial = (liValorInicial > 0)? " - "+liValorInicial:" + " + (-liValorInicial);
-			String sCondicionValorFinal = (liValorFinal > 0)? " + "+liValorFinal:liValorFinal+"";
+			String sCondicionValorInicial = (liValorInicial >= 0)? " - "+liValorInicial:" + " + (-liValorInicial);
+			String sCondicionValorFinal = (liValorFinal >= 0)? " + "+liValorFinal:liValorFinal+"";
 
 			logger.debug("Ejecutando Query...");
 			
@@ -792,7 +792,7 @@ public final class QMProvisiones
 
 			logger.debug("Ejecutando Query...");
 			
-			String sCondicionValor = (liValor > 0)? " - "+liValor:" + "+(-liValor);
+			String sCondicionValor = (liValor >= 0)? " - "+liValor:" + "+(-liValor);
 			
 			String sQuery = "UPDATE " 
 					+ TABLA + 
@@ -838,7 +838,7 @@ public final class QMProvisiones
 		{
 			Statement stmt = null;
 			
-			String sCondicionValor = (liValor > 0)? " + "+liValor:liValor+"";
+			String sCondicionValor = (liValor >= 0)? " + "+liValor:liValor+"";
 
 			logger.debug("Ejecutando Query...");
 			
@@ -888,12 +888,12 @@ public final class QMProvisiones
 
 			logger.debug("Ejecutando Query...");
 			
-			String sCondicionValor = (liValor > 0)? " - "+liValor:" + "+(-liValor);
+			String sCondicionValor = (liValor >= 0)? " - "+liValor:" + "+(-liValor);
 			
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO10 + " = " + CAMPO10 + " - 1 ,"
+					//+ CAMPO10 + " = " + CAMPO10 + " - 1 ,"
 					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
@@ -934,7 +934,7 @@ public final class QMProvisiones
 		{
 			Statement stmt = null;
 			
-			String sCondicionValor = (liValor > 0)? " + "+liValor:liValor+"";
+			String sCondicionValor = (liValor >= 0)? " + "+liValor:liValor+"";
 
 			logger.debug("Ejecutando Query...");
 			
@@ -1548,7 +1548,72 @@ public final class QMProvisiones
 		return bEncontrado;
 	}
 	
-	
+	public static boolean provisionPagada(Connection conexion, String sNUPROF) 
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO1 + " = '"+ sNUPROF + "' AND "
+					+ CAMPO16 + " = '"+ ValoresDefecto.DEF_PROVISION_AUTORIZADA + "' AND "
+					+ CAMPO10 + " = "+ CAMPO13 + 
+					")";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return bEncontrado;
+	}
 	
 	public static String getProvisionAbierta(Connection conexion, String sCodCOSPAT, String sCodTAS, String sCOGRUG, String sCOTPGA) 
 	{
@@ -1948,6 +2013,7 @@ public final class QMProvisiones
 					" WHERE ( " 
 					+ sCondicion
 					+ CAMPO1 + " <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+ "' AND "
+					+ CAMPO15 + " = '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+ "' AND "
 					+ CAMPO12 +" <> '"+ ValoresDefecto.CAMPO_NUME_SIN_INFORMAR +"') ";
 
 			

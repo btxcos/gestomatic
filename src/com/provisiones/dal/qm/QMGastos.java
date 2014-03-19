@@ -1933,22 +1933,18 @@ public final class QMGastos
 					+ CAMPO2 + ","        
 					+ CAMPO3 + ","
 					+ CAMPO4 + ","
-						   + CAMPO5 + ","
-						   + CAMPO6 + ","
-						   + CAMPO7 + ","
-						   + CAMPO10 + ","
-						   + CAMPO15 + ","
-						   + CAMPO16 +
-
-						   " FROM " 
-						   + TABLA + 
-						   " WHERE (" +
-						   "("
-						   + CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_ESTIMADO + "' OR "
-						   + CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_CONOCIDO + 					   
-						   "') AND "					   
-						   
-						   + CAMPO7 + " <= '"+Utils.fechaDeHoy(false)+"')";					   
+					+ CAMPO5 + ","
+					+ CAMPO6 + ","
+					+ CAMPO7 + ","
+					+ CAMPO10 + ","
+					+ CAMPO15 + ","
+					+ CAMPO16 +
+					" FROM " 
+					+ TABLA + 
+					" WHERE ("
+					+ CAMPO2 + " = "+ iCodCOACES+ " AND "
+					+ CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO +"') AND "					   
+					+ CAMPO7 + " <= '"+Utils.fechaDeHoy(false)+"')";
 						   
 			
 			logger.debug(sQuery);

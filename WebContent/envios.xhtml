@@ -26,27 +26,29 @@
 								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
 							</h:panelGrid>
 						</p:fieldset>
-									<p:fieldset legend="Acciones" id="acciones">
-										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Revisar Movimientos" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos, form:NumTransferenciasN34, form:botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPendientes}"/>	
-										</h:panelGrid>
-									</p:fieldset>
-									<p:fieldset legend="Info">
-										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
 
-											<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
-											<h:panelGrid columns="2" cellpadding="5">
-												<p:messages id="msgs"/>
-												<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
-											</h:panelGrid>
-											</p:notificationBar>
+						<p:fieldset legend="Acciones" id="acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Revisar Todo" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos, form:NumTransferenciasN34, form:botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPendientes}"/>	
+							</h:panelGrid>
+						</p:fieldset>
 
-											<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-											<p:growl id="popup" />
-										</h:panelGrid>
-									</p:fieldset>
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">  
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:messages id="msgs"/>
+									<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button" />
 								</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup" />
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="west" size="20%" header="Operativas">
@@ -57,8 +59,64 @@
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
 
-									<p:fieldset legend="Movimientos Pendientes" id="pendientes">
-										<h:panelGrid columns="1" cellpadding="5">
+							<p:fieldset legend="Pagos Pendientes" id="pagos">
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<p:panel >
+										<h:panelGrid columns="3" cellpadding="5">
+
+
+											<h:outputText for="NumTransferenciasN34" value="Norma 34: " />
+											<p:inputText id="NumTransferenciasN34" value="#{GestorEnvios.sNumTransferenciasN34}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botTransferenciasN34" value="Descargar Norma 34" ajax="false" actionListener="#{GestorEnvios.descargarTransferenciasN34}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumTransferenciasN34}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:commandButton value="Revisar Movimientos" update="msgs, popup, NumTransferenciasN34, botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPagosPendientes}"/>	
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Gastos Pendientes" id="gastos">
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<p:panel >
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText for="NumProvisiones" value="Provisiones: " />
+											<p:inputText id="NumProvisiones" value="#{GestorEnvios.sNumProvisiones}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botProvisiones" value="Descargar Cierres" ajax="false" actionListener="#{GestorEnvios.descargarProvisiones}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumProvisiones}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+											<h:outputText for="NumGastos" value="Gastos: " />
+											<p:inputText id="NumGastos" value="#{GestorEnvios.sNumGastos}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botGastos" value="Descargar Gastos" ajax="false" actionListener="#{GestorEnvios.descargarGastos}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumGastos}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:commandButton value="Revisar Movimientos" update="msgs, popup, NumProvisiones, botProvisiones, NumGastos, botGastos" actionListener="#{GestorEnvios.cargarMovimientosGastosPendientes}"/>	
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Asociaciones Pendientes" id="asociaciones">
+								<h:panelGrid columns="2" cellpadding="5">
 
 									<p:panel >
 										<h:panelGrid columns="3" cellpadding="5">
@@ -99,51 +157,13 @@
 												<p:fileDownload value="#{GestorEnvios.file}" />  
 											</p:commandButton>
 
-											<h:outputText for="NumProvisiones" value="Provisiones: " />
-											<p:inputText id="NumProvisiones" value="#{GestorEnvios.sNumProvisiones}" size="10" disabled="true">
-											</p:inputText>
-											<p:commandButton id="botProvisiones" value="Descargar Cierres" ajax="false" actionListener="#{GestorEnvios.descargarProvisiones}"
-												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
-												disabled="#{GestorEnvios.bNumProvisiones}">
-												<p:fileDownload value="#{GestorEnvios.file}" />  
-											</p:commandButton>
-
-											<h:outputText for="NumGastos" value="Gastos: " />
-											<p:inputText id="NumGastos" value="#{GestorEnvios.sNumGastos}" size="10" disabled="true">
-											</p:inputText>
-											<p:commandButton id="botGastos" value="Descargar Gastos" ajax="false" actionListener="#{GestorEnvios.descargarGastos}"
-												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
-												disabled="#{GestorEnvios.bNumGastos}">
-												<p:fileDownload value="#{GestorEnvios.file}" />  
-											</p:commandButton>
-
 										</h:panelGrid>
 									</p:panel>
 
-										</h:panelGrid>
-									</p:fieldset>
+									<p:commandButton value="Revisar Movimientos" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos" actionListener="#{GestorEnvios.cargarMovimientosAsociacionesPendientes}"/>	
 
-									<p:fieldset legend="Pagos Pendientes" id="pagos">
-										<h:panelGrid columns="1" cellpadding="5">
-
-									<p:panel >
-										<h:panelGrid columns="3" cellpadding="5">
-
-
-											<h:outputText for="NumTransferenciasN34" value="Norma 34: " />
-											<p:inputText id="NumTransferenciasN34" value="#{GestorEnvios.sNumTransferenciasN34}" size="10" disabled="true">
-											</p:inputText>
-											<p:commandButton id="botTransferenciasN34" value="Descargar Norma 34" ajax="false" actionListener="#{GestorEnvios.descargarTransferenciasN34}"
-												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
-												disabled="#{GestorEnvios.bNumTransferenciasN34}">
-												<p:fileDownload value="#{GestorEnvios.file}" />  
-											</p:commandButton>
-
-										</h:panelGrid>
-									</p:panel>
-
-										</h:panelGrid>
-									</p:fieldset>
+								</h:panelGrid>
+							</p:fieldset>
 
 						</h:panelGrid>
 					</p:panel>

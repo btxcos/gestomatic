@@ -108,7 +108,7 @@ public class GestorAbonos implements Serializable
 	private String sIMDTGA = "";
 	private String sCOUNMO = ValoresDefecto.DEF_COUNMO;
 	private String sIMIMGA = "";
-	private boolean bIMIMGA = false;
+
 	private String sCOIMPT = "";
 	private String sDCOIMPT = "";
 	
@@ -854,9 +854,10 @@ public class GestorAbonos implements Serializable
 			this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
 			this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
 			this.setsDCOIMPT(CLDescripciones.descripcionTipoImpuestoGasto(gasto.getCOIMPT()));
+			this.sCOIMPT = gasto.getCOIMPT();
 			
-			this.sBIAUTO = gasto.getBIAUTO();
-			this.sFEAUFA = gasto.getFEAUFA();
+			this.sBIAUTO = "";
+			this.sFEAUFA = "0";
 			
 			if (CLPagos.estaPagado(liCodGastoB))
 			{
@@ -1698,14 +1699,6 @@ public class GestorAbonos implements Serializable
 
 	public void setsIMIMGA(String sIMIMGA) {
 		this.sIMIMGA = sIMIMGA;
-	}
-
-	public boolean isbIMIMGA() {
-		return bIMIMGA;
-	}
-
-	public void setbIMIMGA(boolean bIMIMGA) {
-		this.bIMIMGA = bIMIMGA;
 	}
 
 	public String getsCOIMPT() {

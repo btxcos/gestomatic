@@ -145,7 +145,7 @@
 													<h:outputText value="Periodicidad de pago: "/>
 													<p:selectOneMenu id="PTPAGO" value="#{GestorErroresGastos.sPTPAGO}" disabled="#{GestorErroresGastos.bPTPAGO}">
 														<f:selectItem itemLabel="Periodicidad..." itemValue=""/>
-														<f:selectItems value="#{GestorDatosGenerales.tiposptpagoHM}"/>
+														<f:selectItems value="#{GestorErroresGastos.tiposptpagoHM}"/>
 														<p:ajax update="PTPAGO, FFGTVP, hFFGTVP" listener="#{GestorErroresGastos.cambiaFechaFinPeriodo}"/>
 													</p:selectOneMenu>
 
@@ -291,7 +291,7 @@
 															<h:outputText value="Tipo de impuesto: "/>
 															<p:selectOneMenu id="COIMPT" value="#{GestorErroresGastos.sCOIMPT}" disabled="#{GestorErroresGastos.bCOIMPT}">
 																<f:selectItem itemLabel="Tipo..." itemValue=""/>
-																<f:selectItems value="#{GestorDatosGenerales.tiposcoimptHM}"/>
+																<f:selectItems value="#{GestorErroresGastos.tiposcoimptHM}"/>
 																	<p:ajax update="IMIMGA" listener="#{GestorErroresGastos.cambiaImporteImpuesto}"/>
 															</p:selectOneMenu>
 
@@ -467,7 +467,7 @@
 											<h:outputText value="Grupo de gasto: "/>
 											<p:selectOneMenu id="COGRUGB" value="#{GestorErroresGastos.sCOGRUGB}">
 												<f:selectItem itemLabel="Grupo..." itemValue=""/>
-												<f:selectItems value="#{GestorDatosGenerales.tiposcogrugHM}"/>
+												<f:selectItems value="#{GestorErroresGastos.tiposcogrugHM}"/>
 													<p:ajax update="COTPGAB, COSBGAB" listener="#{GestorErroresGastos.cambiaTipoB}"/>
 											</p:selectOneMenu>
 

@@ -156,28 +156,6 @@ public class GestorListaActivos implements Serializable {
    	
     }
 	
-	public void encuentraActivos()
-	{
-
-		logger.debug("Buscando Activos...");
-		
-		if (sCOACES.equals(""))
-		{
-			ActivoTabla filtro = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-			
-			this.setTablaactivos(CLActivos.buscarActivos(filtro));
-		}
-		else
-		{
-			this.setTablaactivos(CLActivos.buscarActivoUnico(Integer.parseInt(sCOACES)));
-		}		
-
-		logger.debug("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-	}
-	
 	public void buscaActivos (ActionEvent actionEvent)
 	{
 
@@ -187,9 +165,22 @@ public class GestorListaActivos implements Serializable {
 			
 			try
 			{
-				Integer.parseInt(sCOACES);
 				
-				encuentraActivos();
+				if (sCOACES.equals(""))
+				{
+					ActivoTabla filtro = new ActivoTabla(
+							"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+							sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+							sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+					
+					this.setTablaactivos(CLActivos.buscarActivos(filtro));
+				}
+				else
+				{
+					int iCOACES = Integer.parseInt(sCOACES);
+					
+					this.setTablaactivos(CLActivos.buscarActivoUnico(iCOACES));
+				}
 
 				if (getTablaactivos().size() == 0)
 				{

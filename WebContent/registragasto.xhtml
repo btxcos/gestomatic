@@ -106,7 +106,7 @@
 													<h:outputText value="Grupo de gasto: "/>
 													<p:selectOneMenu id="COGRUG" value="#{GestorGastos.sCOGRUG}">
 														<f:selectItem itemLabel="Grupo..." itemValue=""/>
-														<f:selectItems value="#{GestorDatosGenerales.tiposcogrugHM}"/>
+														<f:selectItems value="#{GestorGastos.tiposcogrugHM}"/>
 															<p:ajax update="COTPGA, COSBGA" listener="#{GestorGastos.cambiaTipo}"/>
 													</p:selectOneMenu>
 
@@ -126,7 +126,7 @@
 													<h:outputText value="Periodicidad de pago: "/>
 													<p:selectOneMenu id="PTPAGO" value="#{GestorGastos.sPTPAGO}">
 														<f:selectItem itemLabel="Periodicidad..." itemValue=""/>
-														<f:selectItems value="#{GestorDatosGenerales.tiposptpagoHM}"/>
+														<f:selectItems value="#{GestorGastos.tiposptpagoHM}"/>
 														<p:ajax update="PTPAGO, FFGTVP, hFFGTVP" listener="#{GestorGastos.cambiaFechaFinPeriodo}"/>
 													</p:selectOneMenu>
 
@@ -252,7 +252,7 @@
 															<h:outputText value="Tipo de impuesto: "/>
 															<p:selectOneMenu id="COIMPT" value="#{GestorGastos.sCOIMPT}">
 																<f:selectItem itemLabel="Tipo..." itemValue=""/>
-																<f:selectItems value="#{GestorDatosGenerales.tiposcoimptHM}"/>
+																<f:selectItems value="#{GestorGastos.tiposcoimptHM}"/>
 																	<p:ajax update="IMIMGA" listener="#{GestorGastos.cambiaImporteImpuesto}"/>
 															</p:selectOneMenu>
 

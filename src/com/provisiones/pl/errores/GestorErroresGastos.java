@@ -150,6 +150,8 @@ public class GestorErroresGastos implements Serializable
 	private transient GastoTabla gastoseleccionado = null;
 	private transient ArrayList<GastoTabla> tablagastos = null;
 	
+	private transient Map<String,String> tiposcogrugHM = new LinkedHashMap<String, String>();
+	
 	private transient Map<String,String> tiposcotpgaHM = new LinkedHashMap<String, String>();
 	private transient Map<String,String> tiposcosbgaHM = new LinkedHashMap<String, String>();
 	
@@ -165,13 +167,21 @@ public class GestorErroresGastos implements Serializable
 	private transient Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
 	private transient Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
 
+	private transient Map<String,String> tiposptpagoHM = new LinkedHashMap<String, String>();
+	
 	private transient Map<String,String> tiposcosigaHM = new LinkedHashMap<String, String>();
+	
+	private transient Map<String,String> tiposcoimptHM = new LinkedHashMap<String, String>();
 
 	public GestorErroresGastos()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
 			logger.debug("Iniciando GestorErroresGastos...");
+			
+			tiposcogrugHM.put("Compraventa",      "1");
+			tiposcogrugHM.put("Pendientes",       "2");
+			tiposcogrugHM.put("Acciones",         "3");
 
 			tiposcotpga_g1HM.put("Plusvalia", "1");
 			tiposcotpga_g1HM.put("Notaria",   "2");
@@ -214,8 +224,23 @@ public class GestorErroresGastos implements Serializable
 			
 			tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
 			
+			tiposptpagoHM.put("APERIODICO",      "1");
+			tiposptpagoHM.put("MENSUAL",         "2");
+			tiposptpagoHM.put("BIMENSUAL",       "3");
+			tiposptpagoHM.put("TRIMESTRAL",      "4");
+			tiposptpagoHM.put("CUATRIMESTRAL",   "5");
+			tiposptpagoHM.put("SEMESTRAL",       "6");
+			tiposptpagoHM.put("ANUAL",           "7");
+			tiposptpagoHM.put("VARIOS PERIODOS", "8");
+			
 			tiposcosigaHM.put("ESTIMADO",            "1");
 			tiposcosigaHM.put("CONOCIDO",            "2");
+			
+			tiposcoimptHM.put("SIN IMPUESTO",	"0");  
+			tiposcoimptHM.put("IVA",            "1");  
+			tiposcoimptHM.put("IGIC",           "2");  
+			tiposcoimptHM.put("IPSI",           "3");  
+			tiposcoimptHM.put("IRPF",           "4");
 		}	
 	}
 	
@@ -1913,5 +1938,29 @@ public class GestorErroresGastos implements Serializable
 
 	public void setbFEAGTO(boolean bFEAGTO) {
 		this.bFEAGTO = bFEAGTO;
+	}
+
+	public Map<String,String> getTiposptpagoHM() {
+		return tiposptpagoHM;
+	}
+
+	public void setTiposptpagoHM(Map<String,String> tiposptpagoHM) {
+		this.tiposptpagoHM = tiposptpagoHM;
+	}
+
+	public Map<String,String> getTiposcoimptHM() {
+		return tiposcoimptHM;
+	}
+
+	public void setTiposcoimptHM(Map<String,String> tiposcoimptHM) {
+		this.tiposcoimptHM = tiposcoimptHM;
+	}
+
+	public Map<String,String> getTiposcogrugHM() {
+		return tiposcogrugHM;
+	}
+
+	public void setTiposcogrugHM(Map<String,String> tiposcogrugHM) {
+		this.tiposcogrugHM = tiposcogrugHM;
 	}
 }

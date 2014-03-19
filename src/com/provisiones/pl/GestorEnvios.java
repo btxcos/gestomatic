@@ -290,6 +290,286 @@ public class GestorEnvios implements Serializable
 		}
 	}
 	
+	public void cargarMovimientosAsociacionesPendientes(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+	    	String sMsg = "";
+
+	    	ResultadoEnvio resultadocomunidades =  FileManager.escribirComunidades();
+	    	this.sNumComunidades  = Long.toString(resultadocomunidades.getLiEntradas());
+	    	this.bNumComunidades = (resultadocomunidades.getLiEntradas() == 0);
+
+	    	logger.debug("sNumComunidades:|"+sNumComunidades+"|");
+	    	if (!bNumComunidades)
+	    	{
+	    		this.sFicheroComunidades = resultadocomunidades.getsFichero();
+	 
+	    		if (!sFicheroComunidades.equals(""))
+	    		{
+		    		sMsg = "Generado el fichero de Comunidades a enviar.";
+		        	
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+	    		}
+	    		else
+	    		{
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Comunidades. Por favor, avise a soporte.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+	    		}
+	    		
+	    		FacesContext.getCurrentInstance().addMessage(null, msg);
+
+	    	}
+
+	    	ResultadoEnvio resultadocuotas =  FileManager.escribirCuotas();
+	    	this.sNumCuotas  = Long.toString(resultadocuotas.getLiEntradas());
+	    	this.bNumCuotas = (resultadocuotas.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumCuotas:|"+sNumCuotas+"|");
+	    	if (!bNumCuotas)
+	    	{
+	    		this.sFicheroCuotas = resultadocuotas.getsFichero();
+	    		 
+	    		if (!sFicheroCuotas.equals(""))
+	    		{
+
+		    		sMsg = "Generado el fichero de Cuotas a enviar.";
+		        	
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+	    			
+	    		}
+	    		else
+	    		{
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Cuotas.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+	    		}
+	    		
+	    		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+
+	    	ResultadoEnvio resultadoreferencias = FileManager.escribirReferencias();
+	    	this.sNumReferencias  = Long.toString(resultadoreferencias.getLiEntradas());
+	    	this.bNumReferencias = (resultadoreferencias.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumReferencias:|"+sNumReferencias+"|");
+	    	if (!bNumReferencias)
+	    	{
+	    		this.sFicheroReferencias = resultadoreferencias.getsFichero();
+	   		 
+	    		if (!sFicheroReferencias.equals(""))
+	    		{
+
+		    		sMsg = "Generado el fichero de Referencias a enviar.";
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+	    			
+	    		}
+	    		else
+	    		{
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Referencias.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+	    		}
+	    		
+	    		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+	    	
+	    	ResultadoEnvio resultadorecursos = FileManager.escribirImpuestos();
+	    	this.sNumImpuestos  = Long.toString(resultadorecursos.getLiEntradas());
+	    	this.bNumImpuestos = (resultadorecursos.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumImpuestos:|"+sNumImpuestos+"|");
+	    	if (!bNumImpuestos)
+	    	{
+	    		this.sFicheroImpuestos = resultadorecursos.getsFichero();
+	      		 
+	    		if (!sFicheroImpuestos.equals(""))
+	    		{
+
+		    		sMsg = "Generado el fichero de Impuestos a enviar.";
+		        	
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+	    			
+	    		}
+	    		else
+	    		{
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Impuestos.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+	    		}
+	    		
+	    		FacesContext.getCurrentInstance().addMessage(null, msg);	
+	    	}
+
+	    	if (bNumComunidades && bNumCuotas && bNumReferencias && bNumImpuestos)
+	    	{
+	    		sMsg = "No hay movimientos de Asociaciones con Activos pendientes.";
+	    		msg = Utils.pfmsgWarning(sMsg);
+	    		logger.warn(sMsg);
+	    	}
+	    	else
+	    	{
+	    		sMsg = "Cargados todos los movimientos de Asociaciones con Activos pendientes.";
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+
+	    	}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
+	public void cargarMovimientosGastosPendientes(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+	    	String sMsg = "";
+
+	      	ResultadoEnvio resultadogastos = FileManager.escribirGastos();
+	    	this.sNumGastos  = Long.toString(resultadogastos.getLiEntradas());
+	    	this.bNumGastos = (resultadogastos.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumGastos:|"+sNumGastos+"|");
+	    	if (!bNumGastos)
+	    	{
+	    		this.sFicheroGastos = resultadogastos.getsFichero();
+	    		 
+	    		if (!sFicheroGastos.equals(""))
+	    		{
+
+		    		sMsg = "Generado el fichero de Gastos a enviar.";
+		        	
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+	    			
+	    		}
+	    		else
+	    		{
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Gastos.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+	    		}
+	    		
+	    		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+	    	
+	    	ResultadoEnvio resultadoprovisiones = FileManager.escribirCierres();
+	    	this.sNumProvisiones  = Long.toString(resultadoprovisiones.getLiEntradas());
+	    	this.bNumProvisiones = (resultadoprovisiones.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumProvisiones:|"+sNumProvisiones+"|");
+	    	if (!bNumProvisiones)
+	    	{
+	    		this.sFicheroCierres = resultadoprovisiones.getsFichero();
+	     		 
+	    		if (!sFicheroCierres.equals(""))
+	    		{
+
+		    		sMsg = "Generado el fichero de Provisiones a enviar.";
+		        	
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+	    			
+	    		}
+	    		else
+	    		{
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Provisiones.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+	    		}
+	    		
+	    		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+
+	  	    	
+	    	if (bNumGastos && bNumProvisiones)
+	    	{
+	    		sMsg = "No hay movimientos de Gastos pendientes.";
+	    		msg = Utils.pfmsgWarning(sMsg);
+	    		logger.warn(sMsg);
+	    	}
+	    	else
+	    	{
+	    		sMsg = "Cargados todos los movimientos de Gastos pendientes.";
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+
+	    	}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
+	public void cargarMovimientosPagosPendientes(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+	    	String sMsg = "";
+
+	    	ResultadoEnvio resultadotransferenciasn34 = FileManager.escribirNorma34();
+	    	this.sNumTransferenciasN34  = Long.toString(resultadotransferenciasn34.getLiEntradas());
+	    	this.bNumTransferenciasN34 = (resultadotransferenciasn34.getLiEntradas() == 0);
+	    	
+	    	logger.debug("sNumTransferenciasN34:|"+sNumTransferenciasN34+"|");
+	    	if (!bNumTransferenciasN34)
+	    	{
+	    		this.sFicheroTransferenciasN34 = resultadotransferenciasn34.getsFichero();
+	     		 
+	    		if (!sFicheroTransferenciasN34.equals(""))
+	    		{
+
+		    		sMsg = "Generado el fichero de Transferencias Norma 34.";
+		        	
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+	    			
+	    		}
+	    		else
+	    		{
+		    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Transferencias Norma 34.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+	    		}
+	    		
+	    		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+	    	
+	    	if (bNumTransferenciasN34)
+	    	{
+	    		sMsg = "No hay movimientos de Pagos pendientes.";
+	    		msg = Utils.pfmsgWarning(sMsg);
+	    		logger.warn(sMsg);
+	    	}
+	    	else
+	    	{
+	    		sMsg = "Cargados todos los movimientos de Pagos pendientes.";
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+
+	    	}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
 	public void descargarComunidades() 
     {  
 		if (ConnectionManager.comprobarConexion())
