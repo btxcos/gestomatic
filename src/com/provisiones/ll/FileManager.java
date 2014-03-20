@@ -115,7 +115,7 @@ public final class FileManager
 		{
 			//Los movimientos de las comunidades estan repartidos entre las comunidades y los activos incluidos
 			
-			ArrayList<Long> resultcomunidades = QMListaComunidades.getComunidadesPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultcomunidades = QMListaComunidades.getMovimientosComunidadesPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			ArrayList<Long> resultactivos = QMListaComunidadesActivos.getMovimientosComunidadesActivoPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 
 			ArrayList<Long> resultcomunidadesactivos = new ArrayList<Long>(resultcomunidades);
@@ -351,7 +351,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<Long> resultcuotas =  QMListaCuotas.getCuotasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultcuotas =  QMListaCuotas.getMovimientosCuotasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 
 			if (resultcuotas.size() > 0)
 			{
@@ -558,7 +558,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<Long> resultreferencias = QMListaReferencias.getReferenciasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultreferencias = QMListaReferencias.getMovimientosReferenciasPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			
 			if (resultreferencias.size() > 0)
 			{
@@ -762,7 +762,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<Long> resultimpuestos = QMListaImpuestos.getImpuestosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultimpuestos = QMListaImpuestos.getMovimientosImpuestosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 			
 			if (resultimpuestos.size() > 0)
 			{
@@ -966,7 +966,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<Long> resultgastos = QMListaGastos.getGastosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
+			ArrayList<Long> resultgastos = QMListaGastos.getMovimientosGastosPorEstado(conexion,ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE);
 	        
 			if (resultgastos.size() > 0)
 			{

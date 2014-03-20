@@ -347,7 +347,7 @@ public final class QMListaReferencias
 		return bEncontrado;
 	}
 	
-	public static ArrayList<Long>  getReferenciasPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getMovimientosReferenciasPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>(); 
 

@@ -268,6 +268,70 @@ public final class QMGastos
 
 		return bSalida;
 	}
+	
+	public static boolean modImportes(Connection conexion, Gasto NuevoGasto, long liCodGasto)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO15 + " = '"+ NuevoGasto.getIMNGAS() + "', "
+					+ CAMPO16 + " = '"+ NuevoGasto.getYCOS02() + "', "
+					+ CAMPO17 + " = '"+ NuevoGasto.getIMRGAS() + "', "
+					+ CAMPO18 + " = '"+ NuevoGasto.getYCOS04() + "', "
+					+ CAMPO19 + " = '"+ NuevoGasto.getIMDGAS() + "', "
+					+ CAMPO20 + " = '"+ NuevoGasto.getYCOS06() + "', "
+					+ CAMPO21 + " = '"+ NuevoGasto.getIMCOST() + "', "
+					+ CAMPO22 + " = '"+ NuevoGasto.getYCOS08() + "', "
+					+ CAMPO23 + " = '"+ NuevoGasto.getIMOGAS() + "', "
+					+ CAMPO24 + " = '"+ NuevoGasto.getYCOS10() + "', "
+					+ CAMPO25 + " = '"+ NuevoGasto.getIMDTGA() + "', "
+					+ CAMPO26 + " = '"+ NuevoGasto.getIMIMGA() + "', "
+					+ CAMPO33 + " = '"+ NuevoGasto.getValor_total() +
+
+					"' "+
+					" WHERE "
+					+ CAMPO1  + " = "+ liCodGasto;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COACES:|"+NuevoGasto.getCOACES()+"|");
+				logger.error("ERROR COGRUG:|"+NuevoGasto.getCOGRUG()+"|");
+				logger.error("ERROR COTPGA:|"+NuevoGasto.getCOTPGA()+"|");
+				logger.error("ERROR COSBGA:|"+NuevoGasto.getCOSBGA()+"|");
+				logger.error("ERROR FEDEVE:|"+NuevoGasto.getFEDEVE()+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
 
 	public static boolean delGasto(Connection conexion, long liGastoID)
 	{

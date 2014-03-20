@@ -394,7 +394,7 @@ public final class QMListaComunidades
 		return bEncontrado;
 	}
 	
-	public static ArrayList<Long>  getComunidadesPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getMovimientosComunidadesPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>(); 
 

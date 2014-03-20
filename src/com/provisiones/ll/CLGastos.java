@@ -18,6 +18,7 @@ import com.provisiones.dal.qm.listas.errores.QMListaErroresGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Provision;
@@ -232,6 +233,12 @@ public final class CLGastos
 		return QMGastos.getNota(ConnectionManager.getDBConnection(),liCodGasto);
 	}
 	
+	public static long buscarValorTotal (long liCodGasto)
+	{
+		return QMGastos.getValorTotal(ConnectionManager.getDBConnection(), liCodGasto);
+	}
+	
+	
 	public static boolean guardarNota (long liCodGasto, String sNota)
 	{
 		return QMGastos.setNota(ConnectionManager.getDBConnection(),liCodGasto, sNota);
@@ -361,7 +368,7 @@ public final class CLGastos
 							
 							if (gasto.getCOTERR().equals(ValoresDefecto.DEF_COTERR))
 							{
-								if (sEstadoInicialGasto.equals(ValoresDefecto.DEF_GASTO_ABONADO))
+								if (sEstadoInicialGasto.equals(ValoresDefecto.DEF_GASTO_PAGADO))
 								{
 									sValidado = ValoresDefecto.DEF_MOVIMIENTO_RESUELTO;
 								}
@@ -1263,92 +1270,112 @@ public final class CLGastos
 									
 								//Abono	
 								case A:
-									if (QMListaGastos.addRelacionGasto(conexion,liCodGasto,liCodMovimiento))
+									
+									String sEstadoGastoAbonado = QMGastos.getEstado(conexion,liCodGasto);
+									
+									if (sEstadoGastoAbonado.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
 									{
-										String sEstadoGastoAbonado = QMGastos.getEstado(conexion,liCodGasto);
-										
-										if (QMGastos.setEstado(conexion,liCodGasto, ValoresDefecto.DEF_GASTO_ABONADO))
+										if (QMListaGastos.addRelacionGastoBloqueado(conexion,liCodGasto,liCodMovimiento))
 										{
-											String sNUPROFAbono = QMListaGastosProvisiones.getProvisionDeGasto(conexion,liCodGasto);
-											
-											if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+											if (QMListaGastosProvisiones.addRelacionGastoProvisionBloqueado(conexion,liCodGasto,movimiento_revisado.getNUPROF()))
 											{
-												if (QMListaGastosProvisiones.addRelacionGastoProvision(conexion,liCodGasto,movimiento_revisado.getNUPROF()))
+												if (QMProvisiones.setGastoNuevo(conexion, movimiento_revisado.getNUPROF(), movimiento_revisado.getValor_total()))
 												{
-													//OK
-													long liValorGasto = QMGastos.getValorTotal(conexion, liCodGasto);
+													Gasto gasto = QMGastos.getGasto(conexion, liCodGasto);
 													
-													//TODO calcular valor abonado
-													long liValorAbonado = liValorGasto;
+													long liIMNGAS = Long.parseLong(gasto.getYCOS02()+gasto.getIMNGAS())-Long.parseLong(movimiento_revisado.getIMNGAS());
+													logger.debug("liIMNGAS:|"+liIMNGAS+"|");
+													long liIMRGAS = Long.parseLong(gasto.getYCOS04()+gasto.getIMRGAS())-Long.parseLong(movimiento_revisado.getIMRGAS());
+													logger.debug("liIMRGAS:|"+liIMRGAS+"|");
+													long liIMDGAS = Long.parseLong(gasto.getYCOS06()+gasto.getIMDGAS())-Long.parseLong(movimiento_revisado.getIMDGAS());
+													logger.debug("liIMDGAS:|"+liIMDGAS+"|");
+													long liIMCOST = Long.parseLong(gasto.getYCOS08()+gasto.getIMCOST())-Long.parseLong(movimiento_revisado.getIMCOST());
+													logger.debug("liIMCOST:|"+liIMCOST+"|");
+													long liIMOGAS = Long.parseLong(gasto.getYCOS10()+gasto.getIMOGAS())-Long.parseLong(movimiento_revisado.getIMOGAS());
+													logger.debug("liIMOGAS:|"+liIMOGAS+"|");
+													long liIMDTGA = Long.parseLong(gasto.getIMDTGA())-Long.parseLong(movimiento_revisado.getIMDTGA());
+													logger.debug("liIMDTGA:|"+liIMDTGA+"|");
+													long liIMIMGA = Long.parseLong(gasto.getIMIMGA())-Long.parseLong(movimiento_revisado.getIMIMGA());
+													logger.debug("liIMIMGA:|"+liIMIMGA+"|");
+																										
 													
-													if (QMProvisiones.setGastoNuevo(conexion, movimiento_revisado.getNUPROF(), -liValorAbonado))
+													gasto.setIMNGAS(liIMNGAS+"");
+													gasto.setIMRGAS(liIMRGAS+"");
+													gasto.setIMDGAS(liIMDGAS+"");
+													gasto.setIMCOST(liIMCOST+"");
+													gasto.setIMOGAS(liIMOGAS+"");
+													gasto.setIMDTGA(liIMDTGA+"");
+													gasto.setIMIMGA(liIMIMGA+"");
+													
+													gasto.setValor_total();
+													
+													
+													if (QMGastos.modImportes(conexion, gasto, liCodGasto))
 													{
 														
-														if (sEstadoGastoAbonado.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
-														{
-															if (QMProvisiones.setGastoAbonado(conexion,sNUPROFAbono, liValorAbonado))
-															{
-																//OK 
-																
-																iCodigo = 0;
-															}
-															else
-															{
-																//error al actualizar la provisión
-																iCodigo = -909;
-															}
-														}
-														else
-														{
-															//En gastos pagados no se descuenta de los autorizados
-															iCodigo = 0;
-														}
-														
+														iCodigo = 0;
 													}
 													else
 													{
-														//error al actualizar la provisión
-														iCodigo = -909;
+														//Error gasto no modificado
+														iCodigo = -905;									
 													}
-
+													
 												}
 												else
 												{
-													//error relacion gasto no creada - Rollback
-													//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
-													//QMGastos.delGasto(conexion,liCodGasto);
-													//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-													
-													iCodigo = -906;
+													//error al actualizar la provisión
+													iCodigo = -909;
 												}
-												
+
 											}
 											else
 											{
-												//error revision no registrada - Rollback
-												//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-												//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
-												//QMGastos.setEstado(conexion,liCodGasto, sEstado);
-												
-												iCodigo = -904;
+												//error relacion gasto no creada - Rollback
+												iCodigo = -906;
 											}
+
 										}
 										else
 										{
-											//error estado no establecido - Rollback
-											//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-											//QMListaGastos.delRelacionGasto(conexion,liCodMovimiento);
-											
-											iCodigo = -903;
+											//error relacion gasto no creada - Rollback
+											iCodigo = -902;
 										}
 									}
-									else
+									else //Pagado
 									{
-										//error relacion gasto no creada - Rollback
-										//QMMovimientosGastos.delMovimientoGasto(conexion,liCodMovimiento);
-										
-										iCodigo = -902;
+										if (QMListaGastos.addRelacionGasto(conexion,liCodGasto,liCodMovimiento))
+										{
+											if (QMListaGastosProvisiones.addRelacionGastoProvision(conexion,liCodGasto,movimiento_revisado.getNUPROF()))
+											{
+												if (QMProvisiones.setGastoNuevo(conexion, movimiento_revisado.getNUPROF(), movimiento_revisado.getValor_total()))
+												{
+													
+													iCodigo = 0;
+													
+												}
+												else
+												{
+													//error al actualizar la provisión
+													iCodigo = -909;
+												}
+
+											}
+											else
+											{
+												//error relacion gasto no creada - Rollback
+												iCodigo = -906;
+											}
+
+										}
+										else
+										{
+											//error relacion gasto no creada - Rollback
+											iCodigo = -902;
+										}
 									}
+									
+
 									break;
 								case M:
 									
@@ -1894,7 +1921,9 @@ public final class CLGastos
 		movimiento_revisado.setFEAPLI(movimiento.getFEAPLI());
 		movimiento_revisado.setCOAPII(movimiento.getCOAPII());
 		movimiento_revisado.setCOSPII(movimiento.getCOSPII());
-		movimiento_revisado.setNUCLII(movimiento.getNUCLII());	
+		movimiento_revisado.setNUCLII(movimiento.getNUCLII());
+		
+		movimiento_revisado.setValor_total();
 		
 		logger.debug("Revisado! Nuevo movimiento:");
 		

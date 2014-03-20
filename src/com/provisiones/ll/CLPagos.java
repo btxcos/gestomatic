@@ -292,9 +292,9 @@ public class CLPagos
 					
 					String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, liCodGasto);
 					
-					if (QMListaGastos.setValidado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+					if (QMListaGastos.setResuelto(conexion, liCodGasto))
 					{
-						if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+						if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
 						{
 							if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
 							{

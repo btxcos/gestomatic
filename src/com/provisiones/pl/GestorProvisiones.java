@@ -133,12 +133,19 @@ public class GestorProvisiones implements Serializable
 			
 			if (sNUPROF.isEmpty())
 			{
-				sMsg = "Debe seleccionar una provisión antes. Por favor, revise los datos.";
+				sMsg = "Debe seleccionar una Provisión antes. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 			}
+			else if (CLProvisiones.estaBloqueada(sNUPROF))
+			{
+				sMsg = "ERROR: La Provisión tiene Abonos con Gastos pendientes de Pago. Realice los Pagos antes de cerrar esta Provisión.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
 			else
 			{
+
 				if (CLProvisiones.cerrarProvision(sNUPROF,Utils.fechaDeHoy(false)))
 				{
 					sMsg = "Provision '"+ sNUPROF +"' cerrada.";

@@ -88,6 +88,64 @@ public final class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
+	
+	public static boolean addRelacionGastoProvisionBloqueado(Connection conexion, long liCodGasto, String sCodNUPROF) 
+	{
+		boolean bSalida = false;
+		
+		String sUsuario = ConnectionManager.getUser();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "INSERT INTO " 
+					+ TABLA + 
+					" (" 
+					+ CAMPO1 + "," 
+					+ CAMPO2 + "," 
+					+ CAMPO3 + "," 
+					+ CAMPO4 + "," 
+					+ CAMPO5 +						
+					") VALUES ('" 
+					+ liCodGasto + "','"
+					+ sCodNUPROF + "','"
+					+ ValoresDefecto.DEF_MOVIMIENTO_BLOQUEADO + "','"
+				    + sUsuario + "','"
+				    + Utils.timeStamp() +
+					"')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static boolean addRelacionGastoProvisionInyectado(Connection conexion, long liCodGasto, String sCodNUPROF) 
 	{
 		boolean bSalida = false;
@@ -254,6 +312,69 @@ public final class QMListaGastosProvisiones
 		return bEncontrado;
 	}
 	
+	public static boolean provisionbloqueada(Connection conexion, String sCodNUPROF)
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO3 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE ("	
+					+ CAMPO3  + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_BLOQUEADO +"' AND "
+					+ CAMPO2  + " = '"+ sCodNUPROF + 
+					"' )";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bEncontrado;
+	}
+	
 	public static boolean setRevisado(Connection conexion, long liCodGasto, String sRevisado)
 	{
 		boolean bSalida = false;
@@ -298,6 +419,97 @@ public final class QMListaGastosProvisiones
 
 		return bSalida;
 	}
+	
+	public static boolean setResuelto(Connection conexion, long liCodGasto)
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "' "+
+					" WHERE ("
+					+ CAMPO1 + " = '"+ liCodGasto +"' AND "
+					+ CAMPO3 + " = '"+ValoresDefecto.DEF_MOVIMIENTO_VALIDADO+"' )";
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Gasto:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setDesbloqueado(Connection conexion, long liCodGasto)
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "' "+
+					" WHERE ("
+					+ CAMPO1 + " = '"+ liCodGasto +"' AND "
+					+ CAMPO3 + " = '"+ValoresDefecto.DEF_MOVIMIENTO_BLOQUEADO+"' )";
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Gasto:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	
 	public static String getRevisado(Connection conexion, long liCodGasto)
 	{
@@ -390,7 +602,79 @@ public final class QMListaGastosProvisiones
 					" FROM " 
 					+ TABLA + 
 					" WHERE "
-					+ CAMPO1  + " = '"+ liCodGasto +"'";
+					+ CAMPO1  + " = '"+ liCodGasto +"' "+
+					" order by " + CAMPO2 + " limit 0,1";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNUPROF = rs.getString(CAMPO2);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO2+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNUPROF = "";
+
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNUPROF;
+	}
+	
+	public static String getProvisionDeAbono(Connection conexion, long liCodGasto)
+	{
+		String sNUPROF = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO2 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE ("
+					+ CAMPO1  + " = '"+ liCodGasto +"' AND "
+					+ CAMPO3  + " <> '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO +"') "+
+					" order by " + CAMPO2 + " limit 0,1";
 			
 			logger.debug(sQuery);
 

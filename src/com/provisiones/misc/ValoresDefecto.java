@@ -84,6 +84,7 @@ public final class ValoresDefecto
 	public static final String DEF_COACCI_REFERENCIA_MODIFICACION = "M";
 	public static final String DEF_COACCI_REFERENCIA_BAJA = "B";
 	
+	public static final String DEF_MOVIMIENTO_BLOQUEADO = "B";
 	public static final String DEF_MOVIMIENTO_PENDIENTE = "P";
 	public static final String DEF_MOVIMIENTO_ENVIADO = "E";
 	public static final String DEF_MOVIMIENTO_VALIDADO = "V";

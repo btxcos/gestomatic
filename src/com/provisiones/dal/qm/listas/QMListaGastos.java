@@ -93,6 +93,63 @@ public final class QMListaGastos
 		return bSalida;
 	}
 	
+	public static boolean addRelacionGastoBloqueado(Connection conexion, long liCodGasto, long liCodMovimiento) 
+	{
+		boolean bSalida = false;
+
+		String sUsuario = ConnectionManager.getUser();
+	
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "INSERT INTO " 
+					+ TABLA + 
+					" (" 
+					+ CAMPO1 + "," 
+					+ CAMPO2 + "," 
+					+ CAMPO3 + "," 
+					+ CAMPO4 + ","
+					+ CAMPO5 +						
+					") VALUES ('" 
+					+ liCodGasto + "','"
+					+ liCodMovimiento + "','"
+					+ ValoresDefecto.DEF_MOVIMIENTO_BLOQUEADO + "','"
+				    + sUsuario + "','"
+				    + Utils.timeStamp() +
+					"')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+				logger.error("ERROR MOVIMIENTO:|"+liCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static boolean addRelacionGastoInyectado(Connection conexion, long liCodGasto, long liCodMovimiento) 
 	{
 		boolean bSalida = false;
@@ -375,7 +432,7 @@ public final class QMListaGastos
 		return bSalida;
 	}
 	
-	public static ArrayList<Long>  getGastosPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getMovimientosGastosPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>(); 
 
@@ -483,7 +540,7 @@ public final class QMListaGastos
 			{
 				bSalida = false;
 				
-				logger.error("ERROR Gasto:|"+liCodMovimiento+"|");
+				logger.error("ERROR MOVIMIENTO:|"+liCodMovimiento+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -495,6 +552,99 @@ public final class QMListaGastos
 
 		return bSalida;
 	}
+	
+	public static boolean setResuelto(Connection conexion, long liCodGasto)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "' "+
+					" WHERE ("
+					+ CAMPO1 + " = '"+ liCodGasto +"' AND "
+					+ CAMPO3 + " = '"+ValoresDefecto.DEF_MOVIMIENTO_VALIDADO+"')";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR Gasto:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setDesbloqueado(Connection conexion, long liCodGasto)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "' "+
+					" WHERE ("
+					+ CAMPO1 + " = '"+ liCodGasto +"' AND "
+					+ CAMPO3 + " = '"+ValoresDefecto.DEF_MOVIMIENTO_BLOQUEADO+"')";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR Gasto:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 
 	public static String getValidado(Connection conexion, long liCodMovimiento)
 	{

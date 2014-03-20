@@ -198,7 +198,7 @@ public final class QMListaCuotas
 	
 
 	
-	public static ArrayList<Long>  getCuotasPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getMovimientosCuotasPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>(); 
 

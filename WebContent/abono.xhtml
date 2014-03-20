@@ -34,7 +34,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Abonar" update="msgs, popup, activos" action="#{GestorAbonos.registrarAbono}"/>
-								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel" actionListener="#{GestorAbonos.limpiarPlantilla}" />	
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelImportes" actionListener="#{GestorAbonos.limpiarPlantilla}" />	
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -96,6 +96,72 @@
 
 							</h:panelGrid>
 						</p:fieldset>
+
+					<p:fieldset legend="Importes del abono" id="panelImportes">
+						<h:panelGrid columns="2" cellpadding="5">
+
+							<p:panel>
+								<h:panelGrid columns="1" cellpadding="1">
+
+									<p:panel>
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText value="Importe del abono "/>
+											<p:inputText id="IMNGASA" value="#{GestorAbonos.sIMNGASA}" size="16" maxlength="16" disabled="#{GestorAbonos.bIMNGASA}"/>
+											<h:outputText value="¤"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel>
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText value="Descuento: "/>
+											<p:inputText id="IMDTGAA" value="#{GestorAbonos.sIMDTGAA}" size="16" maxlength="16" disabled="#{GestorAbonos.bIMDTGAA}"/>
+											<h:outputText value="¤"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel>
+										<h:panelGrid columns="3" cellpadding="5">
+
+											<h:outputText value="Importe de impuestos: "/>
+											<p:inputText id="IMIMGAA" value="#{GestorAbonos.sIMIMGAA}" size="16" maxlength="16" disabled="#{GestorAbonos.bIMIMGAA}"/>
+											<h:outputText value="¤"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+								</h:panelGrid>
+							</p:panel>
+
+							<p:panel>
+								<h:panelGrid columns="3" cellpadding="5">
+
+									<h:outputText value="Recargo: "/>
+									<p:inputText id="IMRGASA" value="#{GestorAbonos.sIMRGASA}" size="16" maxlength="16" disabled="#{GestorAbonos.bIMRGASA}"/>
+									<h:outputText value="¤"/>
+
+
+									<h:outputText value="Importe de demora: "/>
+									<p:inputText id="IMDGASA" value="#{GestorAbonos.sIMDGASA}" size="16" maxlength="16" disabled="#{GestorAbonos.bIMDGASA}"/>
+									<h:outputText value="¤"/>
+
+									<h:outputText value="Importe de costas: "/>
+									<p:inputText id="IMCOSTA" value="#{GestorAbonos.sIMCOSTA}" size="16" maxlength="16" disabled="#{GestorAbonos.bIMCOSTA}"/>
+									<h:outputText value="¤"/>
+
+									<h:outputText value="Otros incrementos: "/>
+									<p:inputText id="IMOGASA" value="#{GestorAbonos.sIMOGASA}" size="16" maxlength="16" disabled="#{GestorAbonos.bIMOGASA}"/>
+									<h:outputText value="¤"/>
+
+								</h:panelGrid>
+							</p:panel>
+
+							<p:commandButton value="Restaurar Importes" update="msgs, popup, panelImportes" actionListener="#{GestorAbonos.restaurarImportes}" />
+						</h:panelGrid>
+					</p:fieldset>
 
 								<p:fieldset legend="Datos" id="panelDatosGasto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -468,7 +534,7 @@
 					<p:dialog header="Gastos abonables del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
 
 						<p:contextMenu for="gastosactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto" icon="ui-icon-check" actionListener="#{GestorAbonos.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelImportes" icon="ui-icon-check" actionListener="#{GestorAbonos.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosactivo" var="gastoactivo" value="#{GestorAbonos.tablagastosactivo}" rowKey="#{gastoactivo.sGastoID}"

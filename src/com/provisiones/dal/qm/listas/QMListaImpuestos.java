@@ -273,7 +273,7 @@ public final class QMListaImpuestos
 		return bEncontrado;
 	}
 	
-	public static ArrayList<Long>  getImpuestosPorEstado(Connection conexion, String sEstado) 
+	public static ArrayList<Long>  getMovimientosImpuestosPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>(); 
 

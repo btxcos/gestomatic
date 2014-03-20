@@ -938,7 +938,7 @@ public final class Utils
 	{
 		String sImporteReal = "0";
 		
-		//logger.debug("sImporte:|"+sImporte+"|");
+		logger.debug("sImporte:|"+sImporte+"|");
 		
 		if (sImporte.length()>2)
 		{
@@ -951,7 +951,7 @@ public final class Utils
 			sImporteReal = bNegativo ? "-"+ sEuros + "," + sCentimos : sEuros + "," + sCentimos;
 		}
 
-		//logger.debug("sImporteReal:|"+sImporteReal+"|");
+		logger.debug("sImporteReal:|"+sImporteReal+"|");
 
 		return sImporteReal;
 	}

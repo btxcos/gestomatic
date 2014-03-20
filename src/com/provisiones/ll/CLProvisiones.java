@@ -34,6 +34,10 @@ public final class CLProvisiones
 		return QMListaGastosProvisiones.buscaGastosIDPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
+	public static boolean estaBloqueada(String sNUPROF)
+	{
+		return QMListaGastosProvisiones.provisionbloqueada(ConnectionManager.getDBConnection(),sNUPROF);
+	}
 	
 	public static long buscarNumeroProvisionesCerradasPendientes()
 	{

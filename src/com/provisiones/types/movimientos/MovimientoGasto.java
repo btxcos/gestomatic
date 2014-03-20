@@ -108,6 +108,7 @@ public class MovimientoGasto
 		COAPII = cOAPII;
 		COSPII = cOSPII;
 		NUCLII = nUCLII;
+		setValor_total();
 	}
 
 	//Métodos de acceso
