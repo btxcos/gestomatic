@@ -1120,7 +1120,8 @@ public final class QMGastos
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO32 + " = '"+ sFEAUFA + "' " +
+					+ CAMPO32 + " = '"+ sFEAUFA + "' , "
+					+ CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_ABONADO + "'" +
 					" WHERE "
 					+ CAMPO1  + " = '"+ liGastoID +"'";
 			

@@ -893,8 +893,10 @@ public final class QMProvisiones
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					//+ CAMPO10 + " = " + CAMPO10 + " - 1 ,"
-					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+
+					+ CAMPO10 + " = " + CAMPO10 + " + 1 ,"
+					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+ " ,"
+					+ CAMPO13 + " = " + CAMPO13 + " + 1 ,"
+					+ CAMPO14 + " = " + CAMPO14 + sCondicionValor+
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
