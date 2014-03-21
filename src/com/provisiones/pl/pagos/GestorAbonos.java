@@ -876,8 +876,8 @@ public class GestorAbonos implements Serializable
 			
 			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
 			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
-			this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
-			this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+			this.sFEEAUI = "0";
+			this.sFEEPAI = "0";
 			this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
 			this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
 			this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());

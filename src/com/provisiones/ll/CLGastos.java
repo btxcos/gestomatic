@@ -304,6 +304,11 @@ public final class CLGastos
 		return QMGastos.existeGasto(ConnectionManager.getDBConnection(),iCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE);
 	}
 	
+	public static boolean existeBloqueo(long  liCodGasto)
+	{
+		return QMListaGastosProvisiones.existeBloqueoGasto(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+	
 	//Interfaz avanzado
 	public static int eliminarMomivientosSuperfluos (long liCodGasto)
 	{
@@ -458,17 +463,32 @@ public final class CLGastos
 										}
 										else if (sValidado.equals(ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
 										{
-											if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado) && abonaGasto(liCodGasto, gasto.getFEAUFA()))
+											if(QMProvisiones.getEstado(conexion, gasto.getNUPROF()).equals(ValoresDefecto.DEF_PROVISION_ENVIADA))
 											{
-												logger.info("Gasto resuelto.");
-												//TODO revisar los abonos
-												
-												iCodigo = 0;
+												if (!QMProvisiones.setFechaAutorizado(conexion, gasto.getNUPROF(), gasto.getFEAUFA()) 
+													|| !QMProvisiones.setEstado(conexion, gasto.getNUPROF(),ValoresDefecto.DEF_PROVISION_AUTORIZADA))
+												{
+													iCodigo = -7;
+												}
 											}
-											else
+											
+											if (iCodigo == 0)
 											{
-												//QMListaGastos.setValidado(conexion,liCodMovimiento, "E");
-												iCodigo = -6;
+												if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado) 
+														&& QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_ABONADO)
+														&& QMGastos.setCOSIGA(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_PAGADO)
+														&& QMProvisiones.setGastoAbonado(conexion, gasto.getNUPROF(), gasto.getValor_total()))
+													{
+														logger.info("Gasto resuelto.");
+														//TODO revisar los abonos
+														
+														iCodigo = 0;
+													}
+													else
+													{
+														//QMListaGastos.setValidado(conexion,liCodMovimiento, "E");
+														iCodigo = -6;
+													}
 											}
 										}
 										else
@@ -1309,7 +1329,6 @@ public final class CLGastos
 													
 													gasto.setValor_total();
 													
-													
 													if (QMGastos.modImportes(conexion, gasto, liCodGasto))
 													{
 														
@@ -1319,6 +1338,19 @@ public final class CLGastos
 													{
 														//Error gasto no modificado
 														iCodigo = -905;									
+													}
+													
+													if (gasto.getValor_total() == 0 && iCodigo == 0)
+													{
+														if (QMGastos.setAbonado(conexion, liCodGasto, Utils.fechaDeHoy(false)))
+														{
+															iCodigo = 0;
+														}
+														else
+														{
+															//Error gasto no modificado
+															iCodigo = -905;
+														}
 													}
 													
 												}

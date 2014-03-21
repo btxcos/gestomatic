@@ -676,16 +676,14 @@ public class GestorGastos implements Serializable
 			
 			if (sCOACES.isEmpty() || sCOGRUG.isEmpty() || sCOTPGA.isEmpty() || sCOSBGA.isEmpty() || sFEDEVE.isEmpty())
 			{
-				sMsg = "Los campos: 'Activo', 'Grupo de gasto', 'Tipo de concepto', 'Subtipo' y ' Fecha del devengo' son obligatorios. Por favor, revise los datos.";
+				sMsg = "Los campos: 'Activo', 'Grupo de gasto', 'Tipo de concepto', 'Subtipo de gasto' y ' Fecha del devengo' son obligatorios. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
 			else
 			{
 				try
-				{
-
-					
+				{					
 					int iCodCOACES = Integer.parseInt(sCOACES);
 					
 					if (!CLActivos.existeActivo(iCodCOACES))

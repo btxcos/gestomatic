@@ -1204,8 +1204,14 @@ public class GestorPagosSimple implements Serializable
 						logger.error(sMsg);
 						break;
 						
-					case -909: //Error 909 - error y rollback - error al actualizar la provisión
-						sMsg = "[FATAL] ERROR:909 - Se ha producido un error al actualizar la provisión. Por favor, revise los datos y avise a soporte.";
+					case -907: //Error 907 - error y rollback - error al desbloquear la provision del gasto
+						sMsg = "[FATAL] ERROR:907 - Se ha producido un error al desbloquear la provision del gasto. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -908: //Error 908 - error y rollback - error al desbloquear el gasto
+						sMsg = "[FATAL] ERROR:908 - Se ha producido un error al desbloquear el gasto. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

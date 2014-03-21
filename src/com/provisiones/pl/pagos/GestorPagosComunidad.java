@@ -531,6 +531,7 @@ public class GestorPagosComunidad implements Serializable
 				    	this.sGastosPagados = provision.getsGastosPagados();
 				    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
 				    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
+				    	borrarCamposPago();
 						
 						sMsg = "El pago se ha registrado correctamente.";
 						msg = Utils.pfmsgInfo(sMsg);
@@ -581,6 +582,18 @@ public class GestorPagosComunidad implements Serializable
 						
 					case -906: //Error 906 - error y rollback - error al crear la transferencia
 						sMsg = "[FATAL] ERROR:906 - Se ha producido un error al registrar la transferencia del pago. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -907: //Error 907 - error y rollback - error al desbloquear la provision del gasto
+						sMsg = "[FATAL] ERROR:907 - Se ha producido un error al desbloquear la provision del gasto. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -908: //Error 908 - error y rollback - error al desbloquear el gasto
+						sMsg = "[FATAL] ERROR:908 - Se ha producido un error al desbloquear el gasto. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;

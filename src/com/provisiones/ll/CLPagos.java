@@ -296,7 +296,49 @@ public class CLPagos
 					{
 						if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
 						{
-							if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
+							if (CLGastos.existeBloqueo(liCodGasto))
+							{
+								if (QMGastos.setAbonado(conexion, liCodGasto, pago.getsFEPGPR()))
+								{
+									if (QMListaGastos.setDesbloqueado(conexion, liCodGasto))
+									{
+										if (QMListaGastosProvisiones.setDesbloqueado(conexion, liCodGasto))
+										{
+											iCodigo = 0;
+										}
+										else
+										{
+											//error al desbloquear la provision del gasto - Rollback
+											iCodigo = -907;
+										}
+									}
+									else
+									{
+										//error al desbloquear el gasto - Rollback
+										iCodigo = -908;
+									}
+									
+								}
+								else
+								{
+									//error al establecer el estado del gasto - Rollback
+									iCodigo = -905;
+								}
+							}
+							else
+							{
+								if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
+								{
+									iCodigo = 0;
+								}
+								else
+								{
+									//error al establecer el estado del gasto - Rollback
+									iCodigo = -905;
+								}
+							}
+							
+							if (iCodigo == 0)
 							{
 								if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_NORMA34))
 								{
@@ -316,14 +358,12 @@ public class CLPagos
 										else
 										{
 											//error al crear el pago
-											
 											iCodigo = -900;
 										}
 									}
 									else
 									{
 										//error al crear la transferencia pago
-										
 										iCodigo = -906;
 									}
 								}
@@ -356,12 +396,8 @@ public class CLPagos
 									}
 								}
 							}
-							else
-							{
-								//error al establecer el estado del gasto - Rollback
-								
-								iCodigo = -905;
-							}
+							
+			
 						}
 						else
 						{

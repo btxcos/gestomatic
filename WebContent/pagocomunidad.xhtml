@@ -13,7 +13,7 @@
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
 
-				<p:layoutUnit position="north" size="auto" header="Pago Manual">
+				<p:layoutUnit position="north" size="auto" header="Pago a Comunidades">
 
  
 								<h:panelGrid columns="4" cellpadding="5">
@@ -180,7 +180,7 @@
 								</h:panelGrid>
 							</p:fieldset>
 
-								<p:fieldset legend="Pago">
+								<p:fieldset legend="Pago" id="pago">
 										<h:panelGrid columns="1" cellpadding="5">
 
 										<p:panel>
@@ -332,7 +332,7 @@
 					<p:dialog header="Comunidades disponibles: " widgetVar="dlgTablaComunidades" resizable="false">  
     				
 									<p:contextMenu for="comunidades">
-										<p:menuitem value="cargar" update="form:COCLDO, form:NUDCOM, form:NOMCOC, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorPagosComunidad.cargarComunidad}" oncomplete="dlgTablaComunidades.hide(); dlgBuscarComunidad.hide()"/>
+										<p:menuitem value="cargar" update="form:COCLDO, form:NUDCOM, form:NOMCOC, form:popup, form:msgs, form:pago" icon="ui-icon-check" actionListener="#{GestorPagosComunidad.cargarComunidad}" oncomplete="dlgTablaComunidades.hide(); dlgBuscarComunidad.hide()"/>
 									</p:contextMenu>
 									<p:dataTable id="comunidades" var="comunidad" value="#{GestorPagosComunidad.tablacomunidades}" rowKey="#{comunidad.sComunidadID}"
 															selection="#{GestorPagosComunidad.comunidadseleccionada}" selectionMode="single"
