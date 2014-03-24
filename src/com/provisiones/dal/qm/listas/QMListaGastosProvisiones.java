@@ -1289,7 +1289,7 @@ public final class QMListaGastosProvisiones
 			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()?"":QMGastos.CAMPO3 + " = '" + filtro.getCOGRUG() + "' AND ";
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":QMGastos.CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":QMGastos.CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
-			String sCondicionFEDEVE = filtro.getFEDEVE().isEmpty()?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
+			String sCondicionFEDEVE = (filtro.getFEDEVE().isEmpty() || filtro.getFEDEVE().equals("0"))?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
 			String sCondicionEstado = sEstado.isEmpty()?"":QMGastos.CAMPO34 + " = '" + sEstado + "' AND ";
 			
 			logger.debug("Ejecutando Query...");

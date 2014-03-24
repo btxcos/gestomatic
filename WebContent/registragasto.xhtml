@@ -33,7 +33,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorGastos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-								<p:commandButton value="Registrar Gasto" update="panel, popup, msgs" actionListener="#{GestorGastos.registraGasto}"/>
+								<p:commandButton value="Registrar Gasto" update="panel, popup, msgs, panelBuscarActivo, panelBuscarReferencia" actionListener="#{GestorGastos.registraGasto}"/>
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -294,7 +294,7 @@
 							<p:menuitem value="Seleccionar" update="panel, form:popup, form:msgs, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO, form:bDEVO" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarCuota}" oncomplete="dlgTablaPendientes.hide()"/>
 						</p:contextMenu>
 
-						<p:dataTable id="cuotas" var="cuota" value="#{GestorGastos.tablacuotas}" rowKey="#{cuota.DCOSBAC}"
+						<p:dataTable id="cuotas" var="cuota" value="#{GestorGastos.tablacuotas}" rowKey="#{cuota.sCuotaID}"
 											selection="#{GestorGastos.cuotaseleccionada}" selectionMode="single"
 											paginator="true" paginatorPosition="bottom" rows="10"
 											paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -334,7 +334,7 @@
 							<p:menuitem value="Seleccionar" update="panel, form:popup, form:msgs, form:COGRUG, form:COTPGA, form:COSBGA, form:PTPAGO, form:bDEVO" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarDevolucion}" oncomplete="dlgTablaPendientes.hide()"/>
 						</p:contextMenu>
 
-						<p:dataTable id="devoluciones" var="devolucion" value="#{GestorGastos.tabladevoluciones}" rowKey="#{devolucion.DCOSBAC}"
+						<p:dataTable id="devoluciones" var="devolucion" value="#{GestorGastos.tabladevoluciones}" rowKey="#{devolucion.sRecursoID}"
 											selection="#{GestorGastos.devolucionseleccionada}" selectionMode="single"
 											paginator="true" paginatorPosition="bottom" rows="10"
 											paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -359,7 +359,7 @@
 						</p:dataTable>
 					</p:dialog>
 
-					<p:dialog header="Activos con Gastos pendientes: " widgetVar="dlgTabla" resizable="false">
+					<p:dialog header="Activos disponibles: " widgetVar="dlgTabla" resizable="false">
 						<p:contextMenu for="activos">
 							<p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorGastos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 						</p:contextMenu>
@@ -401,11 +401,11 @@
 						</p:dataTable>
 					</p:dialog>
 
-					<p:dialog header="Buscar Activos con Gastos pendientes" widgetVar="dlgBuscar" resizable="false">
+					<p:dialog header="Buscar Activos" widgetVar="dlgBuscar" resizable="false">
 						<p:fieldset legend="Criterios de Búsqueda">
 							<h:panelGrid columns="1" cellpadding="5">
 
-								<p:panel id="panelBuscar" >
+								<p:panel id="panelBuscarActivo" >
 									<h:panelGrid columns="2" cellpadding="5">
 
 										<h:outputText for="NOPRAC" value="Provincia: "/>
@@ -434,11 +434,20 @@
 									</h:panelGrid>
 								</p:panel>
 
+								<p:panel id="panelBuscarReferencia" >
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NURCAT" value="Referencia Catastral: " />
+										<p:inputText id="NURCAT" value="#{GestorGastos.sNURCAT}" size="22" maxlength="20"/>
+
+									</h:panelGrid>
+								</p:panel>
+
 								<p:panel>
 									<h:panelGrid columns="3" cellpadding="5">
 
 										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorGastos.buscaActivos}" oncomplete="dlgTabla.show()"/>
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorGastos.limpiarPlantillaActivo}"/>
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscarActivo, panelBuscarReferencia" actionListener="#{GestorGastos.limpiarPlantillaActivo}"/>
 
 									</h:panelGrid>
 								</p:panel>

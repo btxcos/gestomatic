@@ -650,14 +650,110 @@ public final class QMListaReferencias
 
 			boolean bEncontrado = false;
 			
-			String sCOACES = "";
-			String sCOPOIN = "";
-			String sNOMUIN = "";
-			String sNOPRAC = "";
-			String sNOVIAS = "";
-			String sNUPIAC = "";
-			String sNUPOAC = "";
-			String sNUPUAC = "";
+			String sCondicionEstado = sEstado.isEmpty()? "":" WHERE " + QMGastos.CAMPO34 + " = '"+ sEstado +"'";
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+					
+						   + QMActivos.CAMPO1 + ","        
+						   + QMActivos.CAMPO14 + ","
+						   + QMActivos.CAMPO11 + ","
+						   + QMActivos.CAMPO13 + ","
+						   + QMActivos.CAMPO6 + ","
+						   + QMActivos.CAMPO9 + ","
+						   + QMActivos.CAMPO7 + ","
+						   + QMActivos.CAMPO10 + 
+						   " FROM " 
+						   + QMActivos.TABLA + 
+						   " WHERE ("
+						   + QMActivos.CAMPO1 + " IN (SELECT "
+						   + CAMPO1 +   
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE ("
+						   + CAMPO1 + " IN (SELECT "
+						   + QMGastos.CAMPO2 + 
+	   					   " FROM " 
+						   + QMGastos.TABLA +
+	   					   sCondicionEstado + ") AND "
+						   + CAMPO2 + " IN (SELECT " 
+	   					   + QMReferencias.CAMPO1 + 
+						   " FROM " 
+						   + QMReferencias.TABLA +
+						   " WHERE "
+						   + QMReferencias.CAMPO2 +  " = '" + sNURCAT + "'))))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+	 
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR sNURCAT:|"+sNURCAT+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}	
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> getActivoConGastosPendientes(Connection conexion, String sNURCAT)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
 		
 			logger.debug("Ejecutando Query...");
 
@@ -684,7 +780,7 @@ public final class QMListaReferencias
 	   					   " FROM " 
 						   + QMGastos.TABLA +
 	   					   " WHERE " 
-	   					   + QMGastos.CAMPO34 + " = '"+ sEstado +"') AND "
+						   + QMGastos.CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO + "')) AND "
 						   + CAMPO2 + " IN (SELECT " 
 	   					   + QMReferencias.CAMPO1 + 
 						   " FROM " 
@@ -709,14 +805,14 @@ public final class QMListaReferencias
 					{
 						bEncontrado = true;
 
-						sCOACES = rs.getString(QMActivos.CAMPO1);
-						sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
 						
 						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
 						
@@ -763,15 +859,6 @@ public final class QMListaReferencias
 
 			boolean bEncontrado = false;
 			
-			String sCOACES = "";
-			String sCOPOIN = "";
-			String sNOMUIN = "";
-			String sNOPRAC = "";
-			String sNOVIAS = "";
-			String sNUPIAC = "";
-			String sNUPOAC = "";
-			String sNUPUAC = "";
-		
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
@@ -823,14 +910,14 @@ public final class QMListaReferencias
 					{
 						bEncontrado = true;
 
-						sCOACES = rs.getString(QMActivos.CAMPO1);
-						sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
 						
 						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
 						

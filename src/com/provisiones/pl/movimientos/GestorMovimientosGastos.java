@@ -16,6 +16,7 @@ import javax.faces.event.ActionEvent;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
@@ -101,6 +102,8 @@ public class GestorMovimientosGastos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	
+	private String sNURCAT = "";
 
 	private String sNota = "";
 	
@@ -208,6 +211,8 @@ public class GestorMovimientosGastos implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	
+    	this.sNURCAT = "";
 	}
 	
 	public void borrarResultadosActivo()
@@ -301,6 +306,8 @@ public class GestorMovimientosGastos implements Serializable
     {  
     	this.sCOACES = "";
     	
+    	borrarPlantillaActivo();
+    	
     	borrarPlantillaGasto();
     	    	
     	borrarResultadosActivo();
@@ -319,16 +326,64 @@ public class GestorMovimientosGastos implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla buscaactivos = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLGastos.buscarActivosConGastosPendientes(buscaactivos));
+	    	this.activoseleccionado = null;
 			
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			if (sNURCAT.isEmpty())
+			{
+				ActivoTabla buscaactivos = new ActivoTabla(
+						"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+				
+				this.setTablaactivos(CLGastos.buscarActivosConGastosPendientes(buscaactivos));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConGastosPendientes(sNURCAT));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+		    	this.tablaactivos = null;
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sitema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -358,21 +413,25 @@ public class GestorMovimientosGastos implements Serializable
 			
 			String sMsg = "";
 			
+			this.gastoseleccionado = null;
+			
 			try
 			{
 				if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
 				{
 					this.tablagastos = CLGastos.buscarGastosNuevosActivo(Integer.parseInt(sCOACES));
 					
-					sMsg = "Encontrados "+getTablagastos().size()+" gastos en curso.";
+					sMsg = "Encontrados "+getTablagastos().size()+" Gastos en curso.";
 					msg = Utils.pfmsgInfo(sMsg);
 					logger.info(sMsg);
 				}
 				else
 				{
-					sMsg = "ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
+					this.tablagastos = null;
+					
+					sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 				}
 			}
 			catch(NumberFormatException nfe)
@@ -380,6 +439,8 @@ public class GestorMovimientosGastos implements Serializable
 				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+				
+				this.tablagastos = null;
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -1053,7 +1114,7 @@ public class GestorMovimientosGastos implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOGRUG() {
@@ -1640,6 +1701,14 @@ public class GestorMovimientosGastos implements Serializable
 
 	public void setTiposcoimptHM(Map<String,String> tiposcoimptHM) {
 		this.tiposcoimptHM = tiposcoimptHM;
+	}
+
+	public String getsNURCAT() {
+		return sNURCAT;
+	}
+
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT.trim();
 	}
 
 

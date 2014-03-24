@@ -14,8 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLProvisiones;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -47,6 +49,8 @@ public class GestorListaGastos implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNURCAT = "";
+	
 	
 	//Filtro Gastos Activo
 	private String sCOGRUGFA = "";
@@ -54,7 +58,7 @@ public class GestorListaGastos implements Serializable
 	private String sCOSBGAFA = "";
 	private String sFEDEVEFA = "";
 	private String sIMNGASFA = "";
-	private String sEstadoFA = "";
+	private String sEstadoGastoFA = "";
 	
 	//Filtro Gastos Provision
 	private String sCOGRUGFP = "";
@@ -62,10 +66,11 @@ public class GestorListaGastos implements Serializable
 	private String sCOSBGAFP = "";
 	private String sFEDEVEFP = "";
 	private String sIMNGASFP = "";
-	private String sEstadoFP = "";
+	private String sEstadoGastoFP = "";
 	
 	
 	private String sFEPFON = "";
+	private String sEstadoProvision = "";
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -93,6 +98,9 @@ public class GestorListaGastos implements Serializable
 	private Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
 	
 	private Map<String,String> tiposestadogastoHM = new LinkedHashMap<String, String>();
+	
+	
+	private Map<String,String> tiposestadoprovisionHM = new LinkedHashMap<String, String>();
 
 	public GestorListaGastos()
 	{
@@ -151,7 +159,11 @@ public class GestorListaGastos implements Serializable
 			tiposestadogastoHM.put("PAGADO",    "4");
 			tiposestadogastoHM.put("ANULADO",	"5");
 			tiposestadogastoHM.put("ABONADO",	"6");
-
+			
+			tiposestadoprovisionHM.put("ABIERTA",	"P");
+			tiposestadoprovisionHM.put("ENVIADA",	"E");
+			tiposestadoprovisionHM.put("AUTORIZADA","T");
+			tiposestadoprovisionHM.put("PAGADA",	"G");
 		}
 	}
 	
@@ -173,6 +185,8 @@ public class GestorListaGastos implements Serializable
 		this.sNUPIAC = "";
 		this.sNUPOAC = "";
 		this.sNUPUAC = "";
+		
+		this.sNURCAT = "";
     	
     	this.setActivoseleccionado(null);
     	this.setTablaactivos(null);
@@ -190,7 +204,7 @@ public class GestorListaGastos implements Serializable
 		this.sCOSBGAFA = "";
 		this.sFEDEVEFA = "";
 		this.sIMNGASFA = "";
-		this.sEstadoFA = "";
+		this.sEstadoGastoFA = "";
 	}
 	
     public void limpiarPlantillaFiltroGastosActivo(ActionEvent actionEvent) 
@@ -205,7 +219,7 @@ public class GestorListaGastos implements Serializable
 		this.sCOSBGAFP = "";
 		this.sFEDEVEFP = "";
 		this.sIMNGASFP = "";
-		this.sEstadoFP = "";
+		this.sEstadoGastoFP = "";
 	}
 	
     public void limpiarPlantillaFiltroGastosProvision(ActionEvent actionEvent) 
@@ -216,6 +230,7 @@ public class GestorListaGastos implements Serializable
 	public void borrarCamposProvision()
 	{
 		this.sFEPFON = "";
+		this.sEstadoProvision = "";
     	
     	this.setProvisionseleccionada(null);
     	this.setTablaprovisiones(null);
@@ -239,17 +254,51 @@ public class GestorListaGastos implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLGastos.buscarActivosConGastos(filtro));
+	    	this.setActivoseleccionado(null);
+			
+			if (sNURCAT.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+				
+				this.setTablaactivos(CLGastos.buscarActivosConGastos(filtro));
 
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
+				sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConGastos(sNURCAT));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				
+			}
+			else
+			{
+		    	this.setTablaactivos(null);
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sitema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 			
-			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
-			
+	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		
@@ -284,16 +333,36 @@ public class GestorListaGastos implements Serializable
 			
 			String sFecha = Utils.compruebaFecha(sFEPFON);
 			
+			this.setProvisionseleccionada(null);
+			
 			if (sFecha.equals("#"))
 			{
 				sMsg = "La fecha proporcionada no es válida. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
-				
 				logger.error(sMsg);
+				
+		    	this.setTablaprovisiones(null);
 			}
 			else
 			{
-				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasFecha(sFecha));
+				
+				String sNUPROFF = "";
+				String sCOSPATF = "";
+				String sDCOSPATF = "";
+				String sTASF = "";
+				String sDTASF = "";	
+				String sCOGRUGF = "";
+				String sDCOGRUGF = "";	
+				String sCOTPGAF = "";
+				String sDCOTPGAF = "";
+				String sFEPFONF = sFecha;
+				String sVALORF = "";
+				String sGASTOSF = "";
+				
+				ProvisionTabla filtro = new ProvisionTabla(sNUPROFF, sCOSPATF, sDCOSPATF,
+						sTASF, sDTASF, sCOGRUGF, sDCOGRUGF, sCOTPGAF, sDCOTPGAF, sFEPFONF, sVALORF, sGASTOSF);
+				
+				this.setTablaprovisiones(CLProvisiones.buscarProvisionesConFiltroEstado(filtro, sEstadoProvision));
 
 				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -482,50 +551,83 @@ public class GestorListaGastos implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
+	    	this.setGastoseleccionado(null);
+			
 			try
 			{
-				GastoTabla filtro = new GastoTabla(
-						"",
-						"",   
-						sCOACES,   
-						sCOGRUGFA,   
-						sCOTPGAFA,   
-						sCOSBGAFA,   
-						"",  
-						"",   
-						"",  
-						Utils.compruebaFecha(sFEDEVEFA),   
-						"",   
-						"",  
-						"");
-				
-		    	logger.debug("sCOACES:|"+sCOACES+"|");
-		    	logger.debug("sCOGRUGFA:|"+sCOGRUGFA+"|");
-		    	logger.debug("sCOTPGAFA:|"+sCOTPGAFA+"|");
-		    	logger.debug("sCOSBGAFA:|"+sCOSBGAFA+"|");
-		    	logger.debug("sFEDEVEFA:|"+sFEDEVEFA+"|");
-		    	logger.debug("sEstadoFA:|"+sEstadoFA+"|");
-				
-				this.setTablagastos(CLGastos.buscarGastosActivoConFiltroEstado(filtro, sEstadoFA));
-				
-				if (getTablagastos().size() == 0)
+				if (sCOACES.equals(""))
 				{
-					msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
+					sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					
+			    	this.setTablagastos(null);
 				}
-				else if (getTablagastos().size() == 1)
+				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
 				{
-					msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
+					GastoTabla filtro = new GastoTabla(
+							"",
+							"",   
+							sCOACES,   
+							sCOGRUGFA,   
+							sCOTPGAFA,   
+							sCOSBGAFA,   
+							"",  
+							"",   
+							"",  
+							Utils.compruebaFecha(sFEDEVEFA),   
+							"",   
+							"",  
+							"");
+					
+			    	logger.debug("sCOACES:|"+sCOACES+"|");
+			    	logger.debug("sCOGRUGFA:|"+sCOGRUGFA+"|");
+			    	logger.debug("sCOTPGAFA:|"+sCOTPGAFA+"|");
+			    	logger.debug("sCOSBGAFA:|"+sCOSBGAFA+"|");
+			    	logger.debug("sFEDEVEFA:|"+sFEDEVEFA+"|");
+			    	logger.debug("sEstadoGastoFA:|"+sEstadoGastoFA+"|");
+					
+					this.setTablagastos(CLGastos.buscarGastosActivoConFiltroEstado(filtro, sEstadoGastoFA));
+					
+					if (getTablagastos().size() == 0)
+					{
+						sMsg = "No se encontraron Gastos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+						
+					}
+					else if (getTablagastos().size() == 1)
+					{
+						sMsg = "Encontrado un Gasto relacionado.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontrados "+getTablagastos().size()+" Gastos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
 				}
 				else
 				{
-					msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
-				}
+					sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+			    	this.setTablagastos(null);
+				} 
+				
 			}
 			catch(NumberFormatException nfe)
 			{
-				String sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+				
+		    	this.setTablagastos(null);
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -540,43 +642,73 @@ public class GestorListaGastos implements Serializable
 		{
 			FacesMessage msg;
 			
-			GastoTabla filtro = new GastoTabla(
-					"",
-					sNUPROF,   
-					"",   
-					sCOGRUGFP,   
-					sCOTPGAFP,   
-					sCOSBGAFP,   
-					"",  
-					"",   
-					"",  
-					Utils.compruebaFecha(sFEDEVEFP),   
-					"",   
-					"",  
-					"");
+			String sMsg = "";
 			
-	    	logger.debug("sCOACES:|"+sCOACES+"|");
-	    	logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"|");
-	    	logger.debug("sCOTPGAFP:|"+sCOTPGAFP+"|");
-	    	logger.debug("sCOSBGAFP:|"+sCOSBGAFP+"|");
-	    	logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
-	    	logger.debug("sEstadoFP:|"+sEstadoFP+"|");
+			this.setGastoseleccionado(null);
 			
-			this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoFP));
-			
-			if (getTablagastos().size() == 0)
+			if (sNUPROF.isEmpty())
 			{
-				msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
+				sMsg = "ERROR: Debe informar la Provisión para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+				
+				this.setTablagastos(null);
 			}
-			else if (getTablagastos().size() == 1)
+			else if (CLProvisiones.existeProvision(sNUPROF))
 			{
-				msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
+				GastoTabla filtro = new GastoTabla(
+						"",
+						sNUPROF,   
+						"",   
+						sCOGRUGFP,   
+						sCOTPGAFP,   
+						sCOSBGAFP,   
+						"",  
+						"",   
+						"",  
+						Utils.compruebaFecha(sFEDEVEFP),   
+						"",   
+						"",  
+						"");
+				
+		    	logger.debug("sCOACES:|"+sCOACES+"|");
+		    	logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"|");
+		    	logger.debug("sCOTPGAFP:|"+sCOTPGAFP+"|");
+		    	logger.debug("sCOSBGAFP:|"+sCOSBGAFP+"|");
+		    	logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
+		    	logger.debug("sEstadoGastoFP:|"+sEstadoGastoFP+"|");
+				
+				this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoGastoFP));
+				
+				if (getTablagastos().size() == 0)
+				{
+					sMsg = "No se encontraron gastos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablagastos().size() == 1)
+				{
+					sMsg = "Encontrado un gasto relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablagastos().size()+" gastos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			}
 			else
 			{
-				msg = Utils.pfmsgInfo("Encontrados "+getTablagastos().size()+" gastos relacionados.");
+				sMsg = "La Provisión '"+sNUPROF+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				
+				this.setTablagastos(null);
 			}
-
+			
+			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		
@@ -657,7 +789,7 @@ public class GestorListaGastos implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsNUPROF() {
@@ -665,7 +797,7 @@ public class GestorListaGastos implements Serializable
 	}
 
 	public void setsNUPROF(String sNUPROF) {
-		this.sNUPROF = sNUPROF;
+		this.sNUPROF = sNUPROF.trim();
 	}
 
 	public String getsCOGRUG() {
@@ -804,12 +936,12 @@ public class GestorListaGastos implements Serializable
 		this.sIMNGASFA = sIMNGASFA;
 	}
 
-	public String getsEstadoFA() {
-		return sEstadoFA;
+	public String getsEstadoGastoFA() {
+		return sEstadoGastoFA;
 	}
 
-	public void setsEstadoFA(String sEstadoFA) {
-		this.sEstadoFA = sEstadoFA;
+	public void setsEstadoGastoFA(String sEstadoGastoFA) {
+		this.sEstadoGastoFA = sEstadoGastoFA;
 	}
 
 	public String getsCOGRUGFP() {
@@ -852,12 +984,12 @@ public class GestorListaGastos implements Serializable
 		this.sIMNGASFP = sIMNGASFP;
 	}
 
-	public String getsEstadoFP() {
-		return sEstadoFP;
+	public String getsEstadoGastoFP() {
+		return sEstadoGastoFP;
 	}
 
-	public void setsEstadoFP(String sEstadoFP) {
-		this.sEstadoFP = sEstadoFP;
+	public void setsEstadoGastoFP(String sEstadoGastoFP) {
+		this.sEstadoGastoFP = sEstadoGastoFP;
 	}
 
 	public String getsFEPFON() {
@@ -1026,6 +1158,30 @@ public class GestorListaGastos implements Serializable
 
 	public void setTiposestadogastoHM(Map<String, String> tiposestadogastoHM) {
 		this.tiposestadogastoHM = tiposestadogastoHM;
+	}
+
+	public Map<String,String> getTiposestadoprovisionHM() {
+		return tiposestadoprovisionHM;
+	}
+
+	public void setTiposestadoprovisionHM(Map<String,String> tiposestadoprovisionHM) {
+		this.tiposestadoprovisionHM = tiposestadoprovisionHM;
+	}
+
+	public String getsEstadoProvision() {
+		return sEstadoProvision;
+	}
+
+	public void setsEstadoProvision(String sEstadoProvision) {
+		this.sEstadoProvision = sEstadoProvision;
+	}
+
+	public String getsNURCAT() {
+		return sNURCAT;
+	}
+
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT.trim();
 	}
 	
 }

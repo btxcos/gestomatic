@@ -492,9 +492,12 @@ public class CLPagos
             	{
             		sPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
             	}
+            	else if (QMGastos.getValorTotal(conexion, Long.parseLong(gasto.getsGastoID())) == 0)
+				{
+            		sPago = ValoresDefecto.DEF_PAGO_VENTANILLA;
+				}
             	
             	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR);
-            	
             	
             	iCodigo = registraPagoSimple(pago, cuenta, bValida);
             	

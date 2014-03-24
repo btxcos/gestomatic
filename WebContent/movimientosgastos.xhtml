@@ -32,7 +32,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="NUPROF, panel" actionListener="#{GestorMovimientosGastos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Limpiar Plantilla" update="NUPROF, panel, panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorMovimientosGastos.limpiarPlantilla}" oncomplete="dlgTablaActivos.hide(); dlgBuscarActivos.hide()"/>
 								<p:commandButton value="Registrar Datos" update="panel, popup, msgs" actionListener="#{GestorMovimientosGastos.registraGasto}"/>
 
 							</h:panelGrid>
@@ -87,7 +87,7 @@
 													</h:panelGrid>
 												</p:panel>
 
-												<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscar.show()"/>
+												<p:commandButton value="Buscar un Activo" update="COACES, form:activos" oncomplete="dlgBuscarActivos.show()"/>
 
 											</h:panelGrid>
 										</p:panel>
@@ -356,10 +356,10 @@
 						</p:dataTable>
 
 					</p:dialog>
-					<p:dialog header="Activos con Gastos: " widgetVar="dlgTabla" resizable="false">
+					<p:dialog header="Activos con Gastos Pendientes: " widgetVar="dlgTablaActivos" resizable="false">
 
 							<p:contextMenu for="activos">
-								<p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NUPROF" icon="ui-icon-check" actionListener="#{GestorMovimientosGastos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:menuitem value="Seleccionar" update="form:COACES, form:popup, form:msgs, form:NUPROF" icon="ui-icon-check" actionListener="#{GestorMovimientosGastos.seleccionarActivo}" oncomplete="dlgTablaActivos.hide(); dlgBuscarActivos.hide()"/>
 							</p:contextMenu>
 
 							<p:dataTable id="activos" var="activo" value="#{GestorMovimientosGastos.tablaactivos}" rowKey="#{activo.COACES}"
@@ -398,11 +398,11 @@
 
 							</p:dataTable>
 					</p:dialog>
-					<p:dialog header="Buscar un Activo con Gastos" widgetVar="dlgBuscar" resizable="false">
+					<p:dialog header="Buscar un Activo con Gastos Pendientes" widgetVar="dlgBuscarActivos" resizable="false">
 						<p:fieldset legend="Criterios de Búsqueda">
 							<h:panelGrid columns="1" cellpadding="5">
 
-								<p:panel id="panelBuscar" >
+								<p:panel id="panelBuscarActivos" >
 									<h:panelGrid columns="2" cellpadding="5">
 
 										<h:outputText for="NOPRAC" value="Provincia: "/>
@@ -429,11 +429,20 @@
 									</h:panelGrid>
 								</p:panel>
 
+								<p:panel id="panelBuscarReferencia" >
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NURCAT" value="Referencia Catastral: " />
+										<p:inputText id="NURCAT" value="#{GestorMovimientosGastos.sNURCAT}" size="22" maxlength="20"/>
+
+									</h:panelGrid>
+								</p:panel>
+
 								<p:panel>
 									<h:panelGrid columns="2" cellpadding="5">
 
-										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosGastos.buscaActivos}" oncomplete="dlgTabla.show()"/>
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosGastos.limpiarPlantillaActivo}"/>
+										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosGastos.buscaActivos}" oncomplete="dlgTablaActivos.show()"/>
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorMovimientosGastos.limpiarPlantillaActivo}"/>
 
 									</h:panelGrid>
 								</p:panel>

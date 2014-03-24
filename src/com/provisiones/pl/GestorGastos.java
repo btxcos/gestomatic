@@ -19,6 +19,7 @@ import com.provisiones.ll.CLCuotas;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLProvisiones;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.movimientos.MovimientoGasto;
@@ -100,6 +101,8 @@ public class GestorGastos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	
+	private String sNURCAT = "";
 	
 	private String sNota = "";
 	
@@ -215,6 +218,8 @@ public class GestorGastos implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	
+    	this.sNURCAT = "";
 	}
 	
 	public void borrarResultadosActivo()
@@ -316,6 +321,7 @@ public class GestorGastos implements Serializable
     {  
     	this.sCOACES = "";
 
+    	borrarPlantillaActivo();
     	borrarPlantillaGasto();
 
     	borrarResultadosActivo();
@@ -338,19 +344,64 @@ public class GestorGastos implements Serializable
 			
 			String sMsg = "";
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+	    	this.activoseleccionado = null;
 			
-			
-			ArrayList<ActivoTabla> resultcuotasimpuestos = CLActivos.buscarActivosConFichaInmovilizado(filtro);
+			if (sNURCAT.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+				
+				this.setTablaactivos(CLActivos.buscarActivosConFichaInmovilizado(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 					
-			this.setTablaactivos(resultcuotasimpuestos);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCAT));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+		    	this.tablaactivos = null;
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sitema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+			
 
-			sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -383,6 +434,9 @@ public class GestorGastos implements Serializable
 			
 			String sMsg = "";
 			
+	    	this.cuotaseleccionada = null;
+	    	this.devolucionseleccionada = null;
+
 			if (!sCOACES.equals(""))
 			{
 				try
@@ -408,6 +462,9 @@ public class GestorGastos implements Serializable
 						sMsg = "El activo '"+sCOACES+"' no pertenece a esta cartera. Por favor, revise los datos.";
 						msg = Utils.pfmsgError(sMsg);
 						logger.error(sMsg);
+						
+						this.tablacuotas = null;
+						this.tabladevoluciones = null;
 					}
 				}
 				catch(NumberFormatException nfe)
@@ -1102,7 +1159,7 @@ public class GestorGastos implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOGRUG() {
@@ -1679,6 +1736,14 @@ public class GestorGastos implements Serializable
 	}
 	public void setbDevolucion(boolean bDevolucion) {
 		this.bDevolucion = bDevolucion;
+	}
+
+	public String getsNURCAT() {
+		return sNURCAT;
+	}
+
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT.trim();
 	}
 
 	public String getsNota() {

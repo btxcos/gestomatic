@@ -33,7 +33,7 @@
 									<p:fieldset legend="Acciones">
 										<h:panelGrid columns="3" cellpadding="5">
 													<p:commandButton value="Detalles" update="msgs, popup, activos" action="#{GestorListaGastos.cargarDetallesGasto}"/>
-													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastos, COACES, NUPROF" actionListener="#{GestorListaGastos.limpiarPlantilla}" />	
+													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscarActivo, panelBuscarReferencia, panelBuscarProvision, activos, provisiones, gastos, COACES, NUPROF" actionListener="#{GestorListaGastos.limpiarPlantilla}" />	
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -62,7 +62,7 @@
 
 					<p:panel id="panel">
 						<h:panelGrid columns="1" cellpadding="5">
-							<p:fieldset legend="Criterios de Busqueda">
+							<p:fieldset legend="Criterios de Búsqueda">
 								<h:panelGrid columns="1" cellpadding="5">
 								<p:fieldset legend="Activo">
 										<h:panelGrid columns="2" cellpadding="5">
@@ -101,7 +101,7 @@
 							<p:menuitem value="Detalles" update="form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorListaGastos.cargarDetallesGasto}"/>
 						</p:contextMenu>
 
-						<p:dataTable id="gastos" var="gasto" value="#{GestorListaGastos.tablagastos}" rowKey="#{gasto.NUPROF}"
+						<p:dataTable id="gastos" var="gasto" value="#{GestorListaGastos.tablagastos}" rowKey="#{gasto.sGastoID}"
 															selection="#{GestorListaGastos.gastoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -161,7 +161,7 @@
 													
 								</h:panelGrid>
 							</p:panel>
-					<p:dialog header="Activos con Gastos Autorizados: " widgetVar="dlgTabla" resizable="false">  
+					<p:dialog header="Activos con Gastos: " widgetVar="dlgTabla" resizable="false">  
     				
 							<p:contextMenu for="activos">  
 								 <p:menuitem value="Seleccionar" update="form:COACES, form:popup" icon="ui-icon-check" actionListener="#{GestorListaGastos.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
@@ -231,52 +231,49 @@
 
 							</p:dataTable> 
 					</p:dialog>
-					<p:dialog header="Buscar Activos con Gastos Autorizados: " widgetVar="dlgBuscar" resizable="false">  
-									<p:fieldset legend="Criterios de Busqueda">
+					<p:dialog header="Buscar Activos con Gastos: " widgetVar="dlgBuscar" resizable="false">  
+									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
-											<p:panel id="panelBuscar" >
-												<h:panelGrid columns="3" cellpadding="5">
+
+											<p:panel id="panelBuscarActivo" >
+												<h:panelGrid columns="2" cellpadding="5">
+
 													<h:outputText for="NOPRAC" value="Nombre de la Provincia: " />
-														<p:inputText id="NOPRAC" value="#{GestorListaGastos.sNOPRAC}" size="18" maxlength="18">
-														</p:inputText>
-													<p:message for="NOPRAC" display="icon"/>
+													<p:inputText id="NOPRAC" value="#{GestorListaGastos.sNOPRAC}" size="18" maxlength="18"/>
 
 													<h:outputText for="NOMUIN" value="Nombre del Municipio: " />
-														<p:inputText id="NOMUIN" value="#{GestorListaGastos.sNOMUIN}" size="30" maxlength="30">
-														</p:inputText>
-													<p:message for="NOMUIN" display="icon"/>
+													<p:inputText id="NOMUIN" value="#{GestorListaGastos.sNOMUIN}" size="30" maxlength="30"/>
 
 													<h:outputText for="COPOIN" value="Codigo Postal: " />
-														<p:inputText id="COPOIN" value="#{GestorListaGastos.sCOPOIN}" size="5" maxlength="5">
-														</p:inputText>
-													<p:message for="COPOIN" display="icon"/>
+													<p:inputText id="COPOIN" value="#{GestorListaGastos.sCOPOIN}" size="5" maxlength="5"/>
 
-													<h:outputText for="NOVIAS" value="Nombre de la Via: " />
-														<p:inputText id="NOVIAS" value="#{GestorListaGastos.sNOVIAS}" size="60" maxlength="60">
-														</p:inputText>
-													<p:message for="NOVIAS" display="icon"/>
+													<h:outputText for="NOVIAS" value="Nombre de la Vía: " />
+													<p:inputText id="NOVIAS" value="#{GestorListaGastos.sNOVIAS}" size="60" maxlength="60"/>
 
 													<h:outputText for="NUPOAC" value="Portal/Punto Kilometrico: " />
-														<p:inputText id="NUPOAC" value="#{GestorListaGastos.sNUPOAC}" size="17" maxlength="17">
-														</p:inputText>
-													<p:message for="NUPOAC" display="icon"/>
+													<p:inputText id="NUPOAC" value="#{GestorListaGastos.sNUPOAC}" size="17" maxlength="17"/>
 
 													<h:outputText for="NUPIAC" value="Piso: " />
-														<p:inputText id="NUPIAC" value="#{GestorListaGastos.sNUPIAC}" size="11" maxlength="11">
-														</p:inputText>
-													<p:message for="NUPIAC" display="icon"/>
+													<p:inputText id="NUPIAC" value="#{GestorListaGastos.sNUPIAC}" size="11" maxlength="11"/>
 
 													<h:outputText for="NUPUAC" value="Puerta: " />
-														<p:inputText id="NUPUAC" value="#{GestorListaGastos.sNUPUAC}" size="17" maxlength="17">
-														</p:inputText>
-													<p:message for="NUPUAC" display="icon"/>
+													<p:inputText id="NUPUAC" value="#{GestorListaGastos.sNUPUAC}" size="17" maxlength="17"/>
+
+												</h:panelGrid>
+											</p:panel>
+											<p:panel id="panelBuscarReferencia" >
+												<h:panelGrid columns="2" cellpadding="5">
+
+													<h:outputText for="NURCAT" value="Referencia Catastral: " />
+													<p:inputText id="NURCAT" value="#{GestorListaGastos.sNURCAT}" size="22" maxlength="20"/>
+
 												</h:panelGrid>
 											</p:panel>
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
 													<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorListaGastos.buscarActivos}" oncomplete="dlgTabla.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorListaGastos.limpiarPlantillaActivo}" />	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscarActivo, panelBuscarReferencia" actionListener="#{GestorListaGastos.limpiarPlantillaActivo}" />	
 
 												</h:panelGrid>
 											</p:panel>
@@ -290,11 +287,19 @@
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscarProvision" >
 												<h:panelGrid columns="3" cellpadding="5">
-													<h:outputText for="FEPFON" value="Fecha de provisión: " />
+													<h:outputText for="FEPFON" value="Fecha de cierre: " />
 													<p:inputMask id="FEPFON" value="#{GestorListaGastos.sFEPFON}" mask="99/99/9999" size="10" maxlength="8"/>
 													<p:message for="FEPFON" display="icon"/>
 												</h:panelGrid>
+												<h:panelGrid columns="3" cellpadding="5">
+														<h:outputText value="Estado: "/>
+															<p:selectOneMenu id="ESTADOPROVISION" value="#{GestorListaGastos.sEstadoProvision}">
+																<f:selectItem itemLabel="Estado..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposestadoprovisionHM}"/>
+															</p:selectOneMenu>
+												</h:panelGrid>
 											</p:panel>
+											
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
@@ -392,7 +397,7 @@
 													<p:panel>
 														<h:panelGrid columns="2" cellpadding="1">
 															<h:outputText value="Estado del gasto: "/>
-															<p:selectOneMenu id="ESTADOFA" value="#{GestorListaGastos.sEstadoFA}">
+															<p:selectOneMenu id="ESTADOFA" value="#{GestorListaGastos.sEstadoGastoFA}">
 																<f:selectItem itemLabel="Estado..." itemValue=""/>
 																<f:selectItems value="#{GestorListaGastos.tiposestadogastoHM}"/>
 															</p:selectOneMenu>
@@ -459,7 +464,7 @@
 													<p:panel>
 														<h:panelGrid columns="2" cellpadding="1">
 															<h:outputText value="Estado del gasto: "/>
-															<p:selectOneMenu id="ESTADOFP" value="#{GestorListaGastos.sEstadoFP}">
+															<p:selectOneMenu id="ESTADOFP" value="#{GestorListaGastos.sEstadoGastoFP}">
 																<f:selectItem itemLabel="Estado..." itemValue=""/>
 																<f:selectItems value="#{GestorListaGastos.tiposestadogastoHM}"/>
 															</p:selectOneMenu>

@@ -43,6 +43,12 @@ public final class CLProvisiones
 	{
 		return QMProvisiones.buscaCantidadProvisionesCerradasPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PENDIENTE);
 	}
+	
+	public static ArrayList<String> buscarProvisionesCerradasPendientes()
+	{
+		return QMProvisiones.getProvisionesSinAutorizarPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PENDIENTE);
+	}
+	
 
 	public static ArrayList<ProvisionTabla> buscarProvisionesAbiertas()
 	{
@@ -54,11 +60,15 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 	}
 	
+	public static ArrayList<ProvisionTabla> buscarProvisionesConFiltroEstado(ProvisionTabla filtro, String sEstado)
+	{
+		return QMProvisiones.buscaProvisionesPorFiltroEstado(ConnectionManager.getDBConnection(), filtro, sEstado);
+	}
+	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasActivo(int iCOACES)
 	{
 		return QMProvisiones.buscaProvisionesAutorizadasPorActivo(ConnectionManager.getDBConnection(),iCOACES);
 	}
-	
 	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasComunidad(int iCOACES)
 	{

@@ -18,7 +18,6 @@ import com.provisiones.dal.qm.listas.errores.QMListaErroresGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 
 import com.provisiones.misc.Parser;
-import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Provision;
@@ -490,6 +489,7 @@ public final class CLGastos
 														iCodigo = -6;
 													}
 											}
+											
 										}
 										else
 										{
@@ -1340,19 +1340,6 @@ public final class CLGastos
 														iCodigo = -905;									
 													}
 													
-													if (gasto.getValor_total() == 0 && iCodigo == 0)
-													{
-														if (QMGastos.setAbonado(conexion, liCodGasto, Utils.fechaDeHoy(false)))
-														{
-															iCodigo = 0;
-														}
-														else
-														{
-															//Error gasto no modificado
-															iCodigo = -905;
-														}
-													}
-													
 												}
 												else
 												{
@@ -2134,7 +2121,6 @@ public final class CLGastos
 				iCodigo = -807;
 			}
 			
-			//TODO REVISAR 
 			else if (Long.parseLong(movimiento_revisado.getIMDTGA()) < 0)
 			{
 				//Error 808 - Importe de descuento negativo
