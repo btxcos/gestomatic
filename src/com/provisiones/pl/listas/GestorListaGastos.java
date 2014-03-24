@@ -623,7 +623,7 @@ public class GestorListaGastos implements Serializable
 			}
 			catch(NumberFormatException nfe)
 			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				
@@ -646,66 +646,79 @@ public class GestorListaGastos implements Serializable
 			
 			this.setGastoseleccionado(null);
 			
-			if (sNUPROF.isEmpty())
+			try
 			{
-				sMsg = "ERROR: Debe informar la Provisión para realizar una búsqueda. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
+				Long.parseLong(sNUPROF);
 				
-				this.setTablagastos(null);
-			}
-			else if (CLProvisiones.existeProvision(sNUPROF))
-			{
-				GastoTabla filtro = new GastoTabla(
-						"",
-						sNUPROF,   
-						"",   
-						sCOGRUGFP,   
-						sCOTPGAFP,   
-						sCOSBGAFP,   
-						"",  
-						"",   
-						"",  
-						Utils.compruebaFecha(sFEDEVEFP),   
-						"",   
-						"",  
-						"");
-				
-		    	logger.debug("sCOACES:|"+sCOACES+"|");
-		    	logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"|");
-		    	logger.debug("sCOTPGAFP:|"+sCOTPGAFP+"|");
-		    	logger.debug("sCOSBGAFP:|"+sCOSBGAFP+"|");
-		    	logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
-		    	logger.debug("sEstadoGastoFP:|"+sEstadoGastoFP+"|");
-				
-				this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoGastoFP));
-				
-				if (getTablagastos().size() == 0)
+				if (sNUPROF.isEmpty())
 				{
-					sMsg = "No se encontraron gastos con los criterios solicitados.";
-					msg = Utils.pfmsgWarning(sMsg);
-					logger.warn(sMsg);
+					sMsg = "ERROR: Debe informar la Provisión para realizar una búsqueda. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					
+					this.setTablagastos(null);
 				}
-				else if (getTablagastos().size() == 1)
+				else if (CLProvisiones.existeProvision(sNUPROF))
 				{
-					sMsg = "Encontrado un gasto relacionado.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					GastoTabla filtro = new GastoTabla(
+							"",
+							sNUPROF,   
+							"",   
+							sCOGRUGFP,   
+							sCOTPGAFP,   
+							sCOSBGAFP,   
+							"",  
+							"",   
+							"",  
+							Utils.compruebaFecha(sFEDEVEFP),   
+							"",   
+							"",  
+							"");
+					
+			    	logger.debug("sCOACES:|"+sCOACES+"|");
+			    	logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"|");
+			    	logger.debug("sCOTPGAFP:|"+sCOTPGAFP+"|");
+			    	logger.debug("sCOSBGAFP:|"+sCOSBGAFP+"|");
+			    	logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
+			    	logger.debug("sEstadoGastoFP:|"+sEstadoGastoFP+"|");
+					
+					this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoGastoFP));
+					
+					if (getTablagastos().size() == 0)
+					{
+						sMsg = "No se encontraron gastos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else if (getTablagastos().size() == 1)
+					{
+						sMsg = "Encontrado un gasto relacionado.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontrados "+getTablagastos().size()+" gastos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
 				}
 				else
 				{
-					sMsg = "Encontrados "+getTablagastos().size()+" gastos relacionados.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					sMsg = "La Provisión '"+sNUPROF+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+					this.setTablagastos(null);
 				}
 			}
-			else
+			catch(NumberFormatException nfe)
 			{
-				sMsg = "La Provisión '"+sNUPROF+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
+				sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				
-				this.setTablagastos(null);
+		    	this.setTablagastos(null);
 			}
 			
 			

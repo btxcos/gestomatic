@@ -539,8 +539,13 @@ public final class Utils
 			{
 				sImporteReal = sImporte+"00";
 			}
+
 		}
-		else if (sImporte.equals(""))
+		
+		if (sImporte.isEmpty() 
+				|| sImporteReal.equals("000")
+				|| sImporteReal.equals("-000") 
+				|| sImporteReal.equals("-0"))
 		{
 			sImporteReal= "0";
 		}
@@ -578,7 +583,11 @@ public final class Utils
 			
 				sImporteReal = bNegativo ? "-"+ sEuros + sCentimos : sEuros + sCentimos;
 			}
-			else if (sImporte.equals(""))
+			
+			if (sImporte.isEmpty() 
+				|| sImporteReal.equals("000")
+				|| sImporteReal.equals("-000") 
+				|| sImporteReal.equals("-0"))
 			{
 				sImporteReal= "0";
 			}
