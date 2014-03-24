@@ -28,7 +28,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 								<p:commandButton value="Detalles" update="msgs, popup, activos" actionListener="#{GestorListaComunidades.cargarDetallesComunidad}"/>
-								<p:commandButton value="Limpiar Plantilla" update="COACES, COCLDO, NUDCOM, comunidades" actionListener="#{GestorListaComunidades.limpiarPlantilla}"/>	
+								<p:commandButton value="Limpiar Plantilla" update="COACES, COCLDO, NUDCOM, NOMCOC, comunidades, panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorListaComunidades.limpiarPlantilla}"/>	
 							</h:panelGrid>
 						</p:fieldset>
 						<p:fieldset legend="Info">
@@ -60,26 +60,39 @@
 												<h:panelGrid columns="4" cellpadding="5">
 													<h:outputText for="COACES" value="Activo: "/>
 													<p:inputText id="COACES" value="#{GestorListaComunidades.sCOACES}" size="10" maxlength="9"/>
-													<p:commandButton value="Buscar Comunidad" update="comunidades, msgs, popup, panelBuscar, activos, COACES" actionListener="#{GestorListaComunidades.buscarComunidadActivo}"/>	
+													<p:commandButton value="Buscar Comunidad" update="comunidades, msgs, popup, activos, COACES" actionListener="#{GestorListaComunidades.buscarComunidadActivo}"/>	
 												</h:panelGrid>
 											</p:panel>
 											<p:commandButton value="Buscar Activo" update="COACES, form:activos, msgs, popup" oncomplete="dlgBuscar.show()"/>		
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Comunidad de proprietarios">
-										<h:panelGrid columns="1" cellpadding="5">
+										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel>
-												<h:panelGrid columns="6" cellpadding="5">
-													<h:outputText for="COCLDO" value="Documento: "/>
-													<p:selectOneMenu id="COCLDO" value="#{GestorListaComunidades.sCOCLDO}">
-														<f:selectItem itemLabel="Elija..." itemValue=""/>
-														<f:selectItems value="#{GestorListaComunidades.tiposcocldoHM}"/>
-													</p:selectOneMenu>
-													<h:outputText for="NUDCOM" value="Número: "/>
-													<p:inputText id="NUDCOM" value="#{GestorListaComunidades.sNUDCOM}" size="10" maxlength="10"/>
-													<p:commandButton value="Buscar Comunidad" update="panel, msgs, popup" actionListener="#{GestorListaComunidades.buscarComunidad}"/>
+												<h:panelGrid columns="1" cellpadding="5">
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="5">
+															<h:outputText for="COCLDO" value="Documento: "/>
+															<p:selectOneMenu id="COCLDO" value="#{GestorListaComunidades.sCOCLDO}">
+																<f:selectItem itemLabel="Elija..." itemValue=""/>
+																<f:selectItems value="#{GestorListaComunidades.tiposcocldoHM}"/>
+															</p:selectOneMenu>
+															<h:outputText for="NUDCOM" value="Número: "/>
+															<p:inputText id="NUDCOM" value="#{GestorListaComunidades.sNUDCOM}" size="10" maxlength="10"/>
+															
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText for="NOMCOC" value="Nombre comunidad: "/>
+															<p:inputText id="NOMCOC" value="#{GestorListaComunidades.sNOMCOC}" size="60" maxlength="60"/>
+
+														</h:panelGrid>
+													</p:panel>
 												</h:panelGrid>
 											</p:panel>
+											<p:commandButton value="Buscar Comunidad" update="panel, msgs, popup" actionListener="#{GestorListaComunidades.buscarComunidad}"/>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:contextMenu for="comunidades">
@@ -216,7 +229,7 @@
 							<p:dialog header="Buscar Activos con Comunidades: " widgetVar="dlgBuscar" resizable="false">
 								<p:fieldset legend="Criterios de Busqueda">
 									<h:panelGrid columns="1" cellpadding="5">
-										<p:panel id="panelBuscar" >
+										<p:panel id="panelBuscarActivos" >
 											<h:panelGrid columns="2" cellpadding="5">
 												<h:outputText for="NOPRAC" value="Nombre de la Provincia: "/>
 												<p:inputText id="NOPRAC" value="#{GestorListaComunidades.sNOPRAC}" size="18" maxlength="18"/>
@@ -240,10 +253,18 @@
 												<p:inputText id="NUPUAC" value="#{GestorListaComunidades.sNUPUAC}" size="17" maxlength="17"/>
 											</h:panelGrid>
 										</p:panel>
+											<p:panel id="panelBuscarReferencia" >
+												<h:panelGrid columns="2" cellpadding="5">
+
+													<h:outputText for="NURCAT" value="Referencia Catastral: " />
+													<p:inputText id="NURCAT" value="#{GestorListaComunidades.sNURCAT}" size="22" maxlength="20"/>
+
+												</h:panelGrid>
+											</p:panel>
 										<p:panel >
 											<h:panelGrid columns="3" cellpadding="5">
 												<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorListaComunidades.buscarActivos}" oncomplete="dlgTabla.show()"/>	
-												<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorListaComunidades.limpiarPlantillaActivo}"/>	
+												<p:commandButton value="Limpiar Plantilla" update="panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorListaComunidades.limpiarPlantillaActivo}"/>	
 											</h:panelGrid>
 										</p:panel>
 									</h:panelGrid>

@@ -293,7 +293,7 @@ public class GestorListaGastos implements Serializable
 			{
 		    	this.setTablaactivos(null);
 				
-				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sitema. Por favor, revise los datos.";
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 			}
@@ -407,7 +407,7 @@ public class GestorListaGastos implements Serializable
 
 		logger.debug("sCOGRUGFA:|"+sCOGRUGFA+"|");
 
-		if (sCOGRUGFA !=null && !sCOGRUGFA.equals(""))
+		if (sCOGRUGFA !=null && !sCOGRUGFA.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGFA)) 
 			{
@@ -434,7 +434,7 @@ public class GestorListaGastos implements Serializable
 	{
 		logger.debug("sCOGRUGF:|"+sCOGRUGFA+"| sCOTPGAF:|"+sCOTPGAFA+"|");
 		
-		if (sCOTPGAFA !=null && !sCOTPGAFA.equals(""))
+		if (sCOTPGAFA !=null && !sCOTPGAFA.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGFA+sCOTPGAFA)) 
 			{
@@ -472,7 +472,7 @@ public class GestorListaGastos implements Serializable
 
 		logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"|");
 
-		if (sCOGRUGFP !=null && !sCOGRUGFP.equals(""))
+		if (sCOGRUGFP !=null && !sCOGRUGFP.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGFP)) 
 			{
@@ -499,7 +499,7 @@ public class GestorListaGastos implements Serializable
 	{
 		logger.debug("sCOGRUGFP:|"+sCOGRUGFP+"| sCOTPGAF:|"+sCOTPGAFP+"|");
 		
-		if (sCOTPGAFP !=null && !sCOTPGAFP.equals(""))
+		if (sCOTPGAFP !=null && !sCOTPGAFP.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGFP+sCOTPGAFP)) 
 			{
@@ -557,7 +557,7 @@ public class GestorListaGastos implements Serializable
 			
 			try
 			{
-				if (sCOACES.equals(""))
+				if (sCOACES.isEmpty())
 				{
 					sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
@@ -666,7 +666,7 @@ public class GestorListaGastos implements Serializable
 							"",   
 							sCOGRUGFP,   
 							sCOTPGAFP,   
-							sCOSBGAFP,   
+							sCOSBGAFP,
 							"",  
 							"",   
 							"",  

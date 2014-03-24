@@ -101,6 +101,11 @@ public final class CLComunidades
 	{
 		return QMComunidades.buscaComunidad(ConnectionManager.getDBConnection(),buscarCodigoComunidad (sCodCOCLDO, sCodNUDCOM));
 	}
+	
+	public static ArrayList<ComunidadTabla> buscarComunidadConNombre (String sNOMCOC)
+	{
+		return QMComunidades.buscaComunidadPorNombre(ConnectionManager.getDBConnection(), sNOMCOC);
+	}
 
 	public static ArrayList<ComunidadTabla> buscarComunidadActivo (int iCOACES)
 	{

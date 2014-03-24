@@ -396,7 +396,7 @@ public class GestorGastos implements Serializable
 			{
 		    	this.tablaactivos = null;
 				
-				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sitema. Por favor, revise los datos.";
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 			}

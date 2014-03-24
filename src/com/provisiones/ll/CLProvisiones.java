@@ -65,6 +65,11 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPorFiltroEstado(ConnectionManager.getDBConnection(), filtro, sEstado);
 	}
 	
+	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasConFiltro(ProvisionTabla filtro)
+	{
+		return QMProvisiones.buscaProvisionesPorFiltroEstado(ConnectionManager.getDBConnection(), filtro, ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+	}
+	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasActivo(int iCOACES)
 	{
 		return QMProvisiones.buscaProvisionesAutorizadasPorActivo(ConnectionManager.getDBConnection(),iCOACES);

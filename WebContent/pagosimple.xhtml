@@ -16,7 +16,7 @@
 				<p:layoutUnit position="north" size="auto" header="Pago Manual">
 
  
-								<h:panelGrid columns="4" cellpadding="5">
+					 <h:panelGrid columns="4" cellpadding="5">
 						<p:fieldset legend="Sesión" id="sesion">
 							<h:panelGrid columns="1" cellpadding="1">
 								<p:panel>
@@ -71,7 +71,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACESB" value="Activo: " />
-													<p:inputMask id="COACESB" value="#{GestorPagosSimple.sCOACESB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+													<p:inputText id="COACESB" value="#{GestorPagosSimple.sCOACESB}" size="10" maxlength="9"/>
 
 													<p:commandButton value="Buscar Gastos" update="gastosactivo, msgs, popup" oncomplete="dlgBuscarGastosActivo.show()"/>	
 												</h:panelGrid>
@@ -85,7 +85,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NUPROFB" value="Provisión: " />
-													<p:inputMask id="NUPROFB" value="#{GestorPagosSimple.sNUPROFB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+													<p:inputText id="NUPROFB" value="#{GestorPagosSimple.sNUPROFB}" size="10" maxlength="9"/>
 
 													<p:commandButton value="Buscar Gastos" update="gastosprovision, msgs, popup" oncomplete="dlgBuscarGastosProvision.show()"/>	
 												</h:panelGrid>

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuentas;
 import com.provisiones.ll.CLDescripciones;
@@ -422,7 +423,7 @@ public class GestorPagosSimple implements Serializable
 
 		logger.debug("sCOGRUGBA:|"+sCOGRUGBA+"|");
 
-		if (sCOGRUGBA !=null && !sCOGRUGBA.equals(""))
+		if (sCOGRUGBA !=null && !sCOGRUGBA.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGBA)) 
 			{
@@ -449,7 +450,7 @@ public class GestorPagosSimple implements Serializable
 	{
 		logger.debug("sCOTPGABA:|"+sCOGRUGBA+"| sCOTPGABA:|"+sCOTPGABA+"|");
 		
-		if (sCOTPGABA !=null && !sCOTPGABA.equals(""))
+		if (sCOTPGABA !=null && !sCOTPGABA.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGBA+sCOTPGABA)) 
 			{
@@ -493,7 +494,7 @@ public class GestorPagosSimple implements Serializable
 
 		logger.debug("sCOGRUGB:|"+sCOGRUGBP+"|");
 
-		if (sCOGRUGBP !=null && !sCOGRUGBP.equals(""))
+		if (sCOGRUGBP !=null && !sCOGRUGBP.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGBP)) 
 			{
@@ -520,7 +521,7 @@ public class GestorPagosSimple implements Serializable
 	{
 		logger.debug("sCOTPGABP:|"+sCOGRUGBP+"| sCOTPGABP:|"+sCOTPGABP+"|");
 		
-		if (sCOTPGABP !=null && !sCOTPGABP.equals(""))
+		if (sCOTPGABP !=null && !sCOTPGABP.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGBP+sCOTPGABP)) 
 			{
@@ -577,7 +578,11 @@ public class GestorPagosSimple implements Serializable
 		{
 			FacesMessage msg;
 			
-			if (sNURCATB.equals(""))
+			String sMsg = "";
+			
+			this.activoseleccionado = null;
+			
+			if (sNURCATB.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
 						"", sCOPOINB.toUpperCase(), sNOMUINB.toUpperCase(),
@@ -585,18 +590,54 @@ public class GestorPagosSimple implements Serializable
 						sNUPOACB.toUpperCase(), sNUPUACB.toUpperCase(), "");
 				
 				this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 
 			}
-			else
+			else if (CLReferencias.existeReferenciaCatastral(sNURCATB))
 			{
 				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConGastosAutorizados(sNURCATB));
 				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			}
-
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
-			
+			else
+			{
+		    	this.tablaactivos = null;
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+		
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		
@@ -628,15 +669,36 @@ public class GestorPagosSimple implements Serializable
 			
 			String sFecha = Utils.compruebaFecha(sFEPFONB);
 			
+			
+			this.setProvisionseleccionada(null);
+			
 			if (sFecha.equals("#"))
 			{
 				sMsg = "La fecha proporcionada no es válida. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+				
+		    	this.setTablaprovisiones(null);
 			}
 			else
 			{
-				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasFecha(sFecha));
+				String sNUPROFF = "";
+				String sCOSPATF = "";
+				String sDCOSPATF = "";
+				String sTASF = "";
+				String sDTASF = "";	
+				String sCOGRUGF = "";
+				String sDCOGRUGF = "";	
+				String sCOTPGAF = "";
+				String sDCOTPGAF = "";
+				String sFEPFONF = sFecha;
+				String sVALORF = "";
+				String sGASTOSF = "";
+				
+				ProvisionTabla filtro = new ProvisionTabla(sNUPROFF, sCOSPATF, sDCOSPATF,
+						sTASF, sDTASF, sCOGRUGF, sDCOGRUGF, sCOTPGAF, sDCOTPGAF, sFEPFONF, sVALORF, sGASTOSF);
+				
+				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasConFiltro(filtro));
 
 				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -672,10 +734,23 @@ public class GestorPagosSimple implements Serializable
 			FacesMessage msg;
 
 			String sMsg = "";
-			if (!sCOACESB.equals(""))
+			
+			this.gastoactivoseleccionado = null;
+
+			if (sCOACESB.isEmpty())
+			{
+				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				
+				this.setTablagastosactivo(null);
+				
+			}
+			else if (CLActivos.existeActivo(Integer.parseInt(sCOACESB)))
 			{
 				try
 				{
+					
 					GastoTabla filtro = new GastoTabla(
 							"",
 							"",   
@@ -686,7 +761,7 @@ public class GestorPagosSimple implements Serializable
 							"",  
 							"",   
 							"",  
-							sFEDEVEBA,   
+							Utils.compruebaFecha(sFEDEVEBA),   
 							"",   
 							"",  
 							"");
@@ -697,39 +772,40 @@ public class GestorPagosSimple implements Serializable
 					
 					if (getTablagastosactivo().size() == 0)
 					{
-						sMsg = "No se encontraron gastos con los criterios solicitados.";
+						sMsg = "No se encontraron Gastos con los criterios solicitados.";
 						msg = Utils.pfmsgWarning(sMsg);
 						logger.warn(sMsg);
 					}
 					else if (getTablagastosactivo().size() == 1)
 					{
-						sMsg = "Encontrado un gasto relacionado.";
+						sMsg = "Encontrado un Gasto relacionado.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 					}
 					else
 					{
-						sMsg = "Encontrados "+getTablagastosactivo().size()+" gastos relacionados.";
+						sMsg = "Encontrados "+getTablagastosactivo().size()+" Gastos relacionados.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 					}
 				}
 				catch(NumberFormatException nfe)
 				{
-					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
+					
+					this.setTablagastosactivo(null);
 				}
-				
-				
 			}
 			else
 			{
-				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
+				sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
-			}
-
+				
+		    	this.setTablagastosactivo(null);
+			} 
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -742,8 +818,18 @@ public class GestorPagosSimple implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
+			
+			String sMsg = "";
 
-			if (!sNUPROFB.equals(""))
+			if (sNUPROFB.isEmpty())
+			{
+				sMsg = "No se informó el campo 'Provisión'. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				
+				this.setTablagastosprovision(null);
+			}
+			else if (CLProvisiones.existeProvision(sNUPROFB))
 			{
 				GastoTabla filtro = new GastoTabla(
 						"",
@@ -755,7 +841,7 @@ public class GestorPagosSimple implements Serializable
 						"",  
 						"",   
 						"",  
-						sFEDEVEBP,   
+						Utils.compruebaFecha(sFEDEVEBP),   
 						"",   
 						"",  
 						"");
@@ -764,22 +850,31 @@ public class GestorPagosSimple implements Serializable
 				
 				if (getTablagastosprovision().size() == 0)
 				{
-					msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
+					sMsg = "No se encontraron Gastos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 				}
 				else if (getTablagastosprovision().size() == 1)
 				{
-					msg = Utils.pfmsgInfo("Encontrado un gasto relacionado.");
+					sMsg = "Encontrado un Gasto relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
 				}
 				else
 				{
-					msg = Utils.pfmsgInfo("Encontrados "+getTablagastosprovision().size()+" gastos relacionados.");
+					sMsg = "Encontrados "+getTablagastosprovision().size()+" Gastos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
 				}
 			}
 			else
 			{
-				msg = Utils.pfmsgWarning("No se informó el campo 'Provisión'. Por favor, revise los datos.");
+				sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				
+				this.setTablagastosprovision(null);
 			}
-
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -967,17 +1062,17 @@ public class GestorPagosSimple implements Serializable
 
 				Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
 				
-				if (!comunidad.getsNUDCOM().equals(""))
+				if (!comunidad.getsNUDCOM().isEmpty())
 				{
 					this.setTablacuentascomunidad(CLCuentas.buscarCuentasComunidad(CLComunidades.buscarCodigoComunidad(comunidad.getsCOCLDO(), comunidad.getsNUDCOM())));
 
-					sMsg = "Encontradas "+getTablacuentascomunidad().size()+" cuentas de la comunidad.";
+					sMsg = "Encontradas "+getTablacuentascomunidad().size()+" Cuentas de la Comunidad.";
 					msg = Utils.pfmsgInfo(sMsg);
 					logger.info(sMsg);
 				}
 				else
 				{
-					sMsg = "El activo no esta asociado a una comunidad.";
+					sMsg = "El Activo no esta asociado a una comunidad.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
 				}
@@ -985,7 +1080,7 @@ public class GestorPagosSimple implements Serializable
 			}
 			catch(NumberFormatException nfe)
 			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
@@ -1096,7 +1191,7 @@ public class GestorPagosSimple implements Serializable
 			
 			try
 			{
-				if (sCOACES.equals("") || sCOGRUG.equals("") || sCOTPGA.equals("") || sCOSBGA.equals("") || sFEDEVE.equals(""))
+				if (sCOACES.isEmpty() || sCOGRUG.isEmpty() || sCOTPGA.isEmpty() || sCOSBGA.isEmpty() || sFEDEVE.isEmpty())
 				{
 					sMsg = "ERROR: No se ha seleccionado un Gasto. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
@@ -1108,16 +1203,16 @@ public class GestorPagosSimple implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-				else if (sFEPGPR.equals(""))
+				else if (sFEPGPR.isEmpty())
 				{
 					sMsg = "ERROR: La fecha de pago no se ha informado. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-				else if (sNUCCEN.equals("") ||
-						sNUCCOF.equals("") ||
-						sNUCCDI.equals("") ||
-						sNUCCNT.equals(""))
+				else if (sNUCCEN.isEmpty() ||
+						sNUCCOF.isEmpty() ||
+						sNUCCDI.isEmpty() ||
+						sNUCCNT.isEmpty())
 				{
 					sMsg = "ERROR: Faltan campos en la cuenta de pago por informar. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);

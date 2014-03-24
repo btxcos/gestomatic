@@ -219,16 +219,35 @@ public class GestorPagosComunidad implements Serializable
 			
 			String sFecha = Utils.compruebaFecha(sFEPFONB);
 			
+			this.setProvisionseleccionada(null);
+			
 			if (sFecha.equals("#"))
 			{
 				sMsg = "La fecha proporcionada no es válida. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
-				
 				logger.error(sMsg);
+				
+				this.setTablaprovisiones(null);
 			}
 			else
 			{
-				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasFecha(sFecha));
+				String sNUPROFF = "";
+				String sCOSPATF = "";
+				String sDCOSPATF = "";
+				String sTASF = "";
+				String sDTASF = "";	
+				String sCOGRUGF = "";
+				String sDCOGRUGF = "";	
+				String sCOTPGAF = "";
+				String sDCOTPGAF = "";
+				String sFEPFONF = sFecha;
+				String sVALORF = "";
+				String sGASTOSF = "";
+				
+				ProvisionTabla filtro = new ProvisionTabla(sNUPROFF, sCOSPATF, sDCOSPATF,
+						sTASF, sDTASF, sCOGRUGF, sDCOGRUGF, sCOTPGAF, sDCOTPGAF, sFEPFONF, sVALORF, sGASTOSF);
+				
+				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasConFiltro(filtro));
 
 				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -313,26 +332,49 @@ public class GestorPagosComunidad implements Serializable
 			
 			String sMsg = ""; 
 			
+			this.comunidadseleccionada = null;
+			
 			if (sNUPROF.isEmpty())
 			{
 				sMsg = "ERROR: La Provisión de fondos debe de ser informada para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+				
+				this.setTablacomunidades(null);
 			}
-			else if (!CLProvisiones.existeProvision(sNUPROF))
+			else if (CLProvisiones.existeProvision(sNUPROF))
+			{
+				this.setTablacomunidades(CLComunidades.buscarComunidadesPagablesDeProvision (sNUPROF));
+
+				
+				if (getTablacomunidades().size() == 0)
+				{
+					sMsg = "No se encontraron Comunidades con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+				}
+				else if (getTablacomunidades().size() == 1)
+				{
+					sMsg = "Encontrada una Comunidad relacionada.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontradas "+getTablacomunidades().size()+" Comunidades relacionadas.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				
+			}
+			else
 			{
 				sMsg = "La Provisión informada no está registrada. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
-			}
-			else
-			{
 				
-				this.setTablacomunidades(CLComunidades.buscarComunidadesPagablesDeProvision (sNUPROF));
-
-				sMsg = "Encontradas "+getTablacomunidades().size()+" comunidades relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
+				this.setTablacomunidades(null);
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -379,11 +421,15 @@ public class GestorPagosComunidad implements Serializable
 			
 			String sMsg = "";
 			
+			this.cuentacomunidadseleccionada = null;
+			
 			if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 			{
 				sMsg = "Faltan datos de la Comunidad por informar.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
+				
+				this.setTablacuentascomunidad(null);
 			}
 			else 
 			{
