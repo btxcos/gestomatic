@@ -736,21 +736,20 @@ public class GestorPagosSimple implements Serializable
 			String sMsg = "";
 			
 			this.gastoactivoseleccionado = null;
-
-			if (sCOACESB.isEmpty())
+			
+			try
 			{
-				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
-				
-				this.setTablagastosactivo(null);
-				
-			}
-			else if (CLActivos.existeActivo(Integer.parseInt(sCOACESB)))
-			{
-				try
+				if (sCOACESB.isEmpty())
 				{
+					sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 					
+					this.setTablagastosactivo(null);
+					
+				}
+				else if (CLActivos.existeActivo(Integer.parseInt(sCOACESB)))
+				{
 					GastoTabla filtro = new GastoTabla(
 							"",
 							"",   
@@ -788,24 +787,26 @@ public class GestorPagosSimple implements Serializable
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 					}
+
 				}
-				catch(NumberFormatException nfe)
+				else
 				{
-					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
+					sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 					
-					this.setTablagastosactivo(null);
+			    	this.setTablagastosactivo(null);
 				}
+
 			}
-			else
+			catch(NumberFormatException nfe)
 			{
-				sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
+				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				
-		    	this.setTablagastosactivo(null);
-			} 
+				this.setTablagastosactivo(null);
+			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -820,61 +821,75 @@ public class GestorPagosSimple implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = "";
-
-			if (sNUPROFB.isEmpty())
+			
+			try
 			{
-				sMsg = "No se informó el campo 'Provisión'. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
+				Long.parseLong(sNUPROFB);
 				
-				this.setTablagastosprovision(null);
-			}
-			else if (CLProvisiones.existeProvision(sNUPROFB))
-			{
-				GastoTabla filtro = new GastoTabla(
-						"",
-						sNUPROFB,   
-						sCOACESBP,   
-						sCOGRUGBP,   
-						sCOTPGABP,   
-						sCOSBGABP,   
-						"",  
-						"",   
-						"",  
-						Utils.compruebaFecha(sFEDEVEBP),   
-						"",   
-						"",  
-						"");
-				
-				this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro));
-				
-				if (getTablagastosprovision().size() == 0)
+				if (sNUPROFB.isEmpty())
 				{
-					sMsg = "No se encontraron Gastos con los criterios solicitados.";
+					sMsg = "No se informó el campo 'Provisión'. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
+					
+					this.setTablagastosprovision(null);
 				}
-				else if (getTablagastosprovision().size() == 1)
+				else if (CLProvisiones.existeProvision(sNUPROFB))
 				{
-					sMsg = "Encontrado un Gasto relacionado.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					GastoTabla filtro = new GastoTabla(
+							"",
+							sNUPROFB,   
+							sCOACESBP,   
+							sCOGRUGBP,   
+							sCOTPGABP,   
+							sCOSBGABP,   
+							"",  
+							"",   
+							"",  
+							Utils.compruebaFecha(sFEDEVEBP),   
+							"",   
+							"",  
+							"");
+					
+					this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro));
+					
+					if (getTablagastosprovision().size() == 0)
+					{
+						sMsg = "No se encontraron Gastos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else if (getTablagastosprovision().size() == 1)
+					{
+						sMsg = "Encontrado un Gasto relacionado.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontrados "+getTablagastosprovision().size()+" Gastos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
 				}
 				else
 				{
-					sMsg = "Encontrados "+getTablagastosprovision().size()+" Gastos relacionados.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+					this.setTablagastosprovision(null);
 				}
 			}
-			else
+			catch(NumberFormatException nfe)
 			{
-				sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
+				sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 				
-				this.setTablagastosprovision(null);
+				this.setTablagastosactivo(null);
 			}
+
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
