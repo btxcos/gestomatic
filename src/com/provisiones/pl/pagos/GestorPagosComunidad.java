@@ -334,48 +334,60 @@ public class GestorPagosComunidad implements Serializable
 			
 			this.comunidadseleccionada = null;
 			
-			if (sNUPROF.isEmpty())
+			try
 			{
-				sMsg = "ERROR: La Provisión de fondos debe de ser informada para realizar la búsqueda. Por favor, revise los datos.";
+				if (sNUPROF.isEmpty())
+				{
+					sMsg = "ERROR: La Provisión de fondos debe de ser informada para realizar la búsqueda. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+					
+					this.setTablacomunidades(null);
+				}
+				else if (CLProvisiones.existeProvision(sNUPROF))
+				{
+					this.setTablacomunidades(CLComunidades.buscarComunidadesPagablesDeProvision (sNUPROF));
+
+					
+					if (getTablacomunidades().size() == 0)
+					{
+						sMsg = "No se encontraron Comunidades con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+						
+					}
+					else if (getTablacomunidades().size() == 1)
+					{
+						sMsg = "Encontrada una Comunidad relacionada.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontradas "+getTablacomunidades().size()+" Comunidades relacionadas.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					
+				}
+				else
+				{
+					sMsg = "La Provisión informada no está registrada. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+					this.setTablacomunidades(null);
+				}
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				
 				this.setTablacomunidades(null);
 			}
-			else if (CLProvisiones.existeProvision(sNUPROF))
-			{
-				this.setTablacomunidades(CLComunidades.buscarComunidadesPagablesDeProvision (sNUPROF));
-
-				
-				if (getTablacomunidades().size() == 0)
-				{
-					sMsg = "No se encontraron Comunidades con los criterios solicitados.";
-					msg = Utils.pfmsgWarning(sMsg);
-					logger.warn(sMsg);
-					
-				}
-				else if (getTablacomunidades().size() == 1)
-				{
-					sMsg = "Encontrada una Comunidad relacionada.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-				else
-				{
-					sMsg = "Encontradas "+getTablacomunidades().size()+" Comunidades relacionadas.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-				
-			}
-			else
-			{
-				sMsg = "La Provisión informada no está registrada. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
-				
-				this.setTablacomunidades(null);
-			}
+			
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}

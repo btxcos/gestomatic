@@ -887,7 +887,7 @@ public class GestorPagosSimple implements Serializable
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				
-				this.setTablagastosactivo(null);
+				this.setTablagastosprovision(null);
 			}
 
 
