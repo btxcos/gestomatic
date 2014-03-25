@@ -220,5 +220,10 @@
 		<managed-bean-class>com.provisiones.pl.pagos.GestorPagosComunidad</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorPagosProvision</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.pagos.GestorPagosProvision</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

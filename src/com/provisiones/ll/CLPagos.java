@@ -510,4 +510,43 @@ public class CLPagos
 		
 		return iCodigo;
 	}
+	
+	public static int registraPagoProvision(String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, boolean bValida)
+	{
+		int iCodigo = -910;//Error de conexion
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			ArrayList<GastoTabla> listagastos = CLGastos.buscarGastosPagablesProvision(sNUPROF);
+			
+            for (int i = 0; i < listagastos.size() ; i++)
+            {
+            	GastoTabla gasto = listagastos.get(i);
+            	
+            	String sPago = sTipoPago;
+            	
+            	if (gasto.getIMNGAS().startsWith("-"))
+            	{
+            		sPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
+            	}
+            	else if (QMGastos.getValorTotal(conexion, Long.parseLong(gasto.getsGastoID())) == 0)
+				{
+            		sPago = ValoresDefecto.DEF_PAGO_VENTANILLA;
+				}
+            	
+            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR);
+            	
+            	iCodigo = registraPagoSimple(pago, cuenta, bValida);
+            	
+            	if (iCodigo != 0)
+            	{
+            		i = listagastos.size();
+            	}
+            }
+		}
+		
+		return iCodigo;
+	}
 }

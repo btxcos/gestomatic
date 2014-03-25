@@ -612,7 +612,7 @@
 												<h:panelGrid columns="2" cellpadding="5">
 													
 													<p:commandButton value="Buscar" update="msgs, popup, :form:gastosprovision" actionListener="#{GestorPagosSimple.buscarGastosProvision}" oncomplete="dlgTablaGastosProvision.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosProvision" actionListener="#{GestorPagosSimple.limpiarPlantillaBuscarGastoProvision}" />	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosProvision, COACESBP" actionListener="#{GestorPagosSimple.limpiarPlantillaBuscarGastoProvision}" />	
 
 												</h:panelGrid>
 											</p:panel>
