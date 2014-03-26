@@ -3,6 +3,8 @@ package com.provisiones.pl.detalles;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -16,6 +18,7 @@ import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.GastoTabla;
 
@@ -63,15 +66,29 @@ public class GestorDetallesProvision implements Serializable
 
 	private String sNota = "";
 	
+	private String sEstadoGastos = "";
+	
 	private transient GastoTabla gastoseleccionado = null;
+	
 	private transient ArrayList<GastoTabla> tablagastos = null;
-
+	
+	private transient ArrayList<GastoTabla> tablagastosenviados = null;
+	private transient ArrayList<GastoTabla> tablagastosautorizados = null;
+	private transient ArrayList<GastoTabla> tablagastospagados = null;
+	
+	private Map<String,String> tiposestadogastoHM = new LinkedHashMap<String, String>();
+	
 	public GestorDetallesProvision()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
 			logger.debug("Iniciando GestorDetallesProvision...");
 			cargarDetallesProvision();
+			
+			tiposestadogastoHM.put("ENVIADOS",	"E");
+			tiposestadogastoHM.put("AUTORIZADO","3");
+			tiposestadogastoHM.put("PAGADO",    "4");
+
 		}
 	}
 	
@@ -139,7 +156,10 @@ public class GestorDetallesProvision implements Serializable
 
 	    	this.sCodEstado = provision.getsCodEstado();
 	    	
-	    	
+	    	this.tablagastosenviados = CLGastos.buscarGastosEnviadosProvision(sNUPROF);
+	    	this.tablagastosautorizados =  CLGastos.buscarGastosAutorizadosProvision(sNUPROF);
+	    	this.tablagastospagados =  CLGastos.buscarGastosPagadosProvision(sNUPROF);
+
 		}
 		
 	}
@@ -177,9 +197,29 @@ public class GestorDetallesProvision implements Serializable
 	
 	public void buscarGastos()
 	{
-    	this.setTablagastos(CLGastos.buscarGastosProvision(sNUPROF));
+		FacesMessage msg;
 
-    	logger.debug("Tamaño:"+tablagastos.size());	
+		String sMsg = "";
+		
+		if (this.sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
+		{
+			this.setTablagastos(this.tablagastosautorizados);	
+		}
+		else if (this.sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_PAGADO))
+		{
+			this.setTablagastos(this.tablagastospagados);	
+		}
+		else
+		{
+			this.setTablagastos(this.tablagastosenviados);
+		}
+    	
+    	
+    	sMsg = "Gastos cargados correctamente.";
+		msg = Utils.pfmsgInfo(sMsg);
+		logger.info(sMsg);
+
+    	FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
 	public void cargarDetallesGasto(ActionEvent actionEvent) 
@@ -435,6 +475,14 @@ public class GestorDetallesProvision implements Serializable
 		this.sNota = sNota;
 	}
 
+	public String getsEstadoGastos() {
+		return sEstadoGastos;
+	}
+
+	public void setsEstadoGastos(String sEstadoGastos) {
+		this.sEstadoGastos = sEstadoGastos;
+	}
+
 	public GastoTabla getGastoseleccionado() {
 		return gastoseleccionado;
 	}
@@ -451,4 +499,11 @@ public class GestorDetallesProvision implements Serializable
 		this.tablagastos = tablagastos;
 	}
 
+	public Map<String, String> getTiposestadogastoHM() {
+		return tiposestadogastoHM;
+	}
+
+	public void setTiposestadogastoHM(Map<String, String> tiposestadogastoHM) {
+		this.tiposestadogastoHM = tiposestadogastoHM;
+	}
 }

@@ -1458,7 +1458,8 @@ public final class QMListaComunidadesActivos
 						bEncontrado = true;
 						
 						String sComunidadID = rs.getString(QMComunidades.CAMPO1);
-						String sCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMComunidades.CAMPO2));
+						String sCOCLDO = rs.getString(QMComunidades.CAMPO2);
+						String sDCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
 						String sNUDCOM = rs.getString(QMComunidades.CAMPO3);
 
 						String sNOMCOC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
@@ -1468,7 +1469,7 @@ public final class QMListaComunidadesActivos
 						
 						String sActivos = ""+buscaNumeroActivos(conexion, rs.getLong(QMComunidades.CAMPO1));
 						
-						ComunidadTabla comunidadencontrada = new ComunidadTabla(sComunidadID, sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, sActivos);
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(sComunidadID, sCOCLDO, sDCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, sActivos);
 						
 						resultado.add(comunidadencontrada);
 						
@@ -1655,6 +1656,83 @@ public final class QMListaComunidadesActivos
 				sOBTEXC);
 	}
 	
+	
+	public static long buscaCodigoComunidadPorActivo(Connection conexion, int iCodCOACES)
+	{
+
+		long liCodComunidad = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + QMComunidades.CAMPO1  +
+				       " FROM " 
+					   + QMComunidades.TABLA + 
+					   " WHERE "
+					   
+					   + QMComunidades.CAMPO1 + " IN (SELECT " + CAMPO2 +
+					   " FROM " 
+					   + TABLA +
+					   " WHERE "
+					   + CAMPO1 +  " = '" + iCodCOACES	+ "')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						
+						liCodComunidad = rs.getLong(QMComunidades.CAMPO1); 
+						
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				liCodComunidad = 0;
+
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liCodComunidad;
+	}
+	
 	public static ArrayList<ComunidadTabla> buscaComunidadesPagablesPorProvision(Connection conexion, String sNUPROF)
 	{
 		ArrayList<ComunidadTabla> resultado = new ArrayList<ComunidadTabla>();
@@ -1717,7 +1795,8 @@ public final class QMListaComunidadesActivos
 						bEncontrado = true;
 						
 						String sComunidadID = rs.getString(QMComunidades.CAMPO1);
-						String sCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(QMComunidades.CAMPO2)); 
+						String sCOCLDO = rs.getString(QMComunidades.CAMPO2);
+						String sDCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO); 
 						String sNUDCOM = rs.getString(QMComunidades.CAMPO3);
 						
 						/*sNOMCOC = rs.getString(QMComunidades.CAMPO4); 
@@ -1736,8 +1815,9 @@ public final class QMListaComunidadesActivos
 						String sNOMPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 						String sNOMADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
 
+						String sActivos = ""+buscaNumeroActivos(conexion, rs.getLong(QMComunidades.CAMPO1));
 
-						ComunidadTabla comunidadencontrada = new ComunidadTabla(sComunidadID, sCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, "");
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(sComunidadID, sCOCLDO, sDCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, sActivos);
 						
 						resultado.add(comunidadencontrada);
 						
@@ -1770,6 +1850,119 @@ public final class QMListaComunidadesActivos
 		return resultado;
 	}
 	
+	public static ArrayList<ComunidadTabla> buscaComunidadesProvisionadasPorFiltro(Connection conexion, ComunidadTabla filtro)
+	{
+		ArrayList<ComunidadTabla> resultado = new ArrayList<ComunidadTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			String sCondicionNOMCOC = filtro.getNOMCOC().isEmpty()?"":"(INSTR(AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + filtro.getNOMCOC() + "') > 0) AND ";
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + QMComunidades.CAMPO1 + "," 
+					   + QMComunidades.CAMPO2 + ","        
+					   + QMComunidades.CAMPO3 + ","
+					   + "AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" +
+					   " FROM " 
+					   + QMComunidades.TABLA + 
+					   " WHERE "
+					   + sCondicionNOMCOC
+					   + QMComunidades.CAMPO1 + " IN (SELECT " 
+					   + CAMPO2 +
+					   " FROM " 
+					   + TABLA +
+					   " WHERE "
+					   + CAMPO1 +  " IN (SELECT " 
+					   + QMGastos.CAMPO2 +
+					   " FROM " 
+					   + QMGastos.TABLA +
+					   " WHERE "
+					   + QMGastos.CAMPO1 +  " IN (SELECT "
+					   + QMListaGastosProvisiones.CAMPO1 +
+					   " FROM " 
+					   + QMListaGastosProvisiones.TABLA +
+					   " )))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sComunidadID = rs.getString(QMComunidades.CAMPO1);
+						String sCOCLDO = rs.getString(QMComunidades.CAMPO2);
+						String sDCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO); 
+						String sNUDCOM = rs.getString(QMComunidades.CAMPO3);
+						
+						/*sNOMCOC = rs.getString(QMComunidades.CAMPO4); 
+						sNODCCO = rs.getString(QMComunidades.CAMPO5); 
+						sNOMPRC = rs.getString(QMComunidades.CAMPO6); 
+						sNUTPRC = rs.getString(QMComunidades.CAMPO7); 
+						sNOMADC = rs.getString(QMComunidades.CAMPO8); 
+						sNUTADC = rs.getString(QMComunidades.CAMPO9); 
+						sNODCAD = rs.getString(QMComunidades.CAMPO10);
+						sNUCCEN = rs.getString(QMComunidades.CAMPO11);
+						sNUCCOF = rs.getString(QMComunidades.CAMPO12);
+						sNUCCDI = rs.getString(QMComunidades.CAMPO13);
+						sNUCCNT = rs.getString(QMComunidades.CAMPO14);*/
+						
+						String sNOMCOC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						String sNOMPRC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						String sNOMADC = rs.getString("AES_DECRYPT("+QMComunidades.CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+
+						String sActivos = ""+buscaNumeroActivos(conexion, rs.getLong(QMComunidades.CAMPO1));
+
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(sComunidadID, sCOCLDO, sDCOCLDO, sNUDCOM, sNOMCOC, sNOMPRC, sNOMADC, sActivos);
+						
+						resultado.add(comunidadencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ComunidadTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
 	
 	public static ArrayList<Long> buscarDependencias(Connection conexion, long liCodComunidad, long liCodMovimiento)
 	{

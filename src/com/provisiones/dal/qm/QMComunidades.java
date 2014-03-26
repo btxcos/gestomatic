@@ -1131,7 +1131,8 @@ public final class QMComunidades
 					{
 						bEncontrado = true;
 						
-						String sCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(CAMPO2));
+						String sCOCLDO = rs.getString(CAMPO2);
+						String sDCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
 						String sNUDCOM = rs.getString(CAMPO3);
 
 						String sNOMCOC = rs.getString("AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
@@ -1144,6 +1145,7 @@ public final class QMComunidades
 						ComunidadTabla comunidadencontrada = new ComunidadTabla(
 								Long.toString(liCodComunidadID),
 								sCOCLDO,
+								sDCOCLDO,
 								sNUDCOM,
 								sNOMCOC,
 								sNOMPRC,
@@ -1225,7 +1227,8 @@ public final class QMComunidades
 						bEncontrado = true;
 						
 						String sCodComunidadID = rs.getString(CAMPO1);
-						String sCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, rs.getString(CAMPO2));
+						String sCOCLDO = rs.getString(CAMPO2);
+						String sDCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
 						String sNUDCOM = rs.getString(CAMPO3);
 						
 						String sNOMPRC = rs.getString("AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
@@ -1237,6 +1240,7 @@ public final class QMComunidades
 						ComunidadTabla comunidadencontrada = new ComunidadTabla(
 								sCodComunidadID,
 								sCOCLDO,
+								sDCOCLDO,
 								sNUDCOM,
 								rs.getString("AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),
 								sNOMPRC,

@@ -166,7 +166,7 @@ public class GestorListaActivos implements Serializable {
 			try
 			{
 				
-				if (sCOACES.equals(""))
+				if (sCOACES.isEmpty())
 				{
 					ActivoTabla filtro = new ActivoTabla(
 							"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),

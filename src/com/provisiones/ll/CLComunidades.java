@@ -106,7 +106,7 @@ public final class CLComunidades
 	{
 		return QMComunidades.buscaComunidadPorNombre(ConnectionManager.getDBConnection(), sNOMCOC);
 	}
-
+	
 	public static ArrayList<ComunidadTabla> buscarComunidadActivo (int iCOACES)
 	{
 		return QMListaComunidadesActivos.buscaComunidadActivo(ConnectionManager.getDBConnection(),iCOACES);
@@ -149,9 +149,19 @@ public final class CLComunidades
 		return QMListaComunidadesActivos.buscaComunidadPorActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
+	public static long buscarCodigoComunidadDeActivo (int iCodCOACES)
+	{
+		return QMListaComunidadesActivos.buscaCodigoComunidadPorActivo(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
+	
 	public static ArrayList<ComunidadTabla> buscarComunidadesPagablesDeProvision (String sNUPROF)
 	{
 		return QMListaComunidadesActivos.buscaComunidadesPagablesPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
+	}
+	
+	public static ArrayList<ComunidadTabla> buscarComunidadesProvisionadasConFiltro(ComunidadTabla filtro)
+	{
+		return QMListaComunidadesActivos.buscaComunidadesProvisionadasPorFiltro(ConnectionManager.getDBConnection(), filtro);
 	}
 	
 	public static Comunidad buscarComunidad (long liCodComunidad)

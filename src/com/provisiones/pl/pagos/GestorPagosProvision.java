@@ -193,9 +193,22 @@ public class GestorPagosProvision implements Serializable
 				String sFEPFONF = sFecha;
 				String sVALORF = "";
 				String sGASTOSF = "";
+				String sESTADOF = "";
 				
-				ProvisionTabla filtro = new ProvisionTabla(sNUPROFF, sCOSPATF, sDCOSPATF,
-						sTASF, sDTASF, sCOGRUGF, sDCOGRUGF, sCOTPGAF, sDCOTPGAF, sFEPFONF, sVALORF, sGASTOSF);
+				ProvisionTabla filtro = new ProvisionTabla(
+						sNUPROFF, 
+						sCOSPATF, 
+						sDCOSPATF,
+						sTASF, 
+						sDTASF, 
+						sCOGRUGF, 
+						sDCOGRUGF, 
+						sCOTPGAF, 
+						sDCOTPGAF, 
+						sFEPFONF, 
+						sVALORF, 
+						sGASTOSF,
+						sESTADOF);
 				
 				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasConFiltro(filtro));
 

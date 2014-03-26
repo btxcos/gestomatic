@@ -1005,7 +1005,7 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosProvision(Connection conexion, String sNUPROF)
+	public static ArrayList<GastoTabla> buscaGastosProvisionPorEstadoGasto(Connection conexion, String sNUPROF, String sEstado)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -1018,18 +1018,7 @@ public final class QMListaGastosProvisiones
 
 			boolean bEncontrado = false;
 
-			String sGastoID = "";
-			String sCOACES = "";
-			String sCOGRUG = "";
-			String sCOTPGA = "";
-			String sCOSBGA = "";
-			String sDCOSBGA = "";
-			String sPTPAGO = "";
-			String sDPTPAGO = "";
-			String sFEDEVE = "";
-			String sCOSIGA = "";
-			String sDCOSIGA = "";
-			String sIMNGAS = "";
+			String sCondicionEstado = sEstado.isEmpty()?"":QMGastos.CAMPO34 + " = '" + sEstado + "' AND ";
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1044,10 +1033,10 @@ public final class QMListaGastosProvisiones
 						   + QMGastos.CAMPO10 + ","
 						   + QMGastos.CAMPO15 + ","
 						   + QMGastos.CAMPO16 +
-
 						   " FROM " 
 						   + QMGastos.TABLA + 
 						   " WHERE ("
+						   + sCondicionEstado
 						   + QMGastos.CAMPO1 + 
 						   " IN (SELECT "
 						   +  CAMPO1 + 
@@ -1074,18 +1063,18 @@ public final class QMListaGastosProvisiones
 					{
 						bEncontrado = true;
 						
-						sGastoID = rs.getString(QMGastos.CAMPO1);
-						sCOACES  = rs.getString(QMGastos.CAMPO2);
-						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
-						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
-						sCOSBGA  = rs.getString(QMGastos.CAMPO5);
-						sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
-						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
-						sDPTPAGO = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
-						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
-						sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						String sGastoID = rs.getString(QMGastos.CAMPO1);
+						String sCOACES  = rs.getString(QMGastos.CAMPO2);
+						String sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						String sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						String sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						String sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						String sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						String sDPTPAGO = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						String sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						String sCOSIGA  = rs.getString(QMGastos.CAMPO10);
+						String sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -1536,7 +1525,7 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosPagablesProvisionPorComunidad(Connection conexion, String sNUPROF, long iCodComunidad)
+	public static ArrayList<GastoTabla> buscaGastosPagablesProvisionPorComunidad(Connection conexion, String sNUPROF, long liCodComunidad)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -1592,7 +1581,7 @@ public final class QMListaGastosProvisiones
 						   " FROM " 
 						   + QMListaComunidadesActivos.TABLA + 
 						   " WHERE " 
-						   + QMListaComunidadesActivos.CAMPO2 + " = "+ iCodComunidad + "))";
+						   + QMListaComunidadesActivos.CAMPO2 + " = "+ liCodComunidad + "))";
 						   
 			
 			logger.debug(sQuery);
@@ -1654,7 +1643,7 @@ public final class QMListaGastosProvisiones
 			catch (SQLException ex) 
 			{
 				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
-				logger.error("ERROR COMUNIDAD:|"+iCodComunidad+"|");
+				logger.error("ERROR COMUNIDAD:|"+liCodComunidad+"|");
 				
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

@@ -53,8 +53,17 @@ public final class CLProvisiones
 	{
 		return QMProvisiones.getProvisionesSinAutorizarPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PENDIENTE);
 	}
-	
 
+	public static ArrayList<ProvisionTabla> buscarProvisionesActivoConFiltro(int iCOACES, ProvisionTabla filtro)
+	{
+		return QMProvisiones.buscaProvisionesActivoPorFiltro(ConnectionManager.getDBConnection(),iCOACES, filtro);
+	}
+	
+	public static ArrayList<ProvisionTabla> buscarProvisionesComunidadConFiltro(long liCodComunidad, ProvisionTabla filtro)
+	{
+		return QMProvisiones.buscaProvisionesComunidadPorFiltro(ConnectionManager.getDBConnection(),liCodComunidad, filtro);
+	}
+	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAbiertas()
 	{
 		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_ABIERTA);
@@ -65,14 +74,16 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 	}
 	
-	public static ArrayList<ProvisionTabla> buscarProvisionesConFiltroEstado(ProvisionTabla filtro, String sEstado)
+	public static ArrayList<ProvisionTabla> buscarProvisionesConFiltro(ProvisionTabla filtro)
 	{
-		return QMProvisiones.buscaProvisionesPorFiltroEstado(ConnectionManager.getDBConnection(), filtro, sEstado);
+		return QMProvisiones.buscaProvisionesPorFiltro(ConnectionManager.getDBConnection(), filtro);
 	}
 	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasConFiltro(ProvisionTabla filtro)
 	{
-		return QMProvisiones.buscaProvisionesPorFiltroEstado(ConnectionManager.getDBConnection(), filtro, ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+		filtro.setESTADO(ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+		
+		return QMProvisiones.buscaProvisionesPorFiltro(ConnectionManager.getDBConnection(), filtro);
 	}
 	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasActivo(int iCOACES)
@@ -86,6 +97,10 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 	}
 	
+	public static ArrayList<ProvisionTabla> buscarProvisionUnica(String sNUMPROF)
+	{
+		return QMProvisiones.buscaProvisionUnica(ConnectionManager.getDBConnection(),sNUMPROF);
+	}
 	
 	public static ArrayList<ProvisionTabla> buscarProvisionesFecha(String sFecha)
 	{

@@ -268,9 +268,28 @@ public final class CLGastos
 		return QMListaGastosProvisiones.getProvisionDeGasto(ConnectionManager.getDBConnection(),liCodGasto);
 	}
 	
-	public static ArrayList<GastoTabla> buscarGastosProvision(String sNUPROF)
+	public static ArrayList<GastoTabla> buscarGastosEnviadosProvision(String sNUPROF)
 	{
-		return QMListaGastosProvisiones.buscaGastosProvision(ConnectionManager.getDBConnection(),sNUPROF);
+		ArrayList<GastoTabla> resultado = QMListaGastosProvisiones.buscaGastosProvisionPorEstadoGasto(ConnectionManager.getDBConnection(),sNUPROF,ValoresDefecto.DEF_GASTO_CONOCIDO);
+		
+		resultado.addAll(QMListaGastosProvisiones.buscaGastosProvisionPorEstadoGasto(ConnectionManager.getDBConnection(),sNUPROF,ValoresDefecto.DEF_GASTO_CONOCIDO));
+		
+		return resultado;
+	}
+	
+	public static ArrayList<GastoTabla> buscarGastosAutorizadosProvision(String sNUPROF)
+	{
+		return QMListaGastosProvisiones.buscaGastosProvisionPorEstadoGasto(ConnectionManager.getDBConnection(),sNUPROF,ValoresDefecto.DEF_GASTO_AUTORIZADO);
+	}
+	
+	public static ArrayList<GastoTabla> buscarGastosPagadosProvision(String sNUPROF)
+	{
+		return QMListaGastosProvisiones.buscaGastosProvisionPorEstadoGasto(ConnectionManager.getDBConnection(),sNUPROF,ValoresDefecto.DEF_GASTO_PAGADO);
+	}
+	
+	public static ArrayList<GastoTabla> buscarGastosProvisionConEstadoGasto(String sNUPROF, String sEstado)
+	{
+		return QMListaGastosProvisiones.buscaGastosProvisionPorEstadoGasto(ConnectionManager.getDBConnection(),sNUPROF,sEstado);
 	}
 	
 	public static ArrayList<GastoTabla> buscarGastosProvisionConFiltro(GastoTabla filtro)

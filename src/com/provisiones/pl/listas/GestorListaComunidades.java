@@ -183,27 +183,27 @@ public class GestorListaComunidades implements Serializable
 		{
 			FacesMessage msg;
 			
-			String sMsg = ""; 
+			String sMsg = "";
+			
+			this.comunidadseleccionada = null;
 			
 			if (sCOACES.equals(""))
 			{
-				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
+				sMsg = "ERROR: Debe informar el campo 'Activo' para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+				
+				this.setTablacomunidades(null);
 			}
 			else
 			{
 				try
 				{
-					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES.trim())))
+					int iCOACES = Integer.parseInt(sCOACES);
+					
+					if (CLActivos.existeActivo(iCOACES))
 					{
-						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
-						msg = Utils.pfmsgWarning(sMsg);
-						logger.warn(sMsg);
-					}
-					else
-					{
-						this.setTablacomunidades(CLComunidades.buscarComunidadActivo (Integer.parseInt(sCOACES)));
+						this.setTablacomunidades(CLComunidades.buscarComunidadActivo(iCOACES));
 
 						if (getTablacomunidades().size() == 0)
 						{
@@ -218,12 +218,22 @@ public class GestorListaComunidades implements Serializable
 							logger.info(sMsg);
 						}
 					}
+					else
+					{
+						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+						
+						this.setTablacomunidades(null);
+					}
 				}
 				catch(NumberFormatException nfe)
 				{
 					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
+					
+					this.setTablacomunidades(null);
 				}
 
 			}
@@ -253,21 +263,21 @@ public class GestorListaComunidades implements Serializable
 					
 					this.setTablacomunidades(null);
 				}
-				else if (!CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
-				{
-					sMsg = "La Comunidad informada no está dada de alta. Por favor, revise los datos.";
-					msg = Utils.pfmsgWarning(sMsg);
-					logger.warn(sMsg);
-					
-					this.setTablacomunidades(null);
-				}
-				else
+				else if (CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
 				{
 					this.setTablacomunidades(CLComunidades.buscarComunidad (sCOCLDO,sNUDCOM.toUpperCase()));
 
 					sMsg = "Comunidad encontrada.";
 					msg = Utils.pfmsgInfo(sMsg);
 					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "La Comunidad informada no está dada de alta. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+					this.setTablacomunidades(null);
 				}
 			}
 			else

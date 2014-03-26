@@ -16,13 +16,15 @@ public class ProvisionTabla
 	private String FEPFON = "";
 	private String VALOR = "";
 	private String GASTOS = "";
+	
+	private String ESTADO = "";
 
 	//Constructor de clase
-	
+
 	public ProvisionTabla(String nUPROF, String cOSPAT, String dCOSPAT,
 			String tAS, String dTAS, String cOGRUG, String dCOGRUG,
 			String cOTPGA, String dCOTPGA, String fEPFON, String vALOR,
-			String gASTOS) {
+			String gASTOS, String eSTADO) {
 		super();
 		NUPROF = nUPROF;
 		COSPAT = cOSPAT;
@@ -33,9 +35,10 @@ public class ProvisionTabla
 		DCOGRUG = dCOGRUG;
 		COTPGA = cOTPGA;
 		DCOTPGA = dCOTPGA;
-		setFEPFON(fEPFON);
+		FEPFON = fEPFON;
 		VALOR = vALOR;
 		GASTOS = gASTOS;
+		ESTADO = eSTADO;
 	}
 
 	//Métodos de acceso
@@ -134,5 +137,13 @@ public class ProvisionTabla
 
 	public void setGASTOS(String gASTOS) {
 		GASTOS = gASTOS;
+	}
+
+	public String getESTADO() {
+		return ESTADO;
+	}
+
+	public void setESTADO(String eSTADO) {
+		ESTADO = eSTADO;
 	}
 }

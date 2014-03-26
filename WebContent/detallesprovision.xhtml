@@ -143,18 +143,31 @@
 									</p:fieldset>
 									<p:fieldset legend="Gastos">
 										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText value="Estado de los gastos: "/>
+													<p:selectOneMenu id="ESTADOGASTOS" value="#{GestorDetallesProvision.sEstadoGastos}">
+														<f:selectItem itemLabel="Estado..." itemValue=""/>
+														<f:selectItems value="#{GestorDetallesProvision.tiposestadogastoHM}"/>
+													</p:selectOneMenu>
 										
-										<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorDetallesProvision.buscarGastos}"/>	
+													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorDetallesProvision.buscarGastos}"/>
+												</h:panelGrid>
+											</p:panel>	
 										
 						<p:contextMenu for="gastos">
 							<p:menuitem value="Detalles" icon="ui-icon-check" actionListener="#{GestorDetallesProvision.cargarDetallesGasto}"/>
 						</p:contextMenu>
 
-						<p:dataTable id="gastos" var="gasto" value="#{GestorDetallesProvision.tablagastos}" rowKey="#{gasto.COACES}"
+						<p:dataTable id="gastos" var="gasto" value="#{GestorDetallesProvision.tablagastos}" rowKey="#{gasto.sGastoID}"
 															selection="#{GestorDetallesProvision.gastoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15">
+
+														<f:facet name="header">
+															<h:outputText value="Gastos Enviados" />
+														</f:facet>
 
 														<p:column>
 															<f:facet name="header">
@@ -191,9 +204,12 @@
 															<h:outputText value="#{gasto.FEDEVE}" />
 														</p:column>
 
-						</p:dataTable>
-										</h:panelGrid>
-									</p:fieldset>
+									</p:dataTable>
+
+
+
+								</h:panelGrid>
+							</p:fieldset>
 						</h:panelGrid>
 
 					</p:panel>
