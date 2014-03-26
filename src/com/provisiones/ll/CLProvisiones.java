@@ -44,6 +44,11 @@ public final class CLProvisiones
 		return QMProvisiones.buscaCantidadProvisionesCerradasPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PENDIENTE);
 	}
 	
+	public static String buscarPrimeraFechaLimitePago(String sNUPROF)
+	{
+		return Utils.recuperaFecha(Integer.toString(QMListaGastosProvisiones.getPrimeraFechaLimitePagoProvision(ConnectionManager.getDBConnection(),sNUPROF)));
+	}
+
 	public static ArrayList<String> buscarProvisionesCerradasPendientes()
 	{
 		return QMProvisiones.getProvisionesSinAutorizarPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PENDIENTE);

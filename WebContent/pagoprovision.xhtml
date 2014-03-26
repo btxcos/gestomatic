@@ -33,7 +33,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Pagar" update="msgs, popup, panel" action="#{GestorPagosProvision.registrarPago}"/>
+								<p:commandButton value="Pagar" update="msgs, popup, panel" action="#{GestorPagosProvision.registrarPago}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
 								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panel" actionListener="#{GestorPagosProvision.limpiarPlantilla}" />	
 
 							</h:panelGrid>
@@ -71,7 +71,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NUPROFB" value="Provisión: " />
-													<p:inputMask id="NUPROFB" value="#{GestorPagosProvision.sNUPROFB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+													<p:inputText id="NUPROFB" value="#{GestorPagosProvision.sNUPROFB}" size="10" maxlength="9"/>
 
 													<p:commandButton value="Cargar" update="provision, msgs, popup" actionListener="#{GestorPagosProvision.cargarProvision}"/>
 												</h:panelGrid>
@@ -141,6 +141,9 @@
 											<h:outputText for="ValorPagado" value="Valor pagado: " />
 											<p:inputText id="ValorPagado" value="#{GestorPagosProvision.sValorPagado}" size="20" disabled="true"/>
 											<h:outputText value="¤"/>
+
+											<h:outputText for="FechaLimite" value="Primera fecha límite pago: " />
+											<p:inputText id="FechaLimite" value="#{GestorPagosProvision.sFechaLimite}" size="9" disabled="true"/>
 
 											<h:outputText for="FechaPagado" value="Fecha de pago: " />
 											<p:inputText id="FechaPagado" value="#{GestorPagosProvision.sFechaPagado}" size="9" disabled="true"/>

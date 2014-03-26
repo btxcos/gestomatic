@@ -922,6 +922,7 @@ public final class QMGastos
 	
 	public static boolean esAbono(Connection conexion, long liGastoID)
 	{
+		//TODO repasar
 		boolean bEncontrado = false;
 		
 		boolean bAbono = false;

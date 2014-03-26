@@ -33,7 +33,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Pagar" update="msgs, popup, panel" action="#{GestorPagosComunidad.registrarPago}"/>
+								<p:commandButton value="Pagar" update="msgs, popup, panel" action="#{GestorPagosComunidad.registrarPago}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
 								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panel" actionListener="#{GestorPagosComunidad.limpiarPlantilla}" />	
 
 							</h:panelGrid>
@@ -141,6 +141,9 @@
 											<h:outputText for="ValorPagado" value="Valor pagado: " />
 											<p:inputText id="ValorPagado" value="#{GestorPagosComunidad.sValorPagado}" size="20" disabled="true"/>
 											<h:outputText value="¤"/>
+
+											<h:outputText for="FechaLimite" value="Primera fecha límite pago: " />
+											<p:inputText id="FechaLimite" value="#{GestorPagosComunidad.sFechaLimite}" size="9" disabled="true"/>
 
 											<h:outputText for="FechaPagado" value="Fecha de pago: " />
 											<p:inputText id="FechaPagado" value="#{GestorPagosComunidad.sFechaPagado}" size="9" disabled="true"/>

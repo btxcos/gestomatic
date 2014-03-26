@@ -52,6 +52,8 @@ public class GestorPagosComunidad implements Serializable
 	private String sFechaPagado = "";
 	private String sCodEstado = "";
 	
+	private String sFechaLimite = "";
+	
 	//Campos Comunidad
 	private String sCOCLDO = "";
 	private String sNUDCOM = "";
@@ -164,6 +166,8 @@ public class GestorPagosComunidad implements Serializable
     	this.sValorPagado = "";
     	this.sFechaPagado = "";
     	this.sCodEstado = "";
+    	
+    	this.sFechaLimite = "";
     }
 
 	public void borrarCamposComunidad()
@@ -287,40 +291,79 @@ public class GestorPagosComunidad implements Serializable
 		
 		logger.debug("sNUPROF:|"+sNUPROF+"|");
 		
+		FacesMessage msg;
+
+		String sMsg = "";
 		
-		if (!sNUPROF.isEmpty())
+		try
 		{
+			Long.parseLong(sNUPROF);
+			
+			if (sNUPROF.isEmpty())
+			{
+				sMsg = "ERROR: Debe informar la Provisión para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 
-		  	Provision provision = CLProvisiones.buscarDetallesProvision(sNUPROF);
+			}
+			else if (CLProvisiones.existeProvision(sNUPROF))
+			{
 
-	    	logger.debug(provision.logProvision());
-		  	
-	    	this.sCOSPAT = provision.getsCOSPAT();
-	    	this.sTAS = provision.getsTAS();
-	    	
-	    	this.sCOGRUG = provision.getsCOGRUG();
-	    	this.sCOTPGA = provision.getsCOTPGA();
+			  	Provision provision = CLProvisiones.buscarDetallesProvision(sNUPROF);
 
-	    	this.sFEPFON = Utils.recuperaFecha(provision.getsFEPFON());
-	    	this.sNumGastos = provision.getsNumGastos();
-	    	this.sValorTolal = Utils.recuperaImporte(false,provision.getsValorTolal());
-	    	this.sFechaEnvio = Utils.recuperaFecha(provision.getsFechaEnvio());
+		    	logger.debug(provision.logProvision());
+			  	
+		    	this.sCOSPAT = provision.getsCOSPAT();
+		    	this.sTAS = provision.getsTAS();
+		    	
+		    	this.sCOGRUG = provision.getsCOGRUG();
+		    	this.sCOTPGA = provision.getsCOTPGA();
 
-	    	this.sGastosAutorizados = provision.getsGastosAutorizados();
-	    	this.sValorAutorizado = Utils.recuperaImporte(false,provision.getsValorAutorizado());
-	    	this.sFechaAutorizado = Utils.recuperaFecha(provision.getsFechaAutorizado());
+		    	this.sFEPFON = Utils.recuperaFecha(provision.getsFEPFON());
+		    	this.sNumGastos = provision.getsNumGastos();
+		    	this.sValorTolal = Utils.recuperaImporte(false,provision.getsValorTolal());
+		    	this.sFechaEnvio = Utils.recuperaFecha(provision.getsFechaEnvio());
 
-	    	this.sGastosPagados = provision.getsGastosPagados();
-	    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
-	    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
+		    	this.sGastosAutorizados = provision.getsGastosAutorizados();
+		    	this.sValorAutorizado = Utils.recuperaImporte(false,provision.getsValorAutorizado());
+		    	this.sFechaAutorizado = Utils.recuperaFecha(provision.getsFechaAutorizado());
 
-	    	this.sCodEstado = provision.getsCodEstado();
-	    	
-			borrarCamposComunidad();
-			borrarResultadosBuscarComunidad();
-			borrarCamposPago();
-			borrarResultadosBuscarCuenta();
+		    	this.sGastosPagados = provision.getsGastosPagados();
+		    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
+		    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
+
+		    	this.sCodEstado = provision.getsCodEstado();
+		    	
+		    	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
+		    	
+				borrarCamposComunidad();
+				borrarResultadosBuscarComunidad();
+				borrarCamposPago();
+				borrarResultadosBuscarCuenta();
+				
+				sMsg = "Provisión '"+sNUPROF+"' cargada.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "La Provisión '"+sNUPROF+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				
+				this.sNUPROF = "";
+			}
 		}
+		catch(NumberFormatException nfe)
+		{
+			sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
+			msg = Utils.pfmsgError(sMsg);
+			logger.error(sMsg);
+
+			this.sNUPROF = "";
+		}
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 	}
 	
@@ -589,6 +632,7 @@ public class GestorPagosComunidad implements Serializable
 				    	this.sGastosPagados = provision.getsGastosPagados();
 				    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
 				    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
+				    	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
 				    	borrarCamposPago();
 						
 						sMsg = "El pago se ha registrado correctamente.";
@@ -970,6 +1014,14 @@ public class GestorPagosComunidad implements Serializable
 
 	public void setTablacuentascomunidad(ArrayList<Cuenta> tablacuentascomunidad) {
 		this.tablacuentascomunidad = tablacuentascomunidad;
+	}
+
+	public String getsFechaLimite() {
+		return sFechaLimite;
+	}
+
+	public void setsFechaLimite(String sFechaLimite) {
+		this.sFechaLimite = sFechaLimite;
 	}
 	
 }
