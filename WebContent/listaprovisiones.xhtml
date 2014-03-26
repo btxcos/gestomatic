@@ -85,13 +85,13 @@
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
 													<h:outputText for="COCLDOB" value="Comunidad: " />
-													<p:inputText id="COCLDOB" value="#{GestorListaProvisiones.sCOCLDOB}" size="3" maxlength="5" disabled="true"/>
-													<p:inputText id="NUDCOMB" value="#{GestorListaProvisiones.sNUDCOMB}" size="10" maxlength="9" disabled="true"/>
+													<p:inputText id="COCLDOB" value="#{GestorListaProvisiones.sCOCLDOB}" size="3" maxlength="5"/>
+													<p:inputText id="NUDCOMB" value="#{GestorListaProvisiones.sNUDCOMB}" size="10" maxlength="9"/>
 
-													<p:commandButton value="Buscar Provisiones" update="provisiones, msgs, popup" actionListener="#{GestorListaProvisiones.buscaProvisionesAutorizadasPorComunidad}" disabled="true"/>	
+													<p:commandButton value="Buscar Provisiones" update="provisiones, msgs, popup" actionListener="#{GestorListaProvisiones.buscaProvisionesAutorizadasPorComunidad}"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar Comunidad" update="COCLDOB, NUDCOMB" oncomplete="dlgBuscarComunidad.show()" disabled="true"/>		
+										<p:commandButton value="Buscar Comunidad" update="COCLDOB, NUDCOMB" oncomplete="dlgBuscarComunidad.show()"/>
 										</h:panelGrid>
 									</p:fieldset>
 
@@ -99,18 +99,20 @@
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
-													<h:outputText for="FEPFONB" value="Fecha de provisión: " />
-													<p:inputMask id="FEPFONB" value="#{GestorListaProvisiones.sFEPFON}" mask="99/99/9999" size="10" maxlength="8"/>
-													<p:message for="FEPFONB" display="icon"/>
-													<p:commandButton value="Buscar Provisiones" update="provisiones, msgs, popup" actionListener="#{GestorListaProvisiones.buscaProvisionesAutorizadasPorFechaCierre}"/>	
+													<h:outputText for="NUPROFB" value="Provisión: " />
+													<p:inputText id="NUPROFB" value="#{GestorPagosComunidad.sNUPROFB}" size="10" maxlength="9"/>
+
+													<p:commandButton value="Cargar" update="provisiones, msgs, popup" actionListener="#{GestorListaProvisiones.buscaProvisionesAutorizadasPorFechaCierre}"/>	
+
 												</h:panelGrid>
 											</p:panel>
 
+										<p:commandButton value="Buscar Provisiones" update="provisiones, msgs, popup" actionListener="#{GestorListaProvisiones.buscaProvisionesAutorizadasPorFechaCierre}"/>
 										</h:panelGrid>
 									</p:fieldset>
 
-										</h:panelGrid>
-									</p:fieldset>
+								</h:panelGrid>
+							</p:fieldset>
 
 							<p:contextMenu for="provisiones">  
 								<p:menuitem value="Detalles" update="form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorListaProvisiones.cargarDetalles}"/>  
@@ -270,6 +272,7 @@
 										</h:panelGrid>
 									</p:fieldset>
 					</p:dialog>
+
 					<p:dialog header="Buscar Provisiones: " widgetVar="dlgBuscarComunidad" resizable="false">  
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">

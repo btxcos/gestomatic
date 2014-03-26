@@ -205,9 +205,18 @@ public class GestorListaComunidades implements Serializable
 					{
 						this.setTablacomunidades(CLComunidades.buscarComunidadActivo (Integer.parseInt(sCOACES)));
 
-						sMsg = "Comunidad encontrada.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
+						if (getTablacomunidades().size() == 0)
+						{
+							sMsg = "El Activo informado no esta asociado a una Comunidad.";
+							msg = Utils.pfmsgWarning(sMsg);
+							logger.warn(sMsg);
+						}
+						else
+						{
+							sMsg = "Encontrada una Comunidad relacionada.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
 					}
 				}
 				catch(NumberFormatException nfe)

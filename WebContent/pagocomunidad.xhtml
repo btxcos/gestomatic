@@ -71,7 +71,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NUPROFB" value="Provisión: " />
-													<p:inputMask id="NUPROFB" value="#{GestorPagosComunidad.sNUPROFB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+													<p:inputText id="NUPROFB" value="#{GestorPagosComunidad.sNUPROFB}" size="10" maxlength="9"/>
 
 													<p:commandButton value="Cargar" update="provision, msgs, popup" actionListener="#{GestorPagosComunidad.cargarProvision}"/>
 												</h:panelGrid>
