@@ -100,6 +100,10 @@ public final class Parser {
 				sResultado = sResultado + " ";
 			}
 			
+		} 
+		else if (sCampo.isEmpty())
+		{
+			sResultado = formateaCampoAlfanumerico(sCampo,iLongitud);
 		}
 		
 		//logger.debug("sResultado:|"+sResultado+"|");

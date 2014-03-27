@@ -589,7 +589,7 @@ public class GestorListaProvisiones implements Serializable
 			
 			if (sNUPROFB.isEmpty())
 			{
-				sMsg = "ERROR: Debe informar la Provision Activo para realizar una búsqueda. Por favor, revise los datos.";
+				sMsg = "ERROR: Debe informar la Provision para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				
@@ -599,9 +599,9 @@ public class GestorListaProvisiones implements Serializable
 			{
 				try
 				{
-					if (CLProvisiones.existeProvision(sNUPROF))
+					if (CLProvisiones.existeProvision(sNUPROFB))
 					{
-						this.tablaprovisiones = CLProvisiones.buscarProvisionUnica(sNUPROF); 
+						this.tablaprovisiones = CLProvisiones.buscarProvisionUnica(sNUPROFB); 
 						
 						if (getTablaprovisiones().size() == 0)
 						{

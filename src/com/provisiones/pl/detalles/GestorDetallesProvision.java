@@ -72,10 +72,6 @@ public class GestorDetallesProvision implements Serializable
 	
 	private transient ArrayList<GastoTabla> tablagastos = null;
 	
-	private transient ArrayList<GastoTabla> tablagastosenviados = null;
-	private transient ArrayList<GastoTabla> tablagastosautorizados = null;
-	private transient ArrayList<GastoTabla> tablagastospagados = null;
-	
 	private Map<String,String> tiposestadogastoHM = new LinkedHashMap<String, String>();
 	
 	public GestorDetallesProvision()
@@ -156,10 +152,6 @@ public class GestorDetallesProvision implements Serializable
 
 	    	this.sCodEstado = provision.getsCodEstado();
 	    	
-	    	this.tablagastosenviados = CLGastos.buscarGastosEnviadosProvision(sNUPROF);
-	    	this.tablagastosautorizados =  CLGastos.buscarGastosAutorizadosProvision(sNUPROF);
-	    	this.tablagastospagados =  CLGastos.buscarGastosPagadosProvision(sNUPROF);
-
 		}
 		
 	}
@@ -201,17 +193,18 @@ public class GestorDetallesProvision implements Serializable
 
 		String sMsg = "";
 		
-		if (this.sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
+ 		
+		if (sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
 		{
-			this.setTablagastos(this.tablagastosautorizados);	
+			this.setTablagastos(CLGastos.buscarGastosAutorizadosProvision(sNUPROF));	
 		}
-		else if (this.sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_PAGADO))
+		else if (sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_PAGADO))
 		{
-			this.setTablagastos(this.tablagastospagados);	
+			this.setTablagastos(CLGastos.buscarGastosPagadosProvision(sNUPROF));	
 		}
-		else
+		else if (sEstadoGastos.equals("E"))
 		{
-			this.setTablagastos(this.tablagastosenviados);
+			this.setTablagastos(CLGastos.buscarGastosEnviadosProvision(sNUPROF));
 		}
     	
     	

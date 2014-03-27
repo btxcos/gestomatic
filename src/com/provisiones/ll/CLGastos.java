@@ -426,15 +426,16 @@ public final class CLGastos
 											//recibido error
 											if (QMListaErroresGastos.addErrorGasto(conexion,liCodMovimiento, gasto.getCOTERR()))
 											{
+												iCodigo = 1;
 												//Bloquear gasto y movimientos
-												if (QMGastos.delGasto(conexion, liCodGasto))
+												/*if (QMGastos.delGasto(conexion, liCodGasto))
 												{
 													iCodigo = 1;
 												}
 												else
 												{
 													iCodigo = -5;
-												}
+												}*/
 											}
 											else
 											{

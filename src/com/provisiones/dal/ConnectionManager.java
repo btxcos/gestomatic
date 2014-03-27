@@ -21,7 +21,7 @@ public final class ConnectionManager
 	private static String sConnector = "org.mariadb.jdbc.Driver";
 	private static String sConnectorType = "jdbc:mariadb:";
 	private static String sHostResource = "//localhost:3306/glsl";
-	//private static String sLogin = "?user=root&password=glsl1234";
+	//private static String sLogin = "?user="+sUser+"&password="+sPass;
 	
 	private static String sURL = sConnectorType+sHostResource;
 	private static String sUser = "root";
@@ -69,6 +69,16 @@ public final class ConnectionManager
 				logger.warn("La conexión fue cerrada.");
 			}
 			
+			HttpSession session = (HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+			
+			try
+			{
+				session.invalidate();
+			}
+			catch (Exception es)
+			{
+				logger.error("ERROR: Error terminando la sesión: " + es.getMessage());
+			}
 			
 			logger.error("ERROR: La sesión ha expirado.");
 
