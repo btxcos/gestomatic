@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -14,6 +16,7 @@ import javax.faces.event.ActionEvent;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuotas;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
@@ -27,30 +30,10 @@ public class GestorCuotas implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorCuotas.class.getName());
 
-	private String sCODTRN = ValoresDefecto.DEF_E2_CODTRN;
-	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
-	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
-	private String sCOACCI = "A";
-	private String sCOENGP = ValoresDefecto.DEF_COENGP;
-
-	private String sCOCLDO = "";
-	private String sNUDCOM = "";
-	private String sNOMCOC = "";
-	private String sNODCCO = "";
-
-	private String sCOSBAC = "";
-	private String sFIPAGO = "";
-	private String sFFPAGO = "";
-	private String sIMCUCO = "";
-	private String sFAACTA = "";
-	private String sPTPAGO = "";
-	private String sOBTEXC = "";
-	
-	private String sOBDEER = "";
-	
 	//Buscar activos
 	private String sCOACES = "";
 
+	//Filtro activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";	
 	private String sNOPRAC = "";
@@ -59,21 +42,47 @@ public class GestorCuotas implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNURCAT = "";
+
+	//Comunidad
+	private String sCOCLDO = "";
+	private String sNUDCOM = "";
+	private String sNOMCOC = "";
+	private String sNODCCO = "";
+
+	//Pago
+	private String sCOSBAC = "";
+	private String sFIPAGO = "";
+	private String sFFPAGO = "";
+	private String sIMCUCO = "";
+	private String sFAACTA = "";
+	private String sPTPAGO = "";
+	private String sOBTEXC = "";
+	
+	//Observaciones
+	private String sOBDEER = "";
+
+	//Notas
 	private String sNota = "";
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
-	
 	private transient ActivoTabla activoseleccionado = null;
+	
+	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 	
 	public GestorCuotas()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
 			logger.debug("Iniciando GestorCuotas...");	
+			
+			tiposcocldoHM.put("C.I.F.",                     "2");
+			tiposcocldoHM.put("C.I.F país extranjero.",     "5");
+			tiposcocldoHM.put("Otros persona jurídica.",    "J");
 		}
 	}
 	
-	public void borrarCamposActivo()
+	public void borrarCamposFiltroActivo()
 	{
     	this.sCOPOIN = "";
     	this.sNOMUIN = "";
@@ -82,27 +91,36 @@ public class GestorCuotas implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	
+    	this.sNURCAT = "";
 	}
 	
 	public void borrarResultadosActivo()
 	{
+		this.sCOACES = "";
+		
     	this.activoseleccionado = null;
     	this.tablaactivos = null;
 	}
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
-    	this.sCOACES = "";
-
-    	borrarCamposActivo();
+    	
+    	borrarCamposFiltroActivo();
     	
     	borrarResultadosActivo();
     }
-	
-	public void borrarCampos()
+    
+	public void borrarCamposComunidad()
 	{
 		this.sCOCLDO = "";
 		this.sNUDCOM = "";
+    	this.sNOMCOC = "";
+    	this.sNODCCO = "";
+	}
+	
+	public void borrarCamposCuota()
+	{
 		this.sCOSBAC = "";
 		this.sFIPAGO = "";
 		this.sFFPAGO = "";
@@ -114,17 +132,11 @@ public class GestorCuotas implements Serializable
 	
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
-    	borrarCampos();
-    	
-    	this.sNOMCOC = "";
-    	this.sNODCCO = "";
-
-    	this.sCOACES = "";
-
-    	borrarCamposActivo();
-   	
+    	borrarCamposFiltroActivo();
     	borrarResultadosActivo();
-  	
+  
+    	borrarCamposComunidad();
+    	borrarCamposCuota();
     }
     
     public void limpiarNota(ActionEvent actionEvent) 
@@ -138,26 +150,70 @@ public class GestorCuotas implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			if (!sCOCLDO.equals("") && !sNUDCOM.equals(""))
+			this.activoseleccionado = null;
+			
+			if (sNURCAT.isEmpty())
 			{
-				this.setTablaactivos(CLComunidades.buscarActivosComunidadDisponibles(filtro, sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()));
+				ActivoTabla filtro = new ActivoTabla(
+						"", 
+						sCOPOIN.toUpperCase(), 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						"");
+				
+				this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 
-				msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados con la comunidad '"+sNUDCOM.toUpperCase()+"'.");
-				logger.info("Encontrados {} activos relacionados con la comunidad '{}'.",getTablaactivos().size(),sNUDCOM.toUpperCase());
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConComunidad(sNURCAT));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			}
 			else
 			{
-				this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
+		    	this.setTablaactivos(null);
 				
-				msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-				logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
 			}
-			
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -170,108 +226,14 @@ public class GestorCuotas implements Serializable
 			FacesMessage msg;
 	    	
 	    	this.sCOACES  = activoseleccionado.getCOACES();
-	    	
-	    	msg = Utils.pfmsgInfo("Activo '"+ sCOACES +"' Seleccionado.");
-	    	
-	    	logger.info("Activo '{}' Seleccionado.",sCOACES);
+
+	    	String sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
 
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
-	
-
-    
-	public void cargarComunidad(ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-			
-			if (CLComunidades.existeComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase()))
-			{
-				Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO.toUpperCase(), sNUDCOM.toUpperCase());
-			
-				this.sCOCLDO = comunidad.getsCOCLDO();
-				this.sNUDCOM = comunidad.getsNUDCOM();
-				this.sNOMCOC = comunidad.getsNOMCOC();
-				this.sNODCCO = comunidad.getsNODCCO();
-			
-				this.sCOACES = "";
-			
-			
-				if (comunidad.getsNUDCOM().equals(""))
-				{
-					msg = Utils.pfmsgError("ERROR: La comunidad solicitada no esta registrada en el sistema.");
-					logger.error("ERROR: La comunidad solicitada no esta registrada en el sistema.");
-				}	
-				else
-				{
-				
-					msg = Utils.pfmsgInfo("La comunidad '"+sNUDCOM.toUpperCase()+"' se ha cargado correctamente.");
-					logger.info("La comunidad '{}' se ha cargado correctamente.",sNUDCOM.toUpperCase());
-				}
-			}
-			else
-			{
-				msg = Utils.pfmsgError("ERROR: La comunidad '"+sNUDCOM.toUpperCase()+"' no esta dada de alta en el sistema.");
-				logger.error("ERROR: La comunidad '{}' no esta dada de alta en el sistema.",sNUDCOM.toUpperCase());
-				this.sCOCLDO = "";
-				this.sNUDCOM = "";
-			}
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}				
-	}
-	
-	public void comprobarActivo(ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-			
-			String sMsg ="";
-			
-			try
-			{
-				int iSalida = CLComunidades.comprobarComunidadActivo(sCOCLDO.toUpperCase(),sNUDCOM.toUpperCase(),Integer.parseInt(sCOACES));
-
-				switch (iSalida) 
-				{
-				case 0: //Sin errores
-					sMsg = "El activo '"+sCOACES+"' esta disponible.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-					break;
-				case -1: //Error activo no pertenece comunidad
-					sMsg = "ERROR: El activo '"+sCOACES+"' no pertenece a la comunidad. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-				case -2: //Error activo no disponible
-					sMsg = "ERROR: El activo '"+sCOACES+"' no esta disponible. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					break;
-				default: //Error generico
-					sMsg = "[FATAL] ERROR: El activo '"+sCOACES+"' ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
-					break;
-				}
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}
-			
-
-			
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}
-	}
 	
 	public void buscarComunidad(ActionEvent actionEvent)
 	{
@@ -281,7 +243,8 @@ public class GestorCuotas implements Serializable
 			
 			String sMsg = "";
 			
-			borrarCampos();
+			borrarCamposComunidad();
+			borrarCamposCuota();
 
 			try
 			{
@@ -292,7 +255,7 @@ public class GestorCuotas implements Serializable
 				this.sNOMCOC = comunidad.getsNOMCOC();
 				this.sNODCCO = comunidad.getsNODCCO();
 				
-				if (comunidad.getsNUDCOM().equals(""))
+				if (comunidad.getsNUDCOM().isEmpty())
 				{
 					sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
 					msg = Utils.pfmsgError(sMsg);
@@ -355,15 +318,16 @@ public class GestorCuotas implements Serializable
 				}
 				else
 				{
+					
 					MovimientoCuota movimiento = new MovimientoCuota (
-							sCODTRN.toUpperCase(), 
-							sCOTDOR.toUpperCase(), 
-							sIDPROV.toUpperCase(), 
-							"A",
-							sCOCLDO.toUpperCase(), 
+							ValoresDefecto.DEF_E2_CODTRN, 
+							ValoresDefecto.DEF_COTDOR, 
+							ValoresDefecto.DEF_IDPROV, 
+							ValoresDefecto.DEF_COACCI_CUOTA_ALTA,
+							sCOCLDO, 
 							sNUDCOM.toUpperCase(), 
-							sCOENGP.toUpperCase(), 
-							sCOACES.toUpperCase(), 
+							ValoresDefecto.DEF_COENGP, 
+							sCOACES, 
 							ValoresDefecto.DEF_COGRUG_E2, 
 							ValoresDefecto.DEF_COTACA_E2, 
 							Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 
@@ -588,13 +552,29 @@ public class GestorCuotas implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
-	
+
 	public String getsCOACES() {
 		return sCOACES;
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
+	}
+
+	public String getsCOPOIN() {
+		return sCOPOIN;
+	}
+
+	public void setsCOPOIN(String sCOPOIN) {
+		this.sCOPOIN = sCOPOIN;
+	}
+
+	public String getsNOMUIN() {
+		return sNOMUIN;
+	}
+
+	public void setsNOMUIN(String sNOMUIN) {
+		this.sNOMUIN = sNOMUIN;
 	}
 
 	public String getsNOPRAC() {
@@ -637,139 +617,28 @@ public class GestorCuotas implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 
-	public String getsCODTRN() {
-		return sCODTRN;
+	public String getsNURCAT() {
+		return sNURCAT;
 	}
 
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
-	}
-
-	public String getsCOTDOR() {
-		return sCOTDOR;
-	}
-
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
-	}
-
-	public String getsIDPROV() {
-		return sIDPROV;
-	}
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
-	}
-
-	public String getsCOACCI() {
-		return sCOACCI;
-	}
-
-	public void setsCOACCI(String sCOACCI) {
-		this.sCOACCI = sCOACCI;
-	}
-
-	public String getsCOENGP() {
-		return sCOENGP;
-	}
-
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT;
 	}
 
 	public String getsCOCLDO() {
 		return sCOCLDO;
 	}
+
 	public void setsCOCLDO(String sCOCLDO) {
 		this.sCOCLDO = sCOCLDO;
 	}
+
 	public String getsNUDCOM() {
 		return sNUDCOM;
 	}
+
 	public void setsNUDCOM(String sNUDCOM) {
 		this.sNUDCOM = sNUDCOM;
-	}
-	public String getsCOSBAC() {
-		return sCOSBAC;
-	}
-	public void setsCOSBAC(String sCOSBAC) {
-		this.sCOSBAC = sCOSBAC;
-	}
-	public String getsFIPAGO() {
-		return sFIPAGO;
-	}
-	public void setsFIPAGO(String sFIPAGO) {
-		this.sFIPAGO = sFIPAGO;
-	}
-	public String getsFFPAGO() {
-		return sFFPAGO;
-	}
-	public void setsFFPAGO(String sFFPAGO) {
-		this.sFFPAGO = sFFPAGO;
-	}
-	public String getsIMCUCO() {
-		return sIMCUCO;
-	}
-	public void setsIMCUCO(String sIMCUCO) {
-		this.sIMCUCO = sIMCUCO;
-	}
-	public String getsFAACTA() {
-		return sFAACTA;
-	}
-	public void setsFAACTA(String sFAACTA) {
-		this.sFAACTA = sFAACTA;
-	}
-	public String getsPTPAGO() {
-		return sPTPAGO;
-	}
-	public void setsPTPAGO(String sPTPAGO) {
-		this.sPTPAGO = sPTPAGO;
-	}
-	public String getsOBTEXC() {
-		return sOBTEXC;
-	}
-	public void setsOBTEXC(String sOBTEXC) {
-		this.sOBTEXC = sOBTEXC;
-	}
-
-	public ArrayList<ActivoTabla> getTablaactivos() {
-		return tablaactivos;
-	}
-
-	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
-		this.tablaactivos = tablaactivos;
-	}
-
-	public ActivoTabla getActivoseleccionado() {
-		return activoseleccionado;
-	}
-
-	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
-		this.activoseleccionado = activoseleccionado;
-	}
-
-	public String getsCOPOIN() {
-		return sCOPOIN;
-	}
-
-	public void setsCOPOIN(String sCOPOIN) {
-		this.sCOPOIN = sCOPOIN;
-	}
-
-	public String getsNOMUIN() {
-		return sNOMUIN;
-	}
-
-	public void setsNOMUIN(String sNOMUIN) {
-		this.sNOMUIN = sNOMUIN;
-	}
-
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
 	}
 
 	public String getsNOMCOC() {
@@ -788,11 +657,99 @@ public class GestorCuotas implements Serializable
 		this.sNODCCO = sNODCCO;
 	}
 
+	public String getsCOSBAC() {
+		return sCOSBAC;
+	}
+
+	public void setsCOSBAC(String sCOSBAC) {
+		this.sCOSBAC = sCOSBAC;
+	}
+
+	public String getsFIPAGO() {
+		return sFIPAGO;
+	}
+
+	public void setsFIPAGO(String sFIPAGO) {
+		this.sFIPAGO = sFIPAGO;
+	}
+
+	public String getsFFPAGO() {
+		return sFFPAGO;
+	}
+
+	public void setsFFPAGO(String sFFPAGO) {
+		this.sFFPAGO = sFFPAGO;
+	}
+
+	public String getsIMCUCO() {
+		return sIMCUCO;
+	}
+
+	public void setsIMCUCO(String sIMCUCO) {
+		this.sIMCUCO = sIMCUCO.trim();
+	}
+
+	public String getsFAACTA() {
+		return sFAACTA;
+	}
+
+	public void setsFAACTA(String sFAACTA) {
+		this.sFAACTA = sFAACTA;
+	}
+
+	public String getsPTPAGO() {
+		return sPTPAGO;
+	}
+
+	public void setsPTPAGO(String sPTPAGO) {
+		this.sPTPAGO = sPTPAGO;
+	}
+
+	public String getsOBTEXC() {
+		return sOBTEXC;
+	}
+
+	public void setsOBTEXC(String sOBTEXC) {
+		this.sOBTEXC = sOBTEXC;
+	}
+
+	public String getsOBDEER() {
+		return sOBDEER;
+	}
+
+	public void setsOBDEER(String sOBDEER) {
+		this.sOBDEER = sOBDEER;
+	}
+
 	public String getsNota() {
 		return sNota;
 	}
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public ArrayList<ActivoTabla> getTablaactivos() {
+		return tablaactivos;
+	}
+
+	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
+		this.tablaactivos = tablaactivos;
+	}
+
+	public ActivoTabla getActivoseleccionado() {
+		return activoseleccionado;
+	}
+
+	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
+		this.activoseleccionado = activoseleccionado;
+	}
+
+	public Map<String, String> getTiposcocldoHM() {
+		return tiposcocldoHM;
+	}
+
+	public void setTiposcocldoHM(Map<String, String> tiposcocldoHM) {
+		this.tiposcocldoHM = tiposcocldoHM;
 	}
 }

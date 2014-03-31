@@ -13,6 +13,7 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLCuotas;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Nota;
@@ -27,22 +28,30 @@ public class GestorMovimientosCuotas implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosCuotas.class.getName());
 
-	private String sCODTRN = ValoresDefecto.DEF_E2_CODTRN;
-	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
-	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
 	private String sCOACCI = "";
-	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 
+	//Buscar activos
 	private String sCOACES = "";
+
+	//Filtro activos
+	private String sCOPOIN = "";
+	private String sNOMUIN = "";
+	private String sNOPRAC = "";
+	private String sNOVIAS = "";
+	private String sNUPIAC = "";
+	private String sNUPOAC = "";
+	private String sNUPUAC = "";
 	
+	private String sNURCAT = "";
+	
+	//Comunidad
 	private String sCOCLDO = "";
 	private String sDesCOCLDO = "";
-	
 	private String sNUDCOM = "";
 	private String sNOMCOC = "";
 	private String sNODCCO = "";
 	
-
+	//Pago
 	private String sCOSBAC = "";
 	private String sDesCOSBAC = "";
 	private String sFIPAGO = "";
@@ -52,17 +61,11 @@ public class GestorMovimientosCuotas implements Serializable
 	private String sPTPAGO = "";
 	private String sDesPTPAGO = "";
 	private String sOBTEXC = "";
-	
+
+	//Observaciones
 	private String sOBDEER = "";
 	
-	private String sCOPOIN = "";
-	private String sNOMUIN = "";
-	private String sNOPRAC = "";
-	private String sNOVIAS = "";
-	private String sNUPIAC = "";
-	private String sNUPOAC = "";
-	private String sNUPUAC = "";
-	
+	//Notas
 	private String sNota = "";
 	
 	private transient ActivoTabla activoseleccionado = null;
@@ -80,7 +83,7 @@ public class GestorMovimientosCuotas implements Serializable
 		}
 	}
 	
-	public void borrarCamposActivo()
+	public void borrarCamposFiltroActivo()
 	{
     	this.sCOPOIN = "";
     	this.sNOMUIN = "";
@@ -89,27 +92,35 @@ public class GestorMovimientosCuotas implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	
+    	this.sNURCAT = "";
 	}
 	
 	public void borrarResultadosActivo()
 	{
+		this.sCOACES = "";
+		
     	this.activoseleccionado = null;
     	this.tablaactivos = null;
 	}
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
-    	this.sCOACES = "";
-
-    	borrarCamposActivo();
+    	borrarCamposFiltroActivo();
     	borrarResultadosActivo();
     }
-
-	public void borrarCamposCuota()
+    
+	public void borrarCamposComunidad()
 	{
 		this.sCOCLDO = "";
 		this.sDesCOCLDO = "";
 		this.sNUDCOM = "";
+    	this.sNOMCOC = "";
+    	this.sNODCCO = "";
+	}
+
+	public void borrarCamposCuota()
+	{
 		this.sCOSBAC = "";
 		this.sDesCOSBAC = "";
 		this.sFIPAGO = "";
@@ -127,9 +138,10 @@ public class GestorMovimientosCuotas implements Serializable
     	this.tablacuotas = null;
 	}
 	
-	public void limpiarPlantillaCuotas(ActionEvent actionEvent) 
+	public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
-    	this.sCOACES = "";
+    	borrarCamposFiltroActivo();
+    	borrarResultadosActivo();
 
     	borrarCamposCuota();
     	borrarResultadosCuota();
@@ -146,34 +158,88 @@ public class GestorMovimientosCuotas implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLCuotas.buscarActivosConCuotas(filtro));
+			this.activoseleccionado = null;
 			
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
-			
+			if (sNURCAT.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", 
+						sCOPOIN.toUpperCase(), 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						"");
+				
+				this.setTablaactivos(CLCuotas.buscarActivosConCuotas(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConCuotas(sNURCAT));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+		    	this.setTablaactivos(null);
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
-	
+
 	public void seleccionarActivo(ActionEvent actionEvent) 
-    {
+    {  
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
 	    	
 	    	this.sCOACES  = activoseleccionado.getCOACES();
-	    	
+
 	    	String sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
 	    	msg = Utils.pfmsgInfo(sMsg);
 	    	logger.info(sMsg);
-	    	
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
 	
@@ -267,26 +333,28 @@ public class GestorMovimientosCuotas implements Serializable
 				}
 				else
 				{
+
+					
 					MovimientoCuota movimiento = new MovimientoCuota (
-							sCODTRN.toUpperCase(), 
-							sCOTDOR.toUpperCase(), 
-							sIDPROV.toUpperCase(), 
-							sCOACCI.toUpperCase(), 
-							sCOCLDO.toUpperCase(), 
-							sNUDCOM.toUpperCase(), 
-							sCOENGP.toUpperCase(), 
-							sCOACES.toUpperCase(), 
+							ValoresDefecto.DEF_E2_CODTRN, 
+							ValoresDefecto.DEF_COTDOR, 
+							ValoresDefecto.DEF_IDPROV, 
+							sCOACCI, 
+							sCOCLDO, 
+							sNUDCOM, 
+							ValoresDefecto.DEF_COENGP, 
+							sCOACES, 
 							ValoresDefecto.DEF_COGRUG_E2, 
 							ValoresDefecto.DEF_COTACA_E2, 
-							Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 
+							Utils.compruebaCodigoPago(false,sCOSBAC), 
 							"", 
-							Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
+							Utils.compruebaFecha(sFIPAGO), 
 							"", 
-							Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
+							Utils.compruebaFecha(sFFPAGO), 
 							"", 
-							Utils.compruebaImporte(sIMCUCO.toUpperCase()), 
+							Utils.compruebaImporte(sIMCUCO), 
 							"", 
-							Utils.compruebaFecha(sFAACTA.toUpperCase()), 
+							Utils.compruebaFecha(sFAACTA), 
 							"", 
 							sPTPAGO.toUpperCase(),
 							"", 
@@ -569,44 +637,12 @@ public class GestorMovimientosCuotas implements Serializable
 		this.sCOACES = sCOACES;
 	}
 
-	public String getsCODTRN() {
-		return sCODTRN;
-	}
-
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
-	}
-
-	public String getsCOTDOR() {
-		return sCOTDOR;
-	}
-
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
-	}
-
-	public String getsIDPROV() {
-		return sIDPROV;
-	}
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
-	}
-
 	public String getsCOACCI() {
 		return sCOACCI;
 	}
 
 	public void setsCOACCI(String sCOACCI) {
 		this.sCOACCI = sCOACCI;
-	}
-
-	public String getsCOENGP() {
-		return sCOENGP;
-	}
-
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
 	}
 
 	public String getsCOCLDO() {
@@ -767,6 +803,14 @@ public class GestorMovimientosCuotas implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public String getsNURCAT() {
+		return sNURCAT;
+	}
+
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT;
 	}
 	
 	

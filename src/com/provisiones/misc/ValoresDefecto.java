@@ -77,6 +77,10 @@ public final class ValoresDefecto
 	public static final String DEF_COACCI_COMUNIDAD_BAJA_ACTIVO = "E";
 	public static final String DEF_COACCI_COMUNIDAD_BAJA = "B";
 
+	public static final String DEF_COACCI_CUOTA_ALTA = "A";
+	public static final String DEF_COACCI_CUOTA_MODIFICACION = "M";
+	public static final String DEF_COACCI_CUOTA_BAJA = "B";
+	
 	public static final String DEF_COACCI_REFERENCIA_ALTA = "A";
 	public static final String DEF_COACCI_REFERENCIA_MODIFICACION = "M";
 	public static final String DEF_COACCI_REFERENCIA_BAJA = "B";

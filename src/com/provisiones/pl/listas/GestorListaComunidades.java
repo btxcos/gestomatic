@@ -115,16 +115,36 @@ public class GestorListaComunidades implements Serializable
 			if (sNURCAT.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
-						sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-						sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-						sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+						sCOACES,
+						sCOPOIN.toUpperCase(),
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(),
+						sNOVIAS.toUpperCase(),
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(),
+						sNUPUAC.toUpperCase(), 
+						"");
 				
 				this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
 
-				sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-				msg = Utils.pfmsgInfo(sMsg);
-				
-				logger.info(sMsg);
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			}
 			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
 			{
@@ -164,13 +184,10 @@ public class GestorListaComunidades implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
-	    	String sMsg = ""; 
-	    	
 	    	this.sCOACES  = activoseleccionado.getCOACES();
 	    	
-	    	sMsg = "Activo '"+sCOACES+"' seleccionado.";
+	    	String sMsg = "Activo '"+sCOACES+"' seleccionado.";
 	    	msg = Utils.pfmsgInfo(sMsg);
-	    	
 	    	logger.info(sMsg);
 	    	
 			FacesContext.getCurrentInstance().addMessage(null, msg);

@@ -1424,7 +1424,7 @@ public class GestorPagosSimple implements Serializable
 	}
 
 	public void setsCOACESB(String sCOACESB) {
-		this.sCOACESB = sCOACESB;
+		this.sCOACESB = sCOACESB.trim();
 	}
 
 	public String getsCOGRUGBA() {
@@ -1520,7 +1520,7 @@ public class GestorPagosSimple implements Serializable
 	}
 
 	public void setsNURCATB(String sNURCATB) {
-		this.sNURCATB = sNURCATB;
+		this.sNURCATB = sNURCATB.trim().toUpperCase();
 	}
 
 	public String getsNUPROFB() {
@@ -1528,7 +1528,7 @@ public class GestorPagosSimple implements Serializable
 	}
 
 	public void setsNUPROFB(String sNUPROFB) {
-		this.sNUPROFB = sNUPROFB;
+		this.sNUPROFB = sNUPROFB.trim();
 	}
 
 	public String getsFEPFONB() {
@@ -1576,7 +1576,7 @@ public class GestorPagosSimple implements Serializable
 	}
 
 	public void setsCOACESBP(String sCOACESBP) {
-		this.sCOACESBP = sCOACESBP;
+		this.sCOACESBP = sCOACESBP.trim();
 	}
 
 	public String getsCodGastoB() {
