@@ -32,11 +32,20 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="NUPROF, panel, form:errores, form:gastoserror" actionListener="#{GestorErroresGastos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Limpiar Plantilla" update="NUPROF, ACCION, panel, form:errores, form:gastoserror" actionListener="#{GestorErroresGastos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 
-								<p:commandButton value="Buscar Errores" update="msgs, popup, form:gastoserror" oncomplete="dlgBuscarGastosError.show()"/>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="2">
 
-								<p:commandButton value="Registrar Datos" update="panel, popup, msgs, form:errores" actionListener="#{GestorErroresGastos.registraGasto}"/>
+										<p:commandButton value="Aplicar" update="panel, popup, msgs, form:errores" actionListener="#{GestorErroresGastos.registraGasto}"/>
+
+										<p:selectOneRadio id="ACCION" value="#{GestorErroresGastos.sAccion}" layout="pageDirection">
+											<f:selectItem itemLabel="Reparar" itemValue="R"/>
+											<f:selectItem itemLabel="Reenviar" itemValue="E"/>
+										</p:selectOneRadio>
+
+									</h:panelGrid>
+								</p:panel>
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -68,7 +77,11 @@
 
 				<p:layoutUnit position="center" size="auto">
 					<h:panelGrid columns="1" cellpadding="5">
+
+							<p:commandButton value="Buscar Errores" update="msgs, popup, gastoserror" oncomplete="dlgBuscarGastosError.show()"/>
+
 						<p:panel>
+
 							<p:contextMenu for="errores">
 								<p:menuitem value="Cargar Error" update="errores, form:popup, form:msgs, form:panel" icon="ui-icon-folder-open" actionListener="#{GestorErroresGastos.seleccionarError}"/>
 							</p:contextMenu>  
@@ -91,6 +104,7 @@
 								</p:column>
 
 							</p:dataTable>
+
 						</p:panel>
 						<p:panel id="panel" size="auto">
 							<h:panelGrid columns="1" cellpadding="5">
@@ -546,12 +560,6 @@
 															<h:outputText value="#{gastoe.DCOSBGA}" />
 														</p:column>
 														
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Periodicidad" />
-															</f:facet>
-															<h:outputText value="#{gastoe.DPTPAGO}" />
-														</p:column>
 
 														<p:column>
 															<f:facet name="header">

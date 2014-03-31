@@ -126,16 +126,19 @@ public class GestorErroresGastos implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
-	//Buscar errores
-	private String sCodMovimiento ="";
+	//Errores
+	private long liCodMovimiento = 0;
 	private String sCodError = "";
 	
+	//Filtro Errores
 	private String sNUPROFB = "";
 	private String sCOACESB = "";
 	private String sCOGRUGB = "";
 	private String sCOTPGAB = "";
 	private String sCOSBGAB = "";
 	private String sFEDEVEB = "";
+	
+	private String sAccion = ""; 
 
 	private transient ErrorGastoTabla movimientoseleccionado = null;
 	private transient ArrayList<ErrorGastoTabla> tablagastoserror = null;
@@ -260,7 +263,7 @@ public class GestorErroresGastos implements Serializable
     	this.errorseleccionado = null;
     	this.tablaerrores = null;
     	
-    	this.sCodMovimiento ="";
+    	this.liCodMovimiento = 0;
     	this.sCodError = "";
    	
     }
@@ -303,6 +306,7 @@ public class GestorErroresGastos implements Serializable
 		this.bDevolucion = false;
 		this.sCOTPGA = "";
 		this.sCOSBGA = "";
+		this.sDCOSBGA= ""; 
 		this.sPTPAGO = "";
 
 		this.sFEDEVE = "";
@@ -372,6 +376,8 @@ public class GestorErroresGastos implements Serializable
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
     	this.sCOACES = "";
+    	
+    	this.sAccion = "";
     	
     	borrarPlantillaGasto();
     	    	
@@ -490,9 +496,9 @@ public class GestorErroresGastos implements Serializable
 			
 			String sMsg = "";
 			
-			this.sCodMovimiento = movimientoseleccionado.getMOVIMIENTO(); 
+			this.liCodMovimiento = Long.parseLong(movimientoseleccionado.getMOVIMIENTO()); 
 	    	
-			this.setTablaerrores(CLErrores.buscarErroresGasto(Integer.parseInt(sCodMovimiento)));
+			this.setTablaerrores(CLErrores.buscarErroresGasto(liCodMovimiento));
 			
 			sMsg = "Encontrados "+getTablaerrores().size()+" errores relacionados.";
 			
@@ -501,7 +507,7 @@ public class GestorErroresGastos implements Serializable
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			MovimientoGasto movimiento = CLGastos.buscarMovimientoGasto(Integer.parseInt(sCodMovimiento));
+			MovimientoGasto movimiento = CLGastos.buscarMovimientoGasto(liCodMovimiento);
 			
 			this.sCOACES = movimiento.getCOACES();
 		   	this.sCOGRUG = movimiento.getCOGRUG();
@@ -511,11 +517,11 @@ public class GestorErroresGastos implements Serializable
 	    	this.sFEDEVE = Utils.recuperaFecha(movimiento.getFEDEVE());
 	    	
 	    	
-			logger.debug("sCOACES:|{}|",sCOACES);
-			logger.debug("sCOGRUG:|{}|",sCOGRUG);
-			logger.debug("sCOTPGA:|{}|",sCOTPGA);
-			logger.debug("sCOSBGA:|{}|",sCOSBGA);
-			logger.debug("sFEDEVE:|{}|",sFEDEVE);
+			logger.debug("sCOACES:|"+sCOACES+"|");
+			logger.debug("sCOGRUG:|"+sCOGRUG+"|");
+			logger.debug("sCOTPGA:|"+sCOTPGA+"|");
+			logger.debug("sCOSBGA:|"+sCOSBGA+"|");
+			logger.debug("sFEDEVE:|"+sFEDEVE+"|");
 	    	
 	    	this.bDevolucion = (Integer.parseInt(sCOSBGA) > 49);
 
@@ -953,7 +959,13 @@ public class GestorErroresGastos implements Serializable
 			
 			String sMsg = "";
 			
-			if (!CLGastos.existeMovimientoGasto(Integer.parseInt(sCodMovimiento)))
+			if (sAccion.isEmpty())
+			{
+				sMsg = "ERROR: Debe seleccionar una Acción para operar sobre el movimiento. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (!CLGastos.existeMovimientoGasto(liCodMovimiento))
 			{
 				sMsg = "[FATAL] ERROR:911 - No se puede modificar el gasto, no existe el movimiento. Por favor, revise los datos y avise a soporte.";
 				msg = Utils.pfmsgFatal(sMsg);
@@ -961,62 +973,79 @@ public class GestorErroresGastos implements Serializable
 			}
 			else
 			{
-				logger.debug("sCOACES:|"+sCOACES+"|");
-				logger.debug("sCOGRUG:|"+sCOGRUG+"|");
-				logger.debug("sCOTPGA:|"+sCOTPGA+"|");
-				logger.debug("sCOSBGA:|"+sCOSBGA+"|");
-				logger.debug("sFEDEVE:|"+sFEDEVE+"|");
+				int iSalida = 0;
+			
+				ValoresDefecto.TIPOSACCIONESERROR ACCION = ValoresDefecto.TIPOSACCIONESERROR.valueOf(sAccion);
 				
-				MovimientoGasto nuevomovimiento = new MovimientoGasto (
-						sCOACES,
-						sCOGRUG.toUpperCase(),
-						sCOTPGA.toUpperCase(),
-						Utils.compruebaCodigoPago(false, sCOSBGA.toUpperCase()),
-						sPTPAGO.toUpperCase(),
-						Utils.compruebaFecha(sFEDEVE),
-						Utils.compruebaFecha(sFFGTVP),
-						"0",
-						Utils.compruebaFecha(sFELIPG),
-						sCOSIGA.toUpperCase(),
-						Utils.compruebaFecha(sFEEESI),
-						Utils.compruebaFecha(sFEECOI),
-						"0",
-						"0",
-						Utils.compruebaImporte(sIMNGAS.toUpperCase()),
-						sYCOS02.toUpperCase(),
-						Utils.compruebaImporte(sIMRGAS.toUpperCase()),
-						sYCOS04.toUpperCase(),
-						Utils.compruebaImporte(sIMDGAS.toUpperCase()),
-						sYCOS06.toUpperCase(),
-						Utils.compruebaImporte(sIMCOST.toUpperCase()),
-						sYCOS08.toUpperCase(),
-						Utils.compruebaImporte(sIMOGAS.toUpperCase()),
-						sYCOS10.toUpperCase(),
-						Utils.compruebaImporte(sIMDTGA.toUpperCase()),
-						ValoresDefecto.DEF_COUNMO,
-						Utils.compruebaImporte(sIMIMGA.toUpperCase()),
-						Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
-						ValoresDefecto.DEF_COTNEG,
-						ValoresDefecto.DEF_COENCX,
-						ValoresDefecto.DEF_COOFCX,
-						ValoresDefecto.DEF_NUCONE,
-						sNUPROF.toUpperCase(),
-						Utils.compruebaFecha(sFEAGTO),
-						ValoresDefecto.DEF_COMONA,
-						ValoresDefecto.DEF_BIAUTO,
-						ValoresDefecto.DEF_FEAUFA,
-						ValoresDefecto.DEF_COTERR,
-						ValoresDefecto.DEF_FMPAGN,
-						Utils.compruebaFecha(sFEPGPR),
-						ValoresDefecto.DEF_FEAPLI,
-						ValoresDefecto.DEF_COAPII,
-						ValoresDefecto.DEF_COSPII_GA,
-						ValoresDefecto.DEF_NUCLII);
+				
+				switch (ACCION)
+				{
+					case R:
+						logger.debug("sCOACES:|"+sCOACES+"|");
+						logger.debug("sCOGRUG:|"+sCOGRUG+"|");
+						logger.debug("sCOTPGA:|"+sCOTPGA+"|");
+						logger.debug("sCOSBGA:|"+sCOSBGA+"|");
+						logger.debug("sFEDEVE:|"+sFEDEVE+"|");
+						
+						MovimientoGasto nuevomovimiento = new MovimientoGasto (
+								sCOACES,
+								sCOGRUG.toUpperCase(),
+								sCOTPGA.toUpperCase(),
+								Utils.compruebaCodigoPago(false, sCOSBGA.toUpperCase()),
+								sPTPAGO.toUpperCase(),
+								Utils.compruebaFecha(sFEDEVE),
+								Utils.compruebaFecha(sFFGTVP),
+								"0",
+								Utils.compruebaFecha(sFELIPG),
+								sCOSIGA.toUpperCase(),
+								Utils.compruebaFecha(sFEEESI),
+								Utils.compruebaFecha(sFEECOI),
+								"0",
+								"0",
+								Utils.compruebaImporte(sIMNGAS.toUpperCase()),
+								sYCOS02.toUpperCase(),
+								Utils.compruebaImporte(sIMRGAS.toUpperCase()),
+								sYCOS04.toUpperCase(),
+								Utils.compruebaImporte(sIMDGAS.toUpperCase()),
+								sYCOS06.toUpperCase(),
+								Utils.compruebaImporte(sIMCOST.toUpperCase()),
+								sYCOS08.toUpperCase(),
+								Utils.compruebaImporte(sIMOGAS.toUpperCase()),
+								sYCOS10.toUpperCase(),
+								Utils.compruebaImporte(sIMDTGA.toUpperCase()),
+								ValoresDefecto.DEF_COUNMO,
+								Utils.compruebaImporte(sIMIMGA.toUpperCase()),
+								Utils.compruebaCodigoNum(sCOIMPT.toUpperCase()),
+								ValoresDefecto.DEF_COTNEG,
+								ValoresDefecto.DEF_COENCX,
+								ValoresDefecto.DEF_COOFCX,
+								ValoresDefecto.DEF_NUCONE,
+								sNUPROF.toUpperCase(),
+								Utils.compruebaFecha(sFEAGTO),
+								ValoresDefecto.DEF_COMONA,
+								ValoresDefecto.DEF_BIAUTO,
+								ValoresDefecto.DEF_FEAUFA,
+								ValoresDefecto.DEF_COTERR,
+								ValoresDefecto.DEF_FMPAGN,
+								Utils.compruebaFecha(sFEPGPR),
+								ValoresDefecto.DEF_FEAPLI,
+								ValoresDefecto.DEF_COAPII,
+								ValoresDefecto.DEF_COSPII_GA,
+								ValoresDefecto.DEF_NUCLII);
 
-				//movimiento.pintaMovimientoGasto();
+						//movimiento.pintaMovimientoGasto();
+						
+						//int iSalida = CLErrores.reparaMovimientoGasto(nuevomovimiento,sCodMovimiento,sCodError);
+						iSalida = CLGastos.registraMovimiento(nuevomovimiento, true);
+						break;
+					case E:
+						iSalida = CLErrores.reenviarErrorGasto(liCodMovimiento);
+						break;
+					case I:
+						iSalida = CLErrores.ignoraErrorGasto(liCodMovimiento);
+						break;
+				}
 				
-				//int iSalida = CLErrores.reparaMovimientoGasto(nuevomovimiento,sCodMovimiento,sCodError);
-				int iSalida = CLGastos.registraMovimiento(nuevomovimiento, true);
 				
 				logger.debug("Codigo de salida:"+iSalida);
 				
@@ -1041,8 +1070,39 @@ public class GestorErroresGastos implements Serializable
 					logger.error(sMsg);
 					break;
 
+				case -901: //Error 901 - no existe el movimiento
+					sMsg = "[FATAL] ERROR:901 - No existe el movimiento informado. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -902: //Error 902 - No se ha podido establecer el estado en la relacion Gasto-Movimiento
+					sMsg = "[FATAL] ERROR:902 -  Se ha producido un error al establecer el estado en la relación Gasto-Movimiento. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -903: //Error 903 - No se ha podido establecer el estado en la relación Gasto-Provisión
+					sMsg = "[FATAL] ERROR:903 -  Se ha producido un error al establecer el estado en la relación Gasto-Provisión. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
 				case -904: //Error 904 - error y rollback - error al modificar el gasto
 					sMsg = "[FATAL] ERROR:904 - Se ha producido un error al modificar el gasto. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
+					
+				case -905: //Error 905 - error y rollback - error al eliminar los errores del movimiento
+					sMsg = "[FATAL] ERROR:905 - Se ha producido un error al eliminar los errores del movimiento. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -910: //Error 910 - error y rollback - error al modificar el gasto
+					sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la Base de Datos. Por favor, revise los datos y avise a soporte.";
 					msg = Utils.pfmsgFatal(sMsg);
 					logger.error(sMsg);
 					break;
@@ -1868,14 +1928,6 @@ public class GestorErroresGastos implements Serializable
 		this.tablaerrores = tablaerrores;
 	}
 
-	public String getsCodMovimiento() {
-		return sCodMovimiento;
-	}
-
-	public void setsCodMovimiento(String sCodMovimiento) {
-		this.sCodMovimiento = sCodMovimiento;
-	}
-
 	public String getsCodError() {
 		return sCodError;
 	}
@@ -1962,5 +2014,13 @@ public class GestorErroresGastos implements Serializable
 
 	public void setTiposcogrugHM(Map<String,String> tiposcogrugHM) {
 		this.tiposcogrugHM = tiposcogrugHM;
+	}
+
+	public String getsAccion() {
+		return sAccion;
+	}
+
+	public void setsAccion(String sAccion) {
+		this.sAccion = sAccion;
 	}
 }

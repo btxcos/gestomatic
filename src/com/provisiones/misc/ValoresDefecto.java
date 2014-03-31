@@ -31,14 +31,11 @@ public final class ValoresDefecto
 	public static final String DEF_COREAE = "04";
 	public static final String DEF_COUNMO = "281";
 	
-	//Eliminar tras soporte a usuarios
-	//public static final String DEF_USUARIO = "GLSLUSUP";
-	
 	public static final String CIFRADO_LLAVE_SIMETRICA = "glsl1234glsl1234";
 	public static final String CIFRADO_LONGITUD = "512";
 	public static final String CIFRADO_ALGORITMO = "AES";
 	
-	
+
 	public static final String DEF_COSPII_GA = "GA";
 	public static final String DEF_COSPII_E1 = "E1";
 	public static final String DEF_COSPII_E2 = "E2";
@@ -90,6 +87,10 @@ public final class ValoresDefecto
 	public static final String DEF_MOVIMIENTO_VALIDADO = "V";
 	public static final String DEF_MOVIMIENTO_RESUELTO = "R";
 	public static final String DEF_MOVIMIENTO_ERRONEO = "X";
+	
+	public static final String DEF_ACCION_ERROR_REPARAR = "R";
+	public static final String DEF_ACCION_ERROR_REENVIAR = "E";
+	public static final String DEF_ACCION_ERROR_IGNORAR = "I";
 	
 	public static final String DEF_NEGATIVO = "-";
 	
@@ -153,9 +154,15 @@ public final class ValoresDefecto
 	{
 		A, B, E, M, X
 	}
+	
 	public enum TIPOSACCIONESGASTO 
 	{
 		G, M, N, D, A
+	}
+	
+	public enum TIPOSACCIONESERROR
+	{
+		R, E, I
 	}
 	
 	

@@ -80,6 +80,8 @@ public final class QMListaErroresGastos
 	{
 		boolean bSalida = false;
 		
+		String sCondicionCodigo = sCodCOTDOR.isEmpty()?"": CAMPO2 + " = '" + sCodCOTDOR	+ "' AND ";
+		
 		if (conexion != null)
 		{
 			Statement stmt = null;
@@ -88,10 +90,9 @@ public final class QMListaErroresGastos
 			
 			String sQuery = "DELETE FROM " 
 					+ TABLA + 
-					" WHERE (" 
-					+ CAMPO1 + " = '" + liCodMovimiento	+ "' AND "
-					+ CAMPO2 + " = '" + sCodCOTDOR	+ 
-					"')";
+					" WHERE ("
+					+ sCondicionCodigo
+					+ CAMPO1 + " = '" + liCodMovimiento	+ "')";
 			
 			logger.debug(sQuery);
 

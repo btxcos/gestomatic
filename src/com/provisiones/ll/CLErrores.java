@@ -17,6 +17,7 @@ import com.provisiones.dal.qm.listas.QMListaComunidades;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.listas.QMListaGastos;
+import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.dal.qm.listas.QMListaImpuestos;
 import com.provisiones.dal.qm.listas.QMListaReferencias;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresComunidades;
@@ -62,7 +63,7 @@ public final class CLErrores
 	{
 		return QMListaErroresComunidades.buscaErrores(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
-
+	
 	public static int reparaMovimientoComunidad(MovimientoComunidad movimiento, long liCodMovimiento, String sCodError)
 	{
 		int iCodigo = -910;//Error de conexion
@@ -567,6 +568,182 @@ public final class CLErrores
 	public static ArrayList<ErrorTabla> buscarErroresGasto(long liCodMovimiento)
 	{
 		return QMListaErroresGastos.buscaErrores(ConnectionManager.getDBConnection(),liCodMovimiento);
+	}
+	
+	public static int ignoraErrorGasto(long liCodMovimiento)
+	{
+		int iCodigo = -910;//Error de conexion
+		
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			iCodigo = 0;
+			
+			if (QMMovimientosGastos.existeMovimientoGasto(conexion, liCodMovimiento))
+			{
+				try 
+				{
+					conexion.setAutoCommit(false);
+					
+					if (QMListaGastos.setValidado(conexion, liCodMovimiento, ValoresDefecto.DEF_MOVIMIENTO_VALIDADO))
+					{
+						long liCodGasto = QMListaGastos.getCodGasto(conexion, liCodMovimiento);
+						
+						if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_VALIDADO))
+						{
+							iCodigo = 0;
+						}
+						else
+						{
+							//error (FATAL) - No se ha podido establecer el estado en la relación Gasto-Provisión
+							iCodigo = -903;
+						}
+						
+					}
+					else
+					{
+						//error (FATAL) - No se ha podido establecer el estado en la relación Gasto-Movimiento
+						iCodigo = -902;
+					}
+					
+					if (iCodigo < 0)
+					{
+						conexion.rollback();
+					}
+					else
+					{
+						conexion.commit();
+					}
+					
+					conexion.setAutoCommit(true);
+				}
+				catch (SQLException e) 
+				{
+					//error de conexion con base de datos.
+					iCodigo = -910;
+
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException e1) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException e2) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
+				}
+
+			}
+			else
+			{
+				//error (FATAL) - no existe el movimiento
+				iCodigo = -901;	
+			}
+		}
+		
+		return iCodigo;
+	}
+	
+	public static int reenviarErrorGasto(long liCodMovimiento)
+	{
+		int iCodigo = -910;//Error de conexion
+		
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			iCodigo = 0;
+			
+			if (QMMovimientosGastos.existeMovimientoGasto(conexion, liCodMovimiento))
+			{
+				try 
+				{
+					conexion.setAutoCommit(false);
+					
+					if (QMListaGastos.setValidado(conexion, liCodMovimiento, ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE))
+					{
+						long liCodGasto = QMListaGastos.getCodGasto(conexion, liCodMovimiento);
+						
+						if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE))
+						{
+							if (QMListaErroresGastos.delErrorGasto(conexion, liCodMovimiento, ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR))
+							{
+								iCodigo = 0;
+							}
+							else
+							{
+								//error (FATAL) - No se han podido eliminar los errores del movimiento
+								iCodigo = -905;
+							}
+							
+						}
+						else
+						{
+							//error (FATAL) - No se ha podido establecer el estado en la relación Gasto-Provisión
+							iCodigo = -903;
+						}
+					}
+					else
+					{
+						//error (FATAL) - No se ha podido establecer el estado en la relación Gasto-Movimiento
+						iCodigo = -902;
+					}
+					
+					if (iCodigo < 0)
+					{
+						conexion.rollback();
+					}
+					else
+					{
+						conexion.commit();
+					}
+					
+					conexion.setAutoCommit(true);
+				}
+				catch (SQLException e) 
+				{
+					//error de conexion con base de datos.
+					iCodigo = -910;
+
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException e1) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException e2) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
+				}
+
+			}
+			else
+			{
+				//error (FATAL) - no existe el movimiento
+				iCodigo = -901;	
+			}
+		}
+		
+		return iCodigo;
 	}
 	
 	public static int reparaMovimientoGasto(MovimientoGasto movimiento, long liCodMovimiento, String sCodError)
