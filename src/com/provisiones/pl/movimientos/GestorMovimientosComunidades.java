@@ -17,6 +17,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuentas;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
@@ -31,29 +32,13 @@ public class GestorMovimientosComunidades implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosComunidades.class.getName());
 	
-	private String sCODTRN = ValoresDefecto.DEF_E1_CODTRN;
-	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
-	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
+	//Accion
 	private String sCOACCI = "";
-	private String sCOENGP = ValoresDefecto.DEF_COENGP;
-	private String sCOCLDO = "";
-	private String sNUDCOM = "";
-	private String sCOACES = "";
-	private String sNOMCOC = "";
-	private String sNODCCO = "";
-	private String sNOMPRC = "";
-	private String sNUTPRC = "";
-	private String sNOMADC = "";
-	private String sNUTADC = "";
-	private String sNODCAD = "";
-	private String sNUCCEN = "";
-	private String sNUCCOF = "";
-	private String sNUCCDI = "";
-	private String sNUCCNT = "";
 
-	private String sOBTEXC = "";
-	private String sOBDEER = "";
+	//Buscar activos
+	private String sCOACES = "";
 	
+	//Filtro activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";
 	private String sNOPRAC = "";
@@ -61,6 +46,29 @@ public class GestorMovimientosComunidades implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	
+	private String sNURCAT = "";
+	
+	//Comunidad
+	private String sCOCLDO = "";
+	private String sNUDCOM = "";
+	private String sNOMCOC = "";
+	private String sNODCCO = "";
+	private String sNOMPRC = "";
+	private String sNUTPRC = "";
+	private String sNOMADC = "";
+	private String sNUTADC = "";
+	private String sNODCAD = "";
+	
+	//Cuenta corriente
+	private String sNUCCEN = "";
+	private String sNUCCOF = "";
+	private String sNUCCDI = "";
+	private String sNUCCNT = "";
+
+	//Observaciones
+	private String sOBTEXC = "";
+
 
 	private String sNota = "";
 	
@@ -153,17 +161,71 @@ public class GestorMovimientosComunidades implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
+			this.activoseleccionado = null;
+			
+			if (sNURCAT.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", 
+						sCOPOIN.toUpperCase(), 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						"");
+				
+				this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
-			
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConComunidad(sNURCAT));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+		    	this.setTablaactivos(null);
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -244,7 +306,7 @@ public class GestorMovimientosComunidades implements Serializable
 			
 			borrarCamposComunidad();
 
-			if (sCOACES.equals(""))
+			if (sCOACES.isEmpty())
 			{
 				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -264,7 +326,7 @@ public class GestorMovimientosComunidades implements Serializable
 					{
 						Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
 						
-						if (comunidad.getsNUDCOM().equals(""))
+						if (comunidad.getsNUDCOM().isEmpty())
 						{
 							sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
 							msg = Utils.pfmsgError(sMsg);
@@ -320,7 +382,7 @@ public class GestorMovimientosComunidades implements Serializable
 			
 			String sMsg = "";
 			
-			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+			if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 			{
 				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -379,7 +441,7 @@ public class GestorMovimientosComunidades implements Serializable
 			{
 
 
-		    	if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+		    	if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 		    	{
 					sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la operación. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
@@ -394,12 +456,12 @@ public class GestorMovimientosComunidades implements Serializable
 				else
 				{
 					MovimientoComunidad movimiento = new MovimientoComunidad (
-							sCODTRN.toUpperCase(), 
-							sCOTDOR.toUpperCase(), 
-							sIDPROV.toUpperCase(), 
-							sCOACCI.toUpperCase(), 
-							sCOENGP.toUpperCase(), 
-							sCOCLDO.toUpperCase(), 
+							ValoresDefecto.DEF_E1_CODTRN, 
+							ValoresDefecto.DEF_COTDOR, 
+							ValoresDefecto.DEF_IDPROV, 
+							sCOACCI, 
+							ValoresDefecto.DEF_COENGP, 
+							sCOCLDO, 
 							sNUDCOM.toUpperCase(), 
 							"",
 							"",
@@ -424,7 +486,7 @@ public class GestorMovimientosComunidades implements Serializable
 							sNUCCNT.toUpperCase(), 
 							"", 
 							sOBTEXC.toUpperCase(), 
-							sOBDEER.toUpperCase());
+							ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
 					
 					String sNotaAntigua = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
 					
@@ -708,44 +770,12 @@ public class GestorMovimientosComunidades implements Serializable
 		}
 	}
 
-	public String getsCODTRN() {
-		return sCODTRN;
-	}
-
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
-	}
-
-	public String getsCOTDOR() {
-		return sCOTDOR;
-	}
-
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
-	}
-
-	public String getsIDPROV() {
-		return sIDPROV;
-	}
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
-	}
-
 	public String getsCOACCI() {
 		return sCOACCI;
 	}
 
 	public void setsCOACCI(String sCOACCI) {
 		this.sCOACCI = sCOACCI;
-	}
-
-	public String getsCOENGP() {
-		return sCOENGP;
-	}
-
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
 	}
 
 	public String getsCOCLDO() {
@@ -868,14 +898,6 @@ public class GestorMovimientosComunidades implements Serializable
 		this.sOBTEXC = sOBTEXC;
 	}
 
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
-	}
-
 	public String getsCOPOIN() {
 		return sCOPOIN;
 	}
@@ -958,6 +980,12 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 	public void setTiposcocldoHM(Map<String,String> tiposcocldoHM) {
 		this.tiposcocldoHM = tiposcocldoHM;
+	}
+	public String getsNURCAT() {
+		return sNURCAT;
+	}
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT;
 	}
 
 }

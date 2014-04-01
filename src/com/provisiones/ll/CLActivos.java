@@ -12,6 +12,7 @@ import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.registros.QMRegistroActivos;
 
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Activo;
 import com.provisiones.types.tablas.ActivoTabla;
 
@@ -40,6 +41,22 @@ public final class CLActivos
 	public static ArrayList<ActivoTabla> buscarActivos (ActivoTabla filtro)
 	{
 		return QMActivos.buscaListaActivos(ConnectionManager.getDBConnection(),filtro);
+	}
+	
+	public static ArrayList<ActivoTabla> buscarActivosPorEstadoVenta (ActivoTabla filtro, String sEstado)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+		
+		if (sEstado.isEmpty())
+		{
+			resultado = QMActivos.buscaListaActivos(ConnectionManager.getDBConnection(),filtro);
+		}
+		else
+		{
+			resultado = QMActivos.buscaListaActivosPorVendido(ConnectionManager.getDBConnection(), filtro, sEstado.equals(ValoresDefecto.DEF_BAJA));
+		}
+		
+		return resultado;
 	}
 
 	public static ArrayList<ActivoTabla> buscarActivosConFichaInmovilizado (ActivoTabla activobuscado)

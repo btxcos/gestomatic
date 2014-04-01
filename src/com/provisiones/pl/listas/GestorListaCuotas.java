@@ -3,6 +3,8 @@ package com.provisiones.pl.listas;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -12,11 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuotas;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.ComunidadTabla;
 import com.provisiones.types.tablas.CuotaTabla;
 
 public class GestorListaCuotas implements Serializable 
@@ -26,14 +31,10 @@ public class GestorListaCuotas implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorListaCuotas.class.getName());
 	
-
+	//Buscar activos
 	private String sCOACES = "";
-	
-	private String sCOCLDO = "";
-	private String sNUDCOM = "";
-	
-	private String sCOSBAC = "";
-	
+
+	//Filtro activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";
 	private String sNOPRAC = "";
@@ -42,21 +43,38 @@ public class GestorListaCuotas implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNURCAT = "";
+	
+	//Buscar comunidad
+	private String sCOCLDO = "";
+	private String sNUDCOM = "";
+	private String sNOMCOC = "";
+	
+	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
+	
+	private transient ComunidadTabla comunidadseleccionada = null;
+	private transient ArrayList<ComunidadTabla> tablacomunidades = null;
 
 	private transient CuotaTabla cuotaseleccionada = null;
 	private transient ArrayList<CuotaTabla> tablacuotas = null;
+	
+	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 	
 	public GestorListaCuotas()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorListaCuotas...");	
+			logger.debug("Iniciando GestorListaCuotas...");
+			
+			tiposcocldoHM.put("C.I.F.",                     "2");
+			tiposcocldoHM.put("C.I.F país extranjero.",     "5");
+			tiposcocldoHM.put("Otros persona jurídica.",    "J");
 		}
 	}
 	
-	public void borrarCamposActivo()
+	public void borrarCamposFiltroActivo()
 	{
 		this.sCOPOIN = "";
 		this.sNOMUIN = "";
@@ -65,15 +83,43 @@ public class GestorListaCuotas implements Serializable
 		this.sNUPIAC = "";
 		this.sNUPOAC = "";
 		this.sNUPUAC = "";
-    	
-    	this.setActivoseleccionado(null);
-    	this.setTablaactivos(null);
+	}
+	
+	public void borrarResultadosActivo()
+	{
+		this.sCOACES = "";
+		
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
 	}
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
-    	borrarCamposActivo();
+    	borrarCamposFiltroActivo();
+    	borrarResultadosActivo();
     }
+    
+	public void borrarCamposFiltroComunidad()
+	{
+		this.sNOMCOC = "";
+	}
+	
+	
+	public void borrarResultadosComunidad()
+	{
+		this.sCOCLDO = "";
+		this.sNUDCOM = "";
+		
+    	this.comunidadseleccionada = null;
+    	this.tablacomunidades = null;
+	}
+	
+    public void limpiarPlantillaComunidad(ActionEvent actionEvent) 
+    {  
+    	borrarCamposFiltroComunidad();
+    	borrarResultadosComunidad();
+    }
+    
     
 	public void borrarCamposCuota()
 	{
@@ -87,7 +133,10 @@ public class GestorListaCuotas implements Serializable
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {
-    	borrarCamposActivo();
+    	borrarCamposFiltroActivo();
+    	borrarResultadosActivo();
+    	borrarCamposFiltroComunidad();
+    	borrarResultadosComunidad();
     	borrarCamposCuota();
     }
     
@@ -97,19 +146,74 @@ public class GestorListaCuotas implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLCuotas.buscarActivosConCuotas(filtro));
+			this.activoseleccionado = null;
 			
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			if (sNURCAT.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						sCOACES,
+						sCOPOIN.toUpperCase(),
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(),
+						sNOVIAS.toUpperCase(),
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(),
+						sNUPUAC.toUpperCase(), 
+						"");
+				
+				this.setTablaactivos(CLCuotas.buscarActivosConCuotas(filtro));
+
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConComunidad(sNURCAT));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+		    	this.setTablaactivos(null);
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}			
+
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
+		
 	}
 	
 	public void seleccionarActivo(ActionEvent actionEvent) 
@@ -128,6 +232,62 @@ public class GestorListaCuotas implements Serializable
 		}
     }
 	
+	public void buscarComunidad (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			this.comunidadseleccionada = null;
+			
+			this.setTablacomunidades(CLComunidades.buscarComunidadCuotasConNombre(sNOMCOC.toUpperCase()));
+			
+			if (getTablacomunidades().size() == 0)
+			{
+				sMsg = "No se encontraron Comunidades con los criterios solicitados.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+			else if (getTablacomunidades().size() == 1)
+			{
+				sMsg = "Encontrada una Comunidad relacionada.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "Encontradas "+getTablacomunidades().size()+" Comunidades relacionadas.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+	}
+	
+	
+	public void seleccionarComunidad(ActionEvent actionEvent) 
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+	    	this.sCOCLDO  = comunidadseleccionada.getCOCLDO();
+	    	this.sNUDCOM  = comunidadseleccionada.getNUDCOM();
+	    	
+	    	String sMsg = "Comunidad Seleccionada.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
+	    	
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+    }
+	
+	
 	public void buscarCuotasActivo(ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -136,7 +296,7 @@ public class GestorListaCuotas implements Serializable
 			
 			String sMsg = "";
 			
-			if (sCOACES.equals(""))
+			if (sCOACES.isEmpty())
 			{
 				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -146,11 +306,37 @@ public class GestorListaCuotas implements Serializable
 			{
 				try
 				{
-					this.tablacuotas = CLCuotas.buscarCuotasActivo(Integer.parseInt(sCOACES));
+					if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					{
+						this.tablacuotas = CLCuotas.buscarCuotasActivo(Integer.parseInt(sCOACES));
+						
+						if (getTablacuotas().size() == 0)
+						{
+							sMsg = "No se encontraron Cuotas con los criterios solicitados.";
+							msg = Utils.pfmsgWarning(sMsg);
+							logger.warn(sMsg);
+						}
+						else if (getTablacuotas().size() == 1)
+						{
+							sMsg = "Encontrada una Cuota relacionada.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+						else
+						{
+							sMsg = "Encontradas "+getTablaactivos().size()+" Cuotas relacionadas.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+					}
+					else
+					{
+						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
 					
-					sMsg = "Encontradas "+getTablacuotas().size()+" cuotas relacionadas.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+
 				}
 				catch(NumberFormatException nfe)
 				{
@@ -172,7 +358,7 @@ public class GestorListaCuotas implements Serializable
 			
 			String sMsg = "";
 
-			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+			if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 			{
 				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -211,15 +397,12 @@ public class GestorListaCuotas implements Serializable
 				this.sCOACES = cuotaseleccionada.getCOACES();
 		    	this.sCOCLDO  = cuotaseleccionada.getCOCLDO();
 		    	this.sNUDCOM  = cuotaseleccionada.getNUDCOM();
-		    	this.sCOSBAC = cuotaseleccionada.getCOSBAC();
 		    	
 		    	logger.debug("sCOACES:|"+sCOACES+"|");
 		    	logger.debug("sCOCLDO:|"+sCOCLDO+"|");
 		    	logger.debug("sNUDCOM:|"+sNUDCOM+"|");
-		    	logger.debug("sCOSBAC:|"+sCOSBAC+"|");
-		    	
-		    	
-		    	//String sCodCuota = Long.toString(CLCuotas.buscarCodigoCuota(Integer.parseInt(sCOACES),sCOCLDO, sNUDCOM, sCOSBAC));
+		    	logger.debug("sCOSBAC:|"+cuotaseleccionada.getCOSBAC()+"|");
+	
 		    	String sCodCuota = cuotaseleccionada.getsCuotaID();
 		    	
 		    	logger.debug("sCodCuota:|"+sCodCuota+"|");
@@ -283,14 +466,6 @@ public class GestorListaCuotas implements Serializable
 
 	public void setsCOCLDO(String sCOCLDO) {
 		this.sCOCLDO = sCOCLDO;
-	}
-
-	public String getsCOSBAC() {
-		return sCOSBAC;
-	}
-
-	public void setsCOSBAC(String sCOSBAC) {
-		this.sCOSBAC = sCOSBAC;
 	}
 
 	public String getsNUDCOM() {
@@ -387,5 +562,45 @@ public class GestorListaCuotas implements Serializable
 
 	public void setTablacuotas(ArrayList<CuotaTabla> tablacuotas) {
 		this.tablacuotas = tablacuotas;
+	}
+
+	public String getsNURCAT() {
+		return sNURCAT;
+	}
+
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT;
+	}
+
+	public String getsNOMCOC() {
+		return sNOMCOC;
+	}
+
+	public void setsNOMCOC(String sNOMCOC) {
+		this.sNOMCOC = sNOMCOC;
+	}
+
+	public ComunidadTabla getComunidadseleccionada() {
+		return comunidadseleccionada;
+	}
+
+	public void setComunidadseleccionada(ComunidadTabla comunidadseleccionada) {
+		this.comunidadseleccionada = comunidadseleccionada;
+	}
+
+	public ArrayList<ComunidadTabla> getTablacomunidades() {
+		return tablacomunidades;
+	}
+
+	public void setTablacomunidades(ArrayList<ComunidadTabla> tablacomunidades) {
+		this.tablacomunidades = tablacomunidades;
+	}
+
+	public Map<String,String> getTiposcocldoHM() {
+		return tiposcocldoHM;
+	}
+
+	public void setTiposcocldoHM(Map<String,String> tiposcocldoHM) {
+		this.tiposcocldoHM = tiposcocldoHM;
 	}
 }

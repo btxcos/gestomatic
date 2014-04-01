@@ -1086,13 +1086,13 @@ public final class QMListaReferencias
 						   + QMListaComunidadesActivos.CAMPO1 + 
 	   					   " FROM " 
 						   + QMListaComunidadesActivos.TABLA +
-	   					   " WHERE (" 
+	   					   " ) AND " 
 						   + CAMPO2 + " IN (SELECT " 
 	   					   + QMReferencias.CAMPO1 + 
 						   " FROM " 
 						   + QMReferencias.TABLA +
 						   " WHERE "
-						   + QMReferencias.CAMPO2 +  " = '" + sNURCAT + "'))))))";
+						   + QMReferencias.CAMPO2 +  " = '" + sNURCAT + "'))))";
 			
 			logger.debug(sQuery);
 
@@ -1167,7 +1167,7 @@ public final class QMListaReferencias
 			
 			logger.debug("Ejecutando Query...");
 
-			String sQuery = "SELECT "
+String sQuery = "SELECT "
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
@@ -1186,16 +1186,16 @@ public final class QMListaReferencias
 						   + TABLA + 
 						   " WHERE ("
 						   + CAMPO1 + " IN (SELECT "
-						   + QMListaComunidadesActivos.CAMPO1 + 
+						   + QMListaCuotas.CAMPO1 + 
 	   					   " FROM " 
-						   + QMListaComunidadesActivos.TABLA +
-	   					   " WHERE (" 
+						   + QMListaCuotas.TABLA +
+	   					   " ) AND " 
 						   + CAMPO2 + " IN (SELECT " 
 	   					   + QMReferencias.CAMPO1 + 
 						   " FROM " 
 						   + QMReferencias.TABLA +
 						   " WHERE "
-						   + QMReferencias.CAMPO2 +  " = '" + sNURCAT + "'))))))";
+						   + QMReferencias.CAMPO2 +  " = '" + sNURCAT + "'))))";
 			
 			logger.debug(sQuery);
 

@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLCuotas;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
@@ -28,6 +29,7 @@ public class GestorMovimientosCuotas implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosCuotas.class.getName());
 
+	//Accion
 	private String sCOACCI = "";
 
 	//Buscar activos
@@ -60,10 +62,9 @@ public class GestorMovimientosCuotas implements Serializable
 	private String sFAACTA = "";
 	private String sPTPAGO = "";
 	private String sDesPTPAGO = "";
-	private String sOBTEXC = "";
 
 	//Observaciones
-	private String sOBDEER = "";
+	private String sOBTEXC = "";
 	
 	//Notas
 	private String sNota = "";
@@ -139,7 +140,9 @@ public class GestorMovimientosCuotas implements Serializable
 	}
 	
 	public void limpiarPlantilla(ActionEvent actionEvent) 
-    {  
+    {
+		this.sCOACCI = "";
+		
     	borrarCamposFiltroActivo();
     	borrarResultadosActivo();
 
@@ -251,20 +254,56 @@ public class GestorMovimientosCuotas implements Serializable
 			
 			String sMsg = "";
 			
-			try
+			if (sCOACES.isEmpty())
 			{
-				this.tablacuotas = CLCuotas.buscarCuotasActivo(Integer.parseInt(sCOACES));
-				
-				sMsg = "Encontradas "+getTablacuotas().size()+" cuotas relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
+			else
+			{
+				try
+				{
+					if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					{
+						this.tablacuotas = CLCuotas.buscarCuotasActivo(Integer.parseInt(sCOACES));
+						
+						if (getTablacuotas().size() == 0)
+						{
+							sMsg = "No se encontraron Cuotas con los criterios solicitados.";
+							msg = Utils.pfmsgWarning(sMsg);
+							logger.warn(sMsg);
+						}
+						else if (getTablacuotas().size() == 1)
+						{
+							sMsg = "Encontrada una Cuota relacionada.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+						else
+						{
+							sMsg = "Encontradas "+getTablaactivos().size()+" Cuotas relacionadas.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+					}
+					else
+					{
+						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
+			
+
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -300,19 +339,19 @@ public class GestorMovimientosCuotas implements Serializable
 	public void hoyFIPAGO (ActionEvent actionEvent)
 	{
 		this.setsFIPAGO(Utils.fechaDeHoy(true));
-		logger.debug("sFIPAGO:|{}|",sFIPAGO);
+		logger.debug("sFIPAGO:|"+sFIPAGO+"|");
 	}
 
 	public void hoyFFPAGO (ActionEvent actionEvent)
 	{
 		this.setsFFPAGO(Utils.fechaDeHoy(true));
-		logger.debug("sFFPAGO:|{}|",sFFPAGO);
+		logger.debug("sFFPAGO:|"+sFFPAGO+"|");
 	}
 	
 	public void hoyFAACTA (ActionEvent actionEvent)
 	{
 		this.setsFAACTA(Utils.fechaDeHoy(true));
-		logger.debug("sFAACTA:|{}|",sFAACTA);
+		logger.debug("sFAACTA:|"+sFAACTA+"|");
 	}
 	
 	public void registraDatos(ActionEvent actionEvent)
@@ -325,7 +364,7 @@ public class GestorMovimientosCuotas implements Serializable
 			
 			try
 			{
-				if (!CLCuotas.existeCuota(Integer.parseInt(sCOACES), sCOCLDO, sNUDCOM.toUpperCase(), sCOSBAC))
+				if (!CLCuotas.existeCuota(Integer.parseInt(sCOACES), sCOCLDO, sNUDCOM, sCOSBAC))
 				{
 					sMsg = "ERROR: La cuota no esta dada de alta. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
@@ -359,7 +398,7 @@ public class GestorMovimientosCuotas implements Serializable
 							sPTPAGO.toUpperCase(),
 							"", 
 							sOBTEXC.toUpperCase(), 
-							sOBDEER.toUpperCase());
+							ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
 
 					String sNotaAntigua = CLCuotas.buscarNota(CLCuotas.buscarCodigoCuota(Integer.parseInt(sCOACES), sCOCLDO, sNUDCOM, sCOSBAC));
 					
@@ -731,14 +770,6 @@ public class GestorMovimientosCuotas implements Serializable
 
 	public void setsOBTEXC(String sOBTEXC) {
 		this.sOBTEXC = sOBTEXC;
-	}
-
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
 	}
 
 	public ActivoTabla getActivoseleccionado() {

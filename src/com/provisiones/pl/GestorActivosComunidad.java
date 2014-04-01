@@ -164,7 +164,7 @@ public class GestorActivosComunidad implements Serializable
 			
 			String sMsg = "";
 			
-			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+			if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 			{
 				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -474,13 +474,13 @@ public class GestorActivosComunidad implements Serializable
 	    	
 	    	String sMsg = "";
 
-	    	if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+	    	if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 	    	{
 				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar el alta de Activo. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 	    	}
-	    	else if (sCOACES.equals(""))
+	    	else if (sCOACES.isEmpty())
 	    	{
 				sMsg = "ERROR: Debe informar el campo Activo para darlo de alta en la Comunidad. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);

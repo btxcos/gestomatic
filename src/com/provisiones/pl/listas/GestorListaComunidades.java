@@ -28,6 +28,7 @@ public class GestorListaComunidades implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorListaComunidades.class.getName());
 	
+	//Buscar activos
 	private String sCOACES = "";
 
 	//Busqueda Activos
@@ -41,6 +42,7 @@ public class GestorListaComunidades implements Serializable
 	
 	private String sNURCAT = "";
 	
+	//Comunidad
 	private String sCOCLDO = "";
 	private String sNUDCOM = "";
 	private String sNOMCOC = "";

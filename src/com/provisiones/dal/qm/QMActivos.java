@@ -2023,6 +2023,15 @@ public final class QMActivos
 			String sNUPIAC = "";
 			String sNUPOAC = "";
 			String sNUPUAC = "";
+			
+			//Condiciones Filtro
+			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND ";
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+
 
 			logger.debug("Ejecutando Query...");
 			
@@ -2038,12 +2047,12 @@ public final class QMActivos
 					   " FROM " 
 					   + TABLA + 
 					   " WHERE ("
-					   + CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
-					   + CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
-					   + CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
-					   + CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
-					   + CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
-					   + CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+					   + sCondicionCOPOIN  
+					   + sCondicionNOMUIN  
+					   + sCondicionNOPRAC  
+					   + sCondicionNOVIAS 
+					   + sCondicionNUPIAC  
+					   + sCondicionNUPOAC
 					   + CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ 
 					   "%')";
 			
@@ -2080,6 +2089,124 @@ public final class QMActivos
 						
 						//logger.debug( "Encontrado el registro!");
 						//logger.debug(CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+
+					logger.info("No se encontro la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR COPOIN:|"+filtro.getCOPOIN()+"|");
+				logger.error("ERROR NOMUIN:|"+filtro.getNOMUIN()+"|");
+				logger.error("ERROR NOPRAC:|"+filtro.getNOPRAC()+"|");
+				logger.error("ERROR NOVIAS:|"+filtro.getNOVIAS()+"|");
+				logger.error("ERROR NUPIAC:|"+filtro.getNUPIAC()+"|");
+				logger.error("ERROR NUPOAC:|"+filtro.getNUPOAC()+"|");
+				logger.error("ERROR NUPUAC:|"+filtro.getNUPUAC()+"|");
+				
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaListaActivosPorVendido(Connection conexion, ActivoTabla filtro, boolean bVendido)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+
+
+			//Condiciones Filtro
+			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND ";
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+
+			
+			String sCondicionVendido = CAMPO3 + (bVendido?" <> ":" = ") +"0";
+			
+			
+			
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO1 + ","        
+					   + CAMPO14 + ","
+					   + CAMPO11 + ","
+					   + CAMPO13 + ","
+					   + CAMPO6 + ","
+					   + CAMPO9 + ","
+					   + CAMPO7 + ","
+					   + CAMPO10 + 
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE ("
+					   + sCondicionCOPOIN  
+					   + sCondicionNOMUIN
+					   + sCondicionNOPRAC  
+					   + sCondicionNOVIAS  
+					   + sCondicionNUPIAC
+					   + sCondicionNUPOAC 
+					   + sCondicionNUPUAC
+					   + sCondicionVendido;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						String sCOACES = rs.getString(CAMPO1);
+						String sCOPOIN = rs.getString(CAMPO14);
+						String sNOMUIN = rs.getString(CAMPO11);
+						String sNOPRAC = rs.getString(CAMPO13);
+						String sNOVIAS = rs.getString(CAMPO6);
+						String sNUPIAC = rs.getString(CAMPO9);
+						String sNUPOAC = rs.getString(CAMPO7);
+						String sNUPUAC = rs.getString(CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
 					}
 				}
 				if (!bEncontrado) 

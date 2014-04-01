@@ -1099,6 +1099,8 @@ public final class QMComunidades
 			ResultSet rs = null;
 
 			boolean bEncontrado = false;
+			
+			String sCondicionCodComunidad = (liCodComunidadID == 0)?"":" WHERE " + CAMPO1 +  " = '" + liCodComunidadID + "'"; 
 
 			logger.debug("Ejecutando Query...");
 			
@@ -1110,9 +1112,7 @@ public final class QMComunidades
 				       + "AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" +
 					   "  FROM " 
 					   + TABLA + 
-					   " WHERE "
-					   
-					   + CAMPO1 +  " = '" + liCodComunidadID + "'";
+					   sCondicionCodComunidad;
 			
 			logger.debug(sQuery);
 
@@ -1208,6 +1208,111 @@ public final class QMComunidades
 					   + TABLA + 
 					   " WHERE "
 					   +"INSTR(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + sNOMCOC + "') > 0 ";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sCodComunidadID = rs.getString(CAMPO1);
+						String sCOCLDO = rs.getString(CAMPO2);
+						String sDCOCLDO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOCLDO, QMCodigosControl.ICOCLDO, sCOCLDO);
+						String sNUDCOM = rs.getString(CAMPO3);
+						
+						String sNOMPRC = rs.getString("AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						String sNOMADC = rs.getString("AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+
+						
+						String sActivos = ""+QMListaComunidadesActivos.buscaNumeroActivos(conexion, rs.getLong(CAMPO1));
+						
+						ComunidadTabla comunidadencontrada = new ComunidadTabla(
+								sCodComunidadID,
+								sCOCLDO,
+								sDCOCLDO,
+								sNUDCOM,
+								rs.getString("AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),
+								sNOMPRC,
+								sNOMADC,
+								sActivos);
+						
+						resultado.add(comunidadencontrada);
+						
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ComunidadTabla>();
+
+				logger.error("ERROR sNOMCOC:|"+sNOMCOC+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ComunidadTabla> buscaComunidadCuotasPorNombre(Connection conexion, String sNOMCOC)
+	{
+		//Sin uso
+
+		ArrayList<ComunidadTabla> resultado = new ArrayList<ComunidadTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO1 + ","
+					   + CAMPO2 + "," 
+					   + CAMPO3 + ","
+					   + "AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" +
+					   "  FROM " 
+					   + TABLA + 
+					   " WHERE "
+					   +"INSTR(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + sNOMCOC + "') > 0" +
+					   " AND "
+					   + CAMPO2 +  " IN ( SELECT "
+					   + QMCuotas.CAMPO3 +	
+					   " FROM "
+					   + QMCuotas.TABLA + ")" +
+					   " AND "
+					   + CAMPO3 +  " IN ( SELECT "
+					   + QMCuotas.CAMPO4 +	
+					   " FROM "
+					   + QMCuotas.TABLA + ") ";
 			
 			logger.debug(sQuery);
 
