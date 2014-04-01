@@ -2148,7 +2148,7 @@ public final class QMActivos
 			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
 
 			
-			String sCondicionVendido = CAMPO3 + (bVendido?" <> ":" = ") +"0";
+			String sCondicionVendido = CAMPO71 + (bVendido?" <> ":" = ") +"0";
 			
 			
 			
@@ -2174,7 +2174,8 @@ public final class QMActivos
 					   + sCondicionNUPIAC
 					   + sCondicionNUPOAC 
 					   + sCondicionNUPUAC
-					   + sCondicionVendido;
+					   + sCondicionVendido
+					   +")";
 			
 			logger.debug(sQuery);
 
