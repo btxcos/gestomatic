@@ -131,6 +131,17 @@ public class GestorSesion implements Serializable
 			logger.error("ERROR: No se puede acceder a la página de login.");
 		}
 		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		
+		try
+		{
+			session.invalidate();
+		}
+		catch (Exception es)
+		{
+			logger.error("ERROR: Error terminando la sesión: " + es.getMessage());
+		}
+		
 		//return "login.xhtml?facesRedirect=false";
 	}
 	

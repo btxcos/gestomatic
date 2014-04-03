@@ -28,15 +28,19 @@ public final class QMUsuarios
 	public static final String CAMPO6  = "apellido2";
 	public static final String CAMPO7  = "contacto";
 	public static final String CAMPO8  = "fecha_alta";
-	public static final String CAMPO9  = "fecha_modificacion";
-	public static final String CAMPO10  = "tipo_usuario";
-	public static final String CAMPO11  = "activo";
+	public static final String CAMPO9  = "tipo_usuario";
+	public static final String CAMPO10  = "activo";
+	public static final String CAMPO11  = "usuario_alta";
+	public static final String CAMPO12  = "fecha_modificacion";
+	public static final String CAMPO13  = "nota";
 	
 	private QMUsuarios(){}
 	
 	public static long addUsuario (Connection conexion, Usuario NuevoUsuario) 
 	{
 		long iCodigo = 0;
+		
+		String sUsuario = ConnectionManager.getUser();
 		
 		if (conexion != null)
 		{
@@ -58,20 +62,24 @@ public final class QMUsuarios
 				       + CAMPO7  + ","              
 				       + CAMPO8  + ","              
 				       + CAMPO9  + ","              
-				       + CAMPO10 + ","              
-				       + CAMPO11 +               
+				       + CAMPO10 + ","
+				       + CAMPO11 + "," 
+				       + CAMPO12 + "," 
+				       + CAMPO13 +               
 	          
 				       ") VALUES ('"        
 				       + NuevoUsuario.getsLogin() + "'," 
-				       + "AES_ENCRYPT('"+ NuevoUsuario.getsPassword()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
-				       + NuevoUsuario.getsNombre() + "','"  
-				       + NuevoUsuario.getsApellido1() + "','"  
-				       + NuevoUsuario.getsApellido2() + "','"  
-				       + NuevoUsuario.getsContacto() + "','"  
-				       + sFecha + "','"  
-				       + sFecha + "','"  
+				       + "AES_ENCRYPT('"+ NuevoUsuario.getsPassword()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       + "AES_ENCRYPT('"+ NuevoUsuario.getsNombre() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"  
+				       + "AES_ENCRYPT('"+ NuevoUsuario.getsApellido1() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
+				       + "AES_ENCRYPT('"+ NuevoUsuario.getsApellido2() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       + "AES_ENCRYPT('"+ NuevoUsuario.getsContacto() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"  
+				       + sFecha + "','"
 				       + NuevoUsuario.getsTipoUsuario() + "',"  
-				       + ValoresDefecto.ACTIVO + " )";
+				       + ValoresDefecto.ACTIVO + ",'" 
+				       + sUsuario + "','"
+				       + Utils.timeStamp() + "','"
+				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + "')";
 			
 			logger.debug(sQuery);
 
@@ -120,15 +128,16 @@ public final class QMUsuarios
 					+ TABLA + 
 					" SET " 
 					//+ CAMPO2 + " = '"+ NuevoUsuario.getsLogin() + "', "
-					+ CAMPO3 + " = '"+ NuevoUsuario.getsPassword() + "', "
-					+ CAMPO4 + " = '"+ NuevoUsuario.getsNombre() + "', "
-					+ CAMPO5 + " = '"+ NuevoUsuario.getsApellido1() + "', "
-					+ CAMPO6 + " = '"+ NuevoUsuario.getsApellido2() + "', "
-					+ CAMPO7 + " = '"+ NuevoUsuario.getsContacto() + "', "
+					+ CAMPO3 + " = AES_ENCRYPT('"+ NuevoUsuario.getsPassword() +"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO4 + " = AES_ENCRYPT('"+ NuevoUsuario.getsNombre() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO5 + " = AES_ENCRYPT('"+ NuevoUsuario.getsApellido1() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO6 + " = AES_ENCRYPT('"+ NuevoUsuario.getsApellido2() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
+					+ CAMPO7 + " = AES_ENCRYPT('"+ NuevoUsuario.getsContacto() + "',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), "
 					//+ CAMPO8 + " = '"+ NuevoUsuario.getsFechaAlta() + "', "
-					+ CAMPO9 + " = '"+ Utils.fechaDeHoy(false) + "', "
-					+ CAMPO10 + " = '"+ NuevoUsuario.getsTipoUsuario() + "', "
-					+ CAMPO11 + " = '"+ NuevoUsuario.getsActivo() + "' "+
+					+ CAMPO9 + " = '"+ NuevoUsuario.getsTipoUsuario() + "', "
+					+ CAMPO10 + " = '"+ NuevoUsuario.getsActivo() + "', "
+					//+ CAMPO11 + " = '"+ sUsuario + "', "
+					+ CAMPO12 + " = '"+ Utils.timeStamp() + "' " +
 					" WHERE " 
 					+ CAMPO1 + " = '"+ sUsuarioID + "'";
 			
@@ -213,9 +222,9 @@ public final class QMUsuarios
 		String sContacto = "";
 		String sFechaAlta = "";
 		String sFechaModificacion = "";
-		String sTipoUsuario = "";	
+		String sTipoUsuario = "";
 		String sActivo = "";
-
+		
 		if (conexion != null)
 		{
 			Statement stmt = null;
@@ -229,16 +238,14 @@ public final class QMUsuarios
 			
 			String sQuery = "SELECT "
 					   + CAMPO2  + ","
-					   + "AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-					   //+ CAMPO3  + ","
-					   + CAMPO4  + ","
-					   + CAMPO5  + ","
-				       + CAMPO6  + ","
-				       + CAMPO7  + ","
+					   + "AES_DECRYPT("+ CAMPO3 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+					   + "AES_DECRYPT("+ CAMPO4 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+					   + "AES_DECRYPT("+ CAMPO5 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+					   + "AES_DECRYPT("+ CAMPO6 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+					   + "AES_DECRYPT("+ CAMPO7 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 				       + CAMPO8  + ","              
 				       + CAMPO9  + ","              
-				       + CAMPO10 + ","              
-				       + CAMPO11 +      
+				       + CAMPO10 +      
 				       "  FROM " 
 				       + TABLA + 
 				       " WHERE "
@@ -265,14 +272,16 @@ public final class QMUsuarios
 						sLogin = rs.getString(CAMPO2); 
 						sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						//sPassword = rs.getString(CAMPO3);
-						sNombre = rs.getString(CAMPO4);
-						sApellido1 = rs.getString(CAMPO5); 
-						sApellido2 = rs.getString(CAMPO6);  
-						sContacto = rs.getString(CAMPO7);
-						sFechaAlta = rs.getString(CAMPO8);  
-						sFechaModificacion = rs.getString(CAMPO9);  
-						sTipoUsuario = rs.getString(CAMPO10); 
-						sActivo = rs.getString(CAMPO11); 
+						sNombre = rs.getString("AES_DECRYPT("+ CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sApellido1 = rs.getString("AES_DECRYPT("+ CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sApellido2 = rs.getString("AES_DECRYPT("+ CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sContacto = rs.getString("AES_DECRYPT("+ CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sFechaAlta = rs.getString(CAMPO8);
+						sTipoUsuario = rs.getString(CAMPO9);
+						sActivo = rs.getString(CAMPO10); 
+						//sFechaModificacion = rs.getString(CAMPO11);  
+						 
+						
 						
 						logger.debug("Encontrado el registro!");
 					}
@@ -393,7 +402,7 @@ public final class QMUsuarios
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO11 + " = "+ sEstado + " "+
+					+ CAMPO10 + " = "+ sEstado + " "+
 					" WHERE "
 					+ CAMPO1  + " = '"+ sUsuarioID +"'";
 			
@@ -441,7 +450,7 @@ public final class QMUsuarios
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-					+ CAMPO11 + 
+					+ CAMPO10 + 
 					" FROM "
 					+ TABLA + 
 					" WHERE "
@@ -494,6 +503,125 @@ public final class QMUsuarios
 		}
 
 		return sEstado;
+	}
+	
+	public static boolean setNota(Connection conexion, long liUsuarioID, String sNota)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO13 + " = '"+ sNota +"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ liUsuarioID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR USUARIO:|"+liUsuarioID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static String getNota(Connection conexion, long liUsuarioID)
+	{
+		String sNota = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO13 + 
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ liUsuarioID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sNota = rs.getString(CAMPO13);
+						
+						logger.debug(CAMPO1+":|"+liUsuarioID+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO13+":|"+sNota+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNota = "";
+				
+				logger.error("ERROR USUARIO:|"+liUsuarioID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNota;
 	}
 	
 	//Ámbito Login 

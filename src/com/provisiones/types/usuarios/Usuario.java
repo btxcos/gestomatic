@@ -133,7 +133,20 @@ public class Usuario
 		this.sActivo = sActivo;
 	}
 	
-	
+	public String logUsuario()
+	{
+		return "(USUARIO)" +
+				 "\nLogin:|"+sLogin+
+				"|\nPassword:|"+sPassword+
+				"|\nNombre:|"+sNombre+
+				"|\nApellido1:|"+sApellido1+
+				"|\nApellido2:|"+sApellido2+
+				"|\nContacto:|"+sContacto+
+				"|\nFechaAlta:|"+sFechaAlta+
+				"|\nFechaModificacion:|"+sFechaModificacion+
+				"|\nTipoUsuario:|"+sTipoUsuario+
+				"|\nActivo:|"+sActivo+"|";
+	}
 	
 
 }
