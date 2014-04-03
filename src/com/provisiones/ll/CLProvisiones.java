@@ -159,6 +159,11 @@ public final class CLProvisiones
 		return QMProvisiones.provisionCompleta(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
+	public static boolean estaPagada (String sNUPROF)
+	{
+		return CLProvisiones.estadoProvision(sNUPROF).equals(ValoresDefecto.DEF_PROVISION_PAGADA);
+	}
+	
 	public static boolean existeProvision (String sNUPROF)
 	{
 		return QMProvisiones.existeProvision(ConnectionManager.getDBConnection(),sNUPROF);

@@ -26,6 +26,7 @@ import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuenta;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Pago;
+import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
@@ -64,6 +65,10 @@ public class GestorPagosSimple implements Serializable
 	//Filtro Provision
 	private String sFEPFONB = "";
 
+	//Progreso de Pago
+	private String sGastosPorPagar = "";
+	private String sValorPorPagar = "";
+	private String sFechaLimite = "";
 	
 	//Filtro Gasto provision
 	private String sCOGRUGBP = "";
@@ -388,6 +393,12 @@ public class GestorPagosSimple implements Serializable
     {  
     	borrarCamposCuenta();
     }
+    public void borrarCamposProgreso()
+    {
+    	this.sGastosPorPagar = "";
+    	this.sValorPorPagar = "";
+    	this.sFechaLimite = "";
+    }
 	
 	
 	public void borrarCamposPago()
@@ -407,6 +418,7 @@ public class GestorPagosSimple implements Serializable
     	borrarCamposBuscarProvision();
     	borrarCamposBuscarGastoActivo();
     	borrarCamposBuscarGastoProvision();
+    	borrarCamposProgreso();
     	borrarCamposPago();
     	borrarCamposGasto();
     }
@@ -749,6 +761,8 @@ public class GestorPagosSimple implements Serializable
 			
 			this.gastoactivoseleccionado = null;
 			
+			this.setTablagastosactivo(null);
+			
 			try
 			{
 				if (sCOACESB.isEmpty())
@@ -756,9 +770,6 @@ public class GestorPagosSimple implements Serializable
 					sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
-					
-					this.setTablagastosactivo(null);
-					
 				}
 				else if (CLActivos.existeActivo(Integer.parseInt(sCOACESB)))
 				{
@@ -806,8 +817,6 @@ public class GestorPagosSimple implements Serializable
 					sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
-					
-			    	this.setTablagastosactivo(null);
 				}
 
 			}
@@ -816,8 +825,6 @@ public class GestorPagosSimple implements Serializable
 				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-				
-				this.setTablagastosactivo(null);
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -834,6 +841,10 @@ public class GestorPagosSimple implements Serializable
 			
 			String sMsg = "";
 			
+			this.gastoprovisionseleccionado = null;
+			
+			this.setTablagastosprovision(null);
+			
 			try
 			{
 				Long.parseLong(sNUPROFB);
@@ -843,27 +854,30 @@ public class GestorPagosSimple implements Serializable
 					sMsg = "No se informó el campo 'Provisión'. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
-					
-					this.setTablagastosprovision(null);
+
 				}
 				else if (CLProvisiones.existeProvision(sNUPROFB))
 				{
-					GastoTabla filtro = new GastoTabla(
-							"",
-							sNUPROFB,   
-							sCOACESBP,   
-							sCOGRUGBP,   
-							sCOTPGABP,   
-							sCOSBGABP,   
-							"",  
-							"",   
-							"",  
-							Utils.compruebaFecha(sFEDEVEBP),   
-							"",   
-							"",  
-							"");
-					
-					this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro));
+					if (!CLProvisiones.estaPagada(sNUPROFB))
+					{
+						GastoTabla filtro = new GastoTabla(
+								"",
+								sNUPROFB,   
+								sCOACESBP,   
+								sCOGRUGBP,   
+								sCOTPGABP,   
+								sCOSBGABP,   
+								"",  
+								"",   
+								"",  
+								Utils.compruebaFecha(sFEDEVEBP),   
+								"",   
+								"",  
+								"");
+						
+						this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro));
+						
+					}
 					
 					if (getTablagastosprovision().size() == 0)
 					{
@@ -883,14 +897,13 @@ public class GestorPagosSimple implements Serializable
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 					}
+					
 				}
 				else
 				{
 					sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
-					
-					this.setTablagastosprovision(null);
 				}
 			}
 			catch(NumberFormatException nfe)
@@ -898,8 +911,6 @@ public class GestorPagosSimple implements Serializable
 				sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-				
-				this.setTablagastosprovision(null);
 			}
 
 
@@ -975,98 +986,120 @@ public class GestorPagosSimple implements Serializable
 	    	FacesMessage msg;
 	    	
 	    	String sMsg = "";
-
-			this.sCOACES = gastoseleccionado.getCOACES();
-			
-			//Cargar Comunidad
-			
-			//Cargar Gasto
-	    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
-	    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
-	    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
-	    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
 	    	
-	    	logger.debug("sCOACES:|"+sCOACES+"|");
-	    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");
-	    	logger.debug("sCOTPGA:|"+sCOTPGA+"|");
-	    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
-	    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
+	    	borrarCamposGasto();
+	    	borrarCamposProgreso();
 	    	
-	    	
-	    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA();
-	    	
-	    	
-	    	this.sCodGastoB = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
-
-		  	Gasto gasto = CLGastos.buscarGastoConCodigo(Long.parseLong(sCodGastoB));
-
-	    	logger.debug(gasto.logGasto());
-	    	
-	    	this.sFEDEVE = Utils.recuperaFecha(gasto.getFEDEVE());
-	 
-	    	this.setbDevolucion((Integer.parseInt(sCOSBGA) > 49));
-	    	
-	    	if (bDevolucion)
+	    	if (gastoseleccionado != null)
 	    	{
-	    		this.sPais = "ES";
-	    		this.sDCIBAN = "00";
-	    		this.sNUCCEN = "0000";
-	    		this.sNUCCOF = "0000";
-	    		this.sNUCCDI = "00";
-	    		this.sNUCCNT = "0000000000";
-	    		
-	    		this.setsDescripcion("DEVOLUCION");
-	    		
-	    		this.sTipoPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
+				this.sCOACES = gastoseleccionado.getCOACES();
+				
+				//Cargar Comunidad
+				
+				//Cargar Gasto
+		    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
+		    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
+		    	this.sCOSBGA = gastoseleccionado.getCOSBGA();
+		    	this.sFEDEVE = gastoseleccionado.getFEDEVE();
+		    	
+		    	logger.debug("sCOACES:|"+sCOACES+"|");
+		    	logger.debug("sCOGRUG:|"+sCOGRUG+"|");
+		    	logger.debug("sCOTPGA:|"+sCOTPGA+"|");
+		    	logger.debug("sCOSBGA:|"+sCOSBGA+"|");
+		    	logger.debug("sFEDEVE:|"+sFEDEVE+"|");
+		    	
+		    	
+		    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA();
+		    	
+		    	
+		    	this.sCodGastoB = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
+
+			  	Gasto gasto = CLGastos.buscarGastoConCodigo(Long.parseLong(sCodGastoB));
+
+		    	logger.debug(gasto.logGasto());
+		    	
+		    	this.sFEDEVE = Utils.recuperaFecha(gasto.getFEDEVE());
+		 
+		    	this.setbDevolucion((Integer.parseInt(sCOSBGA) > 49));
+		    	
+		    	if (bDevolucion)
+		    	{
+		    		this.sPais = "ES";
+		    		this.sDCIBAN = "00";
+		    		this.sNUCCEN = "0000";
+		    		this.sNUCCOF = "0000";
+		    		this.sNUCCDI = "00";
+		    		this.sNUCCNT = "0000000000";
+		    		
+		    		this.setsDescripcion("DEVOLUCION");
+		    		
+		    		this.sTipoPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
+		    	}
+		    	else
+		    	{
+		    		borrarCamposCuenta();
+		    	}
+
+				this.sDPTPAGO = gastoseleccionado.getDPTPAGO();
+
+				this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
+				
+				//TODO sacar de datos de pago
+				//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
+				this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
+
+				this.sEstado = CLDescripciones.descripcionEstadoGasto(CLGastos.estadoGasto(Long.parseLong(sCodGastoB)));
+				
+				this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
+				this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
+				this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
+				//this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
+				this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
+				this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
+				this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
+				this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
+				this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
+				this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
+				this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
+				this.setsDCOIMPT(CLDescripciones.descripcionTipoImpuestoGasto(gasto.getCOIMPT()));
+				
+				//TODO sacar de datos de pago
+				//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+				
+				this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
+				
+				//TODO sacar de datos de pago
+				//this.sCOENCX = ValoresDefecto.DEF_COENCX;
+				//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
+				//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
+				
+				this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
+				actualizaProgreso();
+				
+		    	sMsg = "Gasto cargado.";
+		    	msg = Utils.pfmsgInfo(sMsg);
+		    	
+		    	logger.info(sMsg);
 	    	}
 	    	else
 	    	{
-	    		borrarCamposCuenta();
+	    		sMsg = "ERROR: Ocurrio un error al cargar los datos del Gasto. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
 	    	}
-
-			this.sDPTPAGO = gastoseleccionado.getDPTPAGO();
-
-			this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
-			
-			//TODO sacar de datos de pago
-			//this.sFEPAGA = Utils.recuperaFecha(gasto.getFEPAGA());
-			this.sFELIPG = Utils.recuperaFecha(gasto.getFELIPG());
-
-			this.sEstado = CLDescripciones.descripcionEstadoGasto(CLGastos.estadoGasto(Long.parseLong(sCodGastoB)));
-			
-			this.sFEEESI = Utils.recuperaFecha(gasto.getFEEESI());
-			this.sFEECOI = Utils.recuperaFecha(gasto.getFEECOI());
-			this.sFEEAUI = Utils.recuperaFecha(gasto.getFEEAUI());
-			//this.sFEEPAI = Utils.recuperaFecha(gasto.getFEEPAI());
-			this.sIMNGAS = Utils.recuperaImporte(gasto.getYCOS02().equals("-"),gasto.getIMNGAS());
-			this.sIMRGAS = Utils.recuperaImporte(gasto.getYCOS04().equals("-"),gasto.getIMRGAS());
-			this.sIMDGAS = Utils.recuperaImporte(gasto.getYCOS06().equals("-"),gasto.getIMDGAS());
-			this.sIMCOST = Utils.recuperaImporte(gasto.getYCOS08().equals("-"),gasto.getIMCOST());
-			this.sIMOGAS = Utils.recuperaImporte(gasto.getYCOS10().equals("-"),gasto.getIMOGAS());
-			this.sIMDTGA = Utils.recuperaImporte(false,gasto.getIMDTGA());
-			this.sIMIMGA = Utils.recuperaImporte(false,gasto.getIMIMGA());
-			this.setsDCOIMPT(CLDescripciones.descripcionTipoImpuestoGasto(gasto.getCOIMPT()));
-			
-			//TODO sacar de datos de pago
-			//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
-			
-			this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
-			
-			//TODO sacar de datos de pago
-			//this.sCOENCX = ValoresDefecto.DEF_COENCX;
-			//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
-			//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
-			
-			this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
-
-	    	sMsg = "Gasto cargado.";
-	    	msg = Utils.pfmsgInfo(sMsg);
-	    	
-	    	logger.info(sMsg);
 	    	
   			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
+	
+	public void actualizaProgreso()
+	{
+		Provision provision = CLProvisiones.buscarDetallesProvision(sNUPROF);
+
+    	this.sGastosPorPagar = Long.toString(Long.parseLong(provision.getsGastosAutorizados()) - Long.parseLong(provision.getsGastosPagados()));
+    	this.sValorPorPagar = Utils.recuperaImporte(false,Long.toString(Long.parseLong(provision.getsValorAutorizado()) - Long.parseLong(provision.getsValorPagado())));
+    	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
+	}
 	
 	public void buscaCuentas (ActionEvent actionEvent)
 	{
@@ -1326,13 +1359,14 @@ public class GestorPagosSimple implements Serializable
 					switch (iSalida) 
 					{
 					case 0: //Sin errores
+						actualizaProgreso();
 						sMsg = "El pago se ha registrado correctamente.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 						break;
 
 					case -1: //ERROR 001 - El gasto no esta autorizado.
-						sMsg = "ERROR:001 - El gasto no esta autorizado. Por favor, revise los datos.";
+						sMsg = "ERROR:001 - El gasto no está autorizado. Por favor, revise los datos.";
 						msg = Utils.pfmsgError(sMsg);
 						logger.error(sMsg);
 						break;
@@ -1537,6 +1571,30 @@ public class GestorPagosSimple implements Serializable
 
 	public void setsFEPFONB(String sFEPFONB) {
 		this.sFEPFONB = sFEPFONB;
+	}
+
+	public String getsGastosPorPagar() {
+		return sGastosPorPagar;
+	}
+
+	public void setsGastosPorPagar(String sGastosPorPagar) {
+		this.sGastosPorPagar = sGastosPorPagar;
+	}
+
+	public String getsValorPorPagar() {
+		return sValorPorPagar;
+	}
+
+	public void setsValorPorPagar(String sValorPorPagar) {
+		this.sValorPorPagar = sValorPorPagar;
+	}
+
+	public String getsFechaLimite() {
+		return sFechaLimite;
+	}
+
+	public void setsFechaLimite(String sFechaLimite) {
+		this.sFechaLimite = sFechaLimite;
 	}
 
 	public String getsCOGRUGBP() {

@@ -46,10 +46,12 @@ public class GestorPagosProvision implements Serializable
 	private String sGastosPagados = "";
 	private String sValorPagado = "";
 	private String sFechaPagado = "";
-	private String sCodEstado = "";
-	
+
+	private String sGastosPorPagar = "";
+	private String sValorPorPagar = "";
 	private String sFechaLimite = "";
-	
+
+	private String sCodEstado = "";
 	
 	//Búsqueda provisión
 	private String sNUPROFB = "";
@@ -138,9 +140,12 @@ public class GestorPagosProvision implements Serializable
     	this.sGastosPagados = "";
     	this.sValorPagado = "";
     	this.sFechaPagado = "";
-    	this.sCodEstado = "";
-    	
+
+    	this.sGastosPorPagar = "";
+    	this.sValorPorPagar = "";
     	this.sFechaLimite = "";
+
+    	this.sCodEstado = "";
     }
 
 	public void borrarCamposPago()
@@ -246,69 +251,94 @@ public class GestorPagosProvision implements Serializable
 	{
 		logger.debug("Cargando Provision...");
 		
-		this.sNUPROF = sNUPROFB;
-		
-		logger.debug("sNUPROF:|"+sNUPROF+"|");
-		
 		
 		FacesMessage msg;
 
 		String sMsg = "";
 		
+		borrarCamposProvision();
+		
 		try
 		{
-			Long.parseLong(sNUPROF);
+			Long.parseLong(sNUPROFB);
 			
-			if (sNUPROF.isEmpty())
+			if (sNUPROFB.isEmpty())
 			{
 				sMsg = "ERROR: Debe informar la Provisión para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 
 			}
-			else if (CLProvisiones.existeProvision(sNUPROF))
+			else if (CLProvisiones.existeProvision(sNUPROFB))
 			{
 
-			  	Provision provision = CLProvisiones.buscarDetallesProvision(sNUPROF);
+				if (CLProvisiones.estaPagada(sNUPROFB))
+				{
+					sMsg = "La Provisión '"+sNUPROFB+"' ya esta pagada. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 
-		    	logger.debug(provision.logProvision());
+				}
+				else
+				{
+					this.sNUPROF = sNUPROFB;
+					
+					logger.debug("sNUPROF:|"+sNUPROF+"|");
+					
+					Provision provision = CLProvisiones.buscarDetallesProvision(sNUPROF);
+
+			    	logger.debug(provision.logProvision());
+				  	
+			    	this.sCOSPAT = provision.getsCOSPAT();
+			    	this.sTAS = provision.getsTAS();
+			    	
+			    	this.sCOGRUG = provision.getsCOGRUG();
+			    	this.sCOTPGA = provision.getsCOTPGA();
+
+			    	this.sFEPFON = Utils.recuperaFecha(provision.getsFEPFON());
+			    	this.sNumGastos = provision.getsNumGastos();
+			    	this.sValorTolal = Utils.recuperaImporte(false,provision.getsValorTolal());
+			    	this.sFechaEnvio = Utils.recuperaFecha(provision.getsFechaEnvio());
+
+			    	this.sGastosAutorizados = provision.getsGastosAutorizados();
+			    	this.sValorAutorizado = Utils.recuperaImporte(false,provision.getsValorAutorizado());
+			    	this.sFechaAutorizado = Utils.recuperaFecha(provision.getsFechaAutorizado());
+
+			    	this.sGastosPagados = provision.getsGastosPagados();
+			    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
+			    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
+
+			    	this.sCodEstado = provision.getsCodEstado();
+			    	
+			    	logger.debug("sGastosAutorizados:|"+sGastosAutorizados+"|");
+			    	logger.debug("sGastosPagados:|"+sGastosPagados+"|");
+			    				    	
+			    	this.sGastosPorPagar = Long.toString(Long.parseLong(sGastosAutorizados) - Long.parseLong(sGastosPagados));
+			    	logger.debug("sGastosPorPagar:|"+sGastosPorPagar+"|");
+			    	
+			    	logger.debug("sValorAutorizado:|"+sValorAutorizado+"|");
+			    	logger.debug("sValorPagado:|"+sValorPagado+"|");
+			    	
+			    	this.sValorPorPagar = Utils.recuperaImporte(false,Long.toString(Long.parseLong(provision.getsValorAutorizado()) - Long.parseLong(provision.getsValorPagado())));
+			    	
+			    	logger.debug("sValorPorPagar:|"+sValorPorPagar+"|");
+			    	
+			    	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
+			    	
+					borrarCamposPago();
+					
+					sMsg = "Provisión '"+sNUPROF+"' cargada.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			  	
-		    	this.sCOSPAT = provision.getsCOSPAT();
-		    	this.sTAS = provision.getsTAS();
-		    	
-		    	this.sCOGRUG = provision.getsCOGRUG();
-		    	this.sCOTPGA = provision.getsCOTPGA();
-
-		    	this.sFEPFON = Utils.recuperaFecha(provision.getsFEPFON());
-		    	this.sNumGastos = provision.getsNumGastos();
-		    	this.sValorTolal = Utils.recuperaImporte(false,provision.getsValorTolal());
-		    	this.sFechaEnvio = Utils.recuperaFecha(provision.getsFechaEnvio());
-
-		    	this.sGastosAutorizados = provision.getsGastosAutorizados();
-		    	this.sValorAutorizado = Utils.recuperaImporte(false,provision.getsValorAutorizado());
-		    	this.sFechaAutorizado = Utils.recuperaFecha(provision.getsFechaAutorizado());
-
-		    	this.sGastosPagados = provision.getsGastosPagados();
-		    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
-		    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
-
-		    	this.sCodEstado = provision.getsCodEstado();
-		    	
-		    	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
-		    	
-				borrarCamposPago();
-				
-				sMsg = "Provisión '"+sNUPROF+"' cargada.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
 			}
 			else
 			{
-				sMsg = "La Provisión '"+sNUPROF+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+				sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 				
-				this.sNUPROF = "";
 			}
 		}
 		catch(NumberFormatException nfe)
@@ -317,11 +347,23 @@ public class GestorPagosProvision implements Serializable
 			msg = Utils.pfmsgError(sMsg);
 			logger.error(sMsg);
 
-			this.sNUPROF = "";
 		}
 		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
+	}
+	
+	public void actualizaProgreso ()
+	{
+		Provision provision = CLProvisiones.buscarDetallesProvision(sNUPROF);
+		
+    	this.sGastosPagados = provision.getsGastosPagados();
+    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
+    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
+
+    	this.sGastosPorPagar = Long.toString(Long.parseLong(sGastosAutorizados) - Long.parseLong(sGastosPagados));
+    	this.sValorPorPagar = Utils.recuperaImporte(false,Long.toString(Long.parseLong(provision.getsValorAutorizado()) - Long.parseLong(provision.getsValorPagado())));
+    	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
 	}
 	
 	public void hoyFEPGPR (ActionEvent actionEvent)
@@ -382,6 +424,12 @@ public class GestorPagosProvision implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (sGastosPorPagar.equals("0"))
+				{
+					sMsg = "La Provisión '"+sNUPROF+"' ya esta pagada. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
 				else
 				{
 					if (sNUCCEN.equals("0000") ||
@@ -408,12 +456,7 @@ public class GestorPagosProvision implements Serializable
 					switch (iSalida) 
 					{
 					case 0: //Sin errores
-						Provision provision = CLProvisiones.buscarDetallesProvision(sNUPROF);
-						
-				    	this.sGastosPagados = provision.getsGastosPagados();
-				    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
-				    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
-				    	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
+						actualizaProgreso();
 				    	borrarCamposPago();
 						
 						sMsg = "El pago se ha registrado correctamente.";
@@ -642,7 +685,7 @@ public class GestorPagosProvision implements Serializable
 	}
 
 	public void setsNUPROFB(String sNUPROFB) {
-		this.sNUPROFB = sNUPROFB;
+		this.sNUPROFB = sNUPROFB.trim();
 	}
 
 	public String getsFEPFONB() {
@@ -747,6 +790,22 @@ public class GestorPagosProvision implements Serializable
 
 	public void setsFechaLimite(String sFechaLimite) {
 		this.sFechaLimite = sFechaLimite;
+	}
+
+	public String getsGastosPorPagar() {
+		return sGastosPorPagar;
+	}
+
+	public void setsGastosPorPagar(String sGastosPorPagar) {
+		this.sGastosPorPagar = sGastosPorPagar;
+	}
+
+	public String getsValorPorPagar() {
+		return sValorPorPagar;
+	}
+
+	public void setsValorPorPagar(String sValorPorPagar) {
+		this.sValorPorPagar = sValorPorPagar;
 	}
 
 }

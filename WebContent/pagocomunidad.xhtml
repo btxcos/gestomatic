@@ -73,7 +73,7 @@
 													<h:outputText for="NUPROFB" value="Provisión: " />
 													<p:inputText id="NUPROFB" value="#{GestorPagosComunidad.sNUPROFB}" size="10" maxlength="9"/>
 
-													<p:commandButton value="Cargar" update="provision, msgs, popup" actionListener="#{GestorPagosComunidad.cargarProvision}"/>
+													<p:commandButton value="Cargar" update="provision, msgs, popup" actionListener="#{GestorPagosComunidad.cargarProvision}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar Provisión" update="form:provisiones" oncomplete="dlgBuscarProvision.show()"/>
@@ -90,7 +90,7 @@
 										<h:panelGrid columns="4" cellpadding="5">
 
 											<h:outputText for="NUPROF" value="Provisión de fondos: " />
-											<p:inputText id="NUPROF" value="#{GestorPagosComunidad.sNUPROF}" size="10" readonly="true"/>
+											<p:inputText id="NUPROF" value="#{GestorPagosComunidad.sNUPROF}" size="10" disabled="true"/>
 
 											<h:outputText for="FEPFON" value="Fecha de cierre: " />
 											<p:inputText id="FEPFON" value="#{GestorPagosComunidad.sFEPFON}" size="9" disabled="true"/>
@@ -142,11 +142,24 @@
 											<p:inputText id="ValorPagado" value="#{GestorPagosComunidad.sValorPagado}" size="20" disabled="true"/>
 											<h:outputText value="¤"/>
 
-											<h:outputText for="FechaLimite" value="Primera fecha límite pago: " />
-											<p:inputText id="FechaLimite" value="#{GestorPagosComunidad.sFechaLimite}" size="9" disabled="true"/>
-
 											<h:outputText for="FechaPagado" value="Fecha de pago: " />
 											<p:inputText id="FechaPagado" value="#{GestorPagosComunidad.sFechaPagado}" size="9" disabled="true"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel >
+										<h:panelGrid columns="5" cellpadding="5">
+
+											<h:outputText for="GastosPorPagar" value="Gastos por pagar: " />
+											<p:inputText id="GastosPorPagar" value="#{GestorPagosComunidad.sGastosPorPagar}" size="6" disabled="true"/>
+
+											<h:outputText for="ValorPorPagar" value="Valor por pagar: " />
+											<p:inputText id="ValorPorPagar" value="#{GestorPagosComunidad.sValorPorPagar}" size="20" disabled="true"/>
+											<h:outputText value="¤"/>
+
+											<h:outputText for="FechaLimite" value="Primera fecha límite pago: " />
+											<p:inputText id="FechaLimite" value="#{GestorPagosComunidad.sFechaLimite}" size="9" disabled="true"/>
 
 										</h:panelGrid>
 									</p:panel>
@@ -225,7 +238,7 @@
 											</h:panelGrid>
 									  </p:panel>
 
-										<p:commandButton value="Buscar Cuenta" update="cuentascomunidad, msgs, popup" actionListener="#{GestorPagosComunidad.buscaCuentas}" oncomplete="dlgTablaCuentas.show()"/>	
+										<p:commandButton value="Buscar Cuenta" update="cuentascomunidad, msgs, popup" actionListener="#{GestorPagosComunidad.buscaCuentas}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaCuentas.show()"/>	
 
 										<p:panel>
 											<h:panelGrid columns="2" cellpadding="5">
@@ -261,7 +274,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="popup, :form:provisiones" actionListener="#{GestorPagosComunidad.buscarProvisiones}" oncomplete="dlgTablaProvisiones.show()"/>	
+													<p:commandButton value="Buscar" update="popup, :form:provisiones" actionListener="#{GestorPagosComunidad.buscarProvisiones}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaProvisiones.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscarProvision" actionListener="#{GestorPagosComunidad.limpiarPlantillaProvision}" />	
 
 												</h:panelGrid>
@@ -322,7 +335,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													
-													<p:commandButton value="Buscar" update="form:popup, form:msgs, form:comunidades" actionListener="#{GestorPagosComunidad.buscarComunidades}" oncomplete="dlgTablaComunidades.show()"/>	
+													<p:commandButton value="Buscar" update="form:popup, form:msgs, form:comunidades" actionListener="#{GestorPagosComunidad.buscarComunidades}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaComunidades.show()"/>	
 													<p:commandButton value="Limpiar Plantilla" update="panelBuscarComunidad" actionListener="#{GestorPagosComunidad.limpiarPlantillaComunidad}" />	
 
 												</h:panelGrid>
