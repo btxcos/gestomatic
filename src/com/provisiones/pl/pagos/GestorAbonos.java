@@ -670,7 +670,9 @@ public class GestorAbonos implements Serializable
 							sFEDEVEBA,   
 							"",   
 							"",  
-							"");
+							"",
+							"",
+							"");//TODO meter estado en el filtro
 					
 					
 					
@@ -739,7 +741,9 @@ public class GestorAbonos implements Serializable
 						sFEDEVEBP,   
 						"",   
 						"",  
-						"");
+						"",
+						"",
+						"");//TODO meter estado en el filtro
 				
 				this.setTablagastosprovision(CLGastos.buscarGastosAbonablesProvisionConFiltroEstado(filtro,sEstadoBP));
 				

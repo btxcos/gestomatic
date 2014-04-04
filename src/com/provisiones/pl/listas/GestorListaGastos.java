@@ -593,6 +593,8 @@ public class GestorListaGastos implements Serializable
 							Utils.compruebaFecha(sFEDEVEFA),   
 							"",   
 							"",  
+							"",
+							"",
 							"");
 					
 			    	logger.debug("sCOACES:|"+sCOACES+"|");
@@ -686,6 +688,8 @@ public class GestorListaGastos implements Serializable
 							Utils.compruebaFecha(sFEDEVEFP),   
 							"",   
 							"",  
+							"",
+							"",
 							"");
 					
 			    	logger.debug("sCOACES:|"+sCOACES+"|");

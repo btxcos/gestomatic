@@ -786,7 +786,9 @@ public class GestorPagosSimple implements Serializable
 							Utils.compruebaFecha(sFEDEVEBA),   
 							"",   
 							"",  
-							"");
+							"",
+							"",
+							"");//TODO meter estado en el filtro
 					
 					
 					
@@ -873,7 +875,9 @@ public class GestorPagosSimple implements Serializable
 								Utils.compruebaFecha(sFEDEVEBP),   
 								"",   
 								"",  
-								"");
+								"",
+								"",
+								"");//TODO meter estado en el filtro
 						
 						this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro));
 						
