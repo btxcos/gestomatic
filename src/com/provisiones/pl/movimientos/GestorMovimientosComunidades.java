@@ -165,6 +165,8 @@ public class GestorMovimientosComunidades implements Serializable
 			
 			this.activoseleccionado = null;
 			
+			this.setTablaactivos(null);
+			
 			if (sNURCAT.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
@@ -219,8 +221,6 @@ public class GestorMovimientosComunidades implements Serializable
 			}
 			else
 			{
-		    	this.setTablaactivos(null);
-				
 				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
@@ -254,42 +254,51 @@ public class GestorMovimientosComunidades implements Serializable
 			
 			String sMsg = "";
 			
-			try
+			if (sCOACES.isEmpty())
 			{
-				int iSalida = CLComunidades.comprobarActivo(Integer.parseInt(sCOACES));
-
-				switch (iSalida) 
-				{
-					case 0: //Sin errores
-						sMsg = "El activo '"+sCOACES+"' esta disponible.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-						break;
-
-					case -1: //error - ya vinculado
-						sMsg = "ERROR: El activo '"+sCOACES+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -2: //error - no existe
-						sMsg = "ERROR: El activo '"+sCOACES+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					default: //error generico
-						sMsg = "[FATAL] ERROR: El activo '"+sCOACES+"' ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-				}
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El Activo debe de ir informado. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+			}
+			else
+			{
+				try
+				{
+					int iSalida = CLComunidades.comprobarActivo(Integer.parseInt(sCOACES));
+
+					switch (iSalida) 
+					{
+						case 0: //Sin errores
+							sMsg = "El activo '"+sCOACES+"' esta disponible.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+							break;
+
+						case -1: //error - ya vinculado
+							sMsg = "ERROR: El activo '"+sCOACES+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -2: //error - no existe
+							sMsg = "ERROR: El activo '"+sCOACES+"' no se encuentra registrado en el sistema. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						default: //error generico
+							sMsg = "[FATAL] ERROR: El activo '"+sCOACES+"' ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 			}
 					
 			FacesContext.getCurrentInstance().addMessage(null, msg);				
@@ -791,7 +800,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsNUDCOM(String sNUDCOM) {
-		this.sNUDCOM = sNUDCOM;
+		this.sNUDCOM = sNUDCOM.trim().toUpperCase();
 	}
 
 	public String getsCOACES() {
@@ -807,7 +816,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsNOMCOC(String sNOMCOC) {
-		this.sNOMCOC = sNOMCOC;
+		this.sNOMCOC = sNOMCOC.trim().toUpperCase();
 	}
 
 	public String getsNODCCO() {
@@ -815,7 +824,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsNODCCO(String sNODCCO) {
-		this.sNODCCO = sNODCCO;
+		this.sNODCCO = sNODCCO.trim().toUpperCase();
 	}
 
 	public String getsNOMPRC() {
@@ -823,7 +832,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsNOMPRC(String sNOMPRC) {
-		this.sNOMPRC = sNOMPRC;
+		this.sNOMPRC = sNOMPRC.trim().toUpperCase();
 	}
 
 	public String getsNUTPRC() {
@@ -831,7 +840,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsNUTPRC(String sNUTPRC) {
-		this.sNUTPRC = sNUTPRC;
+		this.sNUTPRC = sNUTPRC.trim().toUpperCase();
 	}
 
 	public String getsNOMADC() {
@@ -839,7 +848,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsNOMADC(String sNOMADC) {
-		this.sNOMADC = sNOMADC;
+		this.sNOMADC = sNOMADC.trim().toUpperCase();
 	}
 
 	public String getsNUTADC() {
@@ -847,7 +856,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsNUTADC(String sNUTADC) {
-		this.sNUTADC = sNUTADC;
+		this.sNUTADC = sNUTADC.trim().toUpperCase();
 	}
 
 	public String getsNODCAD() {
@@ -855,7 +864,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsNODCAD(String sNODCAD) {
-		this.sNODCAD = sNODCAD;
+		this.sNODCAD = sNODCAD.trim().toUpperCase();
 	}
 
 	public String getsNUCCEN() {
@@ -895,7 +904,7 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 	public void setsOBTEXC(String sOBTEXC) {
-		this.sOBTEXC = sOBTEXC;
+		this.sOBTEXC = sOBTEXC.trim().toUpperCase();
 	}
 
 	public String getsCOPOIN() {
@@ -973,7 +982,7 @@ public class GestorMovimientosComunidades implements Serializable
 		return sNota;
 	}
 	public void setsNota(String sNota) {
-		this.sNota = sNota;
+		this.sNota = sNota.trim();
 	}
 	public Map<String,String> getTiposcocldoHM() {
 		return tiposcocldoHM;
@@ -985,7 +994,7 @@ public class GestorMovimientosComunidades implements Serializable
 		return sNURCAT;
 	}
 	public void setsNURCAT(String sNURCAT) {
-		this.sNURCAT = sNURCAT;
+		this.sNURCAT = sNURCAT.trim().toUpperCase();
 	}
 
 }

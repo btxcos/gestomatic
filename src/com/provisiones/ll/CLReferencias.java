@@ -65,6 +65,11 @@ public final class CLReferencias
 		return QMListaReferencias.getActivoConCuotasAsociadas(ConnectionManager.getDBConnection(),sNURCAT);
 	}
 	
+	public static ArrayList<ActivoTabla> buscarActivoAsociadoConRecursos(String sNURCAT)
+	{
+		return QMListaReferencias.getActivoConRecursosAsociados(ConnectionManager.getDBConnection(),sNURCAT);
+	}
+	
 	public static ArrayList<ActivoTabla> buscarActivoAsociadoConGastosAutorizados(String sNURCAT)
 	{
 		return QMListaReferencias.getActivoConGastosPorEstado(ConnectionManager.getDBConnection(),sNURCAT, ValoresDefecto.DEF_GASTO_AUTORIZADO);

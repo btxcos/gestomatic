@@ -150,6 +150,12 @@ public class GestorCuentasComunidades implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
+			this.activoseleccionado = null;
+			
+			this.setTablaactivos(null);
+			
 			ActivoTabla filtro = new ActivoTabla(
 					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
@@ -157,9 +163,24 @@ public class GestorCuentasComunidades implements Serializable
 			
 			this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
 
-			String sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			if (getTablaactivos().size() == 0)
+			{
+				sMsg = "No se encontraron Activos con los criterios solicitados.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+			else if (getTablaactivos().size() == 1)
+			{
+				sMsg = "Encontrado un Activo relacionado.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -191,7 +212,7 @@ public class GestorCuentasComunidades implements Serializable
 			
 			borrarCamposComunidad();
 			
-			if (sCOACES.equals(""))
+			if (sCOACES.isEmpty())
 			{
 				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -211,7 +232,7 @@ public class GestorCuentasComunidades implements Serializable
 					{
 						Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
 						
-						if (comunidad.getsNUDCOM().equals(""))
+						if (comunidad.getsNUDCOM().isEmpty())
 						{
 							sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a una comunidad.";
 							msg = Utils.pfmsgError(sMsg);
@@ -262,7 +283,7 @@ public class GestorCuentasComunidades implements Serializable
 			
 			String sMsg = ""; 
 
-			if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+			if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 			{
 				sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -411,16 +432,16 @@ public class GestorCuentasComunidades implements Serializable
 	    	//comprobar la cuenta
 			if (!CLCuentas.existeCuenta(sNUCCENN, sNUCCOFN, sNUCCDIN, sNUCCNTN))
 			{
-				if (sCOCLDO.equals("") ||
-					sNUDCOM.equals("") || 
+				if (sCOCLDO.isEmpty() ||
+					sNUDCOM.isEmpty() || 
 
-					sPaisN.equals("") ||
-					sDCIBANN.equals("") ||
-					sNUCCENN.equals("") ||
-					sNUCCOFN.equals("") ||
-					sNUCCDIN.equals("") ||
-					sNUCCNTN.equals("") ||
-					sDescripcionN.equals(""))
+					sPaisN.isEmpty() ||
+					sDCIBANN.isEmpty() ||
+					sNUCCENN.isEmpty() ||
+					sNUCCOFN.isEmpty() ||
+					sNUCCDIN.isEmpty() ||
+					sNUCCNTN.isEmpty() ||
+					sDescripcionN.isEmpty())
 				{
 					sMsg = "ERROR: Faltan campos por informar para realizar el alta. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);

@@ -100,9 +100,9 @@ public final class QMComunidades
 				       + "AES_ENCRYPT('"+NuevaComunidad.getsNODCAD()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), '"
 				       + NuevaComunidad.getsCuenta() + "','" 
 				       + NuevaComunidad.getsOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "','"
-				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
-				       "')";
+				       + ValoresDefecto.DEF_ALTA + "',"
+				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
+				       ")";
 			
 			logger.debug(sQuery);
 
@@ -908,10 +908,10 @@ public final class QMComunidades
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO14 + " = '"+ sNota +"' "+
+					+ CAMPO14 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
 					" WHERE "
 					+ CAMPO1 + " = '"+ liComunidadID +"'";
-			
+
 			logger.debug(sQuery);
 			
 			try 
@@ -959,7 +959,7 @@ public final class QMComunidades
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-						+ CAMPO14 + 
+						+"AES_DECRYPT("+CAMPO14+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -982,7 +982,9 @@ public final class QMComunidades
 					{
 						bEncontrado = true;
 
-						sNota = rs.getString(CAMPO14);
+						//sNota = rs.getString(CAMPO14);
+						
+						sNota = rs.getString("AES_DECRYPT("+CAMPO14 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						
 						logger.debug(CAMPO1+":|"+liComunidadID+"|");
 						

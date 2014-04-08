@@ -75,8 +75,8 @@ public final class QMImpuestos
 				       + NuevoImpuestoRecurso.getCOTEXA() + "','"
 				       + NuevoImpuestoRecurso.getOBTEXC() + "','" 
 				       + ValoresDefecto.DEF_ALTA + "','"
-				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
-				       "')";
+				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
+				       ")";
 
 			try 
 			{
@@ -640,7 +640,8 @@ public final class QMImpuestos
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO12 + " = '"+ sNota +"' "+
+					//+ CAMPO12 + " = '"+ sNota +"' "+
+					+ CAMPO12 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
 					" WHERE "
 					+ CAMPO1 + " = '"+ liComunidadID +"'";
 			
@@ -691,7 +692,8 @@ public final class QMImpuestos
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-						+ CAMPO12 + 
+						//+ CAMPO12 +
+						+"AES_DECRYPT("+CAMPO12+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -714,7 +716,9 @@ public final class QMImpuestos
 					{
 						bEncontrado = true;
 
-						sNota = rs.getString(CAMPO12);
+						//sNota = rs.getString(CAMPO12);
+						
+						sNota = rs.getString("AES_DECRYPT("+CAMPO12 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						
 						logger.debug(CAMPO1+":|"+liComunidadID+"|");
 						

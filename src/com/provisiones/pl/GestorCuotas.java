@@ -57,10 +57,9 @@ public class GestorCuotas implements Serializable
 	private String sIMCUCO = "";
 	private String sFAACTA = "";
 	private String sPTPAGO = "";
-	private String sOBTEXC = "";
 	
 	//Observaciones
-	private String sOBDEER = "";
+	private String sOBTEXC = "";
 
 	//Notas
 	private String sNota = "";
@@ -154,6 +153,8 @@ public class GestorCuotas implements Serializable
 			
 			this.activoseleccionado = null;
 			
+	    	this.setTablaactivos(null);
+			
 			if (sNURCAT.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
@@ -208,7 +209,6 @@ public class GestorCuotas implements Serializable
 			}
 			else
 			{
-		    	this.setTablaactivos(null);
 				
 				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
@@ -245,38 +245,45 @@ public class GestorCuotas implements Serializable
 			
 			borrarCamposComunidad();
 			borrarCamposCuota();
-
-			try
+			
+			if (sCOACES.isEmpty())
 			{
-				Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
-				
-				this.sCOCLDO = comunidad.getsCOCLDO();
-				this.sNUDCOM = comunidad.getsNUDCOM();
-				this.sNOMCOC = comunidad.getsNOMCOC();
-				this.sNODCCO = comunidad.getsNODCCO();
-				
-				if (comunidad.getsNUDCOM().isEmpty())
-				{
-					sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-				}
-				else
-				{
-					sMsg = "La comunidad se ha cargado correctamente.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El Activo debe de ir informado para realizar la búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
-			
+			else
+			{
+				try
+				{
+					Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
+					
+					this.sCOCLDO = comunidad.getsCOCLDO();
+					this.sNUDCOM = comunidad.getsNUDCOM();
+					this.sNOMCOC = comunidad.getsNOMCOC();
+					this.sNODCCO = comunidad.getsNODCCO();
+					
+					if (comunidad.getsNUDCOM().isEmpty())
+					{
+						sMsg = "ERROR: El Activo '"+sCOACES+"' no esta asociado a ninguna comunidad.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+					}
+					else
+					{
+						sMsg = "La comunidad se ha cargado correctamente.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
 
-			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -325,25 +332,25 @@ public class GestorCuotas implements Serializable
 							ValoresDefecto.DEF_IDPROV, 
 							ValoresDefecto.DEF_COACCI_CUOTA_ALTA,
 							sCOCLDO, 
-							sNUDCOM.toUpperCase(), 
+							sNUDCOM, 
 							ValoresDefecto.DEF_COENGP, 
 							sCOACES, 
 							ValoresDefecto.DEF_COGRUG_E2, 
 							ValoresDefecto.DEF_COTACA_E2, 
-							Utils.compruebaCodigoPago(false,sCOSBAC.toUpperCase()), 
+							Utils.compruebaCodigoPago(false,sCOSBAC), 
 							"", 
-							Utils.compruebaFecha(sFIPAGO.toUpperCase()), 
+							Utils.compruebaFecha(sFIPAGO), 
 							"", 
-							Utils.compruebaFecha(sFFPAGO.toUpperCase()), 
+							Utils.compruebaFecha(sFFPAGO), 
 							"", 
-							Utils.compruebaImporte(sIMCUCO.toUpperCase()),
+							Utils.compruebaImporte(sIMCUCO),
 							"", 
-							Utils.compruebaFecha(sFAACTA.toUpperCase()), 
+							Utils.compruebaFecha(sFAACTA), 
 							"", 
 							sPTPAGO.toUpperCase(),
 							"", 
 							sOBTEXC.toUpperCase(), 
-							sOBDEER.toUpperCase());
+							ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
 					
 					Nota nota = new Nota (false,sNota);
 					
@@ -622,7 +629,7 @@ public class GestorCuotas implements Serializable
 	}
 
 	public void setsNURCAT(String sNURCAT) {
-		this.sNURCAT = sNURCAT;
+		this.sNURCAT = sNURCAT.trim().toUpperCase();
 	}
 
 	public String getsCOCLDO() {
@@ -710,15 +717,7 @@ public class GestorCuotas implements Serializable
 	}
 
 	public void setsOBTEXC(String sOBTEXC) {
-		this.sOBTEXC = sOBTEXC;
-	}
-
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
+		this.sOBTEXC = sOBTEXC.trim().toUpperCase();
 	}
 
 	public String getsNota() {
@@ -726,7 +725,7 @@ public class GestorCuotas implements Serializable
 	}
 
 	public void setsNota(String sNota) {
-		this.sNota = sNota;
+		this.sNota = sNota.trim();
 	}
 
 	public ArrayList<ActivoTabla> getTablaactivos() {

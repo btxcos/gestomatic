@@ -25,13 +25,11 @@ public class GestorListaReferencias implements Serializable
 
 
 	private static Logger logger = LoggerFactory.getLogger(GestorListaReferencias.class.getName());
-	
 
-	private String sNURCAT = "";
-	
 	//Buscar activos
 	private String sCOACES = "";
 
+	//Filtro activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";	
 	private String sNOPRAC = "";
@@ -40,6 +38,11 @@ public class GestorListaReferencias implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNURCATF = "";
+
+	//Buscar referencia
+	private String sNURCAT = "";
+
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	
@@ -63,15 +66,24 @@ public class GestorListaReferencias implements Serializable
 		this.sNUPIAC = "";
 		this.sNUPOAC = "";
 		this.sNUPUAC = "";
-    	
-    	this.setActivoseleccionado(null);
-    	this.setTablaactivos(null);
+		
+		this.sNURCATF = "";
+
+	}
+	
+	public void borrarResultadosActivo()
+	{
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
 	}
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {
-    	
+    	this.sCOACES = "";
+
     	borrarCamposActivo();
+    	
+    	borrarResultadosActivo();
     }
     
     
@@ -99,16 +111,71 @@ public class GestorListaReferencias implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLReferencias.buscarActivosConReferencias(filtro));
+			this.activoseleccionado = null;
+			
+			this.setTablaactivos(null);
+			
+			if (sNURCATF.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", 
+						sCOPOIN.toUpperCase(), 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						"");
+			
+				this.setTablaactivos(CLReferencias.buscarActivosConReferencias(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCATF))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCATF));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 
-			msg = Utils.pfmsgInfo("Encontrados "+getTablaactivos().size()+" activos relacionados.");
-			
-			logger.info("Encontrados {} activos relacionados.",getTablaactivos().size());
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -143,19 +210,30 @@ public class GestorListaReferencias implements Serializable
 			
 			String sMsg = "";
 			
-			try
+			if (sCOACES.isEmpty())
 			{
-				this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
-				
-				sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: Debe informar el campo 'Activo' para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+				
+				this.setTablareferencias(null);
+			}
+			else
+			{
+				try
+				{
+					this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
+					
+					sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -257,7 +335,7 @@ public class GestorListaReferencias implements Serializable
 	}
 
 	public void setsNURCAT(String sNURCAT) {
-		this.sNURCAT = sNURCAT;
+		this.sNURCAT = sNURCAT.trim().toUpperCase();
 	}
 
 	public String getsCOACES() {
@@ -265,7 +343,7 @@ public class GestorListaReferencias implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOPOIN() {
@@ -354,6 +432,14 @@ public class GestorListaReferencias implements Serializable
 
 	public void setTablareferencias(ArrayList<ReferenciaTabla> tablareferencias) {
 		this.tablareferencias = tablareferencias;
+	}
+
+	public String getsNURCATF() {
+		return sNURCATF;
+	}
+
+	public void setsNURCATF(String sNURCATF) {
+		this.sNURCATF = sNURCATF;
 	}
 
 }

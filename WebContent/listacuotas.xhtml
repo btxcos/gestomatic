@@ -295,10 +295,10 @@
 							<p:dialog header="Comunidades con Cuotas: " widgetVar="dlgTablaComunidades" resizable="false">
 
 									<p:contextMenu for="comunidades">
-										<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:COCLDO, form:NUDCOM" icon="ui-icon-check" actionListener="#{GestorListaCuotas.seleccionarComunidad}" oncomplete="dlgTablaComunidades.hide(); dlgBuscarComunidades.hide()"/>
+										<p:menuitem value="Seleccionar" update="form:msgs, form:popup, form:msgs, form:COCLDO, form:NUDCOM" icon="ui-icon-check" actionListener="#{GestorListaCuotas.seleccionarComunidad}" oncomplete="dlgTablaComunidades.hide(); dlgBuscarComunidades.hide()"/>
 									</p:contextMenu>
 									<p:dataTable id="comunidades" var="comunidad" value="#{GestorListaCuotas.tablacomunidades}" rowKey="#{comunidad.sComunidadID}"
-															selection="#{GestorListaActivos.comunidadseleccionada}" selectionMode="single"
+															selection="#{GestorListaCuotas.comunidadseleccionada}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10" lazy="true"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 															rowsPerPageTemplate="5,10,15" emptyMessage="Sin registros">

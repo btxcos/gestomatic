@@ -12,7 +12,7 @@
 	<h:body>
 		<h:form id="form" onkeypress="return event.keyCode != 13">
 			<p:layout fullPage="true">
-				<p:layoutUnit position="north" size="auto" header="Lista de Impuestos Disponibles">
+				<p:layoutUnit position="north" size="auto" header="Lista de Recursos Disponibles">
 					<h:panelGrid columns="4" cellpadding="5">
 						<p:fieldset legend="Sesión" id="sesion">
 							<h:panelGrid columns="1" cellpadding="1">
@@ -28,7 +28,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 								<p:commandButton value="Detalles" update="msgs, popup" actionListener="#{GestorListaImpuestos.cargarDetallesImpuesto}"/>
-								<p:commandButton value="Limpiar Plantilla" update="COACES, impuestos" actionListener="#{GestorListaImpuestos.limpiarPlantilla}"/>	
+								<p:commandButton value="Limpiar Plantilla" update="COACES, impuestos, panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorListaImpuestos.limpiarPlantilla}"/>	
 							</h:panelGrid>
 						</p:fieldset>
 						<p:fieldset legend="Info">
@@ -209,7 +209,7 @@
 							<p:dialog header="Buscar Activos con Impuestos: " widgetVar="dlgBuscar" resizable="false">
 								<p:fieldset legend="Criterios de Busqueda">
 									<h:panelGrid columns="1" cellpadding="5">
-										<p:panel id="panelBuscar" >
+										<p:panel id="panelBuscarActivos" >
 											<h:panelGrid columns="2" cellpadding="5">
 												<h:outputText for="NOPRAC" value="Nombre de la Provincia: "/>
 												<p:inputText id="NOPRAC" value="#{GestorListaImpuestos.sNOPRAC}" size="18" maxlength="18"/>
@@ -233,10 +233,20 @@
 												<p:inputText id="NUPUAC" value="#{GestorListaImpuestos.sNUPUAC}" size="17" maxlength="17"/>
 											</h:panelGrid>
 										</p:panel>
+
+								<p:panel id="panelBuscarReferencia" >
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NURCATF" value="Referencia Catastral: " />
+										<p:inputText id="NURCATF" value="#{GestorListaImpuestos.sNURCATF}" size="22" maxlength="20"/>
+
+									</h:panelGrid>
+								</p:panel>
+
 										<p:panel >
 											<h:panelGrid columns="3" cellpadding="5">
 												<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorListaImpuestos.buscarActivos}" oncomplete="dlgTabla.show()"/>	
-												<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorListaImpuestos.limpiarPlantillaActivo}"/>	
+												<p:commandButton value="Limpiar Plantilla" update="panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorListaImpuestos.limpiarPlantillaActivo}"/>	
 											</h:panelGrid>
 										</p:panel>
 									</h:panelGrid>

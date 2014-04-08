@@ -26,32 +26,13 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosImpuestosRecursos.class.getName());
 
-	private String sCODTRN = ValoresDefecto.DEF_E4_CODTRN;
-	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
-	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
+	//Accion
 	private String sCOACCI = "";
-	private String sCOENGP = ValoresDefecto.DEF_COENGP;
-
-	private String sNURCAT = "";
-
-	private String sCOSBAC = "";
-	private String sFEPRRE = "";
-	private String sFERERE = "";
-	private String sFEDEIN = "";
-	private String sBISODE = "";
-	private String sBIRESO = "";
-	private String sCOTEXA = ValoresDefecto.DEF_COTEXA;
-	private String sOBTEXC = "";
-
-	private String sDesCOSBAC = "";
-	private String sDesBISODE = "";
-	private String sDesBIRESO = "";
-	
-	private String sOBDEER = "";
 	
 	//Buscar activos
 	private String sCOACES = "";
 
+	//Filtro activo
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";	
 	private String sNOPRAC = "";
@@ -59,7 +40,31 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	
+	private String sNURCATF = "";
+	
+	//Referecia Catastral
+	private String sNURCAT = "";
 
+	//Solicitud
+	private String sDesCOSBAC = "";
+	private String sCOSBAC = "";
+	private String sFEPRRE = "";
+	
+	//Resolucion
+	private String sDesBIRESO = "";
+	private String sBIRESO = "";
+	private String sFERERE = "";
+	
+	//Devolucion
+	private String sDesBISODE = "";
+	private String sBISODE = "";
+	private String sFEDEIN = "";
+	
+	//Observaciones
+	private String sOBTEXC = "";
+
+	//Notas
 	private String sNota = "";
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -86,6 +91,8 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	
+    	this.sNURCATF = "";
 	}
 	
 	public void borrarResultadosActivo()
@@ -150,16 +157,64 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(filtro));
-
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			this.activoseleccionado = null;
+			
+			this.setTablaactivos(null);
+			
+			if (sNURCATF.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+				
+				this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCATF))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConRecursos(sNURCATF));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -204,33 +259,46 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 			
 			String sMsg = "";
 			
-			try
-			{
-				this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(Integer.parseInt(sCOACES));
-		    	
-
-		    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
-				{
-		    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(Integer.parseInt(sCOACES));
-		    		
-		    		sMsg = "Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-		    	else
-		    	{
-		    		sMsg = "ERROR: No existe referencia catastral de alta para el activo consultado.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-		        }
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+			this.impuestoseleccionado = null;
+			
+			this.tablaimpuestos = null;
+			
+	    	if (sCOACES.isEmpty())
+	    	{
+				sMsg = "ERROR: El Activo debe de ir informado. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-			}
-	    	
+	    	}
+	    	else
+	    	{
+				try
+				{
+					this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(Integer.parseInt(sCOACES));
+			    	
+
+			    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+					{
+			    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(Integer.parseInt(sCOACES));
+			    		
+			    		sMsg = "Encontrados "+getTablaimpuestos().size()+" impuestos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+			    	else
+			    	{
+			    		sMsg = "ERROR: No existe referencia catastral de alta para el activo consultado.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+			        }
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+	    	}
+			
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -298,31 +366,33 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 				}
 				else
 				{
+
+					
 					MovimientoImpuestoRecurso movimiento = new MovimientoImpuestoRecurso (
-							sCODTRN.toUpperCase(), 
-							sCOTDOR.toUpperCase(), 
-							sIDPROV.toUpperCase(), 
+							ValoresDefecto.DEF_E4_CODTRN, 
+							ValoresDefecto.DEF_COTDOR, 
+							ValoresDefecto.DEF_IDPROV, 
 							sCOACCI.toUpperCase(), 
-							sCOENGP.toUpperCase(), 
+							ValoresDefecto.DEF_COENGP, 
 							sCOACES,
-							sNURCAT.toUpperCase(),
+							sNURCAT,
 							ValoresDefecto.DEF_COGRUG_E4, 
 							ValoresDefecto.DEF_COTACA_E4, 
-							sCOSBAC.toUpperCase(),
+							sCOSBAC,
 							"", 
-							Utils.compruebaFecha(sFEPRRE.toUpperCase()),
+							Utils.compruebaFecha(sFEPRRE),
 							"", 
-							Utils.compruebaFecha(sFERERE.toUpperCase()),
+							Utils.compruebaFecha(sFERERE),
 							"", 
-							Utils.compruebaFecha(sFEDEIN.toUpperCase()),
+							Utils.compruebaFecha(sFEDEIN),
 							"", 
-							Utils.compruebaCodigoAlfa(sBISODE.toUpperCase()),
+							Utils.compruebaCodigoAlfa(sBISODE),
 							"", 
-							Utils.compruebaCodigoAlfa(sBIRESO.toUpperCase()),
-							sCOTEXA.toUpperCase(),
+							Utils.compruebaCodigoAlfa(sBIRESO),
+							ValoresDefecto.DEF_COTEXA,
 							"", 
-							sOBTEXC.toUpperCase(), 
-							sOBDEER.toUpperCase());
+							sOBTEXC, 
+							ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
 					
 					String sNotaAntigua = CLImpuestos.buscarNota(CLImpuestos.buscarCodigoImpuesto(sNURCAT, sCOSBAC));
 					
@@ -591,31 +661,6 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
-	
-
-	public String getsCODTRN() {
-		return sCODTRN;
-	}
-
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
-	}
-
-	public String getsCOTDOR() {
-		return sCOTDOR;
-	}
-
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
-	}
-
-	public String getsIDPROV() {
-		return sIDPROV;
-	}
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
-	}
 
 	public String getsCOACCI() {
 		return sCOACCI;
@@ -623,14 +668,6 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
 	public void setsCOACCI(String sCOACCI) {
 		this.sCOACCI = sCOACCI;
-	}
-
-	public String getsCOENGP() {
-		return sCOENGP;
-	}
-
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
 	}
 
 	public String getsNURCAT() {
@@ -689,28 +726,12 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		this.sBIRESO = sBIRESO;
 	}
 
-	public String getsCOTEXA() {
-		return sCOTEXA;
-	}
-
-	public void setsCOTEXA(String sCOTEXA) {
-		this.sCOTEXA = sCOTEXA;
-	}
-
 	public String getsOBTEXC() {
 		return sOBTEXC;
 	}
 
 	public void setsOBTEXC(String sOBTEXC) {
-		this.sOBTEXC = sOBTEXC;
-	}
-
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
+		this.sOBTEXC = sOBTEXC.trim().toUpperCase();
 	}
 
 	public String getsCOACES() {
@@ -718,7 +739,7 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOPOIN() {
@@ -839,6 +860,14 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public String getsNURCATF() {
+		return sNURCATF;
+	}
+
+	public void setsNURCATF(String sNURCATF) {
+		this.sNURCATF = sNURCATF.trim().toUpperCase();
 	}
 	
 	

@@ -3,6 +3,7 @@ package com.provisiones.dal.qm.listas;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMGastos;
+import com.provisiones.dal.qm.QMImpuestos;
 import com.provisiones.dal.qm.QMReferencias;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.misc.Utils;
@@ -1196,6 +1197,109 @@ String sQuery = "SELECT "
 						   + QMReferencias.TABLA +
 						   " WHERE "
 						   + QMReferencias.CAMPO2 +  " = '" + sNURCAT + "'))))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+	 
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ActivoTabla>();
+
+				logger.error("ERROR sNURCAT:|"+sNURCAT+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}	
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ActivoTabla> getActivoConRecursosAsociados(Connection conexion, String sNURCAT)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+					
+						   + QMActivos.CAMPO1 + ","        
+						   + QMActivos.CAMPO14 + ","
+						   + QMActivos.CAMPO11 + ","
+						   + QMActivos.CAMPO13 + ","
+						   + QMActivos.CAMPO6 + ","
+						   + QMActivos.CAMPO9 + ","
+						   + QMActivos.CAMPO7 + ","
+						   + QMActivos.CAMPO10 + 
+						   " FROM " 
+						   + QMActivos.TABLA + 
+						   " WHERE ("
+						   + QMActivos.CAMPO1 + " IN (SELECT "
+						   + CAMPO1 +   
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE ("
+						   + CAMPO1 + " IN (SELECT "
+						   + QMListaImpuestos.CAMPO1 + 
+	   					   " FROM " 
+						   + QMListaImpuestos.TABLA +
+	   					   " ) AND " 
+						   + CAMPO2 + " IN (SELECT " 
+	   					   + QMImpuestos.CAMPO2 + 
+						   " FROM " 
+						   + QMImpuestos.TABLA +
+						   " WHERE "
+						   + QMImpuestos.CAMPO2 +  " = '" + sNURCAT + "'))))";
 			
 			logger.debug(sQuery);
 

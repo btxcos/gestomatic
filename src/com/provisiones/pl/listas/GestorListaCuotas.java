@@ -150,6 +150,8 @@ public class GestorListaCuotas implements Serializable
 			
 			this.activoseleccionado = null;
 			
+			this.setTablaactivos(null);
+			
 			if (sNURCAT.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
@@ -203,8 +205,6 @@ public class GestorListaCuotas implements Serializable
 			}
 			else
 			{
-		    	this.setTablaactivos(null);
-				
 				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
@@ -242,7 +242,7 @@ public class GestorListaCuotas implements Serializable
 			
 			this.comunidadseleccionada = null;
 			
-			this.setTablacomunidades(CLComunidades.buscarComunidadCuotasConNombre(sNOMCOC.toUpperCase()));
+			this.setTablacomunidades(CLComunidades.buscarComunidadCuotasConNombre(sNOMCOC));
 			
 			if (getTablacomunidades().size() == 0)
 			{
@@ -275,7 +275,17 @@ public class GestorListaCuotas implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
-	    	
+			
+			if (comunidadseleccionada == null)
+			{
+				logger.debug("NULACO!!");
+			}
+			else
+			{
+				logger.debug("sCOCLDO:|"+comunidadseleccionada.getCOCLDO()+"|");
+				logger.debug("sNUDCOM:|"+comunidadseleccionada.getNUDCOM()+"|");
+			}
+			
 	    	this.sCOCLDO  = comunidadseleccionada.getCOCLDO();
 	    	this.sNUDCOM  = comunidadseleccionada.getNUDCOM();
 	    	
@@ -295,6 +305,10 @@ public class GestorListaCuotas implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = "";
+			
+			this.cuotaseleccionada = null;
+
+			this.tablacuotas = null;
 			
 			if (sCOACES.isEmpty())
 			{
@@ -357,6 +371,10 @@ public class GestorListaCuotas implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = "";
+			
+			this.cuotaseleccionada = null;
+			
+			this.tablacuotas = null;
 
 			if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 			{
@@ -457,7 +475,7 @@ public class GestorListaCuotas implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOCLDO() {
@@ -473,7 +491,7 @@ public class GestorListaCuotas implements Serializable
 	}
 
 	public void setsNUDCOM(String sNUDCOM) {
-		this.sNUDCOM = sNUDCOM;
+		this.sNUDCOM = sNUDCOM.trim().toUpperCase();
 	}
 
 	public String getsCOPOIN() {
@@ -577,7 +595,7 @@ public class GestorListaCuotas implements Serializable
 	}
 
 	public void setsNOMCOC(String sNOMCOC) {
-		this.sNOMCOC = sNOMCOC;
+		this.sNOMCOC = sNOMCOC.trim().toUpperCase();
 	}
 
 	public ComunidadTabla getComunidadseleccionada() {

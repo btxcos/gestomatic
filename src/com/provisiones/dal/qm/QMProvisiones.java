@@ -101,8 +101,8 @@ public final class QMProvisiones
 					+ NuevaProvision.getsCodEstado() + "','"
 					+ sUsuario + "','"
 					+ Utils.timeStamp() + "','"
-					+ ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
-					"')";
+				    + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
+				    ")";
 
 			logger.debug(sQuery);
 
@@ -1105,7 +1105,8 @@ public final class QMProvisiones
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO19 + " = '"+ sNota +"' "+
+					//+ CAMPO19 + " = '"+ sNota +"' "+
+					+ CAMPO19 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
 					" WHERE "
 					+ CAMPO1 + " = '"+ sNUPROF +"'";
 			
@@ -1156,7 +1157,8 @@ public final class QMProvisiones
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-						+ CAMPO19 + 
+						//+ CAMPO19 +
+						+"AES_DECRYPT("+CAMPO19+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -1179,7 +1181,9 @@ public final class QMProvisiones
 					{
 						bEncontrado = true;
 
-						sNota = rs.getString(CAMPO19);
+						//sNota = rs.getString(CAMPO19);
+						
+						sNota = rs.getString("AES_DECRYPT("+CAMPO19 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 						

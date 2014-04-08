@@ -25,12 +25,10 @@ public class GestorListaImpuestos implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorListaImpuestos.class.getName());
 
-	private String sNURCAT = "";
-	private String sCOSBAC = "";
-	
 	//Buscar activos
 	private String sCOACES = "";
 
+	//Filtro activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";	
 	private String sNOPRAC = "";
@@ -38,6 +36,12 @@ public class GestorListaImpuestos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	
+	private String sNURCATF = "";
+	
+	private String sNURCAT = "";
+	private String sCOSBAC = "";
+	
 
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	private transient ActivoTabla activoseleccionado = null;
@@ -62,26 +66,34 @@ public class GestorListaImpuestos implements Serializable
 		this.sNUPIAC = "";
 		this.sNUPOAC = "";
 		this.sNUPUAC = "";
-    	
-    	this.setActivoseleccionado(null);
-    	this.setTablaactivos(null);
+		
+		this.sNURCATF = "";
+	}
+	
+	public void borrarResultadosActivo()
+	{
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
 	}
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
+    	this.sCOACES = "";
+    	
     	borrarCamposActivo();
+    	borrarResultadosActivo();
     }
     
 	public void borrarCamposImpuesto()
 	{
-		this.sCOACES = "";
-    	
     	this.setImpuestoseleccionado(null);
     	this.setTablaimpuestos(null);
 	}
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {
+    	this.sCOACES = "";
+    	
     	borrarCamposActivo();
     	borrarCamposImpuesto();
     }
@@ -92,16 +104,72 @@ public class GestorListaImpuestos implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(filtro));
+			this.activoseleccionado = null;
 			
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			this.setTablaactivos(null);
+			
+			if (sNURCATF.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", 
+						sCOPOIN.toUpperCase(), 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						"");
+				
+				this.setTablaactivos(CLImpuestos.buscarActivosConImpuestos(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCATF))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConRecursos(sNURCATF));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+
+
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -131,7 +199,11 @@ public class GestorListaImpuestos implements Serializable
 			
 			String sMsg = "";
 			
-			if (sCOACES.equals(""))
+			this.impuestoseleccionado = null;
+			
+			this.tablaimpuestos = null;
+			
+			if (sCOACES.isEmpty())
 			{
 				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -144,7 +216,7 @@ public class GestorListaImpuestos implements Serializable
 					this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(Integer.parseInt(sCOACES));
 			    	
 
-			    	if (!sNURCAT.equals("") && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
+			    	if (!sNURCAT.isEmpty() && CLReferencias.estadoReferencia(sNURCAT).equals("A") )
 					{
 			    		this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(Integer.parseInt(sCOACES));
 			    		
@@ -225,7 +297,7 @@ public class GestorListaImpuestos implements Serializable
 			{
 				FacesMessage msg;
 
-				sMsg = "ERROR: No se ha seleccionado una Cuota.";
+				sMsg = "ERROR: No se ha seleccionado un Recurso.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				
@@ -260,7 +332,7 @@ public class GestorListaImpuestos implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOPOIN() {
@@ -349,5 +421,13 @@ public class GestorListaImpuestos implements Serializable
 
 	public void setImpuestoseleccionado(ImpuestoRecursoTabla impuestoseleccionado) {
 		this.impuestoseleccionado = impuestoseleccionado;
+	}
+
+	public String getsNURCATF() {
+		return sNURCATF;
+	}
+
+	public void setsNURCATF(String sNURCATF) {
+		this.sNURCATF = sNURCATF.trim().toUpperCase();
 	}
 }

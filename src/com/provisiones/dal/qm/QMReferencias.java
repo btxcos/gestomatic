@@ -78,9 +78,9 @@ public final class QMReferencias
 				       + NuevaReferenciaCatastral.getIMCATA() + "','"
 				       + NuevaReferenciaCatastral.getFERECA() + "','"
 
-				       + ValoresDefecto.DEF_ALTA + "','"
-				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
-				       "')";
+				       + ValoresDefecto.DEF_ALTA + "',"
+				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
+				       ")";
 			
 			logger.debug(sQuery);
 
@@ -691,7 +691,8 @@ public final class QMReferencias
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO11 + " = '"+ sNota +"' "+
+					//+ CAMPO11 + " = '"+ sNota +"' "+
+					+ CAMPO11 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
 					" WHERE "
 					+ CAMPO1 + " = '"+ liReferenciaID +"'";
 			
@@ -742,7 +743,8 @@ public final class QMReferencias
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-						+ CAMPO11 + 
+						//+ CAMPO11 +
+						+"AES_DECRYPT("+CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -765,7 +767,9 @@ public final class QMReferencias
 					{
 						bEncontrado = true;
 
-						sNota = rs.getString(CAMPO11);
+						//sNota = rs.getString(CAMPO11);
+						
+						sNota = rs.getString("AES_DECRYPT("+CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						
 						logger.debug(CAMPO1+":|"+liReferenciaID+"|");
 						

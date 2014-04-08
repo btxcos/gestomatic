@@ -114,6 +114,8 @@ public class GestorListaComunidades implements Serializable
 			
 			this.activoseleccionado = null;
 			
+	    	this.setTablaactivos(null);
+			
 			if (sNURCAT.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
@@ -167,7 +169,6 @@ public class GestorListaComunidades implements Serializable
 			}
 			else
 			{
-		    	this.setTablaactivos(null);
 				
 				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
@@ -206,13 +207,13 @@ public class GestorListaComunidades implements Serializable
 			
 			this.comunidadseleccionada = null;
 			
-			if (sCOACES.equals(""))
+			this.setTablacomunidades(null);
+			
+			if (sCOACES.isEmpty())
 			{
 				sMsg = "ERROR: Debe informar el campo 'Activo' para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-				
-				this.setTablacomunidades(null);
 			}
 			else
 			{
@@ -242,8 +243,6 @@ public class GestorListaComunidades implements Serializable
 						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
 						msg = Utils.pfmsgWarning(sMsg);
 						logger.warn(sMsg);
-						
-						this.setTablacomunidades(null);
 					}
 				}
 				catch(NumberFormatException nfe)
@@ -251,8 +250,6 @@ public class GestorListaComunidades implements Serializable
 					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
-					
-					this.setTablacomunidades(null);
 				}
 
 			}
@@ -272,15 +269,15 @@ public class GestorListaComunidades implements Serializable
 			
 			this.comunidadseleccionada = null;
 			
+			this.setTablacomunidades(null);
+			
 			if (sNOMCOC.isEmpty())
 			{
-				if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+				if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 				{
 					sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar la búsqueda. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
-					
-					this.setTablacomunidades(null);
 				}
 				else if (CLComunidades.existeComunidad(sCOCLDO, sNUDCOM.toUpperCase()))
 				{
@@ -295,8 +292,6 @@ public class GestorListaComunidades implements Serializable
 					sMsg = "La Comunidad informada no está dada de alta. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
-					
-					this.setTablacomunidades(null);
 				}
 			}
 			else
@@ -322,10 +317,6 @@ public class GestorListaComunidades implements Serializable
 					logger.info(sMsg);
 				}
 			}
-			
-			
-
-
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}

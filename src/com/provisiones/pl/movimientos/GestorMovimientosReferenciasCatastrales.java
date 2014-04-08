@@ -26,28 +26,13 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosReferenciasCatastrales.class.getName());
 
-	private String sCODTRN = ValoresDefecto.DEF_E3_CODTRN;
-	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
-	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
+	//Accion
 	private String sCOACCI = "";
-	private String sCOENGP = ValoresDefecto.DEF_COENGP;
-	
-	private String sNURCAT = "";
-	private String sTIRCAT = "";
-	private String sENEMIS = "";
-	private String sCOTEXA = ValoresDefecto.DEF_COTEXA;
-	private String sOBTEXC = "";
-	
-	private String sOBDEER = "";
-	
-	//Ampliacion de valor catastral
-	private String sIMVSUE = "";
-	private String sIMCATA = "";
-	private String sFERECA = "";
 	
 	//Buscar activos
 	private String sCOACES = "";
 
+	//Filtro activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";	
 	private String sNOPRAC = "";
@@ -55,7 +40,25 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	
+	private String sNURCATF = "";
+	
+	//Referencia Catastral	
+	private String sNURCAT = "";
+	private String sTIRCAT = "";
+	
+	//Valor catastral
+	private String sIMVSUE = "";
+	private String sIMCATA = "";
+	private String sFERECA = "";
+	
+	//Entidad de emisión
+	private String sENEMIS = "";
 
+	//Observaciones
+	private String sOBTEXC = "";
+
+	//Notas
 	private String sNota = "";
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -82,6 +85,8 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	
+    	this.sNURCATF = "";
 	}
 	
 	public void borrarResultadosActivo()
@@ -143,16 +148,70 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(),"");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLReferencias.buscarActivosConReferencias(filtro));
+			this.activoseleccionado = null;
 			
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			this.setTablaactivos(null);
+			
+			if (sNURCATF.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", 
+						sCOPOIN.toUpperCase(),
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(),
+						"");
+				
+				this.setTablaactivos(CLReferencias.buscarActivosConReferencias(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCATF))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCATF));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -182,19 +241,28 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 			
 			String sMsg = "";
 			
-			try
+			if (sCOACES.isEmpty())
 			{
-				this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
-				
-				sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El Activo debe de ir informado. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+			}
+			else
+			{
+				try
+				{
+					this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
+					
+					sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -253,27 +321,27 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 				else
 				{
 					MovimientoReferenciaCatastral movimiento = new MovimientoReferenciaCatastral (
-							sCODTRN.toUpperCase(), 
-							sCOTDOR.toUpperCase(), 
-							sIDPROV.toUpperCase(), 
-							sCOACCI.toUpperCase(), 
-							sCOENGP.toUpperCase(), 
+							ValoresDefecto.DEF_E3_CODTRN, 
+							ValoresDefecto.DEF_COTDOR, 
+							ValoresDefecto.DEF_IDPROV, 
+							sCOACCI, 
+							ValoresDefecto.DEF_COENGP, 
 							sCOACES, 
-							sNURCAT.toUpperCase(),
+							sNURCAT,
 							"", 
-							sTIRCAT.toUpperCase(),
+							sTIRCAT,
 							"", 
-							sENEMIS.toUpperCase(),
+							sENEMIS,
 							ValoresDefecto.DEF_COTEXA,
 							"", 
-							sOBTEXC.toUpperCase(), 
-							sOBDEER.toUpperCase(),
+							sOBTEXC, 
+							ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR,
 							"", 
-							Utils.compruebaImporte(sIMVSUE.toUpperCase()),
+							Utils.compruebaImporte(sIMVSUE),
 							"", 
-							Utils.compruebaImporte(sIMCATA.toUpperCase()),
+							Utils.compruebaImporte(sIMCATA),
 							"", 
-							Utils.compruebaFecha(sFERECA.toUpperCase()));
+							Utils.compruebaFecha(sFERECA));
 
 					String sNotaAntigua = CLReferencias.buscarNota(CLReferencias.buscarCodigoReferencia(sNURCAT));
 					
@@ -474,30 +542,6 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		}
 	}
 
-	public String getsCODTRN() {
-		return sCODTRN;
-	}
-
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
-	}
-
-	public String getsCOTDOR() {
-		return sCOTDOR;
-	}
-
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
-	}
-
-	public String getsIDPROV() {
-		return sIDPROV;
-	}
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
-	}
-
 	public String getsCOACCI() {
 		return sCOACCI;
 	}
@@ -506,20 +550,12 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		this.sCOACCI = sCOACCI;
 	}
 
-	public String getsCOENGP() {
-		return sCOENGP;
-	}
-
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
-	}
-
 	public String getsNURCAT() {
 		return sNURCAT;
 	}
 
 	public void setsNURCAT(String sNURCAT) {
-		this.sNURCAT = sNURCAT;
+		this.sNURCAT = sNURCAT.trim().toUpperCase();
 	}
 
 	public String getsTIRCAT() {
@@ -527,7 +563,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	}
 
 	public void setsTIRCAT(String sTIRCAT) {
-		this.sTIRCAT = sTIRCAT;
+		this.sTIRCAT = sTIRCAT.trim().toUpperCase();
 	}
 
 	public String getsENEMIS() {
@@ -535,15 +571,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	}
 
 	public void setsENEMIS(String sENEMIS) {
-		this.sENEMIS = sENEMIS;
-	}
-
-	public String getsCOTEXA() {
-		return sCOTEXA;
-	}
-
-	public void setsCOTEXA(String sCOTEXA) {
-		this.sCOTEXA = sCOTEXA;
+		this.sENEMIS = sENEMIS.trim().toUpperCase();
 	}
 
 	public String getsOBTEXC() {
@@ -551,15 +579,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	}
 
 	public void setsOBTEXC(String sOBTEXC) {
-		this.sOBTEXC = sOBTEXC;
-	}
-
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
+		this.sOBTEXC = sOBTEXC.trim().toUpperCase();
 	}
 
 	public String getsCOACES() {
@@ -567,7 +587,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOPOIN() {
@@ -663,7 +683,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	}
 
 	public void setsIMVSUE(String sIMVSUE) {
-		this.sIMVSUE = sIMVSUE;
+		this.sIMVSUE = sIMVSUE.trim();
 	}
 
 	public String getsIMCATA() {
@@ -671,7 +691,7 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	}
 
 	public void setsIMCATA(String sIMCATA) {
-		this.sIMCATA = sIMCATA;
+		this.sIMCATA = sIMCATA.trim();
 	}
 
 	public String getsFERECA() {
@@ -687,7 +707,15 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	}
 
 	public void setsNota(String sNota) {
-		this.sNota = sNota;
+		this.sNota = sNota.trim();
+	}
+
+	public String getsNURCATF() {
+		return sNURCATF;
+	}
+
+	public void setsNURCATF(String sNURCATF) {
+		this.sNURCATF = sNURCATF;
 	}
 	
 	

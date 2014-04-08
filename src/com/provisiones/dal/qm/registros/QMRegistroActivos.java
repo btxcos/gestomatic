@@ -60,8 +60,8 @@ public class QMRegistroActivos implements Serializable
 				       + sTimeStamp + "','"
 				       + sUsuario + "','"
 				       + sTimeStamp + "','"
-				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
-				       "')";
+				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
+				       ")";
 			
 			logger.debug(sQuery);
 
@@ -305,7 +305,8 @@ public class QMRegistroActivos implements Serializable
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO5 + " = '"+ sNota +"' "+
+					//+ CAMPO5 + " = '"+ sNota +"' "+
+					+ CAMPO5 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
 					" WHERE "
 					+ CAMPO1 + " = '"+ iCodCOACES +"'";
 			
@@ -356,7 +357,8 @@ public class QMRegistroActivos implements Serializable
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-						+ CAMPO5 + 
+						//+ CAMPO5 +
+						+"AES_DECRYPT("+CAMPO5+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -379,7 +381,9 @@ public class QMRegistroActivos implements Serializable
 					{
 						bEncontrado = true;
 
-						sNota = rs.getString(CAMPO5);
+						//sNota = rs.getString(CAMPO5);
+						
+						sNota = rs.getString("AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						
 						logger.debug(CAMPO1+":|"+iCodCOACES+"|");
 						

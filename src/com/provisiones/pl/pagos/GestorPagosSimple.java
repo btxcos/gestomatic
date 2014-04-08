@@ -1364,6 +1364,7 @@ public class GestorPagosSimple implements Serializable
 					{
 					case 0: //Sin errores
 						actualizaProgreso();
+						borrarCamposPago();
 						sMsg = "El pago se ha registrado correctamente.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);

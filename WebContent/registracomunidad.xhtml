@@ -33,7 +33,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="panel, NOTA" actionListener="#{GestorComunidades.limpiarPlantilla}"/>
+								<p:commandButton value="Limpiar Plantilla" update="panel, panelBuscarActivos, panelBuscarReferencia, NOTA" actionListener="#{GestorComunidades.limpiarPlantilla}"/>
 
 								<p:commandButton value="Alta" update="panel, popup, msgs" actionListener="#{GestorComunidades.realizaAlta}"/>
 
@@ -276,7 +276,7 @@
 					<p:dialog header="Buscar Activos sin Comunidad" widgetVar="dlgBuscar" resizable="false">
 						<p:fieldset legend="Criterios de Búsqueda">
 							<h:panelGrid columns="1" cellpadding="5">
-								<p:panel id="panelBuscar">
+								<p:panel id="panelBuscarActivos">
 									<h:panelGrid columns="2" cellpadding="5">
 
 										<h:outputText for="NOPRAC" value="Provincia: "/>
@@ -302,11 +302,21 @@
 
 									</h:panelGrid>
 								</p:panel>
+
+								<p:panel id="panelBuscarReferencia" >
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NURCAT" value="Referencia Catastral: " />
+										<p:inputText id="NURCAT" value="#{GestorComunidades.sNURCAT}" size="22" maxlength="20"/>
+
+									</h:panelGrid>
+								</p:panel>
+
 								<p:panel >
 									<h:panelGrid columns="2" cellpadding="5">
 
 										<p:commandButton value="Buscar" update="popup, form:activos, form:popup, form:msgs" actionListener="#{GestorComunidades.buscaActivos}" oncomplete="dlgTabla.show()"/>
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorComunidades.limpiarPlantillaActivo}"/>
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscarActivos,panelBuscarReferencia" actionListener="#{GestorComunidades.limpiarPlantillaActivo}"/>
 
 									</h:panelGrid>
 								</p:panel>

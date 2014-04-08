@@ -28,22 +28,11 @@
 								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
 							</h:panelGrid>
 						</p:fieldset>
-						<p:panel>
-							<h:panelGrid columns="2" cellpadding="5">
-
-								<h:outputText value="CODTRN: "/>
-								<p:inputText id="CODTRN" value="#{GestorMovimientosImpuestosRecursos.sCODTRN}" disabled="true"/>
-
-								<h:outputText value="IDPROV: "/>
-								<p:inputText id="IDPROV" value="#{GestorMovimientosImpuestosRecursos.sIDPROV}" disabled="true"/>
-
-							</h:panelGrid>
-						</p:panel>
 
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Limpiar Plantilla" update="panel, panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
 								<p:commandButton value="Registrar Datos" update="panel, popup, msgs" actionListener="#{GestorMovimientosImpuestosRecursos.registraDatos}"/>
 
 								<p:selectOneRadio id="options" value="#{GestorMovimientosImpuestosRecursos.sCOACCI}">
@@ -259,33 +248,61 @@
 											paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 											rowsPerPageTemplate="5,10,15">
 
-							<p:column headerText="Código Activo">
-								#{activo.COACES}
-							</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Activo"/>
+										</f:facet>
+										<h:outputText value="#{activo.COACES}"/>
+									</p:column>
 
-							<p:column headerText="Provincia">
-								#{activo.NOPRAC}
-							</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Provincia"/>
+										</f:facet>
+										<h:outputText value="#{activo.NOPRAC}"/>
+									</p:column>
 
-							<p:column headerText="Municipio">
-								#{activo.NOMUIN}
-							</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Municipio"/>
+										</f:facet>
+										<h:outputText value="#{activo.NOMUIN}"/>
+									</p:column>
 
-							<p:column headerText="Vía">
-								#{activo.NOVIAS}
-							</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Vía"/>
+										</f:facet>
+										<h:outputText value="#{activo.NOVIAS}"/>
+									</p:column>
 
-							<p:column headerText="Portal">
-								#{activo.NUPOAC}
-							</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Portal"/>
+										</f:facet>
+										<h:outputText value="#{activo.NUPOAC}"/>
+									</p:column>
 
-							<p:column headerText="Piso">
-								#{activo.NUPIAC}
-							</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Piso"/>
+										</f:facet>
+										<h:outputText value="#{activo.NUPIAC}"/>
+									</p:column>
 
-							<p:column headerText="Puerta">
-								#{activo.NUPUAC}
-							</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Puerta"/>
+										</f:facet>
+										<h:outputText value="#{activo.NUPUAC}"/>
+									</p:column>
+
+									<f:facet name="footer">
+										<h:commandLink>
+											<p:graphicImage value="recursos/excel.png"/>
+											<p:dataExporter type="xls" target="activos" fileName="listaactivos" encoding="ISO-8859-15"/>
+										</h:commandLink>
+									</f:facet>
 
 						</p:dataTable>
 					</p:dialog>
@@ -293,7 +310,7 @@
 						<p:fieldset legend="Criterios de Búsqueda">
 
 							<h:panelGrid columns="1" cellpadding="5">
-								<p:panel id="panelBuscar">
+								<p:panel id="panelBuscarActivos">
 
 									<h:panelGrid columns="2" cellpadding="5">
 
@@ -321,11 +338,20 @@
 									</h:panelGrid>
 								</p:panel>
 
+								<p:panel id="panelBuscarReferencia" >
+									<h:panelGrid columns="2" cellpadding="5">
+
+										<h:outputText for="NURCATF" value="Referencia Catastral: " />
+										<p:inputText id="NURCATF" value="#{GestorMovimientosImpuestosRecursos.sNURCATF}" size="22" maxlength="20"/>
+
+									</h:panelGrid>
+								</p:panel>
+
 								<p:panel>
 									<h:panelGrid columns="3" cellpadding="5">
 
 										<p:commandButton value="Buscar" update="popup, form:activos" actionListener="#{GestorMovimientosImpuestosRecursos.buscaActivos}" oncomplete="dlgTabla.show()"/>
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantillaActivo}"/>
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorMovimientosImpuestosRecursos.limpiarPlantillaActivo}"/>
 
 									</h:panelGrid>
 								</p:panel>

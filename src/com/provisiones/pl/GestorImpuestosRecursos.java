@@ -26,29 +26,10 @@ public class GestorImpuestosRecursos implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorImpuestosRecursos.class.getName());
 	
-	private String sCODTRN = ValoresDefecto.DEF_E4_CODTRN;
-	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
-	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
-	private String sCOACCI = "A";
-	private String sCOENGP = ValoresDefecto.DEF_COENGP;
-
-	private String sNURCAT = "";
-
-	private String sCOSBAC = "";
-	private String sFEPRRE = "";
-	private String sFERERE = "";
-	private String sFEDEIN = "";
-	private String sBISODE = "";
-	private String sBIRESO = "";
-	private String sCOTEXA = ValoresDefecto.DEF_COTEXA;
-	private String sOBTEXC = "";
-	
-	
-	private String sOBDEER = "";
-	
 	//Buscar activos
 	private String sCOACES = "";
 
+	//Filtrar activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";	
 	private String sNOPRAC = "";
@@ -56,7 +37,24 @@ public class GestorImpuestosRecursos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	
+	private String sNURCATF = "";
+	
+	//Referencia Catastral
+	private String sNURCAT = "";
 
+	//Solicitud
+	private String sCOSBAC = "";
+	private String sFEPRRE = "";
+	private String sFERERE = "";
+	private String sFEDEIN = "";
+	private String sBISODE = "";
+	private String sBIRESO = "";
+
+	//Observaciones
+	private String sOBTEXC = "";
+
+	//Notas
 	private String sNota = "";
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -82,6 +80,8 @@ public class GestorImpuestosRecursos implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	
+    	this.sNURCATF = "";
 	}
 	
 	public void borrarResultadosActivo()
@@ -142,16 +142,71 @@ public class GestorImpuestosRecursos implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
-		
-			this.setTablaactivos(CLReferencias.buscarActivosConReferencias(filtro));
+			String sMsg = "";
 			
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			this.activoseleccionado = null;
+			
+	    	this.setTablaactivos(null);
+			
+			if (sNURCATF.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", 
+						sCOPOIN.toUpperCase(), 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						"");
+			
+				this.setTablaactivos(CLReferencias.buscarActivosConReferencias(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCATF))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCATF));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);	
 		}
 	}
@@ -180,62 +235,39 @@ public class GestorImpuestosRecursos implements Serializable
 			
 			String sMsg = "";
 			
-			try
-			{
-				this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
-				
-				sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+			this.referenciaseleccionada = null;
+			
+			this.tablareferencias = null;
+			
+	    	if (sCOACES.isEmpty())
+	    	{
+				sMsg = "ERROR: El Activo debe de ir informado. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-			}
+	    	}
+	    	else
+	    	{
+				try
+				{
+					this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
+					
+					sMsg = "Encontradas "+getTablareferencias().size()+" referencias relacionadas.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}	    		
+	    	}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		
 	}
 		
-	public void cargarReferencia(ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-			
-			String sMsg = "";
-			
-			try
-			{
-		    	this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(Integer.parseInt(sCOACES));
-		    	
-		    	if (sNURCAT.equals("") || !CLReferencias.estadoReferencia(sNURCAT).equals("A"))
-		    	{
-		    		sMsg = "ERROR: No existe referencia catastral de alta para el activo consultado.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-		    	}
-		    	else
-				{
-		    		sMsg = "Encontrada referencia para el activo '"+sCOACES+"'.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);	
-		}
-	}
-	
 	public void seleccionarReferencia(ActionEvent actionEvent) 
     {  
 		if (ConnectionManager.comprobarConexion())
@@ -278,31 +310,32 @@ public class GestorImpuestosRecursos implements Serializable
 				}
 				else
 				{
+					
 					MovimientoImpuestoRecurso movimiento = new MovimientoImpuestoRecurso (
-							sCODTRN.toUpperCase(), 
-							sCOTDOR.toUpperCase(), 
-							sIDPROV.toUpperCase(), 
+							ValoresDefecto.DEF_E4_CODTRN, 
+							ValoresDefecto.DEF_COTDOR, 
+							ValoresDefecto.DEF_IDPROV, 
 							"A", 
-							sCOENGP.toUpperCase(), 
+							ValoresDefecto.DEF_COENGP, 
 							sCOACES,
 							sNURCAT.toUpperCase(),
 							ValoresDefecto.DEF_COGRUG_E4, 
 							ValoresDefecto.DEF_COTACA_E4, 
 							sCOSBAC.toUpperCase(),
 							"", 
-							Utils.compruebaFecha(sFEPRRE.toUpperCase()),
+							Utils.compruebaFecha(sFEPRRE),
 							"", 
 							ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
 							"", 
 							ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
 							"", 
-							Utils.compruebaCodigoAlfa(sBISODE.toUpperCase()),
+							Utils.compruebaCodigoAlfa(sBISODE),
 							"", 
 							ValoresDefecto.DEF_CODIGO_ALFA,
 							ValoresDefecto.DEF_COTEXA,
 							"", 
-							sOBTEXC.toUpperCase(), 
-							sOBDEER.toUpperCase());
+							sOBTEXC, 
+							ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
 					
 					Nota nota = new Nota (false,sNota);
 					
@@ -568,46 +601,6 @@ public class GestorImpuestosRecursos implements Serializable
 	
 
 
-	public String getsCODTRN() {
-		return sCODTRN;
-	}
-
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
-	}
-
-	public String getsCOTDOR() {
-		return sCOTDOR;
-	}
-
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
-	}
-
-	public String getsIDPROV() {
-		return sIDPROV;
-	}
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
-	}
-
-	public String getsCOACCI() {
-		return sCOACCI;
-	}
-
-	public void setsCOACCI(String sCOACCI) {
-		this.sCOACCI = sCOACCI;
-	}
-
-	public String getsCOENGP() {
-		return sCOENGP;
-	}
-
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
-	}
-
 	public String getsNURCAT() {
 		return sNURCAT;
 	}
@@ -664,28 +657,12 @@ public class GestorImpuestosRecursos implements Serializable
 		this.sBIRESO = sBIRESO;
 	}
 
-	public String getsCOTEXA() {
-		return sCOTEXA;
-	}
-
-	public void setsCOTEXA(String sCOTEXA) {
-		this.sCOTEXA = sCOTEXA;
-	}
-
 	public String getsOBTEXC() {
-		return sOBTEXC;
+		return sOBTEXC.trim().toUpperCase();
 	}
 
 	public void setsOBTEXC(String sOBTEXC) {
 		this.sOBTEXC = sOBTEXC;
-	}
-
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
 	}
 
 	public String getsCOACES() {
@@ -693,7 +670,7 @@ public class GestorImpuestosRecursos implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOPOIN() {
@@ -757,7 +734,7 @@ public class GestorImpuestosRecursos implements Serializable
 	}
 
 	public void setsNota(String sNota) {
-		this.sNota = sNota;
+		this.sNota = sNota.trim();
 	}
 
 	public ArrayList<ActivoTabla> getTablaactivos() {
@@ -790,6 +767,14 @@ public class GestorImpuestosRecursos implements Serializable
 
 	public void setReferenciaseleccionada(ReferenciaTabla referenciaseleccionada) {
 		this.referenciaseleccionada = referenciaseleccionada;
+	}
+
+	public String getsNURCATF() {
+		return sNURCATF;
+	}
+
+	public void setsNURCATF(String sNURCATF) {
+		this.sNURCATF = sNURCATF.trim().toUpperCase();
 	}
 	
 	

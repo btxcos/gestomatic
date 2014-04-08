@@ -125,6 +125,12 @@ public class GestorActivosComunidad implements Serializable
 		{
 			FacesMessage msg;
 			
+			String sMsg = "";
+			
+			this.activoseleccionadoalta = null;
+			
+			this.setTablaactivos(null);
+			
 			ActivoTabla buscaactivos = new ActivoTabla(
 					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
 					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
@@ -132,9 +138,24 @@ public class GestorActivosComunidad implements Serializable
 
 			this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(buscaactivos));
 			
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			if (getTablaactivos().size() == 0)
+			{
+				sMsg = "No se encontraron Activos con los criterios solicitados.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+			else if (getTablaactivos().size() == 1)
+			{
+				sMsg = "Encontrado un Activo relacionado.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}

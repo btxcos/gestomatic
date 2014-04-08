@@ -16,6 +16,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLPagos;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
@@ -70,16 +71,16 @@ public class GestorPagosConexion implements Serializable
 	
 	private String sCOTNEG = ValoresDefecto.DEF_COTNEG;
 	
-	private String sCOENCX = ValoresDefecto.DEF_COENCX;
-	private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
-	private String sNUCONE = ValoresDefecto.DEF_NUCONE;
+	private String sCOENCX = "";
+	private String sCOOFCX = "";
+	private String sNUCONE = "";
 	private String sNUPROF = "";
 	private String sFEAGTO = ValoresDefecto.DEF_FEAGTO;
 	private String sCOMONA = ValoresDefecto.DEF_COMONA;
 	private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
 	private String sFEAUFA = ValoresDefecto.DEF_FEAUFA;
 	private String sCOTERR = ValoresDefecto.DEF_COTERR;
-	private String sFMPAGN = ValoresDefecto.DEF_FMPAGN;
+	private String sFMPAGN = "";
 	private String sFEPGPR = "";
 	
 	private String sFEAPLI = ValoresDefecto.DEF_FEAPLI;
@@ -101,6 +102,7 @@ public class GestorPagosConexion implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNURCATF = "";
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -187,6 +189,8 @@ public class GestorPagosConexion implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	
+    	this.sNURCATF = "";
 	}
 	
 	public void borrarResultadosActivo()
@@ -293,16 +297,71 @@ public class GestorPagosConexion implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
+			this.activoseleccionado = null;
 			
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
+			this.setTablaactivos(null);
+			
+			if (sNURCATF.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", 
+						sCOPOIN.toUpperCase(), 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						"");
+				
+				this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCATF))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCATF));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -332,30 +391,43 @@ public class GestorPagosConexion implements Serializable
 			
 			String sMsg = "";
 			
-			try
+			this.gastoseleccionado = null;
+			
+			this.tablagastos = null;
+			
+			if (sCOACES.isEmpty())
 			{
-				if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+				sMsg = "ERROR: Debe informar el campo 'Activo' para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else
+			{
+				try
 				{
-					this.tablagastos = CLGastos.buscarGastosValidadosActivo(Integer.parseInt(sCOACES));
-				
-					sMsg = "Encontrados "+getTablagastos().size()+" gastos validados.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					{
+						this.tablagastos = CLGastos.buscarGastosValidadosActivo(Integer.parseInt(sCOACES));
+					
+						sMsg = "Encontrados "+getTablagastos().size()+" gastos validados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+					}
 				}
-				else
+				catch(NumberFormatException nfe)
 				{
-					sMsg = "ERROR: No exite el activo '"+sCOACES+"'. Por favor, revise los datos.";
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
 			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}			
-
+			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -1002,7 +1074,7 @@ public class GestorPagosConexion implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public boolean isbDevolucion() {
@@ -1603,6 +1675,14 @@ public class GestorPagosConexion implements Serializable
 
 	public void setTiposcosigaHM(Map<String, String> tiposcosigaHM) {
 		this.tiposcosigaHM = tiposcosigaHM;
+	}
+
+	public String getsNURCATF() {
+		return sNURCATF;
+	}
+
+	public void setsNURCATF(String sNURCATF) {
+		this.sNURCATF = sNURCATF;
 	}
 	
 	

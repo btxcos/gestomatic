@@ -79,9 +79,9 @@ public final class QMCuotas
 				       + NuevaCuota.getFAACTA() + "','"
 				       + NuevaCuota.getPTPAGO() + "','"
 				       + NuevaCuota.getOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "','"
-				       + ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR + 
-				       "')";
+				       + ValoresDefecto.DEF_ALTA + "',"
+				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
+				       ")";
 
 			logger.debug(sQuery);
 
@@ -1037,6 +1037,8 @@ public final class QMCuotas
 		return sEstado;
 	}
 	
+
+	
 	public static boolean setNota(Connection conexion, long liCuotaID, String sNota)
 	{
 		boolean bSalida = false;
@@ -1049,8 +1051,9 @@ public final class QMCuotas
 			
 			String sQuery = "UPDATE " 
 					+ TABLA + 
-					" SET " 
-					+ CAMPO13 + " = '"+ sNota +"' "+
+					" SET "
+					+ CAMPO13 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
+					//+ CAMPO13 + " = '"+ sNota +"' "+
 					" WHERE "
 					+ CAMPO1 + " = '"+ liCuotaID +"'";
 			
@@ -1100,8 +1103,9 @@ public final class QMCuotas
 
 			logger.debug("Ejecutando Query...");
 			
-			String sQuery = "SELECT " 
-						+ CAMPO13 + 
+			String sQuery = "SELECT "
+						+"AES_DECRYPT("+CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+						//+ CAMPO13 + 
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -1124,7 +1128,9 @@ public final class QMCuotas
 					{
 						bEncontrado = true;
 
-						sNota = rs.getString(CAMPO13);
+						//sNota = rs.getString(CAMPO13);
+						
+						sNota = rs.getString("AES_DECRYPT("+CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						
 						logger.debug(CAMPO1+":|"+liCuotaID+"|");
 						
@@ -1155,4 +1161,5 @@ public final class QMCuotas
 
 		return sNota;
 	}
+	
 }

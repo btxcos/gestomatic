@@ -15,6 +15,7 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLComunidades;
+import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Nota;
@@ -28,31 +29,35 @@ public class GestorComunidades implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorComunidades.class.getName());
 	
-	private String sCODTRN = ValoresDefecto.DEF_E1_CODTRN;
-	private String sCOTDOR = ValoresDefecto.DEF_COTDOR;
-	private String sIDPROV = ValoresDefecto.DEF_IDPROV;
-	private String sCOACCI = "A";
-	private String sCOENGP = ValoresDefecto.DEF_COENGP;
 
+	//Comunidad de propietarios
 	private String sCOCLDO = "";
 	private String sNUDCOM = "";
 	private String sNOMCOC = "";
 	private String sNODCCO = "";
+	
+	//Presidente
 	private String sNOMPRC = "";
 	private String sNUTPRC = "";
+	
+	//Administrador
 	private String sNOMADC = "";
 	private String sNUTADC = "";
 	private String sNODCAD = "";
+	
+	//Cuenta corriente
 	private String sNUCCEN = "";
 	private String sNUCCOF = "";
 	private String sNUCCDI = "";
 	private String sNUCCNT = "";
+	
+	//Observaciones
 	private String sOBTEXC = "";
 	
-	private String sOBDEER = "";
-	
+	//Buscar activos
 	private String sCOACES = "";
 	
+	//Filtro activos
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";
 	private String sNOPRAC = "";
@@ -61,6 +66,9 @@ public class GestorComunidades implements Serializable
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
 	
+	private String sNURCAT = "";
+	
+	//Notas
 	private String sNota = "";
 	
 	private transient ActivoTabla activoseleccionado = null;
@@ -90,7 +98,8 @@ public class GestorComunidades implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
-		
+    	
+    	this.sNURCAT = "";
 	}
 
 	public void borrarResultadosActivo()
@@ -147,18 +156,64 @@ public class GestorComunidades implements Serializable
 		{
 			FacesMessage msg;
 			
-			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+			String sMsg = "";
 			
-			this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(filtro));
+			this.activoseleccionado = null;
+			
+			this.setTablaactivos(null);
+			
+			if (sNURCAT.isEmpty())
+			{
+				ActivoTabla filtro = new ActivoTabla(
+						"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+				
+				this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(filtro));
 
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			
-			msg = Utils.pfmsgInfo(sMsg);
-			
-			logger.info(sMsg);
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else if (CLReferencias.existeReferenciaCatastral(sNURCAT))
+			{
+				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCAT));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -189,47 +244,54 @@ public class GestorComunidades implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = "";
-
-			try
+			
+			if (sCOACES.isEmpty())
 			{
-
-				int iSalida = CLComunidades.comprobarActivo(Integer.parseInt(sCOACES));
-
-				switch (iSalida) 
-				{
-					case 0: //Sin errores
-						sMsg = "El activo '"+sCOACES+"' esta disponible.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-						break;
-
-					case -1: //error - ya vinculado
-						sMsg = "ERROR: El activo '"+sCOACES+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -2: //error - no existe
-						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
-						msg = Utils.pfmsgWarning(sMsg);
-						logger.warn(sMsg);
-						break;
-
-					default: //error generico
-						sMsg = "[FATAL] ERROR: El activo '"+sCOACES+"' ha producido un error desconocido. Por favor, revise los datos.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-				}
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El Activo debe de ir informado. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
-			
+			else
+			{
+				try
+				{
 
+					int iSalida = CLComunidades.comprobarActivo(Integer.parseInt(sCOACES));
+
+					switch (iSalida) 
+					{
+						case 0: //Sin errores
+							sMsg = "El activo '"+sCOACES+"' esta disponible.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+							break;
+
+						case -1: //error - ya vinculado
+							sMsg = "ERROR: El activo '"+sCOACES+"' ya esta vinculado a otra comunidada. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -2: //error - no existe
+							sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+							msg = Utils.pfmsgWarning(sMsg);
+							logger.warn(sMsg);
+							break;
+
+						default: //error generico
+							sMsg = "[FATAL] ERROR: El activo '"+sCOACES+"' ha producido un error desconocido. Por favor, revise los datos.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
 
 
 			
@@ -245,13 +307,17 @@ public class GestorComunidades implements Serializable
 			
 			String sMsg = "";
 			
-			try
-			{
-				Integer.parseInt(sCOACES);
 
-		    	if (sCOCLDO.equals("") || sNUDCOM.equals(""))
+
+		    	if (sCOCLDO.isEmpty() || sNUDCOM.isEmpty())
 		    	{
 					sMsg = "ERROR: Los campos 'Documento' y 'Número' deben de ser informados para realizar el alta. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+		    	}
+		    	if (sCOACES.isEmpty())
+		    	{
+					sMsg = "ERROR: El Activo debe de ser informado para realizar el alta. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 		    	}
@@ -263,294 +329,305 @@ public class GestorComunidades implements Serializable
 				}
 				else
 				{
-					MovimientoComunidad movimiento = new MovimientoComunidad (
-							sCODTRN.toUpperCase(), 
-							sCOTDOR.toUpperCase(), 
-							sIDPROV.toUpperCase(), 
-							"A", 
-							sCOENGP.toUpperCase(), 
-							sCOCLDO.toUpperCase(), 
-							sNUDCOM.toUpperCase(), 
-							"", 
-							sCOACES,
-							"", 
-							sNOMCOC.toUpperCase(), 
-							"", 
-							sNODCCO.toUpperCase(), 
-							"", 
-							sNOMPRC.toUpperCase(), 
-							"", 
-							sNUTPRC.toUpperCase(), 
-							"", 
-							sNOMADC.toUpperCase(), 
-							"", 
-							sNUTADC.toUpperCase(), 
-							"", 
-							sNODCAD.toUpperCase(), 
-							"", 
-							sNUCCEN.toUpperCase(), 
-							sNUCCOF.toUpperCase(), 
-							sNUCCDI.toUpperCase(), 
-							sNUCCNT.toUpperCase(), 
-							"", 
-							sOBTEXC.toUpperCase(), 
-							sOBDEER.toUpperCase());
-					
-					logger.debug(movimiento.logMovimientoComunidad());
-
-					Nota nota = new Nota (false,sNota);
-					
-					int iSalida = CLComunidades.registraMovimiento(movimiento, nota);
-					
-					switch (iSalida) 
+					try
 					{
-					case 0: //Sin errores
+						Integer.parseInt(sCOACES);
 						
-						sMsg = "La comunidad se ha creado correctamente.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-						break;
-
-					case -1: //error 001 - CODIGO DE ACCION DEBE SER A,M,B,X 
-						sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -3: //error 003 - NO EXISTE EL ACTIVO
-						sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-
-					case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO, NULO O CEROS
-						sMsg = "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -5: //Error 005 - NO TIENE NOMBRE LA COMUNIDAD
-						sMsg = "ERROR:005 - El nombre de la comunidad es obligatorio. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -6: //Error 006 - FALTAN DATOS DE LA CUENTA BANCARIA
-						sMsg = "ERROR:006 - No se han informado los datos de la cuenta corriente. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -8: //Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
-						sMsg = "ERROR:008 - El activo ya esta asociado a otra comunidad. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-
-					/*case -9: //error 009 - YA EXISTE ESTA COMUNIDAD
-						sMsg = "ERROR:009 - La comunidad ya se encuentra registrada. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;*/
-
-
-					case -10: //error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
-						sMsg = "ERROR:010 - El activo ya esta asociado a esta comunidad. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-
-					case -11: //error 011 - LA COMUNIDAD NO EXISTE. ACTIVO NO SE PUEDE DAR DE ALTA
-						sMsg = "ERROR:011 - No se puede dar de alta el activo, la comunidad no existe. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-
-					case -12: //error 012 - LA COMUNIDAD NO EXISTE. NO SE PUEDE MODIFICAR
-						sMsg = "ERROR:012 - No se puede modificar la comunidad, no se encuentra registrada. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -22: //error 022 - NO SE PUEDE DAR ALTA SI CONTROL DE ACTIVO NO ES S
-						sMsg = "ERROR:022 - Para dar de alta la comunidad es necesario incluir un activo. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
+						MovimientoComunidad movimiento = new MovimientoComunidad (
+								ValoresDefecto.DEF_E1_CODTRN, 
+								ValoresDefecto.DEF_COTDOR, 
+								ValoresDefecto.DEF_IDPROV, 
+								"A", 
+								ValoresDefecto.DEF_COENGP, 
+								sCOCLDO, 
+								sNUDCOM, 
+								"", 
+								sCOACES,
+								"", 
+								sNOMCOC, 
+								"", 
+								sNODCCO, 
+								"", 
+								sNOMPRC, 
+								"", 
+								sNUTPRC, 
+								"", 
+								sNOMADC, 
+								"", 
+								sNUTADC, 
+								"", 
+								sNODCAD, 
+								"", 
+								sNUCCEN, 
+								sNUCCOF, 
+								sNUCCDI, 
+								sNUCCNT, 
+								"", 
+								sOBTEXC, 
+								ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
 						
-					case -26: //error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
-						sMsg = "ERROR:026 - No se puede dar de baja la comunidad, no se encuentra registrada. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
+						logger.debug(movimiento.logMovimientoComunidad());
 
-					case -27: //error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
-						sMsg = "ERROR:027 - No se puede dar de baja la comunidad, aun tiene cuotas de alta. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -30: //Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
-						sMsg = "ERROR:030 - No se ha elegido un tipo de documento. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
+						Nota nota = new Nota (false,sNota);
 						
-					case -31: //Error 031 - NUMERO DE DOCUMENTO CIF ERRONEO
-						sMsg = "ERROR:031 - El numero de documento es incorrecto. Por favor, revise los datos.";
+						int iSalida = CLComunidades.registraMovimiento(movimiento, nota);
+						
+						switch (iSalida) 
+						{
+						case 0: //Sin errores
+							
+							sMsg = "La comunidad se ha creado correctamente.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+							break;
+
+						case -1: //error 001 - CODIGO DE ACCION DEBE SER A,M,B,X 
+							sMsg = "ERROR:001 - No se ha elegido una acccion correcta. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -3: //error 003 - NO EXISTE EL ACTIVO
+							sMsg = "ERROR:003 - El activo elegido no esta registrado en el sistema. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+
+						case -4: //Error 004 - CIF DE LA COMUNIDAD NO PUEDE SER BLANCO, NULO O CEROS
+							sMsg = "ERROR:004 - No se ha informado el numero de documento. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -5: //Error 005 - NO TIENE NOMBRE LA COMUNIDAD
+							sMsg = "ERROR:005 - El nombre de la comunidad es obligatorio. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -6: //Error 006 - FALTAN DATOS DE LA CUENTA BANCARIA
+							sMsg = "ERROR:006 - No se han informado los datos de la cuenta corriente. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -8: //Error 008 - EL ACTIVO EXISTE EN OTRA COMUNIDAD
+							sMsg = "ERROR:008 - El activo ya esta asociado a otra comunidad. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+
+						/*case -9: //error 009 - YA EXISTE ESTA COMUNIDAD
+							sMsg = "ERROR:009 - La comunidad ya se encuentra registrada. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;*/
+
+
+						case -10: //error 010 - EL ACTIVO YA EXISTE PARA ESTA COMUNIDAD
+							sMsg = "ERROR:010 - El activo ya esta asociado a esta comunidad. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+
+						case -11: //error 011 - LA COMUNIDAD NO EXISTE. ACTIVO NO SE PUEDE DAR DE ALTA
+							sMsg = "ERROR:011 - No se puede dar de alta el activo, la comunidad no existe. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+
+						case -12: //error 012 - LA COMUNIDAD NO EXISTE. NO SE PUEDE MODIFICAR
+							sMsg = "ERROR:012 - No se puede modificar la comunidad, no se encuentra registrada. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -22: //error 022 - NO SE PUEDE DAR ALTA SI CONTROL DE ACTIVO NO ES S
+							sMsg = "ERROR:022 - Para dar de alta la comunidad es necesario incluir un activo. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -26: //error 026 - LA COMUNIDAD NO EXISTE, NO SE PUEDE DAR DE BAJA
+							sMsg = "ERROR:026 - No se puede dar de baja la comunidad, no se encuentra registrada. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -27: //error 027 - NO SE PUEDE DAR DE BAJA LA COMUNIDAD PORQUE TIENE CUOTAS
+							sMsg = "ERROR:027 - No se puede dar de baja la comunidad, aun tiene cuotas de alta. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -30: //Error 030 - LA CLASE DE DOCUMENTO DEBE SER UN CIF (2,5,J)
+							sMsg = "ERROR:030 - No se ha elegido un tipo de documento. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -31: //Error 031 - NUMERO DE DOCUMENTO CIF ERRONEO
+							sMsg = "ERROR:031 - El numero de documento es incorrecto. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -701: //Error 701 - Datos de cuenta incorrectos
+							sMsg = "ERROR:701 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+							
+
+						case -702: //Error 702 - direccion de correo de comunidad incorrecta
+							sMsg = "ERROR:702 - La direccion de correo de la comunidad es incorrecta. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+							
+
+						case -703: //Error 703 - direccion de correo del administrador incorrecta
+							sMsg = "ERROR:703 - La direccion de correo del adminsitrador es incorrecta. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -801: //Error 801 - alta de una comunidad en alta
+							sMsg = "ERROR:801 - La comunidad ya esta dada de alta. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -802: //Error 802 - comunidad de baja no puede recibir mas movimientos
+							sMsg = "ERROR:802 - La comunidad esta de baja y no puede recibir mas movimientos. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -803: //Error 803 - estado no disponible
+							sMsg = "ERROR:803 - El estado de la comunidad informada no esta disponible. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -804: //Error 804 - modificacion sin cambios
+							sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -900: //Error 900 - al crear un movimiento
+							sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -901: //Error 901 - error y rollback - error al crear la comuidad
+							sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -902: //Error 902 - error y rollback - error al registrar la relaccion
+							sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -903: //Error 903 - error y rollback - error al registrar el activo durante el alta
+							sMsg = "[FATAL] ERROR:903 - Se ha producido un error al asociar el activo durante el alta. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -904: //Error 904 - error y rollback - error al cambiar el estado
+							sMsg = "[FATAL] ERROR:904 - Se ha producido un error al cambiar el estado de la comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -905: //Error 905 - error y rollback - error al modificar la comunidad
+							sMsg = "[FATAL] ERROR:905 - Se ha producido un error al modificar la comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -906: //Error 906 - error y rollback - el activo ya esta vinculado
+							sMsg = "[FATAL] ERROR:906 - El activo ya ha sido vinculado. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -907: //Error 907 - error y rollback - error al asociar el activo en la comunidad
+							sMsg = "[FATAL] ERROR:907 - Se ha producido un error al asociar el activo a la comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -908: //Error 908 - error y rollback - el activo no esta vinculado
+							sMsg = "[FATAL] ERROR:908 - El activo no ha sido vinculado. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -909: //Error 909 - error y rollback - error al desasociar el activo en la comunidad
+							sMsg = "[FATAL] ERROR:909 - Se ha producido un error al desasociar el activo a la comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -910: //Error 910 - error y rollback - error al conectar con la base de datos
+							sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -911: //Error 911 - error y rollback - error al crear la cuenta de la comunidad
+							sMsg = "[FATAL] ERROR:911 - Se ha producido un error al crear la cuenta de la comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -912: //Error 912 - error y rollback - error al crear la cuenta de la comunidad
+							sMsg = "[FATAL] ERROR:912 - Se ha producido un error al crear la relacion cuenta-comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -913: //Error 913 - error y rollback - error al borrar la cuenta de la comunidad
+							sMsg = "[FATAL] ERROR:913 - Se ha producido un error al borrar la cuenta de la comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						case -914: //Error 914 - error y rollback - error la cuenta nueva ya existe
+							sMsg = "[FATAL] ERROR:914 - Se ha producido un error al crear la cuenta de la comunidad, ya existe. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+
+						case -915: //Error 915 - error y rollback - error al guardar la nota
+							sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota de la comunidad. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+							
+						default: //error generico
+							sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+							break;
+						}
+					}
+					catch(NumberFormatException nfe)
+					{
+						sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 						msg = Utils.pfmsgError(sMsg);
 						logger.error(sMsg);
-						break;
-						
-					case -701: //Error 701 - Datos de cuenta incorrectos
-						sMsg = "ERROR:701 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-						
-
-					case -702: //Error 702 - direccion de correo de comunidad incorrecta
-						sMsg = "ERROR:702 - La direccion de correo de la comunidad es incorrecta. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-						
-
-					case -703: //Error 703 - direccion de correo del administrador incorrecta
-						sMsg = "ERROR:703 - La direccion de correo del adminsitrador es incorrecta. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -801: //Error 801 - alta de una comunidad en alta
-						sMsg = "ERROR:801 - La comunidad ya esta dada de alta. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -802: //Error 802 - comunidad de baja no puede recibir mas movimientos
-						sMsg = "ERROR:802 - La comunidad esta de baja y no puede recibir mas movimientos. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-						
-					case -803: //Error 803 - estado no disponible
-						sMsg = "ERROR:803 - El estado de la comunidad informada no esta disponible. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -804: //Error 804 - modificacion sin cambios
-						sMsg = "ERROR:804 - No hay modificaciones que realizar. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -900: //Error 900 - al crear un movimiento
-						sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el movimiento. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -901: //Error 901 - error y rollback - error al crear la comuidad
-						sMsg = "[FATAL] ERROR:901 - Se ha producido un error al registrar la comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-						
-					case -902: //Error 902 - error y rollback - error al registrar la relaccion
-						sMsg = "[FATAL] ERROR:902 - Se ha producido un error al registrar la relacion. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -903: //Error 903 - error y rollback - error al registrar el activo durante el alta
-						sMsg = "[FATAL] ERROR:903 - Se ha producido un error al asociar el activo durante el alta. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -904: //Error 904 - error y rollback - error al cambiar el estado
-						sMsg = "[FATAL] ERROR:904 - Se ha producido un error al cambiar el estado de la comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -905: //Error 905 - error y rollback - error al modificar la comunidad
-						sMsg = "[FATAL] ERROR:905 - Se ha producido un error al modificar la comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -906: //Error 906 - error y rollback - el activo ya esta vinculado
-						sMsg = "[FATAL] ERROR:906 - El activo ya ha sido vinculado. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -907: //Error 907 - error y rollback - error al asociar el activo en la comunidad
-						sMsg = "[FATAL] ERROR:907 - Se ha producido un error al asociar el activo a la comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -908: //Error 908 - error y rollback - el activo no esta vinculado
-						sMsg = "[FATAL] ERROR:908 - El activo no ha sido vinculado. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -909: //Error 909 - error y rollback - error al desasociar el activo en la comunidad
-						sMsg = "[FATAL] ERROR:909 - Se ha producido un error al desasociar el activo a la comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-						
-					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
-						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-						
-					case -911: //Error 911 - error y rollback - error al crear la cuenta de la comunidad
-						sMsg = "[FATAL] ERROR:911 - Se ha producido un error al crear la cuenta de la comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-						
-					case -912: //Error 912 - error y rollback - error al crear la cuenta de la comunidad
-						sMsg = "[FATAL] ERROR:912 - Se ha producido un error al crear la relacion cuenta-comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -913: //Error 913 - error y rollback - error al borrar la cuenta de la comunidad
-						sMsg = "[FATAL] ERROR:913 - Se ha producido un error al borrar la cuenta de la comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-						
-					case -914: //Error 914 - error y rollback - error la cuenta nueva ya existe
-						sMsg = "[FATAL] ERROR:914 - Se ha producido un error al crear la cuenta de la comunidad, ya existe. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-
-					case -915: //Error 915 - error y rollback - error al guardar la nota
-						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al guardar la nota de la comunidad. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
-						
-					default: //error generico
-						sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
-						msg = Utils.pfmsgFatal(sMsg);
-						logger.error(sMsg);
-						break;
 					}
 				}
 				
@@ -558,58 +635,12 @@ public class GestorComunidades implements Serializable
 				
 				
 				borrarResultadosActivo();
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 
 		}
 	}
 	
-	public String getsCODTRN() {
-		return sCODTRN;
-	}
-
-	public void setsCODTRN(String sCODTRN) {
-		this.sCODTRN = sCODTRN;
-	}
-
-	public String getsCOTDOR() {
-		return sCOTDOR;
-	}
-
-	public void setsCOTDOR(String sCOTDOR) {
-		this.sCOTDOR = sCOTDOR;
-	}
-
-	public String getsIDPROV() {
-		return sIDPROV;
-	}
-
-	public void setsIDPROV(String sIDPROV) {
-		this.sIDPROV = sIDPROV;
-	}
-
-	public String getsCOACCI() {
-		return sCOACCI;
-	}
-
-	public void setsCOACCI(String sCOACCI) {
-		this.sCOACCI = sCOACCI;
-	}
-
-	public String getsCOENGP() {
-		return sCOENGP;
-	}
-
-	public void setsCOENGP(String sCOENGP) {
-		this.sCOENGP = sCOENGP;
-	}
-
 	public String getsCOCLDO() {
 		return sCOCLDO;
 	}
@@ -623,7 +654,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNUDCOM(String sNUDCOM) {
-		this.sNUDCOM = sNUDCOM;
+		this.sNUDCOM = sNUDCOM.trim().toUpperCase();
 	}
 
 	public String getsNOMCOC() {
@@ -631,7 +662,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNOMCOC(String sNOMCOC) {
-		this.sNOMCOC = sNOMCOC;
+		this.sNOMCOC = sNOMCOC.trim().toUpperCase();
 	}
 
 	public String getsNODCCO() {
@@ -639,7 +670,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNODCCO(String sNODCCO) {
-		this.sNODCCO = sNODCCO;
+		this.sNODCCO = sNODCCO.trim().toUpperCase();
 	}
 
 	public String getsNOMPRC() {
@@ -647,7 +678,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNOMPRC(String sNOMPRC) {
-		this.sNOMPRC = sNOMPRC;
+		this.sNOMPRC = sNOMPRC.trim().toUpperCase();
 	}
 
 	public String getsNUTPRC() {
@@ -655,7 +686,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNUTPRC(String sNUTPRC) {
-		this.sNUTPRC = sNUTPRC;
+		this.sNUTPRC = sNUTPRC.trim().toUpperCase();
 	}
 
 	public String getsNOMADC() {
@@ -663,7 +694,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNOMADC(String sNOMADC) {
-		this.sNOMADC = sNOMADC;
+		this.sNOMADC = sNOMADC.trim().toUpperCase();
 	}
 
 	public String getsNUTADC() {
@@ -671,7 +702,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNUTADC(String sNUTADC) {
-		this.sNUTADC = sNUTADC;
+		this.sNUTADC = sNUTADC.trim().toUpperCase();
 	}
 
 	public String getsNODCAD() {
@@ -679,7 +710,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNODCAD(String sNODCAD) {
-		this.sNODCAD = sNODCAD;
+		this.sNODCAD = sNODCAD.trim().toUpperCase();
 	}
 
 	public String getsNUCCEN() {
@@ -719,15 +750,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsOBTEXC(String sOBTEXC) {
-		this.sOBTEXC = sOBTEXC;
-	}
-
-	public String getsOBDEER() {
-		return sOBDEER;
-	}
-
-	public void setsOBDEER(String sOBDEER) {
-		this.sOBDEER = sOBDEER;
+		this.sOBTEXC = sOBTEXC.trim().toUpperCase();
 	}
 
 	public String getsCOACES() {
@@ -815,7 +838,7 @@ public class GestorComunidades implements Serializable
 	}
 
 	public void setsNota(String sNota) {
-		this.sNota = sNota;
+		this.sNota = sNota.trim();
 	}
 
 	public Map<String, String> getTiposcocldoHM() {
@@ -824,6 +847,14 @@ public class GestorComunidades implements Serializable
 
 	public void setTiposcocldoHM(Map<String, String> tiposcocldoHM) {
 		this.tiposcocldoHM = tiposcocldoHM;
+	}
+
+	public String getsNURCAT() {
+		return sNURCAT;
+	}
+
+	public void setsNURCAT(String sNURCAT) {
+		this.sNURCAT = sNURCAT.trim().toUpperCase();
 	}
 
 }

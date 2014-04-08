@@ -165,6 +165,8 @@ public class GestorMovimientosCuotas implements Serializable
 			
 			this.activoseleccionado = null;
 			
+			this.setTablaactivos(null);
+			
 			if (sNURCAT.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
@@ -219,9 +221,7 @@ public class GestorMovimientosCuotas implements Serializable
 			}
 			else
 			{
-		    	this.setTablaactivos(null);
-				
-				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+		    	sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
 			}
@@ -673,7 +673,7 @@ public class GestorMovimientosCuotas implements Serializable
 	}
 
 	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+		this.sCOACES = sCOACES.trim();
 	}
 
 	public String getsCOACCI() {
@@ -745,7 +745,7 @@ public class GestorMovimientosCuotas implements Serializable
 	}
 
 	public void setsIMCUCO(String sIMCUCO) {
-		this.sIMCUCO = sIMCUCO;
+		this.sIMCUCO = sIMCUCO.trim();
 	}
 
 	public String getsFAACTA() {
@@ -769,7 +769,7 @@ public class GestorMovimientosCuotas implements Serializable
 	}
 
 	public void setsOBTEXC(String sOBTEXC) {
-		this.sOBTEXC = sOBTEXC;
+		this.sOBTEXC = sOBTEXC.trim().toUpperCase();
 	}
 
 	public ActivoTabla getActivoseleccionado() {
@@ -833,7 +833,7 @@ public class GestorMovimientosCuotas implements Serializable
 	}
 
 	public void setsNota(String sNota) {
-		this.sNota = sNota;
+		this.sNota = sNota.trim();
 	}
 
 	public String getsNURCAT() {
@@ -841,7 +841,7 @@ public class GestorMovimientosCuotas implements Serializable
 	}
 
 	public void setsNURCAT(String sNURCAT) {
-		this.sNURCAT = sNURCAT;
+		this.sNURCAT = sNURCAT.trim().toUpperCase();
 	}
 	
 	
