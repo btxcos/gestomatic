@@ -315,6 +315,12 @@ public class GestorComunidades implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 		    	}
+				else if (sNOMCOC.isEmpty())
+		    	{
+					sMsg = "ERROR: El campo 'Nombre de comunidad' debe de ser informado para realizar la operación. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+		    	}
 		    	if (sCOACES.isEmpty())
 		    	{
 					sMsg = "ERROR: El Activo debe de ser informado para realizar el alta. Por favor, revise los datos.";
