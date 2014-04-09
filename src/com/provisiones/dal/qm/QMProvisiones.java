@@ -100,7 +100,7 @@ public final class QMProvisiones
 					+ NuevaProvision.getsFechaPagado() + "','" 
 					+ NuevaProvision.getsCodEstado() + "','"
 					+ sUsuario + "','"
-					+ Utils.timeStamp() + "','"
+					+ Utils.timeStamp() + "',"
 				    + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
 				    ")";
 
@@ -2223,7 +2223,8 @@ public final class QMProvisiones
 					" WHERE ( " 
 					+ sCondicion
 					+ CAMPO1 + " <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+ "' AND "
-					+ CAMPO16 +" IN ('"+ ValoresDefecto.DEF_PROVISION_AUTORIZADA +"','"+ ValoresDefecto.DEF_PROVISION_PAGADA +"') ";
+					+ CAMPO10 + " <> '"+ValoresDefecto.DEF_GASTO_ABONADO+"' AND "
+					+ CAMPO16 +" IN ('"+ ValoresDefecto.DEF_PROVISION_AUTORIZADA +"','"+ ValoresDefecto.DEF_PROVISION_PAGADA +"'))";
 
 			
 			logger.debug(sQuery);

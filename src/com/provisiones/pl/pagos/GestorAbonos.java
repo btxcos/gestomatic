@@ -262,14 +262,18 @@ public class GestorAbonos implements Serializable
 		this.sNUPUACB = "";
 		
 		this.sNURCATB = "";
-    	
-    	this.setActivoseleccionado(null);
-    	this.setTablaactivos(null);
+	}
+	
+	public void borrarResultadosActivo()
+	{
+    	this.activoseleccionado = null;
+    	this.tablaactivos = null;
 	}
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
-    {  
+    {    	
     	borrarCamposBuscarActivo();
+    	borrarResultadosActivo();
     }
     
     
@@ -409,7 +413,7 @@ public class GestorAbonos implements Serializable
 
 		logger.debug("sCOGRUGBA:|"+sCOGRUGBA+"|");
 
-		if (sCOGRUGBA !=null && !sCOGRUGBA.equals(""))
+		if (sCOGRUGBA !=null && !sCOGRUGBA.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGBA)) 
 			{
@@ -436,7 +440,7 @@ public class GestorAbonos implements Serializable
 	{
 		logger.debug("sCOTPGABA:|"+sCOGRUGBA+"| sCOTPGABA:|"+sCOTPGABA+"|");
 		
-		if (sCOTPGABA !=null && !sCOTPGABA.equals(""))
+		if (sCOTPGABA !=null && !sCOTPGABA.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGBA+sCOTPGABA)) 
 			{
@@ -480,7 +484,7 @@ public class GestorAbonos implements Serializable
 
 		logger.debug("sCOGRUGB:|"+sCOGRUGBP+"|");
 
-		if (sCOGRUGBP !=null && !sCOGRUGBP.equals(""))
+		if (sCOGRUGBP !=null && !sCOGRUGBP.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGBP)) 
 			{
@@ -507,7 +511,7 @@ public class GestorAbonos implements Serializable
 	{
 		logger.debug("sCOTPGABP:|"+sCOGRUGBP+"| sCOTPGABP:|"+sCOTPGABP+"|");
 		
-		if (sCOTPGABP !=null && !sCOTPGABP.equals(""))
+		if (sCOTPGABP !=null && !sCOTPGABP.isEmpty())
 		{
 			switch (Integer.parseInt(sCOGRUGBP+sCOTPGABP)) 
 			{
@@ -558,26 +562,72 @@ public class GestorAbonos implements Serializable
 		{
 			FacesMessage msg;
 			
-			if (sNURCATB.equals(""))
+			String sMsg = "";
+			
+			this.activoseleccionado = null;
+			
+			this.setTablaactivos(null);
+			
+			if (sNURCATB.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
-						"", sCOPOINB.toUpperCase(), sNOMUINB.toUpperCase(),
-						sNOPRACB.toUpperCase(), sNOVIASB.toUpperCase(), sNUPIACB.toUpperCase(), 
-						sNUPOACB.toUpperCase(), sNUPUACB.toUpperCase(), "");
+						"", 
+						sCOPOINB.toUpperCase(), 
+						sNOMUINB.toUpperCase(),
+						sNOPRACB.toUpperCase(), 
+						sNOVIASB.toUpperCase(), 
+						sNUPIACB.toUpperCase(), 
+						sNUPOACB.toUpperCase(), 
+						sNUPUACB.toUpperCase(), 
+						"");
 				
 				this.setTablaactivos(CLGastos.buscarActivosConGastosAbonables(filtro));
+				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaactivos().size() == 1)
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 
 			}
-			else
+			else if (CLReferencias.existeReferenciaCatastral(sNURCATB))
 			{
 				this.setTablaactivos(CLReferencias.buscarActivoAsociadoConGastosAbonables(sNURCATB));
 				
+				if (getTablaactivos().size() == 0)
+				{
+					sMsg = "No se encontraron Activos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrado un Activo relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+			else
+			{
+				
+				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
 			}
 
-			String sMsg = "Encontrados "+getTablaactivos().size()+" activos relacionados.";
-			msg = Utils.pfmsgInfo(sMsg);
-			logger.info(sMsg);
-			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		
@@ -605,7 +655,9 @@ public class GestorAbonos implements Serializable
 		{
 			FacesMessage msg;
 			
-			String sMsg = ""; 
+			String sMsg = "";
+			
+			this.provisionseleccionada = null;
 			
 			String sFecha = Utils.compruebaFecha(sFEPFONB);
 			
@@ -614,14 +666,31 @@ public class GestorAbonos implements Serializable
 				sMsg = "La fecha proporcionada no es válida. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+				
+				this.setTablaprovisiones(null);
 			}
 			else
 			{
 				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAbonablesFecha(sFecha));
 
-				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
+				if (getTablaprovisiones().size() == 0)
+				{
+					sMsg = "No se encontraron Provisiones con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaprovisiones().size() == 1)
+				{
+					sMsg = "Encontrado una Provisión relacionada.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontradas "+getTablaprovisiones().size()+" Provisiones relacionadas.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			}
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -653,10 +722,23 @@ public class GestorAbonos implements Serializable
 			FacesMessage msg;
 
 			String sMsg = "";
-			if (!sCOACESB.equals(""))
+			
+			this.gastoactivoseleccionado = null;
+			this.setTablagastosactivo(null);
+			
+			
+			if (sCOACESB.isEmpty())
+			{
+				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+			else
 			{
 				try
 				{
+					Integer.parseInt(sCOACESB);
+					
 					GastoTabla filtro = new GastoTabla(
 							"",
 							"",   
@@ -699,18 +781,10 @@ public class GestorAbonos implements Serializable
 				}
 				catch(NumberFormatException nfe)
 				{
-					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-				
-				
-			}
-			else
-			{
-				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
 			}
 
 
@@ -725,46 +799,76 @@ public class GestorAbonos implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			FacesMessage msg;
-
-			if (!sNUPROFB.equals(""))
+			
+			String sMsg = "";
+			
+			this.gastoprovisionseleccionado = null;
+			
+			this.tablagastosprovision = null;
+			
+			if (sNUPROFB.isEmpty())
 			{
-				GastoTabla filtro = new GastoTabla(
-						"",
-						sNUPROFB,   
-						sCOACESBP,   
-						sCOGRUGBP,   
-						sCOTPGABP,   
-						sCOSBGABP,   
-						"",  
-						"",   
-						"",  
-						sFEDEVEBP,   
-						"",   
-						"",  
-						"",
-						"",
-						"");//TODO meter estado en el filtro
-				
-				this.setTablagastosprovision(CLGastos.buscarGastosAbonablesProvisionConFiltroEstado(filtro,sEstadoBP));
-				
-				if (getTablagastosprovision().size() == 0)
-				{
-					msg = Utils.pfmsgWarning("No se encontraron gastos con los criterios solicitados.");
-				}
-				else if (getTablagastosprovision().size() == 1)
-				{
-					msg = Utils.pfmsgInfo("Encontrado un Gasto relacionado.");
-				}
-				else
-				{
-					msg = Utils.pfmsgInfo("Encontrados "+getTablagastosprovision().size()+" gastos relacionados.");
-				}
+				sMsg = "No se informó el campo 'Provisión'. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+			else if (!sCOACESBP.isEmpty() && Utils.esAlfanumerico(sCOACESBP))
+			{
+				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
 			}
 			else
 			{
-				msg = Utils.pfmsgWarning("No se informó el campo 'Provisión'. Por favor, revise los datos.");
+				try
+				{
+					Integer.parseInt(sNUPROFB);
+					
+					GastoTabla filtro = new GastoTabla(
+							"",
+							sNUPROFB,   
+							sCOACESBP,   
+							sCOGRUGBP,   
+							sCOTPGABP,   
+							sCOSBGABP,   
+							"",  
+							"",   
+							"",  
+							sFEDEVEBP,   
+							"",   
+							"",  
+							"",
+							"",
+							"");//TODO meter estado en el filtro
+					
+					this.setTablagastosprovision(CLGastos.buscarGastosAbonablesProvisionConFiltroEstado(filtro,sEstadoBP));
+					
+					if (getTablagastosprovision().size() == 0)
+					{
+						sMsg = "No se encontraron gastos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else if (getTablagastosprovision().size() == 1)
+					{
+						sMsg = "Encontrado un Gasto relacionado.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontrados "+getTablagastosprovision().size()+" gastos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 			}
-
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -991,7 +1095,7 @@ public class GestorAbonos implements Serializable
 			{
 			
 
-				if (sCOACES.equals("") || sCOGRUG.equals("") || sCOTPGA.equals("") || sCOSBGA.equals("") || sFEDEVE.equals(""))
+				if (sCOACES.isEmpty() || sCOGRUG.isEmpty() || sCOTPGA.isEmpty() || sCOSBGA.isEmpty() || sFEDEVE.isEmpty())
 				{
 					sMsg = "ERROR: No se ha seleccionado un Gasto. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
@@ -1007,7 +1111,7 @@ public class GestorAbonos implements Serializable
 				{
 					this.sNUPROF = CLProvisiones.provisionAsignada(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA);
 					
-					if (sNUPROF.equals(""))
+					if (sNUPROF.isEmpty())
 					{
 						sMsg = "[FATAL] No se pudo asignar una Provisión al Abono. Por favor, avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);

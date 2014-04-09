@@ -468,7 +468,7 @@ public class GestorListaComunidades implements Serializable
 	}
 
 	public void setsNUDCOM(String sNUDCOM) {
-		this.sNUDCOM = sNUDCOM.trim();
+		this.sNUDCOM = sNUDCOM.trim().toUpperCase();
 	}
 
 	public String getsNOMCOC() {
@@ -476,7 +476,7 @@ public class GestorListaComunidades implements Serializable
 	}
 
 	public void setsNOMCOC(String sNOMCOC) {
-		this.sNOMCOC = sNOMCOC;
+		this.sNOMCOC = sNOMCOC.trim();
 	}
 
 	public ActivoTabla getActivoseleccionado() {
@@ -524,7 +524,7 @@ public class GestorListaComunidades implements Serializable
 	}
 
 	public void setsNURCAT(String sNURCAT) {
-		this.sNURCAT = sNURCAT;
+		this.sNURCAT = sNURCAT.trim().toUpperCase();
 	}
 
 }

@@ -618,6 +618,22 @@ public final class Utils
 		
 		return sNuevoImporte;
 	}
+	
+    public static boolean esAlfanumerico (String sCampo) 
+    {
+    	boolean bAlfanumerico = false;
+    	
+		try
+		{
+			Integer.parseInt(sCampo);
+		}
+		catch(NumberFormatException nfe)
+		{
+			 bAlfanumerico = true;
+		}
+    	
+    	return bAlfanumerico;
+    }
 
 	public static String compruebaFecha(String sFecha)
 	{

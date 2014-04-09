@@ -144,7 +144,7 @@ public final class QMGastos
 				       + NuevoGasto.getBIAUTO() + "','"  
 				       + NuevoGasto.getFEAUFA() + "','"  
 				       + NuevoGasto.getValor_total() + "','"
-				       + sEstado + "','"
+				       + sEstado + "', "
 				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
 				       ")";
 			

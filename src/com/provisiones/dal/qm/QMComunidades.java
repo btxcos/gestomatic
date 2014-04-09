@@ -100,7 +100,7 @@ public final class QMComunidades
 				       + "AES_ENCRYPT('"+NuevaComunidad.getsNODCAD()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")), '"
 				       + NuevaComunidad.getsCuenta() + "','" 
 				       + NuevaComunidad.getsOBTEXC() + "','" 
-				       + ValoresDefecto.DEF_ALTA + "',"
+				       + ValoresDefecto.DEF_ALTA + "', "
 				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
 				       ")";
 			

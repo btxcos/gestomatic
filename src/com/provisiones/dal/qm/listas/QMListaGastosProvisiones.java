@@ -1469,6 +1469,7 @@ public final class QMListaGastosProvisiones
 			boolean bEncontrado = false;
 
 			//Condiciones de filtro
+			String sCondicionCOACES = filtro.getCOACES().isEmpty()?"":QMGastos.CAMPO2 + " = '" + filtro.getCOACES() + "' AND ";
 			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()?"":QMGastos.CAMPO3 + " = '" + filtro.getCOGRUG() + "' AND ";
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":QMGastos.CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":QMGastos.CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
@@ -1496,7 +1497,9 @@ public final class QMListaGastosProvisiones
 						   " FROM " 
 						   + QMGastos.TABLA + 
 						   " WHERE ("
+						   + QMGastos.CAMPO10 + " <> '"+ValoresDefecto.DEF_GASTO_ABONADO+"' AND "
 						   + QMGastos.CAMPO33 + " > 0 AND "
+						   + sCondicionCOACES
 						   + sCondicionCOGRUG
 						   + sCondicionCOTPGA
 						   + sCondicionCOSBGA

@@ -59,7 +59,7 @@ public class QMRegistroActivos implements Serializable
 				       + iCodCOACES + "','" 
 				       + sTimeStamp + "','"
 				       + sUsuario + "','"
-				       + sTimeStamp + "','"
+				       + sTimeStamp + "', "
 				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
 				       ")";
 			
