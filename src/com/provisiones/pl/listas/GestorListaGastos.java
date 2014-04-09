@@ -377,10 +377,24 @@ public class GestorListaGastos implements Serializable
 				
 				this.setTablaprovisiones(CLProvisiones.buscarProvisionesConFiltro(filtro));
 
-				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				
-				logger.info(sMsg);
+				if (getTablaprovisiones().size() == 0)
+				{
+					sMsg = "No se encontraron Provisiones con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaprovisiones().size() == 1)
+				{
+					sMsg = "Encontrada una Provisión relacionada.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontradas "+getTablaprovisiones().size()+" Provisiones relacionadas.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			}
 
 

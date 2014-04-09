@@ -497,9 +497,24 @@ public class GestorListaProvisiones implements Serializable
 
 					this.tablaprovisiones = CLProvisiones.buscarProvisionesComunidadConFiltro(liCodComunidad, filtro); 
 
-					sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					if (getTablaprovisiones().size() == 0)
+					{
+						sMsg = "No se encontraron Provisiones con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else if (getTablaprovisiones().size() == 1)
+					{
+						sMsg = "Encontrada una Provisión relacionada.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontradas "+getTablaprovisiones().size()+" Provisiones relacionadas.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
 				}
 				
 
@@ -568,9 +583,24 @@ public class GestorListaProvisiones implements Serializable
 
 				this.tablaprovisiones = CLProvisiones.buscarProvisionesConFiltro(filtro); 
 
-				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
+				if (getTablaprovisiones().size() == 0)
+				{
+					sMsg = "No se encontraron Provisiones con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (getTablaprovisiones().size() == 1)
+				{
+					sMsg = "Encontrada una Provisión relacionada.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontradas "+getTablaprovisiones().size()+" Provisiones relacionadas.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);			
@@ -599,6 +629,8 @@ public class GestorListaProvisiones implements Serializable
 			{
 				try
 				{
+					Integer.parseInt(sNUPROFB);
+					
 					if (CLProvisiones.existeProvision(sNUPROFB))
 					{
 						this.tablaprovisiones = CLProvisiones.buscarProvisionUnica(sNUPROFB); 
@@ -618,7 +650,7 @@ public class GestorListaProvisiones implements Serializable
 					}
 					else
 					{
-						sMsg = "La Provisión '"+sNUPROF+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+						sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
 						msg = Utils.pfmsgWarning(sMsg);
 						logger.warn(sMsg);
 						

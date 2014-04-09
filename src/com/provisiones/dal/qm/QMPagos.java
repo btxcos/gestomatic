@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Pago;
@@ -753,6 +754,83 @@ public class QMPagos
 				resultado = new ArrayList<Long>();
 
 				logger.error("ERROR ENVIADO:|"+btEnviado+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
+	
+	public static ArrayList<Long> buscarPagosEmitidosProvision(Connection conexion, String sNUPROF) 
+	{
+		ArrayList<Long> resultado = new ArrayList<Long>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO1  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO7 + " = "+ ValoresDefecto.PAGO_EMITIDO + " AND "
+					+ CAMPO3 + " IN (SELECT "
+					+ QMListaGastosProvisiones.CAMPO1 +
+					" FROM " 
+					+ QMListaGastosProvisiones.TABLA + 
+					" WHERE "
+					+ QMListaGastosProvisiones.CAMPO2 + " = '"+ sNUPROF +"'))"+
+					" ORDER BY " + CAMPO2 + " ASC";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						long liPagoID = rs.getLong(CAMPO1);
+						
+						resultado.add(liPagoID);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+liPagoID+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<Long>();
+
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 

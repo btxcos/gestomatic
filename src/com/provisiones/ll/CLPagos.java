@@ -51,9 +51,14 @@ public class CLPagos
 		return QMPagos.buscarActivosPagoEnvio(ConnectionManager.getDBConnection(),ValoresDefecto.PAGO_EMITIDO);
 	}
 	
-	public static ArrayList<Long> buscarPagosSinEnviar()
+	/*public static ArrayList<Long> buscarPagosSinEnviar()
 	{
 		return QMPagos.buscarPagoEnvio(ConnectionManager.getDBConnection(),ValoresDefecto.PAGO_EMITIDO);
+	}*/
+	
+	public static ArrayList<Long> buscarPagosSinEnviar(String sNUPROF)
+	{
+		return QMPagos.buscarPagosEmitidosProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
 	public static boolean estaPagado(long liCodGasto)

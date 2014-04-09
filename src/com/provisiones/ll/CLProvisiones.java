@@ -79,6 +79,11 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPorFiltro(ConnectionManager.getDBConnection(), filtro);
 	}
 	
+	public static ArrayList<ProvisionTabla> buscarProvisionesPagadasConFiltro(ProvisionTabla filtro)
+	{
+		return QMProvisiones.buscaProvisionesPagadasPorFiltro(ConnectionManager.getDBConnection(), filtro);
+	}
+	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasConFiltro(ProvisionTabla filtro)
 	{
 		filtro.setESTADO(ValoresDefecto.DEF_PROVISION_AUTORIZADA);

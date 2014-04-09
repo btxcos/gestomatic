@@ -1318,6 +1318,8 @@ public final class CLGastos
 								case A:
 									
 									String sEstadoGastoAbonado = QMGastos.getEstado(conexion,liCodGasto);
+									String sProvisionAbonada = QMListaGastosProvisiones.getProvisionDeGasto(conexion, liCodGasto);
+									logger.debug("sProvisionAbonada:|"+sProvisionAbonada+"|");
 									
 									if (sEstadoGastoAbonado.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
 									{
@@ -1328,6 +1330,10 @@ public final class CLGastos
 												if (QMProvisiones.setGastoNuevo(conexion, movimiento_revisado.getNUPROF(), movimiento_revisado.getValor_total()))
 												{
 													Gasto gasto = QMGastos.getGasto(conexion, liCodGasto);
+													
+													gasto.setValor_total();
+													
+													long liValorPrevio = gasto.getValor_total();
 													
 													long liIMNGAS = Long.parseLong(gasto.getYCOS02()+gasto.getIMNGAS())-Long.parseLong(movimiento_revisado.getIMNGAS());
 													logger.debug("liIMNGAS:|"+liIMNGAS+"|");
@@ -1344,6 +1350,7 @@ public final class CLGastos
 													long liIMIMGA = Long.parseLong(gasto.getIMIMGA())-Long.parseLong(movimiento_revisado.getIMIMGA());
 													logger.debug("liIMIMGA:|"+liIMIMGA+"|");
 																										
+													long liValorAbono = movimiento_revisado.getValor_total();
 													
 													gasto.setIMNGAS(liIMNGAS+"");
 													gasto.setIMRGAS(liIMRGAS+"");
@@ -1354,6 +1361,12 @@ public final class CLGastos
 													gasto.setIMIMGA(liIMIMGA+"");
 													
 													gasto.setValor_total();
+													
+													long liValorFinal = gasto.getValor_total();
+													
+													logger.debug("liValorPrevio:|"+liValorPrevio+"|");
+													logger.debug("liValorAbono:|"+liValorAbono+"|");
+													logger.debug("liValorFinal:|"+liValorFinal+"|");
 													
 													if (QMGastos.modImportes(conexion, gasto, liCodGasto))
 													{

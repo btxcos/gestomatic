@@ -1368,7 +1368,7 @@ public final class FileManager
         return new ResultadoEnvio(sNombreFichero,liEntradas);
 	}
 	
-	public static ResultadoEnvio escribirNorma34() 
+	public static ResultadoEnvio escribirNorma34(String sNUPROF) 
 	{
 		String sNombreFichero = "";
 		long liEntradas = 0;
@@ -1377,7 +1377,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<Long> resultpagos = CLPagos.buscarPagosSinEnviar();
+			ArrayList<Long> resultpagos = CLPagos.buscarPagosSinEnviar(sNUPROF);
 
 			if (resultpagos.size() > 0)
 			{
@@ -1396,7 +1396,8 @@ public final class FileManager
 		        	ficheroN34 = new FileWriter(sNombreFichero);
 		            pw = new PrintWriter(ficheroN34);
 		            
-		            Cuenta cuentaordenante = new Cuenta ("","",
+		            Cuenta cuentaordenante = new Cuenta ("",
+		            		"",
 		            		ValoresDefecto.DEF_ORDENANTE_ENTIDAD,
 		            		ValoresDefecto.DEF_ORDENANTE_OFICINA,
 		            		ValoresDefecto.DEF_ORDENANTE_DIGITO_CONTROL,
@@ -1423,12 +1424,17 @@ public final class FileManager
 		            
 		            for (int i = 0; i < resultpagos.size(); i++)
 		            {
+		            	logger.debug("resultpagos.get("+i+"):|"+resultpagos.get(i)+"|");
+		            	
 		            	bOK = QMPagos.setEnviado(conexion, resultpagos.get(i),ValoresDefecto.PAGO_ENVIADO);
 		            	
 		            	if (bOK)
 		            	{
-			            	
-			            	TransferenciaN34 transferencia = CLTransferencias.buscarTransferenciaN34(Long.parseLong(QMPagos.getCodOperacion(conexion, resultpagos.get(i))));
+		            		String sCodOperacion = QMPagos.getCodOperacion(conexion, resultpagos.get(i));
+		            		
+		            		logger.debug("sCodOperacion:|"+sCodOperacion+"|");
+		            		
+			            	TransferenciaN34 transferencia = CLTransferencias.buscarTransferenciaN34(Long.parseLong(sCodOperacion));
 			            	
 			            	ArrayList<String> campostransferencia = Parser.escribirTransferenciaN34(transferencia);
 				            
@@ -1438,6 +1444,8 @@ public final class FileManager
 				            }
 				            
 				            iLineas = iLineas + campostransferencia.size();
+				            
+				            logger.debug("transferencia.getsImporte():|"+transferencia.getsImporte()+"|");
 				            
 				            liSumaImportes = liSumaImportes + Long.parseLong(transferencia.getsImporte());
 		            	}

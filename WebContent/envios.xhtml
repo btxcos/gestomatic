@@ -29,7 +29,7 @@
 
 						<p:fieldset legend="Acciones" id="acciones">
 							<h:panelGrid columns="3" cellpadding="5">
-								<p:commandButton value="Revisar Todo" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos, form:NumTransferenciasN34, form:botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPendientes}"/>	
+								<p:commandButton value="Revisar Gastos y Asociaciones" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos, form:NumTransferenciasN34, form:botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPendientes}"/>	
 							</h:panelGrid>
 						</p:fieldset>
 
@@ -60,7 +60,20 @@
 						<h:panelGrid columns="1" cellpadding="5">
 
 							<p:fieldset legend="Pagos Pendientes" id="pagos">
-								<h:panelGrid columns="2" cellpadding="5">
+								<h:panelGrid columns="1" cellpadding="5">
+
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="NUPROF" value="Provisión: " />
+														<p:inputText id="NUPROF" value="#{GestorEnvios.sNUPROF}" size="9" maxlength="9">
+														</p:inputText>
+													<p:message for="NUPROF" display="icon"/>
+													<p:commandButton value="Revisar Movimientos" update="msgs, popup, NumTransferenciasN34, botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPagosPendientes}"/>
+												</h:panelGrid>
+											</p:panel>
+										<p:commandButton value="Buscar Provisión" update="NUPROF, form:provisiones, msgs, popup" oncomplete="dlgBuscarProvision.show()"/>		
+										</h:panelGrid>
 
 									<p:panel >
 										<h:panelGrid columns="3" cellpadding="5">
@@ -78,7 +91,7 @@
 										</h:panelGrid>
 									</p:panel>
 
-									<p:commandButton value="Revisar Movimientos" update="msgs, popup, NumTransferenciasN34, botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPagosPendientes}"/>	
+										
 
 								</h:panelGrid>
 							</p:fieldset>
@@ -167,6 +180,71 @@
 
 						</h:panelGrid>
 					</p:panel>
+					<p:dialog header="Buscar Provisiones: " widgetVar="dlgBuscarProvision" resizable="false">  
+									<p:fieldset legend="Criterios de Busqueda">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelBuscarProvision" >
+												<h:panelGrid columns="3" cellpadding="5">
+													<h:outputText for="FEPFON" value="Fecha de cierre: " />
+													<p:inputMask id="FEPFON" value="#{GestorEnvios.sFEPFON}" mask="99/99/9999" size="10" maxlength="8"/>
+													<p:message for="FEPFON" display="icon"/>
+												</h:panelGrid>
+											</p:panel>
+											
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, form:provisiones" actionListener="#{GestorEnvios.buscarProvisiones}" oncomplete="dlgTablaProvisiones.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscarProvision" actionListener="#{GestorEnvios.limpiarPlantillaProvision}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
+					<p:dialog header="Provisiones disponibles: " widgetVar="dlgTablaProvisiones" resizable="false">  
+    				
+							<p:contextMenu for="provisiones">  
+								<p:menuitem value="Seleccionar" update="form:NUPROF, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorEnvios.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide(); dlgBuscarProvision.hide();"/>  
+							</p:contextMenu>  
+									
+							<p:dataTable id="provisiones" var="provision" value="#{GestorEnvios.tablaprovisiones}" rowKey="#{provision.NUPROF}"  
+									            selection="#{GestorEnvios.provisionseleccionada}" selectionMode="single"  
+												paginator="true" paginatorPosition="bottom" rows="10"
+												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+												rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">									
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Número de Provisión"/>
+										</f:facet>
+										<h:outputText value="#{provision.NUPROF}"/>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Sociedad Patrimonial"/>
+										</f:facet>
+										<h:outputText value="#{provision.DCOSPAT}"/>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Tipo de Activos SAREB"/>
+										</f:facet>
+										<h:outputText value="#{provision.DTAS}"/>
+									</p:column>
+
+									<f:facet name="footer">
+										<h:commandLink>
+											<p:graphicImage value="recursos/excel.png"/>
+											<p:dataExporter type="xls" target="provisiones" fileName="listaprovisiones" encoding="ISO-8859-15"/>
+										</h:commandLink>
+									</f:facet>
+
+							</p:dataTable> 
+					</p:dialog>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
 						<p:graphicImage value="recursos/loadingBar.gif" />
 					</p:dialog> 
