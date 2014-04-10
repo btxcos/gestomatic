@@ -68,9 +68,14 @@ public class GestorListaGastos implements Serializable
 	private String sIMNGASFP = "";
 	private String sEstadoGastoFP = "";
 	
-	
+	//Filtro de provision
 	private String sFEPFON = "";
 	private String sEstadoProvision = "";
+	
+	//Filtro fecha limite
+	private String sFELIPG = "";
+	
+	
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -571,6 +576,12 @@ public class GestorListaGastos implements Serializable
 		logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
 	}
 	
+	public void hoyFELIPG (ActionEvent actionEvent)
+	{
+		this.setsFELIPG(Utils.fechaDeHoy(true));
+		logger.debug("sFELIPG:|"+sFELIPG+"|");
+	}
+	
 	public void buscarGastosActivo (ActionEvent actionEvent)
 	{
 
@@ -607,6 +618,7 @@ public class GestorListaGastos implements Serializable
 							Utils.compruebaFecha(sFEDEVEFA),   
 							"",   
 							"",  
+							"",
 							"",
 							"",
 							"");
@@ -698,10 +710,11 @@ public class GestorListaGastos implements Serializable
 							sCOSBGAFP,
 							"",  
 							"",   
-							"",  
+							"",
 							Utils.compruebaFecha(sFEDEVEFP),   
 							"",   
 							"",  
+							"",
 							"",
 							"",
 							"");
@@ -753,6 +766,58 @@ public class GestorListaGastos implements Serializable
 			}
 			
 			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+	}
+	
+	public void buscarGastosFechaLimite (ActionEvent actionEvent)
+	{
+
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+	    	this.setGastoseleccionado(null);
+	    	
+	    	String sFecha = Utils.compruebaFecha(sFELIPG);
+			
+			if (sFecha.equals("#"))
+			{
+				sMsg = "ERROR: La fecha proporcionada no es válida. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+				
+		    	this.setTablaprovisiones(null);
+			}
+			else
+			{
+				
+				this.setTablagastos(CLGastos.buscarGastosFechaLimite(sFecha));
+				
+				if (getTablagastos().size() == 0)
+				{
+					sMsg = "No se encontraron Gastos con los criterios solicitados.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+					
+				}
+				else if (getTablagastos().size() == 1)
+				{
+					sMsg = "Encontrado un Gasto relacionado.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "Encontrados "+getTablagastos().size()+" Gastos relacionados.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+			}
+
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		
@@ -1226,6 +1291,14 @@ public class GestorListaGastos implements Serializable
 
 	public void setsNURCAT(String sNURCAT) {
 		this.sNURCAT = sNURCAT.trim();
+	}
+
+	public String getsFELIPG() {
+		return sFELIPG;
+	}
+
+	public void setsFELIPG(String sFELIPG) {
+		this.sFELIPG = sFELIPG;
 	}
 	
 }

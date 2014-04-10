@@ -82,15 +82,27 @@
 								<p:fieldset legend="Provisión">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NUPROF" value="Provisión: " />
-														<p:inputText id="NUPROF" value="#{GestorListaGastos.sNUPROF}" size="9" maxlength="9">
-														</p:inputText>
-													<p:message for="NUPROF" display="icon"/>
+													<p:inputText id="NUPROF" value="#{GestorListaGastos.sNUPROF}" size="9" maxlength="9"/>
+
 													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" oncomplete="dlgFiltrarGastoProvision.show()"/>
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar Provisión" update="NUPROF, form:provisiones, msgs, popup" oncomplete="dlgBuscarProvision.show()"/>		
+										</h:panelGrid>
+									</p:fieldset>
+
+								<p:fieldset legend="Fecha límite de pago">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:panel >
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="FELIPG" value="Provisión: " />
+													<p:inputMask id="FELIPG" value="#{GestorListaGastos.sFELIPG}" mask="99/99/9999" size="10" maxlength="8"/>
+													<p:commandButton icon="ui-icon-clock" update="FELIPG" actionListener="#{GestorListaGastos.hoyFELIPG}"/>
+													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastosFechaLimite}"/>
+												</h:panelGrid>
+											</p:panel>
 										</h:panelGrid>
 									</p:fieldset>
 
@@ -144,7 +156,7 @@
 
 														<p:column>
 															<f:facet name="header">
-																<h:outputText value="Fecha de Devengo" />
+																<h:outputText value="Devengo" />
 															</f:facet>
 															<h:outputText value="#{gasto.FEDEVE}" />
 														</p:column>
@@ -154,6 +166,13 @@
 																<h:outputText value="Estado" />
 															</f:facet>
 															<h:outputText value="#{gasto.ESTADO}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Límite de Pago" />
+															</f:facet>
+															<h:outputText value="#{gasto.FELIPG}" />
 														</p:column>
 
 														<p:column>

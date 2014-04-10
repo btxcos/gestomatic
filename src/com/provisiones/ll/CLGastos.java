@@ -202,6 +202,11 @@ public final class CLGastos
 		return QMGastos.buscaGastosPorActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
+	public static ArrayList<GastoTabla> buscarGastosFechaLimite(String sFELIPG)
+	{
+		return QMGastos.buscaGastosPorFechaLimite(ConnectionManager.getDBConnection(),sFELIPG);
+	}
+	
 	public static ArrayList<GastoTabla> buscarGastosValidadosActivo(int iCodCOACES)
 	{
 		return QMListaGastos.buscaGastosValidadosActivo(ConnectionManager.getDBConnection(),iCodCOACES);

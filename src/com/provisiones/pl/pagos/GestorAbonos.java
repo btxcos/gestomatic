@@ -754,7 +754,8 @@ public class GestorAbonos implements Serializable
 							"",  
 							"",
 							"",
-							"");//TODO meter estado en el filtro
+							"",//TODO meter estado en el filtro
+							"");
 					
 					
 					
@@ -839,7 +840,8 @@ public class GestorAbonos implements Serializable
 							"",  
 							"",
 							"",
-							"");//TODO meter estado en el filtro
+							"",//TODO meter estado en el filtro
+							"");
 					
 					this.setTablagastosprovision(CLGastos.buscarGastosAbonablesProvisionConFiltroEstado(filtro,sEstadoBP));
 					

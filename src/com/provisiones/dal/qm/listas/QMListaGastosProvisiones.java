@@ -1106,6 +1106,7 @@ public final class QMListaGastosProvisiones
 						   + QMGastos.CAMPO5 + ","
 						   + QMGastos.CAMPO6 + ","
 						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO9 + ","
 						   + QMGastos.CAMPO10 + ","
 						   + QMGastos.CAMPO14 + ","
 						   + QMGastos.CAMPO15 + ","
@@ -1156,6 +1157,7 @@ public final class QMListaGastosProvisiones
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						//String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -1172,7 +1174,8 @@ public final class QMListaGastosProvisiones
 								sDCOSIGA,
 								sIMNGAS,
 								QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34)),
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -1225,6 +1228,7 @@ public final class QMListaGastosProvisiones
 						   + QMGastos.CAMPO5 + ","
 						   + QMGastos.CAMPO6 + ","
 						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO9 + ","
 						   + QMGastos.CAMPO10 + ","
 						   + QMGastos.CAMPO14 + ","
 						   + QMGastos.CAMPO15 + ","
@@ -1279,6 +1283,7 @@ public final class QMListaGastosProvisiones
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -1295,7 +1300,8 @@ public final class QMListaGastosProvisiones
 								sDCOSIGA,
 								sIMNGAS,
 								sEstado,
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -1355,6 +1361,7 @@ public final class QMListaGastosProvisiones
 						   + QMGastos.CAMPO5 + ","
 						   + QMGastos.CAMPO6 + ","
 						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO9 + ","
 						   + QMGastos.CAMPO10 + ","
 						   + QMGastos.CAMPO14 + ","
 						   + QMGastos.CAMPO15 + ","
@@ -1410,6 +1417,7 @@ public final class QMListaGastosProvisiones
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						//String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -1426,7 +1434,8 @@ public final class QMListaGastosProvisiones
 								sDCOSIGA,
 								sIMNGAS,
 								QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34)),
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -1488,6 +1497,7 @@ public final class QMListaGastosProvisiones
 						   + QMGastos.CAMPO5 + ","
 						   + QMGastos.CAMPO6 + ","
 						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO9 + ","
 						   + QMGastos.CAMPO10 + ","
 						   + QMGastos.CAMPO14 + ","
 						   + QMGastos.CAMPO15 + ","
@@ -1545,6 +1555,7 @@ public final class QMListaGastosProvisiones
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						//String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -1561,7 +1572,8 @@ public final class QMListaGastosProvisiones
 								sDCOSIGA,
 								sIMNGAS,
 								QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34)),
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -1613,6 +1625,7 @@ public final class QMListaGastosProvisiones
 						   + QMGastos.CAMPO5 + ","
 						   + QMGastos.CAMPO6 + ","
 						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO9 + ","
 						   + QMGastos.CAMPO10 + ","
 						   + QMGastos.CAMPO14 + ","
 						   + QMGastos.CAMPO15 + ","
@@ -1670,6 +1683,7 @@ public final class QMListaGastosProvisiones
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -1686,7 +1700,8 @@ public final class QMListaGastosProvisiones
 								sDCOSIGA,
 								sIMNGAS,
 								sEstado,
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -1741,6 +1756,7 @@ public final class QMListaGastosProvisiones
 						   + QMGastos.CAMPO5 + ","
 						   + QMGastos.CAMPO6 + ","
 						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO9 + ","
 						   + QMGastos.CAMPO10 + ","
 						   + QMGastos.CAMPO14 + ","
 						   + QMGastos.CAMPO15 + ","
@@ -1790,6 +1806,7 @@ public final class QMListaGastosProvisiones
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -1806,7 +1823,8 @@ public final class QMListaGastosProvisiones
 								sDCOSIGA,
 								sIMNGAS,
 								sEstado,
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						

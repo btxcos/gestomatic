@@ -19,13 +19,15 @@ public class GastoTabla
 	private String IMNGAS = "";
 	private String ESTADO = "";
 	private String FEEPAI = "";
+	private String FELIPG = "";
 
 	//Constructor de clase
 	
 	public GastoTabla(String sGastoID, String nUPROF, String cOACES,
 			String cOGRUG, String cOTPGA, String cOSBGA, String dCOSBGA,
 			String pTPAGO, String dPTPAGO, String fEDEVE, String cOSIGA,
-			String dCOSIGA, String iMNGAS, String eSTADO, String fEEPAI) {
+			String dCOSIGA, String iMNGAS, String eSTADO, String fEEPAI,
+			String fELIPG) {
 		super();
 		this.sGastoID = sGastoID;
 		NUPROF = nUPROF;
@@ -42,6 +44,7 @@ public class GastoTabla
 		IMNGAS = iMNGAS;
 		ESTADO = eSTADO;
 		FEEPAI = fEEPAI;
+		FELIPG = fELIPG;
 	}
 	
 	//Métodos de acceso
@@ -164,6 +167,14 @@ public class GastoTabla
 
 	public void setFEEPAI(String fEEPAI) {
 		FEEPAI = fEEPAI;
+	}
+
+	public String getFELIPG() {
+		return FELIPG;
+	}
+
+	public void setFELIPG(String fELIPG) {
+		FELIPG = fELIPG;
 	}
 
 }

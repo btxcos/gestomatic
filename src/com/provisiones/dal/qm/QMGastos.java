@@ -1976,15 +1976,6 @@ public final class QMGastos
 			ResultSet rs = null;
 
 			boolean bEncontrado = false;
-
-			String sCOACES = "";
-			String sCOPOIN = "";
-			String sNOMUIN = "";
-			String sNOPRAC = "";
-			String sNOVIAS = "";
-			String sNUPIAC = "";
-			String sNUPOAC = "";
-			String sNUPUAC = "";
 			
 			String sCondicionEstado = "";
 			
@@ -2046,16 +2037,25 @@ public final class QMGastos
 					{
 						bEncontrado = true;
 						
-						sCOACES = rs.getString(QMActivos.CAMPO1);
-						sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								"");
 						
 						resultado.add(activoencontrado);
 						
@@ -2100,22 +2100,6 @@ public final class QMGastos
 
 			boolean bEncontrado = false;
 			
-			String sGastoID = "";
-			String sNUPROF = "";
-			String sCOACES = "";
-			String sCOGRUG = "";
-			String sCOTPGA = "";
-			String sCOSBGA = "";
-			String sDCOSBGA = "";
-			String sPTPAGO = "";
-			String sDPTPAGO = "";
-			String sFEDEVE = "";
-			String sCOSIGA = "";
-			String sDCOSIGA = "";
-			String sIMNGAS = "";
-			String sEstado = "";
-			String sFEEPAI = "";
-			
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
@@ -2126,6 +2110,7 @@ public final class QMGastos
 					+ CAMPO5 + ","
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
+					+ CAMPO9 + ","
 					+ CAMPO10 + ","
 					+ CAMPO14 + ","
 					+ CAMPO15 + ","
@@ -2157,21 +2142,22 @@ public final class QMGastos
 					{
 						bEncontrado = true;
 						
-						sGastoID = rs.getString(QMGastos.CAMPO1);
-						sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
-						sCOACES  = rs.getString(QMGastos.CAMPO2);
-						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
-						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
-						sCOSBGA  = rs.getString(QMGastos.CAMPO5);
-						sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
-						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
-						sDPTPAGO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
-						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
-						sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
-						sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
-						sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sGastoID = rs.getString(QMGastos.CAMPO1);
+						String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
+						String sCOACES  = rs.getString(QMGastos.CAMPO2);
+						String sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						String sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						String sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						String sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						String sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						String sDPTPAGO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						String sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						String sCOSIGA  = rs.getString(QMGastos.CAMPO10);
+						String sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
+						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -2188,7 +2174,8 @@ public final class QMGastos
 								sDCOSIGA,
 								sIMNGAS,
 								sEstado,
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -2232,22 +2219,6 @@ public final class QMGastos
 
 			boolean bEncontrado = false;
 			
-			String sGastoID = "";
-			String sNUPROF = "";
-			String sCOACES = "";
-			String sCOGRUG = "";
-			String sCOTPGA = "";
-			String sCOSBGA = "";
-			String sDCOSBGA = "";
-			String sPTPAGO = "";
-			String sDPTPAGO = "";
-			String sFEDEVE = "";
-			String sCOSIGA = "";
-			String sDCOSIGA = "";
-			String sIMNGAS = "";
-			String sEstado = "";
-			String sFEEPAI = "";
-			
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
@@ -2258,6 +2229,7 @@ public final class QMGastos
 					+ CAMPO5 + ","
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
+					+ CAMPO9 + ","
 					+ CAMPO10 + ","
 					+ CAMPO14 + ","
 					+ CAMPO15 + ","
@@ -2288,21 +2260,22 @@ public final class QMGastos
 					{
 						bEncontrado = true;
 						
-						sGastoID = rs.getString(QMGastos.CAMPO1);
-						sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
-						sCOACES  = rs.getString(QMGastos.CAMPO2);
-						sCOGRUG  = rs.getString(QMGastos.CAMPO3);
-						sCOTPGA  = rs.getString(QMGastos.CAMPO4);
-						sCOSBGA  = rs.getString(QMGastos.CAMPO5);
-						sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
-						sPTPAGO  = rs.getString(QMGastos.CAMPO6);
-						sDPTPAGO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
-						sCOSIGA  = rs.getString(QMGastos.CAMPO10);
-						sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-						sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
-						sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
-						sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sGastoID = rs.getString(QMGastos.CAMPO1);
+						String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
+						String sCOACES  = rs.getString(QMGastos.CAMPO2);
+						String sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						String sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						String sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						String sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						String sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						String sDPTPAGO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						String sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						String sCOSIGA  = rs.getString(QMGastos.CAMPO10);
+						String sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
+						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -2319,7 +2292,8 @@ public final class QMGastos
 								sDCOSIGA,
 								sIMNGAS,
 								sEstado,
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -2350,6 +2324,131 @@ public final class QMGastos
 		return resultado;
 	}
 	
+	public static ArrayList<GastoTabla> buscaGastosPorFechaLimite(Connection conexion, String sFELIPG)
+	{
+		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			String sCondicionFELIPG = sFELIPG.isEmpty()? "": CAMPO9 + " >= '"+sFELIPG+"' AND ";
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+					+ CAMPO1 + "," 	
+					+ CAMPO2 + ","
+					+ CAMPO3 + ","
+					+ CAMPO4 + ","
+					+ CAMPO5 + ","
+					+ CAMPO6 + ","
+					+ CAMPO7 + ","
+					+ CAMPO9 + ","
+					+ CAMPO10 + ","
+					+ CAMPO14 + ","
+					+ CAMPO15 + ","
+					+ CAMPO16 + ","
+					+ CAMPO34 +
+
+					" FROM " 
+					+ TABLA + 
+					" WHERE ("
+					+ sCondicionFELIPG
+					+ CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO + "','" + ValoresDefecto.DEF_GASTO_AUTORIZADO + "'))"+
+					" ORDER BY "+CAMPO9;
+	   
+						   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sGastoID = rs.getString(QMGastos.CAMPO1);
+						String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
+						String sCOACES  = rs.getString(QMGastos.CAMPO2);
+						String sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						String sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						String sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						String sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						String sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						String sDPTPAGO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						String sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						String sCOSIGA  = rs.getString(QMGastos.CAMPO10);
+						String sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
+						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						
+						
+						
+						GastoTabla gastoencontrado = new GastoTabla(
+								sGastoID,
+								sNUPROF,
+								sCOACES,
+								sCOGRUG,
+								sCOTPGA,
+								sCOSBGA,
+								sDCOSBGA,
+								sPTPAGO,
+								sDPTPAGO,
+								sFEDEVE,
+								sCOSIGA,
+								sDCOSIGA,
+								sIMNGAS,
+								sEstado,
+								sFEEPAI,
+								Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9)));
+						
+						resultado.add(gastoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO9+":|"+sFELIPG+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<GastoTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return resultado;
+	}
+	
+	
 	public static ArrayList<GastoTabla> buscaGastosPorFiltro(Connection conexion, GastoTabla filtro)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
@@ -2373,6 +2472,7 @@ public final class QMGastos
 					+ CAMPO5 + ","
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
+					+ CAMPO9 + ","
 					+ CAMPO10 + ","
 					+ CAMPO14 + ","
 					+ CAMPO15 + ","
@@ -2422,6 +2522,7 @@ public final class QMGastos
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -2438,7 +2539,8 @@ public final class QMGastos
 								sDCOSIGA,
 								sIMNGAS,
 								sEstado,
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -2497,6 +2599,7 @@ public final class QMGastos
 					+ CAMPO5 + ","
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
+					+ CAMPO9 + ","
 					+ CAMPO10 + ","
 					+ CAMPO14 + ","
 					+ CAMPO15 + ","
@@ -2547,6 +2650,8 @@ public final class QMGastos
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						//sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
+						
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -2563,7 +2668,8 @@ public final class QMGastos
 								sDCOSIGA,
 								sIMNGAS,
 								QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34)),
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						
@@ -2624,6 +2730,7 @@ public final class QMGastos
 					+ CAMPO5 + ","
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
+					+ CAMPO9 + ","
 					+ CAMPO10 + ","
 					+ CAMPO14 + ","
 					+ CAMPO15 + ","
@@ -2677,6 +2784,7 @@ public final class QMGastos
 						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
 						//String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
@@ -2693,7 +2801,8 @@ public final class QMGastos
 								sDCOSIGA,
 								sIMNGAS,
 								QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34)),
-								sFEEPAI);
+								sFEEPAI,
+								sFELIPG);
 						
 						resultado.add(gastoencontrado);
 						

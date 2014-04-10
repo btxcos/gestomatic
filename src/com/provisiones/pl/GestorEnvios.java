@@ -963,10 +963,7 @@ public class GestorEnvios implements Serializable
 			} 
 			catch (FileNotFoundException e) 
 			{
-				
-				
 	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
-	        	
 	    		msg = Utils.pfmsgError(sMsg);
 	    		logger.error(sMsg);
 			}
