@@ -784,41 +784,50 @@ public class GestorListaGastos implements Serializable
 			
 	    	this.setGastoseleccionado(null);
 	    	
-	    	String sFecha = Utils.compruebaFecha(sFELIPG);
-			
-			if (sFecha.equals("#"))
-			{
-				sMsg = "ERROR: La fecha proporcionada no es válida. Por favor, revise los datos.";
+	    	if (sFELIPG.isEmpty())
+	    	{
+				sMsg = "ERROR: Debe informar la fecha de vencimiento para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+	    	}
+	    	else
+	    	{
+		    	String sFecha = Utils.compruebaFecha(sFELIPG);
 				
-		    	this.setTablaprovisiones(null);
-			}
-			else
-			{
-				
-				this.setTablagastos(CLGastos.buscarGastosFechaLimite(sFecha));
-				
-				if (getTablagastos().size() == 0)
+				if (sFecha.equals("#"))
 				{
-					sMsg = "No se encontraron Gastos con los criterios solicitados.";
-					msg = Utils.pfmsgWarning(sMsg);
-					logger.warn(sMsg);
+					sMsg = "ERROR: La fecha proporcionada no es válida. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
 					
-				}
-				else if (getTablagastos().size() == 1)
-				{
-					sMsg = "Encontrado un Gasto relacionado.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+			    	this.setTablaprovisiones(null);
 				}
 				else
 				{
-					sMsg = "Encontrados "+getTablagastos().size()+" Gastos relacionados.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					
+					this.setTablagastos(CLGastos.buscarGastosFechaLimite(sFecha));
+					
+					if (getTablagastos().size() == 0)
+					{
+						sMsg = "No se encontraron Gastos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+						
+					}
+					else if (getTablagastos().size() == 1)
+					{
+						sMsg = "Encontrado un Gasto relacionado.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontrados "+getTablagastos().size()+" Gastos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
 				}
-			}
+	    	}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}

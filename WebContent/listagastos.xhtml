@@ -97,7 +97,7 @@
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
 												<h:panelGrid columns="4" cellpadding="5">
-													<h:outputText for="FELIPG" value="Provisión: " />
+													<h:outputText for="FELIPG" value="Fecha de vencimiento: " />
 													<p:inputMask id="FELIPG" value="#{GestorListaGastos.sFELIPG}" mask="99/99/9999" size="10" maxlength="8"/>
 													<p:commandButton icon="ui-icon-clock" update="FELIPG" actionListener="#{GestorListaGastos.hoyFELIPG}"/>
 													<p:commandButton value="Buscar Gastos" update="gastos, msgs, popup" actionListener="#{GestorListaGastos.buscarGastosFechaLimite}"/>
