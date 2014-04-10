@@ -2614,7 +2614,8 @@ public final class QMGastos
 				   + sCondicionCOSBGA
 				   + sCondicionFEDEVE
 				   + sCondicionEstado
-	 			   + CAMPO2 + " = '" + filtro.getCOACES() + "')";
+	 			   + CAMPO2 + " = '" + filtro.getCOACES() + "')"+
+	 			   " ORDER BY "+ CAMPO9;
 						   
 			
 			logger.debug(sQuery);

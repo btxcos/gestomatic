@@ -1383,7 +1383,8 @@ public final class QMListaGastosProvisiones
 						   " FROM " 
 						   + TABLA + 
 						   " WHERE " 
-						   + CAMPO2 + " = '"+ filtro.getNUPROF() + "'))";					   
+						   + CAMPO2 + " = '"+ filtro.getNUPROF() + "'))"+
+						   " ORDER BY "+ QMGastos.CAMPO9;
 						   
 			
 			logger.debug(sQuery);

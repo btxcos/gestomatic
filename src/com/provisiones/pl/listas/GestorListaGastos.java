@@ -251,6 +251,8 @@ public class GestorListaGastos implements Serializable
     	borrarCamposGasto();
     	borrarCamposActivo();
     	borrarCamposProvision();
+    	
+    	this.sFELIPG= ""; 
     }
     
 	public void buscarActivos (ActionEvent actionEvent)
