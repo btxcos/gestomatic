@@ -6,7 +6,6 @@ import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
-//import com.provisiones.dal.qm.QMComunidades;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
@@ -1402,7 +1401,6 @@ public final class QMListaComunidadesActivos
 		return resultado;
 	}
 
-	
 	public static ArrayList<ComunidadTabla> buscaComunidadActivo(Connection conexion, int iCodCOACES)
 	{
 		//Sin uso

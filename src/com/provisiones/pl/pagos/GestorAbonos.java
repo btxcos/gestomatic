@@ -28,7 +28,7 @@ import com.provisiones.types.tablas.ProvisionTabla;
 
 public class GestorAbonos implements Serializable 
 {
-	private static final long serialVersionUID = 1475023133671386650L;
+	private static final long serialVersionUID = -6798102863183547873L;
 
 	private static Logger logger = LoggerFactory.getLogger(GestorAbonos.class.getName());
 
@@ -187,7 +187,7 @@ public class GestorAbonos implements Serializable
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorPagosSimple...");
+			logger.debug("Iniciando GestorAbonos...");
 
 			tiposcogrugHM.put("Compraventa",      "1");
 			tiposcogrugHM.put("Pendientes",       "2");

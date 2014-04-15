@@ -48,7 +48,22 @@ public final class CLProvisiones
 	{
 		return Utils.recuperaFecha(Integer.toString(QMListaGastosProvisiones.getPrimeraFechaLimitePagoProvision(ConnectionManager.getDBConnection(),sNUPROF)));
 	}
-
+	
+	public static String buscarUltimaFechaDevengo(String sNUPROF)
+	{
+		return Utils.recuperaFecha(Integer.toString(QMListaGastosProvisiones.getUltimaFechaDevengoProvision(ConnectionManager.getDBConnection(),sNUPROF)));
+	}
+		
+	public static String buscarUltimaFechaDevengoComunidad(String sNUPROF)
+	{
+		return Utils.recuperaFecha(Integer.toString(QMListaGastosProvisiones.getUltimaFechaDevengoProvisionComunidad(ConnectionManager.getDBConnection(),sNUPROF)));
+	}
+	
+	public static boolean tieneComunidad(String sNUPROF)
+	{
+		return QMProvisiones.existeComunidadEnProvision(ConnectionManager.getDBConnection(),sNUPROF);
+	}
+	
 	public static ArrayList<String> buscarProvisionesCerradasPendientes()
 	{
 		return QMProvisiones.getProvisionesSinAutorizarPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PENDIENTE);
@@ -62,6 +77,11 @@ public final class CLProvisiones
 	public static ArrayList<ProvisionTabla> buscarProvisionesComunidadConFiltro(long liCodComunidad, ProvisionTabla filtro)
 	{
 		return QMProvisiones.buscaProvisionesComunidadPorFiltro(ConnectionManager.getDBConnection(),liCodComunidad, filtro);
+	}
+	
+	public static ArrayList<ProvisionTabla> buscarProvisionesComunidadAutorizadasConFiltro(ProvisionTabla filtro)
+	{
+		return QMProvisiones.buscaProvisionesComunidadGastoAutorizadoPorFiltro(ConnectionManager.getDBConnection(), filtro);
 	}
 	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAbiertas()
@@ -94,12 +114,6 @@ public final class CLProvisiones
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasActivo(int iCOACES)
 	{
 		return QMProvisiones.buscaProvisionesAutorizadasPorActivo(ConnectionManager.getDBConnection(),iCOACES);
-	}
-	
-	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasComunidad(int iCOACES)
-	{
-		//TODO revisar
-		return QMProvisiones.buscaProvisionesPorEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 	}
 	
 	public static ArrayList<ProvisionTabla> buscarProvisionUnica(String sNUMPROF)

@@ -1418,6 +1418,78 @@ public final class QMGastos
 		return sCOSIGA;
 	}
 	
+	public static String getFEDEVE(Connection conexion, long liGastoID)
+	{
+		String sFEDEVE = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO7 + 
+					" FROM "
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1  + " = '"+ liGastoID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sFEDEVE = rs.getString(CAMPO7);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO7+":|"+sFEDEVE+"|");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				sFEDEVE = "";
+
+				logger.error("ERROR GASTO:|"+liGastoID);
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sFEDEVE;
+	}
+	
 	public static boolean setEstado(Connection conexion, long liGastoID, String sEstado)
 	{
 		boolean bSalida = false;
@@ -2604,6 +2676,7 @@ public final class QMGastos
 					+ CAMPO14 + ","
 					+ CAMPO15 + ","
 					+ CAMPO16 + ","
+					+ CAMPO33 + ","
 					+ CAMPO34 +		
 
 				   " FROM " 
@@ -2648,7 +2721,9 @@ public final class QMGastos
 						String sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
 						String sCOSIGA  = rs.getString(QMGastos.CAMPO10);
 						String sDCOSIGA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
-						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						//String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						
+						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO33).startsWith("-"),rs.getString(QMGastos.CAMPO33));
 						//sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
 						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));

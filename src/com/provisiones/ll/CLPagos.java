@@ -95,7 +95,11 @@ public class CLPagos
 				//ERROR 003 - La fecha de pago no es correcta.
 				iCodigo = -3;
 			}
-					
+			else if (Long.parseLong(QMGastos.getFEDEVE(conexion, liCodGasto)) > Long.parseLong(pago.getsFEPGPR()))
+			{
+				//ERROR 004 - Fecha de devengo anterior a la fecha de pago.
+				iCodigo = -4;
+			}					
 			
 		}
 		

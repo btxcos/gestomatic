@@ -59,6 +59,7 @@ public class GestorPagosProvision implements Serializable
 
 	//Fecha de pago
 	private String sFEPGPR = "";
+	private String sFechaUltimoDevengo = "";
 	
 	//Cuenta de pago
 	private String sPais = "";	
@@ -151,6 +152,8 @@ public class GestorPagosProvision implements Serializable
 	public void borrarCamposPago()
 	{
     	this.sFEPGPR = "";
+    	this.sFechaUltimoDevengo = "";
+
     	borrarCamposCuenta();
 	}
 	
@@ -325,8 +328,13 @@ public class GestorPagosProvision implements Serializable
 				    	logger.debug("sValorPorPagar:|"+sValorPorPagar+"|");
 				    	
 				    	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
-				    	
+
 						borrarCamposPago();
+				    	
+				    	this.sFechaUltimoDevengo = CLProvisiones.buscarUltimaFechaDevengo(sNUPROF);
+				    	
+				    	logger.debug("sFechaUltimoDevengo:|"+sFechaUltimoDevengo+"|");
+				    	
 						
 						sMsg = "Provisión '"+sNUPROF+"' cargada.";
 						msg = Utils.pfmsgInfo(sMsg);
@@ -431,6 +439,12 @@ public class GestorPagosProvision implements Serializable
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
 				}
+				else if (Long.parseLong(Utils.compruebaFecha(sFechaUltimoDevengo)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
+				{
+					sMsg = "ERROR: La fecha de Pago no puede ser inferior a la de Devengo. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				else
 				{
 					if (sNUCCEN.equals("0000") ||
@@ -479,6 +493,12 @@ public class GestorPagosProvision implements Serializable
 
 					case -3: //Error 003 - La fecha de pago no es correcta
 						sMsg = "ERROR:004 - La fecha de pago no es correcta. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -4: //Error 004 - Fecha de devengo anterior a la fecha de pago.
+						sMsg = "ERROR:004 - La fecha de pago no puede ser inferior a la de  devengo. Por favor, revise los datos.";
 						msg = Utils.pfmsgError(sMsg);
 						logger.error(sMsg);
 						break;
@@ -703,6 +723,14 @@ public class GestorPagosProvision implements Serializable
 
 	public void setsFEPGPR(String sFEPGPR) {
 		this.sFEPGPR = sFEPGPR;
+	}
+
+	public String getsFechaUltimoDevengo() {
+		return sFechaUltimoDevengo;
+	}
+
+	public void setsFechaUltimoDevengo(String sFechaUltimoDevengo) {
+		this.sFechaUltimoDevengo = sFechaUltimoDevengo;
 	}
 
 	public String getsPais() {

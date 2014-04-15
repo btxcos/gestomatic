@@ -73,7 +73,7 @@
 													<h:outputText for="NUPROFB" value="Provisión: " />
 													<p:inputText id="NUPROFB" value="#{GestorPagosProvision.sNUPROFB}" size="10" maxlength="9"/>
 
-													<p:commandButton value="Cargar" update="provision, msgs, popup" actionListener="#{GestorPagosProvision.cargarProvision}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
+													<p:commandButton value="Cargar" update="provision, FechaUltimoDevengo, msgs, popup" actionListener="#{GestorPagosProvision.cargarProvision}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar Provisión" update="form:provisiones" oncomplete="dlgBuscarProvision.show()"/>
@@ -173,11 +173,15 @@
 										<h:panelGrid columns="1" cellpadding="5">
 
 										<p:panel>
-											<h:panelGrid columns="3" cellpadding="5">
+											<h:panelGrid columns="5" cellpadding="5">
 											<h:outputText for="FEPGPR" value="Fecha de Pago: " />
 											<p:inputMask id="FEPGPR" value="#{GestorPagosProvision.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
 
 											<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorPagosProvision.hoyFEPGPR}"/>
+
+											<h:outputText for="FechaUltimoDevengo" value="Fecha del último devengo: " />
+											<p:inputText id="FechaUltimoDevengo" value="#{GestorPagosProvision.sFechaUltimoDevengo}" size="9" disabled="true"/>
+
 											</h:panelGrid>
 									  </p:panel>
 

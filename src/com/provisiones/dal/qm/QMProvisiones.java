@@ -2192,6 +2192,115 @@ public final class QMProvisiones
 		return resultado;
 	}
 	
+	public static ArrayList<ProvisionTabla> buscaProvisionesComunidadAutorizadasPorFecha(Connection conexion, String sFEPFON) 
+	{
+		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			String sCondicion = (sFEPFON.equals("0")) ? "" : CAMPO6 + " = '"+ sFEPFON + "' AND ";
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + ","
+					+ CAMPO2 + ","
+					+ CAMPO3 + ","
+					+ CAMPO4 + ","
+					+ CAMPO5 + ","
+					//+ CAMPO6 + ","
+					+ CAMPO7 + ","
+					+ CAMPO8 + ","
+					+ CAMPO16 + 
+					" FROM " + TABLA + 
+					" WHERE ( " 
+					+ sCondicion
+					+ CAMPO1 + " <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+ "' AND "
+					+ CAMPO15 + " = '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+ "' AND "
+					+ CAMPO12 +" <> '"+ ValoresDefecto.CAMPO_NUME_SIN_INFORMAR +"') ";
+
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						String sNUPROF =  rs.getString(CAMPO1);
+						String sCOSPAT =  rs.getString(CAMPO2);
+						String sDCOSPAT =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
+						String sTAS =  rs.getString(CAMPO3);
+						String sDTAS =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
+						String sCOGRUG =  rs.getString(CAMPO4);
+						String sDCOGRUG =   QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOGRUG,QMCodigosControl.ICOGRUG,sCOGRUG);
+						String sCOTPGA =   rs.getString(CAMPO5);
+						String sDCOTPGA =   QMCodigosControl.getDesCOTPGA(conexion,sCOGRUG, sCOTPGA);
+						//String sFEPFON =   rs.getString(CAMPO6);
+						String sGASTOS =  rs.getString(CAMPO7);
+						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO16));
+
+						ProvisionTabla provisionencontrada = new ProvisionTabla(
+								sNUPROF,
+								sCOSPAT,
+								sDCOSPAT,
+								sTAS,
+								sDTAS,
+								sCOGRUG,
+								sDCOGRUG,
+								sCOTPGA,
+								sDCOTPGA,
+								sFEPFON,
+								sVALOR,
+								sGASTOS,
+								sESTADO);
+						
+						resultado.add(provisionencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ProvisionTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
+	
 	public static ArrayList<ProvisionTabla> buscaProvisionesAbonablesPorFecha(Connection conexion, String sFEPFON) 
 	{
 		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
@@ -2472,9 +2581,217 @@ public final class QMProvisiones
 					" IN (SELECT "
 					+  QMListaComunidadesActivos.CAMPO1 + 
 					" FROM " 
-					+ QMListaComunidadesActivos.TABLA + 
-					" WHERE " 
+					+ QMListaComunidadesActivos.TABLA 
+					+ " WHERE " 
 					+ QMListaComunidadesActivos.CAMPO2 + " = "+ liCodComunidad + "))))))";
+					
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						
+						
+						String sNUPROF =  rs.getString(CAMPO1);
+						String sCOSPAT =  rs.getString(CAMPO2);
+						String sDCOSPAT =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
+						String sTAS =  rs.getString(CAMPO3);
+						String sDTAS =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
+						String sCOGRUG =  rs.getString(CAMPO4);
+						String sDCOGRUG =   QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOGRUG,QMCodigosControl.ICOGRUG,sCOGRUG);
+						String sCOTPGA =   rs.getString(CAMPO5);
+						String sDCOTPGA =   QMCodigosControl.getDesCOTPGA(conexion,sCOGRUG, sCOTPGA);
+						String sFEPFON =   rs.getString(CAMPO6);
+						String sGASTOS =  rs.getString(CAMPO7);
+						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO16));
+
+						ProvisionTabla provisionencontrada = new ProvisionTabla(
+								sNUPROF,
+								sCOSPAT,
+								sDCOSPAT,
+								sTAS,
+								sDTAS,
+								sCOGRUG,
+								sDCOGRUG,
+								sCOTPGA,
+								sDCOTPGA,
+								sFEPFON,
+								sVALOR,
+								sGASTOS,
+								sESTADO);
+						
+						resultado.add(provisionencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ProvisionTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
+	
+	public static boolean existeComunidadEnProvision(Connection conexion, String sNUPROF) 
+	{
+		boolean bEncontrado = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO2 + 
+					" FROM " + TABLA + 
+					" WHERE ( "
+					+ CAMPO1 + 
+					" IN (SELECT "
+					+ QMListaGastosProvisiones.CAMPO2 +
+					" FROM " 
+					+ QMListaGastosProvisiones.TABLA + 
+					" WHERE ("
+					+ QMListaGastosProvisiones.CAMPO2 + " = '"+ sNUPROF + "' AND "
+					+ QMListaGastosProvisiones.CAMPO1 + 
+					" IN (SELECT "
+					+ QMGastos.CAMPO1 + 
+					" FROM " 
+					+ QMGastos.TABLA + 
+					" WHERE (" 
+					+ QMGastos.CAMPO2 + 
+					" IN (SELECT "
+					+  QMListaComunidadesActivos.CAMPO1 + 
+					" FROM " 
+					+ QMListaComunidadesActivos.TABLA + "))))))";
+					
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return bEncontrado;
+	}
+	
+	public static ArrayList<ProvisionTabla> buscaProvisionesComunidadGastoAutorizadoPorFiltro(Connection conexion, ProvisionTabla filtro) 
+	{
+		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+			
+			String sCondicionFEPFON = (filtro.getFEPFON().equals("0")) ? "" : CAMPO6 + " = '"+ filtro.getFEPFON() + "' AND ";
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + ","
+					+ CAMPO2 + ","
+					+ CAMPO3 + ","
+					+ CAMPO4 + ","
+					+ CAMPO5 + ","
+					+ CAMPO6 + ","
+					+ CAMPO7 + ","
+					+ CAMPO8 + ","
+					+ CAMPO16 + 
+					" FROM " + TABLA + 
+					" WHERE ( "
+					+ sCondicionFEPFON
+					+ CAMPO16 + " = '" + ValoresDefecto.DEF_PROVISION_AUTORIZADA + "' AND "
+					+ CAMPO1 + 
+					" IN (SELECT "
+					+ QMListaGastosProvisiones.CAMPO2 +
+					" FROM " 
+					+ QMListaGastosProvisiones.TABLA + 
+					" WHERE ("
+					+ QMListaGastosProvisiones.CAMPO1 + 
+					" IN (SELECT "
+					+ QMGastos.CAMPO1 + 
+					" FROM " 
+					+ QMGastos.TABLA + 
+					" WHERE (" 
+					+ QMGastos.CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_AUTORIZADO + "' AND "
+					+ QMGastos.CAMPO2 + 
+					" IN (SELECT "
+					+  QMListaComunidadesActivos.CAMPO1 + 
+					" FROM " 
+					+ QMListaComunidadesActivos.TABLA + "))))))";
 					
 			
 			logger.debug(sQuery);
@@ -2827,6 +3144,132 @@ public final class QMProvisiones
 					+ QMGastos.TABLA + 
 					" WHERE "
 					+ QMGastos.CAMPO2 + " = '" + iCOACES + "')))";
+					
+						   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sNUPROF =  rs.getString(CAMPO1);
+						String sCOSPAT =  rs.getString(CAMPO2);
+						String sDCOSPAT =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
+						String sTAS =  rs.getString(CAMPO3);
+						String sDTAS =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
+						String sCOGRUG =  rs.getString(CAMPO4);
+						String sDCOGRUG =   QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOGRUG,QMCodigosControl.ICOGRUG,sCOGRUG);
+						String sCOTPGA =   rs.getString(CAMPO5);
+						String sDCOTPGA =   QMCodigosControl.getDesCOTPGA(conexion,sCOGRUG, sCOTPGA);
+						String sFEPFON =   rs.getString(CAMPO6);
+						String sGASTOS =  rs.getString(CAMPO7);
+						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO16));
+
+
+						ProvisionTabla provisionencontrada = new ProvisionTabla(
+								sNUPROF,
+								sCOSPAT,
+								sDCOSPAT,
+								sTAS,
+								sDTAS,
+								sCOGRUG,
+								sDCOGRUG,
+								sCOTPGA,
+								sDCOTPGA,
+								sFEPFON,
+								sVALOR,
+								sGASTOS,
+								sESTADO);
+						
+						resultado.add(provisionencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				logger.error("ERROR COACES:|"+iCOACES+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<ProvisionTabla> buscaProvisionesComunidadAutorizadasPorActivo(Connection conexion, int iCOACES)
+	{
+		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			String sCondicionCOACES = (iCOACES > 0)? QMGastos.CAMPO2 + " = '" + iCOACES + "' AND ": "";
+
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT " 
+					+ CAMPO1 + ","
+					+ CAMPO2 + ","
+					+ CAMPO3 + ","
+					+ CAMPO4 + ","
+					+ CAMPO5 + ","
+					+ CAMPO6 + ","
+					+ CAMPO7 + ","
+					+ CAMPO8 + ","
+					+ CAMPO16 + 
+					" FROM " 
+					+ TABLA
+					+ " WHERE ("
+					+ CAMPO12 +" <> '"+ ValoresDefecto.CAMPO_NUME_SIN_INFORMAR +"' AND "
+					+ CAMPO1 + " IN (SELECT "
+					+ QMListaGastosProvisiones.CAMPO2 +
+					" FROM "
+					+ QMListaGastosProvisiones.TABLA +
+					" WHERE "
+					+ QMListaGastosProvisiones.CAMPO1 + 
+					" IN (SELECT "
+					+ QMGastos.CAMPO1 + 
+					" FROM " 
+					+ QMGastos.TABLA + 
+					" WHERE "
+					+ sCondicionCOACES
+					+ QMGastos.CAMPO2 + 
+					" IN (SELECT "
+					+  QMListaComunidadesActivos.CAMPO1 + 
+					" FROM " 
+					+ QMListaComunidadesActivos.TABLA + "))))";
 					
 						   
 			

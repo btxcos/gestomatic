@@ -1373,6 +1373,15 @@ public final class CLGastos
 													logger.debug("liValorAbono:|"+liValorAbono+"|");
 													logger.debug("liValorFinal:|"+liValorFinal+"|");
 													
+													if (gasto.getValor_total() == 0)
+													{
+														
+													}
+													else
+													{
+														
+													}
+													
 													if (QMGastos.modImportes(conexion, gasto, liCodGasto))
 													{
 														

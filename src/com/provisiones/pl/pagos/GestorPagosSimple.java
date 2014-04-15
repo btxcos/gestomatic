@@ -1336,7 +1336,13 @@ public class GestorPagosSimple implements Serializable
 					sMsg = "ERROR: Faltan campos en la cuenta de pago por informar. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
-				}					
+				}
+				else if (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
+				{
+					sMsg = "ERROR: La fecha de Pago no puede ser inferior a la de Devengo. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				else
 				{
 					if (bDevolucion)
@@ -1386,6 +1392,12 @@ public class GestorPagosSimple implements Serializable
 
 					case -3: //Error 003 - La fecha de pago no es correcta
 						sMsg = "ERROR:004 - La fecha de pago no es correcta. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -4: //Error 004 - Fecha de devengo anterior a la fecha de pago.
+						sMsg = "ERROR:004 - La fecha de pago no puede ser inferior a la de  devengo. Por favor, revise los datos.";
 						msg = Utils.pfmsgError(sMsg);
 						logger.error(sMsg);
 						break;

@@ -74,6 +74,7 @@ public class GestorPagosComunidad implements Serializable
 	
 	//Fecha de pago
 	private String sFEPGPR = "";
+	private String sFechaUltimoDevengo = "";
 	
 	//Cuenta de pago
 	private String sPais = "";	
@@ -204,6 +205,8 @@ public class GestorPagosComunidad implements Serializable
 	public void borrarCamposPago()
 	{
     	this.sFEPGPR = "";
+    	this.sFechaUltimoDevengo = "";
+    	
     	borrarCamposCuenta();
 	}
 	
@@ -271,8 +274,11 @@ public class GestorPagosComunidad implements Serializable
 						sGASTOSF,
 						sESTADOF);
 
-				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasConFiltro(filtro));
+				//this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasConFiltro(filtro));
 
+				this.setTablaprovisiones(CLProvisiones.buscarProvisionesComunidadAutorizadasConFiltro(filtro));
+				
+				
 				sMsg = "Encontradas "+getTablaprovisiones().size()+" provisiones relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
 				
@@ -328,10 +334,16 @@ public class GestorPagosComunidad implements Serializable
 				}
 				else if (CLProvisiones.existeProvision(sNUPROFB))
 				{
-					
 					if (CLProvisiones.estaPagada(sNUPROFB))
 					{
 						sMsg = "La Provisión '"+sNUPROFB+"' ya esta pagada. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+
+					}
+					if (!CLProvisiones.tieneComunidad(sNUPROFB))
+					{
+						sMsg = "La Provisión '"+sNUPROFB+"' no tiene Activos asociados a una Comunidad. Por favor, revise los datos.";
 						msg = Utils.pfmsgWarning(sMsg);
 						logger.warn(sMsg);
 
@@ -511,6 +523,10 @@ public class GestorPagosComunidad implements Serializable
 			
 			borrarCamposPago();
 			borrarResultadosBuscarCuenta();
+			
+	    	this.sFechaUltimoDevengo = CLProvisiones.buscarUltimaFechaDevengoComunidad(sNUPROF);
+	    	
+	    	logger.debug("sFechaUltimoDevengo:|"+sFechaUltimoDevengo+"|");
 		
 			sMsg = "La Comunidad '"+sNUDCOM+"' se ha cargado correctamente.";
 			msg = Utils.pfmsgInfo(sMsg);
@@ -658,6 +674,12 @@ public class GestorPagosComunidad implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (Long.parseLong(Utils.compruebaFecha(sFechaUltimoDevengo)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
+				{
+					sMsg = "ERROR: La fecha de Pago no puede ser inferior a la de Devengo. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				else
 				{
 					if (sNUCCEN.equals("0000") ||
@@ -711,6 +733,12 @@ public class GestorPagosComunidad implements Serializable
 						logger.error(sMsg);
 						break;
 
+					case -4: //Error 004 - Fecha de devengo anterior a la fecha de pago.
+						sMsg = "ERROR:004 - La fecha de pago no puede ser inferior a la de  devengo. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+						break;
+						
 					case -900: //Error 900 - al registrar el pago
 						sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el pago. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
@@ -963,6 +991,14 @@ public class GestorPagosComunidad implements Serializable
 
 	public void setsFEPGPR(String sFEPGPR) {
 		this.sFEPGPR = sFEPGPR;
+	}
+
+	public String getsFechaUltimoDevengo() {
+		return sFechaUltimoDevengo;
+	}
+
+	public void setsFechaUltimoDevengo(String sFechaUltimoDevengo) {
+		this.sFechaUltimoDevengo = sFechaUltimoDevengo;
 	}
 
 	public String getsPais() {
