@@ -495,6 +495,140 @@ public final class Utils
 		
 		return sResultado;
 	}
+	
+	public static String compruebaRecargo(String sRecargo)
+	{
+
+		String sRecargoReal = "#";
+		
+		String sSeparador = "";
+		
+		//logger.debug("sImporte:|{}|",sImporte);
+		
+		if (sRecargo.matches("-?[\\d]+([\\.|,][\\d][\\d]*)?$"))
+		{
+			
+			if (sRecargo.contains("."))
+			{
+				sSeparador = "\\.";
+			}
+			else if (sRecargo.contains(","))
+			{
+				sSeparador = ",";
+			}
+			
+			if (!sSeparador.equals(""))
+			{
+				String[] arrayimporte = sRecargo.split(sSeparador);
+				String sEuros = arrayimporte[0];
+				String sCentimos = arrayimporte[1];
+				if (sCentimos.length() < ValoresDefecto.DECIMALES)
+				{
+					sCentimos = sCentimos +"0";
+				}
+				else if (sCentimos.length() > ValoresDefecto.DECIMALES)
+				{
+					sCentimos = sCentimos.substring(0, ValoresDefecto.DECIMALES);
+				}
+				//logger.debug("sEuros:|{}|",sEuros);
+				//logger.debug("sCentimos:|{}|",sCentimos);
+			
+				sRecargoReal = sEuros + sCentimos +"0000";
+			}
+			else
+			{
+				sRecargoReal = sRecargo+"000000";
+			}
+
+		}
+		
+		if (sRecargo.isEmpty() 
+				|| sRecargoReal.equals("0000000")
+				|| sRecargoReal.equals("-0000000") 
+				|| sRecargoReal.equals("-00000"))
+		{
+			sRecargoReal= "0";
+		}
+		
+		//logger.debug("sRecargoReal:|{}|",sRecargoReal);
+		
+		return sRecargoReal;
+	}
+	
+	public static long redondeaRecargo(long liRecargo)
+	{
+		long liRedondeo = 0;
+		
+		if (liRecargo != 0)
+		{
+			liRedondeo = liRecargo/10000;
+			//BOE-A-1998-29216 - Artículo 11. Redondeo.
+			if ((liRecargo%10000) >4999)
+			{
+				liRedondeo = liRedondeo + 1;
+			}
+		}
+		
+		return liRedondeo;
+	}
+	
+	public static String recuperaRecargo(boolean bNegativo, String sRecargo)
+	{
+		String sRecargoReal = "0";
+		
+		String sEuros = "0";
+		String sCentimos = "00";
+		
+		logger.debug("sRecargo:|"+sRecargo+"|");
+		
+		logger.debug("sRecargo.length():|"+sRecargo.length()+"|");
+		
+		if (sRecargo.length()>6)
+		{
+			sEuros = sRecargo.substring(0, sRecargo.length()-6);
+			sCentimos = sRecargo.substring(sRecargo.length()-6,sRecargo.length()-4);
+		}
+		else if (sRecargo.length()>5)
+		{
+			sCentimos = sRecargo.substring(0,2);
+		}
+		else if (sRecargo.length()>4)
+		{
+			sCentimos = sRecargo.substring(0,1);
+		}
+		
+		//BOE-A-1998-29216 - Artículo 11. Redondeo.
+		if ((Long.parseLong(sRecargo)%10000) >4999)
+		{
+			int iCentimos = Integer.parseInt(sCentimos)+1;
+			
+			if (iCentimos > 99)
+			{
+				sEuros = Integer.toString(Integer.parseInt(sEuros) + 1);
+				iCentimos = 0;
+			}
+
+			sCentimos = Integer.toString(iCentimos);
+		}
+
+		if (sCentimos.length() == 1)
+		{
+			sCentimos = "0" + sCentimos;
+		}
+
+
+		logger.debug("sEuros:|"+sEuros+"|");
+		logger.debug("sCentimos:|"+sCentimos+"|");
+		
+		if (!sEuros.equals("0") || !sCentimos.equals("00"))
+		{
+			sRecargoReal = bNegativo ? "-" +sEuros + "," + sCentimos : sEuros + "," + sCentimos;
+		}
+
+		logger.debug("sRecargoReal:|"+sRecargoReal+"|");
+
+		return sRecargoReal;
+	}
 
 	public static String compruebaImporte(String sImporte)
 	{
@@ -962,18 +1096,33 @@ public final class Utils
 	public static String recuperaImporte(boolean bNegativo, String sImporte)
 	{
 		String sImporteReal = "0";
+		String sEuros = "0";
+		String sCentimos = "00";
 		
 		logger.debug("sImporte:|"+sImporte+"|");
 		
 		if (sImporte.length()>2)
 		{
-			String sEuros = sImporte.substring(0, sImporte.length()-2);
-			String sCentimos = sImporte.substring(sImporte.length()-2,sImporte.length());
+			sEuros = sImporte.substring(0, sImporte.length()-2);
+			sCentimos = sImporte.substring(sImporte.length()-2,sImporte.length());
 
-			//logger.debug("sEuros:|{}|",sEuros);
-			//logger.debug("sCentimos:|{}|",sCentimos);
-	
-			sImporteReal = bNegativo ? "-"+ sEuros + "," + sCentimos : sEuros + "," + sCentimos;
+		}
+		else if (sImporte.length() == 2)
+		{
+			sCentimos = sImporte;
+		}
+		else if (sImporte.length() == 1)
+		{
+			sCentimos = "0" + sImporte;
+		}
+
+
+		logger.debug("sEuros:|"+sEuros+"|");
+		logger.debug("sCentimos:|"+sCentimos+"|");
+		
+		if (!sEuros.equals("0") || !sCentimos.equals("00"))
+		{
+			sImporteReal = bNegativo ? "-" +sEuros + "," + sCentimos : sEuros + "," + sCentimos;
 		}
 
 		logger.debug("sImporteReal:|"+sImporteReal+"|");

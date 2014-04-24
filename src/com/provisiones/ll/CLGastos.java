@@ -1377,9 +1377,13 @@ public final class CLGastos
 													{
 														
 													}
-													else
+													else if (gasto.getValor_total() > 0)
 													{
 														
+													}
+													else
+													{
+														//error
 													}
 													
 													if (QMGastos.modImportes(conexion, gasto, liCodGasto))

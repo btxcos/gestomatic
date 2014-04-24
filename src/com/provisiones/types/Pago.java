@@ -7,17 +7,19 @@ public class Pago
 	private String sTipoPago = "";
 	private String sCodOperacion = "";
 	private String sFEPGPR = "";
+	private String sRecargoAdicional = "";
 
 	//Constructor de clase
 	
 	public Pago(String sCOACES, String sGasto, String sTipoPago,
-			String sCodOperacion, String sFEPGPR) {
+			String sCodOperacion, String sFEPGPR, String sRecargoAdicional) {
 		super();
 		this.sCOACES = sCOACES;
 		this.sGasto = sGasto;
 		this.sTipoPago = sTipoPago;
 		this.sCodOperacion = sCodOperacion;
 		this.sFEPGPR = sFEPGPR;
+		this.sRecargoAdicional = sRecargoAdicional;
 	}
 
 	//Métodos de acceso
@@ -60,6 +62,14 @@ public class Pago
 
 	public void setsFEPGPR(String sFEPGPR) {
 		this.sFEPGPR = sFEPGPR;
+	}
+
+	public String getsRecargoAdicional() {
+		return sRecargoAdicional;
+	}
+
+	public void setsRecargoAdicional(String sRecargoAdicional) {
+		this.sRecargoAdicional = sRecargoAdicional;
 	}
 
 	//log

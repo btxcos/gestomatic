@@ -2,9 +2,6 @@ package com.provisiones.test;
 
 import com.provisiones.misc.Utils;
 
-
-
-
 public class TestString{
 
     public static void main( String[] args )
@@ -74,7 +71,7 @@ public class TestString{
     memory = memory-runtime.freeMemory();
     System.out.println("Memoria: " + memory);*/
     	
-    	int iDias = -1;
+    	/*int iDias = -1;
     	
     	String sImporte = "1";
     	System.out.println("sImporte: " + sImporte);
@@ -83,7 +80,30 @@ public class TestString{
     	String sFecha = Utils.fechaDeHoy(false);
     	System.out.println("sFecha: " + sFecha);
     	System.out.println("sFecha en "+iDias+" dias: " + Utils.sumaDiasFecha(sFecha, iDias));
-    	System.out.println("sFechaN34: " + Utils.aFechaN34(sFecha));
+    	System.out.println("sFechaN34: " + Utils.aFechaN34(sFecha));*/
+    	
+    	
+    	String sValorRecargo = "1000";
+    	long liValorTotal = 0;
+    	
+    	long liRecargoAdicional = 0;
+    	
+    	String sRecargoRecuperado = "1995000";
+    	
+		String sRecargo = Long.toString((liValorTotal * Long.parseLong(sValorRecargo))/10000);
+    	
+		String sCentimillos = Long.toString((liValorTotal * Long.parseLong(sValorRecargo))%10000);
+		
+		System.out.println("sRecargo:|" + sRecargo +"|");
+		
+		System.out.println("sCentimillos:|" + sCentimillos +"|");
+		
+		System.out.println("recuperaRecargo:|"+ Utils.recuperaRecargo(false, sRecargoRecuperado) +"|");
+		
+		System.out.println("recuperaImporte:|"+ Utils.recuperaImporte(false, Long.toString(liValorTotal)) +"|");
+		
+		System.out.println("liRecargoAdicional:|"+ Utils.redondeaRecargo(liRecargoAdicional) +"|");
+
     }
     
     

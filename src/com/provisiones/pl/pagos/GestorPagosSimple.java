@@ -120,28 +120,16 @@ public class GestorPagosSimple implements Serializable
 	private String sCOIMPT = "";
 	private String sDCOIMPT = "";
 	
-	//private String sCOTNEG = ValoresDefecto.DEF_COTNEG;
-	
-	//private String sCOENCX = ValoresDefecto.DEF_COENCX;
-	//private String sCOOFCX = ValoresDefecto.DEF_COOFCX;
-	//private String sNUCONE = ValoresDefecto.DEF_NUCONE;
 	private String sNUPROF = "";
 	
 	private String sFEPGPR = "";
-	//private String sCOMONA = ValoresDefecto.DEF_COMONA;
-	//private String sBIAUTO = ValoresDefecto.DEF_BIAUTO;
-	//private String sFEAUFA = ValoresDefecto.DEF_FEAUFA;
-	//private String sCOTERR = ValoresDefecto.DEF_COTERR;
-	//private String sFMPAGN = ValoresDefecto.DEF_FMPAGN;
-	//private String sFEPGPR = ValoresDefecto.DEF_FEPGPR;
-	
-	//private String sFEAPLI = ValoresDefecto.DEF_FEAPLI;
-	
-	//private String sCOAPII = ValoresDefecto.DEF_COAPII;
-	//private String sCOSPII = ValoresDefecto.DEF_COSPII_GA;
-	//private String sNUCLII = ValoresDefecto.DEF_NUCLII;
 	
 	private String sTipoPago = "";
+	
+	//Recargo
+	private String sTipoRecargo = "";
+	private String sValorRecargo = "0";
+	private boolean bRecargo = true;
 
 	//Cuenta
 	private String sPais = "";	
@@ -172,7 +160,9 @@ public class GestorPagosSimple implements Serializable
 	private Map<String,String> tiposcosbga_t23HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
-
+	
+	private Map<String,String> tiposrecargoHM = new LinkedHashMap<String, String>();
+	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
@@ -241,6 +231,9 @@ public class GestorPagosSimple implements Serializable
 			tiposcosbga_t32HM.put("Servicios varios",        "4");
 			
 			tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
+			
+			tiposrecargoHM.put("Cantidad fija (¤)","1");
+			tiposrecargoHM.put("Proporcional (%)", "2");
 		}
 	}
 	
@@ -581,6 +574,11 @@ public class GestorPagosSimple implements Serializable
 	{
 		this.setsFEPGPR(Utils.fechaDeHoy(true));
 		logger.debug("sFEPGPR:|"+sFEPGPR+"|");
+	}
+	
+	public void cambiaRecargo()
+	{
+		this.bRecargo = (sTipoRecargo ==null || sTipoRecargo.isEmpty());
 	}
     
 	public void buscarActivos (ActionEvent actionEvent)
@@ -1361,8 +1359,28 @@ public class GestorPagosSimple implements Serializable
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_NORMA34;
 					}
 					
+					String sRecargo = "0";
 					
-					Pago pago = new Pago(sCOACES,sCodGastoB,sTipoPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,Utils.compruebaFecha(sFEPGPR));
+					Long.parseLong(Utils.compruebaImporte(sValorRecargo));
+					
+					
+	            	if (sTipoRecargo.equals(ValoresDefecto.DEF_RECARGO_FIJO))
+	            	{
+	            		sRecargo = Utils.compruebaImporte(sValorRecargo)+"0000";
+	            	}
+	            	else if (sTipoRecargo.equals(ValoresDefecto.DEF_RECARGO_PROPORCIONAL))
+	            	{
+	            		
+	            		long liValorTotal = CLGastos.buscarValorTotal(Long.parseLong(sCodGastoB));
+	            		
+	            		sRecargo = Long.toString(liValorTotal * Long.parseLong(Utils.compruebaImporte(sValorRecargo)));
+	            	}
+	            	
+	            	logger.debug("sTipoRecargo:|"+sTipoRecargo+"|");
+	            	logger.debug("sRecargo:|"+sRecargo+"|");
+	            	
+					
+					Pago pago = new Pago(sCOACES,sCodGastoB,sTipoPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,Utils.compruebaFecha(sFEPGPR),sRecargo);
 					
 					Cuenta cuenta = new Cuenta (sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT,"");
 					
@@ -1462,7 +1480,7 @@ public class GestorPagosSimple implements Serializable
 			}
 			catch(NumberFormatException nfe)
 			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El valor debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
@@ -1934,6 +1952,39 @@ public class GestorPagosSimple implements Serializable
 
 	public void setsFEPGPR(String sFEPGPR) {
 		this.sFEPGPR = sFEPGPR;
+	}
+
+
+	public String getsTipoRecargo() {
+		return sTipoRecargo;
+	}
+
+	public void setsTipoRecargo(String sTipoRecargo) {
+		this.sTipoRecargo = sTipoRecargo;
+	}
+
+	public String getsValorRecargo() {
+		return sValorRecargo;
+	}
+
+	public void setsValorRecargo(String sValorRecargo) {
+		this.sValorRecargo = sValorRecargo;
+	}
+
+	public boolean isbRecargo() {
+		return bRecargo;
+	}
+
+	public void setbRecargo(boolean bRecargo) {
+		this.bRecargo = bRecargo;
+	}
+
+	public Map<String, String> getTiposrecargoHM() {
+		return tiposrecargoHM;
+	}
+
+	public void setTiposrecargoHM(Map<String, String> tiposrecargoHM) {
+		this.tiposrecargoHM = tiposrecargoHM;
 	}
 
 	public String getsPais() {

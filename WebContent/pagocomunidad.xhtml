@@ -213,34 +213,51 @@
 									  </p:panel>
 
 										<p:panel>
-											<h:panelGrid columns="2" cellpadding="5">
+											<h:panelGrid columns="5" cellpadding="5">
+
+												<h:outputText for="TRECARGO" value="Recargo adicional en pago: " />
+												<p:selectOneMenu id="TRECARGO" value="#{GestorPagosComunidad.sTipoRecargo}">
+													<f:selectItem itemLabel="Sin recargo" itemValue=""/>
+													<f:selectItems value="#{GestorPagosComunidad.tiposrecargoHM}"/>
+														<p:ajax update="VRECARGO" listener="#{GestorPagosComunidad.cambiaRecargo}"/>
+												</p:selectOneMenu>
+
+												<p:inputText id="VRECARGO" value="#{GestorPagosComunidad.sValorRecargo}" size="10" maxlength="10" disabled="#{GestorPagosComunidad.bRecargo}"/>
+
+											</h:panelGrid>
+										</p:panel>
+
 
 										<p:panel>
-											<h:panelGrid columns="7" cellpadding="5">
+											<h:panelGrid columns="2" cellpadding="5">
 
-										<p:inputText id="PAIS" value="#{GestorPagosComunidad.sPais}" size="3" disabled="true"/>
+												<p:panel>
+													<h:panelGrid columns="7" cellpadding="5">
 
-										<p:inputText id="DCIBAN" value="#{GestorPagosComunidad.sDCIBAN}" size="3" disabled="true"/>
+														<p:inputText id="PAIS" value="#{GestorPagosComunidad.sPais}" size="3" disabled="true"/>
 
-										<h:outputText value="Número de Cuenta: "/>
+														<p:inputText id="DCIBAN" value="#{GestorPagosComunidad.sDCIBAN}" size="3" disabled="true"/>
 
-										<p:inputMask id="NUCCEN" value="#{GestorPagosComunidad.sNUCCEN}" mask="9999" size="4">
-											<f:validateLength minimum="4"/>
-										</p:inputMask>
+														<h:outputText value="Número de Cuenta: "/>
 
-										<p:inputMask id="NUCCOF" value="#{GestorPagosComunidad.sNUCCOF}" mask="9999" size="4">
-											<f:validateLength minimum="4"/>
-										</p:inputMask>
+														<p:inputMask id="NUCCEN" value="#{GestorPagosComunidad.sNUCCEN}" mask="9999" size="4">
+															<f:validateLength minimum="4"/>
+														</p:inputMask>
 
-										<p:inputMask id="NUCCDI" value="#{GestorPagosComunidad.sNUCCDI}" mask="99" size="2">
-											<f:validateLength minimum="2"/>
-										</p:inputMask>
+														<p:inputMask id="NUCCOF" value="#{GestorPagosComunidad.sNUCCOF}" mask="9999" size="4">
+															<f:validateLength minimum="4"/>
+														</p:inputMask>
 
-										<p:inputMask id="NUCCNT" value="#{GestorPagosComunidad.sNUCCNT}" mask="9999999999" size="10">
-											<f:validateLength minimum="10"/>
-										</p:inputMask>
-											</h:panelGrid>
-									  </p:panel>
+														<p:inputMask id="NUCCDI" value="#{GestorPagosComunidad.sNUCCDI}" mask="99" size="2">
+															<f:validateLength minimum="2"/>
+														</p:inputMask>
+
+														<p:inputMask id="NUCCNT" value="#{GestorPagosComunidad.sNUCCNT}" mask="9999999999" size="10">
+															<f:validateLength minimum="10"/>
+														</p:inputMask>
+
+													</h:panelGrid>
+											  </p:panel>
 
 										<p:commandButton value="Buscar Cuenta" update="cuentascomunidad, msgs, popup" actionListener="#{GestorPagosComunidad.buscaCuentas}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaCuentas.show()"/>	
 

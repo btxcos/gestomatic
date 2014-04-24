@@ -183,7 +183,22 @@
 											<p:inputText id="FechaUltimoDevengo" value="#{GestorPagosProvision.sFechaUltimoDevengo}" size="9" disabled="true"/>
 
 											</h:panelGrid>
-									  </p:panel>
+										</p:panel>
+
+										<p:panel>
+											<h:panelGrid columns="5" cellpadding="5">
+											<h:outputText for="TRECARGO" value="Recargo adicional en pago: " />
+											<p:selectOneMenu id="TRECARGO" value="#{GestorPagosProvision.sTipoRecargo}">
+												<f:selectItem itemLabel="Sin recargo" itemValue=""/>
+												<f:selectItems value="#{GestorPagosProvision.tiposrecargoHM}"/>
+													<p:ajax update="VRECARGO" listener="#{GestorPagosProvision.cambiaRecargo}"/>
+											</p:selectOneMenu>
+
+											<p:inputText id="VRECARGO" value="#{GestorPagosProvision.sValorRecargo}" size="10" maxlength="10"  disabled="#{GestorPagosProvision.bRecargo}"/>
+
+											</h:panelGrid>
+										</p:panel>
+
 
 										<p:panel>
 											<h:panelGrid columns="2" cellpadding="5">

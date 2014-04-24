@@ -988,6 +988,74 @@ public final class QMGastos
 		return bAbono;
 	}
 	
+	public static boolean estaAbonando(Connection conexion, long liGastoID)
+	{
+		//TODO repasar
+		boolean bEncontrado = false;
+		
+		boolean bAbono = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+						+ CAMPO16  +       
+						" FROM " 
+						+ TABLA + 
+						" WHERE "	
+						+ CAMPO1  + " = '"+ liGastoID + "'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						bAbono = rs.getString(CAMPO16).equals(ValoresDefecto.DEF_NEGATIVO);
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bAbono = false;
+
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bAbono;
+	}
+	
 	public static boolean gastoAnulado(Connection conexion, int iCodCOACES, String sCodCOGRUG, String sCodCOTPGA, String sCodCOSBGA, String sFEDEVE)
 	{
 		boolean bEncontrado = false;

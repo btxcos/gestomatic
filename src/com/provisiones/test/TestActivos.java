@@ -28,7 +28,7 @@ public class TestActivos
 	
 	public static void main(String[] args) throws IOException 
 	{
-		Pago pago = new Pago("1","1","1","1","1");
+		Pago pago = new Pago("1","1","1","1","1","0");
 		
 		Connection conx = ConnectionManager.openDBConnection();
 		

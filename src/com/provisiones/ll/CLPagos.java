@@ -19,6 +19,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuenta;
 import com.provisiones.types.Pago;
+import com.provisiones.types.RecargoImporte;
 import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
@@ -31,9 +32,14 @@ public class CLPagos
 	private CLPagos(){}
 	
 	//ID
-	public static long buscarCodigoPago (long liCodPago)
+	public static long buscarCodigoPago (long liCodGasto)
 	{
-		return QMPagos.getPagoID(ConnectionManager.getDBConnection(),liCodPago);
+		return QMPagos.getPagoID(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+	
+	public static Pago buscarPago (long liCodPago)
+	{
+		return QMPagos.getPago(ConnectionManager.getDBConnection(),liCodPago);
 	}
 	
 	public static String buscarFechaPago(long liPagoID)
@@ -351,8 +357,9 @@ public class CLPagos
 							{
 								if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_NORMA34))
 								{
+									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
 
-									TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta);
+									TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta, liRecargo);
 									long liCodTransferencia = QMTransferenciasN34.addTransferencia(conexion, transferencia);
 									
 									if (liCodTransferencia != 0)
@@ -393,7 +400,8 @@ public class CLPagos
 								
 								if (iCodigo == 0)
 								{
-									if (QMProvisiones.setGastoPagado(conexion,sNUPROF, QMGastos.getValorTotal(conexion, liCodGasto)))
+									logger.debug("pago.getsRecargoAdicional():|"+pago.getsRecargoAdicional()+"|");
+									if (QMProvisiones.setGastoPagado(conexion,sNUPROF, QMGastos.getValorTotal(conexion, liCodGasto), pago.getsRecargoAdicional()))
 									{
 										//OK 
 										iCodigo = 0;
@@ -481,7 +489,7 @@ public class CLPagos
 		return iCodigo;
 	}
 	
-	public static int registraPagoComunidad(long iCodComunidad, String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, boolean bValida)
+	public static int registraPagoComunidad(long iCodComunidad, String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, RecargoImporte recargo, boolean bValida)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -493,20 +501,47 @@ public class CLPagos
 			
             for (int i = 0; i < listagastos.size() ; i++)
             {
+            	String sRecargo = "0";
+            	
             	GastoTabla gasto = listagastos.get(i);
             	
             	String sPago = sTipoPago;
+            	
+            	long liValorTotal = QMGastos.getValorTotal(conexion, Long.parseLong(gasto.getsGastoID()));
             	
             	if (gasto.getIMNGAS().startsWith("-"))
             	{
             		sPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
             	}
-            	else if (QMGastos.getValorTotal(conexion, Long.parseLong(gasto.getsGastoID())) == 0)
+            	else if (liValorTotal == 0)
 				{
             		sPago = ValoresDefecto.DEF_PAGO_VENTANILLA;
-				}
+				}            	
             	
-            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR);
+            	if (recargo.getsTipoRecargo().equals(ValoresDefecto.DEF_RECARGO_FIJO))
+            	{
+            		sRecargo = recargo.getsValorRecargo()+"0000";
+            	}
+            	else if (recargo.getsTipoRecargo().equals(ValoresDefecto.DEF_RECARGO_PROPORCIONAL))
+            	{
+            		/*
+            		long liRedondeo = 0;
+            		
+            		//BOE-A-1998-29216 - Artículo 11. Redondeo.
+            		if (((liValorTotal * Long.parseLong(sValorRecargo))%10000) >5555)
+            		{
+            			liRedondeo = 1;
+            		}
+            		
+            		sRecargo = Long.toString(((liValorTotal * Long.parseLong(sValorRecargo))/10000)+liRedondeo);
+            		*/
+            		
+            		sRecargo = Long.toString(liValorTotal * Long.parseLong(recargo.getsValorRecargo()));
+            	}
+            	
+            	logger.debug("sRecargo:|"+sRecargo+"|");
+            	
+            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR,sRecargo);
             	
             	iCodigo = registraPagoSimple(pago, cuenta, bValida);
             	
@@ -520,7 +555,7 @@ public class CLPagos
 		return iCodigo;
 	}
 	
-	public static int registraPagoProvision(String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, boolean bValida)
+	public static int registraPagoProvision(String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, RecargoImporte recargo, boolean bValida)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -532,20 +567,47 @@ public class CLPagos
 			
             for (int i = 0; i < listagastos.size() ; i++)
             {
+            	String sRecargo = "0";
+            	
             	GastoTabla gasto = listagastos.get(i);
             	
             	String sPago = sTipoPago;
+            	
+            	long liValorTotal = QMGastos.getValorTotal(conexion, Long.parseLong(gasto.getsGastoID()));
             	
             	if (gasto.getIMNGAS().startsWith("-"))
             	{
             		sPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
             	}
-            	else if (QMGastos.getValorTotal(conexion, Long.parseLong(gasto.getsGastoID())) == 0)
+            	else if (liValorTotal == 0)
 				{
             		sPago = ValoresDefecto.DEF_PAGO_VENTANILLA;
 				}
             	
-            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR);
+            	if (recargo.getsTipoRecargo().equals(ValoresDefecto.DEF_RECARGO_FIJO))
+            	{
+            		sRecargo = recargo.getsValorRecargo()+"0000";
+            	}
+            	else if (recargo.getsTipoRecargo().equals(ValoresDefecto.DEF_RECARGO_PROPORCIONAL))
+            	{
+            		/*
+            		long liRedondeo = 0;
+            		
+            		//BOE-A-1998-29216 - Artículo 11. Redondeo.
+            		if (((liValorTotal * Long.parseLong(sValorRecargo))%10000) >5555)
+            		{
+            			liRedondeo = 1;
+            		}
+            		
+            		sRecargo = Long.toString(((liValorTotal * Long.parseLong(sValorRecargo))/10000)+liRedondeo);
+            		*/
+            		
+            		sRecargo = Long.toString(liValorTotal * Long.parseLong(recargo.getsValorRecargo()));
+            	}
+            	
+            	logger.debug("sRecargo:|"+sRecargo+"|");
+            	
+            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR, sRecargo);
             	
             	iCodigo = registraPagoSimple(pago, cuenta, bValida);
             	

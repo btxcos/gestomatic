@@ -92,9 +92,6 @@
 											<h:outputText value="Fecha de fin de periodo: " />
 											<p:inputText id="FFGTVP" value="#{GestorDetallesGasto.sFFGTVP}" disabled="true" size="9"/>
 
-											<h:outputText value="Fecha del pago al proveedor: " />
-											<p:inputText id="FEPGPR" value="#{GestorDetallesGasto.sFEPGPR}" disabled="true" size="9"/>
-
 											<h:outputText value="Fecha limite del pago: " />
 											<p:inputText id="FELIPG" value="#{GestorDetallesGasto.sFELIPG}" disabled="true" size="9"/>
 														</h:panelGrid>
@@ -213,6 +210,37 @@
 								</h:panelGrid>
 							</p:fieldset>
 
+								<p:fieldset legend="Pago" id="panelPago">
+										<h:panelGrid columns="2" cellpadding="3">
+
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+												<h:outputText for="FEPGPR" value="Fecha de Pago al proveedor: " />
+												<p:inputText id="FEPGPR" value="#{GestorDetallesGasto.sFEPGPR}" disabled="true" size="9"/>
+											</h:panelGrid>
+										</p:panel>
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+												<h:outputText value="Tipo de pago: "/>
+												<p:inputText id="DESCRIPCION" value="#{GestorDetallesGasto.sDescripcion}" size="25" maxlength="25" disabled="true"/>
+												<p:commandButton type="button" value="Detalles" onclick="dlgDetallesTransferencia.show()" disabled="#{GestorDetallesGasto.bDetallesTransferencia}"/> 
+											</h:panelGrid>
+									  </p:panel>
+
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+
+												<h:outputText for="RECARGO" value="Recargo adicional en pago: " />
+
+												<p:inputText id="RECARGO" value="#{GestorDetallesGasto.sRecargoAdicional}" size="10" maxlength="10" disabled="true"/>
+
+											</h:panelGrid>
+										</p:panel>
+
+									</h:panelGrid>
+								</p:fieldset>
+
 							<p:fieldset legend="Autorización">
 								<h:panelGrid columns="1" cellpadding="5">
 									<p:panel>
@@ -282,6 +310,25 @@
 
 						</h:panelGrid>
 					</p:panel>
+
+					<p:dialog header="Detalles de la transferencia" widgetVar="dlgDetallesTransferencia" resizable="false">
+						<p:panel>
+							<h:panelGrid columns="7" cellpadding="5">
+
+								<p:inputText id="PAIS" value="#{GestorDetallesGasto.sPais}" size="3" disabled="true"/>
+
+								<p:inputText id="DCIBAN" value="#{GestorDetallesGasto.sDCIBAN}" size="3" disabled="true"/>
+
+								<h:outputText value="Número de Cuenta: "/>
+								<p:inputText id="NUCCEN" value="#{GestorDetallesGasto.sNUCCEN}" size="3" disabled="true"/>
+								<p:inputText id="NUCCOF" value="#{GestorDetallesGasto.sNUCCOF}" size="3" disabled="true"/>
+								<p:inputText id="NUCCDI" value="#{GestorDetallesGasto.sNUCCDI}" size="3" disabled="true"/>
+								<p:inputText id="NUCCNT" value="#{GestorDetallesGasto.sNUCCNT}" size="3" disabled="true"/>
+
+							</h:panelGrid>
+						</p:panel>
+					</p:dialog> 
+
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
 						<p:graphicImage value="recursos/loadingBar.gif" />
 					</p:dialog> 

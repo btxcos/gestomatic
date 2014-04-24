@@ -127,7 +127,22 @@
 
 											<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorPagosSimple.hoyFEPGPR}"/>
 											</h:panelGrid>
-									  </p:panel>
+										</p:panel>
+
+										<p:panel>
+											<h:panelGrid columns="5" cellpadding="5">
+
+												<h:outputText for="TRECARGO" value="Recargo adicional en pago: " />
+												<p:selectOneMenu id="TRECARGO" value="#{GestorPagosSimple.sTipoRecargo}">
+													<f:selectItem itemLabel="Sin recargo" itemValue=""/>
+													<f:selectItems value="#{GestorPagosComunidad.tiposrecargoHM}"/>
+														<p:ajax update="VRECARGO" listener="#{GestorPagosSimple.cambiaRecargo}"/>
+												</p:selectOneMenu>
+
+												<p:inputText id="VRECARGO" value="#{GestorPagosSimple.sValorRecargo}" size="10" maxlength="10" disabled="#{GestorPagosSimple.bRecargo}"/>
+
+											</h:panelGrid>
+										</p:panel>
 
 										<p:panel id="panelCuenta">
 											<h:panelGrid columns="2" cellpadding="5">

@@ -18,6 +18,7 @@ public class Provision
 	private String sGastosPagados = "";
 	private String sValorPagado = "";
 	private String sFechaPagado = "";
+	private String sRecargoTotal = "";
 	private String sCodEstado = "";
 
 	//Constructor de clase
@@ -27,7 +28,7 @@ public class Provision
 			String sValorTolal, String sFechaEnvio, String sGastosAutorizados,
 			String sValorAutorizado, String sFechaAutorizado,
 			String sGastosPagados, String sValorPagado, String sFechaPagado,
-			String sCodEstado) {
+			String sRecargoTotal, String sCodEstado) {
 		super();
 		this.sNUPROF = sNUPROF;
 		this.sCOSPAT = sCOSPAT;
@@ -44,6 +45,7 @@ public class Provision
 		this.sGastosPagados = sGastosPagados;
 		this.sValorPagado = sValorPagado;
 		this.sFechaPagado = sFechaPagado;
+		this.setsRecargoTotal(sRecargoTotal);
 		this.sCodEstado = sCodEstado;
 	}
 
@@ -167,6 +169,14 @@ public class Provision
 
 	public void setsFechaPagado(String sFechaPagado) {
 		this.sFechaPagado = sFechaPagado;
+	}
+
+	public String getsRecargoTotal() {
+		return sRecargoTotal;
+	}
+
+	public void setsRecargoTotal(String sRecargoTotal) {
+		this.sRecargoTotal = sRecargoTotal;
 	}
 
 	public String getsCodEstado() {

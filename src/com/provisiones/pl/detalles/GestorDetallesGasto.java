@@ -12,11 +12,15 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLPagos;
 import com.provisiones.ll.CLProvisiones;
+import com.provisiones.ll.CLTransferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
+import com.provisiones.types.Pago;
+import com.provisiones.types.transferencias.N34.TransferenciaN34;
 
 public class GestorDetallesGasto implements Serializable 
 {
@@ -65,13 +69,31 @@ public class GestorDetallesGasto implements Serializable
 	private String sFEAUFA = "";
 	private String sCOTERR = "";
 	private String sFMPAGN = "";
-	private String sFEPGPR = "";
 	private String sFEAPLI = "";
 	private String sCOAPII = "";
 	private String sCOSPII = "";
 	private String sNUCLII = "";
 	
 	private long liCodGasto = 0;
+	
+	//Pago
+	private String sFEPGPR = "";
+	private String sTipoPago = "";
+	
+	//Recargo
+	private String sRecargoAdicional = "0";
+
+	//Transferencia
+	private boolean bDetallesTransferencia = true;
+	
+	private String sPais = "";	
+	private String sDCIBAN = "";
+	private String sNUCCEN = "";
+	private String sNUCCOF = "";
+	private String sNUCCDI = "";
+	private String sNUCCNT = "";
+	
+	private String sDescripcion = "";
 
 	private String sNota = "";
 	
@@ -166,8 +188,7 @@ public class GestorDetallesGasto implements Serializable
 				this.sCOMONA = gasto.getCOMONA();
 				this.sBIAUTO = gasto.getBIAUTO();
 				this.sFEAUFA = Utils.recuperaFecha(gasto.getFEAUFA());
-				//TODO sacar de datos de pago
-				//this.sFEPGPR = Utils.recuperaFecha(gasto.getFEPGPR());
+
 				
 				this.sCOUNMO = ValoresDefecto.DEF_COUNMO;
 				
@@ -180,6 +201,57 @@ public class GestorDetallesGasto implements Serializable
 
 				this.sCOTERR = ValoresDefecto.DEF_COTERR;
 				
+				//Datos de pago
+				long liCodPago = CLPagos.buscarCodigoPago(liCodGasto);
+				
+				if (liCodPago != 0)
+				{
+					Pago pago = CLPagos.buscarPago(liCodPago);
+
+					this.sFEPGPR = Utils.recuperaFecha(pago.getsFEPGPR());
+					this.sTipoPago = pago.getsTipoPago();
+					
+					//Recargo
+					this.sRecargoAdicional = Utils.recuperaRecargo(false, pago.getsRecargoAdicional());
+					
+					if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_VENTANILLA))
+					{
+						this.bDetallesTransferencia = true;
+						
+						this.sPais = "";	
+						this.sDCIBAN = "";
+						this.sNUCCEN = "";
+						this.sNUCCOF = "";
+						this.sNUCCDI = "";
+						this.sNUCCNT = "";
+						
+						this.sDescripcion = "Pago en ventanilla";
+					}
+					else if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_NORMA34))
+					{
+						this.bDetallesTransferencia = false;
+						
+						long liCodOperacion = Long.parseLong(pago.getsCodOperacion());
+						
+						TransferenciaN34 tranferencia = CLTransferencias.buscarTransferenciaN34(liCodOperacion);
+						
+						this.sPais = "ES";	
+						
+						this.sNUCCEN = tranferencia.getsNUCCEN();
+						this.sNUCCOF = tranferencia.getsNUCCOF();
+						this.sNUCCDI = tranferencia.getsNUCCDI();
+						this.sNUCCNT = tranferencia.getsNUCCNT();
+						this.sDCIBAN = Utils.calculaDCIBAN(sPais, sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT);
+						
+						
+						this.sDescripcion = "Pago por transferencia";
+					}
+					
+					//Cuenta
+
+				}
+
+				
 				//TODO sacar de datos de pago
 				//this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
 			
@@ -187,6 +259,7 @@ public class GestorDetallesGasto implements Serializable
 				this.sCOAPII = ValoresDefecto.DEF_COAPII;
 				this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 				this.sNUCLII = ValoresDefecto.DEF_NUCLII;
+				
 				
 				this.sNota = CLGastos.buscarNota(liCodGasto);
 				
@@ -613,6 +686,86 @@ public class GestorDetallesGasto implements Serializable
 	}
 	public void setsNUCLII(String sNUCLII) {
 		this.sNUCLII = sNUCLII;
+	}	
+
+	public String getsTipoPago() {
+		return sTipoPago;
+	}
+
+	public void setsTipoPago(String sTipoPago) {
+		this.sTipoPago = sTipoPago;
+	}
+
+	public String getsRecargoAdicional() {
+		return sRecargoAdicional;
+	}
+
+	public void setsRecargoAdicional(String sRecargoAdicional) {
+		this.sRecargoAdicional = sRecargoAdicional;
+	}
+
+	public boolean isbDetallesTransferencia() {
+		return bDetallesTransferencia;
+	}
+
+	public void setbDetallesTransferencia(boolean bDetallesTransferencia) {
+		this.bDetallesTransferencia = bDetallesTransferencia;
+	}
+
+	public String getsPais() {
+		return sPais;
+	}
+
+	public void setsPais(String sPais) {
+		this.sPais = sPais;
+	}
+
+	public String getsDCIBAN() {
+		return sDCIBAN;
+	}
+
+	public void setsDCIBAN(String sDCIBAN) {
+		this.sDCIBAN = sDCIBAN;
+	}
+
+	public String getsNUCCEN() {
+		return sNUCCEN;
+	}
+
+	public void setsNUCCEN(String sNUCCEN) {
+		this.sNUCCEN = sNUCCEN;
+	}
+
+	public String getsNUCCOF() {
+		return sNUCCOF;
+	}
+
+	public void setsNUCCOF(String sNUCCOF) {
+		this.sNUCCOF = sNUCCOF;
+	}
+
+	public String getsNUCCDI() {
+		return sNUCCDI;
+	}
+
+	public void setsNUCCDI(String sNUCCDI) {
+		this.sNUCCDI = sNUCCDI;
+	}
+
+	public String getsNUCCNT() {
+		return sNUCCNT;
+	}
+
+	public void setsNUCCNT(String sNUCCNT) {
+		this.sNUCCNT = sNUCCNT;
+	}
+
+	public String getsDescripcion() {
+		return sDescripcion;
+	}
+
+	public void setsDescripcion(String sDescripcion) {
+		this.sDescripcion = sDescripcion;
 	}
 
 	public String getsNota() {

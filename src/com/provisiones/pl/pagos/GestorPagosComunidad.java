@@ -2,6 +2,8 @@ package com.provisiones.pl.pagos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -20,6 +22,7 @@ import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Cuenta;
 import com.provisiones.types.Provision;
+import com.provisiones.types.RecargoImporte;
 import com.provisiones.types.tablas.ComunidadTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
 
@@ -76,6 +79,11 @@ public class GestorPagosComunidad implements Serializable
 	private String sFEPGPR = "";
 	private String sFechaUltimoDevengo = "";
 	
+	//Recargo
+	private String sTipoRecargo = "";
+	private String sValorRecargo = "0";
+	private boolean bRecargo = true;
+	
 	//Cuenta de pago
 	private String sPais = "";	
 	private String sDCIBAN = "";
@@ -88,6 +96,8 @@ public class GestorPagosComunidad implements Serializable
 	private String sTipoPago = "";
 	
 	private long iCodComunidad = 0;
+	
+	private Map<String,String> tiposrecargoHM = new LinkedHashMap<String, String>();
 	
 	private transient ProvisionTabla provisionseleccionada = null;
 	private transient ArrayList<ProvisionTabla> tablaprovisiones = null;
@@ -103,6 +113,9 @@ public class GestorPagosComunidad implements Serializable
 		if (ConnectionManager.comprobarConexion())
 		{
 			logger.debug("Iniciando GestorPagosComunidad...");
+			
+			tiposrecargoHM.put("Cantidad fija (¤)","1");
+			tiposrecargoHM.put("Proporcional (%)", "2");
 		}
 	}
 	
@@ -206,6 +219,10 @@ public class GestorPagosComunidad implements Serializable
 	{
     	this.sFEPGPR = "";
     	this.sFechaUltimoDevengo = "";
+    	
+    	this.sTipoRecargo = "";
+    	this.sValorRecargo = "0";
+    	this.bRecargo = true;
     	
     	borrarCamposCuenta();
 	}
@@ -542,6 +559,11 @@ public class GestorPagosComunidad implements Serializable
 		logger.debug("sFEPGPR:|"+sFEPGPR+"|");
 	}
 	
+	public void cambiaRecargo()
+	{
+		this.bRecargo = (sTipoRecargo ==null || sTipoRecargo.isEmpty());
+	}
+	
 	public void buscaCuentas (ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -634,7 +656,7 @@ public class GestorPagosComunidad implements Serializable
 			String sMsg = "";
 			
 			try
-			{
+			{	
 				if (sFEPGPR.isEmpty())
 				{
 					sMsg = "ERROR: La fecha de pago no se ha informado. Por favor, revise los datos.";
@@ -680,6 +702,12 @@ public class GestorPagosComunidad implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (!sTipoRecargo.isEmpty() && sValorRecargo.equals("0") )
+				{
+					sMsg = "Elija 'Sin recargo' si el pago no lleva recargo. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
 				else
 				{
 					if (sNUCCEN.equals("0000") ||
@@ -696,12 +724,22 @@ public class GestorPagosComunidad implements Serializable
 					
 					Cuenta cuenta = new Cuenta (sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT,"");
 					
+					if (sTipoRecargo.isEmpty())
+					{
+						sValorRecargo = "0";
+					}
+					
+					Long.parseLong(Utils.compruebaImporte(sValorRecargo));
+					
+					RecargoImporte recargo = new RecargoImporte(sTipoRecargo,Utils.compruebaImporte(sValorRecargo));
+					
 					int iSalida = CLPagos.registraPagoComunidad(
 							iCodComunidad,
 							sNUPROF,
 							sTipoPago,
 							Utils.compruebaFecha(sFEPGPR),
 							cuenta,
+							recargo,
 							true);
 					
 					switch (iSalida) 
@@ -799,7 +837,7 @@ public class GestorPagosComunidad implements Serializable
 			}
 			catch(NumberFormatException nfe)
 			{
-				sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+				sMsg = "ERROR: El valor debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
@@ -1000,6 +1038,30 @@ public class GestorPagosComunidad implements Serializable
 	public void setsFechaUltimoDevengo(String sFechaUltimoDevengo) {
 		this.sFechaUltimoDevengo = sFechaUltimoDevengo;
 	}
+	
+	public String getsTipoRecargo() {
+		return sTipoRecargo;
+	}
+
+	public void setsTipoRecargo(String sTipoRecargo) {
+		this.sTipoRecargo = sTipoRecargo;
+	}
+
+	public String getsValorRecargo() {
+		return sValorRecargo;
+	}
+
+	public void setsValorRecargo(String sValorRecargo) {
+		this.sValorRecargo = sValorRecargo;
+	}
+
+	public boolean isbRecargo() {
+		return bRecargo;
+	}
+
+	public void setbRecargo(boolean bRecargo) {
+		this.bRecargo = bRecargo;
+	}
 
 	public String getsPais() {
 		return sPais;
@@ -1055,6 +1117,14 @@ public class GestorPagosComunidad implements Serializable
 
 	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
+	}
+	
+	public Map<String, String> getTiposrecargoHM() {
+		return tiposrecargoHM;
+	}
+
+	public void setTiposrecargoHM(Map<String, String> tiposrecargoHM) {
+		this.tiposrecargoHM = tiposrecargoHM;
 	}
 
 	public ProvisionTabla getProvisionseleccionada() {

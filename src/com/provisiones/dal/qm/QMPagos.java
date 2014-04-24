@@ -30,9 +30,11 @@ public class QMPagos
 	public static final String CAMPO4 = "cod_tipo_pago";
 	public static final String CAMPO5 = "cod_operacion";
 	public static final String CAMPO6 = "fepgpr";
-	public static final String CAMPO7 = "enviado";
-	public static final String CAMPO8 = "usuario_pago";
-	public static final String CAMPO9 = "fecha_pago";
+	public static final String CAMPO7 = "recargo_adicional";
+	public static final String CAMPO8 = "enviado";
+	public static final String CAMPO9 = "usuario_pago";
+	public static final String CAMPO10 = "fecha_pago";
+	public static final String CAMPO11 = "nota";
 
 
 	private QMPagos(){}
@@ -61,17 +63,21 @@ public class QMPagos
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO9 +
+					+ CAMPO9 + ","
+					+ CAMPO10 + ","
+					+ CAMPO11 +
 					") VALUES ('"
 					+ NuevoPago.getsCOACES() + "','"
 					+ NuevoPago.getsGasto() + "','"
 					+ NuevoPago.getsTipoPago() + "','"
 					+ NuevoPago.getsCodOperacion() + "','"
-					+ NuevoPago.getsFEPGPR() + "',"
+					+ NuevoPago.getsFEPGPR() + "','"
+					+ NuevoPago.getsRecargoAdicional() + "',"
 					+ btEnviado + ",'"
 					+ sUsuario + "','"
-					+ Utils.timeStamp() + 
-					"')";
+					+ Utils.timeStamp() + "',"
+					+ "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
+				    ")";
 
 			logger.debug(sQuery);
 
@@ -131,9 +137,10 @@ public class QMPagos
 					+ CAMPO4 + " = '" + pago.getsTipoPago() + "', "
 					+ CAMPO5 + " = '" + pago.getsCodOperacion() + "', " 
 					+ CAMPO6 + " = '" + pago.getsFEPGPR() + "', "
-					+ CAMPO7 + " = " + btEnviado + ", " 
-					+ CAMPO8 + " = '" + sUsuario + "', " 
-					+ CAMPO9 + " = '" + Utils.timeStamp() + "' " +					
+					+ CAMPO7 + " = '" + pago.getsRecargoAdicional() + "', "
+					+ CAMPO8 + " = " + btEnviado + ", " 
+					+ CAMPO9 + " = '" + sUsuario + "', " 
+					+ CAMPO10 + " = '" + Utils.timeStamp() + "' " +					
 					" WHERE " 
 					+ CAMPO1 + " = '" + liPagoID + "'";
 
@@ -216,8 +223,7 @@ public class QMPagos
 		String sTipoPago = "";
 		String sCodOperacion = "";
 		String sFEPGPR = "";
-	
-
+		String sRecargoAdicional = "";
 
 		if (conexion != null)
 		{
@@ -234,8 +240,9 @@ public class QMPagos
 				       + CAMPO2  + ","
 				       + CAMPO3  + ","    
 				       + CAMPO4  + ","
-				       + CAMPO5  + ","  
-				       + CAMPO6
+				       + CAMPO5  + ","
+				       + CAMPO6  + "," 
+				       + CAMPO7
 				       +" FROM " 
 				       + TABLA + 
 				       " WHERE "
@@ -265,7 +272,8 @@ public class QMPagos
 						sGasto = rs.getString(CAMPO3);  
 						sTipoPago = rs.getString(CAMPO4);
 						sCodOperacion = rs.getString(CAMPO5);
-						sFEPGPR = rs.getString(CAMPO6); 
+						sFEPGPR = rs.getString(CAMPO6);
+						sRecargoAdicional = rs.getString(CAMPO7);
 
 						logger.debug("Encontrado el registro!");
 					}
@@ -283,7 +291,8 @@ public class QMPagos
 				sGasto = "";
 				sTipoPago = "";
 				sCodOperacion = "";
-				sFEPGPR = "";	
+				sFEPGPR = "";
+				sRecargoAdicional = "";
 
 				logger.error("ERROR PAGO:|"+liPagoID+"|");
 
@@ -301,7 +310,8 @@ public class QMPagos
 				sGasto,
 				sTipoPago,
 				sCodOperacion,
-				sFEPGPR);
+				sFEPGPR,
+				sRecargoAdicional);
 	}
 
 	public static long getPagoID(Connection conexion, long liCodGasto)
@@ -337,7 +347,7 @@ public class QMPagos
 				
 				logger.debug("Ejecutada con exito!");
 				
-				logger.debug(CAMPO2 + ":|"+liCodGasto+"|");
+				logger.debug(CAMPO3 + ":|"+liCodGasto+"|");
 
 				if (rs != null) 
 				{
@@ -375,7 +385,130 @@ public class QMPagos
 		}
 
 		return liPagoID;
-	}	
+	}
+	
+	public static boolean setNota(Connection conexion, String sNUPROF, String sNota)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					//+ CAMPO11 + " = '"+ sNota +"' "+
+					+ CAMPO11 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ sNUPROF +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static String getNota(Connection conexion, String sNUPROF)
+	{
+		String sNota = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						//+ CAMPO11 +
+						+"AES_DECRYPT("+CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ sNUPROF +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						//sNota = rs.getString(CAMPO19);
+						
+						sNota = rs.getString("AES_DECRYPT("+CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO11+":|"+sNota+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sNota = "";
+				
+				logger.error("ERROR PROVISION:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sNota;
+	}
 	
 	public static boolean setEnviado(Connection conexion, long liPagoID, byte btEnviado)
 	{
@@ -390,7 +523,7 @@ public class QMPagos
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO7 + " = "+ btEnviado +
+					+ CAMPO8 + " = "+ btEnviado +
 					" WHERE "
 					+ CAMPO1  + " = '"+ liPagoID +"'";
 			
@@ -436,7 +569,7 @@ public class QMPagos
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-				       	+ CAMPO7  +                
+				       	+ CAMPO8  +                
 				       	" FROM " 
 				       	+ TABLA + 
 				       	" WHERE "
@@ -646,7 +779,7 @@ public class QMPagos
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO7 + " = "+ btEnviado + "))";
+					+ CAMPO8 + " = "+ btEnviado + "))";
 			
 			logger.debug(sQuery);
 
@@ -716,7 +849,7 @@ public class QMPagos
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
-					+ CAMPO7 + " = "+ btEnviado + 
+					+ CAMPO8 + " = "+ btEnviado + 
 					" ORDER BY " + CAMPO2 + " ASC";
 			
 			logger.debug(sQuery);
@@ -787,7 +920,7 @@ public class QMPagos
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO7 + " = "+ ValoresDefecto.PAGO_EMITIDO + " AND "
+					+ CAMPO8 + " = "+ ValoresDefecto.PAGO_EMITIDO + " AND "
 					+ CAMPO3 + " IN (SELECT "
 					+ QMListaGastosProvisiones.CAMPO1 +
 					" FROM " 
@@ -864,7 +997,7 @@ public class QMPagos
 					" WHERE " +
 					"("
 					+ CAMPO4 + " = '"+sTipoPago+"' AND "
-					+ CAMPO7 + " = "+ValoresDefecto.PAGO_EMITIDO+
+					+ CAMPO8 + " = "+ValoresDefecto.PAGO_EMITIDO+
 					")";
 			
 			logger.debug(sQuery);

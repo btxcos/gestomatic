@@ -57,7 +57,7 @@ public class CLTransferencias
 				sPlaza);
 	}
 	
-	public static TransferenciaN34 generarTransferenciaN34(long liCodGasto, Cuenta cuenta)
+	public static TransferenciaN34 generarTransferenciaN34(long liCodGasto, Cuenta cuenta, long liRecargo)
 	{
 		Connection conexion = ConnectionManager.getDBConnection();
 		
@@ -83,7 +83,7 @@ public class CLTransferencias
 			gasto.setValor_total();
 			sReferenciaBeneficiario = gasto.getCOACES();
 			
-			sImporte = Long.toString(gasto.getValor_total());
+			sImporte = Long.toString(gasto.getValor_total()+liRecargo);
 			
 			sNUCCEN = cuenta.getsNUCCEN();
 			sNUCCOF = cuenta.getsNUCCOF();
@@ -98,7 +98,7 @@ public class CLTransferencias
 	    	
 	    	if (sNombreBeneficiario.equals(""))
 	    	{
-	    		sNombreBeneficiario = "PROPIETARIO DE LA FINCA";
+	    		sNombreBeneficiario = "ADMINISTRADOR DE LA FINCA";
 	    	}
 			
 	    	String sDomicilio = activo.getNOVIAS() + " " + activo.getNUPOAC();
