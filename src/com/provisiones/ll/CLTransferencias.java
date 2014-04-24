@@ -98,7 +98,12 @@ public class CLTransferencias
 	    	
 	    	if (sNombreBeneficiario.equals(""))
 	    	{
+	    		//Longitud maxima (36)
 	    		sNombreBeneficiario = "ADMINISTRADOR DE LA FINCA";
+	    	}
+	    	else if (sNombreBeneficiario.length() > Longitudes.N34_CAMPO_L)
+	    	{
+	    		sNombreBeneficiario = sNombreBeneficiario.substring(0, Longitudes.N34_CAMPO_L);
 	    	}
 			
 	    	String sDomicilio = activo.getNOVIAS() + " " + activo.getNUPOAC();
