@@ -563,11 +563,38 @@ public final class QMGastos
 			}
 		}
 		
-		return new Gasto(sCOACES, sCOGRUG, sCOTPGA, sCOSBGA,
-				sPTPAGO, sFEDEVE, sFFGTVP, sFELIPG, sCOSIGA, sFEEESI, sFEECOI,
-				sFEEAUI, sFEEPAI, sIMNGAS, sYCOS02, sIMRGAS, sYCOS04, sIMDGAS,
-				sYCOS06, sIMCOST, sYCOS08, sIMOGAS, sYCOS10, sIMDTGA, sIMIMGA,
-				sCOIMPT, sCOTNEG, sFEAGTO, sCOMONA, sBIAUTO, sFEAUFA);
+		return new Gasto(
+				sCOACES, 
+				sCOGRUG, 
+				sCOTPGA, 
+				sCOSBGA,
+				sPTPAGO, 
+				sFEDEVE, 
+				sFFGTVP, 
+				sFELIPG, 
+				sCOSIGA, 
+				sFEEESI, 
+				sFEECOI,
+				sFEEAUI, 
+				sFEEPAI, 
+				sIMNGAS, 
+				sYCOS02, 
+				sIMRGAS, 
+				sYCOS04, 
+				sIMDGAS,
+				sYCOS06, 
+				sIMCOST, 
+				sYCOS08, 
+				sIMOGAS, 
+				sYCOS10, 
+				sIMDTGA, 
+				sIMIMGA,
+				sCOIMPT, 
+				sCOTNEG, 
+				sFEAGTO, 
+				sCOMONA, 
+				sBIAUTO, 
+				sFEAUFA);
 	}
 	
 	

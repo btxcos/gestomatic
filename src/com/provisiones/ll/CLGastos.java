@@ -12,6 +12,7 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMProvisiones;
+import com.provisiones.dal.qm.listas.QMListaAbonosGastos;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresGastos;
@@ -1375,21 +1376,31 @@ public final class CLGastos
 													
 													if (gasto.getValor_total() == 0)
 													{
-														
+														//Dar gasto por pagado en provision (debloquear)
 													}
 													else if (gasto.getValor_total() > 0)
 													{
-														
+														//Forzar bloqueo de provision y gasto en abonando
 													}
 													else
 													{
-														//error
+														//Error abono no registrado
+														iCodigo = -911;
 													}
 													
-													if (QMGastos.modImportes(conexion, gasto, liCodGasto))
+													if (QMGastos.modImportes(conexion, gasto, liCodGasto) && (iCodigo == 0))
 													{
 														
-														iCodigo = 0;
+														if (QMListaAbonosGastos.addRelacionAbono(conexion,liCodGasto,liCodMovimiento))
+														{
+															
+															iCodigo = 0;
+														}
+														else
+														{
+															//Error abono no registrado
+															iCodigo = -911;			
+														}
 													}
 													else
 													{

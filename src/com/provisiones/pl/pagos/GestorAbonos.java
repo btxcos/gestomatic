@@ -1467,6 +1467,12 @@ public class GestorAbonos implements Serializable
 								msg = Utils.pfmsgFatal(sMsg);
 								logger.error(sMsg);
 								break;
+
+							case -909: //Error 909 - error y rollback - error al actualizar la provision
+								sMsg = "[FATAL] ERROR:909 - Se ha producido un error al actualizar la provisión. Por favor, revise los datos y avise a soporte.";
+								msg = Utils.pfmsgFatal(sMsg);
+								logger.error(sMsg);
+								break;
 								
 							case -910: //Error 910 - error y rollback - error al conectar con la base de datos
 								sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
@@ -1474,6 +1480,12 @@ public class GestorAbonos implements Serializable
 								logger.error(sMsg);
 								break;
 
+							case -911: //Error 911 - error y rollback - error al registar el abono
+								sMsg = "[FATAL] ERROR:911 - Se ha producido un error al registar el abono. Por favor, revise los datos y avise a soporte.";
+								msg = Utils.pfmsgFatal(sMsg);
+								logger.error(sMsg);
+								break;
+								
 							default: //error generico
 								sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
 								msg = Utils.pfmsgFatal(sMsg);
