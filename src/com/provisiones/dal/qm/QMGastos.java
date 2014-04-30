@@ -26,14 +26,14 @@ public final class QMGastos
 
 	public static final String CAMPO1  = "ga_gasto_id";
 	public static final String CAMPO2  = "cod_coaces"; 
-	public static final String CAMPO3  = "cod_cogrug"; 
+	public static final String CAMPO3  = "cod_cogrug";
 	public static final String CAMPO4  = "cotpga";     
 	public static final String CAMPO5  = "cosbga";     
-	public static final String CAMPO6  = "cod_ptpago"; 
+	public static final String CAMPO6  = "cod_ptpago";
 	public static final String CAMPO7  = "fedeve";     
 	public static final String CAMPO8  = "ffgtvp";     
 	public static final String CAMPO9  = "felipg";     
-	public static final String CAMPO10 = "cod_cosiga"; 
+	public static final String CAMPO10 = "cod_cosiga";
 	public static final String CAMPO11 = "feeesi";     
 	public static final String CAMPO12 = "feecoi";     
 	public static final String CAMPO13 = "feeaui";     
@@ -42,7 +42,7 @@ public final class QMGastos
 	public static final String CAMPO16 = "ycos02";     
 	public static final String CAMPO17 = "imrgas";     
 	public static final String CAMPO18 = "ycos04";     
-	public static final String CAMPO19 = "imdgas";     
+	public static final String CAMPO19 = "imdgas";
 	public static final String CAMPO20 = "ycos06";     
 	public static final String CAMPO21 = "imcost";     
 	public static final String CAMPO22 = "ycos08";     

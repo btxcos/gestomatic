@@ -631,7 +631,7 @@ public final class QMMovimientosGastos
 					       + CAMPO8  +" = '" + gasto.getFFGTVP() + "' AND "
 					       + CAMPO9  +" = '" + gasto.getFEPAGA() + "' AND "
 					       + CAMPO10 +" = '" + gasto.getFELIPG() + "' AND "
-					       + CAMPO11 +" = '" + gasto.getCOSIGA() + "' AND "
+					       //+ CAMPO11 +" = '" + gasto.getCOSIGA() + "' AND "
 					       + CAMPO12 +" = '" + gasto.getFEEESI() + "' AND "
 					       + CAMPO13 +" = '" + gasto.getFEECOI() + "' AND "
 					       + CAMPO14 +" = '" + gasto.getFEEAUI() + "' AND "
