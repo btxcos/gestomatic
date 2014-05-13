@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public final class ConnectionManager
 		Connection conn = null; 
 		try
 		{
-			conn = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
+			conn = ((GestorSesion)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getConn();
 		}
 		catch (NullPointerException e)
 		{
@@ -69,7 +70,7 @@ public final class ConnectionManager
 				logger.warn("La conexión fue cerrada.");
 			}
 			
-			HttpSession session = (HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 			
 			try
 			{
@@ -93,7 +94,7 @@ public final class ConnectionManager
 		
 		try
 		{
-			sUser = ((GestorSesion)((HttpSession) javax.faces.context.FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getsUsuario(); 
+			sUser = ((GestorSesion)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getsUsuario(); 
 		}
 		catch (NullPointerException npe)
 		{

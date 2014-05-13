@@ -30,7 +30,7 @@ public class GestorAbonos implements Serializable
 {
 	private static final long serialVersionUID = -6798102863183547873L;
 
-	private static Logger logger = LoggerFactory.getLogger(GestorAbonos.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.getUser()+"] ["+GestorAbonos.class.getName());
 
 	//Buscar Activo
 	private String sCOACESB = "";
@@ -187,6 +187,9 @@ public class GestorAbonos implements Serializable
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
+			
+			logger.debug("Usuario:|"+ConnectionManager.getUser()+"|");
+			
 			logger.debug("Iniciando GestorAbonos...");
 
 			tiposcogrugHM.put("Compraventa",      "1");
@@ -1119,6 +1122,12 @@ public class GestorAbonos implements Serializable
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 					}
+					else if (CLPagos.estaAbonado(liCodGastoB))
+					{
+						sMsg = "ERROR: El Gasto informado ya está abonado. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+					}
 					else
 					{
 						MovimientoGasto movimiento = new MovimientoGasto (
@@ -1482,6 +1491,18 @@ public class GestorAbonos implements Serializable
 
 							case -911: //Error 911 - error y rollback - error al registar el abono
 								sMsg = "[FATAL] ERROR:911 - Se ha producido un error al registar el abono. Por favor, revise los datos y avise a soporte.";
+								msg = Utils.pfmsgFatal(sMsg);
+								logger.error(sMsg);
+								break;
+								
+							case -912: //Error 912 - error y rollback - error al resolver la relación del Gasto
+								sMsg = "[FATAL] ERROR:912 - Se ha producido un error al resolver la relación del Gasto. Por favor, revise los datos y avise a soporte.";
+								msg = Utils.pfmsgFatal(sMsg);
+								logger.error(sMsg);
+								break;
+								
+							case -913: //Error 913 - error y rollback - error al resolver la relación Gasto-Provisión
+								sMsg = "[FATAL] ERROR:913 - Se ha producido un error al resolver la relación Gasto-Provisión. Por favor, revise los datos y avise a soporte.";
 								msg = Utils.pfmsgFatal(sMsg);
 								logger.error(sMsg);
 								break;

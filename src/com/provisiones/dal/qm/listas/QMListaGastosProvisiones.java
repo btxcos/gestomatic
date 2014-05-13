@@ -203,6 +203,63 @@ public final class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
+	public static boolean addRelacionGastoProvisionResuelto(Connection conexion, long liCodGasto, String sCodNUPROF) 
+	{
+		boolean bSalida = false;
+		
+		String sUsuario = ConnectionManager.getUser();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "INSERT INTO " 
+					+ TABLA + 
+					" (" 
+					+ CAMPO1 + "," 
+					+ CAMPO2 + "," 
+					+ CAMPO3 + "," 
+					+ CAMPO4 + "," 
+					+ CAMPO5 +						
+					") VALUES ('" 
+					+ liCodGasto + "','"
+					+ sCodNUPROF + "','"
+					+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO + "','"
+				    + sUsuario + "','"
+				    + Utils.timeStamp() +
+					"')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+				logger.error("ERROR PROVISION:|"+sCodNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static boolean delRelacionGastoProvision(Connection conexion, long liCodGasto) 
 	{
 		boolean bSalida = false;

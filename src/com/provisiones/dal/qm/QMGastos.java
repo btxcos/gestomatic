@@ -1348,6 +1348,53 @@ public final class QMGastos
 		return bSalida;
 	}
 	
+	public static boolean setPagadoAbonado(Connection conexion, long liGastoID, String sFEEPAI)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET "
+					+ CAMPO14 + " = '"+ sFEEPAI + "', "
+					+ CAMPO34 + " = '"+ ValoresDefecto.DEF_GASTO_ABONADO + "' "+
+					" WHERE "
+					+ CAMPO1  + " = '"+ liGastoID +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR GASTO:|"+liGastoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static boolean setPagadoConexion(Connection conexion, long liGastoID, String sFEEPAI)
 	{
 		boolean bSalida = false;

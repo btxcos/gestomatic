@@ -12,6 +12,7 @@ import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMPagos;
 import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.QMTransferenciasN34;
+import com.provisiones.dal.qm.listas.QMListaAbonosGastos;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
@@ -70,6 +71,11 @@ public class CLPagos
 	public static boolean estaPagado(long liCodGasto)
 	{
 		return QMPagos.existePago(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+	
+	public static boolean estaAbonado(long liCodGasto)
+	{
+		return QMListaAbonosGastos.existeRelacionAbono(ConnectionManager.getDBConnection(),liCodGasto);
 	}
 	
 	public static int validaPago(Pago pago, Cuenta cuenta)
@@ -342,15 +348,31 @@ public class CLPagos
 							}
 							else
 							{
-								if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
+								if (QMGastos.getCOSIGA(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_ABONADO))
 								{
-									iCodigo = 0;
+									if (QMGastos.setPagadoAbonado(conexion, liCodGasto, pago.getsFEPGPR()))
+									{
+										iCodigo = 0;
+									}
+									else
+									{
+										//error al establecer el estado del gasto - Rollback
+										iCodigo = -905;
+									}
 								}
 								else
 								{
-									//error al establecer el estado del gasto - Rollback
-									iCodigo = -905;
+									if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
+									{
+										iCodigo = 0;
+									}
+									else
+									{
+										//error al establecer el estado del gasto - Rollback
+										iCodigo = -905;
+									}
 								}
+
 							}
 							
 							if (iCodigo == 0)

@@ -946,13 +946,15 @@ public final class QMProvisiones
 		if (conexion != null)
 		{
 			Statement stmt = null;
+			
+			String sCondicionValor = (liValor >= 0)? " + "+liValor:liValor+"";
 
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO17 + " = " + CAMPO17 + " + "+liValor+
+					+ CAMPO17 + " = " + CAMPO17 + sCondicionValor+
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -1001,6 +1003,60 @@ public final class QMProvisiones
 					+ CAMPO17 + " = " + CAMPO17 + " + "+liValor+
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoAbonadoInyectado(Connection conexion, String sNUPROF, long liValor) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			String sCondicionValor = (liValor >= 0)? " + "+liValor:liValor+"";
+
+			logger.debug("Ejecutando Query...");
+			
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO7  + " = " + CAMPO7 + " + 1,"
+					+ CAMPO8  + " = " + CAMPO8 + sCondicionValor + ", "
+					+ CAMPO10 + " = " + CAMPO10 + " + 1,"
+					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+ ", "			
+					+ CAMPO13 + " = " + CAMPO13 + " + 1 ,"
+					+ CAMPO14 + " = " + CAMPO14 + sCondicionValor+
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
 			
 			logger.debug(sQuery);
 

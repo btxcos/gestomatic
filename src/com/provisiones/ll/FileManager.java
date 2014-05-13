@@ -1889,6 +1889,10 @@ public final class FileManager
 	    				sDescripcion = "[FATAL] El movimiento recibido figura como 'no enviado'.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
+	    			case -12:
+	    				sDescripcion = "[FATAL] El gasto esta resuelto y puede recibir más movimientos.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
 					case -910:
 						sDescripcion = "[FATAL] Se ha producido un error al conectar con la base de datos.";
 						sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
@@ -2025,15 +2029,7 @@ public final class FileManager
 	    				sDescripcion = "No existe la provisión de gasto en el sistema.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;	
-	    			case -908:
-	    				sDescripcion = "[FATAL] Error al crear la Provisión del Gasto.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
-	    				break;
-	    			case -901:
-	    				sDescripcion = "[FATAL] Error al crear el Gasto.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
-	    				break;
-	    			case -909:
+	    			case -800:
 	    				sDescripcion = "El movimiento cargado ya se encontraba en el sistema.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
 	    				break;
@@ -2041,14 +2037,55 @@ public final class FileManager
 	    				sDescripcion = "[FATAL] Error al registrar el movimiento.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
+	    			case -901:
+	    				sDescripcion = "[FATAL] Error al crear el Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
 	    			case -902:
 	    				sDescripcion = "[FATAL] Error al crear la relación del Gasto.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;	
-	    			case -906:
+	    			case -903:
+	    				sDescripcion = "[FATAL] Error al crear la Provisión del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -904:
 	    				sDescripcion = "[FATAL] Error al crear la relación del Gasto con la Provisión.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
+	    			case -905:
+	    				sDescripcion = "[FATAL] Error al actualizar el estado del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -906:
+	    				sDescripcion = "[FATAL] Error al actualizar el estado de la Provisión del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -907:
+	    				sDescripcion = "[FATAL] Error al actualizar el Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -908:
+	    				sDescripcion = "[FATAL] Error al actualizar la Provisión del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -909:
+	    				sDescripcion = "[FATAL] Error al registar el Abono del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -910:
+	    				sDescripcion = "[FATAL] Error de conexion con base de datos.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -911:
+	    				sDescripcion = "[FATAL]  Error al actualizar la relación del Gasto con la Provisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+	    			case -912:
+	    				sDescripcion = "[FATAL]  Error al actualizar la relación del Gasto.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
+
 	    			default:
 	    				sDescripcion = "El movimiento cargado no ha podido ser validado ("+iCodigo+").";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;

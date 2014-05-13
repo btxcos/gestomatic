@@ -21,6 +21,7 @@ public class QMListaAbonosGastos
 	//identificadores
 	public static final String CAMPO1  = "cod_gasto";
 	public static final String CAMPO2  = "cod_abono";
+	public static final String CAMPO3  = "fecha_abono";
 
 	private QMListaAbonosGastos(){}
 
@@ -37,11 +38,13 @@ public class QMListaAbonosGastos
 			String sQuery = "INSERT INTO " 
 					   + TABLA + 
 					   " ("
-					   + CAMPO1  + "," 
-				       + CAMPO2  +    
+					   + CAMPO1  + ","
+					   + CAMPO2  + ","
+				       + CAMPO3  +    
 				       ") VALUES ('"
-				       + liCodGasto + "','" 
-				       + liCodAbono + "' )";
+				       + liCodGasto + "','"
+				       + liCodAbono + "','"
+				       + Utils.fechaDeHoy(false) + "' )";
 			
 			logger.debug(sQuery);
 
@@ -117,7 +120,7 @@ public class QMListaAbonosGastos
 		return bSalida;
 	}
 
-	public static boolean existeRelacionAbono(Connection conexion, long liCodGasto, long liCodAbono)
+	public static boolean existeRelacionAbono(Connection conexion, long liCodGasto)
 	{
 		boolean bEncontrado = false;
 		
@@ -134,9 +137,8 @@ public class QMListaAbonosGastos
 				       + CAMPO1  +
 				       " FROM " 
 				       + TABLA + 
-				       " WHERE (" 
-				       + CAMPO1 + " = '" + liCodGasto + "' AND "
-				       + CAMPO2 + " = '" + liCodAbono + "')";
+				       " WHERE " 
+				       + CAMPO1 + " = '" + liCodGasto + "'";
 			
 			logger.debug(sQuery);
 
@@ -168,7 +170,6 @@ public class QMListaAbonosGastos
 				bEncontrado = false;
 
 				logger.error("ERROR GASTO:|"+liCodGasto+"|");
-				logger.error("ERROR ABONO:|"+liCodAbono+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -182,4 +183,139 @@ public class QMListaAbonosGastos
 		return bEncontrado;
 	}
 	
+	public static long getAbono(Connection conexion, long liCodGasto) 
+	{
+		long liCodAbono = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + CAMPO2  +
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1 + " = '" + liCodGasto + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						liCodAbono = rs.getLong(CAMPO2);
+
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liCodAbono = 0;
+
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return liCodAbono;
+	}
+	
+	public static String getFechaAbono(Connection conexion, long liCodGasto) 
+	{
+		String sFecha = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + CAMPO3  +
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1 + " = '" + liCodGasto + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sFecha = rs.getString(CAMPO3);
+
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sFecha = "";
+
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return sFecha;
+	}
 }
