@@ -18,6 +18,7 @@ import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuenta;
+import com.provisiones.types.Nota;
 import com.provisiones.types.Provision;
 import com.provisiones.types.RecargoImporte;
 import com.provisiones.types.tablas.ProvisionTabla;
@@ -79,6 +80,9 @@ public class GestorPagosProvision implements Serializable
 	private String sDescripcion = "";
 	
 	private String sTipoPago = "";
+	
+	//Notas
+	private String sNota = "";
 	
 	private Map<String,String> tiposrecargoHM = new LinkedHashMap<String, String>();
 	
@@ -177,11 +181,17 @@ public class GestorPagosProvision implements Serializable
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
 		this.sNUPROFB = "";
+		this.sNota = "";
 
 		borrarCamposProvision();
 		borrarCamposBuscarProvision();
 		borrarResultadosBuscarProvision();
 		borrarCamposPago();
+    }
+    
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
     }
     
 	public void buscarProvisiones (ActionEvent actionEvent)
@@ -461,12 +471,12 @@ public class GestorPagosProvision implements Serializable
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
 				}
-				else if (Long.parseLong(Utils.compruebaFecha(sFechaUltimoDevengo)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
+				/*else if (Long.parseLong(Utils.compruebaFecha(sFechaUltimoDevengo)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
 				{
 					sMsg = "ERROR: La fecha de Pago no puede ser inferior a la de Devengo. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
-				}
+				}*/
 				else if (!sTipoRecargo.isEmpty() && sValorRecargo.equals("0") )
 				{
 					sMsg = "Elija 'Sin recargo' si el pago no lleva recargo. Por favor, revise los datos.";
@@ -498,20 +508,23 @@ public class GestorPagosProvision implements Serializable
 					
 					RecargoImporte recargo = new RecargoImporte(sTipoRecargo,Utils.compruebaImporte(sValorRecargo));
 					
+					Nota nota = new Nota (false,sNota);
+					
 					int iSalida = CLPagos.registraPagoProvision(
 							sNUPROF,
 							sTipoPago,
 							Utils.compruebaFecha(sFEPGPR),
 							cuenta,
 							recargo,
-							true);
+							true,
+							nota);
 					
 					switch (iSalida) 
 					{
 					case 0: //Sin errores
 						actualizaProgreso();
 				    	borrarCamposPago();
-						
+
 						sMsg = "El pago se ha registrado correctamente.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
@@ -857,6 +870,14 @@ public class GestorPagosProvision implements Serializable
 
 	public void setsTipoPago(String sTipoPago) {
 		this.sTipoPago = sTipoPago;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 
 	public Map<String, String> getTiposrecargoHM() {

@@ -42,6 +42,7 @@
 						<p:fieldset legend="Info">
 							<h:panelGrid columns="3" cellpadding="5">
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
 
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -122,15 +123,15 @@
 
 										<p:panel>
 											<h:panelGrid columns="3" cellpadding="5">
-											<h:outputText for="FEPGPR" value="Fecha de Pago: " />
-											<p:inputMask id="FEPGPR" value="#{GestorPagosSimple.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
+												<h:outputText for="FEPGPR" value="Fecha de Pago: " />
+												<p:inputMask id="FEPGPR" value="#{GestorPagosSimple.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
 
-											<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorPagosSimple.hoyFEPGPR}"/>
+												<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorPagosSimple.hoyFEPGPR}"/>
 											</h:panelGrid>
 										</p:panel>
 
 										<p:panel>
-											<h:panelGrid columns="5" cellpadding="5">
+											<h:panelGrid columns="7" cellpadding="5">
 
 												<h:outputText for="TRECARGO" value="Recargo adicional en pago: " />
 												<p:selectOneMenu id="TRECARGO" value="#{GestorPagosSimple.sTipoRecargo}">
@@ -140,6 +141,14 @@
 												</p:selectOneMenu>
 
 												<p:inputText id="VRECARGO" value="#{GestorPagosSimple.sValorRecargo}" size="10" maxlength="10" disabled="#{GestorPagosSimple.bRecargo}"/>
+
+												<p:commandButton value="Recalcular" update="msgs, popup, VIMPORTE" actionListener="#{GestorPagosSimple.recalcularImporte}" />
+
+
+												<h:outputText for="VIMPORTE" value="Importe a Pagar: " />
+												<p:inputText id="VIMPORTE" value="#{GestorPagosSimple.sImporte}" size="10" maxlength="10" disabled="true"/>
+												<h:outputText value="¤"/>
+
 
 											</h:panelGrid>
 										</p:panel>
@@ -353,8 +362,27 @@
 								</p:fieldset>
 					</h:panelGrid>
 				</p:panel>
+
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+					<h:panelGrid columns="1" cellpadding="1">
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
+
+								<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorPagosSimple.limpiarNota}"/>
+
+							</h:panelGrid>
+						</p:panel>
+
+						<h:panelGrid columns="1" cellpadding="5">
+							<h:outputText id="counternota"/>
+							<p:inputTextarea id="NOTA" value="#{GestorPagosSimple.sNota}" cols="40" rows="10" counter="counternota" maxlength="500"
+								counterTemplate="{0} carácteres restantes." autoResize="false"/>
+						</h:panelGrid>
+					</h:panelGrid>
+					</p:dialog>
+
 					<p:dialog header="Activos con Gastos Autorizados: " widgetVar="dlgTabla" resizable="false">  
-    				
+
 							<p:contextMenu for="activos">  
 								 <p:menuitem value="Seleccionar" update="form:COACESB, form:msgs, form:popup" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
 							</p:contextMenu>  
@@ -547,7 +575,7 @@
 					<p:dialog header="Gastos Autorizados del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
 
 						<p:contextMenu for="gastosactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelCuenta, form:panelProgresoProvision" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelCuenta, form:panelProgresoProvision, form:VIMPORTE" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosactivo" var="gastoactivo" value="#{GestorPagosSimple.tablagastosactivo}" rowKey="#{gastoactivo.sGastoID}"
@@ -667,7 +695,7 @@
 					<p:dialog header="Gastos Autorizados de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
 
 						<p:contextMenu for="gastosprovision">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelCuenta, form:panelProgresoProvision" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelCuenta, form:panelProgresoProvision, form:VIMPORTE" icon="ui-icon-check" actionListener="#{GestorPagosSimple.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosprovision" var="gastoprovision" value="#{GestorPagosSimple.tablagastosprovision}" rowKey="#{gastoprovision.sGastoID}"

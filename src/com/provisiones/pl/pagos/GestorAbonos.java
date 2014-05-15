@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLDescripciones;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLPagos;
@@ -728,69 +729,76 @@ public class GestorAbonos implements Serializable
 			
 			this.gastoactivoseleccionado = null;
 			this.setTablagastosactivo(null);
-			
-			
-			if (sCOACESB.isEmpty())
-			{
-				sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
-			}
-			else
-			{
-				try
-				{
-					Integer.parseInt(sCOACESB);
-					
-					GastoTabla filtro = new GastoTabla(
-							"",
-							"",   
-							sCOACESB,   
-							sCOGRUGBA,   
-							sCOTPGABA,   
-							sCOSBGABA,   
-							"",  
-							"",   
-							"",  
-							sFEDEVEBA,   
-							"",   
-							"",  
-							"",
-							"",
-							"",//TODO meter estado en el filtro
-							"");
-					
-					
-					
-					this.setTablagastosactivo(CLGastos.buscarGastosAbonablesActivoConFiltroEstado(filtro,sEstadoBA));
-					
-					if (getTablagastosactivo().size() == 0)
-					{
-						sMsg = "No se encontraron gastos con los criterios solicitados.";
-						msg = Utils.pfmsgWarning(sMsg);
-						logger.warn(sMsg);
-					}
-					else if (getTablagastosactivo().size() == 1)
-					{
-						sMsg = "Encontrado un Gasto relacionado.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-					}
-					else
-					{
-						sMsg = "Encontrados "+getTablagastosactivo().size()+" gastos relacionados.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-					}
-				}
-				catch(NumberFormatException nfe)
-				{
-					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-				}
-			}
 
+			try
+			{
+				if (sCOACESB.isEmpty())
+				{
+					sMsg = "No se informó el campo 'Activo'. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+				else if (CLActivos.existeActivo(Integer.parseInt(sCOACESB)))
+				{
+					
+
+						Integer.parseInt(sCOACESB);
+						
+						GastoTabla filtro = new GastoTabla(
+								"",
+								"",   
+								sCOACESB,   
+								sCOGRUGBA,   
+								sCOTPGABA,   
+								sCOSBGABA,   
+								"",  
+								"",   
+								"",  
+								sFEDEVEBA,   
+								"",   
+								"",  
+								"",
+								"",
+								"",//TODO meter estado en el filtro
+								"");
+						
+						
+						
+						this.setTablagastosactivo(CLGastos.buscarGastosAbonablesActivoConFiltroEstado(filtro,sEstadoBA));
+						
+						if (getTablagastosactivo().size() == 0)
+						{
+							sMsg = "No se encontraron gastos con los criterios solicitados.";
+							msg = Utils.pfmsgWarning(sMsg);
+							logger.warn(sMsg);
+						}
+						else if (getTablagastosactivo().size() == 1)
+						{
+							sMsg = "Encontrado un Gasto relacionado.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+						else
+						{
+							sMsg = "Encontrados "+getTablagastosactivo().size()+" gastos relacionados.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+
+				}
+				else
+				{
+					sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}	
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -809,71 +817,81 @@ public class GestorAbonos implements Serializable
 			this.gastoprovisionseleccionado = null;
 			
 			this.tablagastosprovision = null;
-			
-			if (sNUPROFB.isEmpty())
+
+			try
 			{
-				sMsg = "No se informó el campo 'Provisión'. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
-			}
-			else if (!sCOACESBP.isEmpty() && Utils.esAlfanumerico(sCOACESBP))
-			{
-				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-			}
-			else
-			{
-				try
+				Integer.parseInt(sNUPROFB);
+				
+				if (sNUPROFB.isEmpty())
 				{
-					Integer.parseInt(sNUPROFB);
-					
-					GastoTabla filtro = new GastoTabla(
-							"",
-							sNUPROFB,   
-							sCOACESBP,   
-							sCOGRUGBP,   
-							sCOTPGABP,   
-							sCOSBGABP,   
-							"",  
-							"",   
-							"",  
-							sFEDEVEBP,   
-							"",   
-							"",  
-							"",
-							"",
-							"",//TODO meter estado en el filtro
-							"");
-					
-					this.setTablagastosprovision(CLGastos.buscarGastosAbonablesProvisionConFiltroEstado(filtro,sEstadoBP));
-					
-					if (getTablagastosprovision().size() == 0)
-					{
-						sMsg = "No se encontraron gastos con los criterios solicitados.";
-						msg = Utils.pfmsgWarning(sMsg);
-						logger.warn(sMsg);
-					}
-					else if (getTablagastosprovision().size() == 1)
-					{
-						sMsg = "Encontrado un Gasto relacionado.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-					}
-					else
-					{
-						sMsg = "Encontrados "+getTablagastosprovision().size()+" gastos relacionados.";
-						msg = Utils.pfmsgInfo(sMsg);
-						logger.info(sMsg);
-					}
+					sMsg = "No se informó el campo 'Provisión'. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 				}
-				catch(NumberFormatException nfe)
+				else if (!sCOACESBP.isEmpty() && Utils.esAlfanumerico(sCOACESBP))
 				{
-					sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
+					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (CLProvisiones.existeProvision(sNUPROFB))
+				{
+						
+						GastoTabla filtro = new GastoTabla(
+								"",
+								sNUPROFB,   
+								sCOACESBP,   
+								sCOGRUGBP,   
+								sCOTPGABP,   
+								sCOSBGABP,   
+								"",  
+								"",   
+								"",  
+								sFEDEVEBP,   
+								"",   
+								"",  
+								"",
+								"",
+								"",//TODO meter estado en el filtro
+								"");
+						
+						this.setTablagastosprovision(CLGastos.buscarGastosAbonablesProvisionConFiltroEstado(filtro,sEstadoBP));
+						
+						if (getTablagastosprovision().size() == 0)
+						{
+							sMsg = "No se encontraron gastos con los criterios solicitados.";
+							msg = Utils.pfmsgWarning(sMsg);
+							logger.warn(sMsg);
+						}
+						else if (getTablagastosprovision().size() == 1)
+						{
+							sMsg = "Encontrado un Gasto relacionado.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+						else
+						{
+							sMsg = "Encontrados "+getTablagastosprovision().size()+" gastos relacionados.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+						}
+
+				}
+				else
+				{
+					sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
+				}
 			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			
+
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}

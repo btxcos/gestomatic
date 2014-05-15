@@ -58,7 +58,7 @@
 											<p:panel >
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACESB" value="Activo: " />
-													<p:inputMask id="COACESB" value="#{GestorAbonos.sCOACESB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+													<p:inputText id="COACESB" value="#{GestorAbonos.sCOACESB}" size="10" maxlength="9"/>
 													<p:commandButton value="Buscar Gastos" update="gastosactivo, msgs, popup" oncomplete="dlgBuscarGastosActivo.show()"/>	
 												</h:panelGrid>
 											</p:panel>
@@ -70,7 +70,7 @@
 											<p:panel>
 												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="NUPROFB" value="Provisión: " />
-													<p:inputMask id="NUPROFB" value="#{GestorAbonos.sNUPROFB}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+													<p:inputText id="NUPROFB" value="#{GestorAbonos.sNUPROFB}" size="10" maxlength="9"/>
 													<p:commandButton value="Buscar Gastos" update="gastosprovision, msgs, popup" oncomplete="dlgBuscarGastosProvision.show()"/>	
 												</h:panelGrid>
 											</p:panel>

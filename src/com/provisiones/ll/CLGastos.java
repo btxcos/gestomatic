@@ -19,6 +19,7 @@ import com.provisiones.dal.qm.listas.errores.QMListaErroresGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Provision;
@@ -293,6 +294,11 @@ public final class CLGastos
 		return QMListaGastosProvisiones.buscaGastosProvisionPorEstadoGasto(ConnectionManager.getDBConnection(),sNUPROF,ValoresDefecto.DEF_GASTO_PAGADO);
 	}
 	
+	public static ArrayList<GastoTabla> buscarGastosAbonadosProvision(String sNUPROF)
+	{
+		return QMListaGastosProvisiones.buscaGastosProvisionPorEstadoGasto(ConnectionManager.getDBConnection(),sNUPROF,ValoresDefecto.DEF_GASTO_ABONADO);
+	}
+	
 	public static ArrayList<GastoTabla> buscarGastosProvisionConEstadoGasto(String sNUPROF, String sEstado)
 	{
 		return QMListaGastosProvisiones.buscaGastosProvisionPorEstadoGasto(ConnectionManager.getDBConnection(),sNUPROF,sEstado);
@@ -512,9 +518,30 @@ public final class CLGastos
 															&& QMListaGastos.setValidado(conexion, liCodGasto,ValoresDefecto.DEF_MOVIMIENTO_RESUELTO)
 															&& QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_ABONADO))
 														{
-															logger.info("Gasto resuelto.");
 															
-															iCodigo = 0;
+															if (QMProvisiones.setGastoAbonadoAutorizado(conexion, gasto.getNUPROF(), gasto.getValor_total()))
+															{
+																logger.info("Gasto resuelto.");
+
+																iCodigo = 0;
+																
+																//
+																if(QMProvisiones.provisionPagada(conexion, gasto.getNUPROF()))
+																{
+																	//Cambiamos su estado a pagada.
+																	if (!QMProvisiones.setFechaPagado(conexion, gasto.getNUPROF(), gasto.getNUPROF()) 
+																		|| !QMProvisiones.setEstado(conexion, gasto.getNUPROF(),ValoresDefecto.DEF_PROVISION_PAGADA))
+																	{
+																		//Error al actualizar la Provisión del Gasto
+																		iCodigo = -908;
+																	}
+																}
+															}
+															else
+															{
+																//error al actualizar la provisión
+																iCodigo = -7;
+															}
 														}
 														else
 														{
@@ -821,7 +848,7 @@ public final class CLGastos
 																							if(QMProvisiones.provisionPagada(conexion, sProvisionAbonable))
 																							{
 																								//Cambiamos su estado a pagada.
-																								if (!QMProvisiones.setFechaPagado(conexion, sProvisionAbonable, ValoresDefecto.CAMPO_NUME_SIN_INFORMAR) 
+																								if (!QMProvisiones.setFechaPagado(conexion, sProvisionAbonable, Utils.fechaDeHoy(false)) 
 																									|| !QMProvisiones.setEstado(conexion, sProvisionAbonable,ValoresDefecto.DEF_PROVISION_PAGADA))
 																								{
 																									//Error al actualizar la Provisión del Gasto

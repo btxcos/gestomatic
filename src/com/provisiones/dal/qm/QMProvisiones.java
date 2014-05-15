@@ -986,7 +986,7 @@ public final class QMProvisiones
 		return bSalida;
 	}
 	
-	public static boolean setGastoAbonadoPagado(Connection conexion, String sNUPROF, long liValor) 
+	public static boolean setGastoAbonadoAutorizado(Connection conexion, String sNUPROF, long liValor) 
 	{
 		boolean bSalida = false;
 		
@@ -994,13 +994,64 @@ public final class QMProvisiones
 		{
 			Statement stmt = null;
 
+			String sCondicionValor = (liValor >= 0)? " + "+liValor:liValor+"";
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO10 + " = " + CAMPO10 + " + 1 ,"
+					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+ ", "
+					+ CAMPO13 + " = " + CAMPO13 + " + 1" +
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoAbonadoPagado(Connection conexion, String sNUPROF, long liValor) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			String sCondicionValor = (liValor >= 0)? " + "+liValor:liValor+"";
+
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
 					+ CAMPO13 + " = " + CAMPO13 + " + 1 ,"
-					+ CAMPO17 + " = " + CAMPO17 + " + "+liValor+
+					+ CAMPO17 + " = " + CAMPO17 +sCondicionValor+
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -1044,7 +1095,7 @@ public final class QMProvisiones
 
 			logger.debug("Ejecutando Query...");
 			
-			
+			//TODO Revisar
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
@@ -3147,7 +3198,7 @@ public final class QMProvisiones
 					+ QMPagos.TABLA +
 					" WHERE ("
 					+ QMPagos.CAMPO4 + " = " + ValoresDefecto.DEF_PAGO_NORMA34 +" AND " 
-					+ QMPagos.CAMPO7 + " = '" + ValoresDefecto.PAGO_EMITIDO + "'))))";
+					+ QMPagos.CAMPO8 + " = '" + ValoresDefecto.PAGO_EMITIDO + "'))))";
 
 			
 			logger.debug(sQuery);
@@ -3237,7 +3288,7 @@ public final class QMProvisiones
 			
 			//TODO meter mas filtros demandados
 			String sCondicionFEPFON = (filtro.getFEPFON().equals("0")) ? "" : CAMPO6 + " = '"+ filtro.getFEPFON() + "' AND ";
-			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO17 + " = '" + filtro.getESTADO() + "' AND ";
+			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO18 + " = '" + filtro.getESTADO() + "' AND ";
 			
 			boolean bEncontrado = false;
 

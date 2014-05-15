@@ -84,6 +84,7 @@ public class GestorDetallesProvision implements Serializable
 			tiposestadogastoHM.put("ENVIADOS",	"E");
 			tiposestadogastoHM.put("AUTORIZADO","3");
 			tiposestadogastoHM.put("PAGADO",    "4");
+			tiposestadogastoHM.put("ABONADOS",  "6");
 
 		}
 	}
@@ -194,7 +195,13 @@ public class GestorDetallesProvision implements Serializable
 		String sMsg = "";
 		
  		
-		if (sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
+		if (sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO) 
+				|| sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_PAGADO)
+				|| sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_ABONADO))
+		{
+			this.setTablagastos(CLGastos.buscarGastosProvisionConEstadoGasto(sNUPROF, sEstadoGastos));
+		}
+		/*if (sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
 		{
 			this.setTablagastos(CLGastos.buscarGastosAutorizadosProvision(sNUPROF));	
 		}
@@ -202,6 +209,10 @@ public class GestorDetallesProvision implements Serializable
 		{
 			this.setTablagastos(CLGastos.buscarGastosPagadosProvision(sNUPROF));	
 		}
+		else if (sEstadoGastos.equals(ValoresDefecto.DEF_GASTO_ABONADO))
+		{
+			this.setTablagastos(CLGastos.buscarGastosAbonadosProvision(sNUPROF));	
+		}*/
 		else if (sEstadoGastos.equals("E"))
 		{
 			this.setTablagastos(CLGastos.buscarGastosEnviadosProvision(sNUPROF));

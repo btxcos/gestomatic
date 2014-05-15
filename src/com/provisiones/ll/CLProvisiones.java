@@ -230,7 +230,7 @@ public final class CLProvisiones
 			}
 		}
 		
-		logger.error("iCodigo:|"+iCodigo+"|");
+		logger.debug("iCodigo:|"+iCodigo+"|");
 		
 		return iCodigo;
 	}

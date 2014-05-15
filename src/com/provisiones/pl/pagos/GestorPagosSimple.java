@@ -25,6 +25,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuenta;
 import com.provisiones.types.Gasto;
+import com.provisiones.types.Nota;
 import com.provisiones.types.Pago;
 import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -131,6 +132,9 @@ public class GestorPagosSimple implements Serializable
 	private String sValorRecargo = "0";
 	private boolean bRecargo = true;
 
+	private String sImporte = "0";
+	private String sImporteBase = "0";
+	
 	//Cuenta
 	private String sPais = "";	
 	private String sDCIBAN = "";
@@ -140,6 +144,9 @@ public class GestorPagosSimple implements Serializable
 	private String sNUCCNT = "";
 	
 	private String sDescripcion = "";
+	
+	//Notas
+	private String sNota = "";
 	
 	private Map<String,String> tiposcogrugHM = new LinkedHashMap<String, String>();
 
@@ -398,14 +405,21 @@ public class GestorPagosSimple implements Serializable
 	{
 		this.sFEPGPR = "";
 		
+		this.sImporte = "0";
+		this.sImporteBase= "0"; 
+		
+		this.sTipoRecargo = "";
+    	this.sValorRecargo = "0";
+    	this.bRecargo = true;
+		
 		borrarCamposCuenta();
 
 	}
-	
-	
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
-    {  
+    {
+    	this.sNota = "";
+    	
     	borrarCamposBuscar();
     	borrarCamposBuscarActivo();
     	borrarCamposBuscarProvision();
@@ -414,6 +428,11 @@ public class GestorPagosSimple implements Serializable
     	borrarCamposProgreso();
     	borrarCamposPago();
     	borrarCamposGasto();
+    }
+    
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
     }
     
 	public void cambiaGrupoActivo()
@@ -1077,6 +1096,10 @@ public class GestorPagosSimple implements Serializable
 				//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 				//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 				
+				this.sImporteBase = Utils.recuperaImporte(false,Long.toString(gasto.getValor_total()));
+				
+				this.sImporte = sImporteBase; 
+				
 				this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
 				actualizaProgreso();
 				
@@ -1103,6 +1126,61 @@ public class GestorPagosSimple implements Serializable
     	this.sGastosPorPagar = Long.toString(Long.parseLong(provision.getsGastosAutorizados()) - Long.parseLong(provision.getsGastosPagados()));
     	this.sValorPorPagar = Utils.recuperaImporte(false,Long.toString(Long.parseLong(provision.getsValorAutorizado()) - Long.parseLong(provision.getsValorPagado())));
     	this.sFechaLimite = CLProvisiones.buscarPrimeraFechaLimitePago(sNUPROF);
+	}
+	
+	public void recalcularImporte (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			if (sValorRecargo.equals("0"))
+			{
+				sMsg = "El Importe no tiene Recargo.";
+				msg = Utils.pfmsgWarning(sMsg);
+				
+				logger.warn(sMsg);
+			}
+			else
+			{
+				try
+				{
+					logger.debug("sTipoRecargo:|"+sTipoRecargo+"|");
+					
+					if (sTipoRecargo.equals(ValoresDefecto.DEF_RECARGO_FIJO))
+					{
+						this.sImporte = Utils.recuperaImporte(false,Long.toString(Long.parseLong(Utils.compruebaImporte(sImporteBase))+Long.parseLong(Utils.compruebaImporte(sValorRecargo))));
+					}
+					else if (sTipoRecargo.equals(ValoresDefecto.DEF_RECARGO_PROPORCIONAL))
+					{
+						this.sImporte = Utils.recuperaImporte(false,Long.toString(Long.parseLong(Utils.compruebaImporte(sImporteBase))+Utils.redondeaRecargo(Long.parseLong(Utils.compruebaImporte(sImporteBase))*Long.parseLong(Utils.compruebaImporte(sValorRecargo)))));
+					}
+					else
+					{
+						this.sImporte = sImporteBase;
+					}
+					
+					logger.debug("sImporte:|"+sImporte+"|");
+					
+					
+					sMsg = "Recalculado el importe del Gasto.";
+					msg = Utils.pfmsgInfo(sMsg);
+					
+					logger.info(sMsg);
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El Recargo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+
 	}
 	
 	public void buscaCuentas (ActionEvent actionEvent)
@@ -1335,12 +1413,12 @@ public class GestorPagosSimple implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-				else if (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
+				/*else if (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
 				{
 					sMsg = "ERROR: La fecha de Pago no puede ser inferior a la de Devengo. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
-				}
+				}*/
 				else
 				{
 					if (bDevolucion)
@@ -1384,13 +1462,16 @@ public class GestorPagosSimple implements Serializable
 					
 					Cuenta cuenta = new Cuenta (sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT,"");
 					
-					int iSalida = CLPagos.registraPagoSimple(pago, cuenta, true);
+					Nota nota = new Nota (false,sNota);
+					
+					int iSalida = CLPagos.registraPagoSimple(pago, cuenta, true, nota);
 					
 					switch (iSalida) 
 					{
 					case 0: //Sin errores
 						actualizaProgreso();
 						borrarCamposPago();
+
 						sMsg = "El pago se ha registrado correctamente.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
@@ -1987,6 +2068,14 @@ public class GestorPagosSimple implements Serializable
 		this.tiposrecargoHM = tiposrecargoHM;
 	}
 
+	public String getsImporte() {
+		return sImporte;
+	}
+
+	public void setsImporte(String sImporte) {
+		this.sImporte = sImporte;
+	}
+
 	public String getsPais() {
 		return sPais;
 	}
@@ -2041,6 +2130,14 @@ public class GestorPagosSimple implements Serializable
 
 	public void setsDescripcion(String sDescripcion) {
 		this.sDescripcion = sDescripcion;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 
 	public Map<String, String> getTiposcogrugHM() {

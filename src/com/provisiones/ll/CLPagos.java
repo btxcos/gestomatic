@@ -19,6 +19,7 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuenta;
+import com.provisiones.types.Nota;
 import com.provisiones.types.Pago;
 import com.provisiones.types.RecargoImporte;
 import com.provisiones.types.movimientos.MovimientoGasto;
@@ -107,11 +108,11 @@ public class CLPagos
 				//ERROR 003 - La fecha de pago no es correcta.
 				iCodigo = -3;
 			}
-			else if (Long.parseLong(QMGastos.getFEDEVE(conexion, liCodGasto)) > Long.parseLong(pago.getsFEPGPR()))
+			/*else if (Long.parseLong(QMGastos.getFEDEVE(conexion, liCodGasto)) > Long.parseLong(pago.getsFEPGPR()))
 			{
 				//ERROR 004 - Fecha de devengo anterior a la fecha de pago.
 				iCodigo = -4;
-			}					
+			}*/			
 			
 		}
 		
@@ -285,7 +286,7 @@ public class CLPagos
 		return iCodigo;
 	}
 
-	public static int registraPagoSimple(Pago pago, Cuenta cuenta, boolean bValida)
+	public static int registraPagoSimple(Pago pago, Cuenta cuenta, boolean bValida, Nota nota)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -511,7 +512,7 @@ public class CLPagos
 		return iCodigo;
 	}
 	
-	public static int registraPagoComunidad(long iCodComunidad, String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, RecargoImporte recargo, boolean bValida)
+	public static int registraPagoComunidad(long iCodComunidad, String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, RecargoImporte recargo, boolean bValida, Nota nota)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -565,7 +566,7 @@ public class CLPagos
             	
             	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR,sRecargo);
             	
-            	iCodigo = registraPagoSimple(pago, cuenta, bValida);
+            	iCodigo = registraPagoSimple(pago, cuenta, bValida, nota);
             	
             	if (iCodigo != 0)
             	{
@@ -577,7 +578,7 @@ public class CLPagos
 		return iCodigo;
 	}
 	
-	public static int registraPagoProvision(String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, RecargoImporte recargo, boolean bValida)
+	public static int registraPagoProvision(String sNUPROF, String sTipoPago, String sFEPGPR, Cuenta cuenta, RecargoImporte recargo, boolean bValida, Nota nota)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -631,7 +632,7 @@ public class CLPagos
             	
             	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR, sRecargo);
             	
-            	iCodigo = registraPagoSimple(pago, cuenta, bValida);
+            	iCodigo = registraPagoSimple(pago, cuenta, bValida, nota);
             	
             	if (iCodigo != 0)
             	{
