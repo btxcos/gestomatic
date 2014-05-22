@@ -213,7 +213,7 @@ public final class QMCodigosControl
 	{
 		String sDescripcion = "";
 
-		if (conexion != null)
+		if ((conexion != null) || (sCodCOGRUG.equals("0")))
 		{
 			Statement stmt = null;
 

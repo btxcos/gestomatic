@@ -1631,7 +1631,7 @@ public final class QMListaGastosProvisiones
 						String sCOSIGA  = rs.getString(QMGastos.CAMPO10);
 						String sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
 						//String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
-						String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO33).startsWith("-"),rs.getString(QMGastos.CAMPO33));
+						String sIMNGAS  = Utils.recuperaImporte(false,rs.getString(QMGastos.CAMPO33));
 						//String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
 						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));

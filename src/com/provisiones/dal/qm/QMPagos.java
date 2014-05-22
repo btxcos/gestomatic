@@ -15,6 +15,7 @@ import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Pago;
+import com.provisiones.types.tablas.ActivoTabla;
 
 public class QMPagos
 {
@@ -295,6 +296,104 @@ public class QMPagos
 				sRecargoAdicional = "";
 
 				logger.error("ERROR PAGO:|"+liPagoID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return new Pago(
+				sCOACES,
+				sGasto,
+				sTipoPago,
+				sCodOperacion,
+				sFEPGPR,
+				sRecargoAdicional);
+	}
+	
+	public static Pago getPagoGasto(Connection conexion, long liCodGasto)
+	{
+		String sCOACES = "";
+		String sGasto = "";
+		String sTipoPago = "";
+		String sCodOperacion = "";
+		String sFEPGPR = "";
+		String sRecargoAdicional = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+				       + CAMPO2  + ","
+				       + CAMPO3  + ","    
+				       + CAMPO4  + ","
+				       + CAMPO5  + ","
+				       + CAMPO6  + "," 
+				       + CAMPO7
+				       +" FROM " 
+				       + TABLA + 
+				       " WHERE "
+				       + CAMPO3 + " = '"+ liCodGasto +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				logger.debug(CAMPO3 + ":|"+liCodGasto+"|");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sCOACES = rs.getString(CAMPO2);
+						sGasto = rs.getString(CAMPO3);  
+						sTipoPago = rs.getString(CAMPO4);
+						sCodOperacion = rs.getString(CAMPO5);
+						sFEPGPR = rs.getString(CAMPO6);
+						sRecargoAdicional = rs.getString(CAMPO7);
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				sCOACES = "";
+				sGasto = "";
+				sTipoPago = "";
+				sCodOperacion = "";
+				sFEPGPR = "";
+				sRecargoAdicional = "";
+
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1043,5 +1142,118 @@ public class QMPagos
 		}
 
 		return liNumero;
+	}
+	
+	public static ArrayList<ActivoTabla> buscaActivosConPagosPorFiltro(Connection conexion, ActivoTabla filtro)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND ";
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						
+						   + QMActivos.CAMPO1 + ","        
+						   + QMActivos.CAMPO14 + ","
+						   + QMActivos.CAMPO11 + ","
+						   + QMActivos.CAMPO13 + ","
+						   + QMActivos.CAMPO6 + ","
+						   + QMActivos.CAMPO9 + ","
+						   + QMActivos.CAMPO7 + ","
+						   + QMActivos.CAMPO10 + 
+
+						   " FROM " 
+						   + QMActivos.TABLA + 
+						   " WHERE ("
+						   + sCondicionCOPOIN  
+						   + sCondicionNOMUIN
+						   + sCondicionNOPRAC  
+						   + sCondicionNOVIAS  
+						   + sCondicionNUPIAC
+						   + sCondicionNUPOAC 
+						   + sCondicionNUPUAC		
+						   + QMActivos.CAMPO1 +" IN (SELECT "
+						   + CAMPO2 + 
+	   					   " FROM " 
+						   + TABLA +"))";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC, 
+								"");
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+
 	}
 }

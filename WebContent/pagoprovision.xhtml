@@ -305,29 +305,68 @@
 												paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 												rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">
 
-								<p:column headerText="Provisión">  
-								    #{provision.NUPROF}  
-								</p:column>  
-								
-								<p:column headerText="Sociedad Patrimonial">  
-								    #{provision.DCOSPAT}  
-								</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Provisión" />
+								</f:facet>
+								<h:outputText value="#{provision.NUPROF}" />
+							</p:column>
 
-								<p:column headerText="Tipo de Activos SAREB">  
-								    #{provision.DTAS}  
-								</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Sociedad Patrimonial" />
+								</f:facet>
+								<h:outputText value="#{provision.DCOSPAT}" />
+							</p:column>
 
-								<p:column headerText="Grupo de Gastos">  
-								    #{provision.DCOGRUG}  
-								</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Tipo de Activos SAREB" />
+								</f:facet>
+								<h:outputText value="#{provision.DTAS}" />
+							</p:column>
 
-								<p:column headerText="Tipo de Gastos">  
-								    #{provision.DCOTPGA}  
-								</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Grupo de Gastos" />
+								</f:facet>
+								<h:outputText value="#{provision.DCOGRUG}" />
+							</p:column>
 
-								<p:column headerText="Fecha de Cierre">  
-								    #{provision.FEPFON}  
-								</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Tipo de Gastos" />
+								</f:facet>
+								<h:outputText value="#{provision.DCOTPGA}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Gastos" />
+								</f:facet>
+								<h:outputText value="#{provision.GASTOS}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Valor" />
+								</f:facet>
+								<h:outputText value="#{provision.VALOR}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Cierre" />
+								</f:facet>
+								<h:outputText value="#{provision.FEPFON}" />
+							</p:column>
+
+							<f:facet name="footer">
+								<h:commandLink>
+									<p:graphicImage value="recursos/excel.png" />  
+									<p:dataExporter type="xls" target="provisiones" fileName="listaprovisiones" encoding="ISO-8859-15"/>  
+								</h:commandLink>
+							</f:facet> 
 
 							</p:dataTable> 
 					</p:dialog>

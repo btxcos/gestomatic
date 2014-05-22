@@ -23,7 +23,10 @@ public final class ValoresDefecto
 	public static final byte CUENTA_TODAS = 2;
 	
 	public static final byte PAGO_ENVIADO = 1;
-	public static final byte PAGO_EMITIDO = 0;	
+	public static final byte PAGO_EMITIDO = 0;
+	
+	public static final byte ABONO_EJECUTADO = 1;
+	public static final byte ABONO_EMITIDO = 0;
 
 	public static final String DEF_COAPII = "168";
 	public static final String DEF_NUCLII = "2306894218400";

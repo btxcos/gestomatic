@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
 
 public class QMListaAbonosGastos 
@@ -22,6 +23,7 @@ public class QMListaAbonosGastos
 	public static final String CAMPO1  = "cod_gasto";
 	public static final String CAMPO2  = "cod_abono";
 	public static final String CAMPO3  = "fecha_abono";
+	public static final String CAMPO4  = "ejecutado";
 
 	private QMListaAbonosGastos(){}
 
@@ -40,11 +42,13 @@ public class QMListaAbonosGastos
 					   " ("
 					   + CAMPO1  + ","
 					   + CAMPO2  + ","
-				       + CAMPO3  +    
+				       + CAMPO3  + ","
+				       + CAMPO4  +
 				       ") VALUES ('"
 				       + liCodGasto + "','"
 				       + liCodAbono + "','"
-				       + Utils.fechaDeHoy(false) + "' )";
+				       + Utils.fechaDeHoy(false) + "'," 
+				       + ValoresDefecto.ABONO_EMITIDO + ")";
 			
 			logger.debug(sQuery);
 
@@ -317,5 +321,50 @@ public class QMListaAbonosGastos
 		}		
 
 		return sFecha;
+	}
+	
+	public static boolean setEjecutado(Connection conexion, long liCodGasto, byte btEjecutado)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO4 + " = "+ btEjecutado +
+					" WHERE "
+					+ CAMPO1  + " = '"+ liCodGasto +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR GASTO:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+		
+		return bSalida;
 	}
 }

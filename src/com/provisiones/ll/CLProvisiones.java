@@ -104,6 +104,11 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPagadasPorFiltro(ConnectionManager.getDBConnection(), filtro);
 	}
 	
+	public static ArrayList<ProvisionTabla> buscarProvisionesEnPagoConFiltro(ProvisionTabla filtro)
+	{
+		return QMProvisiones.buscaProvisionesConPagosPorFiltro(ConnectionManager.getDBConnection(), filtro);
+	}
+	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasConFiltro(ProvisionTabla filtro)
 	{
 		filtro.setESTADO(ValoresDefecto.DEF_PROVISION_AUTORIZADA);
@@ -183,6 +188,31 @@ public final class CLProvisiones
 		return CLProvisiones.estadoProvision(sNUPROF).equals(ValoresDefecto.DEF_PROVISION_PAGADA);
 	}
 	
+	public static int revisaPagos (String sNUPROF)
+	{
+		int iCodigo = -910;
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			if(QMProvisiones.provisionPagadaAbonada(conexion, sNUPROF))
+			{
+				//Cambiamos su estado a pagada.
+				if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, Utils.fechaDeHoy(false)) 
+					|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_PAGADA))
+				{
+					//Error al actualizar la Provisión del Gasto
+					iCodigo = -908;
+				}
+			}
+		}
+		
+		return iCodigo;
+		
+	}
+	
+	
 	public static boolean existeProvision (String sNUPROF)
 	{
 		return QMProvisiones.existeProvision(ConnectionManager.getDBConnection(),sNUPROF);
@@ -207,7 +237,7 @@ public final class CLProvisiones
 			
 			if (!QMProvisiones.existeProvision(conexion, cierre.getsNUPROF()))
 			{
-				Provision provision = new Provision (cierre.getsNUPROF(), "0", "#", "0","0",cierre.getsFEPFON(),"0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
+				Provision provision = new Provision (cierre.getsNUPROF(), "0", "#", "0","0",cierre.getsFEPFON(),"0","0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
 				provision.setsFEPFON(cierre.getsFEPFON());
 				provision.setsFechaEnvio(Utils.fechaDeHoy(false));
@@ -436,7 +466,7 @@ public final class CLProvisiones
 			logger.info("Inicializando provisiones...");
 			if (!existeProvision("0"))
 			{
-				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
+				Provision provision = new Provision ("0", "0", "#", "0","0","0","0","0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				QMProvisiones.addProvision(conexion,provision);
 			}
 			logger.info("Provisiones inicializadas.");
@@ -533,7 +563,7 @@ public final class CLProvisiones
 					logger.debug("sProvision:|"+sProvision+"|");
 				}			
 				
-				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , sCOGRUG, sCOTPGA,"0","0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
+				Provision provision = new Provision (sProvision, sCOSPAT, sTipo , sCOGRUG, sCOTPGA,"0","0","0","0","0","0","0","0","0","0","0","0","0",ValoresDefecto.DEF_PROVISION_ABIERTA);
 				
 				QMProvisiones.addProvision(conexion,provision);
 			}

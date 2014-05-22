@@ -164,6 +164,11 @@ public final class CLGastos
 		return QMGastos.buscaGastosPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, ValoresDefecto.DEF_GASTO_AUTORIZADO);
 	}
 	
+	public static ArrayList<GastoTabla> buscarGastosPagadosActivoConFiltro(GastoTabla filtro)
+	{
+		return QMGastos.buscaGastosPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, ValoresDefecto.DEF_GASTO_PAGADO);
+	}
+	
 	public static ArrayList<GastoTabla> buscarGastosAbonablesActivoConFiltroEstado(GastoTabla filtro, String sEstado)
 	{
 		return QMGastos.buscaGastosAbonablesPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, sEstado);
@@ -322,6 +327,11 @@ public final class CLGastos
 	public static ArrayList<GastoTabla> buscarGastosAutorizadosProvisionConFiltro(GastoTabla filtro)
 	{
 		return QMListaGastosProvisiones.buscaGastosProvisionPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, ValoresDefecto.DEF_GASTO_AUTORIZADO);
+	}
+
+	public static ArrayList<GastoTabla> buscarGastosPagadosProvisionConFiltro(GastoTabla filtro)
+	{
+		return QMListaGastosProvisiones.buscaGastosProvisionPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, ValoresDefecto.DEF_GASTO_PAGADO);
 	}
 	
 	public static String estadoGasto(long liCodGasto)
@@ -514,28 +524,31 @@ public final class CLGastos
 											{
 												if (QMGastos.getCOSIGA(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_ABONADO))
 												{
-													if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado) 
-															&& QMListaGastos.setValidado(conexion, liCodGasto,ValoresDefecto.DEF_MOVIMIENTO_RESUELTO)
+													//if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado)
+													if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_VALIDADO)
+															//&& QMListaGastos.setValidado(conexion, liCodGasto,ValoresDefecto.DEF_MOVIMIENTO_RESUELTO)
+															&& QMListaGastos.setValidado(conexion, liCodGasto,ValoresDefecto.DEF_MOVIMIENTO_VALIDADO)
 															&& QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_ABONADO))
 														{
-															
-															if (QMProvisiones.setGastoAbonadoAutorizado(conexion, gasto.getNUPROF(), gasto.getValor_total()))
+															//TODO Revisar
+															if (QMProvisiones.setGastoAutorizado(conexion, gasto.getNUPROF(), gasto.getValor_total()))
+															//if (QMProvisiones.setGastoAutorizadoPagado(conexion, gasto.getNUPROF(), gasto.getValor_total()))
 															{
 																logger.info("Gasto resuelto.");
 
 																iCodigo = 0;
 																
-																//
-																if(QMProvisiones.provisionPagada(conexion, gasto.getNUPROF()))
+																
+																/*if(QMProvisiones.provisionPagadaAbonada(conexion, gasto.getNUPROF()))
 																{
 																	//Cambiamos su estado a pagada.
-																	if (!QMProvisiones.setFechaPagado(conexion, gasto.getNUPROF(), gasto.getNUPROF()) 
+																	if (!QMProvisiones.setFechaPagado(conexion, gasto.getNUPROF(), Utils.fechaDeHoy(false)) 
 																		|| !QMProvisiones.setEstado(conexion, gasto.getNUPROF(),ValoresDefecto.DEF_PROVISION_PAGADA))
 																	{
 																		//Error al actualizar la Provisión del Gasto
 																		iCodigo = -908;
 																	}
-																}
+																}*/
 															}
 															else
 															{
@@ -770,6 +783,7 @@ public final class CLGastos
 												
 													if (QMListaAbonosGastos.addRelacionAbono(conexion,liCodGasto,liCodMovimiento))
 													{
+														//Provision nueva
 														if (QMProvisiones.setGastoAbonadoInyectado(conexion, movimiento.getNUPROF(), movimiento.getValor_total()))
 														{
 
@@ -831,15 +845,24 @@ public final class CLGastos
 																{
 																	//TODO PAGADO
 																	
+																	logger.debug("Abono total autorizado.");
+																	
 																	if(QMListaGastos.setResuelto(conexion, liCodGasto))
 																	{
+																		//Provision antigua
 																		if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
 																		{
-																			if (QMListaGastos.addRelacionGastoResuelto(conexion,liCodGasto,liCodMovimiento))
+																			//nueva relacion con gasto de provision nueva
+																			if (QMListaGastos.addRelacionGastoInyectado(conexion,liCodGasto,liCodMovimiento))
+																			//if (QMListaGastos.addRelacionGastoResuelto(conexion,liCodGasto,liCodMovimiento))
 																			{
-																				if (QMListaGastosProvisiones.addRelacionGastoProvisionResuelto(conexion, liCodGasto, movimiento.getNUPROF()))
+																				//nueva relacion gasto-provision
+																				//if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
+																				if (QMListaGastosProvisiones.addRelacionGastoProvisionInyectado(conexion, liCodGasto, movimiento.getNUPROF()))
+																				//if (QMListaGastosProvisiones.addRelacionGastoProvisionResuelto(conexion, liCodGasto, movimiento.getNUPROF()))
 																				{
-																					if (QMProvisiones.setGastoAbonadoPagado(conexion, sProvisionAbonable, liValorAbono))
+																					//Descontamos el gasto y ya no se paga
+																					if (QMProvisiones.setGastoAbonado(conexion, sProvisionAbonable, liValorAbono))
 																					{
 																						if (QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_ABONADO))
 																						{
@@ -896,10 +919,13 @@ public final class CLGastos
 																}
 																else
 																{
-																	//Forzar bloqueo de provision y gasto en abonando
-																	if (QMListaGastos.addRelacionGastoResuelto(conexion,liCodGasto,liCodMovimiento))
+																	logger.debug("Abono parcial autorizado.");
+																	//Abono parcial
+																	if (QMListaGastos.addRelacionGastoInyectado(conexion,liCodGasto,liCodMovimiento))
+																	//if (QMListaGastos.addRelacionGastoResuelto(conexion,liCodGasto,liCodMovimiento))
 																	{
-																		if (QMListaGastosProvisiones.addRelacionGastoProvisionResuelto(conexion,liCodGasto,movimiento.getNUPROF()))
+																		if (QMListaGastosProvisiones.addRelacionGastoProvisionInyectado(conexion,liCodGasto,movimiento.getNUPROF()))
+																		//if (QMListaGastosProvisiones.addRelacionGastoProvisionResuelto(conexion,liCodGasto,movimiento.getNUPROF()))
 																		{
 																			if (QMProvisiones.setGastoAbonado(conexion, sProvisionAbonable, liValorAbono))
 																			{
@@ -940,9 +966,12 @@ public final class CLGastos
 															}
 															else if (sEstadoAnteriorGasto.equals(ValoresDefecto.DEF_GASTO_PAGADO))
 															{
-																if (QMListaGastos.addRelacionGastoResuelto(conexion,liCodGasto,liCodMovimiento))
+																logger.debug("Abono pagado.");
+																if (QMListaGastos.addRelacionGastoInyectado(conexion,liCodGasto,liCodMovimiento))
+																//if (QMListaGastos.addRelacionGastoResuelto(conexion,liCodGasto,liCodMovimiento))
 																{
-																	if (QMListaGastosProvisiones.addRelacionGastoProvisionResuelto(conexion, liCodGasto, movimiento.getNUPROF()))
+																	if (QMListaGastosProvisiones.addRelacionGastoProvisionInyectado(conexion, liCodGasto, movimiento.getNUPROF()))
+																	//if (QMListaGastosProvisiones.addRelacionGastoProvisionResuelto(conexion, liCodGasto, movimiento.getNUPROF()))
 																	{
 																		if (QMProvisiones.setGastoAbonado(conexion, sProvisionAbonable, liValorAbono))
 																		{
@@ -1687,7 +1716,7 @@ public final class CLGastos
 															{
 																if (QMListaGastosProvisiones.addRelacionGastoProvision(conexion,liCodGasto,movimiento_revisado.getNUPROF()))
 																{
-																	if (QMProvisiones.setGastoAbonadoPagado(conexion, sProvisionAbonada, liValorAbono))
+																	if (QMProvisiones.setGastoAbonado(conexion, sProvisionAbonada, liValorAbono))
 																	{
 																		if (QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_PAGADO))
 																		{

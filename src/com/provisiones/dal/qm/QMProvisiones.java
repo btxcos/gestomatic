@@ -42,11 +42,12 @@ public final class QMProvisiones
 	public static final String CAMPO14 = "valor_pagado";	
 	public static final String CAMPO15 = "fecha_pagado";
 	public static final String CAMPO16 = "recargo_total";
-	public static final String CAMPO17 = "abono_total";
-	public static final String CAMPO18 = "cod_estado";
-	public static final String CAMPO19 = "usuario_modificacion";
-	public static final String CAMPO20 = "fecha_modificacion";
-	public static final String CAMPO21 = "nota";
+	public static final String CAMPO17 = "gastos_abonados";
+	public static final String CAMPO18 = "abono_total";
+	public static final String CAMPO19 = "cod_estado";
+	public static final String CAMPO20 = "usuario_modificacion";
+	public static final String CAMPO21 = "fecha_modificacion";
+	public static final String CAMPO22 = "nota";
 
 	private QMProvisiones(){}
 	
@@ -85,7 +86,8 @@ public final class QMProvisiones
 					+ CAMPO18 + ","
 					+ CAMPO19 + ","
 					+ CAMPO20 + ","
-					+ CAMPO21 +
+					+ CAMPO21 + ","
+					+ CAMPO22 +
 					") VALUES ('" 
 					+ NuevaProvision.getsNUPROF() + "','"
 					+ NuevaProvision.getsCOSPAT() + "','"
@@ -103,6 +105,7 @@ public final class QMProvisiones
 					+ NuevaProvision.getsValorPagado() + "','"
 					+ NuevaProvision.getsFechaPagado() + "','"
 					+ NuevaProvision.getsRecargoTotal() + "','"
+					+ NuevaProvision.getsGastosAbonados() + "','"
 					+ NuevaProvision.getsAbonoTotal() + "','"
 					+ NuevaProvision.getsCodEstado() + "','"
 					+ sUsuario + "','"
@@ -168,10 +171,11 @@ public final class QMProvisiones
 					+ CAMPO14 + " = '" + provision.getsValorPagado() + "', "
  					+ CAMPO15 + " = '" + provision.getsFechaPagado() + "', "
  					+ CAMPO16 + " = '" + provision.getsRecargoTotal() + "', "
- 					+ CAMPO17 + " = '" + provision.getsAbonoTotal() + "', " 
-					+ CAMPO18 + " = '" + provision.getsCodEstado() + "', "
-					+ CAMPO19 + " = '" + sUsuario + "', " 
-					+ CAMPO20 + " = '" + Utils.timeStamp() + "' " +					
+ 					+ CAMPO17 + " = '" + provision.getsGastosAbonados() + "', " 
+ 					+ CAMPO18 + " = '" + provision.getsAbonoTotal() + "', " 
+					+ CAMPO19 + " = '" + provision.getsCodEstado() + "', "
+					+ CAMPO20 + " = '" + sUsuario + "', " 
+					+ CAMPO21 + " = '" + Utils.timeStamp() + "' " +					
 					" WHERE " 
 					+ CAMPO1 + " = '" + provision.getsNUPROF() + "'";
 
@@ -220,9 +224,9 @@ public final class QMProvisiones
 					+ TABLA + 
 					" SET " 
 					+ CAMPO6 + " = '" + sFEPFON + "', "
-					+ CAMPO18 + " = '" + ValoresDefecto.DEF_PROVISION_PENDIENTE + "', "
-					+ CAMPO19 + " = '" + sUsuario + "', " 
-					+ CAMPO20 + " = '" + Utils.timeStamp() + "' " +					
+					+ CAMPO19 + " = '" + ValoresDefecto.DEF_PROVISION_PENDIENTE + "', "
+					+ CAMPO20 + " = '" + sUsuario + "', " 
+					+ CAMPO21 + " = '" + Utils.timeStamp() + "' " +					
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 
@@ -315,6 +319,7 @@ public final class QMProvisiones
 		String sValorPagado = "";
 		String sFechaPagado = "";
 		String sRecargoTotal = "";
+		String sGastosAbonados = ""; 
 		String sAbonoTotal = ""; 
 		String sEstado = "";
 
@@ -346,7 +351,8 @@ public final class QMProvisiones
 					+ CAMPO15 + "," 
 					+ CAMPO16 + ","
 					+ CAMPO17 + ","
-					+ CAMPO18 +  
+					+ CAMPO18 + ","
+					+ CAMPO19 +  
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
@@ -384,8 +390,9 @@ public final class QMProvisiones
 						sValorPagado = rs.getString(CAMPO14);
 						sFechaPagado = rs.getString(CAMPO15);
 						sRecargoTotal = rs.getString(CAMPO16);
-						sAbonoTotal = rs.getString(CAMPO17);
-						sEstado = rs.getString(CAMPO18);
+						sGastosAbonados = rs.getString(CAMPO17);
+						sAbonoTotal = rs.getString(CAMPO18);
+						sEstado = rs.getString(CAMPO19);
 
 						
 						logger.debug("Encontrado el registro!");
@@ -415,6 +422,7 @@ public final class QMProvisiones
 				sValorPagado = "";
 				sFechaPagado = "";
 				sRecargoTotal = "";
+				sGastosAbonados = "";
 				sAbonoTotal = "";
 				sEstado = "";
 
@@ -446,6 +454,7 @@ public final class QMProvisiones
 				sValorPagado, 
 				sFechaPagado, 
 				sRecargoTotal,
+				sGastosAbonados,
 				sAbonoTotal,
 				sEstado);
 	}
@@ -467,6 +476,7 @@ public final class QMProvisiones
 		String sValorPagado = "";
 		String sFechaPagado = "";
 		String sRecargoTotal = "";
+		String sGastosAbonados = "";
 		String sAbonoTotal = ""; 
 		String sEstado = "";
 
@@ -498,7 +508,8 @@ public final class QMProvisiones
 					+ CAMPO15 + ","
 					+ CAMPO16 + ","
 					+ CAMPO17 + ","
-					+ CAMPO18 +  
+					+ CAMPO18 + ","
+					+ CAMPO19 +  
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
@@ -546,8 +557,9 @@ public final class QMProvisiones
 						sValorPagado = rs.getString(CAMPO14);
 						sFechaPagado = rs.getString(CAMPO15);
 						sRecargoTotal = rs.getString(CAMPO16);
-						sAbonoTotal = rs.getString(CAMPO17);
-						sEstado = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF, QMCodigosControl.IESPROF, rs.getString(CAMPO18));
+						sGastosAbonados = rs.getString(CAMPO17);
+						sAbonoTotal = rs.getString(CAMPO18);
+						sEstado = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF, QMCodigosControl.IESPROF, rs.getString(CAMPO19));
 
 						
 						logger.debug("Encontrado el registro!");
@@ -577,6 +589,7 @@ public final class QMProvisiones
 				sValorPagado = "";
 				sFechaPagado = "";
 				sRecargoTotal = "";
+				sGastosAbonados = "";
 				sAbonoTotal = "";
 				sEstado = "";
 
@@ -608,6 +621,7 @@ public final class QMProvisiones
 				sValorPagado, 
 				sFechaPagado, 
 				sRecargoTotal,
+				sGastosAbonados,
 				sAbonoTotal,
 				sEstado);
 	}
@@ -939,7 +953,7 @@ public final class QMProvisiones
 		return bSalida;
 	}
 	
-	public static boolean setGastoAbonado(Connection conexion, String sNUPROF, long liValor) 
+	public static boolean setGastoAutorizadoPagado(Connection conexion, String sNUPROF, long liValor) 
 	{
 		boolean bSalida = false;
 		
@@ -954,7 +968,58 @@ public final class QMProvisiones
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO17 + " = " + CAMPO17 + sCondicionValor+
+					+ CAMPO10 + " = " + CAMPO10 + " + 1 ,"
+					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+ ","
+					+ CAMPO13 + " = " + CAMPO13 + " + 1 ,"
+					+ CAMPO14 + " = " + CAMPO14 + sCondicionValor+
+					" WHERE " 
+					+ CAMPO1 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+
+				logger.debug("Ejecutada con exito!");
+
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setGastoAbonado(Connection conexion, String sNUPROF, long liValor) 
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			String sCondicionValor = (liValor >= 0)? " + "+liValor:liValor+"";
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET "
+					+ CAMPO17 + " = " + CAMPO17 + " + 1,"
+					+ CAMPO18 + " = " + CAMPO18 + sCondicionValor+
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -988,6 +1053,7 @@ public final class QMProvisiones
 	
 	public static boolean setGastoAbonadoAutorizado(Connection conexion, String sNUPROF, long liValor) 
 	{
+		//TODO Revisar
 		boolean bSalida = false;
 		
 		if (conexion != null)
@@ -1051,7 +1117,8 @@ public final class QMProvisiones
 					+ TABLA + 
 					" SET " 
 					+ CAMPO13 + " = " + CAMPO13 + " + 1 ,"
-					+ CAMPO17 + " = " + CAMPO17 +sCondicionValor+
+					+ CAMPO17 + " = " + CAMPO17 + " + 1 ,"
+					+ CAMPO18 + " = " + CAMPO18 +sCondicionValor+
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -1102,9 +1169,9 @@ public final class QMProvisiones
 					+ CAMPO7  + " = " + CAMPO7 + " + 1,"
 					+ CAMPO8  + " = " + CAMPO8 + sCondicionValor + ", "
 					+ CAMPO10 + " = " + CAMPO10 + " + 1,"
-					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+ ", "			
-					+ CAMPO13 + " = " + CAMPO13 + " + 1 ,"
-					+ CAMPO14 + " = " + CAMPO14 + sCondicionValor+
+					+ CAMPO11 + " = " + CAMPO11 + sCondicionValor+ /*", "
+					+ CAMPO13 + " = " + CAMPO13 + " + 1,"
+					+ CAMPO14 + " = " + CAMPO14 + sCondicionValor+*/
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -1201,7 +1268,7 @@ public final class QMProvisiones
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO18 + " = '" + sEstado + "' " +
+					+ CAMPO19 + " = '" + sEstado + "' " +
 					" WHERE " 
 					+ CAMPO1 + " = '" + sNUPROF + "'";
 			
@@ -1251,7 +1318,7 @@ public final class QMProvisiones
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-					+ CAMPO18  +
+					+ CAMPO19  +
 					" FROM " 
 					+ TABLA + 
 					" WHERE " 
@@ -1274,7 +1341,7 @@ public final class QMProvisiones
 					{
 						bEncontrado = true;
 						
-						sValidado = rs.getString(CAMPO18);
+						sValidado = rs.getString(CAMPO19);
 
 						logger.debug("Encontrado el registro!");
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
@@ -1316,8 +1383,8 @@ public final class QMProvisiones
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					//+ CAMPO21 + " = '"+ sNota +"' "+
-					+ CAMPO21 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
+					//+ CAMPO22 + " = '"+ sNota +"' "+
+					+ CAMPO22 + " = AES_ENCRYPT('"+sNota+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) "+
 					" WHERE "
 					+ CAMPO1 + " = '"+ sNUPROF +"'";
 			
@@ -1368,8 +1435,8 @@ public final class QMProvisiones
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT " 
-						//+ CAMPO21 +
-						+"AES_DECRYPT("+CAMPO21+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+						//+ CAMPO22 +
+						+"AES_DECRYPT("+CAMPO22+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -1394,13 +1461,13 @@ public final class QMProvisiones
 
 						//sNota = rs.getString(CAMPO19);
 						
-						sNota = rs.getString("AES_DECRYPT("+CAMPO21 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sNota = rs.getString("AES_DECRYPT("+CAMPO22 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 						
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 						
 						logger.debug("Encontrado el registro!");
 
-						logger.debug(CAMPO21+":|"+sNota+"|");
+						logger.debug(CAMPO22+":|"+sNota+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -1590,7 +1657,7 @@ public final class QMProvisiones
 					"("
 					+ CAMPO6 + " <> '0' AND "
 					+ CAMPO9 + " = '0' AND "
-					+ CAMPO18 + " = '" + sEstado + "'"
+					+ CAMPO19 + " = '" + sEstado + "'"
 					+")";
 			
 			logger.debug(sQuery);
@@ -1791,7 +1858,7 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE (" 
 					+ CAMPO1 + " = '"+ sNUPROF + "' AND "
-					+ CAMPO18 + " <> '"+ ValoresDefecto.DEF_PROVISION_ABIERTA + 
+					+ CAMPO19 + " <> '"+ ValoresDefecto.DEF_PROVISION_ABIERTA + 
 					"')";
 			
 			logger.debug(sQuery);
@@ -1857,8 +1924,75 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE (" 
 					+ CAMPO1 + " = '"+ sNUPROF + "' AND "
-					+ CAMPO18 + " = '"+ ValoresDefecto.DEF_PROVISION_AUTORIZADA + "' AND "
-					+ CAMPO10 + " = "+ CAMPO13 + 
+					+ CAMPO19 + " = '"+ ValoresDefecto.DEF_PROVISION_AUTORIZADA + "' AND "
+					+ CAMPO14 + " = "+ CAMPO18 + " + "+ CAMPO11+
+					")";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR NUPROF:|"+sNUPROF+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return bEncontrado;
+	}
+	
+	public static boolean provisionPagadaAbonada(Connection conexion, String sNUPROF) 
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1  +
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ CAMPO1 + " = '"+ sNUPROF + "' AND "
+					+ CAMPO19 + " IN ('"+ ValoresDefecto.DEF_PROVISION_AUTORIZADA + "','"+ ValoresDefecto.DEF_PROVISION_PAGADA + "') AND "
+					+ CAMPO14 + " = "+ CAMPO18 + " + "+ CAMPO11+
 					")";
 			
 			logger.debug(sQuery);
@@ -1926,7 +2060,7 @@ public final class QMProvisiones
 					+ TABLA + 
 					" WHERE " +
 					"( " 
-					+ CAMPO18 + " = '" + ValoresDefecto.DEF_PROVISION_ABIERTA + "' AND "
+					+ CAMPO19 + " = '" + ValoresDefecto.DEF_PROVISION_ABIERTA + "' AND "
 					+ CAMPO2 +" = '"+ sCodCOSPAT +"' AND "
 					+ CAMPO3 +" = '"+ sCodTAS + "' AND "
 					+ CAMPO4 +" = '"+ sCOGRUG +"' AND "
@@ -1998,7 +2132,7 @@ public final class QMProvisiones
 					" FROM " 
 					+ TABLA + 
 					" WHERE (" 
-					+ CAMPO18 + " = '" + sEstado + "' AND "
+					+ CAMPO19 + " = '" + sEstado + "' AND "
 					+ CAMPO12 + " = '0'"+
 					")";
 			
@@ -2079,7 +2213,7 @@ public final class QMProvisiones
 					+ CAMPO8 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
-					+ CAMPO18 + " = '"+ sEstado + "' AND "
+					+ CAMPO19 + " = '"+ sEstado + "' AND "
 					+ CAMPO1 + " <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+
 					"' )";
 			
@@ -2183,7 +2317,7 @@ public final class QMProvisiones
 					//+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
 					+ sCondicion
@@ -2219,7 +2353,7 @@ public final class QMProvisiones
 						//String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -2288,7 +2422,7 @@ public final class QMProvisiones
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE " 
 					+CAMPO1+" = '"+sNUPROF+"'";
@@ -2321,7 +2455,7 @@ public final class QMProvisiones
 						String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -2392,7 +2526,7 @@ public final class QMProvisiones
 					//+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
 					+ sCondicion
@@ -2430,7 +2564,7 @@ public final class QMProvisiones
 						//String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -2501,7 +2635,7 @@ public final class QMProvisiones
 					//+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
 					+ sCondicion
@@ -2539,7 +2673,7 @@ public final class QMProvisiones
 						//String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -2610,13 +2744,13 @@ public final class QMProvisiones
 					//+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
 					+ sCondicion
 					+ CAMPO1 + " <> '"+ValoresDefecto.DEF_GASTO_PROVISION_CONEXION+ "' AND "
 					+ CAMPO10 + " <> '"+ValoresDefecto.DEF_GASTO_ABONADO+"' AND "
-					+ CAMPO18 +" IN ('"+ ValoresDefecto.DEF_PROVISION_AUTORIZADA +"','"+ ValoresDefecto.DEF_PROVISION_PAGADA +"'))";
+					+ CAMPO19 +" IN ('"+ ValoresDefecto.DEF_PROVISION_AUTORIZADA +"','"+ ValoresDefecto.DEF_PROVISION_PAGADA +"'))";
 
 			
 			logger.debug(sQuery);
@@ -2648,7 +2782,7 @@ public final class QMProvisiones
 						//String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -2707,7 +2841,7 @@ public final class QMProvisiones
 			boolean bEncontrado = false;
 			
 			String sCondicionFEPFON = (filtro.getFEPFON().equals("0")) ? "" : CAMPO6 + " = '"+ filtro.getFEPFON() + "' AND ";
-			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO18 + " = '" + filtro.getESTADO() + "' AND ";
+			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO19 + " = '" + filtro.getESTADO() + "' AND ";
 
 			logger.debug("Ejecutando Query...");
 			
@@ -2720,7 +2854,7 @@ public final class QMProvisiones
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE ( "
 					+ sCondicionFEPFON
@@ -2771,7 +2905,7 @@ public final class QMProvisiones
 						String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -2830,7 +2964,7 @@ public final class QMProvisiones
 			boolean bEncontrado = false;
 			
 			String sCondicionFEPFON = (filtro.getFEPFON().equals("0")) ? "" : CAMPO6 + " = '"+ filtro.getFEPFON() + "' AND ";
-			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO18 + " = '" + filtro.getESTADO() + "' AND ";
+			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO19 + " = '" + filtro.getESTADO() + "' AND ";
 
 			logger.debug("Ejecutando Query...");
 			
@@ -2843,7 +2977,7 @@ public final class QMProvisiones
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE ( "
 					+ sCondicionFEPFON
@@ -2900,7 +3034,7 @@ public final class QMProvisiones
 						String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -3052,11 +3186,11 @@ public final class QMProvisiones
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE ( "
 					+ sCondicionFEPFON
-					+ CAMPO18 + " = '" + ValoresDefecto.DEF_PROVISION_AUTORIZADA + "' AND "
+					+ CAMPO19 + " = '" + ValoresDefecto.DEF_PROVISION_AUTORIZADA + "' AND "
 					+ CAMPO1 + 
 					" IN (SELECT "
 					+ QMListaGastosProvisiones.CAMPO2 +
@@ -3108,7 +3242,7 @@ public final class QMProvisiones
 						String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -3180,7 +3314,7 @@ public final class QMProvisiones
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " 
 					+ TABLA + 
 					" WHERE ( " 
@@ -3230,7 +3364,116 @@ public final class QMProvisiones
 						String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
+
+						ProvisionTabla provisionencontrada = new ProvisionTabla(
+								sNUPROF,
+								sCOSPAT,
+								sDCOSPAT,
+								sTAS,
+								sDTAS,
+								sCOGRUG,
+								sDCOGRUG,
+								sCOTPGA,
+								sDCOTPGA,
+								sFEPFON,
+								sVALOR,
+								sGASTOS,
+								sESTADO);
+						
+						resultado.add(provisionencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ProvisionTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
+	
+	public static ArrayList<ProvisionTabla> buscaProvisionesConPagosPorFiltro(Connection conexion, ProvisionTabla filtro) 
+	{
+		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			//TODO meter mas filtros demandados
+			String sCondicionFEPFON = (filtro.getFEPFON().equals("0")) ? "" : CAMPO6 + " = '"+ filtro.getFEPFON() + "' AND ";
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + ","
+					+ CAMPO2 + ","
+					+ CAMPO3 + ","
+					+ CAMPO4 + ","
+					+ CAMPO5 + ","
+					+ CAMPO6 + ","
+					+ CAMPO7 + ","
+					+ CAMPO8 + ","
+					+ CAMPO19 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE (" 
+					+ sCondicionFEPFON
+					+ CAMPO13 + " > 0 )";
+
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						String sNUPROF =  rs.getString(CAMPO1);
+						String sCOSPAT =  rs.getString(CAMPO2);
+						String sDCOSPAT =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
+						String sTAS =  rs.getString(CAMPO3);
+						String sDTAS =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
+						String sCOGRUG =  rs.getString(CAMPO4);
+						String sDCOGRUG =   QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOGRUG,QMCodigosControl.ICOGRUG,sCOGRUG);
+						String sCOTPGA =   rs.getString(CAMPO5);
+						String sDCOTPGA =   QMCodigosControl.getDesCOTPGA(conexion,sCOGRUG, sCOTPGA);
+						String sFEPFON =   Utils.recuperaFecha(rs.getString(CAMPO6));
+						String sGASTOS =  rs.getString(CAMPO7);
+						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -3288,7 +3531,7 @@ public final class QMProvisiones
 			
 			//TODO meter mas filtros demandados
 			String sCondicionFEPFON = (filtro.getFEPFON().equals("0")) ? "" : CAMPO6 + " = '"+ filtro.getFEPFON() + "' AND ";
-			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO18 + " = '" + filtro.getESTADO() + "' AND ";
+			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO19 + " = '" + filtro.getESTADO() + "' AND ";
 			
 			boolean bEncontrado = false;
 
@@ -3303,7 +3546,7 @@ public final class QMProvisiones
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " + TABLA + 
 					" WHERE ( " 
 					+ sCondicionFEPFON
@@ -3340,7 +3583,7 @@ public final class QMProvisiones
 						String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
 								sNUPROF,
@@ -3410,7 +3653,7 @@ public final class QMProvisiones
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " 
 					+ TABLA
 					+ " WHERE ("
@@ -3459,7 +3702,7 @@ public final class QMProvisiones
 						String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
@@ -3531,7 +3774,7 @@ public final class QMProvisiones
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO18 + 
+					+ CAMPO19 + 
 					" FROM " 
 					+ TABLA
 					+ " WHERE ("
@@ -3585,7 +3828,7 @@ public final class QMProvisiones
 						String sFEPFON =   rs.getString(CAMPO6);
 						String sGASTOS =  rs.getString(CAMPO7);
 						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
-						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO18));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
 
 
 						ProvisionTabla provisionencontrada = new ProvisionTabla(
@@ -3651,7 +3894,7 @@ public final class QMProvisiones
 						" FROM " 
 						+ TABLA + 
 						" WHERE ( " 
-						+ CAMPO18 + " <> '"+ ValoresDefecto.DEF_PROVISION_ABIERTA + "' AND " 
+						+ CAMPO19 + " <> '"+ ValoresDefecto.DEF_PROVISION_ABIERTA + "' AND " 
 						+ CAMPO2 +" = '"+ sCodCOSPAT +"') "+
 						" order by " + CAMPO1 + " desc limit 0,1 ";
 			

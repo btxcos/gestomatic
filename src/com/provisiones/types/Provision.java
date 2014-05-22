@@ -19,6 +19,7 @@ public class Provision
 	private String sValorPagado = "";
 	private String sFechaPagado = "";
 	private String sRecargoTotal = "";
+	private String sGastosAbonados = "";
 	private String sAbonoTotal = "";
 	private String sCodEstado = "";
 
@@ -29,7 +30,8 @@ public class Provision
 			String sValorTolal, String sFechaEnvio, String sGastosAutorizados,
 			String sValorAutorizado, String sFechaAutorizado,
 			String sGastosPagados, String sValorPagado, String sFechaPagado,
-			String sRecargoTotal, String sAbonoTotal, String sCodEstado) {
+			String sRecargoTotal, String sGastosAbonados, String sAbonoTotal,
+			String sCodEstado) {
 		super();
 		this.sNUPROF = sNUPROF;
 		this.sCOSPAT = sCOSPAT;
@@ -47,6 +49,7 @@ public class Provision
 		this.sValorPagado = sValorPagado;
 		this.sFechaPagado = sFechaPagado;
 		this.sRecargoTotal = sRecargoTotal;
+		this.sGastosAbonados = sGastosAbonados;
 		this.sAbonoTotal = sAbonoTotal;
 		this.sCodEstado = sCodEstado;
 	}
@@ -179,6 +182,14 @@ public class Provision
 
 	public void setsRecargoTotal(String sRecargoTotal) {
 		this.sRecargoTotal = sRecargoTotal;
+	}
+
+	public String getsGastosAbonados() {
+		return sGastosAbonados;
+	}
+
+	public void setsGastosAbonados(String sGastosAbonados) {
+		this.sGastosAbonados = sGastosAbonados;
 	}
 
 	public String getsAbonoTotal() {
