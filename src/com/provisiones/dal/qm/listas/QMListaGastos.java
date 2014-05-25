@@ -656,6 +656,52 @@ public final class QMListaGastos
 		return bSalida;
 	}
 	
+	public static boolean setAutorizado(Connection conexion, long liCodGasto)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "' "+
+					" WHERE ("
+					+ CAMPO1 + " = '"+ liCodGasto +"' AND "
+					+ CAMPO3 + " = '"+ValoresDefecto.DEF_MOVIMIENTO_RESUELTO+"')";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+				
+				logger.error("ERROR Gasto:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static boolean setDesbloqueado(Connection conexion, long liCodGasto)
 	{
 		boolean bSalida = false;

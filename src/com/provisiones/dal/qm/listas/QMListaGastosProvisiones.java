@@ -585,6 +585,52 @@ public final class QMListaGastosProvisiones
 		return bSalida;
 	}
 	
+	public static boolean setAutorizado(Connection conexion, long liCodGasto, String sNUPROF)
+	{
+		boolean bSalida = false;
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "' "+
+					" WHERE ("
+					+ CAMPO1 + " = '"+ liCodGasto +"' AND "
+					+ CAMPO2 + " = '"+ sNUPROF +"' AND "
+					+ CAMPO3 + " = '"+ValoresDefecto.DEF_MOVIMIENTO_RESUELTO+"' )";
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Gasto:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 	public static boolean setDesbloqueado(Connection conexion, long liCodGasto)
 	{
 		boolean bSalida = false;
@@ -1592,6 +1638,142 @@ public final class QMListaGastosProvisiones
 						   + sCondicionCOSBGA
 						   + sCondicionFEDEVE
 						   + sCondicionEstado
+						   + QMGastos.CAMPO1 + 
+						   " IN (SELECT "
+						   +  CAMPO1 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE " 
+						   + CAMPO2 + " = '"+ filtro.getNUPROF() + "'))"+
+						   " ORDER BY "+ QMGastos.CAMPO9;
+						   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sGastoID = rs.getString(QMGastos.CAMPO1);
+						String sCOACES  = rs.getString(QMGastos.CAMPO2);
+						String sCOGRUG  = rs.getString(QMGastos.CAMPO3);
+						String sCOTPGA  = rs.getString(QMGastos.CAMPO4);
+						String sCOSBGA  = rs.getString(QMGastos.CAMPO5);
+						String sDCOSBGA = QMCodigosControl.getDesCOSBGA(conexion,sCOGRUG,sCOTPGA,sCOSBGA);
+						String sPTPAGO  = rs.getString(QMGastos.CAMPO6);
+						String sDPTPAGO = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
+						String sFEDEVE  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO7));
+						String sCOSIGA  = rs.getString(QMGastos.CAMPO10);
+						String sDCOSIGA = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSIGA,QMCodigosControl.ICOSIGA,sCOSIGA);
+						//String sIMNGAS  = Utils.recuperaImporte(rs.getString(QMGastos.CAMPO16).equals("-"),rs.getString(QMGastos.CAMPO15));
+						String sIMNGAS  = Utils.recuperaImporte(false,rs.getString(QMGastos.CAMPO33));
+						//String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
+						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
+						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
+						
+						GastoTabla gastoencontrado = new GastoTabla(
+								sGastoID,
+								filtro.getNUPROF(),
+								sCOACES,
+								sCOGRUG,
+								sCOTPGA,
+								sCOSBGA,
+								sDCOSBGA,
+								sPTPAGO,
+								sDPTPAGO,
+								sFEDEVE,
+								sCOSIGA,
+								sDCOSIGA,
+								sIMNGAS,
+								QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34)),
+								sFEEPAI,
+								sFELIPG);
+						
+						resultado.add(gastoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				logger.error("ERROR NUPROF:|"+filtro.getNUPROF()+"|");
+				
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<GastoTabla> buscaGastosProvisionRevisablesPorFiltro(Connection conexion, GastoTabla filtro)
+	{
+		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			//Condiciones de filtro
+			String sCondicionCOACES = filtro.getCOACES().isEmpty()?"":QMGastos.CAMPO2 + " = '" + filtro.getCOACES() + "' AND ";
+			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()?"":QMGastos.CAMPO3 + " = '" + filtro.getCOGRUG() + "' AND ";
+			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":QMGastos.CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
+			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":QMGastos.CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
+			String sCondicionFEDEVE = (filtro.getFEDEVE().isEmpty() || filtro.getFEDEVE().equals("0"))?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						   + QMGastos.CAMPO1 + "," 
+						   + QMGastos.CAMPO2 + ","        
+						   + QMGastos.CAMPO3 + ","
+						   + QMGastos.CAMPO4 + ","
+						   + QMGastos.CAMPO5 + ","
+						   + QMGastos.CAMPO6 + ","
+						   + QMGastos.CAMPO7 + ","
+						   + QMGastos.CAMPO9 + ","
+						   + QMGastos.CAMPO10 + ","
+						   + QMGastos.CAMPO14 + ","
+						   + QMGastos.CAMPO15 + ","
+						   + QMGastos.CAMPO16 + ","
+						   + QMGastos.CAMPO33 + ","
+						   + QMGastos.CAMPO34 +	
+
+						   " FROM " 
+						   + QMGastos.TABLA + 
+						   " WHERE ("
+						   + sCondicionCOACES
+						   + sCondicionCOGRUG
+						   + sCondicionCOTPGA
+						   + sCondicionCOSBGA
+						   + sCondicionFEDEVE
+						   + QMGastos.CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_AUTORIZADO + "','" + ValoresDefecto.DEF_GASTO_PAGADO + "') AND "
 						   + QMGastos.CAMPO1 + 
 						   " IN (SELECT "
 						   +  CAMPO1 + 

@@ -81,9 +81,24 @@ public class CLPagos
 		return QMPagos.buscaActivosConPagosPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
 	
+	public static String buscarNota (long liCodPago)
+	{
+		return QMPagos.getNota(ConnectionManager.getDBConnection(),liCodPago);
+	}
+	
+	public static boolean guardarNota (long liCodPago, String sNota)
+	{
+		return QMPagos.setNota(ConnectionManager.getDBConnection(),liCodPago, sNota);
+	}
+	
 	public static boolean estaPagado(long liCodGasto)
 	{
 		return QMPagos.existePago(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+	
+	public static boolean estaEnviado(long liCodPago)
+	{
+		return QMPagos.getEnviado(ConnectionManager.getDBConnection(),liCodPago);
 	}
 	
 	public static boolean estaAbonado(long liCodGasto)
@@ -326,6 +341,8 @@ public class CLPagos
 					
 					String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, liCodGasto);
 					
+					long liCodPago = 0;
+					
 					if (QMListaGastos.setResuelto(conexion, liCodGasto))
 					{
 						if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
@@ -401,7 +418,9 @@ public class CLPagos
 									{
 										pago.setsCodOperacion(Long.toString(liCodTransferencia));
 
-										if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO) != 0)
+										liCodPago = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										
+										if ( liCodPago != 0)
 										{
 											
 											iCodigo = 0;
@@ -420,7 +439,9 @@ public class CLPagos
 								}
 								else
 								{
-									if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_ENVIADO) != 0)
+									liCodPago = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_ENVIADO);
+									
+									if (liCodPago != 0)
 									{
 										
 										iCodigo = 0;
@@ -439,7 +460,28 @@ public class CLPagos
 									if (QMProvisiones.setGastoPagado(conexion,sNUPROF, QMGastos.getValorTotal(conexion, liCodGasto), pago.getsRecargoAdicional()))
 									{
 										//OK 
-										iCodigo = 0;
+										if (nota.isbInvalida())
+										{
+											//OK 
+											iCodigo = 0;
+											conexion.commit();
+										}
+										else
+										{
+											if (QMPagos.setNota(conexion, liCodPago, nota.getsContenido()))
+											{
+												//OK 
+												iCodigo = 0;
+												conexion.commit();
+											}
+											else
+											{
+												//Error al guardar la nota
+												iCodigo = -915;
+												conexion.rollback();
+											}
+											
+										}
 									}
 									else
 									{
@@ -656,7 +698,7 @@ public class CLPagos
 		return iCodigo;
 	}
 	
-	public static int modificaPago(Pago pago, Cuenta cuenta, boolean bBorrar, Nota nota)
+	public static int modificaPago(Pago pago, Cuenta cuenta, Nota nota)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -667,65 +709,55 @@ public class CLPagos
 			
 			iCodigo = 0;
 			
-			if (bBorrar)
-			{
-				try
-				{
-					if (QMPagos.delPago(conexion, buscarCodigoPago(Long.parseLong(pago.getsGasto()))))
-					{
-						iCodigo = 0;
-					}
-					else
-					{
-						//TODO revisar error
-						//error al borrar el gasto
-						iCodigo = -999;
-					}
-				}
-				catch(NumberFormatException nfe)
-				{
-					//TODO revisar error
-					//error al acceder al codigo del gasto
-					iCodigo = -999;
-				}
 
-			}
-			else
+			try
 			{
-				try
+				conexion.setAutoCommit(false);
+				
+				long liCodGasto = Long.parseLong(pago.getsGasto());
+				
+				String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, liCodGasto);
+				
+				if (QMListaGastos.setResuelto(conexion, liCodGasto))
 				{
-					conexion.setAutoCommit(false);
-					
-					long liCodGasto = Long.parseLong(pago.getsGasto());
-					
-					String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, liCodGasto);
-					
-					if (QMListaGastos.setResuelto(conexion, liCodGasto))
+					if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
 					{
-						if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
+						if (CLGastos.existeBloqueo(liCodGasto))
 						{
-							if (CLGastos.existeBloqueo(liCodGasto))
+							if (QMGastos.setAbonado(conexion, liCodGasto, pago.getsFEPGPR()))
 							{
-								if (QMGastos.setAbonado(conexion, liCodGasto, pago.getsFEPGPR()))
+								if (QMListaGastos.setDesbloqueado(conexion, liCodGasto))
 								{
-									if (QMListaGastos.setDesbloqueado(conexion, liCodGasto))
+									if (QMListaGastosProvisiones.setDesbloqueado(conexion, liCodGasto))
 									{
-										if (QMListaGastosProvisiones.setDesbloqueado(conexion, liCodGasto))
-										{
-											iCodigo = 0;
-										}
-										else
-										{
-											//error al desbloquear la provision del gasto - Rollback
-											iCodigo = -907;
-										}
+										iCodigo = 0;
 									}
 									else
 									{
-										//error al desbloquear el gasto - Rollback
-										iCodigo = -908;
+										//error al desbloquear la provision del gasto - Rollback
+										iCodigo = -907;
 									}
-									
+								}
+								else
+								{
+									//error al desbloquear el gasto - Rollback
+									iCodigo = -908;
+								}
+								
+							}
+							else
+							{
+								//error al establecer el estado del gasto - Rollback
+								iCodigo = -905;
+							}
+						}
+						else
+						{
+							if (QMGastos.getCOSIGA(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_ABONADO))
+							{
+								if (QMGastos.setPagadoAbonado(conexion, liCodGasto, pago.getsFEPGPR()))
+								{
+									iCodigo = 0;
 								}
 								else
 								{
@@ -735,66 +767,33 @@ public class CLPagos
 							}
 							else
 							{
-								if (QMGastos.getCOSIGA(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_ABONADO))
+								if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
 								{
-									if (QMGastos.setPagadoAbonado(conexion, liCodGasto, pago.getsFEPGPR()))
-									{
-										iCodigo = 0;
-									}
-									else
-									{
-										//error al establecer el estado del gasto - Rollback
-										iCodigo = -905;
-									}
+									iCodigo = 0;
 								}
 								else
 								{
-									if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
-									{
-										iCodigo = 0;
-									}
-									else
-									{
-										//error al establecer el estado del gasto - Rollback
-										iCodigo = -905;
-									}
+									//error al establecer el estado del gasto - Rollback
+									iCodigo = -905;
 								}
-
 							}
-							
-							if (iCodigo == 0)
+
+						}
+						
+						if (iCodigo == 0)
+						{
+							if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_NORMA34))
 							{
-								if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_NORMA34))
-								{
-									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
+								long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
 
-									TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta, liRecargo);
-									long liCodTransferencia = QMTransferenciasN34.addTransferencia(conexion, transferencia);
-									
-									if (liCodTransferencia != 0)
-									{
-										pago.setsCodOperacion(Long.toString(liCodTransferencia));
-
-										if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO) != 0)
-										{
-											
-											iCodigo = 0;
-										}
-										else
-										{
-											//error al crear el pago
-											iCodigo = -900;
-										}
-									}
-									else
-									{
-										//error al crear la transferencia pago
-										iCodigo = -906;
-									}
-								}
-								else
+								TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta, liRecargo);
+								long liCodTransferencia = QMTransferenciasN34.addTransferencia(conexion, transferencia);
+								
+								if (liCodTransferencia != 0)
 								{
-									if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_ENVIADO) != 0)
+									pago.setsCodOperacion(Long.toString(liCodTransferencia));
+
+									if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO) != 0)
 									{
 										
 										iCodigo = 0;
@@ -802,97 +801,302 @@ public class CLPagos
 									else
 									{
 										//error al crear el pago
-										
 										iCodigo = -900;
 									}
 								}
-								
-								if (iCodigo == 0)
+								else
 								{
-									logger.debug("pago.getsRecargoAdicional():|"+pago.getsRecargoAdicional()+"|");
-									if (QMProvisiones.setGastoPagado(conexion,sNUPROF, QMGastos.getValorTotal(conexion, liCodGasto), pago.getsRecargoAdicional()))
-									{
-										//OK 
-										iCodigo = 0;
-									}
-									else
-									{
-										//error al actualizar la provisión
-										iCodigo = -909;
-									}
+									//error al crear la transferencia pago
+									iCodigo = -906;
+								}
+							}
+							else
+							{
+								if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_ENVIADO) != 0)
+								{
+									
+									iCodigo = 0;
+								}
+								else
+								{
+									//error al crear el pago
+									
+									iCodigo = -900;
 								}
 							}
 							
+							if (iCodigo == 0)
+							{
+								logger.debug("pago.getsRecargoAdicional():|"+pago.getsRecargoAdicional()+"|");
+								if (QMProvisiones.setGastoPagado(conexion,sNUPROF, QMGastos.getValorTotal(conexion, liCodGasto), pago.getsRecargoAdicional()))
+								{
+									//OK 
+									iCodigo = 0;
+								}
+								else
+								{
+									//error al actualizar la provisión
+									iCodigo = -909;
+								}
+							}
+						}
+						
+		
+					}
+					else
+					{
+						//error sin revision - Rollback
+						
+						iCodigo = -904;
+					}
+				}
+				else
+				{
+					//error estado no establecido - Rollback
+					
+					iCodigo = -903;
+				}
+				if (iCodigo == 0)
+				{
+					
+					if(QMProvisiones.provisionPagada(conexion, sNUPROF))
+					{
+						//Cambiamos su estado a pagada.
+						if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, pago.getsFEPGPR()) 
+							|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_PAGADA))
+						{
+							iCodigo = -909;
+						}
+					}
+				}
+
+				
+				if (iCodigo == 0)
+				{
+					conexion.commit();
+				}
+				else
+				{
+					conexion.rollback();
+				}
+
+				conexion.setAutoCommit(true);
+			}
+			catch (SQLException e) 
+			{
+				//error de conexion con base de datos.
+				iCodigo = -910;
+
+				try 
+				{
+					//reintentamos
+					conexion.rollback();
+					conexion.setAutoCommit(true);
+					conexion.close();
+				} 
+				catch (SQLException e1) 
+				{
+					try 
+					{
+						conexion.close();
+					}
+					catch (SQLException e2) 
+					{
+						logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+					}
+				}
+			}
 			
+			
+
+			
+		
+		}
+		
+		return iCodigo;
+	}
+	
+	public static int eliminaPago(String sNUPROF, long liCodGasto, long liCodPago, long liCodOperacion, long liValor, String sRecargo, boolean bAbono)
+	{
+		int iCodigo = -910;//Error de conexion
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			
+			iCodigo = 0;
+			
+			try
+			{
+				conexion.setAutoCommit(false);
+				
+				if (QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_AUTORIZADO))
+				{
+					if (QMGastos.setFechaPagado(conexion, liCodGasto, ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+					{
+						if (QMListaGastos.setAutorizado(conexion, liCodGasto))
+						{
+							if (QMListaGastosProvisiones.setAutorizado(conexion, liCodGasto,sNUPROF))
+							{
+								String sEstadoAnterior = "";
+
+								if (bAbono)
+								{
+									sEstadoAnterior = ValoresDefecto.DEF_GASTO_ABONADO;
+								}
+								else
+								{
+									sEstadoAnterior = ValoresDefecto.DEF_GASTO_CONOCIDO;
+								}
+								
+								if (QMGastos.setCOSIGA(conexion, liCodGasto, sEstadoAnterior))
+								{
+
+									if (QMPagos.delPago(conexion, liCodOperacion))
+									{
+										if(QMProvisiones.setGastoPagoAnulado(conexion, sNUPROF, liValor, sRecargo))
+										{
+											if (liCodOperacion == 0)
+											{
+												iCodigo = 0;
+											}
+											else
+											{
+												if (QMTransferenciasN34.delTransferencia(conexion, liCodOperacion))
+												{
+													iCodigo = 0;
+												}
+												else
+												{
+													//TODO revisar error
+													//error al borrar el gasto
+													iCodigo = -999;
+												}
+											}
+										}
+										else
+										{
+											//TODO revisar error
+											//error al borrar el gasto
+											iCodigo = -999;
+										}
+										
+
+										if(QMProvisiones.getEstado(conexion, sNUPROF).equals(ValoresDefecto.DEF_PROVISION_PAGADA) && (iCodigo == 0))
+										{
+											//Cambiamos su estado a pagada.
+											if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, ValoresDefecto.CAMPO_NUME_SIN_INFORMAR) 
+												|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_AUTORIZADA))
+											{
+												//TODO revisar error
+												//error al borrar el gasto
+												iCodigo = -999;
+											}
+											else
+											{
+
+											}
+										}
+									}
+									else
+									{
+										//TODO revisar error
+										//error al borrar el gasto
+										iCodigo = -999;
+									}
+								}
+								else
+								{
+									//TODO revisar error
+									//error al borrar el gasto
+									iCodigo = -999;
+								}
+								
+								if (sNUPROF.isEmpty())
+								{
+									//TODO revisar error
+									//error al borrar el gasto
+									iCodigo = -999;
+								}
+								else
+								{
+									
+									
+								}
+							}
+							else
+							{
+								//TODO revisar error
+								//error al borrar el gasto
+								iCodigo = -999;
+							}
 						}
 						else
 						{
-							//error sin revision - Rollback
-							
-							iCodigo = -904;
+							//TODO revisar error
+							//error al borrar el gasto
+							iCodigo = -999;
 						}
 					}
 					else
 					{
-						//error estado no establecido - Rollback
-						
-						iCodigo = -903;
+						//TODO revisar error
+						//error al borrar el gasto
+						iCodigo = -999;
 					}
-					if (iCodigo == 0)
-					{
-						
-						if(QMProvisiones.provisionPagada(conexion, sNUPROF))
-						{
-							//Cambiamos su estado a pagada.
-							if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, pago.getsFEPGPR()) 
-								|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_PAGADA))
-							{
-								iCodigo = -909;
-							}
-						}
-					}
-
-					
-					if (iCodigo == 0)
-					{
-						conexion.commit();
-					}
-					else
-					{
-						conexion.rollback();
-					}
-
-					conexion.setAutoCommit(true);
 				}
-				catch (SQLException e) 
+				else
 				{
-					//error de conexion con base de datos.
-					iCodigo = -910;
+					//TODO revisar error
+					//error al borrar el gasto
+					iCodigo = -999;
+				}
+				
+				
+				
+				if (iCodigo == 0)
+				{
+					conexion.commit();
+				}
+				else
+				{
+					conexion.rollback();
+				}
+				
+				conexion.setAutoCommit(false);
+			}
+			catch(NumberFormatException nfe)
+			{
+				//TODO revisar error
+				//error al acceder al codigo del gasto
+				iCodigo = -999;
+			}
+			catch (SQLException e) 
+			{
+				//error de conexion con base de datos.
+				iCodigo = -910;
 
+				try 
+				{
+					//reintentamos
+					conexion.rollback();
+					conexion.setAutoCommit(true);
+					conexion.close();
+				} 
+				catch (SQLException e1) 
+				{
 					try 
 					{
-						//reintentamos
-						conexion.rollback();
-						conexion.setAutoCommit(true);
 						conexion.close();
-					} 
-					catch (SQLException e1) 
+					}
+					catch (SQLException e2) 
 					{
-						try 
-						{
-							conexion.close();
-						}
-						catch (SQLException e2) 
-						{
-							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
-						}
+						logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
 					}
 				}
-				
-				
-
-				
 			}
+		
 		}
 		
 		return iCodigo;

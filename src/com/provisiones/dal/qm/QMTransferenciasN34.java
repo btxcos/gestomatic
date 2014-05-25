@@ -124,6 +124,49 @@ public class QMTransferenciasN34
 		return liCodigo;
 	}
 	
+	public static boolean delTransferencia(Connection conexion, long liTransferenciaID) 
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "DELETE FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + liTransferenciaID + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Transferencia:|"+liTransferenciaID+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally
+			{
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return bSalida;
+	}
+	
 	public static TransferenciaN34 getTransferencia(Connection conexion, long liTransferenciaID)
 	{
 		String sCodOrdenante = "";
