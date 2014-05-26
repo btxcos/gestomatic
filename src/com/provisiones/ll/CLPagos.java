@@ -698,7 +698,7 @@ public class CLPagos
 		return iCodigo;
 	}
 	
-	public static int modificaPago(Pago pago, Cuenta cuenta, Nota nota)
+	public static int modificaPago(String sNUPROF, long liCodGasto, long liCodPago, long liCodOperacion, long liValor, String sRecargo, boolean bAbono, Pago pago, Cuenta cuenta, Nota nota)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -706,211 +706,14 @@ public class CLPagos
 		
 		if (conexion != null)
 		{
-			
-			iCodigo = 0;
-			
-
-			try
-			{
-				conexion.setAutoCommit(false);
-				
-				long liCodGasto = Long.parseLong(pago.getsGasto());
-				
-				String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, liCodGasto);
-				
-				if (QMListaGastos.setResuelto(conexion, liCodGasto))
-				{
-					if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
-					{
-						if (CLGastos.existeBloqueo(liCodGasto))
-						{
-							if (QMGastos.setAbonado(conexion, liCodGasto, pago.getsFEPGPR()))
-							{
-								if (QMListaGastos.setDesbloqueado(conexion, liCodGasto))
-								{
-									if (QMListaGastosProvisiones.setDesbloqueado(conexion, liCodGasto))
-									{
-										iCodigo = 0;
-									}
-									else
-									{
-										//error al desbloquear la provision del gasto - Rollback
-										iCodigo = -907;
-									}
-								}
-								else
-								{
-									//error al desbloquear el gasto - Rollback
-									iCodigo = -908;
-								}
-								
-							}
-							else
-							{
-								//error al establecer el estado del gasto - Rollback
-								iCodigo = -905;
-							}
-						}
-						else
-						{
-							if (QMGastos.getCOSIGA(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_ABONADO))
-							{
-								if (QMGastos.setPagadoAbonado(conexion, liCodGasto, pago.getsFEPGPR()))
-								{
-									iCodigo = 0;
-								}
-								else
-								{
-									//error al establecer el estado del gasto - Rollback
-									iCodigo = -905;
-								}
-							}
-							else
-							{
-								if (QMGastos.setPagado(conexion, liCodGasto, pago.getsFEPGPR()))
-								{
-									iCodigo = 0;
-								}
-								else
-								{
-									//error al establecer el estado del gasto - Rollback
-									iCodigo = -905;
-								}
-							}
-
-						}
-						
-						if (iCodigo == 0)
-						{
-							if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_NORMA34))
-							{
-								long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
-
-								TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta, liRecargo);
-								long liCodTransferencia = QMTransferenciasN34.addTransferencia(conexion, transferencia);
-								
-								if (liCodTransferencia != 0)
-								{
-									pago.setsCodOperacion(Long.toString(liCodTransferencia));
-
-									if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO) != 0)
-									{
-										
-										iCodigo = 0;
-									}
-									else
-									{
-										//error al crear el pago
-										iCodigo = -900;
-									}
-								}
-								else
-								{
-									//error al crear la transferencia pago
-									iCodigo = -906;
-								}
-							}
-							else
-							{
-								if (QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_ENVIADO) != 0)
-								{
-									
-									iCodigo = 0;
-								}
-								else
-								{
-									//error al crear el pago
-									
-									iCodigo = -900;
-								}
-							}
-							
-							if (iCodigo == 0)
-							{
-								logger.debug("pago.getsRecargoAdicional():|"+pago.getsRecargoAdicional()+"|");
-								if (QMProvisiones.setGastoPagado(conexion,sNUPROF, QMGastos.getValorTotal(conexion, liCodGasto), pago.getsRecargoAdicional()))
-								{
-									//OK 
-									iCodigo = 0;
-								}
-								else
-								{
-									//error al actualizar la provisión
-									iCodigo = -909;
-								}
-							}
-						}
-						
+			//TODO revisar pago en gestor para modificar solo lo necesario
+			//Solución temporal
+			iCodigo = eliminaPago(sNUPROF,liCodGasto,liCodPago,liCodOperacion,liValor,sRecargo,bAbono);
 		
-					}
-					else
-					{
-						//error sin revision - Rollback
-						
-						iCodigo = -904;
-					}
-				}
-				else
-				{
-					//error estado no establecido - Rollback
-					
-					iCodigo = -903;
-				}
-				if (iCodigo == 0)
-				{
-					
-					if(QMProvisiones.provisionPagada(conexion, sNUPROF))
-					{
-						//Cambiamos su estado a pagada.
-						if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, pago.getsFEPGPR()) 
-							|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_PAGADA))
-						{
-							iCodigo = -909;
-						}
-					}
-				}
-
-				
-				if (iCodigo == 0)
-				{
-					conexion.commit();
-				}
-				else
-				{
-					conexion.rollback();
-				}
-
-				conexion.setAutoCommit(true);
-			}
-			catch (SQLException e) 
+			if (iCodigo == 0)
 			{
-				//error de conexion con base de datos.
-				iCodigo = -910;
-
-				try 
-				{
-					//reintentamos
-					conexion.rollback();
-					conexion.setAutoCommit(true);
-					conexion.close();
-				} 
-				catch (SQLException e1) 
-				{
-					try 
-					{
-						conexion.close();
-					}
-					catch (SQLException e2) 
-					{
-						logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
-					}
-				}
+				iCodigo = registraPagoSimple(pago,cuenta, true,nota);
 			}
-			
-			
-
-			
-		
 		}
 		
 		return iCodigo;
@@ -969,29 +772,26 @@ public class CLPagos
 												}
 												else
 												{
-													//TODO revisar error
-													//error al borrar el gasto
-													iCodigo = -999;
+													//error al eliminar el registro de transferencia
+													iCodigo = -916;
 												}
 											}
 										}
 										else
 										{
-											//TODO revisar error
-											//error al borrar el gasto
-											iCodigo = -999;
+											//error al descontar los importes del resumen de pagos en provision
+											iCodigo = -915;
 										}
 										
 
 										if(QMProvisiones.getEstado(conexion, sNUPROF).equals(ValoresDefecto.DEF_PROVISION_PAGADA) && (iCodigo == 0))
 										{
-											//Cambiamos su estado a pagada.
+											//Cambiamos su estado a autorizada.
 											if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, ValoresDefecto.CAMPO_NUME_SIN_INFORMAR) 
 												|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_AUTORIZADA))
 											{
-												//TODO revisar error
-												//error al borrar el gasto
-												iCodigo = -999;
+												//error error al restablecer la provisión como autorizada
+												iCodigo = -914;
 											}
 											else
 											{
@@ -1002,55 +802,40 @@ public class CLPagos
 									else
 									{
 										//TODO revisar error
-										//error al borrar el gasto
-										iCodigo = -999;
+										//error al eliminar el registro de pago
+										iCodigo = -913;
 									}
 								}
 								else
 								{
-									//TODO revisar error
-									//error al borrar el gasto
-									iCodigo = -999;
+									//error al restablecer el codigo de situacion del gasto
+									iCodigo = -912;
 								}
 								
-								if (sNUPROF.isEmpty())
-								{
-									//TODO revisar error
-									//error al borrar el gasto
-									iCodigo = -999;
-								}
-								else
-								{
-									
-									
-								}
+
 							}
 							else
 							{
-								//TODO revisar error
-								//error al borrar el gasto
-								iCodigo = -999;
+								//error al restablecer el estado de la relación gasto-provisión
+								iCodigo = -911;
 							}
 						}
 						else
 						{
-							//TODO revisar error
-							//error al borrar el gasto
-							iCodigo = -999;
+							//error al restablecer el estado de la relación del gasto
+							iCodigo = -909;
 						}
 					}
 					else
 					{
-						//TODO revisar error
-						//error al borrar el gasto
-						iCodigo = -999;
+						//error al eliminar la fecha de pago del gasto
+						iCodigo = -902;
 					}
 				}
 				else
 				{
-					//TODO revisar error
-					//error al borrar el gasto
-					iCodigo = -999;
+					//error al restablecer el estado del gasto
+					iCodigo = -901;
 				}
 				
 				

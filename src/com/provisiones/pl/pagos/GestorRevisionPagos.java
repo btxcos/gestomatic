@@ -36,8 +36,7 @@ import com.provisiones.types.transferencias.N34.TransferenciaN34;
 
 public class GestorRevisionPagos implements Serializable 
 {
-
-	private static final long serialVersionUID = -7139955896637122032L;
+	private static final long serialVersionUID = 6847953493067729015L;
 
 	private static Logger logger = LoggerFactory.getLogger(GestorRevisionPagos.class.getName());
 
@@ -1610,7 +1609,7 @@ public class GestorRevisionPagos implements Serializable
 						
 						Nota nota = new Nota (false,sNota);
 						
-						iSalida = CLPagos.modificaPago(pago, cuenta, nota);
+						iSalida = CLPagos.modificaPago(sNUPROF, liCodGasto, liCodPago, liCodOperacion, liValor, sRecargo, bAbono, pago, cuenta, nota);
 					}
 					
 					switch (iSalida) 
@@ -1619,7 +1618,7 @@ public class GestorRevisionPagos implements Serializable
 						actualizaProgreso();
 						borrarCamposPago();
 
-						sMsg = "El pago se ha registrado correctamente.";
+						sMsg = "El cambio en el Pago se ha registrado correctamente.";
 						msg = Utils.pfmsgInfo(sMsg);
 						logger.info(sMsg);
 						break;
@@ -1650,6 +1649,18 @@ public class GestorRevisionPagos implements Serializable
 
 					case -900: //Error 900 - al registrar el pago
 						sMsg = "[FATAL] ERROR:900 - Se ha producido un error al registrar el pago. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -901: //Error 901 - al restablecer el estado del gasto
+						sMsg = "[FATAL] ERROR:901 - Se ha producido un error al restablecer el estado del gasto. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -902: //Error 902 - al eliminar la fecha de pago del gasto
+						sMsg = "[FATAL] ERROR:902 - Se ha producido un error al eliminar la fecha de pago del gasto. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;
@@ -1690,12 +1701,54 @@ public class GestorRevisionPagos implements Serializable
 						logger.error(sMsg);
 						break;
 						
+					case -909: //Error 909 - error y rollback - error al restablecer el estado de la relación del gasto
+						sMsg = "[FATAL] ERROR:909 - Se ha producido un error al restablecer el estado de la relación del gasto. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
 					case -910: //Error 910 - error y rollback - error al conectar con la base de datos
 						sMsg = "[FATAL] ERROR:910 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
 						logger.error(sMsg);
 						break;
 
+					case -911: //Error 911 - error y rollback - error al restablecer el estado de la relación gasto-provisión
+						sMsg = "[FATAL] ERROR:911 - Se ha producido un error al restablecer el estado de la relación gasto-provisión. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -912: //Error 912 - error y rollback - error al restablecer el codigo de situacion del gasto
+						sMsg = "[FATAL] ERROR:912 - Se ha producido un error al restablecer el codigo de situacion del gasto. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -913: //Error 913 - error y rollback - error al eliminar el registro de pago
+						sMsg = "[FATAL] ERROR:913 - Se ha producido un error al eliminar el registro de pago. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -914: //Error 914 - error y rollback - error al restablecer la provisión como autorizada
+						sMsg = "[FATAL] ERROR:914 - Se ha producido un error al restablecer la provisión como autorizada. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -915: //Error 915 - error y rollback - error al descontar los importes del resumen de pagos en provisión
+						sMsg = "[FATAL] ERROR:915 - Se ha producido un error al descontar los importes del resumen de pagos en provisión. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
+					case -916: //Error 916 - error y rollback - error al eliminar el registro de transferencia
+						sMsg = "[FATAL] ERROR:916 - Se ha producido un error al eliminar el registro de transferencia. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
 					default: //error generico
 						sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);
