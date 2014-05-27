@@ -131,14 +131,15 @@ public class GestorRevisionPagos implements Serializable
 	private long liCodGasto = 0;
 	private long liCodPago = 0;
 	private long liCodOperacion = 0;
-	private long liValor = 0;
-	private String sRecargo = "0";
 	private boolean bAbono = false;
 
-	
+	private String sFEPGPRO = "";
+
 	private String sFEPGPR = "";
-	
+	private long liValor = 0;
+	private String sRecargo = "0";
 	private String sTipoPago = "";
+	
 	
 	//Recargo
 	private String sTipoRecargo = "";
@@ -149,6 +150,15 @@ public class GestorRevisionPagos implements Serializable
 	private String sImporteBase = "0";
 	
 	//Cuenta
+	//Original
+	private String sPaisO = "";	
+	private String sDCIBANO = "";
+	private String sNUCCENO = "";
+	private String sNUCCOFO = "";
+	private String sNUCCDIO = "";
+	private String sNUCCNTO = "";
+	
+	//Nueva
 	private String sPais = "";	
 	private String sDCIBAN = "";
 	private String sNUCCEN = "";
@@ -159,6 +169,7 @@ public class GestorRevisionPagos implements Serializable
 	private String sDescripcion = "";
 	
 	//Notas
+	private String sNotaO = "";
 	private String sNota = "";
 	
 	private boolean bRevisable = true;
@@ -858,7 +869,7 @@ public class GestorRevisionPagos implements Serializable
 				}
 				else
 				{
-					sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+					sMsg = "El Activo '"+sCOACESB+"' no pertenece a la cartera. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
 				}
@@ -1074,23 +1085,7 @@ public class GestorRevisionPagos implements Serializable
 		 
 		    	this.setbDevolucion((Integer.parseInt(sCOSBGA) > 49));
 		    	
-		    	if (bDevolucion)
-		    	{
-		    		this.sPais = "ES";
-		    		this.sDCIBAN = "00";
-		    		this.sNUCCEN = "0000";
-		    		this.sNUCCOF = "0000";
-		    		this.sNUCCDI = "00";
-		    		this.sNUCCNT = "0000000000";
-		    		
-		    		this.setsDescripcion("DEVOLUCION");
-		    		
-		    		this.sTipoPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
-		    	}
-		    	else
-		    	{
-		    		borrarCamposCuenta();
-		    	}
+
 		    	
 		    	this.sDPTPAGO = gastoseleccionado.getDPTPAGO();
 
@@ -1138,6 +1133,8 @@ public class GestorRevisionPagos implements Serializable
 
 				this.sFEPGPR = Utils.recuperaFecha(pago.getsFEPGPR());
 				
+				this.sFEPGPRO = sFEPGPR;
+				
 				logger.debug("pago.getsTipoPago():|"+pago.getsTipoPago()+"|");
 				
 				
@@ -1163,6 +1160,8 @@ public class GestorRevisionPagos implements Serializable
 					
 					this.sImporte = Utils.recuperaImporte(false,Long.toString(Long.parseLong(Utils.compruebaImporte(sImporteBase))+Long.parseLong(Utils.compruebaImporte(sValorRecargo))));
 				}
+				
+				
 				logger.debug("sImporte:|"+sImporte+"|");
 				logger.debug("sValorRecargo:|"+sValorRecargo+"|");
 				
@@ -1232,6 +1231,15 @@ public class GestorRevisionPagos implements Serializable
 	    			bError = true;
 	    		}
 	    		
+	    		
+	    		this.sPaisO = sPais;
+	    		this.sDCIBANO = sDCIBAN;
+	    		this.sNUCCENO = sNUCCEN;
+	    		this.sNUCCOFO = sNUCCOF;
+	    		this.sNUCCDIO = sNUCCDI;
+	    		this.sNUCCNTO = sNUCCNT;
+	    		
+	    		
 				logger.debug("sNUPROF:|"+sNUPROF+"|");
 				logger.debug("liCodGasto:|"+liCodGasto+"|");
 				logger.debug("liCodPago:|"+liCodPago+"|");
@@ -1251,6 +1259,7 @@ public class GestorRevisionPagos implements Serializable
 				
 				//Notas
 				this.sNota = CLPagos.buscarNota(liCodPago);
+				this.sNotaO = sNota;
 
 
 	    	}
@@ -1545,6 +1554,26 @@ public class GestorRevisionPagos implements Serializable
 			
 			try
 			{
+				String sRecargoM = "0";
+				
+				Long.parseLong(Utils.compruebaImporte(sValorRecargo));
+				
+				
+            	if (sTipoRecargo.equals(ValoresDefecto.DEF_RECARGO_FIJO))
+            	{
+            		sRecargoM = Utils.compruebaImporte(sValorRecargo)+"0000";
+            	}
+            	else if (sTipoRecargo.equals(ValoresDefecto.DEF_RECARGO_PROPORCIONAL))
+            	{
+            		
+            		long liValorTotal = CLGastos.buscarValorTotal(Long.parseLong(sCodGastoB));
+            		
+            		sRecargoM = Long.toString(liValorTotal * Long.parseLong(Utils.compruebaImporte(sValorRecargo)));
+            	}
+            	
+            	logger.debug("sTipoRecargo:|"+sTipoRecargo+"|");
+            	logger.debug("sRecargoM:|"+sRecargoM+"|");
+				
 				if (sAccion.isEmpty())
 				{
 					sMsg = "ERROR: No se ha seleccionado una Acción. Por favor, revise los datos.";
@@ -1590,8 +1619,41 @@ public class GestorRevisionPagos implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (sFEPGPR.equals(sFEPGPRO) 
+						&& sRecargo.equals(sRecargoM) 
+						&& sPais.equals(sPaisO)
+						&& sDCIBAN.equals(sDCIBANO)
+						&& sNUCCEN.equals(sNUCCENO)
+						&& sNUCCOF.equals(sNUCCOFO)
+						&& sNUCCDI.equals(sNUCCDIO)
+						&& sNUCCNT.equals(sNUCCNTO)
+						&& sNota.equals(sNotaO))
+				{
+					sMsg = "ERROR: No hay modificaciones que realizar. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				else
 				{
+					logger.debug("sFEPGPR:|"+sFEPGPR+"|");
+					logger.debug("sFEPGPRO:|"+sFEPGPRO+"|");
+					logger.debug("sRecargo:|"+sRecargo+"|");
+					logger.debug("sRecargoM:|"+sRecargoM+"|");
+					logger.debug("sPais:|"+sPais+"|");
+					logger.debug("sPaisO:|"+sPaisO+"|");
+					logger.debug("sDCIBAN:|"+sDCIBAN+"|");
+					logger.debug("sDCIBANO:|"+sDCIBANO+"|");
+					logger.debug("sNUCCEN:|"+sNUCCEN+"|");
+					logger.debug("sNUCCENO:|"+sNUCCENO+"|");
+					logger.debug("sNUCCOF:|"+sNUCCOF+"|");
+					logger.debug("sNUCCOFO:|"+sNUCCOFO+"|");
+					logger.debug("sNUCCDI:|"+sNUCCDI+"|");
+					logger.debug("sNUCCDIO:|"+sNUCCDIO+"|");
+					logger.debug("sNUCCNT:|"+sNUCCNT+"|");
+					logger.debug("sNUCCNTO:|"+sNUCCNTO+"|");
+					logger.debug("sNota:|"+sNota+"|");
+					logger.debug("sNotaO:|"+sNotaO+"|");
+					
 					if (bDevolucion)
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_DEVOLUCION;
@@ -1608,25 +1670,7 @@ public class GestorRevisionPagos implements Serializable
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_NORMA34;
 					}
 					
-					String sRecargoM = "0";
-					
-					Long.parseLong(Utils.compruebaImporte(sValorRecargo));
-					
-					
-	            	if (sTipoRecargo.equals(ValoresDefecto.DEF_RECARGO_FIJO))
-	            	{
-	            		sRecargoM = Utils.compruebaImporte(sValorRecargo)+"0000";
-	            	}
-	            	else if (sTipoRecargo.equals(ValoresDefecto.DEF_RECARGO_PROPORCIONAL))
-	            	{
-	            		
-	            		long liValorTotal = CLGastos.buscarValorTotal(Long.parseLong(sCodGastoB));
-	            		
-	            		sRecargoM = Long.toString(liValorTotal * Long.parseLong(Utils.compruebaImporte(sValorRecargo)));
-	            	}
-	            	
-	            	logger.debug("sTipoRecargo:|"+sTipoRecargo+"|");
-	            	logger.debug("sRecargoM:|"+sRecargoM+"|");
+
 	            	
 					
 					int iSalida = -999;
