@@ -3006,6 +3006,7 @@ public final class QMGastos
 				   + sCondicionCOTPGA
 				   + sCondicionCOSBGA
 				   + sCondicionFEDEVE
+				   + CAMPO33 + " > 0 AND "
 				   + CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ABONADO + "','" + ValoresDefecto.DEF_GASTO_PAGADO + "') AND "
 	 			   + CAMPO2 + " = '" + filtro.getCOACES() + "')"+
 	 			   " ORDER BY "+ CAMPO9;

@@ -1074,6 +1074,24 @@ public class GestorRevisionPagos implements Serializable
 		 
 		    	this.setbDevolucion((Integer.parseInt(sCOSBGA) > 49));
 		    	
+		    	if (bDevolucion)
+		    	{
+		    		this.sPais = "ES";
+		    		this.sDCIBAN = "00";
+		    		this.sNUCCEN = "0000";
+		    		this.sNUCCOF = "0000";
+		    		this.sNUCCDI = "00";
+		    		this.sNUCCNT = "0000000000";
+		    		
+		    		this.setsDescripcion("DEVOLUCION");
+		    		
+		    		this.sTipoPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
+		    	}
+		    	else
+		    	{
+		    		borrarCamposCuenta();
+		    	}
+		    	
 		    	this.sDPTPAGO = gastoseleccionado.getDPTPAGO();
 
 				this.sFFGTVP = Utils.recuperaFecha(gasto.getFFGTVP());
@@ -1214,6 +1232,12 @@ public class GestorRevisionPagos implements Serializable
 	    			bError = true;
 	    		}
 	    		
+				logger.debug("sNUPROF:|"+sNUPROF+"|");
+				logger.debug("liCodGasto:|"+liCodGasto+"|");
+				logger.debug("liCodPago:|"+liCodPago+"|");
+				logger.debug("liCodOperacion:|"+liCodOperacion+"|");
+				logger.debug("liValor:|"+liValor+"|");
+				logger.debug("sRecargo:|"+sRecargo+"|");
 	    		
 
 		    	logger.debug("sFEPGPR:|"+sFEPGPR+"|");
@@ -1568,6 +1592,22 @@ public class GestorRevisionPagos implements Serializable
 				}
 				else
 				{
+					if (bDevolucion)
+					{
+						this.sTipoPago= ValoresDefecto.DEF_PAGO_DEVOLUCION;
+					}
+					else if (sNUCCEN.equals("0000") ||
+					sNUCCOF.equals("0000") ||
+					sNUCCDI.equals("00") ||
+					sNUCCNT.equals("0000000000"))
+					{
+						this.sTipoPago= ValoresDefecto.DEF_PAGO_VENTANILLA; 
+					}
+					else
+					{
+						this.sTipoPago= ValoresDefecto.DEF_PAGO_NORMA34;
+					}
+					
 					String sRecargoM = "0";
 					
 					Long.parseLong(Utils.compruebaImporte(sValorRecargo));
@@ -1590,15 +1630,16 @@ public class GestorRevisionPagos implements Serializable
 	            	
 					
 					int iSalida = -999;
+
+					logger.debug("sNUPROF:|"+sNUPROF+"|");
+					logger.debug("liCodGasto:|"+liCodGasto+"|");
+					logger.debug("liCodPago:|"+liCodPago+"|");
+					logger.debug("liCodOperacion:|"+liCodOperacion+"|");
+					logger.debug("liValor:|"+liValor+"|");
+					logger.debug("sRecargo:|"+sRecargo+"|");
 					
 					if (sAccion.equals(ValoresDefecto.DEF_BAJA))
 					{
-						logger.debug("sNUPROF:|"+sNUPROF+"|");
-						logger.debug("liCodGasto:|"+liCodGasto+"|");
-						logger.debug("liCodPago:|"+liCodPago+"|");
-						logger.debug("liCodOperacion:|"+liCodOperacion+"|");
-						logger.debug("liValor:|"+liValor+"|");
-						logger.debug("sRecargo:|"+sRecargo+"|");
 						iSalida = CLPagos.eliminaPago(sNUPROF, liCodGasto, liCodPago, liCodOperacion, liValor, sRecargo, bAbono);
 					}
 					else //if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION))

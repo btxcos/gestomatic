@@ -706,6 +706,13 @@ public class CLPagos
 		
 		if (conexion != null)
 		{
+			logger.debug("sNUPROF:|"+sNUPROF+"|");
+			logger.debug("liCodGasto:|"+liCodGasto+"|");
+			logger.debug("liCodPago:|"+liCodPago+"|");
+			logger.debug("liCodOperacion:|"+liCodOperacion+"|");
+			logger.debug("liValor:|"+liValor+"|");
+			logger.debug("sRecargo:|"+sRecargo+"|");
+			
 			//TODO revisar pago en gestor para modificar solo lo necesario
 			//Solución temporal
 			iCodigo = eliminaPago(sNUPROF,liCodGasto,liCodPago,liCodOperacion,liValor,sRecargo,bAbono);
@@ -729,6 +736,13 @@ public class CLPagos
 		{
 			
 			iCodigo = 0;
+			
+			logger.debug("sNUPROF:|"+sNUPROF+"|");
+			logger.debug("liCodGasto:|"+liCodGasto+"|");
+			logger.debug("liCodPago:|"+liCodPago+"|");
+			logger.debug("liCodOperacion:|"+liCodOperacion+"|");
+			logger.debug("liValor:|"+liValor+"|");
+			logger.debug("sRecargo:|"+sRecargo+"|");
 			
 			try
 			{
@@ -756,7 +770,7 @@ public class CLPagos
 								if (QMGastos.setCOSIGA(conexion, liCodGasto, sEstadoAnterior))
 								{
 
-									if (QMPagos.delPago(conexion, liCodOperacion))
+									if (QMPagos.delPago(conexion, liCodPago))
 									{
 										if(QMProvisiones.setGastoPagoAnulado(conexion, sNUPROF, liValor, sRecargo))
 										{
@@ -850,12 +864,6 @@ public class CLPagos
 				}
 				
 				conexion.setAutoCommit(false);
-			}
-			catch(NumberFormatException nfe)
-			{
-				//TODO revisar error
-				//error al acceder al codigo del gasto
-				iCodigo = -999;
 			}
 			catch (SQLException e) 
 			{
