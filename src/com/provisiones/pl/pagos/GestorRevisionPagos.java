@@ -1628,7 +1628,8 @@ public class GestorRevisionPagos implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
-				else if (sFEPGPR.equals(sFEPGPRO) 
+				else if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION)
+						&& sFEPGPR.equals(sFEPGPRO) 
 						&& sRecargo.equals(sRecargoM) 
 						&& sPais.equals(sPaisO)
 						&& sDCIBAN.equals(sDCIBANO)
@@ -1636,8 +1637,7 @@ public class GestorRevisionPagos implements Serializable
 						&& sNUCCOF.equals(sNUCCOFO)
 						&& sNUCCDI.equals(sNUCCDIO)
 						&& sNUCCNT.equals(sNUCCNTO)
-						&& sNota.equals(sNotaO) 
-						&& !sAccion.equals(ValoresDefecto.DEF_MODIFICACION))
+						&& sNota.equals(sNotaO))
 				{
 					sMsg = "ERROR: No hay modificaciones que realizar. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
