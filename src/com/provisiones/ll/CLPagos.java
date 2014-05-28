@@ -706,21 +706,155 @@ public class CLPagos
 		
 		if (conexion != null)
 		{
-			logger.debug("sNUPROF:|"+sNUPROF+"|");
-			logger.debug("liCodGasto:|"+liCodGasto+"|");
-			logger.debug("liCodPago:|"+liCodPago+"|");
-			logger.debug("liCodOperacion:|"+liCodOperacion+"|");
-			logger.debug("liValor:|"+liValor+"|");
-			logger.debug("sRecargo:|"+sRecargo+"|");
-			
-			//TODO revisar pago en gestor para modificar solo lo necesario
-			//Solución temporal
-			iCodigo = eliminaPago(sNUPROF,liCodGasto,liCodPago,liCodOperacion,liValor,sRecargo,bAbono);
-		
-			if (iCodigo == 0)
+			try
 			{
-				iCodigo = registraPagoSimple(pago,cuenta, true,nota);
+				conexion.setAutoCommit(false);
+				
+				if (QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_AUTORIZADO))
+				{
+					if (QMGastos.setFechaPagado(conexion, liCodGasto, ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+					{
+						if (QMListaGastos.setAutorizado(conexion, liCodGasto))
+						{
+							if (QMListaGastosProvisiones.setAutorizado(conexion, liCodGasto,sNUPROF))
+							{
+								String sEstadoAnterior = "";
+
+								if (bAbono)
+								{
+									sEstadoAnterior = ValoresDefecto.DEF_GASTO_ABONADO;
+								}
+								else
+								{
+									sEstadoAnterior = ValoresDefecto.DEF_GASTO_CONOCIDO;
+								}
+								
+								if (QMGastos.setCOSIGA(conexion, liCodGasto, sEstadoAnterior))
+								{
+
+									if (QMPagos.delPago(conexion, liCodPago))
+									{
+										if(QMProvisiones.setGastoPagoAnulado(conexion, sNUPROF, liValor, sRecargo))
+										{
+											if (liCodOperacion == 0)
+											{
+												iCodigo = 0;
+											}
+											else
+											{
+												if (QMTransferenciasN34.delTransferencia(conexion, liCodOperacion))
+												{
+													iCodigo = 0;
+												}
+												else
+												{
+													//error al eliminar el registro de transferencia
+													iCodigo = -916;
+												}
+											}
+										}
+										else
+										{
+											//error al descontar los importes del resumen de pagos en provision
+											iCodigo = -915;
+										}
+										
+
+										if(QMProvisiones.getEstado(conexion, sNUPROF).equals(ValoresDefecto.DEF_PROVISION_PAGADA) && (iCodigo == 0))
+										{
+											//Cambiamos su estado a autorizada.
+											if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, ValoresDefecto.CAMPO_NUME_SIN_INFORMAR) 
+												|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_AUTORIZADA))
+											{
+												//error error al restablecer la provisión como autorizada
+												iCodigo = -914;
+											}
+											else
+											{
+
+											}
+										}
+									}
+									else
+									{
+										//TODO revisar error
+										//error al eliminar el registro de pago
+										iCodigo = -913;
+									}
+								}
+								else
+								{
+									//error al restablecer el codigo de situacion del gasto
+									iCodigo = -912;
+								}
+								
+
+							}
+							else
+							{
+								//error al restablecer el estado de la relación gasto-provisión
+								iCodigo = -911;
+							}
+						}
+						else
+						{
+							//error al restablecer el estado de la relación del gasto
+							iCodigo = -909;
+						}
+					}
+					else
+					{
+						//error al eliminar la fecha de pago del gasto
+						iCodigo = -902;
+					}
+				}
+				else
+				{
+					//error al restablecer el estado del gasto
+					iCodigo = -901;
+				}
+				
+				if (iCodigo == 0)
+				{
+					iCodigo = registraPagoSimple(pago,cuenta, true,nota);
+				}
+				
+				if (iCodigo == 0)
+				{
+					conexion.commit();
+				}
+				else
+				{
+					conexion.rollback();
+				}
+				
+				conexion.setAutoCommit(false);
 			}
+			catch (SQLException e) 
+			{
+				//error de conexion con base de datos.
+				iCodigo = -910;
+
+				try 
+				{
+					//reintentamos
+					conexion.rollback();
+					conexion.setAutoCommit(true);
+					conexion.close();
+				} 
+				catch (SQLException e1) 
+				{
+					try 
+					{
+						conexion.close();
+					}
+					catch (SQLException e2) 
+					{
+						logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+					}
+				}
+			}
+
 		}
 		
 		return iCodigo;

@@ -453,6 +453,12 @@ public class GestorPagosProvision implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (!Utils.compruebaCC(sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT))
+				{
+					sMsg = "ERROR:002 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				else if (sNUPROF.isEmpty())
 				{
 					sMsg = "ERROR: En número de Provisión de fondos debe de ser informado para realizar el Pago. Por favor, revise los datos.";
@@ -485,9 +491,9 @@ public class GestorPagosProvision implements Serializable
 				}
 				else
 				{
-					if (sNUCCEN.equals("0000") ||
-					sNUCCOF.equals("0000") ||
-					sNUCCDI.equals("00") ||
+					if (sNUCCEN.equals("0000") &&
+					sNUCCOF.equals("0000") &&
+					sNUCCDI.equals("00") &&
 					sNUCCNT.equals("0000000000"))
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_VENTANILLA; 

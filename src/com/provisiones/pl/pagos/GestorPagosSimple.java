@@ -1413,6 +1413,12 @@ public class GestorPagosSimple implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (!Utils.compruebaCC(sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT))
+				{
+					sMsg = "ERROR:002 - Los datos de la cuenta corriente son incorrectos. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				/*else if (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
 				{
 					sMsg = "ERROR: La fecha de Pago no puede ser inferior a la de Devengo. Por favor, revise los datos.";
@@ -1425,9 +1431,9 @@ public class GestorPagosSimple implements Serializable
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_DEVOLUCION;
 					}
-					else if (sNUCCEN.equals("0000") ||
-					sNUCCOF.equals("0000") ||
-					sNUCCDI.equals("00") ||
+					else if (sNUCCEN.equals("0000") &&
+					sNUCCOF.equals("0000") &&
+					sNUCCDI.equals("00") &&
 					sNUCCNT.equals("0000000000"))
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_VENTANILLA; 
