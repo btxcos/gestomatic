@@ -1636,7 +1636,8 @@ public class GestorRevisionPagos implements Serializable
 						&& sNUCCOF.equals(sNUCCOFO)
 						&& sNUCCDI.equals(sNUCCDIO)
 						&& sNUCCNT.equals(sNUCCNTO)
-						&& sNota.equals(sNotaO))
+						&& sNota.equals(sNotaO) 
+						&& !sAccion.equals(ValoresDefecto.DEF_MODIFICACION))
 				{
 					sMsg = "ERROR: No hay modificaciones que realizar. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
