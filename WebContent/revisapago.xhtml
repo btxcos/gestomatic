@@ -33,7 +33,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelProgresoProvision, COACCI" actionListener="#{GestorRevisionPagos.limpiarPlantilla}" />	
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelProgresoProvision, COACCI, NOTA" actionListener="#{GestorRevisionPagos.limpiarPlantilla}" />	
 								<p:commandButton value="Registrar Cambio" update="msgs, popup, activos, panelProgresoProvision, panelPago" action="#{GestorRevisionPagos.modificarPago}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" />
 
 								<p:selectOneRadio id="COACCI" value="#{GestorRevisionPagos.sAccion}">
@@ -663,7 +663,7 @@
 					<p:dialog header="Gastos Autorizados del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
 
 						<p:contextMenu for="gastosactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision, form:panelRecargo, form:panelCuenta, form:FEPGPR" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarPagoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision, form:panelRecargo, form:panelCuenta, form:FEPGPR, form:NOTA" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarPagoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosactivo" var="gastoactivo" value="#{GestorRevisionPagos.tablagastosactivo}" rowKey="#{gastoactivo.sGastoID}"
@@ -783,7 +783,7 @@
 					<p:dialog header="Gastos Autorizados de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
 
 						<p:contextMenu for="gastosprovision">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision, form:panelRecargo, form:panelCuenta, form:FEPGPR" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarPagoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision, form:panelRecargo, form:panelCuenta, form:FEPGPR, form:NOTA" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarPagoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosprovision" var="gastoprovision" value="#{GestorRevisionPagos.tablagastosprovision}" rowKey="#{gastoprovision.sGastoID}"

@@ -33,8 +33,8 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panel, NOTA" actionListener="#{GestorPagosProvision.limpiarPlantilla}" />	
 								<p:commandButton value="Pagar" update="msgs, popup, panel" action="#{GestorPagosProvision.registrarPago}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
-								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panel" actionListener="#{GestorPagosProvision.limpiarPlantilla}" />	
 
 							</h:panelGrid>
 						</p:fieldset>
