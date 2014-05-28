@@ -33,7 +33,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelProgresoProvision" actionListener="#{GestorRevisionPagos.limpiarPlantilla}" />	
+								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelProgresoProvision, COACCI" actionListener="#{GestorRevisionPagos.limpiarPlantilla}" />	
 								<p:commandButton value="Registrar Cambio" update="msgs, popup, activos, panelProgresoProvision, panelPago" action="#{GestorRevisionPagos.modificarPago}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" />
 
 								<p:selectOneRadio id="COACCI" value="#{GestorRevisionPagos.sAccion}">
@@ -501,7 +501,7 @@
 												<h:panelGrid columns="2" cellpadding="5">
 													
 													<p:commandButton value="Buscar" update="msgs, popup, :form:activos" actionListener="#{GestorRevisionPagos.buscarActivos}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTabla.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorRevisionPagos.limpiarPlantillaActivo}" />	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar, NURCATB" actionListener="#{GestorRevisionPagos.limpiarPlantillaActivo}" />	
 
 												</h:panelGrid>
 											</p:panel>

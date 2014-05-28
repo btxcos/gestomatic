@@ -455,6 +455,8 @@ public class GestorRevisionPagos implements Serializable
     {
     	this.sNota = "";
     	
+    	this.sAccion = "";
+    	
     	borrarCamposBuscar();
     	borrarCamposBuscarActivo();
     	borrarCamposBuscarProvision();
