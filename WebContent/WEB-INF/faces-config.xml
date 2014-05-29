@@ -191,11 +191,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>GestorAbonos</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.pagos.GestorAbonos</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>GestorListaCuotas</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.listas.GestorListaCuotas</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -233,6 +228,16 @@
 	<managed-bean>
 		<managed-bean-name>GestorRevisionPagos</managed-bean-name>
 		<managed-bean-class>com.provisiones.pl.pagos.GestorRevisionPagos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorAbonos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.abonos.GestorAbonos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorEjecucionAbono</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.abonos.GestorEjecucionAbono</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

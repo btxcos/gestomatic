@@ -218,7 +218,7 @@ public class GestorRevisionPagos implements Serializable
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorPagosSimple...");
+			logger.debug("Iniciando GestorRevisionPagos...");
 
 			tiposcogrugHM.put("Compraventa",      "1");
 			tiposcogrugHM.put("Pendientes",       "2");

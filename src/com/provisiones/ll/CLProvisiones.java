@@ -29,6 +29,13 @@ public final class CLProvisiones
 		return QMListaGastosProvisiones.buscaCantidadGastos(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
+	public static long buscarNumeroAbonosEjecutablesProvision(String sNUPROF)
+	{
+		return QMListaGastosProvisiones.buscaCantidadAbonosEjecutables(ConnectionManager.getDBConnection(),sNUPROF);
+	}
+	
+	
+	
 	public static ArrayList<Long> buscarGastosProvision(String sNUPROF)
 	{
 		return QMListaGastosProvisiones.buscaGastosIDPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
@@ -114,6 +121,11 @@ public final class CLProvisiones
 		filtro.setESTADO(ValoresDefecto.DEF_PROVISION_AUTORIZADA);
 		
 		return QMProvisiones.buscaProvisionesPorFiltro(ConnectionManager.getDBConnection(), filtro);
+	}
+	
+	public static ArrayList<ProvisionTabla> buscarProvisionesEjecutablesConFiltro(ProvisionTabla filtro)
+	{
+		return QMProvisiones.buscaProvisionesConAbonosEjecutablesPorFiltro(ConnectionManager.getDBConnection(), filtro);
 	}
 	
 	public static ArrayList<ProvisionTabla> buscarProvisionesAutorizadasActivo(int iCOACES)

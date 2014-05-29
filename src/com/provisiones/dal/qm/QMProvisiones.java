@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.dal.qm.listas.QMListaAbonosGastos;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 
@@ -3568,7 +3569,7 @@ public final class QMProvisiones
 
 		return resultado;
 	}
-	
+
 	public static ArrayList<ProvisionTabla> buscaProvisionesPorFiltro(Connection conexion, ProvisionTabla filtro) 
 	{
 		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
@@ -3679,6 +3680,126 @@ public final class QMProvisiones
 		return resultado;
 	}
 	
+	
+	public static ArrayList<ProvisionTabla> buscaProvisionesConAbonosEjecutablesPorFiltro(Connection conexion, ProvisionTabla filtro) 
+	{
+		ArrayList<ProvisionTabla> resultado = new ArrayList<ProvisionTabla>();
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			//TODO meter mas filtros demandados
+			String sCondicionFEPFON = (filtro.getFEPFON().equals("0")) ? "" : CAMPO6 + " = '"+ filtro.getFEPFON() + "' AND ";
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + ","
+					+ CAMPO2 + ","
+					+ CAMPO3 + ","
+					+ CAMPO4 + ","
+					+ CAMPO5 + ","
+					+ CAMPO6 + ","
+					+ CAMPO7 + ","
+					+ CAMPO8 + ","
+					+ CAMPO19 + 
+					" FROM " + TABLA + 
+					" WHERE ( " 
+					+ sCondicionFEPFON
+					+ CAMPO19 + " = '"+ValoresDefecto.DEF_PROVISION_AUTORIZADA+ "' AND "
+					+ CAMPO1 + " IN (SELECT "
+					+ QMListaGastosProvisiones.CAMPO2 + 
+					" FROM " 
+					+ QMListaGastosProvisiones.TABLA +
+	   				" WHERE ("
+					+ QMListaGastosProvisiones.CAMPO3 + " = '"+ValoresDefecto.DEF_MOVIMIENTO_VALIDADO+ "' AND "
+	   				+ QMListaGastosProvisiones.CAMPO1 + " IN (SELECT "
+	   				+ QMListaAbonosGastos.CAMPO1 + 
+	   				" FROM " 
+					+ QMListaAbonosGastos.TABLA +
+	   				" WHERE " 
+	   				+ QMListaAbonosGastos.CAMPO4 + " = '"+ ValoresDefecto.ABONO_EMITIDO + "'))))";
+
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						String sNUPROF =  rs.getString(CAMPO1);
+						String sCOSPAT =  rs.getString(CAMPO2);
+						String sDCOSPAT =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT);
+						String sTAS =  rs.getString(CAMPO3);
+						String sDTAS =  QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TTIACSA,QMCodigosControl.ITIACSA,sTAS);
+						String sCOGRUG =  rs.getString(CAMPO4);
+						String sDCOGRUG =   QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOGRUG,QMCodigosControl.ICOGRUG,sCOGRUG);
+						String sCOTPGA =   rs.getString(CAMPO5);
+						String sDCOTPGA =   QMCodigosControl.getDesCOTPGA(conexion,sCOGRUG, sCOTPGA);
+						String sFEPFON =   rs.getString(CAMPO6);
+						String sGASTOS =  rs.getString(CAMPO7);
+						String sVALOR =   Utils.recuperaImporte(false,rs.getString(CAMPO8));
+						String sESTADO = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,rs.getString(CAMPO19));
+
+						ProvisionTabla provisionencontrada = new ProvisionTabla(
+								sNUPROF,
+								sCOSPAT,
+								sDCOSPAT,
+								sTAS,
+								sDTAS,
+								sCOGRUG,
+								sDCOGRUG,
+								sCOTPGA,
+								sDCOTPGA,
+								sFEPFON,
+								sVALOR,
+								sGASTOS,
+								sESTADO);
+						
+						resultado.add(provisionencontrada);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO1+":|"+sNUPROF+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ProvisionTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}		
+
+		return resultado;
+	}
 	
 	public static ArrayList<ProvisionTabla> buscaProvisionesAutorizadasPorActivo(Connection conexion, int iCOACES)
 	{

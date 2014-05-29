@@ -23,7 +23,7 @@ public class QMListaAbonosGastos
 	public static final String CAMPO1  = "cod_gasto";
 	public static final String CAMPO2  = "cod_abono";
 	public static final String CAMPO3  = "fecha_abono";
-	public static final String CAMPO4  = "ejecutado";
+	public static final String CAMPO4  = "fecha_ejecucion";
 
 	private QMListaAbonosGastos(){}
 
@@ -47,8 +47,8 @@ public class QMListaAbonosGastos
 				       ") VALUES ('"
 				       + liCodGasto + "','"
 				       + liCodAbono + "','"
-				       + Utils.fechaDeHoy(false) + "'," 
-				       + ValoresDefecto.ABONO_EMITIDO + ")";
+				       + Utils.fechaDeHoy(false) + "','" 
+				       + ValoresDefecto.ABONO_EMITIDO + "')";
 			
 			logger.debug(sQuery);
 
@@ -323,7 +323,7 @@ public class QMListaAbonosGastos
 		return sFecha;
 	}
 	
-	public static boolean setEjecutado(Connection conexion, long liCodGasto, byte btEjecutado)
+	public static boolean setEjecutado(Connection conexion, long liCodGasto, String sFechaEjecucion)
 	{
 		boolean bSalida = false;
 
@@ -336,7 +336,7 @@ public class QMListaAbonosGastos
 			String sQuery = "UPDATE " 
 					+ TABLA + 
 					" SET " 
-					+ CAMPO4 + " = "+ btEjecutado +
+					+ CAMPO4 + " = '"+ sFechaEjecucion + "'"+
 					" WHERE "
 					+ CAMPO1  + " = '"+ liCodGasto +"'";
 			

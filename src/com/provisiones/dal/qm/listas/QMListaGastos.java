@@ -1139,7 +1139,7 @@ public final class QMListaGastos
 		return resultado;
 
 	}
-	
+
 	public static ArrayList<ActivoTabla> buscaActivosConGastosAbonablesPorFiltro(Connection conexion, ActivoTabla filtro)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
@@ -1200,6 +1200,128 @@ public final class QMListaGastos
 						   + TABLA +
 	   					   " WHERE " 
 	   					   + CAMPO3 + " IN ('"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "','"+ValoresDefecto.DEF_MOVIMIENTO_RESUELTO+"'))))";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCOACES = rs.getString(QMActivos.CAMPO1);
+						sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						
+						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(QMActivos.CAMPO1+":|"+sCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+
+	}
+	
+		
+	public static ArrayList<ActivoTabla> buscaActivosConAbonosEjecutablesPorFiltro(Connection conexion, ActivoTabla filtro)
+	{
+		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			String sCOACES = "";
+			String sCOPOIN = "";
+			String sNOMUIN = "";
+			String sNOPRAC = "";
+			String sNOVIAS = "";
+			String sNUPIAC = "";
+			String sNUPOAC = "";
+			String sNUPUAC = "";
+
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						
+						   + QMActivos.CAMPO1 + ","        
+						   + QMActivos.CAMPO14 + ","
+						   + QMActivos.CAMPO11 + ","
+						   + QMActivos.CAMPO13 + ","
+						   + QMActivos.CAMPO6 + ","
+						   + QMActivos.CAMPO9 + ","
+						   + QMActivos.CAMPO7 + ","
+						   + QMActivos.CAMPO10 + 
+
+						   " FROM " 
+						   + QMActivos.TABLA + 
+						   " WHERE ("
+
+						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
+
+						   + QMActivos.CAMPO1 +" IN (SELECT "
+						   + QMGastos.CAMPO2 + 
+	   					   " FROM " 
+						   + QMGastos.TABLA +
+	   					   " WHERE "
+						   + QMGastos.CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_ABONADO + "' AND "
+	   					   + QMGastos.CAMPO1 + " IN (SELECT "
+						   + CAMPO1 + 
+	   					   " FROM " 
+						   + TABLA +
+	   					   " WHERE " 
+	   					   + CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "' AND "
+	   					   + CAMPO1 + " IN (SELECT "
+	   					   + QMListaAbonosGastos.CAMPO1 + 
+	   					   " FROM " 
+						   + QMListaAbonosGastos.TABLA +
+	   					   " WHERE " 
+	   					   + QMListaAbonosGastos.CAMPO4 + " = '"+ ValoresDefecto.ABONO_EMITIDO + "'))))";
 			
 			logger.debug(sQuery);
 			
