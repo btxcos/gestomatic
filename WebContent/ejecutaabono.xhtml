@@ -34,7 +34,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelProgresoProvision, NOTA" actionListener="#{GestorEjecucionAbono.limpiarPlantilla}" />	
-								<p:commandButton value="Pagar" update="msgs, popup, activos, panelProgresoProvision, panelPago" action="#{GestorEjecucionAbono.registrarPago}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" />
+								<p:commandButton value="Ejecutar Abono" update="msgs, popup, activos, panelProgresoProvision, panelEjecucion" action="#{GestorEjecucionAbono.registrarEjecucion}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" />
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -42,7 +42,6 @@
 						<p:fieldset legend="Info">
 							<h:panelGrid columns="3" cellpadding="5">
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
-								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
 
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -97,8 +96,24 @@
 
 							</h:panelGrid>
 						</p:fieldset>
+						<h:panelGrid columns="2" cellpadding="3">
 
-								<p:fieldset legend="Progreso de Pagos en Provisión #{GestorEjecucionAbono.sNUPROF}" id="panelProgresoProvision">
+								<p:fieldset legend="Ejecución" id="panelEjecucion">
+										<h:panelGrid columns="1" cellpadding="3">
+
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+												<h:outputText for="FEPGPR" value="Fecha de Ejecución: " />
+												<p:inputMask id="FEPGPR" value="#{GestorEjecucionAbono.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
+
+												<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorEjecucionAbono.hoyFEPGPR}"/>
+											</h:panelGrid>
+										</p:panel>
+
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:fieldset legend="Progreso de Ejecuciones en Provisión #{GestorEjecucionAbono.sNUPROF}" id="panelProgresoProvision">
 										<h:panelGrid columns="1" cellpadding="3">
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
@@ -111,90 +126,7 @@
 										</h:panelGrid>
 									</p:fieldset>
 
-								<p:fieldset legend="Pago" id="panelPago">
-										<h:panelGrid columns="1" cellpadding="3">
-
-										<p:panel>
-											<h:panelGrid columns="3" cellpadding="5">
-												<h:outputText for="FEPGPR" value="Fecha de Pago: " />
-												<p:inputMask id="FEPGPR" value="#{GestorEjecucionAbono.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
-
-												<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorEjecucionAbono.hoyFEPGPR}"/>
-											</h:panelGrid>
-										</p:panel>
-
-										<p:panel>
-											<h:panelGrid columns="7" cellpadding="5">
-
-												<h:outputText for="TRECARGO" value="Recargo adicional en pago: " />
-												<p:selectOneMenu id="TRECARGO" value="#{GestorEjecucionAbono.sTipoRecargo}">
-													<f:selectItem itemLabel="Sin recargo" itemValue=""/>
-													<f:selectItems value="#{GestorPagosComunidad.tiposrecargoHM}"/>
-														<p:ajax update="VRECARGO" listener="#{GestorEjecucionAbono.cambiaRecargo}"/>
-												</p:selectOneMenu>
-
-												<p:inputText id="VRECARGO" value="#{GestorEjecucionAbono.sValorRecargo}" size="10" maxlength="10" disabled="#{GestorEjecucionAbono.bRecargo}"/>
-
-												<p:commandButton value="Recalcular" update="msgs, popup, VIMPORTE" actionListener="#{GestorEjecucionAbono.recalcularImporte}" />
-
-
-												<h:outputText for="VIMPORTE" value="Importe a Pagar: " />
-												<p:inputText id="VIMPORTE" value="#{GestorEjecucionAbono.sImporte}" size="10" maxlength="10" disabled="true"/>
-												<h:outputText value="¤"/>
-
-
-											</h:panelGrid>
-										</p:panel>
-
-										<p:panel id="panelCuenta">
-											<h:panelGrid columns="2" cellpadding="5">
-
-										<p:panel>
-											<h:panelGrid columns="7" cellpadding="5">
-
-										<p:inputText id="PAIS" value="#{GestorEjecucionAbono.sPais}" size="3" disabled="true"/>
-
-										<p:inputText id="DCIBAN" value="#{GestorEjecucionAbono.sDCIBAN}" size="3" disabled="true"/>
-
-										<h:outputText value="Número de Cuenta: "/>
-
-										<p:inputMask id="NUCCEN" value="#{GestorEjecucionAbono.sNUCCEN}" mask="9999" size="4" disabled="#{GestorEjecucionAbono.bDevolucion}">
-											<f:validateLength minimum="4"/>
-										</p:inputMask>
-
-										<p:inputMask id="NUCCOF" value="#{GestorEjecucionAbono.sNUCCOF}" mask="9999" size="4" disabled="#{GestorEjecucionAbono.bDevolucion}">
-											<f:validateLength minimum="4"/>
-										</p:inputMask>
-
-										<p:inputMask id="NUCCDI" value="#{GestorEjecucionAbono.sNUCCDI}" mask="99" size="2" disabled="#{GestorEjecucionAbono.bDevolucion}">
-											<f:validateLength minimum="2"/>
-										</p:inputMask>
-
-										<p:inputMask id="NUCCNT" value="#{GestorEjecucionAbono.sNUCCNT}" mask="9999999999" size="10" disabled="#{GestorEjecucionAbono.bDevolucion}">
-											<f:validateLength minimum="10"/>
-										</p:inputMask>
-											</h:panelGrid>
-									  </p:panel>
-
-										<p:commandButton id="botBuscaCuenta" value="Buscar Cuenta" update="cuentasactivo, cuentascomunidad, msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorEjecucionAbono.buscaCuentas}" oncomplete="dlgTablaCuentas.show()" disabled="#{GestorEjecucionAbono.bDevolucion}"/>	
-
-										<p:panel>
-											<h:panelGrid columns="2" cellpadding="5">
-												<h:outputText value="Descripción: "/>
-												<p:inputText id="DESCRIPCION" value="#{GestorEjecucionAbono.sDescripcion}" size="66" maxlength="60" disabled="true"/>
-											</h:panelGrid>
-									  </p:panel>
-
-									 <p:commandButton id="botSinCuenta" value="Sin Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorEjecucionAbono.seleccionarPagoPorVentanilla}" disabled="#{GestorEjecucionAbono.bDevolucion}"/>
-
-									 <p:commandButton id="botLimpiaCuenta" value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorEjecucionAbono.limpiarPlantillaCuenta}" disabled="#{GestorEjecucionAbono.bDevolucion}"/>
-
-											</h:panelGrid>
-									  </p:panel>
-
-										</h:panelGrid>
-									</p:fieldset>
-
+							</h:panelGrid>
 
 								<p:fieldset legend="Datos" id="panelDatosGasto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -651,7 +583,7 @@
 					<p:dialog header="Gastos Autorizados del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
 
 						<p:contextMenu for="gastosactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelCuenta, form:panelProgresoProvision, form:VIMPORTE" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosactivo" var="gastoactivo" value="#{GestorEjecucionAbono.tablagastosactivo}" rowKey="#{gastoactivo.sGastoID}"
@@ -771,7 +703,7 @@
 					<p:dialog header="Gastos Autorizados de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
 
 						<p:contextMenu for="gastosprovision">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelCuenta, form:panelProgresoProvision, form:VIMPORTE" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosprovision" var="gastoprovision" value="#{GestorEjecucionAbono.tablagastosprovision}" rowKey="#{gastoprovision.sGastoID}"
@@ -830,142 +762,6 @@
 														</p:column>
 
 						</p:dataTable>
-
-					</p:dialog>
-
-					<p:dialog header="Cuentas Disponibles: " widgetVar="dlgTablaCuentas" resizable="false">
-
-						<p:contextMenu for="cuentasactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, NUCCEN, NUCCOF, NUCCDI, NUCCNT" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarCuentaActivo}" oncomplete="dlgTablaCuentas.hide();"/>
-						</p:contextMenu>
-
-								<p:dataTable id="cuentasactivo" var="cuentaactivo" value="#{GestorEjecucionAbono.tablacuentasactivo}" rowKey="#{cuentaactivo.sNUCCEN}"
-															selection="#{GestorEjecucionAbono.cuentaactivoseleccionada}" selectionMode="single"
-															paginator="true" paginatorPosition="bottom" rows="10"
-															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-															rowsPerPageTemplate="5,10,15">
-
-															<f:facet name="header">
-																<h:outputText value="Cuentas del Activo" />
-															</f:facet>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="País" />
-															</f:facet>
-															<h:outputText value="#{cuentaactivo.sPais}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="DCIBAN" />
-															</f:facet>
-															<h:outputText value="#{cuentaactivo.sDCIBAN}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Entidad" />
-															</f:facet>
-															<h:outputText value="#{cuentaactivo.sNUCCEN}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Oficina" />
-															</f:facet>
-															<h:outputText value="#{cuentaactivo.sNUCCOF}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="DC" />
-															</f:facet>
-															<h:outputText value="#{cuentaactivo.sNUCCDI}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Cuenta" />
-															</f:facet>
-															<h:outputText value="#{cuentaactivo.sNUCCNT}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Descripción" />
-															</f:facet>
-															<h:outputText value="#{cuentaactivo.sDescripcion}" />
-														</p:column>
-
-								</p:dataTable>
-
-
-						<p:contextMenu for="cuentascomunidad">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, NUCCEN, NUCCOF, NUCCDI, NUCCNT" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarCuentaComunidad}" oncomplete="dlgTablaCuentas.hide();"/>
-						</p:contextMenu>
-
-								<p:dataTable id="cuentascomunidad" var="cuentacomunidad" value="#{GestorEjecucionAbono.tablacuentascomunidad}" rowKey="#{cuentacomunidad.sNUCCEN}"
-															selection="#{GestorEjecucionAbono.cuentacomunidadseleccionada}" selectionMode="single"
-															paginator="true" paginatorPosition="bottom" rows="10"
-															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-															rowsPerPageTemplate="5,10,15">
-
-															<f:facet name="header">
-																<h:outputText value="Cuentas de la Comunidad" />
-															</f:facet>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="País" />
-															</f:facet>
-															<h:outputText value="#{cuentacomunidad.sPais}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="DCIBAN" />
-															</f:facet>
-															<h:outputText value="#{cuentacomunidad.sDCIBAN}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Entidad" />
-															</f:facet>
-															<h:outputText value="#{cuentacomunidad.sNUCCEN}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Oficina" />
-															</f:facet>
-															<h:outputText value="#{cuentacomunidad.sNUCCOF}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="DC" />
-															</f:facet>
-															<h:outputText value="#{cuentacomunidad.sNUCCDI}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Cuenta" />
-															</f:facet>
-															<h:outputText value="#{cuentacomunidad.sNUCCNT}" />
-														</p:column>
-
-														<p:column>
-															<f:facet name="header">
-																<h:outputText value="Descripción" />
-															</f:facet>
-															<h:outputText value="#{cuentacomunidad.sDescripcion}" />
-														</p:column>
-
-								</p:dataTable>
-
 
 					</p:dialog>
 

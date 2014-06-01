@@ -344,6 +344,7 @@ public final class CLGastos
 		return QMListaGastosProvisiones.buscaGastosProvisionPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, ValoresDefecto.DEF_GASTO_AUTORIZADO);
 	}
 	
+	
 	public static ArrayList<GastoTabla> buscarGastosAbonadosEjecutablesProvisionConFiltro(GastoTabla filtro)
 	{
 		return QMListaGastosProvisiones.buscaGastosAbonadosEjecutablesProvisionPorFiltro(ConnectionManager.getDBConnection(),filtro);
@@ -386,6 +387,116 @@ public final class CLGastos
 	{
 		int iCodigo = 0;
 		
+		
+		
+		return iCodigo;
+	}
+	
+	public static int ejecutaAbono (long liCodGasto, String sFechaEjecucion)
+	{
+		int iCodigo = -910;
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			long liCodAbono = QMListaAbonosGastos.getAbono(conexion, liCodGasto);
+			
+			String sNUPROF = QMListaGastosProvisiones.getProvisionDeAbono(conexion, liCodGasto);
+
+			try 
+			{
+				conexion.setAutoCommit(false);
+				
+				if (QMListaAbonosGastos.setEjecutado(ConnectionManager.getDBConnection(), liCodGasto, sFechaEjecucion))
+				{
+					//OK
+					if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+						{
+							if(QMListaGastos.setValidado(conexion, liCodAbono,ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+							{
+								long liValorAbonado = QMMovimientosGastos.getValor(conexion, liCodAbono);
+								
+								logger.debug("liValorAbonado:|"+liValorAbonado+"|");
+								
+								if (QMProvisiones.setGastoPagado(conexion,sNUPROF, liValorAbonado, ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+								{
+									iCodigo = 0;
+								}
+								else
+								{
+									iCodigo = -904;
+								}
+							}
+							else
+							{
+								iCodigo = -902;	
+							}
+						}
+						else
+						{
+							iCodigo = -903;
+						}
+				}
+				else
+				{
+					//Error al ejecutar el abono
+					iCodigo = -901;
+				}
+				
+				if (iCodigo == 0)
+				{
+					
+					if(QMProvisiones.provisionPagada(conexion, sNUPROF))
+					{
+						//Cambiamos su estado a pagada.
+						if (!QMProvisiones.setFechaPagado(conexion, sNUPROF, Utils.fechaDeHoy(false)) 
+							|| !QMProvisiones.setEstado(conexion, sNUPROF,ValoresDefecto.DEF_PROVISION_PAGADA))
+						{
+							iCodigo = -905;
+						}
+					}
+				}
+				
+				if (iCodigo < 0)
+				{
+					conexion.rollback();
+				}
+				else
+				{
+					conexion.commit();
+				}
+
+			
+				conexion.setAutoCommit(true);
+			
+			}
+			catch (SQLException e)
+			{
+				//error de conexion con base de datos.
+				iCodigo = -910;
+
+				try 
+				{
+					//reintentamos
+					conexion.rollback();
+					conexion.setAutoCommit(true);
+					conexion.close();
+				} 
+				catch (SQLException e1) 
+				{
+					try 
+					{
+						conexion.close();
+					}
+					catch (SQLException e2) 
+					{
+						logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+					}
+				}
+			}
+		}
+			
 		
 		
 		return iCodigo;
@@ -553,8 +664,8 @@ public final class CLGastos
 												{
 													//if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado)
 													if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_VALIDADO)
-															//&& QMListaGastos.setValidado(conexion, liCodGasto,ValoresDefecto.DEF_MOVIMIENTO_RESUELTO)
-															&& QMListaGastos.setValidado(conexion, liCodGasto,ValoresDefecto.DEF_MOVIMIENTO_VALIDADO)
+															//&& QMListaGastos.setValidado(conexion, liCodMovimiento,ValoresDefecto.DEF_MOVIMIENTO_RESUELTO)
+															&& QMListaGastos.setValidado(conexion, liCodMovimiento,ValoresDefecto.DEF_MOVIMIENTO_VALIDADO)
 															&& QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_ABONADO))
 														{
 															//TODO Revisar
@@ -1069,6 +1180,8 @@ public final class CLGastos
 												}
 												else
 												{
+													
+													logger.debug("sEstadoAnteriorGasto:|"+sEstadoAnteriorGasto+"|");
 													//Error al registar el Abono del Gasto
 													iCodigo = -909;
 												}

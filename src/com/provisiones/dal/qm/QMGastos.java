@@ -2,7 +2,6 @@
 package com.provisiones.dal.qm;
 
 import com.provisiones.dal.qm.listas.QMListaAbonosGastos;
-import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -2127,7 +2126,16 @@ public final class QMGastos
 			liIMOGAS = -liIMOGAS;
 		}
 		
+		logger.debug("liIMNGAS:|"+liIMNGAS+"|");
+		logger.debug("liIMRGAS:|"+liIMRGAS+"|");
+		logger.debug("liIMDGAS:|"+liIMDGAS+"|");
+		logger.debug("liIMCOST:|"+liIMCOST+"|");
+		logger.debug("liIMOGAS:|"+liIMOGAS+"|");		
+		
+
 		liValor = liIMNGAS+liIMRGAS+liIMDGAS+liIMCOST+liIMOGAS;
+		
+		logger.debug("liValor1:|"+liValor+"|");
 		
 		if (liValor < 0)
 		{
@@ -2147,6 +2155,8 @@ public final class QMGastos
 			liValor = liValor + liIMIMGA;
 		}
 
+		logger.debug("liValor2:|"+liValor+"|");
+		
 		return liValor;
 	}
 	
@@ -3276,16 +3286,10 @@ public final class QMGastos
 						   + sCondicionCOTPGA
 						   + sCondicionCOSBGA
 						   + sCondicionFEDEVE
-						   + CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_ABONADO + "' AND "
-						   + CAMPO10 + " = '" + ValoresDefecto.DEF_GASTO_ABONADO + "' AND "
 			 			   + CAMPO2 + " = '" + filtro.getCOACES() + "' AND "
-			 			   + CAMPO1 + /*" IN (SELECT "
-			 			   + QMListaGastos.CAMPO1 + 
-	   					   " FROM " 
-						   + QMListaGastos.TABLA +
-	   					   " WHERE " 
-	   					   + QMListaGastos.CAMPO3 + " = '"+ ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "' AND "
-			 			   + QMListaGastos.CAMPO1 +*/ " IN (SELECT "
+						   + CAMPO10 + " = '" + ValoresDefecto.DEF_GASTO_ABONADO + "' AND "
+						   + CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_ABONADO + "' AND "
+			 			   + CAMPO1 + " IN (SELECT "
 			 			   + QMListaAbonosGastos.CAMPO1 + 
 	   					   " FROM " 
 						   + QMListaAbonosGastos.TABLA +

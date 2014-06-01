@@ -837,10 +837,9 @@ public final class QMListaGastosProvisiones
 					+ CAMPO2 + 
 					" FROM " 
 					+ TABLA + 
-					" WHERE ("
-					+ CAMPO1  + " = '"+ liCodGasto +"' AND "
-					+ CAMPO3  + " <> '"+ ValoresDefecto.DEF_MOVIMIENTO_RESUELTO +"') "+
-					" order by " + CAMPO2 + " limit 0,1";
+					" WHERE "
+					+ CAMPO1  + " = '"+ liCodGasto +"'"+
+					" order by " + CAMPO2 + " desc limit 0,1";
 			
 			logger.debug(sQuery);
 
@@ -889,7 +888,7 @@ public final class QMListaGastosProvisiones
 		return sNUPROF;
 	}
 	
-	public static String getProvisionDeMovimiento(Connection conexion, String sCodMovimientoGasto)
+	public static String getProvisionDeMovimiento(Connection conexion, long liCodMovimientoGasto)
 	{
 		String sNUPROF = "";
 		
@@ -910,12 +909,12 @@ public final class QMListaGastosProvisiones
 					+ TABLA + 
 					" WHERE "
 					+ CAMPO1 +
-					"IN (SELECT "
+					" IN (SELECT "
 					+ QMListaGastos.CAMPO1 +
 					" FROM " 
 					+ QMListaGastos.TABLA +
 					" WHERE "
-					+ QMListaGastos.CAMPO2  + " = '"+ sCodMovimientoGasto +"' )";
+					+ QMListaGastos.CAMPO2  + " = '"+ liCodMovimientoGasto +"' )";
 			
 			logger.debug(sQuery);
 
@@ -937,7 +936,7 @@ public final class QMListaGastosProvisiones
 						sNUPROF = rs.getString(CAMPO2);
 
 						logger.debug("Encontrado el registro!");
-						logger.debug(QMListaGastos.CAMPO2+":|"+sCodMovimientoGasto+"|");
+						logger.debug(QMListaGastos.CAMPO2+":|"+liCodMovimientoGasto+"|");
 						logger.debug(CAMPO2+":|"+sNUPROF+"|");
 					}
 				}
@@ -951,7 +950,7 @@ public final class QMListaGastosProvisiones
 			{
 				sNUPROF = "";
 
-				logger.error("ERROR Gasto:|"+sCodMovimientoGasto+"|");
+				logger.error("ERROR MOVIMIENTO:|"+liCodMovimientoGasto+"|");
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
@@ -1881,7 +1880,7 @@ public final class QMListaGastosProvisiones
 			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()?"":QMGastos.CAMPO3 + " = '" + filtro.getCOGRUG() + "' AND ";
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":QMGastos.CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":QMGastos.CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
-			String sCondicionFEDEVE = filtro.getFEDEVE().isEmpty()?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
+			String sCondicionFEDEVE = (filtro.getFEDEVE().equals("0") || filtro.getFEDEVE().isEmpty())?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
 			String sCondicionEstado = sEstado.isEmpty()?
 					QMGastos.CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_AUTORIZADO + "','" + ValoresDefecto.DEF_GASTO_PAGADO + "') AND "
 					:QMGastos.CAMPO34 + " = '" + sEstado + "' AND ";
@@ -2020,7 +2019,7 @@ public final class QMListaGastosProvisiones
 			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()?"":QMGastos.CAMPO3 + " = '" + filtro.getCOGRUG() + "' AND ";
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":QMGastos.CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":QMGastos.CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
-			String sCondicionFEDEVE = filtro.getFEDEVE().isEmpty()?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
+			String sCondicionFEDEVE = (filtro.getFEDEVE().equals("0") || filtro.getFEDEVE().isEmpty())?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
 			
 			logger.debug("Ejecutando Query...");
 
@@ -2063,7 +2062,7 @@ public final class QMListaGastosProvisiones
 	   					   " FROM " 
 						   + QMListaAbonosGastos.TABLA +
 	   					   " WHERE " 
-	   					   + QMListaAbonosGastos.CAMPO4 + " = '"+ ValoresDefecto.ABONO_EMITIDO + "')))";					   
+	   					   + QMListaAbonosGastos.CAMPO4 + " = '"+ ValoresDefecto.ABONO_EMITIDO + "'))))";					   
 						   
 			
 			logger.debug(sQuery);
@@ -2460,6 +2459,8 @@ public final class QMListaGastosProvisiones
 					+ TABLA + 
 					" WHERE "
 					+ CAMPO2 + " = '" + sNUPROF + "'";
+			
+			logger.debug(sQuery);
 
 			try 
 			{
@@ -2531,6 +2532,8 @@ public final class QMListaGastosProvisiones
 					+ QMListaAbonosGastos.TABLA +
 	   				" WHERE " 
 	   				+ QMListaAbonosGastos.CAMPO4 + " = '"+ ValoresDefecto.ABONO_EMITIDO + "'))";
+			
+			logger.debug(sQuery);
 
 			try 
 			{
@@ -2547,7 +2550,7 @@ public final class QMListaGastosProvisiones
 					{
 						bEncontrado = true;
 
-						liNumero = rs.getLong("COUNT("+CAMPO1+")");
+						liNumero = rs.getLong("COUNT("+CAMPO2+")");
 						
 						logger.debug("Encontrado el registro!");
 

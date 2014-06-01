@@ -1309,6 +1309,7 @@ public final class QMListaGastos
 	   					   " FROM " 
 						   + QMGastos.TABLA +
 	   					   " WHERE "
+						   + QMGastos.CAMPO10 + " = '" + ValoresDefecto.DEF_GASTO_ABONADO + "' AND "
 						   + QMGastos.CAMPO34 + " = '" + ValoresDefecto.DEF_GASTO_ABONADO + "' AND "
 	   					   + QMGastos.CAMPO1 + " IN (SELECT "
 						   + CAMPO1 + 
