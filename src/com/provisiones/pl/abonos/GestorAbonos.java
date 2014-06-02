@@ -754,7 +754,7 @@ public class GestorAbonos implements Serializable
 								"",  
 								"",   
 								"",  
-								sFEDEVEBA,   
+								Utils.compruebaFecha(sFEDEVEBA),   
 								"",   
 								"",  
 								"",
@@ -788,7 +788,7 @@ public class GestorAbonos implements Serializable
 				}
 				else
 				{
-					sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+					sMsg = "El Activo '"+sCOACESB+"' no pertenece a la cartera. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
 				}
@@ -847,7 +847,7 @@ public class GestorAbonos implements Serializable
 								"",  
 								"",   
 								"",  
-								sFEDEVEBP,   
+								Utils.compruebaFecha(sFEDEVEBP),   
 								"",   
 								"",  
 								"",

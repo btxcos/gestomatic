@@ -264,7 +264,7 @@
 								<p:panel >
 									<h:panelGrid columns="2" cellpadding="5">
 										<p:commandButton value="Buscar" update="msgs, popup, :form:activos" actionListener="#{GestorAbonos.buscarActivos}"  onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTabla.show()"/>	
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorAbonos.limpiarPlantillaActivo}" />	
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscar, NURCATB" actionListener="#{GestorAbonos.limpiarPlantillaActivo}" />	
 									</h:panelGrid>
 								</p:panel>
 							</h:panelGrid>
@@ -411,7 +411,7 @@
 								<p:panel>
 									<h:panelGrid columns="2" cellpadding="5">
 										<p:commandButton value="Buscar" update="msgs, popup, :form:gastosactivo" actionListener="#{GestorAbonos.buscarGastosActivo}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaGastosActivo.show()"/>	
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosActivo" actionListener="#{GestorAbonos.limpiarPlantillaBuscarGastoActivo}" />	
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosActivo, FEDEVEBA, ESTADOBA" actionListener="#{GestorAbonos.limpiarPlantillaBuscarGastoActivo}" />	
 									</h:panelGrid>
 								</p:panel>
 										
@@ -514,7 +514,7 @@
 								<p:panel>
 									<h:panelGrid columns="2" cellpadding="5">
 										<p:commandButton value="Buscar" update="msgs, popup, :form:gastosprovision" actionListener="#{GestorAbonos.buscarGastosProvision}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaGastosProvision.show()"/>	
-										<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosProvision" actionListener="#{GestorAbonos.limpiarPlantillaBuscarGastoProvision}" />	
+										<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosProvision, FEDEVEBP, ESTADOBP, COACESBP" actionListener="#{GestorAbonos.limpiarPlantillaBuscarGastoProvision}" />	
 									</h:panelGrid>
 								</p:panel>
 							</h:panelGrid>

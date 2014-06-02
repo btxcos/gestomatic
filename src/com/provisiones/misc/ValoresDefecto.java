@@ -74,6 +74,9 @@ public final class ValoresDefecto
 	public static final String DEF_BAJA = "B";
 	public static final String DEF_MODIFICACION = "M";
 	
+	public static final String DEF_ACTIVO_BLOQUEADO = "B";
+	public static final String DEF_ACTIVO_DESBLOQUEADO = "D";
+	
 	public static final String DEF_COACCI_COMUNIDAD_ALTA = "A";
 	public static final String DEF_COACCI_COMUNIDAD_MODIFICACION = "M";
 	public static final String DEF_COACCI_COMUNIDAD_ALTA_ACTIVO = "X";
