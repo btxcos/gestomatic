@@ -147,7 +147,10 @@ public final class CLGastos
 		return QMGastos.setAbonado(ConnectionManager.getDBConnection(),liCodGasto, sFEAUFA);
 	}
 	
-	
+	public static String buscarProvisionAbono(long liCodGasto)
+	{
+		return QMListaGastosProvisiones.getProvisionDeAbono(ConnectionManager.getDBConnection(), liCodGasto);
+	}
 	
 	public static ArrayList<GastoTabla> buscarGastosActivoConFiltro(GastoTabla filtro)
 	{

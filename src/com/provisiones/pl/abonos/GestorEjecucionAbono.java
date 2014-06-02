@@ -114,6 +114,8 @@ public class GestorEjecucionAbono implements Serializable
 	
 	private String sNUPROF = "";
 	
+	private String sNUPROFA = "";
+	
 	private String sFEPGPR = "";
 	
 	//Notas
@@ -299,6 +301,8 @@ public class GestorEjecucionAbono implements Serializable
     
 	public void borrarCamposGasto()
 	{
+		this.liCodGasto = 0;
+		
 		this.sCOACES = "";
 		this.sCOGRUG = "";
 		this.bDevolucion = false;
@@ -342,6 +346,7 @@ public class GestorEjecucionAbono implements Serializable
 
     public void borrarCamposProgreso()
     {
+    	this.sNUPROFA =  "";
     	this.sAbonosPorEjecutar = "";
     }
 	
@@ -1012,6 +1017,9 @@ public class GestorEjecucionAbono implements Serializable
 				//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 				
 				this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
+				
+				this.sNUPROFA =  CLGastos.buscarProvisionAbono(liCodGasto);
+				
 				actualizaProgreso();
 				
 		    	sMsg = "Gasto cargado.";
@@ -1032,7 +1040,7 @@ public class GestorEjecucionAbono implements Serializable
 	
 	public void actualizaProgreso()
 	{
-    	this.sAbonosPorEjecutar = Long.toString(CLProvisiones.buscarNumeroAbonosEjecutablesProvision(sNUPROF));
+    	this.sAbonosPorEjecutar = Long.toString(CLProvisiones.buscarNumeroAbonosEjecutablesProvision(sNUPROFA));
     }
 	
 
@@ -1574,6 +1582,14 @@ public class GestorEjecucionAbono implements Serializable
 
 	public void setsNUPROF(String sNUPROF) {
 		this.sNUPROF = sNUPROF;
+	}
+
+	public String getsNUPROFA() {
+		return sNUPROFA;
+	}
+
+	public void setsNUPROFA(String sNUPROFA) {
+		this.sNUPROFA = sNUPROFA;
 	}
 
 	public String getsFEPGPR() {

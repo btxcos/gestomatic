@@ -2031,7 +2031,7 @@ public final class QMGastos
 				       + CAMPO24 + ","              
 				       + CAMPO25 + ","              
 				       + CAMPO26 + ","              
-				       + CAMPO27 +      
+				       + CAMPO28 +      
 				       "  FROM " 
 				       + TABLA + 
 				       " WHERE "
@@ -2066,7 +2066,7 @@ public final class QMGastos
 						liIMOGAS = rs.getLong(CAMPO24); 
 						sYCOS10 = rs.getString(CAMPO25); 
 						liIMDTGA = rs.getLong(CAMPO26); 
-						liIMIMGA = rs.getLong(CAMPO27); 
+						liIMIMGA = rs.getLong(CAMPO28); 
 						
 						logger.debug("Encontrado el registro!");
 
@@ -2146,6 +2146,8 @@ public final class QMGastos
 			liValor = liValor - liIMDTGA;
 		}
 		
+		logger.debug("liIMDTGA:|"+liIMDTGA+"|");
+		
 		if (liValor < 0)
 		{
 			liValor = liValor - liIMIMGA;
@@ -2154,6 +2156,8 @@ public final class QMGastos
 		{
 			liValor = liValor + liIMIMGA;
 		}
+		
+		logger.debug("liIMIMGA:|"+liIMIMGA+"|");
 
 		logger.debug("liValor2:|"+liValor+"|");
 		

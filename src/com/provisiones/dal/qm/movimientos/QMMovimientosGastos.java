@@ -936,7 +936,7 @@ public final class QMMovimientosGastos
 				       + CAMPO24 + ","              
 				       + CAMPO25 + ","              
 				       + CAMPO26 + ","              
-				       + CAMPO27 +      
+				       + CAMPO28 +      
 				       "  FROM " 
 				       + TABLA + 
 				       " WHERE "
@@ -971,7 +971,7 @@ public final class QMMovimientosGastos
 						liIMOGAS = rs.getLong(CAMPO24); 
 						sYCOS10 = rs.getString(CAMPO25); 
 						liIMDTGA = rs.getLong(CAMPO26); 
-						liIMIMGA = rs.getLong(CAMPO27); 
+						liIMIMGA = rs.getLong(CAMPO28); 
 						
 						logger.debug("Encontrado el registro!");
 
@@ -1031,7 +1031,15 @@ public final class QMMovimientosGastos
 			liIMOGAS = -liIMOGAS;
 		}
 		
+		logger.debug("liIMNGAS:|"+liIMNGAS+"|");
+		logger.debug("liIMRGAS:|"+liIMRGAS+"|");
+		logger.debug("liIMDGAS:|"+liIMDGAS+"|");
+		logger.debug("liIMCOST:|"+liIMCOST+"|");
+		logger.debug("liIMOGAS:|"+liIMOGAS+"|");	
+		
 		liValor = liIMNGAS+liIMRGAS+liIMDGAS+liIMCOST+liIMOGAS;
+		
+		logger.debug("liValor1:|"+liValor+"|");
 		
 		if (liValor < 0)
 		{
@@ -1042,6 +1050,8 @@ public final class QMMovimientosGastos
 			liValor = liValor - liIMDTGA;
 		}
 		
+		logger.debug("liIMDTGA:|"+liIMDTGA+"|");
+		
 		if (liValor < 0)
 		{
 			liValor = liValor - liIMIMGA;
@@ -1050,6 +1060,10 @@ public final class QMMovimientosGastos
 		{
 			liValor = liValor + liIMIMGA;
 		}
+		
+		logger.debug("liIMIMGA:|"+liIMIMGA+"|");
+		
+		logger.debug("liValor2:|"+liValor+"|");
 
 		return liValor;
 	}
