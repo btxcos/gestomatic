@@ -1043,8 +1043,6 @@ public class GestorEjecucionAbono implements Serializable
     	this.sAbonosPorEjecutar = Long.toString(CLProvisiones.buscarNumeroAbonosEjecutablesProvision(sNUPROFA));
     }
 	
-
-
 	public void registrarEjecucion()
 	{
 		

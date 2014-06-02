@@ -27,8 +27,8 @@
 						</p:fieldset>
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
-								<p:commandButton value="Abonar" update="msgs, popup, activos" action="#{GestorAbonos.registrarAbono}"/>
 								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelImportes" actionListener="#{GestorAbonos.limpiarPlantilla}" />	
+								<p:commandButton value="Abonar" update="msgs, popup, activos" action="#{GestorAbonos.registrarAbono}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
 							</h:panelGrid>
 						</p:fieldset>
 						<p:fieldset legend="Info">
@@ -263,7 +263,7 @@
 								</p:panel>
 								<p:panel >
 									<h:panelGrid columns="2" cellpadding="5">
-										<p:commandButton value="Buscar" update="msgs, popup, :form:activos" actionListener="#{GestorAbonos.buscarActivos}" oncomplete="dlgTabla.show()"/>	
+										<p:commandButton value="Buscar" update="msgs, popup, :form:activos" actionListener="#{GestorAbonos.buscarActivos}"  onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTabla.show()"/>	
 										<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorAbonos.limpiarPlantillaActivo}" />	
 									</h:panelGrid>
 								</p:panel>
@@ -341,7 +341,7 @@
 								</p:panel>
 								<p:panel >
 									<h:panelGrid columns="3" cellpadding="5">
-										<p:commandButton value="Buscar" update="popup, :form:provisiones" actionListener="#{GestorAbonos.buscarProvisiones}" oncomplete="dlgTablaProvisiones.show()"/>	
+										<p:commandButton value="Buscar" update="popup, :form:provisiones" actionListener="#{GestorAbonos.buscarProvisiones}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaProvisiones.show()"/>	
 										<p:commandButton value="Limpiar Plantilla" update="panelBuscarProvision" actionListener="#{GestorAbonos.limpiarPlantillaProvision}" />	
 									</h:panelGrid>
 								</p:panel>
@@ -410,7 +410,7 @@
 								</p:panel>
 								<p:panel>
 									<h:panelGrid columns="2" cellpadding="5">
-										<p:commandButton value="Buscar" update="msgs, popup, :form:gastosactivo" actionListener="#{GestorAbonos.buscarGastosActivo}" oncomplete="dlgTablaGastosActivo.show()"/>	
+										<p:commandButton value="Buscar" update="msgs, popup, :form:gastosactivo" actionListener="#{GestorAbonos.buscarGastosActivo}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaGastosActivo.show()"/>	
 										<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosActivo" actionListener="#{GestorAbonos.limpiarPlantillaBuscarGastoActivo}" />	
 									</h:panelGrid>
 								</p:panel>
@@ -513,7 +513,7 @@
 								</p:panel>
 								<p:panel>
 									<h:panelGrid columns="2" cellpadding="5">
-										<p:commandButton value="Buscar" update="msgs, popup, :form:gastosprovision" actionListener="#{GestorAbonos.buscarGastosProvision}" oncomplete="dlgTablaGastosProvision.show()"/>	
+										<p:commandButton value="Buscar" update="msgs, popup, :form:gastosprovision" actionListener="#{GestorAbonos.buscarGastosProvision}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaGastosProvision.show()"/>	
 										<p:commandButton value="Limpiar Plantilla" update="panelBuscarGastosProvision" actionListener="#{GestorAbonos.limpiarPlantillaBuscarGastoProvision}" />	
 									</h:panelGrid>
 								</p:panel>

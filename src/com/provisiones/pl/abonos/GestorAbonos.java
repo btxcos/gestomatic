@@ -1211,6 +1211,8 @@ public class GestorAbonos implements Serializable
 								sMsg = "El Abono se ha asignado correctamente a la Provisión '"+sNUPROF+"'.";
 								msg = Utils.pfmsgInfo(sMsg);
 								logger.info(sMsg);
+								borrarImportesAbono();
+								borrarCamposGasto();
 								break;
 
 							case -2: //Error 002 - Llega fecha de anulación y no existe Gasto en la tabla

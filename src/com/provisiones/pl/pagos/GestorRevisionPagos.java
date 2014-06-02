@@ -358,6 +358,7 @@ public class GestorRevisionPagos implements Serializable
     
 	public void borrarCamposGasto()
 	{
+		this.liCodGasto = 0;
 		this.sCOACES = "";
 		this.sCOGRUG = "";
 		this.bDevolucion = false;
@@ -1075,7 +1076,7 @@ public class GestorRevisionPagos implements Serializable
 		    	
 		    	this.sDCOSBGA = gastoseleccionado.getDCOSBGA();
 		    	
-		    	liCodGasto = CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
+		    	this.liCodGasto = CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE));
 
 			  	Gasto gasto = CLGastos.buscarGastoConCodigo(liCodGasto);
 
@@ -1714,6 +1715,7 @@ public class GestorRevisionPagos implements Serializable
 					case 0: //Sin errores
 						actualizaProgreso();
 						borrarCamposPago();
+						borrarCamposGasto();
 
 						sMsg = "El cambio en el Pago se ha registrado correctamente.";
 						msg = Utils.pfmsgInfo(sMsg);
