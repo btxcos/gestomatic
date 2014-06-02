@@ -306,7 +306,7 @@
 					</h:panelGrid>
 					</p:dialog>
 
-					<p:dialog header="Activos con Gastos Autorizados: " widgetVar="dlgTabla" resizable="false">  
+					<p:dialog header="Activos con Gastos Abonados Autorizados: " widgetVar="dlgTabla" resizable="false">  
 
 							<p:contextMenu for="activos">  
 								 <p:menuitem value="Seleccionar" update="form:COACESB, form:msgs, form:popup" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarActivo}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>  
@@ -376,7 +376,7 @@
 									
 							</p:dataTable> 
 					</p:dialog>
-					<p:dialog header="Buscar Activos con Gastos Autorizados: " widgetVar="dlgBuscar" resizable="false">  
+					<p:dialog header="Buscar Activos con Gastos Abonados Autorizados: " widgetVar="dlgBuscar" resizable="false">  
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscar" >
@@ -421,7 +421,7 @@
 												<h:panelGrid columns="2" cellpadding="5">
 													
 													<p:commandButton value="Buscar" update="msgs, popup, :form:activos" actionListener="#{GestorEjecucionAbono.buscarActivos}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTabla.show()"/>	
-													<p:commandButton value="Limpiar Plantilla" update="panelBuscar" actionListener="#{GestorEjecucionAbono.limpiarPlantillaActivo}" />	
+													<p:commandButton value="Limpiar Plantilla" update="panelBuscar, NURCATB" actionListener="#{GestorEjecucionAbono.limpiarPlantillaActivo}" />	
 
 												</h:panelGrid>
 											</p:panel>
@@ -534,7 +534,7 @@
 							</p:dataTable> 
 					</p:dialog>
 
-					<p:dialog header="Buscar Gastos Autorizados del Activo: " widgetVar="dlgBuscarGastosActivo" resizable="false">  
+					<p:dialog header="Buscar Gastos Abonados Autorizados del Activo: " widgetVar="dlgBuscarGastosActivo" resizable="false">  
 									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscarGastosActivo" >
@@ -580,7 +580,7 @@
 									</p:fieldset>
 					</p:dialog>
 
-					<p:dialog header="Gastos Autorizados del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
+					<p:dialog header="Gastos Abonados Autorizados del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
 
 						<p:contextMenu for="gastosactivo">
 							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
@@ -645,7 +645,7 @@
 
 					</p:dialog>
 
-					<p:dialog header="Buscar Gastos Autorizados de la Provisión: " widgetVar="dlgBuscarGastosProvision" resizable="false">  
+					<p:dialog header="Buscar Gastos Abonados Autorizados de la Provisión: " widgetVar="dlgBuscarGastosProvision" resizable="false">  
 									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscarGastosProvision" >
@@ -700,7 +700,7 @@
 									</p:fieldset>
 					</p:dialog>
 
-					<p:dialog header="Gastos Autorizados de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
+					<p:dialog header="Gastos Abonados Autorizados de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
 
 						<p:contextMenu for="gastosprovision">
 							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision" icon="ui-icon-check" actionListener="#{GestorEjecucionAbono.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
