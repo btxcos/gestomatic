@@ -753,9 +753,17 @@ public class GestorGastos implements Serializable
 					{
 						String sFechaVentaActivo = CLActivos.buscarFechaVentaActivo(iCodCOACES);
 						
+						String sFechaBloqueo = CLActivos.buscarFechaBloqueo(iCodCOACES);
+						
 						if (!sFechaVentaActivo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(sFechaVentaActivo)))
 						{
 							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo es superior a la de venta del Activo ("+Utils.recuperaFecha(sFechaVentaActivo)+"). Por favor, revise los datos";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+						}
+						if (!sFechaBloqueo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(sFechaBloqueo)))
+						{
+							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo es superior a la de bloqueo del Activo ("+Utils.recuperaFecha(sFechaVentaActivo)+"). Por favor, revise los datos";
 							msg = Utils.pfmsgError(sMsg);
 							logger.error(sMsg);
 						}

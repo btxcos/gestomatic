@@ -122,6 +122,68 @@ public final class CLActivos
 		return QMRegistroActivos.buscaActivosRegistradosPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, sEstado);
 	}
 	
+	public static EstadoActivoTabla buscarEstadoActivo (int iCodCOACES)
+	{
+		return QMRegistroActivos.getEstadoActivo(ConnectionManager.getDBConnection(), iCodCOACES);
+	}
+	
+	public static int modificaBloqueoActivo(EstadoActivoTabla estadoactivo)
+	{
+		int iCodigo = -905;
+		
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		int iCOACES = Integer.parseInt(estadoactivo.getCOACES());
+		
+		logger.debug("sCOACESB:|"+estadoactivo.getCOACES()+"|");
+		logger.debug("sEstado:|"+estadoactivo.getsEstado()+"|");
+		logger.debug("sFechaActivacion:|"+estadoactivo.getsFechaActivacion()+"|");
+		
+		if (estadoactivo.getsEstado().equals(ValoresDefecto.DEF_ACTIVO_BLOQUEADO))
+		{
+			if (QMRegistroActivos.setBloqueado(conexion, iCOACES, estadoactivo.getsFechaActivacion()))
+			{
+				iCodigo = 0;
+			}
+			else
+			{
+				//error - al bloquear el activo
+				iCodigo = -901;
+			}
+		}
+		else if (estadoactivo.getsEstado().equals(ValoresDefecto.DEF_ACTIVO_DESBLOQUEADO))
+		{
+			if (QMRegistroActivos.setDesbloqueado(conexion, iCOACES))
+			{
+				iCodigo = 0;
+			}
+			else
+			{
+				//error - al desbloquear el activo
+				iCodigo = -902;
+			}
+		}
+		else if (estadoactivo.getsEstado().equals(ValoresDefecto.DEF_MODIFICACION))
+		{
+			if (QMRegistroActivos.setFechaBloqueo(conexion, iCOACES, estadoactivo.getsFechaActivacion()))
+			{
+				iCodigo = 0;
+			}
+			else
+			{
+				//error - al modificar la fecha de bloqueo
+				iCodigo = -903;
+			}
+		}
+		else
+		{
+			//error - operación desconocida
+			iCodigo = -904;
+		}
+		
+		return iCodigo;
+		
+	}
 	
 	//Interfaz avanzado
 	public static int actualizaActivoLeido(String linea)

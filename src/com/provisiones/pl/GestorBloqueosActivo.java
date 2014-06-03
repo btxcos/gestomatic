@@ -14,8 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
+import com.provisiones.ll.CLDescripciones;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.EstadoActivoTabla;
 
@@ -25,6 +27,9 @@ public class GestorBloqueosActivo implements Serializable
 	private static final long serialVersionUID = -7248014413361854070L;
 
 	private static Logger logger = LoggerFactory.getLogger(GestorBloqueosActivo.class.getName());
+	
+	//Accion
+	private String sAccion = "";
 	
 	//Buscar Activo
 	private String sCOACESB = "";
@@ -43,11 +48,9 @@ public class GestorBloqueosActivo implements Serializable
 	private String sEstadoB = "";
 	
 	private boolean bBloqueo = false;
-	private boolean bDesbloqueo = true;
-	
+	private String sCOACES = "";
+	private String sEstadoD = "";
 	private String sFechaActivacion = "";
-	
-	private String sEstado = "";
 
 	private Map<String,String> tiposestadosHM = new LinkedHashMap<String, String>();
 	
@@ -97,13 +100,21 @@ public class GestorBloqueosActivo implements Serializable
     	borrarResultadosActivo();
     }
     
+	public void borrarCamposBloqueo()
+	{
+		this.bBloqueo = false;
+		this.sCOACES = "";
+    	this.sEstadoD = "";
+    	this.sFechaActivacion = "";
+	}
+    
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {
-    	this.sEstado = "";
-    	this.sFechaActivacion = "";
+    	this.sAccion = "";
     	
     	borrarCamposBuscar();
     	borrarCamposBuscarActivo();
+    	borrarCamposBloqueo();
 
     }
     
@@ -215,31 +226,159 @@ public class GestorBloqueosActivo implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
-	    	this.sCOACESB  = activoseleccionado.getCOACES();
-	    	this.sEstado = activoseleccionado.getsEstado();
-	    	this.sFechaActivacion = activoseleccionado.getsFechaActivacion();
+	    	String sMsg = "";
 	    	
-	    	String sMsg = "Activo '"+sCOACESB+"' seleccionado.";
-	    	msg = Utils.pfmsgInfo(sMsg);
-	    	logger.info(sMsg);
+	    	try
+	    	{
+	    		this.sCOACES =  sCOACESB;
+		    	EstadoActivoTabla estado = CLActivos.buscarEstadoActivo(Integer.parseInt(sCOACES));
+
+		    	this.sEstadoD = CLDescripciones.descripcionEstadoActivo(estado.getsEstado());
+		    	this.sFechaActivacion = Utils.recuperaFecha(estado.getsFechaActivacion());
+		    	
+		    	this.bBloqueo = estado.getsEstado().equals(ValoresDefecto.DEF_ACTIVO_BLOQUEADO);
+		    	
+		    	sMsg = "Activo '"+sCOACESB+"' cargado.";
+		    	msg = Utils.pfmsgInfo(sMsg);
+		    	logger.info(sMsg);
+		    	
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+	    	}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}	
 	    	
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+
+
 		}
     }
 	
-	public void bloquearActivo()
+	public void modificarBloqueo()
 	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			
+
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			if (sAccion.isEmpty())
+			{
+				sMsg = "ERROR: No se ha seleccionado una Acción. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sCOACES.isEmpty())
+			{
+				sMsg = "ERROR: No se ha cargado un Activo. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sAccion.equals(ValoresDefecto.DEF_ACTIVO_BLOQUEADO) && bBloqueo) 
+			{
+				sMsg = "ERROR: No se puede bloquear un Activo bloqueado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sAccion.equals(ValoresDefecto.DEF_ACTIVO_DESBLOQUEADO) && !bBloqueo) 
+			{
+				sMsg = "ERROR: No se puede desbloquear un Activo desbloqueado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION) && !bBloqueo) 
+			{
+				sMsg = "ERROR: No se puede modificar la fecha de bloqueo de un Activo desbloqueado. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else
+			{
+				logger.debug("sCOACES:|"+sCOACES+"|");
+				logger.debug("sAccion:|"+sAccion+"|");
+				logger.debug("sFechaActivacion:|"+sFechaActivacion+"|");
+				
+				EstadoActivoTabla estado = new EstadoActivoTabla(sCOACES, sAccion, Utils.compruebaFecha(sFechaActivacion));
+				
+				int iSalida = CLActivos.modificaBloqueoActivo(estado);
+				
+				logger.debug("iSalida:|"+iSalida+"|");
+				
+				switch (iSalida) 
+				{
+				case 0: //Sin errores
+					borrarCamposBloqueo();
+
+					sMsg = "El cambio en el bloqueo se ha registrado correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+					break;
+
+				case -901: //Error 901 - al bloquear el activo
+					sMsg = "[FATAL] ERROR:901 - Se ha producido un error al bloquear el Activo. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				case -902: //Error 902 - al desbloquear el activo
+					sMsg = "[FATAL] ERROR:902 - Se ha producido un error al desbloquear el Activo. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -903: //Error 903 - - al modificar la fecha de bloqueo
+					sMsg = "[FATAL] ERROR:903 - Se ha producido un error al modificar la fecha de bloqueo. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -904: //Error 904 - operación desconocida
+					sMsg = "[FATAL] ERROR:904 - Se ha producido una operación desconocida. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+
+				case -905: //Error 905 - al conectar con la base de datos
+					sMsg = "[FATAL] ERROR:905 - Se ha producido un error al conectar con la base de datos. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+					
+				default: //error generico
+					sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					break;
+				}
+
+				logger.debug("Finalizadas las comprobaciones.");
+			}
+			
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+
+		}	
 		
 	}
-	
-	public void desbloquearActivo()
-	{
-		
+
+	public String getsCOACES() {
+		return sCOACES;
 	}
-	
-	public void modificarBloqueoActivo()
-	{
-		
+
+	public void setsCOACES(String sCOACES) {
+		this.sCOACES = sCOACES;
+	}
+
+	public String getsAccion() {
+		return sAccion;
+	}
+
+	public void setsAccion(String sAccion) {
+		this.sAccion = sAccion;
 	}
 
 	public String getsCOACESB() {
@@ -330,14 +469,6 @@ public class GestorBloqueosActivo implements Serializable
 		this.bBloqueo = bBloqueo;
 	}
 
-	public boolean isbDesbloqueo() {
-		return bDesbloqueo;
-	}
-
-	public void setbDesbloqueo(boolean bDesbloqueo) {
-		this.bDesbloqueo = bDesbloqueo;
-	}
-
 	public String getsFechaActivacion() {
 		return sFechaActivacion;
 	}
@@ -346,12 +477,12 @@ public class GestorBloqueosActivo implements Serializable
 		this.sFechaActivacion = sFechaActivacion;
 	}
 
-	public String getsEstado() {
-		return sEstado;
+	public String getsEstadoD() {
+		return sEstadoD;
 	}
 
-	public void setsEstado(String sEstado) {
-		this.sEstado = sEstado;
+	public void setsEstadoD(String sEstadoD) {
+		this.sEstadoD = sEstadoD;
 	}
 
 	public Map<String, String> getTiposestadosHM() {

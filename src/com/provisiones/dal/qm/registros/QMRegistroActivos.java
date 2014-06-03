@@ -424,6 +424,224 @@ public class QMRegistroActivos implements Serializable
 		return bSalida;
 	}
 	
+	public static String getEstado(Connection conexion, int iCodCOACES)
+	{
+		String sEstado = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO5 +
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO1 + " = '"+ iCodCOACES +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sEstado = rs.getString(CAMPO5);
+						
+						
+						logger.debug(CAMPO1+":|"+iCodCOACES+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO5+":|"+sEstado+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sEstado = "";
+				
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sEstado;
+	}
+	
+	
+	public static boolean setEstado(Connection conexion, int iCodCOACES, String sEstado)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO5 + " = '"+ sEstado +"' "+
+					" WHERE "
+					+ CAMPO1 + " = '"+ iCodCOACES +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setBloqueado(Connection conexion, int iCodCOACES, String sFecha)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO5 + " = '"+ ValoresDefecto.DEF_ACTIVO_BLOQUEADO +"', "
+					+ CAMPO6  + " = '"+ sFecha + "' " +
+					" WHERE "
+					+ CAMPO1 + " = '"+ iCodCOACES +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
+	
+	public static boolean setDesbloqueado(Connection conexion, int iCodCOACES)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO5 + " = '"+ ValoresDefecto.DEF_ACTIVO_DESBLOQUEADO +"', "
+					+ CAMPO6  + " = '"+ ValoresDefecto.CAMPO_NUME_SIN_INFORMAR +"' " +
+					" WHERE "
+					+ CAMPO1 + " = '"+ iCodCOACES +"'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+				
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+
+			} 
+			finally 
+			{
+
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return bSalida;
+	}
 	
 	
 	public static boolean setNota(Connection conexion, int iCodCOACES, String sNota)
@@ -547,6 +765,84 @@ public class QMRegistroActivos implements Serializable
 		}
 
 		return sNota;
+	}
+	
+
+	
+	public static EstadoActivoTabla getEstadoActivo(Connection conexion, int iCodCOACES)
+	{
+		String sCOACES = "";
+		String sEstado = "";
+		String sFechaActivacion = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+          
+				       + CAMPO5  + ","              
+				       + CAMPO6  +              
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE " 
+				       + CAMPO1  + " = '"+ iCodCOACES +"'";
+
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sEstado = rs.getString(CAMPO5);
+						sFechaActivacion = rs.getString(CAMPO6);
+						
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				sCOACES = "";
+				sEstado = "";
+				sFechaActivacion = "";
+
+
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return new EstadoActivoTabla(sCOACES, sEstado, sFechaActivacion);
 	}
 
 	public static ArrayList<EstadoActivoTabla> buscaActivosRegistradosPorFiltroEstado(Connection conexion, ActivoTabla filtro, String sEstado)

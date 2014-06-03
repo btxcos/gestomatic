@@ -17,6 +17,11 @@ public class CLDescripciones
 		return QMCodigosControl.getDesCampo(ConnectionManager.getDBConnection(), QMCodigosControl.TESGAST, QMCodigosControl.IESGAST, sEstado);
 	}
 	
+	public static String descripcionEstadoActivo (String sEstado)
+	{
+		return QMCodigosControl.getDesCampo(ConnectionManager.getDBConnection(), QMCodigosControl.TESACTI, QMCodigosControl.IESACTI, sEstado);
+	}
+	
 	public static String descripcionTipoImpuestoGasto (String sCOIMPT)
 	{
 		return QMCodigosControl.getDesCampo(ConnectionManager.getDBConnection(), QMCodigosControl.TCOIMPT, QMCodigosControl.ICOIMPT, sCOIMPT);
