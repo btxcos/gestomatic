@@ -13,6 +13,8 @@ public class ActivoTabla
 	private String NUPOAC = "";
 	private String NUPUAC = "";
 	private String NURCAT = "";
+	
+	//Constructor de clase
 
 	public ActivoTabla(String cOACES, String cOPOIN, String nOMUIN,
 			String nOPRAC, String nOVIAS, String nUPIAC, String nUPOAC,

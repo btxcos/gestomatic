@@ -812,6 +812,12 @@ public class GestorEjecucionAbono implements Serializable
 					logger.warn(sMsg);
 
 				}
+				else if (!sCOACESBP.isEmpty() && Utils.esAlfanumerico(sCOACESBP))
+				{
+					sMsg = "ERROR: El Activo de filtro debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
 				else if (CLProvisiones.existeProvision(sNUPROFB))
 				{
 					if (!CLProvisiones.estaPagada(sNUPROFB))

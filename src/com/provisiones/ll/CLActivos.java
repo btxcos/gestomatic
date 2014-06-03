@@ -105,6 +105,17 @@ public final class CLActivos
 		return QMRegistroActivos.setNota(ConnectionManager.getDBConnection(),iCodCOACES, sNota);
 	}
 	
+	//Getion de Bloqueos
+	public static String buscarFechaBloqueo (int iCodCOACES)
+	{
+		return QMRegistroActivos.getFechaBloqueo(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
+	
+	public static boolean guardarFechaBloqueo (int iCodCOACES, String sFecha)
+	{
+		return QMRegistroActivos.setFechaBloqueo(ConnectionManager.getDBConnection(),iCodCOACES, sFecha);
+	}
+	
 	//Interfaz avanzado
 	public static int actualizaActivoLeido(String linea)
 	{

@@ -132,7 +132,8 @@ public final class QMCodigosControl
 	public static final String TESPROF = "pp001_estados_provision_tbl";
 	public static final String IESPROF = "estado_provision_id";
 	
-	
+	public static final String TESACTI = "pp001_estados_activo_tbl";
+	public static final String IESACTI = "estado_activo_id";	
 	
 	private QMCodigosControl(){}
 	

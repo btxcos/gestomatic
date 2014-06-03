@@ -300,6 +300,7 @@ public class GestorAbonos implements Serializable
 		this.sCOTPGABA = "";
 		this.sCOSBGABA = "";
 		this.sFEDEVEBA = "";
+		this.sEstadoBA = "";
 		
 		cambiaGrupoActivo();
 	
@@ -320,6 +321,7 @@ public class GestorAbonos implements Serializable
 		this.sCOTPGABP = "";
 		this.sCOSBGABP = "";
 		this.sFEDEVEBP = "";
+		this.sEstadoBP = "";
 	
 		this.sCOACESBP = "";
 		
@@ -830,7 +832,7 @@ public class GestorAbonos implements Serializable
 				}
 				else if (!sCOACESBP.isEmpty() && Utils.esAlfanumerico(sCOACESBP))
 				{
-					sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+					sMsg = "ERROR: El Activo de filtro debe ser numérico. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}

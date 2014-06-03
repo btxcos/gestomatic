@@ -912,7 +912,12 @@ public class GestorRevisionPagos implements Serializable
 					sMsg = "No se informó el campo 'Provisión'. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
-
+				}
+				else if (!sCOACESBP.isEmpty() && Utils.esAlfanumerico(sCOACESBP))
+				{
+					sMsg = "ERROR: El Activo de filtro debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
 				}
 				else if (CLProvisiones.existeProvision(sNUPROFB))
 				{
