@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -43,6 +43,7 @@ public class GestorBloqueosActivo implements Serializable
 	private String sEstadoB = "";
 	
 	private boolean bBloqueo = false;
+	private boolean bDesbloqueo = true;
 	
 	private String sFechaActivacion = "";
 	
@@ -50,7 +51,7 @@ public class GestorBloqueosActivo implements Serializable
 
 	private Map<String,String> tiposestadosHM = new LinkedHashMap<String, String>();
 	
-	private transient ActivoTabla activoseleccionado = null;
+	private transient EstadoActivoTabla activoseleccionado = null;
 	
 	private transient ArrayList<EstadoActivoTabla> tablaactivos = null;
 	
@@ -125,12 +126,19 @@ public class GestorBloqueosActivo implements Serializable
 			if (sNURCATB.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
-						"", sCOPOINB.toUpperCase(), sNOMUINB.toUpperCase(),
-						sNOPRACB.toUpperCase(), sNOVIASB.toUpperCase(), sNUPIACB.toUpperCase(), 
-						sNUPOACB.toUpperCase(), sNUPUACB.toUpperCase(), "");
+						"", 
+						sCOPOINB.toUpperCase(), 
+						sNOMUINB.toUpperCase(),
+						sNOPRACB.toUpperCase(), 
+						sNOVIASB.toUpperCase(), 
+						sNUPIACB.toUpperCase(), 
+						sNUPOACB.toUpperCase(), 
+						sNUPUACB.toUpperCase(), 
+						"");
 				
 				//TODO AC
-				//this.setTablaactivos(CLGastos.buscarActivosConAbonosEjecutables(filtro));
+				
+				this.setTablaactivos(CLActivos.buscaActivosRegistrados(filtro, sEstadoB));
 				
 				if (getTablaactivos().size() == 0)
 				{
@@ -156,7 +164,7 @@ public class GestorBloqueosActivo implements Serializable
 			else if (CLReferencias.existeReferenciaCatastral(sNURCATB))
 			{
 				//TODO RC
-				//this.setTablaactivos(CLReferencias.buscarActivoAsociadoConGastosAutorizados(sNURCATB));
+				this.setTablaactivos(CLReferencias.buscarActivoAsociadoRegistrado(sNURCATB));
 				
 				if (getTablaactivos().size() == 0)
 				{
@@ -208,6 +216,8 @@ public class GestorBloqueosActivo implements Serializable
 	    	FacesMessage msg;
 	    	
 	    	this.sCOACESB  = activoseleccionado.getCOACES();
+	    	this.sEstado = activoseleccionado.getsEstado();
+	    	this.sFechaActivacion = activoseleccionado.getsFechaActivacion();
 	    	
 	    	String sMsg = "Activo '"+sCOACESB+"' seleccionado.";
 	    	msg = Utils.pfmsgInfo(sMsg);
@@ -216,6 +226,21 @@ public class GestorBloqueosActivo implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
+	
+	public void bloquearActivo()
+	{
+		
+	}
+	
+	public void desbloquearActivo()
+	{
+		
+	}
+	
+	public void modificarBloqueoActivo()
+	{
+		
+	}
 
 	public String getsCOACESB() {
 		return sCOACESB;
@@ -305,6 +330,14 @@ public class GestorBloqueosActivo implements Serializable
 		this.bBloqueo = bBloqueo;
 	}
 
+	public boolean isbDesbloqueo() {
+		return bDesbloqueo;
+	}
+
+	public void setbDesbloqueo(boolean bDesbloqueo) {
+		this.bDesbloqueo = bDesbloqueo;
+	}
+
 	public String getsFechaActivacion() {
 		return sFechaActivacion;
 	}
@@ -329,11 +362,11 @@ public class GestorBloqueosActivo implements Serializable
 		this.tiposestadosHM = tiposestadosHM;
 	}
 
-	public ActivoTabla getActivoseleccionado() {
+	public EstadoActivoTabla getActivoseleccionado() {
 		return activoseleccionado;
 	}
 
-	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
+	public void setActivoseleccionado(EstadoActivoTabla activoseleccionado) {
 		this.activoseleccionado = activoseleccionado;
 	}
 

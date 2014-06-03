@@ -13,6 +13,7 @@ import com.provisiones.dal.qm.QMReferencias;
 import com.provisiones.dal.qm.listas.QMListaReferencias;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresReferencias;
 import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
+import com.provisiones.dal.qm.registros.QMRegistroActivos;
 
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
@@ -21,6 +22,7 @@ import com.provisiones.types.Nota;
 import com.provisiones.types.ReferenciaCatastral;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.EstadoActivoTabla;
 import com.provisiones.types.tablas.ReferenciaTabla;
 
 public final class CLReferencias 
@@ -78,6 +80,11 @@ public final class CLReferencias
 	public static ArrayList<ActivoTabla> buscarActivoAsociadoConGastosAbonables(String sNURCAT)
 	{
 		return QMListaReferencias.getActivoConGastosAbonables(ConnectionManager.getDBConnection(),sNURCAT);
+	}
+	
+	public static ArrayList<EstadoActivoTabla> buscarActivoAsociadoRegistrado (String sNURCAT)
+	{
+		return QMRegistroActivos.buscaActivoReferenciaRegistradoPorReferencia(ConnectionManager.getDBConnection(),sNURCAT);
 	}
 	
 	public static MovimientoReferenciaCatastral convierteCuotaenMovimiento(ReferenciaCatastral referencia, int iCodCOACES, String sCodCOACCI)

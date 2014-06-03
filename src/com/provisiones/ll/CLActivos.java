@@ -15,6 +15,7 @@ import com.provisiones.misc.Parser;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Activo;
 import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.EstadoActivoTabla;
 
 public final class CLActivos 
 {
@@ -105,7 +106,7 @@ public final class CLActivos
 		return QMRegistroActivos.setNota(ConnectionManager.getDBConnection(),iCodCOACES, sNota);
 	}
 	
-	//Getion de Bloqueos
+	//Gestion de Bloqueos
 	public static String buscarFechaBloqueo (int iCodCOACES)
 	{
 		return QMRegistroActivos.getFechaBloqueo(ConnectionManager.getDBConnection(),iCodCOACES);
@@ -115,6 +116,12 @@ public final class CLActivos
 	{
 		return QMRegistroActivos.setFechaBloqueo(ConnectionManager.getDBConnection(),iCodCOACES, sFecha);
 	}
+	
+	public static ArrayList<EstadoActivoTabla> buscaActivosRegistrados (ActivoTabla filtro, String sEstado)
+	{
+		return QMRegistroActivos.buscaActivosRegistradosPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, sEstado);
+	}
+	
 	
 	//Interfaz avanzado
 	public static int actualizaActivoLeido(String linea)

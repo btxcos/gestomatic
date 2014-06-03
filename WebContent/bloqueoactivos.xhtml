@@ -34,7 +34,6 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, activos, panel" actionListener="#{GestorBloqueosActivo.limpiarPlantilla}" />	
-								<p:commandButton value="Ejecutar Abono" update="msgs, popup, activos" action="#{GestorBloqueosActivo.registrarEjecucion}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" />
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -76,38 +75,42 @@
 													<p:commandButton value="Cargar" update="ESTADOBLOQUEO, FECHABLOQUEO, msgs, popup" actionListener="#{GestorBloqueosActivo.cargarEstado}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTabla.show()"/>	
 												</h:panelGrid>
 											</p:panel>
-										<p:commandButton value="Buscar Activo" update="COACESB, form:activos" oncomplete="dlgBuscar.show()"/>		
+										<p:commandButton value="Buscar Activo" update="COACESB, form:activos" oncomplete="dlgBuscar.show()"/>
 										</h:panelGrid>
 									</p:fieldset>
 
 
 							</h:panelGrid>
 						</p:fieldset>
-						<h:panelGrid columns="2" cellpadding="3">
 
-								<p:fieldset legend="Bloqueo" id="panelEjecucion">
-										<h:panelGrid columns="2" cellpadding="3">
+						<p:fieldset legend="Bloqueo" id="panelEjecucion">
+								<h:panelGrid columns="3" cellpadding="3">
 
-										<p:panel>
-											<h:panelGrid columns="2" cellpadding="5">
-												<h:outputText for="ESTADOBLOQUEO" value="Estado del activo: " />
-												<p:inputText id="ESTADOBLOQUEO" value="#{GestorBloqueosActivo.sEstado}" size="6" disabled="true"/>
-											</h:panelGrid>
-										</p:panel>
-
-										<p:panel>
-											<h:panelGrid columns="3" cellpadding="5">
-												<h:outputText for="FECHABLOQUEO" value="Fecha de inicio de Bloqueo: " />
-												<p:inputMask id="FECHABLOQUEO" value="#{GestorBloqueosActivo.sFechaActivacion}" mask="99/99/9999" size="10" maxlength="10"/>
-
-												<p:commandButton icon="ui-icon-clock" update="FECHABLOQUEO" actionListener="#{GestorBloqueosActivo.hoyFechaActivacion}"/>
-											</h:panelGrid>
-										</p:panel>
-
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+										<h:outputText for="ESTADOBLOQUEO" value="Estado del activo: " />
+										<p:inputText id="ESTADOBLOQUEO" value="#{GestorBloqueosActivo.sEstado}" size="15" disabled="true"/>
 									</h:panelGrid>
-								</p:fieldset>
+								</p:panel>
+
+								<p:panel>
+									<h:panelGrid columns="3" cellpadding="5">
+										<h:outputText for="FECHABLOQUEO" value="Fecha de inicio de Bloqueo: " />
+										<p:inputMask id="FECHABLOQUEO" value="#{GestorBloqueosActivo.sFechaActivacion}" mask="99/99/9999" size="10" maxlength="10" disabled="#{GestorBloqueosActivo.bBloqueo}"/>
+
+										<p:commandButton icon="ui-icon-clock" update="FECHABLOQUEO" actionListener="#{GestorBloqueosActivo.hoyFechaActivacion}" disabled="#{GestorBloqueosActivo.bBloqueo}"/>
+									</h:panelGrid>
+								</p:panel>
+
+								<h:panelGrid columns="1" cellpadding="3">
+									<p:commandButton value="Bloquear" id="BotBLOQUEAR" update="FECHABLOQUEO, BotBLOQUEAR, BotDESBLOQUEAR, BotMODIFICAR" action="#{GestorBloqueosActivo.bloquearActivo}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" disabled="#{GestorBloqueosActivo.bBloqueo}"/>
+									<p:commandButton value="Desbloquear" id="BotDESBLOQUEAR" update="FECHABLOQUEO, BotBLOQUEAR, BotDESBLOQUEAR, BotMODIFICAR" action="#{GestorBloqueosActivo.desbloquearActivo}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" disabled="#{GestorBloqueosActivo.bDesbloqueo}"/>
+									<p:commandButton value="Modificar" id="BotMODIFICAR" update="FECHABLOQUEO" action="#{GestorBloqueosActivo.modificarBloqueoActivo}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" disabled="#{GestorBloqueosActivo.bDesbloqueo}"/>
+								</h:panelGrid>
 
 							</h:panelGrid>
+						</p:fieldset>
+
 					</h:panelGrid>
 				</p:panel>
 

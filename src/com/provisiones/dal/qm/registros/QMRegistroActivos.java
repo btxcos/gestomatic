@@ -13,9 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.dal.qm.QMCodigosControl;
+import com.provisiones.dal.qm.listas.QMListaReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.tablas.ActivoTabla;
+import com.provisiones.types.tablas.EstadoActivoTabla;
 
 public class QMRegistroActivos implements Serializable 
 {
@@ -546,9 +549,9 @@ public class QMRegistroActivos implements Serializable
 		return sNota;
 	}
 
-	public static ArrayList<ActivoTabla> buscaActivosRegistrados(Connection conexion, ActivoTabla filtro, String sEstado)
+	public static ArrayList<EstadoActivoTabla> buscaActivosRegistradosPorFiltroEstado(Connection conexion, ActivoTabla filtro, String sEstado)
 	{
-		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
+		ArrayList<EstadoActivoTabla> resultado = new ArrayList<EstadoActivoTabla>();
 
 		if (conexion != null)
 		{
@@ -559,47 +562,28 @@ public class QMRegistroActivos implements Serializable
 
 			boolean bEncontrado = false;
 			
-			String sCondicionEstado = "";
-			
-			if (sEstado.equals(ValoresDefecto.DEF_ACTIVO_BLOQUEADO))
-			{
-				sCondicionEstado = " WHERE " + CAMPO6 + " > 0 "; 
-			}
-			else if (!sCondicionEstado.isEmpty())
-			{
-				sCondicionEstado = " WHERE " + CAMPO6 + " = 0 ";
-			}
-
+			String sCondicionEstado = sEstado.isEmpty()? "": CAMPO5 + " = '"+ sEstado +"' AND "; 
 			
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
-						
-						   + QMActivos.CAMPO1 + ","        
-						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
-
+						   + CAMPO1 + ","
+						   + CAMPO5 + ","
+						   + CAMPO6 +
+						   " FROM " + TABLA +
+						   " WHERE ("
+						   + sCondicionEstado
+						   + CAMPO1 + " IN (SELECT "
+						   + QMActivos.CAMPO1 + 
 						   " FROM " + QMActivos.TABLA + 
 						   " WHERE ("
-
 						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
 						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
 						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
 						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
 						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
 						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
-						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
-
-						   + QMActivos.CAMPO1 +" IN (SELECT "
-						   + CAMPO2 + 
-						   " FROM " + TABLA
-						   + sCondicionEstado
-						   + "))";
+						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%')))";
 			
 			logger.debug(sQuery);
 			
@@ -619,25 +603,15 @@ public class QMRegistroActivos implements Serializable
 					{
 						bEncontrado = true;
 						
-						String sCOACES = rs.getString(QMActivos.CAMPO1);
-						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sCOACES = rs.getString(CAMPO1);
+						String sEstadoActivo = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESACTI,QMCodigosControl.IESACTI,rs.getString(CAMPO5));
+						String sFechaActivacion = Utils.recuperaFecha(rs.getString(CAMPO6));
+
 						
-						ActivoTabla activoencontrado = new ActivoTabla(
+						EstadoActivoTabla activoencontrado = new EstadoActivoTabla(
 								sCOACES, 
-								sCOPOIN, 
-								sNOMUIN, 
-								sNOPRAC, 
-								sNOVIAS, 
-								sNUPIAC, 
-								sNUPOAC, 
-								sNUPUAC,
-								"");
+								sEstadoActivo, 
+								sFechaActivacion);
 						
 						resultado.add(activoencontrado);
 						
@@ -654,7 +628,92 @@ public class QMRegistroActivos implements Serializable
 			} 
 			catch (SQLException ex) 
 			{
-				resultado = new ArrayList<ActivoTabla>();
+				resultado = new ArrayList<EstadoActivoTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+
+	}
+	
+	public static ArrayList<EstadoActivoTabla> buscaActivoReferenciaRegistradoPorReferencia(Connection conexion, String sNURCAT)
+	{
+		ArrayList<EstadoActivoTabla> resultado = new ArrayList<EstadoActivoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						   + CAMPO1 + ","
+						   + CAMPO5 + ","
+						   + CAMPO6 +
+						   " FROM " + TABLA +
+						   " WHERE ("
+						   + CAMPO1 + " IN (SELECT "
+						   + QMListaReferencias.CAMPO1 + 
+						   " FROM " + QMListaReferencias.TABLA + 
+						   " WHERE "
+						   + QMListaReferencias.CAMPO2 + " = '"+sNURCAT+"'))";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sCOACES = rs.getString(CAMPO1);
+						String sEstadoActivo = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESACTI,QMCodigosControl.IESACTI,rs.getString(CAMPO5));
+						String sFechaActivacion = Utils.recuperaFecha(rs.getString(CAMPO6));
+
+						
+						EstadoActivoTabla activoencontrado = new EstadoActivoTabla(
+								sCOACES, 
+								sEstadoActivo, 
+								sFechaActivacion);
+						
+						resultado.add(activoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug("{}:|"+QMActivos.CAMPO1,sCOACES);
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<EstadoActivoTabla>();
 
 				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
 			} 
