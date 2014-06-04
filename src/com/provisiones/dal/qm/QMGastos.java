@@ -2850,7 +2850,7 @@ public final class QMGastos
 	}
 	
 	
-	public static ArrayList<GastoTabla> buscaGastosPorFiltro(Connection conexion, GastoTabla filtro)
+	/*public static ArrayList<GastoTabla> buscaGastosPorFiltro(Connection conexion, GastoTabla filtro)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -2968,9 +2968,9 @@ public final class QMGastos
 		}
 
 		return resultado;
-	}
+	}*/
 	
-	public static ArrayList<GastoTabla> buscaGastosPorFiltroEstado(Connection conexion, GastoTabla filtro, String sEstado)
+	public static ArrayList<GastoTabla> buscaGastosPorFiltro(Connection conexion, GastoTabla filtro)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -2988,7 +2988,8 @@ public final class QMGastos
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
 			String sCondicionFEDEVE = (filtro.getFEDEVE().isEmpty() || filtro.getFEDEVE().equals("0"))?"":CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
-			String sCondicionEstado = sEstado.isEmpty()?"":CAMPO34 + " = '" + sEstado + "' AND ";
+			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":CAMPO34 + " = '" + filtro.getESTADO() + "' AND ";
+			//String sCondicionEstado = sEstado.isEmpty()?"":CAMPO34 + " = '" + sEstado + "' AND ";
 			
 			logger.debug("Ejecutando Query...");
 

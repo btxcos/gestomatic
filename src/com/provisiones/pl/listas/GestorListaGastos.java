@@ -467,9 +467,16 @@ public class GestorListaGastos implements Serializable
 					tiposcotpgaHM = tiposcotpga_g3HM;
 					break;
 				default:
-					tiposcotpgaHM = new LinkedHashMap<String, String>();
+					
 					break;
 			}
+			tiposcosbgaHM = new LinkedHashMap<String, String>();
+			sCOTPGAFA = "";
+			sCOSBGAFA = "";
+		}
+		else
+		{
+			tiposcotpgaHM = new LinkedHashMap<String, String>();
 			tiposcosbgaHM = new LinkedHashMap<String, String>();
 			sCOTPGAFA = "";
 			sCOSBGAFA = "";
@@ -535,6 +542,13 @@ public class GestorListaGastos implements Serializable
 					tiposcotpgaHM = new LinkedHashMap<String, String>();
 					break;
 			}
+			tiposcosbgaHM = new LinkedHashMap<String, String>();
+			sCOTPGAFP = "";
+			sCOSBGAFP = "";
+		}
+		else
+		{
+			tiposcotpgaHM = new LinkedHashMap<String, String>();
 			tiposcosbgaHM = new LinkedHashMap<String, String>();
 			sCOTPGAFP = "";
 			sCOSBGAFP = "";
@@ -633,7 +647,7 @@ public class GestorListaGastos implements Serializable
 							"",   
 							"",  
 							"",
-							"",
+							sEstadoGastoFA,
 							"",
 							"");
 					
@@ -644,7 +658,7 @@ public class GestorListaGastos implements Serializable
 			    	logger.debug("sFEDEVEFA:|"+sFEDEVEFA+"|");
 			    	logger.debug("sEstadoGastoFA:|"+sEstadoGastoFA+"|");
 					
-					this.setTablagastos(CLGastos.buscarGastosActivoConFiltroEstado(filtro, sEstadoGastoFA));
+					this.setTablagastos(CLGastos.buscarGastosActivoConFiltro(filtro));
 					
 					if (getTablagastos().size() == 0)
 					{

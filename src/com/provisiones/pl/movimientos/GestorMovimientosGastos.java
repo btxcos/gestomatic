@@ -470,6 +470,13 @@ public class GestorMovimientosGastos implements Serializable
 			sCOTPGABA = "";
 			sCOSBGABA = "";
 		}
+		else
+		{
+			tiposcotpgaHM = new LinkedHashMap<String, String>();
+			tiposcosbgaHM = new LinkedHashMap<String, String>();
+			sCOTPGABA = "";
+			sCOSBGABA = "";
+		}
 	}
 	
 	public void cambiaSubtipoActivo()
@@ -538,6 +545,13 @@ public class GestorMovimientosGastos implements Serializable
 					break;
 			}
 			tiposcosbgaHMP = new LinkedHashMap<String, String>();
+			sCOTPGABP = "";
+			sCOSBGABP = "";
+		}
+		else
+		{
+			tiposcotpgaHM = new LinkedHashMap<String, String>();
+			tiposcosbgaHM = new LinkedHashMap<String, String>();
 			sCOTPGABP = "";
 			sCOSBGABP = "";
 		}

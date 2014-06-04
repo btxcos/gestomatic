@@ -153,19 +153,20 @@ public final class CLGastos
 		return QMListaGastosProvisiones.getProvisionDeAbono(ConnectionManager.getDBConnection(), liCodGasto);
 	}
 	
+	/*public static ArrayList<GastoTabla> buscarGastosActivoConFiltro(GastoTabla filtro)
+	{
+		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
+	}*/
+	
 	public static ArrayList<GastoTabla> buscarGastosActivoConFiltro(GastoTabla filtro)
 	{
 		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
 	
-	public static ArrayList<GastoTabla> buscarGastosActivoConFiltroEstado(GastoTabla filtro, String sEstado)
-	{
-		return QMGastos.buscaGastosPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, sEstado);
-	}
-	
 	public static ArrayList<GastoTabla> buscarGastosAutorizadosActivoConFiltro(GastoTabla filtro)
 	{
-		return QMGastos.buscaGastosPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, ValoresDefecto.DEF_GASTO_AUTORIZADO);
+		filtro.setESTADO(ValoresDefecto.DEF_GASTO_AUTORIZADO);
+		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
 	
 	public static ArrayList<GastoTabla> buscarGastosAbonadosEjecutablesActivoConFiltro(GastoTabla filtro)
@@ -175,7 +176,8 @@ public final class CLGastos
 	
 	public static ArrayList<GastoTabla> buscarGastosPagadosActivoConFiltro(GastoTabla filtro)
 	{
-		return QMGastos.buscaGastosPorFiltroEstado(ConnectionManager.getDBConnection(),filtro, ValoresDefecto.DEF_GASTO_PAGADO);
+		filtro.setESTADO(ValoresDefecto.DEF_GASTO_PAGADO);
+		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
 	
 	public static ArrayList<GastoTabla> buscarGastosRevisablesActivoConFiltro(GastoTabla filtro)

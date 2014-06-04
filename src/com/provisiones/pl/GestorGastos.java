@@ -587,6 +587,13 @@ public class GestorGastos implements Serializable
 			sCOTPGA = "";
 			sCOSBGA = "";
 		}
+		else
+		{
+			tiposcotpgaHM = new LinkedHashMap<String, String>();
+			tiposcosbgaHM = new LinkedHashMap<String, String>();
+			sCOTPGA = "";
+			sCOSBGA = "";
+		}
 	}
 	
 	public void cambiaSubtipo()
