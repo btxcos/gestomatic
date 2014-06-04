@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/>
+	</h:head>
+
+	<h:body>
+		<h:form id="form">
+			<p:layout fullPage="true">
+
+
+				<p:layoutUnit position="north" size="auto" header="Registrar Comunidad">
+					<h:panelGrid columns="4" cellpadding="5">
+						<p:fieldset legend="Sesión" id="sesion">
+							<h:panelGrid columns="1" cellpadding="1">
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="1">
+										<h:outputText value="Usuario: "/>
+										<p:inputText id="USUARIO" value="#{GestorSesion.sUsuario}" size="10" disabled="true"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Limpiar Plantilla" update="panel, NOTA" actionListener="#{GestorUsuarios.limpiarPlantilla}"/>
+
+								<p:commandButton value="Alta" update="panel, popup, msgs" actionListener="#{GestorUsuarios.realizaAlta}"/>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="2" cellpadding="5">
+
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button" disabled="true"/>
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
+
+							</h:panelGrid>
+						</p:fieldset>
+
+					</h:panelGrid>
+
+				</p:layoutUnit>
+
+				<p:layoutUnit position="west" size="20%" header="Operativas">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<h:panelGrid columns="1" cellpadding="5">
+						<p:panel id="panel">
+							<h:panelGrid columns="1" cellpadding="5">
+
+								<p:fieldset legend="Datos del Usuario">
+									<h:panelGrid columns="1" cellpadding="1">
+										<p:panel>
+											<h:panelGrid columns="1" cellpadding="3">
+												<h:panelGrid columns="3" cellpadding="3">
+													<h:outputText for="LOGIN" value="Nombre de usuario: "/>
+													<p:inputText id="LOGIN" value="#{GestorUsuarios.sLogin}" size="8" maxlength="8"/>
+													<p:commandButton value="Comprobar disponibilidad" update="panel, popup, LOGIN" actionListener="#{GestorUsuarios.comprobarUsuario}"/>
+												</h:panelGrid>
+
+												<h:panelGrid columns="2" cellpadding="3">
+
+													<h:outputText for="PASSWORD" value="Contraseña: "/>
+													<p:inputText id="PASSWORD" value="#{GestorUsuarios.sPassword}" size="64" maxlength="64"/>
+												</h:panelGrid>
+
+											</h:panelGrid>
+										</p:panel>
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+
+												<h:outputText for="NOMBRE" value="Nombre: "/>
+												<p:inputText id="NOMBRE" value="#{GestorUsuarios.sNombre}" size="64" maxlength="64"/>
+
+												<h:outputText for="APELLIDO1"  value="Primer Apellido: "/>
+												<p:inputText id="APELLIDO1" value="#{GestorUsuarios.sApellido1}" size="80"  maxlength="80"/>
+
+												<h:outputText for="APELLIDO2"  value="Segundo Apellido: "/>
+												<p:inputText id="APELLIDO2" value="#{GestorUsuarios.sApellido2}" size="80"  maxlength="80"/>
+
+
+											</h:panelGrid>
+										</p:panel>
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+
+												<h:outputText for="CONTACTO"  value="Datos de Contacto: "/>
+												<p:inputTextarea id="CONTACTO" value="#{GestorUsuarios.sContacto}" rows="3" cols="80" counter="counter" maxlength="160"
+													counterTemplate="{0} carácteres restantes." autoResize="false"/>
+												<h:outputText id="counter"/>
+
+											</h:panelGrid>
+										</p:panel>
+									</h:panelGrid>
+								</p:fieldset>
+
+							</h:panelGrid>
+						</p:panel>
+					</h:panelGrid>
+
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+					<h:panelGrid columns="1" cellpadding="1">
+						<p:panel>
+							<h:panelGrid columns="2" cellpadding="5">
+
+								<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorUsuarios.limpiarNota}"/>
+
+							</h:panelGrid>
+						</p:panel>
+
+						<h:panelGrid columns="1" cellpadding="5">
+							<h:outputText id="counternota"/>
+							<p:inputTextarea id="NOTA" value="#{GestorUsuarios.sNota}" cols="40" rows="10" counter="counternota" maxlength="500"
+								counterTemplate="{0} carácteres restantes." autoResize="false"/>
+						</h:panelGrid>
+					</h:panelGrid>
+					</p:dialog>
+
+					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
+						<p:graphicImage value="recursos/loadingBar.gif"/>
+					</p:dialog>
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de cerrar esta sesión?" />
+									<h:outputText value="- Todos los datos no guardados se perderán." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" action="#{GestorSesion.cerrarSesion}" oncomplete="dlgConfirmaSalir.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaSalir.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+				</p:layoutUnit>
+
+			</p:layout>
+		</h:form>
+	</h:body>
+
+</f:view>
+</html>
