@@ -96,6 +96,8 @@ public class GestorDetallesGasto implements Serializable
 	private String sDescripcion = "";
 
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	
 	
 	public GestorDetallesGasto()
 	{
@@ -260,8 +262,9 @@ public class GestorDetallesGasto implements Serializable
 				this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 				this.sNUCLII = ValoresDefecto.DEF_NUCLII;
 				
+				this.sNotaOriginal = CLGastos.buscarNota(liCodGasto);
 				
-				this.sNota = CLGastos.buscarNota(liCodGasto);
+				this.sNota = sNotaOriginal;
 				
 				sMsg = "El Gasto se cargó correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -289,6 +292,11 @@ public class GestorDetallesGasto implements Serializable
     {  
     	this.sNota = "";
     }
+    
+    public void restaurarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    }
 	
 	public void guardaNota (ActionEvent actionEvent)
 	{
@@ -298,18 +306,29 @@ public class GestorDetallesGasto implements Serializable
 
 			String sMsg = "";
 			
-			if (CLProvisiones.guardarNota(sNUPROF, sNota))
+			if (sNota.equals(sNotaOriginal))
 			{
-				sMsg = "Nota guardada correctamente.";
-				msg = Utils.pfmsgInfo(sMsg);
-				logger.info(sMsg);
+				sMsg = "La Nota no se ha modificado, no ha habido cambios.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
 			}
 			else
 			{
-				sMsg = "ERROR: Ocurrió un error al guardar la Nota de la Referencia Catastral. Por favor, revise los datos y avise a soporte.";
-				msg = Utils.pfmsgFatal(sMsg);
-				logger.error(sMsg);
+				if (CLProvisiones.guardarNota(sNUPROF, sNota))
+				{
+					sMsg = "Nota guardada correctamente.";
+					msg = Utils.pfmsgInfo(sMsg);
+					logger.info(sMsg);
+				}
+				else
+				{
+					sMsg = "ERROR: Ocurrió un error al guardar la Nota de la Referencia Catastral. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+				}
 			}
+			
+
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		

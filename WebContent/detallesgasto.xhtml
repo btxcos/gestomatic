@@ -26,13 +26,30 @@
 								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/> 
 							</h:panelGrid>
 						</p:fieldset>
-									<p:fieldset legend="Acciones">
-										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton value="Volver" actionListener="#{GestorDetallesGasto.volver}"/>
-										</h:panelGrid>
-											<p:messages id="msgs"/>
-									</p:fieldset>
-								</h:panelGrid>
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Volver" actionListener="#{GestorDetallesGasto.volver}"/>
+							</h:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
+
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
+
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
 				</p:layoutUnit>
 
 				<p:layoutUnit position="west" size="20%" header="Menus">
@@ -328,6 +345,26 @@
 							</h:panelGrid>
 						</p:panel>
 					</p:dialog> 
+
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+						<h:panelGrid columns="1" cellpadding="1">
+							<p:panel>
+								<h:panelGrid columns="3" cellpadding="5">
+
+									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorDetallesGasto.limpiarNota}"/>
+									<p:commandButton value="Guardar" update="NOTA" actionListener="#{GestorDetallesGasto.guardaNota}"/>
+									<p:commandButton value="Restaurar" update="NOTA" actionListener="#{GestorDetallesGasto.restaurarNota}"/>
+
+								</h:panelGrid>
+							</p:panel>
+
+							<h:panelGrid columns="1" cellpadding="5">
+								<h:outputText id="counternota"/>
+								<p:inputTextarea id="NOTA" value="#{GestorDetallesGasto.sNota}" cols="40" rows="10" counter="counternota" maxlength="500"
+									counterTemplate="{0} carácteres restantes." autoResize="false"/>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:dialog>
 
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">  
 						<p:graphicImage value="recursos/loadingBar.gif" />

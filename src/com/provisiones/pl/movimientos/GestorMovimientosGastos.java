@@ -416,6 +416,7 @@ public class GestorMovimientosGastos implements Serializable
     	this.sNUPROFB = "";
 
     	this.sNota = "";
+    	this.sNotaOriginal = "";
     	
     	borrarCamposBuscarActivo();
     	borrarCamposBuscarProvision();

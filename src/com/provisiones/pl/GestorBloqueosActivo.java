@@ -50,6 +50,7 @@ public class GestorBloqueosActivo implements Serializable
 	private boolean bBloqueo = false;
 	private String sCOACES = "";
 	private String sEstadoD = "";
+	private String sFechaOriginal = "";
 	private String sFechaActivacion = "";
 
 	private Map<String,String> tiposestadosHM = new LinkedHashMap<String, String>();
@@ -86,6 +87,8 @@ public class GestorBloqueosActivo implements Serializable
 		this.sNUPUACB = "";
 		
 		this.sNURCATB = "";
+		
+		this.sEstadoB = "";
 	}
 	
 	public void borrarResultadosActivo()
@@ -106,6 +109,7 @@ public class GestorBloqueosActivo implements Serializable
 		this.sCOACES = "";
     	this.sEstadoD = "";
     	this.sFechaActivacion = "";
+    	this.sFechaOriginal = "";
 	}
     
     public void limpiarPlantilla(ActionEvent actionEvent) 
@@ -134,11 +138,17 @@ public class GestorBloqueosActivo implements Serializable
 			
 			this.activoseleccionado = null;
 			
-			if (sNURCATB.isEmpty())
+			if (Utils.esAlfanumerico(sCOPOINB))
+			{
+				sMsg = "ERROR: El Código Postal debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sNURCATB.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
 						"", 
-						sCOPOINB.toUpperCase(), 
+						sCOPOINB, 
 						sNOMUINB.toUpperCase(),
 						sNOPRACB.toUpperCase(), 
 						sNOVIASB.toUpperCase(), 
@@ -234,7 +244,10 @@ public class GestorBloqueosActivo implements Serializable
 		    	EstadoActivoTabla estado = CLActivos.buscarEstadoActivo(Integer.parseInt(sCOACES));
 
 		    	this.sEstadoD = CLDescripciones.descripcionEstadoActivo(estado.getsEstado());
-		    	this.sFechaActivacion = Utils.recuperaFecha(estado.getsFechaActivacion());
+		    	
+		    	this.sFechaOriginal = Utils.recuperaFecha(estado.getsFechaActivacion());
+		    	
+		    	this.sFechaActivacion = sFechaOriginal;
 		    	
 		    	this.bBloqueo = estado.getsEstado().equals(ValoresDefecto.DEF_ACTIVO_BLOQUEADO);
 		    	
@@ -295,6 +308,24 @@ public class GestorBloqueosActivo implements Serializable
 				sMsg = "ERROR: No se puede modificar la fecha de bloqueo de un Activo desbloqueado. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
+			}
+			else if (sAccion.equals(ValoresDefecto.DEF_ACTIVO_BLOQUEADO) && sFechaActivacion.isEmpty()) 
+			{
+				sMsg = "ERROR: No se puede bloquear sin fecha de inicio de bloqueo. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION) && sFechaActivacion.isEmpty()) 
+			{
+				sMsg = "ERROR: No se puede modificar sin fecha de inicio de bloqueo. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION) && sFechaActivacion.equals(sFechaOriginal)) 
+			{
+				sMsg = "No se ha modificado, la fecha de inicio de bloqueo no ha cambiado. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
 			}
 			else
 			{

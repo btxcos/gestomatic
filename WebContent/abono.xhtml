@@ -33,7 +33,10 @@
 						</p:fieldset>
 						<p:fieldset legend="Info">
 							<h:panelGrid columns="3" cellpadding="5">
+
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
+								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
+
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
 										<p:messages id="msgs"/>
@@ -234,6 +237,24 @@
 							</p:fieldset>
 						</h:panelGrid>
 					</p:panel>
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+						<h:panelGrid columns="1" cellpadding="1">
+							<p:panel>
+								<h:panelGrid columns="2" cellpadding="5">
+
+									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorAbonos.limpiarNota}"/>
+									<p:commandButton value="Restaurar" update="NOTA" actionListener="#{GestorAbonos.restaurarNota}"/>
+
+								</h:panelGrid>
+							</p:panel>
+
+							<h:panelGrid columns="1" cellpadding="5">
+								<h:outputText id="counternota"/>
+								<p:inputTextarea id="NOTA" value="#{GestorAbonos.sNota}" cols="40" rows="10" counter="counternota" maxlength="500"
+									counterTemplate="{0} carácteres restantes." autoResize="false"/>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:dialog>
 					<p:dialog header="Buscar Activos con Gastos abonables: " widgetVar="dlgBuscar" resizable="false">
 						<p:fieldset legend="Criterios de Busqueda">
 							<h:panelGrid columns="1" cellpadding="5">
