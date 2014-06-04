@@ -123,6 +123,13 @@ public final class CLProvisiones
 		return QMProvisiones.buscaProvisionesPorFiltro(ConnectionManager.getDBConnection(), filtro);
 	}
 	
+	public static ArrayList<ProvisionTabla> buscarProvisionesAbiertasConFiltro(ProvisionTabla filtro)
+	{
+		filtro.setESTADO(ValoresDefecto.DEF_PROVISION_ABIERTA);
+		
+		return QMProvisiones.buscaProvisionesPorFiltro(ConnectionManager.getDBConnection(), filtro);
+	}
+	
 	public static ArrayList<ProvisionTabla> buscarProvisionesEjecutablesConFiltro(ProvisionTabla filtro)
 	{
 		return QMProvisiones.buscaProvisionesConAbonosEjecutablesPorFiltro(ConnectionManager.getDBConnection(), filtro);

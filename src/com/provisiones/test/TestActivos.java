@@ -61,7 +61,10 @@ public class TestActivos
         System.out.println("t1.getsConcepto2Transferencia():"+t1.getsConcepto2Transferencia());
      
 */        
-       
+		String sTemp = "";
+		
+		
+		System.out.println("CI:|"+Utils.compruebaImporte(sTemp)+"|");
 		
 		ConnectionManager.closeDBConnection(conx);
 	}

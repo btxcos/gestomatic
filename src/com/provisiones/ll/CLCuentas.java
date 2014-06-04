@@ -37,6 +37,8 @@ public class CLCuentas
 		return QMCuentas.existeCuenta(ConnectionManager.getDBConnection(), sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT);
 	}
 	
+	//TODO Borrar cuentas Comunidad
+	
 	public static ArrayList<Cuenta> buscarCuentasActivo (int iCodCOACES)
 	{
 		return QMListaCuentasActivos.buscaListaCuentas(ConnectionManager.getDBConnection(),iCodCOACES);

@@ -265,12 +265,24 @@ public class GestorListaGastos implements Serializable
 			
 	    	this.setActivoseleccionado(null);
 			
-			if (sNURCAT.isEmpty())
+	    	if (Utils.esAlfanumerico(sCOPOIN))
+			{
+				sMsg = "ERROR: El Código Postal debe ser numérico. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sNURCAT.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
-						sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-						sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-						sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+						sCOACES.toUpperCase(), 
+						sCOPOIN, 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						"");
 				
 				this.setTablaactivos(CLGastos.buscarActivosConGastos(filtro));
 

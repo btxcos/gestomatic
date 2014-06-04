@@ -22,6 +22,7 @@ import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
+import com.provisiones.types.Nota;
 import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
@@ -149,6 +150,11 @@ public class GestorAbonos implements Serializable
 	private boolean bIMDTGAA = true;
 	private String sIMIMGAA = "";	
 	private boolean bIMIMGAA = true;
+	
+	//Nota 
+	private String sNota = "";
+	private String sNotaOriginal = "";
+
 	
 	private Map<String,String> tiposcogrugHM = new LinkedHashMap<String, String>();
 
@@ -406,6 +412,16 @@ public class GestorAbonos implements Serializable
     	borrarCamposBuscarGastoProvision();
     	borrarCamposGasto();
     	borrarImportesAbono();
+    }
+    
+    public void limpiarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = "";
+    }
+    
+    public void restaurarNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
     }
     
 	public void cambiaGrupoActivo()
@@ -971,8 +987,6 @@ public class GestorAbonos implements Serializable
 
 			this.sCOACES = gastoseleccionado.getCOACES();
 			
-			//Cargar Comunidad
-			
 			//Cargar Gasto
 	    	this.sCOGRUG = gastoseleccionado.getCOGRUG();
 	    	this.sCOTPGA = gastoseleccionado.getCOTPGA();
@@ -1042,8 +1056,13 @@ public class GestorAbonos implements Serializable
 			//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 			//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 			
-			this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
+			//this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
 
+			this.sNUPROF = CLGastos.buscarProvisionGastoID(liCodGastoB);
+			
+			this.sNotaOriginal = CLGastos.buscarNota(liCodGastoB);
+			this.sNota = sNotaOriginal;
+			
 			cargarImportes();
 	    	
 	    	sMsg = "Gasto cargado.";
@@ -1205,7 +1224,14 @@ public class GestorAbonos implements Serializable
 						}
 						else
 						{
-							int iSalida = CLGastos.registraMovimiento(movimiento,true);
+							Nota nota = new Nota (sNotaOriginal.equals(sNota),sNota);
+							
+							if (nota.isbInvalida())
+							{
+								nota.setsContenido("");
+							}
+							
+							int iSalida = CLGastos.registraMovimiento(movimiento,true,nota);
 							
 							switch (iSalida) 
 							{
@@ -2312,6 +2338,14 @@ public class GestorAbonos implements Serializable
 
 	public void setTiposestadogastoHM(Map<String, String> tiposestadogastoHM) {
 		this.tiposestadogastoHM = tiposestadogastoHM;
+	}
+
+	public String getsNota() {
+		return sNota;
+	}
+
+	public void setsNota(String sNota) {
+		this.sNota = sNota;
 	}
 
 }

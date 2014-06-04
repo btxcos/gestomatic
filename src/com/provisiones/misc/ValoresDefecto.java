@@ -14,6 +14,7 @@ public final class ValoresDefecto
 	public static final String CAMPO_ALFA_SIN_INFORMAR = "";
 	public static final String CAMPO_NUME_SIN_INFORMAR = "0";
 	
+	public static final String CAMPO_NUME_INCORRECTO = "#";
 	
 	public static final byte ACTIVO = 1;
 	public static final byte INACTIVO = 0;

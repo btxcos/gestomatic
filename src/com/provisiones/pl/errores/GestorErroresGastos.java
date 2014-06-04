@@ -21,6 +21,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Gasto;
+import com.provisiones.types.Nota;
 import com.provisiones.types.errores.ErrorGastoTabla;
 import com.provisiones.types.errores.ErrorTabla;
 import com.provisiones.types.movimientos.MovimientoGasto;
@@ -1036,7 +1037,11 @@ public class GestorErroresGastos implements Serializable
 						//movimiento.pintaMovimientoGasto();
 						
 						//int iSalida = CLErrores.reparaMovimientoGasto(nuevomovimiento,sCodMovimiento,sCodError);
-						iSalida = CLGastos.registraMovimiento(nuevomovimiento, true);
+						
+						//TODO Gestion de notas
+						Nota nota = new Nota (false,"ERROR RECUPERADO");
+						
+						iSalida = CLGastos.registraMovimiento(nuevomovimiento, true, nota);
 						break;
 					case E:
 						iSalida = CLErrores.reenviarErrorGasto(liCodMovimiento);
