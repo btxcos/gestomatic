@@ -346,9 +346,12 @@ public class GestorGastos implements Serializable
 			String sMsg = "";
 			
 	    	this.activoseleccionado = null;
+	    	this.tablaactivos = null;
 			
-			if (Utils.esAlfanumerico(sCOPOIN))
+			if (!sCOPOIN.isEmpty() && Utils.esAlfanumerico(sCOPOIN))
 			{
+				
+				
 				sMsg = "ERROR: El Código Postal debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
@@ -407,8 +410,6 @@ public class GestorGastos implements Serializable
 			}
 			else
 			{
-		    	this.tablaactivos = null;
-				
 				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
 				msg = Utils.pfmsgWarning(sMsg);
 				logger.warn(sMsg);
@@ -792,15 +793,15 @@ public class GestorGastos implements Serializable
 						
 						String sFechaBloqueo = CLActivos.buscarFechaBloqueo(iCodCOACES);
 						
-						if (!sFechaVentaActivo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(sFechaVentaActivo)))
+						if (!sFechaVentaActivo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) >= Long.parseLong(sFechaVentaActivo)))
 						{
-							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo es superior a la de venta del Activo ("+Utils.recuperaFecha(sFechaVentaActivo)+"). Por favor, revise los datos";
+							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo debe de ser inferior a la de venta del Activo ("+Utils.recuperaFecha(sFechaVentaActivo)+"). Por favor, revise los datos";
 							msg = Utils.pfmsgError(sMsg);
 							logger.error(sMsg);
 						}
-						else if (!sFechaBloqueo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(sFechaBloqueo)))
+						else if (!sFechaBloqueo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) >= Long.parseLong(sFechaBloqueo)))
 						{
-							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo es superior a la de bloqueo del Activo ("+Utils.recuperaFecha(sFechaVentaActivo)+"). Por favor, revise los datos";
+							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo debe de ser inferior a la de bloqueo del Activo ("+Utils.recuperaFecha(sFechaBloqueo)+"). Por favor, revise los datos";
 							msg = Utils.pfmsgError(sMsg);
 							logger.error(sMsg);
 						}

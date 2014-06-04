@@ -138,7 +138,7 @@ public class GestorBloqueosActivo implements Serializable
 			
 			this.activoseleccionado = null;
 			
-			if (Utils.esAlfanumerico(sCOPOINB))
+			if (!sCOPOINB.isEmpty() && Utils.esAlfanumerico(sCOPOINB))
 			{
 				sMsg = "ERROR: El Código Postal debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);

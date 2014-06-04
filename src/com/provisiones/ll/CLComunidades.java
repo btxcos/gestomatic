@@ -627,62 +627,41 @@ public final class CLComunidades
 																{
 																	//OK 
 																	iCodigo = 0;
-																	
-																	conexion.commit();
 																}
 																else
 																{
 																	//Error y Rollback - error al registrar el activo durante el alta
 																	iCodigo = -903;
-																	//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-																	//QMComunidades.delComunidad(conexion,liCodComunidad);
-																	//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-																	conexion.rollback();
 																}
 															}
 															else
 															{
 																//Error y Rollback - error al registrar la relaccion
-																	iCodigo = -902;
-																	//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-																	//QMComunidades.delComunidad(conexion,liCodComunidad);
-																	
-																	conexion.rollback();
+																iCodigo = -902;
 															}
 														}
 														else
 														{
 															//Error y Rollback - error al registrar la relacion cuenta-comunidad
 															iCodigo = -912;
-															
-															conexion.rollback();
 														}
-														
-														
 													}
 													else
 													{
 														//Error y Rollback - error al registrar la comuidad
-															iCodigo = -901;
-															//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-															
-															conexion.rollback();
+														iCodigo = -901;
 													}
 												}
 												else
 												{
 													//Error y Rollback - error al registrar la cuenta de la comunidad
-														iCodigo = -911;
-														
-														conexion.rollback();
+													iCodigo = -911;
 												}	
 											}
 											else
 											{
 												//Error y Rollback - Cuenta de la comunidad ya de alta
 												iCodigo = -914;
-												
-												conexion.rollback();
 											}
 											
 										}
@@ -690,7 +669,6 @@ public final class CLComunidades
 										{
 											//Error 801 - alta de una comunidad en alta
 											iCodigo = -801;
-											conexion.rollback();
 										}
 										break;
 									case B:
@@ -705,35 +683,24 @@ public final class CLComunidades
 												{
 													//OK 
 													iCodigo = 0; 
-													conexion.commit();
 												}
 												else
 												{
 													//error y rollback - error al cambiar el estado
 													iCodigo = -904;
-													//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-													//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-													
-													conexion.rollback();
 												}
 											}
 											else
 											{
 												//error y rollback - error al registrar la relaccion
 												iCodigo = -902;
-												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-												
-												conexion.rollback();
 											}
 										}
 										else
 										{
 											//Error 803 - comunidad no disponible
 											iCodigo = -803;
-											conexion.rollback();
 										}
-										
-										
 										break;
 									case M:
 										if (liCodComunidad != 0)
@@ -755,15 +722,11 @@ public final class CLComunidades
 													{	
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
 														//error y rollback - error al modificar la comunidad
 														iCodigo = -905;
-														//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-														//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-														conexion.rollback();
 													}
 													
 												}
@@ -783,67 +746,49 @@ public final class CLComunidades
 																	{
 																		//OK 
 																		iCodigo = 0;
-																		conexion.commit();
 																	}
 																	else
 																	{
 																		//Error y Rollback - error al eliminar la cuenta antigua de la comunidad
 																		iCodigo = -913;
-																		
-																		conexion.rollback();
 																	}
-
 																}
 																else
 																{
 																	//error y rollback - error al modificar la comunidad
 																	iCodigo = -905;
-																	//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-																	//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-																	conexion.rollback();
 																}
 															}
 															else
 															{
 																//Error y Rollback - error al registrar la relacion cuenta-comunidad
 																iCodigo = -912;
-																
-																conexion.rollback();
 															}
 														}
 														else
 														{
 															//Error y Rollback - error al registrar la cuenta de la comunidad
-																iCodigo = -911;
-																
-																conexion.rollback();
+															iCodigo = -911;
 														}
 													}
 													else
 													{
 														//Error y Rollback - error al eliminar la cuenta antigua de la comunidad
 														iCodigo = -914;
-														
-														conexion.rollback();
 													}	
 												}
-
 											}
 											else
 											{
 												//error y rollback - error al registrar la relaccion
 												iCodigo = -902;
-												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-												conexion.rollback();
 											}	
 										}
 										else
 										{
 											//Error 803 - comunidad no disponible
 											iCodigo = -803;
-											conexion.rollback();
 										}
-										
 										break;
 									case X:
 										if (liCodComunidad != 0)
@@ -853,8 +798,6 @@ public final class CLComunidades
 											{
 												//error y rollback - el activo ya esta vinculado
 												iCodigo = -906;
-												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-												conexion.rollback();
 											}
 											else
 											{							
@@ -862,14 +805,11 @@ public final class CLComunidades
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
 													//error y rollback - error al asociar el activo en la comunidad
 													iCodigo = -907;
-													//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-													conexion.rollback();
 												}
 											}
 										}
@@ -877,9 +817,7 @@ public final class CLComunidades
 										{
 											//Error 803 - comunidad no disponible
 											iCodigo = -803;
-											conexion.rollback();
 										}
-											
 										break;
 									case E:
 										if (liCodComunidad != 0)
@@ -890,8 +828,6 @@ public final class CLComunidades
 											{
 												//error y rollback - el activo no esta vinculado
 												iCodigo = -908;
-												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-												conexion.rollback();
 											}
 											else
 											{	
@@ -899,16 +835,11 @@ public final class CLComunidades
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
 													//error y rollback - error al desasociar el activo en la comunidad
 													iCodigo = -909;
-													//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-													//QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento.getCOACES(), liCodComunidad, sMovimientoBaja);
-													
-													conexion.rollback();
 												}
 											}	
 										}
@@ -916,10 +847,18 @@ public final class CLComunidades
 										{
 											//Error 803 - comunidad no disponible
 											iCodigo = -803;
-											conexion.rollback();
 										}
 										break;
 								}	
+							}
+							
+							if (iCodigo == 0)
+							{
+								conexion.commit();
+							}
+							else
+							{
+								conexion.rollback();
 							}
 							
 							conexion.setAutoCommit(true);
@@ -1111,7 +1050,6 @@ public final class CLComunidades
 															{
 																//OK 
 																iCodigo = 0;
-																conexion.commit();
 															}
 															else
 															{
@@ -1119,72 +1057,48 @@ public final class CLComunidades
 																{
 																	//OK 
 																	iCodigo = 0;
-																	conexion.commit();
 																}
 																else
 																{
 																	//Error al guardar la nota
 																	iCodigo = -915;
-																	conexion.rollback();
 																}
-																
 															}
-															
-															
 														}
 														else
 														{
 															//Error y Rollback - error al registrar el activo durante el alta
 															iCodigo = -903;
-															//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-															//QMComunidades.delComunidad(conexion,liCodComunidad);
-															//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-															conexion.rollback();
 														}
 													}
 													else
 													{
 														//Error y Rollback - error al registrar la relaccion
-															iCodigo = -902;
-															//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-															//QMComunidades.delComunidad(conexion,liCodComunidad);
-															
-															conexion.rollback();
+														iCodigo = -902;
 													}
 												}
 												else
 												{
 													//Error y Rollback - error al registrar la relacion cuenta-comunidad
 													iCodigo = -912;
-													
-													conexion.rollback();
 												}
-												
-												
 											}
 											else
 											{
 												//Error y Rollback - error al registrar la comuidad
 													iCodigo = -901;
-													//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-													
-													conexion.rollback();
 											}
 										}
 										else
 										{
 											//Error y Rollback - error al registrar la cuenta de la comunidad
 												iCodigo = -911;
-												
-												conexion.rollback();
 										}	
 									}
 									else
 									{
 										//Error y Rollback - Cuenta de la comunidad ya de alta
 										iCodigo = -914;
-										
-										conexion.rollback();
 									}
 																
 
@@ -1194,15 +1108,21 @@ public final class CLComunidades
 									{
 										if (QMComunidades.delComunidad(conexion, liCodComunidad))
 										{
-											//OK 
-											iCodigo = 0;
-											conexion.commit();
+											if (QMListaCuentasComunidades.eliminarCuentasComunidad(conexion, liCodComunidad))
+											{
+												//OK 
+												iCodigo = 0;
+											}
+											else
+											{
+												//Error al dar de baja las cuentas de la comunidad
+												iCodigo = -917;
+											}
 										}
 										else
 										{
 											//Error al eliminar la comunidad
 											iCodigo = -916;
-											conexion.rollback();
 										}
 									}
 									else
@@ -1217,7 +1137,6 @@ public final class CLComunidades
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
@@ -1225,13 +1144,11 @@ public final class CLComunidades
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
 														//Error al guardar la nota
 														iCodigo = -915;
-														conexion.rollback();
 													}
 												}
 											}
@@ -1239,19 +1156,12 @@ public final class CLComunidades
 											{
 												//error y rollback - error al cambiar el estado
 												iCodigo = -904;
-												//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-												
-												conexion.rollback();
 											}
 										}
 										else
 										{
 											//error y rollback - error al registrar la relaccion
 											iCodigo = -902;
-											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-											
-											conexion.rollback();
 										}
 									}
 									
@@ -1277,7 +1187,6 @@ public final class CLComunidades
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
@@ -1285,24 +1194,18 @@ public final class CLComunidades
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
 														//Error al guardar la nota
 														iCodigo = -915;
-														conexion.rollback();
 													}
-													
 												}
 											}
 											else
 											{
 												//error y rollback - error al modificar la comunidad
 												iCodigo = -905;
-												//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-												conexion.rollback();
 											}
 											
 										}
@@ -1328,7 +1231,6 @@ public final class CLComunidades
 																{
 																	//OK 
 																	iCodigo = 0;
-																	conexion.commit();
 																}
 																else
 																{
@@ -1336,13 +1238,11 @@ public final class CLComunidades
 																	{
 																		//OK 
 																		iCodigo = 0;
-																		conexion.commit();
 																	}
 																	else
 																	{
 																		//Error al guardar la nota
 																		iCodigo = -915;
-																		conexion.rollback();
 																	}
 																	
 																}
@@ -1351,8 +1251,6 @@ public final class CLComunidades
 															{
 																//Error y Rollback - error al eliminar la cuenta antigua de la comunidad
 																iCodigo = -913;
-																
-																conexion.rollback();
 															}
 
 														}
@@ -1360,33 +1258,24 @@ public final class CLComunidades
 														{
 															//error y rollback - error al modificar la comunidad
 															iCodigo = -905;
-															//QMListaComunidades.delRelacionComunidad(conexion,Integer.toString(indice));
-															//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-															conexion.rollback();
 														}
 													}
 													else
 													{
 														//Error y Rollback - error al registrar la relacion cuenta-comunidad
 														iCodigo = -912;
-														
-														conexion.rollback();
 													}
 												}
 												else
 												{
 													//Error y Rollback - error al registrar la cuenta de la comunidad
 														iCodigo = -911;
-														
-														conexion.rollback();
 												}
 											}
 											else
 											{
 												//Error y Rollback - error la cuenta nueva ya existe
 												iCodigo = -914;
-												
-												conexion.rollback();
 											}	
 										}
 
@@ -1395,8 +1284,6 @@ public final class CLComunidades
 									{
 										//error y rollback - error al registrar la relaccion
 										iCodigo = -902;
-										//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-										conexion.rollback();
 									}
 									break;
 								case X:
@@ -1405,8 +1292,6 @@ public final class CLComunidades
 										{
 											//error y rollback - el activo ya esta vinculado
 											iCodigo = -906;
-											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-											conexion.rollback();
 										}
 										else
 										{							
@@ -1416,7 +1301,6 @@ public final class CLComunidades
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
@@ -1424,13 +1308,11 @@ public final class CLComunidades
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
 														//Error al guardar la nota
 														iCodigo = -915;
-														conexion.rollback();
 													}
 													
 												}
@@ -1439,8 +1321,6 @@ public final class CLComunidades
 											{
 												//error y rollback - error al asociar el activo en la comunidad
 												iCodigo = -907;
-												//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-												conexion.rollback();
 											}
 										}
 									break;
@@ -1451,8 +1331,6 @@ public final class CLComunidades
 										{
 											//error y rollback - el activo no esta vinculado
 											iCodigo = -908;
-											//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-											conexion.rollback();
 										}
 										else
 										{
@@ -1465,7 +1343,6 @@ public final class CLComunidades
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
@@ -1473,13 +1350,11 @@ public final class CLComunidades
 														{
 															//OK 
 															iCodigo = 0;
-															conexion.commit();
 														}
 														else
 														{
 															//Error al guardar la nota
 															iCodigo = -915;
-															conexion.rollback();
 														}
 														
 													}
@@ -1488,10 +1363,6 @@ public final class CLComunidades
 												{
 													//error y rollback - error al desasociar el activo en la comunidad
 													iCodigo = -909;
-													//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-													//QMListaComunidadesActivos.addRelacionComunidad(conexion,movimiento_revisado.getCOACES(), liCodComunidad, sMovimientoBaja);
-													
-													conexion.rollback();
 												}
 
 											}
@@ -1503,7 +1374,6 @@ public final class CLComunidades
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
@@ -1511,13 +1381,11 @@ public final class CLComunidades
 														{
 															//OK 
 															iCodigo = 0;
-															conexion.commit();
 														}
 														else
 														{
 															//Error al guardar la nota
 															iCodigo = -915;
-															conexion.rollback();
 														}
 														
 													}
@@ -1526,14 +1394,22 @@ public final class CLComunidades
 												{
 													//error y rollback - error al asociar el activo en la comunidad
 													iCodigo = -909;
-													//QMMovimientosComunidades.delMovimientoComunidad(conexion,Integer.toString(indice));
-													conexion.rollback();
+
 												}
 												
 											}
 										}
 									break;
 							}	
+						}
+						
+						if (iCodigo == 0)
+						{
+							conexion.commit();
+						}
+						else
+						{
+							conexion.rollback();
 						}
 						
 						conexion.setAutoCommit(true);

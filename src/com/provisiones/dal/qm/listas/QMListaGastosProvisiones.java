@@ -1745,7 +1745,9 @@ public final class QMListaGastosProvisiones
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":QMGastos.CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":QMGastos.CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
 			String sCondicionFEDEVE = (filtro.getFEDEVE().isEmpty() || filtro.getFEDEVE().equals("0"))?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
-			
+			String sCondicionEstado = filtro.getESTADO().isEmpty()? 
+					QMGastos.CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO +"')"
+					:QMGastos.CAMPO34 + " = '"+filtro.getESTADO()+"'"; 
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1773,7 +1775,7 @@ public final class QMListaGastosProvisiones
 						   + sCondicionCOTPGA
 						   + sCondicionCOSBGA
 						   + sCondicionFEDEVE
-						   + QMGastos.CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO +"') AND "
+						   + sCondicionEstado + " AND "
 						   + QMGastos.CAMPO1 + 
 						   " IN (SELECT "
 						   +  CAMPO1 + 

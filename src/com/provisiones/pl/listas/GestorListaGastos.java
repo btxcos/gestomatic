@@ -265,7 +265,7 @@ public class GestorListaGastos implements Serializable
 			
 	    	this.setActivoseleccionado(null);
 			
-	    	if (Utils.esAlfanumerico(sCOPOIN))
+	    	if (!sCOPOIN.isEmpty() && Utils.esAlfanumerico(sCOPOIN))
 			{
 				sMsg = "ERROR: El Código Postal debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);

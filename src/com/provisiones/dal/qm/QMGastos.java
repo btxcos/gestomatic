@@ -2495,6 +2495,10 @@ public final class QMGastos
 
 			boolean bEncontrado = false;
 			
+			String sCondicionEstado = filtro.getESTADO().isEmpty()? 
+					CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO +"')"
+					:CAMPO34 + " = '"+filtro.getESTADO()+"'"; 
+			
 			logger.debug("Ejecutando Query...");
 
 			String sQuery = "SELECT "
@@ -2519,7 +2523,8 @@ public final class QMGastos
 					+ CAMPO4 + " LIKE '%" + filtro.getCOTPGA() + "%' AND "  
 					+ CAMPO5 + " LIKE '%" + filtro.getCOSBGA() + "%' AND "  
 					+ CAMPO7 + " LIKE '%" + filtro.getFEDEVE() + "%' AND "	
-					+ CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO +"'))";
+					+ sCondicionEstado
+					+")";
 						   
 			
 			logger.debug(sQuery);

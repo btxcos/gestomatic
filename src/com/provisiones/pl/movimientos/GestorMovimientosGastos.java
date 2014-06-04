@@ -715,7 +715,7 @@ public class GestorMovimientosGastos implements Serializable
 			
 			this.setTablaactivos(null);
 			
-			if (Utils.esAlfanumerico(sCOPOINB))
+			if (!sCOPOINB.isEmpty() && Utils.esAlfanumerico(sCOPOINB))
 			{
 				sMsg = "ERROR: El Código Postal debe ser numérico. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -1309,7 +1309,7 @@ public class GestorMovimientosGastos implements Serializable
 						}
 						else if (!sFechaBloqueo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(sFechaBloqueo)))
 						{
-							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo es superior a la de bloqueo del Activo ("+Utils.recuperaFecha(sFechaVentaActivo)+"). Por favor, revise los datos";
+							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo es superior a la de bloqueo del Activo ("+Utils.recuperaFecha(sFechaBloqueo)+"). Por favor, revise los datos";
 							msg = Utils.pfmsgError(sMsg);
 							logger.error(sMsg);
 						}

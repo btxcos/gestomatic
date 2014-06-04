@@ -298,4 +298,53 @@ public class QMListaCuentasComunidades
 		return resultado;
 	}
 	
+	public static boolean eliminarCuentasComunidad(Connection conexion, long liCodComunidad)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "DELETE FROM " 
+					+ QMCuentas.TABLA + 
+					" WHERE ("
+					+ QMCuentas.CAMPO1 + " IN (SELECT "
+					+  CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO2 + " = '"+ liCodComunidad + "'))";				   
+						   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR COMUNIDAD:|"+liCodComunidad+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bSalida;
+	}
+	
 }
