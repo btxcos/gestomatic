@@ -943,7 +943,6 @@ public class CLPagos
 										{
 											//OK 
 											iCodigo = 0;
-											conexion.commit();
 										}
 										else
 										{
@@ -951,13 +950,11 @@ public class CLPagos
 											{
 												//OK 
 												iCodigo = 0;
-												conexion.commit();
 											}
 											else
 											{
 												//Error al guardar la nota
 												iCodigo = -915;
-												conexion.rollback();
 											}
 											
 										}

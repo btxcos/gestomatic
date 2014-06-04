@@ -114,7 +114,7 @@ public final class CLErrores
 									if (bError)
 									{
 										i = dependenciascomunidades.size();
-										conexion.rollback();
+										iCodigo = -900;
 									}
 					            }
 					            
@@ -126,14 +126,13 @@ public final class CLErrores
 										if (bError)
 										{
 											i = dependenciascomunidades.size();
-											conexion.rollback();
+											iCodigo = -900;
 										}
 						            }
 									if (!bError)
 									{
 										//OK 
 										iCodigo = 0;
-										conexion.commit();
 									}
 								}
 							}
@@ -141,9 +140,6 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la comunidad
 								iCodigo = -905;
-								//QMListaErroresComunidades.addErrorComunidad(conexion,liCodMovimiento, sCodError);
-								//QMMovimientosComunidades.modMovimientoComunidad(conexion,movimiento_antiguo,liCodMovimiento);
-								conexion.rollback();
 							}
 
 						}
@@ -151,9 +147,16 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -905;
-							//QMMovimientosComunidades.modMovimientoComunidad(conexion,movimiento_antiguo,liCodMovimiento);
-							conexion.rollback();
 						}
+					}
+					
+					if (iCodigo == 0)
+					{
+						conexion.commit();
+					}
+					else
+					{
+						conexion.rollback();
 					}
 					
 					conexion.setAutoCommit(true);
@@ -221,7 +224,7 @@ public final class CLErrores
 			}
 			else
 			{
-				MovimientoCuota movimiento_antiguo = QMMovimientosCuotas.getMovimientoCuota(conexion,liCodMovimiento);
+				//MovimientoCuota movimiento_antiguo = QMMovimientosCuotas.getMovimientoCuota(conexion,liCodMovimiento);
 				
 				try 
 				{
@@ -250,7 +253,7 @@ public final class CLErrores
 									if (bError)
 									{
 										i = dependenciascuotas.size();
-										conexion.rollback();
+										iCodigo = -900;
 									}
 					            }
 								
@@ -258,15 +261,12 @@ public final class CLErrores
 								{
 									//OK 
 									iCodigo = 0;
-									conexion.commit();
 								}
 							}
 							else
 							{
 								//error y rollback - error al modificar la cuota
 								iCodigo = -904;
-								QMListaErroresCuotas.addErrorCuota(conexion,liCodMovimiento, sCodError);
-								QMMovimientosCuotas.modMovimientoCuota(conexion,movimiento_antiguo,liCodMovimiento);
 							}
 
 						}
@@ -274,8 +274,16 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -904;
-							QMMovimientosCuotas.modMovimientoCuota(conexion,movimiento_antiguo,liCodMovimiento);
 						}
+					}
+					
+					if (iCodigo == 0)
+					{
+						conexion.commit();
+					}
+					else
+					{
+						conexion.rollback();
 					}
 					
 					conexion.setAutoCommit(true);
@@ -371,7 +379,7 @@ public final class CLErrores
 									if (bError)
 									{
 										i = dependenciascuotas.size();
-										conexion.rollback();
+										iCodigo = -900;
 									}
 					            }
 								
@@ -379,7 +387,6 @@ public final class CLErrores
 								{
 									//OK 
 									iCodigo = 0;
-									conexion.commit();
 								}
 					            
 							}
@@ -387,9 +394,6 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la referencia
 								iCodigo = -904;
-								//QMListaErroresReferencias.addErrorReferencia(conexion,liCodMovimiento, sCodError);
-								//QMMovimientosReferencias.modMovimientoReferenciaCatastral(conexion,movimiento_antiguo,liCodMovimiento);
-								conexion.rollback();
 							}
 
 						}
@@ -397,9 +401,16 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -904;
-							//QMMovimientosReferencias.modMovimientoReferenciaCatastral(conexion,movimiento_antiguo,liCodMovimiento);
-							conexion.rollback();
 						}
+					}
+					
+					if (iCodigo == 0)
+					{
+						conexion.commit();
+					}
+					else
+					{
+						conexion.rollback();
 					}
 
 					conexion.setAutoCommit(true);
@@ -496,7 +507,7 @@ public final class CLErrores
 									if (bError)
 									{
 										i = dependenciasimpuestos.size();
-										conexion.rollback();
+										iCodigo = -900;
 									}
 					            }
 								
@@ -504,7 +515,6 @@ public final class CLErrores
 								{
 									//OK 
 									iCodigo = 0;
-									conexion.commit();
 								}
 					            
 							}
@@ -512,9 +522,6 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la impuesto
 								iCodigo = -904;
-								//QMListaErroresImpuestos.addErrorImpuesto(conexion,liCodMovimiento, sCodError);
-								//QMMovimientosImpuestos.modMovimientoImpuestoRecurso(conexion,movimiento_antiguo,liCodMovimiento);
-								conexion.rollback();
 							}
 
 						}
@@ -522,9 +529,16 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -904;
-							//QMMovimientosImpuestos.modMovimientoImpuestoRecurso(conexion,movimiento_antiguo,liCodMovimiento);
-							conexion.rollback();
 						}
+					}
+
+					if (iCodigo == 0)
+					{
+						conexion.commit();
+					}
+					else
+					{
+						conexion.rollback();
 					}
 					
 					conexion.setAutoCommit(true);
@@ -805,7 +819,7 @@ public final class CLErrores
 									if (bError)
 									{
 										i = dependenciasgastos.size();
-										conexion.rollback();
+										iCodigo = -900;
 									}
 					            }
 								
@@ -813,7 +827,6 @@ public final class CLErrores
 								{
 									//OK 
 									iCodigo = 0;
-									conexion.commit();
 								}
 					            
 							}
@@ -821,9 +834,6 @@ public final class CLErrores
 							{
 								//error y rollback - error al modificar la gasto
 								iCodigo = -904;
-								//QMListaErroresGastos.addErrorGasto(conexion,liCodMovimiento, sCodError);
-								//QMMovimientosGastos.modMovimientoGasto(conexion,movimiento_antiguo,liCodMovimiento);
-								conexion.rollback();
 							}
 
 						}
@@ -831,9 +841,16 @@ public final class CLErrores
 						{
 							//error y rollback - error al eliminar el error
 							iCodigo = -904;
-							//QMMovimientosGastos.modMovimientoGasto(conexion,movimiento_antiguo,liCodMovimiento);
-							conexion.rollback();
 						}
+					}
+					
+					if (iCodigo == 0)
+					{
+						conexion.commit();
+					}
+					else
+					{
+						conexion.rollback();
 					}
 
 					conexion.setAutoCommit(true);

@@ -438,7 +438,7 @@ public final class CLReferencias
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
+														
 													}
 													else
 													{
@@ -446,13 +446,13 @@ public final class CLReferencias
 														{
 															//OK 
 															iCodigo = 0;
-															conexion.commit();
+															
 														}
 														else
 														{
 															//Error al guardar la nota
 															iCodigo = -915;
-															conexion.rollback();
+															
 														}
 														
 													}
@@ -463,7 +463,7 @@ public final class CLReferencias
 													//QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
 													//QMReferencias.setEstado(conexion,liCodReferencia, ValoresDefecto.DEF_BAJA);
 													iCodigo = -904;
-													conexion.rollback();
+													
 												}
 											}
 											else
@@ -472,7 +472,7 @@ public final class CLReferencias
 												//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 												//QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
 												iCodigo = -903;
-												conexion.rollback();
+												
 											}
 										}
 										else
@@ -480,7 +480,7 @@ public final class CLReferencias
 											//error relacion referencia no creada - Rollback
 											//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 											iCodigo = -902;
-											conexion.rollback();
+											
 										}
 										
 
@@ -498,7 +498,7 @@ public final class CLReferencias
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
+													
 												}
 												else
 												{
@@ -506,13 +506,13 @@ public final class CLReferencias
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
+														
 													}
 													else
 													{
 														//Error al guardar la nota
 														iCodigo = -915;
-														conexion.rollback();
+														
 													}
 													
 												}
@@ -523,7 +523,7 @@ public final class CLReferencias
 												//QMReferencias.delReferenciaCatastral(conexion,liCodReferencia);
 												//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 												iCodigo = -902;
-												conexion.rollback();
+												
 											}
 										}
 										else
@@ -531,7 +531,7 @@ public final class CLReferencias
 											//error referencia no creada - Rollback
 											//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 											iCodigo = -901;
-											conexion.rollback();
+											
 										}
 									}
 									
@@ -543,13 +543,13 @@ public final class CLReferencias
 										{
 											//OK 
 											iCodigo = 0;
-											conexion.commit();
+											
 										}
 										else
 										{
 											//error al eliminar la referencia catastal - Rollback
 											iCodigo = -905;
-											conexion.rollback();
+											
 										}
 									}
 									else
@@ -560,7 +560,7 @@ public final class CLReferencias
 											{
 												//OK 
 												iCodigo = 0; 
-												conexion.commit();
+												
 											}
 											else
 											{
@@ -570,7 +570,7 @@ public final class CLReferencias
 												//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 												//QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
 												iCodigo = -903;
-												conexion.rollback();
+												
 											}
 										}
 										else
@@ -578,7 +578,7 @@ public final class CLReferencias
 											//error relacion referencia no creada - Rollback
 											//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 											iCodigo = -902;
-											conexion.rollback();
+											
 										}	
 									}
 									break;
@@ -592,7 +592,7 @@ public final class CLReferencias
 											{
 												//OK 
 												iCodigo = 0;
-												conexion.commit();
+												
 											}
 											else
 											{
@@ -600,13 +600,13 @@ public final class CLReferencias
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
+													
 												}
 												else
 												{
 													//Error al guardar la nota
 													iCodigo = -915;
-													conexion.rollback();
+													
 												}
 												
 											}
@@ -616,7 +616,7 @@ public final class CLReferencias
 											//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 											//QMListaReferencias.delRelacionReferencia(conexion,Integer.toString(indice));
 											iCodigo = -904;
-											conexion.rollback();
+											
 										}
 									}
 									else
@@ -624,7 +624,7 @@ public final class CLReferencias
 										//error relacion referencia no creada - Rollback
 										//QMMovimientosReferencias.delMovimientoReferenciaCatastral(conexion,Integer.toString(indice));
 										iCodigo = -902;
-										conexion.rollback();
+										
 									}
 									break;
 								default:
@@ -632,6 +632,14 @@ public final class CLReferencias
 							}
 						}
 					
+						if (iCodigo == 0)
+						{
+							conexion.commit();
+						}
+						else
+						{
+							conexion.rollback();
+						}
 						
 						conexion.setAutoCommit(true);
 					

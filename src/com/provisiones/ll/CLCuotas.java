@@ -364,7 +364,6 @@ public final class CLCuotas
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
@@ -372,13 +371,11 @@ public final class CLCuotas
 														{
 															//OK 
 															iCodigo = 0;
-															conexion.commit();
 														}
 														else
 														{
 															//Error al guardar la nota
 															iCodigo = -915;
-															conexion.rollback();
 														}
 														
 													}
@@ -387,11 +384,7 @@ public final class CLCuotas
 												else
 												{
 													//Error cuota no modificada
-													//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-													//QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
-													//QMCuotas.setEstado(conexion,sCodCuota, ValoresDefecto.DEF_BAJA);
 													iCodigo = -904;	
-													conexion.rollback();
 												} 
 											}
 											else
@@ -400,18 +393,13 @@ public final class CLCuotas
 												//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
 												//QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
 												iCodigo = -903;
-												conexion.rollback();
 											}
 										}
 										else
 										{
 											//error relacion cuota no creada - Rollback
-											//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
 											iCodigo = -902;
-											conexion.rollback();
 										}
-										
-
 									}
 									else
 									{
@@ -426,7 +414,6 @@ public final class CLCuotas
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
@@ -434,13 +421,11 @@ public final class CLCuotas
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
 														//Error al guardar la nota
 														iCodigo = -915;
-														conexion.rollback();
 													}
 													
 												}
@@ -448,18 +433,13 @@ public final class CLCuotas
 											else
 											{
 												//error relacion cuota no creada - Rollback
-												//QMCuotas.delCuota(conexion,sCodCuota);
-												//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
 												iCodigo = -902;
-												conexion.rollback();
 											}
 										}
 										else
 										{
 											//error cuota no creada - Rollback
-											//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
 											iCodigo = -901;
-											conexion.rollback();
 										}
 									}
 
@@ -473,7 +453,6 @@ public final class CLCuotas
 											{
 												//OK 
 												iCodigo = 0;
-												conexion.commit();
 											}
 											else
 											{
@@ -481,13 +460,11 @@ public final class CLCuotas
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
 													//Error al guardar la nota
 													iCodigo = -915;
-													conexion.rollback();
 												}
 												
 											}
@@ -495,18 +472,13 @@ public final class CLCuotas
 										else
 										{
 											//error estado no establecido - Rollback
-											//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-											//QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
 											iCodigo = -903;
-											conexion.rollback();
 										}
 									}
 									else
 									{
 										//error relacion cuota no creada - Rollback
-										//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
 										iCodigo = -902;
-										conexion.rollback();
 									}
 									break;
 								case M:
@@ -519,7 +491,6 @@ public final class CLCuotas
 											{
 												//OK 
 												iCodigo = 0;
-												conexion.commit();
 											}
 											else
 											{
@@ -527,39 +498,40 @@ public final class CLCuotas
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
 													//Error al guardar la nota
 													iCodigo = -915;
-													conexion.rollback();
 												}
-												
 											}
 										}
 										else
 										{
 											//Error cuota no modificada
-											//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
-											//QMListaCuotas.delRelacionCuotas(conexion,Integer.toString(indice));
 											iCodigo = -904;
-											conexion.rollback();
 										}
 
 									}
 									else
 									{
 										//error relacion cuota no creada - Rollback
-										//QMMovimientosCuotas.delMovimientoCuota(conexion,Integer.toString(indice));
 										iCodigo = -902;
-										conexion.rollback();
 									}
 									break;
 								default:
 									break;
 							}
 							
+						}
+						
+						if (iCodigo == 0)
+						{
+							conexion.commit();
+						}
+						else
+						{
+							conexion.rollback();
 						}
 						
 						conexion.setAutoCommit(true);

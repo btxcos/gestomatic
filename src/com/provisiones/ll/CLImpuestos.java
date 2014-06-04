@@ -352,7 +352,6 @@ public final class CLImpuestos
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
@@ -360,13 +359,11 @@ public final class CLImpuestos
 														{
 															//OK 
 															iCodigo = 0;
-															conexion.commit();
 														}
 														else
 														{
 															//Error al guardar la nota
 															iCodigo = -915;
-															conexion.rollback();
 														}
 														
 													}
@@ -374,28 +371,19 @@ public final class CLImpuestos
 												else
 												{
 													//error modificacion impuesto - Rollback
-													//QMImpuestos.setEstado(conexion,liCodImpuesto,ValoresDefecto.DEF_BAJA);
-													//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-													//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
 													iCodigo = -904;
-													conexion.rollback();
 												}
 											}
 											else
 											{
 												//error estado no establecido - Rollback
-												//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-												//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
 												iCodigo = -903;
-												conexion.rollback();
 											}
 										}
 										else
 										{
 											//error relacion impuesto no creada - Rollback
-											//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
 											iCodigo = -902;
-											conexion.rollback();
 										}
 
 									}
@@ -412,7 +400,6 @@ public final class CLImpuestos
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
@@ -420,13 +407,11 @@ public final class CLImpuestos
 													{
 														//OK 
 														iCodigo = 0;
-														conexion.commit();
 													}
 													else
 													{
 														//Error al guardar la nota
 														iCodigo = -915;
-														conexion.rollback();
 													}
 													
 												}
@@ -434,18 +419,13 @@ public final class CLImpuestos
 											else
 											{
 												//error relacion impuesto no creada - Rollback
-												//QMImpuestos.delImpuestoRecurso(conexion,liCodImpuesto);
-												//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
 												iCodigo = -902;
-												conexion.rollback();
 											}
 										}
 										else
 										{
 											//error impuesto no creada - Rollback
-											//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
 											iCodigo = -901;
-											conexion.rollback();
 										}
 
 									}
@@ -459,15 +439,11 @@ public final class CLImpuestos
 										{
 											//OK 
 											iCodigo = 0;
-											conexion.commit();
 										}
 										else
 										{
 											//error estado no establecido - Rollback
-											//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-											//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
 											iCodigo = -903;
-											conexion.rollback();
 										}
 			
 									}
@@ -476,7 +452,6 @@ public final class CLImpuestos
 										//error relacion impuesto no creada - Rollback
 										//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
 										iCodigo = -902;
-										conexion.rollback();
 									}
 									break;
 								case M:
@@ -489,7 +464,6 @@ public final class CLImpuestos
 											{
 												//OK 
 												iCodigo = 0;
-												conexion.commit();
 											}
 											else
 											{
@@ -497,13 +471,11 @@ public final class CLImpuestos
 												{
 													//OK 
 													iCodigo = 0;
-													conexion.commit();
 												}
 												else
 												{
 													//Error al guardar la nota
 													iCodigo = -915;
-													conexion.rollback();
 												}
 												
 											}
@@ -511,19 +483,15 @@ public final class CLImpuestos
 										else
 										{
 											//error modificacion impuesto - Rollback
-											//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
-											//QMListaImpuestos.delRelacionImpuestos(conexion,Integer.toString(indice));
 											iCodigo = -904;
-											conexion.rollback();
 										}
 
 									}
 									else
 									{
 										//error relacion impuesto no creada - Rollback
-										//QMMovimientosImpuestos.delMovimientoImpuestoRecurso(conexion,Integer.toString(indice));
 										iCodigo = -902;
-										conexion.rollback();
+
 									}
 									break;
 								default:
@@ -531,6 +499,14 @@ public final class CLImpuestos
 							}
 						}
 					
+						if (iCodigo == 0)
+						{
+							conexion.commit();
+						}
+						else
+						{
+							conexion.rollback();
+						}
 						
 						conexion.setAutoCommit(true);
 					

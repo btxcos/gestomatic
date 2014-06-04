@@ -1002,7 +1002,6 @@ public final class CLComunidades
 						{
 							//Error al crear un movimiento
 							iCodigo = -900;
-							conexion.rollback();
 						}
 						else
 						{
