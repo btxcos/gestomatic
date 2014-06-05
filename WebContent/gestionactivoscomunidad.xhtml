@@ -32,7 +32,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 								<p:commandButton value="Limpiar Plantilla" update="panel, activosComunidad" actionListener="#{GestorActivosComunidad.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-								<p:commandButton value="Dar de Baja" update="msgs, popup, COACES, activosComunidad" actionListener="#{GestorActivosComunidad.bajaActivoComunidad}"/>
+								<p:commandButton value="Dar de Baja" onclick="dlgConfirmaRegistrarB.show()"/>
 							</h:panelGrid>
 						</p:fieldset>
 
@@ -103,12 +103,12 @@
 
 								<p:fieldset legend="Activo">
 									<h:panelGrid columns="2" cellpadding="5">
-										<p:panel >
+										<p:panel>
 											<h:panelGrid columns="4" cellpadding="5">
 
 												<h:outputText for="COACES" value="Activo: " />
 												<p:inputText id="COACES" value="#{GestorActivosComunidad.sCOACES}" size="10"  maxlength="9"/>
-												<p:commandButton value="Dar de Alta" update="msgs, popup, COACES, activosComunidad" actionListener="#{GestorActivosComunidad.altaActivoComunidad}"/>
+												<p:commandButton value="Dar de Alta" onclick="dlgConfirmaRegistrarA.show()"/>
 
 											</h:panelGrid>
 										</p:panel>
@@ -163,6 +163,38 @@
 							</h:panelGrid>
 						</p:panel>
 					</h:panelGrid>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrarA" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, COACES, activosComunidad" actionListener="#{GestorActivosComunidad.altaActivoComunidad}" oncomplete="dlgConfirmaRegistrarA.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrarA.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrarB" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, COACES, activosComunidad" actionListener="#{GestorActivosComunidad.bajaActivoComunidad}" oncomplete="dlgConfirmaRegistrarB.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrarB.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
 
 					<p:dialog header="Activos sin Comunidad:" widgetVar="dlgTabla" resizable="false">
 						<p:contextMenu for="activos">

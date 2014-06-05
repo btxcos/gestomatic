@@ -35,7 +35,7 @@
 
 								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, activos, panel, COACCI" actionListener="#{GestorBloqueosActivo.limpiarPlantilla}" />
 								
-								<p:commandButton value="Registrar Cambio" update="msgs, popup, panelBloqueo" action="#{GestorBloqueosActivo.modificarBloqueo}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" />
+								<p:commandButton value="Registrar Cambio" onclick="dlgConfirmaRegistrar.show()"/>
 								<p:selectOneRadio id="COACCI" value="#{GestorBloqueosActivo.sAccion}">
 									<f:selectItem itemLabel="Bloquear" itemValue="B"/>
 									<f:selectItem itemLabel="Modificación" itemValue="M"/>
@@ -120,6 +120,22 @@
 
 					</h:panelGrid>
 				</p:panel>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrar" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, panelBloqueo" action="#{GestorBloqueosActivo.modificarBloqueo}" oncomplete="dlgConfirmaRegistrar.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrar.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
 
 					<p:dialog header="Buscar Activos con Gastos Abonados Autorizados: " widgetVar="dlgBuscar" resizable="false">  
 									<p:fieldset legend="Criterios de Busqueda">

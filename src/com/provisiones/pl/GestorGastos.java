@@ -321,6 +321,7 @@ public class GestorGastos implements Serializable
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
     	this.sCOACES = "";
+    	this.sNota = "";
 
     	borrarPlantillaActivo();
     	borrarPlantillaGasto();

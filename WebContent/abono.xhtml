@@ -28,7 +28,7 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelImportes" actionListener="#{GestorAbonos.limpiarPlantilla}" />	
-								<p:commandButton value="Abonar" update="msgs, popup, activos" action="#{GestorAbonos.registrarAbono}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
+								<p:commandButton value="Abonar" onclick="dlgConfirmaRegistrar.show()"/>
 							</h:panelGrid>
 						</p:fieldset>
 						<p:fieldset legend="Info">
@@ -237,6 +237,23 @@
 							</p:fieldset>
 						</h:panelGrid>
 					</p:panel>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrar" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, activos" action="#{GestorAbonos.registrarAbono}" onstart="statusDialog.show()" oncomplete="statusDialog.hide();dlgConfirmaRegistrar.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrar.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+
 					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
 						<h:panelGrid columns="1" cellpadding="1">
 							<p:panel>

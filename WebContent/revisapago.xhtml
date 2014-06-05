@@ -34,7 +34,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscar, panelBuscarProvision, activos, provisiones, gastosactivo, gastosprovision, panel, panelProgresoProvision, COACCI, NOTA" actionListener="#{GestorRevisionPagos.limpiarPlantilla}" />	
-								<p:commandButton value="Registrar Cambio" update="msgs, popup, activos, panelProgresoProvision, panelPago" action="#{GestorRevisionPagos.modificarPago}" onstart="statusDialog.show()" oncomplete="statusDialog.hide()" />
+								<p:commandButton value="Registrar Cambio" onclick="dlgConfirmaRegistrar.show()"/>
 
 								<p:selectOneRadio id="COACCI" value="#{GestorRevisionPagos.sAccion}">
 									<f:selectItem itemLabel="Baja" itemValue="B"/>
@@ -367,6 +367,22 @@
 								</p:fieldset>
 					</h:panelGrid>
 				</p:panel>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrar" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, activos, panelProgresoProvision, panelPago" action="#{GestorRevisionPagos.modificarPago}" onstart="statusDialog.show()" oncomplete="statusDialog.hide();dlgConfirmaRegistrar.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrar.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
 
 					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
 					<h:panelGrid columns="1" cellpadding="1">

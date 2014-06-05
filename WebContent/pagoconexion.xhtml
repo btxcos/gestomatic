@@ -33,7 +33,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Limpiar Plantilla" update="NUPROF, panel, panelBuscarActivos, panelBuscarReferencia" actionListener="#{GestorPagosConexion.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-								<p:commandButton value="Registrar Pago" update="panel, popup, msgs" actionListener="#{GestorPagosConexion.registraGasto}"/>
+								<p:commandButton value="Registrar Pago" onclick="dlgConfirmaRegistrar.show()"/>
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -284,6 +284,22 @@
 						</p:panel>
 					</h:panelGrid>
 
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrar" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="panel, popup, msgs" actionListener="#{GestorPagosConexion.registraGasto}" oncomplete="dlgConfirmaRegistrar.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrar.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+
 					<p:dialog header="Gastos del Activo: " widgetVar="dlgTablaPendientes" resizable="false">
 
 						<p:contextMenu for="gastos">
@@ -294,7 +310,7 @@
 															selection="#{GestorPagosConexion.gastoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-															rowsPerPageTemplate="5,10,15">
+															rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">
 
 							<p:column headerText="Gasto">
 								#{gasto.DCOSBGA}
@@ -325,7 +341,7 @@
 															selection="#{GestorPagosConexion.activoseleccionado}" selectionMode="single"
 															paginator="true" paginatorPosition="bottom" rows="10"
 															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-															rowsPerPageTemplate="5,10,15">
+															rowsPerPageTemplate="5,10,15" lazy="true" emptyMessage="Sin registros">
 
 									<p:column>
 										<f:facet name="header">

@@ -25,6 +25,9 @@ public class GestorCuentasActivos implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorCuentasActivos.class.getName());
 	
+	//Activo de búsqueda
+	private String sCOACESB = "";
+
 	private String sCOACES = "";
 
 	
@@ -76,7 +79,7 @@ public class GestorCuentasActivos implements Serializable
 	
     public void limpiarPlantillaActivo(ActionEvent actionEvent) 
     {  
-    	this.sCOACES = "";
+    	this.sCOACESB = "";
 
     	borrarCamposActivo();
     	
@@ -85,8 +88,8 @@ public class GestorCuentasActivos implements Serializable
     
 	public void borrarCamposNuevaCuenta()
 	{
-    	//this.sPais = "";
-    	//this.sDCIBAN = "";
+    	this.sPais = "ES";
+    	this.sDCIBAN = "#";
     	this.sNUCCEN = "";
     	this.sNUCCOF = "";
     	this.sNUCCDI = "";
@@ -101,6 +104,7 @@ public class GestorCuentasActivos implements Serializable
 	
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
+		this.sCOACESB = "";
 		this.sCOACES = "";
 
 		borrarCamposActivo();
@@ -141,9 +145,9 @@ public class GestorCuentasActivos implements Serializable
 
 	    	String sMsg = "";
 	    	
-	    	this.sCOACES  = activoseleccionado.getCOACES();
+	    	this.sCOACESB  = activoseleccionado.getCOACES();
 	    	
-	    	sMsg = "Activo '"+ sCOACES +"' Seleccionado.";
+	    	sMsg = "Activo '"+ sCOACESB +"' Seleccionado.";
 	    	
 	    	msg = Utils.pfmsgInfo(sMsg);
 	    	logger.info(sMsg);
@@ -159,6 +163,8 @@ public class GestorCuentasActivos implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = "";
+			
+			this.sCOACES = sCOACESB;
 			
 			try
 			{
@@ -215,6 +221,7 @@ public class GestorCuentasActivos implements Serializable
 		
 		try
 		{
+
 			if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
 			{
 				sMsg = "ERROR: No se puede operar sobre la cuenta, el activo no pertenece a la cartera. Por favor, revise los datos.";
@@ -317,15 +324,20 @@ public class GestorCuentasActivos implements Serializable
 	    	//comprobar la cuenta
 			if (!CLCuentas.existeCuenta(sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT))
 			{
-				if (sCOACES.equals("") || 
-
-						sPais.equals("") ||
-						sDCIBAN.equals("") ||
-						sNUCCEN.equals("") ||
-						sNUCCOF.equals("") ||
-						sNUCCDI.equals("") ||
-						sNUCCNT.equals("") ||
-						sDescripcion.equals(""))
+				
+					if (sCOACES.isEmpty())
+					{
+						sMsg = "ERROR: Debe comprobar el Activo antes de operar sobre sus cuentas. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);
+					}
+					else if (sPais.isEmpty() ||
+						sDCIBAN.isEmpty() ||
+						sNUCCEN.isEmpty() ||
+						sNUCCOF.isEmpty() ||
+						sNUCCDI.isEmpty() ||
+						sNUCCNT.isEmpty() ||
+						sDescripcion.isEmpty())
 					{
 						sMsg = "ERROR: Faltan campos por informar para realizar el alta. Por favor, revise los datos.";
 						msg = Utils.pfmsgError(sMsg);
@@ -370,9 +382,17 @@ public class GestorCuentasActivos implements Serializable
 		{
 	    	FacesMessage msg;
 
-	    	if (cuentaseleccionada == null)
+	    	String sMsg = "";
+	    	
+	    	if (sCOACES.isEmpty())
+			{
+	    		sMsg = "ERROR: Debe comprobar el Activo antes de operar sobre sus cuentas. Por favor, revise los datos.";
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
+			}
+			else if (cuentaseleccionada == null)
 	    	{
-	    		String sMsg = "ERROR: No se ha seleccionado una cuenta.";
+	    		sMsg = "ERROR: No se ha seleccionado una cuenta.";
 	    		msg = Utils.pfmsgError(sMsg);
 	    		logger.error(sMsg);
 	    	}
@@ -387,12 +407,12 @@ public class GestorCuentasActivos implements Serializable
 		}
     }
 
-	public String getsCOACES() {
-		return sCOACES;
+	public String getsCOACESB() {
+		return sCOACESB;
 	}
 
-	public void setsCOACES(String sCOACES) {
-		this.sCOACES = sCOACES;
+	public void setsCOACESB(String sCOACESB) {
+		this.sCOACESB = sCOACESB;
 	}
 
 	public String getsCOPOIN() {

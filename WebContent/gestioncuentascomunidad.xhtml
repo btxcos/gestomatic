@@ -33,8 +33,8 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Limpiar Plantilla" update="panel, cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN" actionListener="#{GestorCuentasComunidades.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-								<p:commandButton value="Añadir Cuenta" update="cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN, msgs, popup" actionListener="#{GestorCuentasComunidades.altaCuentaComunidad}" />
-								<p:commandButton value="Eliminar Cuenta" update="cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN, msgs, popup" actionListener="#{GestorCuentasComunidades.bajaCuentaComunidad}" />
+								<p:commandButton value="Añadir Cuenta" onclick="dlgConfirmaRegistrarA.show()"/>
+								<p:commandButton value="Eliminar Cuenta" onclick="dlgConfirmaRegistrarB.show()"/>
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -270,6 +270,38 @@
 							</h:panelGrid>
 						</p:fieldset>
 					</h:panelGrid>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrarA" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN, msgs, popup" actionListener="#{GestorCuentasComunidades.altaCuentaComunidad}" oncomplete="dlgConfirmaRegistrarA.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrarA.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrarB" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="cuentas, NUCCENN, NUCCOFN, NUCCDIN, NUCCNTN, DESCRIPCIONN, msgs, popup" actionListener="#{GestorCuentasComunidades.bajaCuentaComunidad}" oncomplete="dlgConfirmaRegistrarB.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrarB.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
 
 					<p:dialog header="Activos con Comunidad: " widgetVar="dlgTabla" resizable="false">
 

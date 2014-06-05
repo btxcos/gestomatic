@@ -32,8 +32,8 @@
 						<p:fieldset legend="Acciones">
 							<h:panelGrid columns="3" cellpadding="5">
 
-								<p:commandButton value="Limpiar Plantilla" update="panel" actionListener="#{GestorGastos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
-								<p:commandButton value="Registrar Gasto" update="panel, popup, msgs, panelBuscarActivo, panelBuscarReferencia" actionListener="#{GestorGastos.registraGasto}"/>
+								<p:commandButton value="Limpiar Plantilla" update="panel, NOTA" actionListener="#{GestorGastos.limpiarPlantilla}" oncomplete="dlgTabla.hide(); dlgBuscar.hide()"/>
+								<p:commandButton value="Registrar Gasto" onclick="dlgConfirmaRegistrar.show()"/>
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -269,6 +269,22 @@
 							</h:panelGrid>
 						</p:panel>
 					</h:panelGrid>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrar" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="panel, popup, msgs, panelBuscarActivo, panelBuscarReferencia" actionListener="#{GestorGastos.registraGasto}" oncomplete="dlgConfirmaRegistrar.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrar.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
 
 					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
 						<h:panelGrid columns="1" cellpadding="1">

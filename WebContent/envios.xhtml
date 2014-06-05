@@ -29,7 +29,7 @@
 
 						<p:fieldset legend="Acciones" id="acciones">
 							<h:panelGrid columns="3" cellpadding="5">
-								<p:commandButton value="Revisar Gastos y Asociaciones" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos, form:NumTransferenciasN34, form:botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPendientes}"/>	
+								<p:commandButton value="Revisar Gastos y Asociaciones" onclick="dlgConfirmaRegistrarT.show()"/>	
 							</h:panelGrid>
 						</p:fieldset>
 
@@ -69,7 +69,7 @@
 														<p:inputText id="NUPROF" value="#{GestorEnvios.sNUPROF}" size="9" maxlength="9">
 														</p:inputText>
 													<p:message for="NUPROF" display="icon"/>
-													<p:commandButton value="Revisar Movimientos" update="msgs, popup, NumTransferenciasN34, botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPagosPendientes}"/>
+													<p:commandButton value="Revisar Movimientos" onclick="dlgConfirmaRegistrarP.show()"/>
 												</h:panelGrid>
 											</p:panel>
 										<p:commandButton value="Buscar Provisión Pagada" update="NUPROF, form:provisiones, msgs, popup" oncomplete="dlgBuscarProvision.show()"/>		
@@ -123,7 +123,7 @@
 										</h:panelGrid>
 									</p:panel>
 
-									<p:commandButton value="Revisar Movimientos" update="msgs, popup, NumProvisiones, botProvisiones, NumGastos, botGastos" actionListener="#{GestorEnvios.cargarMovimientosGastosPendientes}"/>	
+									<p:commandButton value="Revisar Movimientos" onclick="dlgConfirmaRegistrarG.show()"/>	
 
 								</h:panelGrid>
 							</p:fieldset>
@@ -173,13 +173,82 @@
 										</h:panelGrid>
 									</p:panel>
 
-									<p:commandButton value="Revisar Movimientos" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos" actionListener="#{GestorEnvios.cargarMovimientosAsociacionesPendientes}"/>	
+									<p:commandButton value="Revisar Movimientos" onclick="dlgConfirmaRegistrarA.show()"/>	
 
 								</h:panelGrid>
 							</p:fieldset>
 
 						</h:panelGrid>
 					</p:panel>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrarT" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+									<h:outputText value="-La operacón de revisión NO puede deshacerse una vez completada." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos, form:NumProvisiones, form:botProvisiones, form:NumGastos, form:botGastos, form:NumTransferenciasN34, form:botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPendientes}" oncomplete="dlgConfirmaRegistrarT.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrarT.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrarP" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+									<h:outputText value="-La operacón de revisión NO puede deshacerse una vez completada." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, NumTransferenciasN34, botTransferenciasN34" actionListener="#{GestorEnvios.cargarMovimientosPagosPendientes}" oncomplete="dlgConfirmaRegistrarP.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrarP.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrarG" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+									<h:outputText value="-La operacón de revisión NO puede deshacerse una vez completada." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, NumProvisiones, botProvisiones, NumGastos, botGastos" actionListener="#{GestorEnvios.cargarMovimientosGastosPendientes}" oncomplete="dlgConfirmaRegistrarG.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrarG.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrarA" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
+									<h:outputText value="-La operacón de revisión NO puede deshacerse una vez completada." />
+								</h:panelGrid>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, form:NumComunidades, form:botComunidades, form:NumCuotas, form:botCuotas, form:NumReferencias, form:botReferencias, form:NumImpuestos, form:botImpuestos" actionListener="#{GestorEnvios.cargarMovimientosAsociacionesPendientes}" oncomplete="dlgConfirmaRegistrarA.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrarA.hide()"/>
+									</h:panelGrid>
+								</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+
 					<p:dialog header="Buscar Provisiones: " widgetVar="dlgBuscarProvision" resizable="false">  
 									<p:fieldset legend="Criterios de Busqueda">
 										<h:panelGrid columns="1" cellpadding="5">
