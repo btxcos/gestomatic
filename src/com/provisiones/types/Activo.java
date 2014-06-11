@@ -95,6 +95,7 @@ public class Activo
 	private String IDCOL3 = "";
 	private String BIOBNU = "";
 	private String POBRAR = "";
+	private String FETIFI = "";
 
 
 	//Constructor de clase
@@ -120,10 +121,9 @@ public class Activo
 			String fESODE, String fEREAC, String cOXSIA, String nUJUZD,
 			String nURCAT, String nOMPRC, String nUTPRC, String nOMADC,
 			String nUTADC, String iMPCOO, String cOENOR, String cOSPAT,
-			String cOSPAS, String iDCOL3, String bIOBNU, String pOBRAR) 
-	{
+			String cOSPAS, String iDCOL3, String bIOBNU, String pOBRAR,
+			String fETIFI) {
 		super();
-
 		COACES = cOACES;
 		NUINMU = nUINMU;
 		COSOPA = cOSOPA;
@@ -216,6 +216,7 @@ public class Activo
 		IDCOL3 = iDCOL3;
 		BIOBNU = bIOBNU;
 		POBRAR = pOBRAR;
+		setFETIFI(fETIFI);
 	}
 
 	
@@ -1140,6 +1141,18 @@ public class Activo
 	public void setPOBRAR(String pOBRAR) {
 		POBRAR = pOBRAR;
 	}
+
+	public String getFETIFI() {
+		return FETIFI;
+	}
+
+
+
+	public void setFETIFI(String fETIFI) {
+		FETIFI = fETIFI;
+	}
+
+
 
 	public String logActivo()
 	{

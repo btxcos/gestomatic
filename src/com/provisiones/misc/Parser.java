@@ -206,6 +206,7 @@ public final class Parser {
 		String sIDCOL3 = limpiaCampoAlfanumerico(linea.substring(Posiciones.AC_IDCOL3_P, Posiciones.AC_IDCOL3_P+Longitudes.IDCOL3_L));
 		String sBIOBNU = limpiaCampoAlfanumericoCodigo(linea.substring(Posiciones.AC_BIOBNU_P, Posiciones.AC_BIOBNU_P+Longitudes.BIOBNU_L),"#");
 		String sPOBRAR = linea.substring(Posiciones.AC_POBRAR_P, Posiciones.AC_POBRAR_P+Longitudes.POBRAR_L);
+		String sFETIFI = linea.substring(Posiciones.AC_FETIFI_P, Posiciones.AC_FETIFI_P+Longitudes.FETIFI_L);
 		
 		
 		return new Activo(sCOACES, sNUINMU, sCOSOPA, sCOENAE, sCOESEN, sNOVIAS,
@@ -221,7 +222,7 @@ public final class Parser {
 				sFEFOAC, sFEVACT, sIMVACT, sNUFIPR, sCOTPET, sFEEMPT, sFESORC,
 				sFESODE, sFEREAC, sCOXSIA, sNUJUZD, sNURCAT, sNOMPRC, sNUTPRC,
 				sNOMADC, sNUTADC, sIMPCOO, sCOENOR, sCOSPAT, sCOSPAS, sIDCOL3,
-				sBIOBNU, sPOBRAR);
+				sBIOBNU, sPOBRAR, sFETIFI);
 	}
 
 	public static String escribirActivo (Activo activo)
@@ -321,6 +322,8 @@ public final class Parser {
         String sBIOBNU = formateaCampoAlfanumericoCodigo(activo.getBIOBNU(),Longitudes.BIOBNU_L,"#");
 
         String sPOBRAR = formateaCampoNumerico(activo.getPOBRAR(),Longitudes.POBRAR_L);		
+        
+        String sFETIFI = formateaCampoNumerico(activo.getFETIFI(),Longitudes.FETIFI_L); 
 		
 		return sCOACES + sNUINMU + sCOSOPA + sCOENAE + sCOESEN + sNOVIAS
 				+ sNUPOAC + sNUESAC + sNUPIAC + sNUPUAC + sNOMUIN + sCOPRAE
@@ -337,7 +340,7 @@ public final class Parser {
 				+ sNUFIPR + sCOTPET + sFEEMPT + sFESORC + sFESODE + sFEREAC
 				+ sCOXSIA + sNUJUZD + sNURCAT + sNOMPRC + sNUTPRC + sNOMADC
 				+ sNUTADC + sIMPCOO + sCOENOR + sCOSPAT + sCOSPAS + sIDCOL3
-				+ sBIOBNU + sPOBRAR;
+				+ sBIOBNU + sPOBRAR + sFETIFI;
 	}
 
 	

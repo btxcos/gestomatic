@@ -132,6 +132,7 @@ public final class Longitudes
 	public static final int FESOLA_L = 8;
 	public static final int FESOPO_L = 8;
 	public static final int FESORC_L = 8;
+	public static final int FETIFI_L = 8;
 	public static final int FEVACT_L = 8;
 	public static final int FFGTVP_L = 8;
 	public static final int FFPAGO_L = 8;

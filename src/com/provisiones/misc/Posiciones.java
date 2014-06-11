@@ -97,6 +97,7 @@ public final class Posiciones
 	public static final int AC_IDCOL3_P = 870;
 	public static final int AC_BIOBNU_P = 874;
 	public static final int AC_POBRAR_P = 875;
+	public static final int AC_FETIFI_P = 881;
 	
 	//Posiciones en archivo gastos
 	

@@ -114,6 +114,7 @@ public final class QMActivos
 	public static final String CAMPO90 = "idcol3";
 	public static final String CAMPO91 = "cod_biobnu";
 	public static final String CAMPO92 = "pobrar";
+	public static final String CAMPO93 = "fetifi";
 	
 	private QMActivos(){}
 
@@ -220,8 +221,9 @@ public final class QMActivos
 				       + CAMPO88 + ","              
 				       + CAMPO89 + ","              
 				       + CAMPO90 + ","              
-				       + CAMPO91 + ","              
-				       + CAMPO92 +                  
+				       + CAMPO91 + ","
+				       + CAMPO92 + ","
+				       + CAMPO93 +                  
 				       ") VALUES ('"   
 				       + NuevoActivo.getCOACES() + "','"
 				       + NuevoActivo.getNUINMU() + "','"  
@@ -314,7 +316,8 @@ public final class QMActivos
 				       + NuevoActivo.getCOSPAS() + "','"  
 				       + NuevoActivo.getIDCOL3() + "','"  
 				       + NuevoActivo.getBIOBNU() + "','"  
-				       + NuevoActivo.getPOBRAR() + "' )";
+				       + NuevoActivo.getPOBRAR() + "','"
+				       + NuevoActivo.getFETIFI() + "' )";
 			
 			//logger.debug(sQuery);
 			
@@ -447,7 +450,8 @@ public final class QMActivos
 					+ CAMPO89 + " = '"+ NuevoActivo.getCOSPAS() + "', "
 					+ CAMPO90 + " = '"+ NuevoActivo.getIDCOL3() + "', "
 					+ CAMPO91 + " = '"+ NuevoActivo.getBIOBNU() + "', "
-					+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' "+
+					+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "', "
+					+ CAMPO93 + " = '"+ NuevoActivo.getFETIFI() + "' "+
 					" WHERE "
 					+ CAMPO1 + " = '"+ iCOACES +"'";
 			
@@ -621,6 +625,7 @@ public final class QMActivos
 		String sIDCOL3 = "";
 		String sBIOBNU = "";
 		String sPOBRAR = "";
+		String sFETIFI = "";
 
 		if (conexion != null)
 		{
@@ -724,8 +729,9 @@ public final class QMActivos
 				       + CAMPO88 + ","              
 				       + CAMPO89 + ","              
 				       + CAMPO90 + ","              
-				       + CAMPO91 + ","              
-				       + CAMPO92 +        
+				       + CAMPO91 + ","
+				       + CAMPO92 + ","
+				       + CAMPO93 +        
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
@@ -843,6 +849,7 @@ public final class QMActivos
 						sIDCOL3 = rs.getString(CAMPO90);
 						sBIOBNU = rs.getString(CAMPO91);
 						sPOBRAR = rs.getString(CAMPO92);
+						sFETIFI = rs.getString(CAMPO93);
 
 						logger.debug("Encontrado el registro!");
 
@@ -948,6 +955,7 @@ public final class QMActivos
 				sIDCOL3 = "";
 				sBIOBNU = "";
 				sPOBRAR = "";
+				sFETIFI = "";
 				
 				logger.error("ERROR COACES:|"+iCOACES+"|");
 
@@ -974,7 +982,7 @@ public final class QMActivos
 				sFEFOAC, sFEVACT, sIMVACT, sNUFIPR, sCOTPET, sFEEMPT, sFESORC,
 				sFESODE, sFEREAC, sCOXSIA, sNUJUZD, sNURCAT, sNOMPRC, sNUTPRC,
 				sNOMADC, sNUTADC, sIMPCOO, sCOENOR, sCOSPAT, sCOSPAS, sIDCOL3,
-				sBIOBNU, sPOBRAR);
+				sBIOBNU, sPOBRAR, sFETIFI);
 	}
 	
 	public static Activo getDetallesActivo(Connection conexion, int iCOACES)
@@ -1071,6 +1079,7 @@ public final class QMActivos
 		String sIDCOL3 = "";
 		String sBIOBNU = "";
 		String sPOBRAR = "";
+		String sFETIFI = "";
 
 		if (conexion != null)
 		{
@@ -1174,8 +1183,9 @@ public final class QMActivos
 				       + CAMPO88 + ","              
 				       + CAMPO89 + ","              
 				       + CAMPO90 + ","              
-				       + CAMPO91 + ","              
-				       + CAMPO92 +        
+				       + CAMPO91 + ","
+				       + CAMPO92 + ","
+				       + CAMPO93 +        
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
@@ -1293,6 +1303,7 @@ public final class QMActivos
 						sIDCOL3 = rs.getString(CAMPO90);
 						sBIOBNU = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TBIOBNU, QMCodigosControl.IBIOBNU, rs.getString(CAMPO91));
 						sPOBRAR = rs.getString(CAMPO92);
+						sFETIFI = rs.getString(CAMPO93);
 
 						logger.debug("Encontrado el registro!");
 
@@ -1398,6 +1409,7 @@ public final class QMActivos
 				sIDCOL3 = "";
 				sBIOBNU = "";
 				sPOBRAR = "";
+				sFETIFI = "";
 				
 				logger.error("ERROR COACES:|"+iCOACES+"|");
 
@@ -1424,7 +1436,7 @@ public final class QMActivos
 				sFEFOAC, sFEVACT, sIMVACT, sNUFIPR, sCOTPET, sFEEMPT, sFESORC,
 				sFESODE, sFEREAC, sCOXSIA, sNUJUZD, sNURCAT, sNOMPRC, sNUTPRC,
 				sNOMADC, sNUTADC, sIMPCOO, sCOENOR, sCOSPAT, sCOSPAS, sIDCOL3,
-				sBIOBNU, sPOBRAR);
+				sBIOBNU, sPOBRAR, sFETIFI);
 	}
 	
 
@@ -1607,7 +1619,8 @@ public final class QMActivos
 					+ CAMPO89 + " = '"+ NuevoActivo.getCOSPAS() + "' AND "
 					+ CAMPO90 + " = '"+ NuevoActivo.getIDCOL3() + "' AND "
 					+ CAMPO91 + " = '"+ NuevoActivo.getBIOBNU() + "' AND "
-					+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' )";
+					+ CAMPO92 + " = '"+ NuevoActivo.getPOBRAR() + "' AND "
+					+ CAMPO93 + " = '"+ NuevoActivo.getFETIFI() + "' )";
 			
 			//logger.debug(sQuery);
 			

@@ -117,6 +117,7 @@ public class GestorDetallesActivo implements Serializable
 	private String sIDCOL3 = "";
 	private String sBIOBNU = "";
 	private String sPOBRAR = "";
+	private String sFETIFI = "";
 	
 	private String sNota = "";
 	
@@ -265,6 +266,8 @@ public class GestorDetallesActivo implements Serializable
 			this.sBIOBNU = activo.getBIOBNU();
 			
 			this.sPOBRAR = Parser.formateaCampoNumerico(activo.getPOBRAR(), 6);
+			
+			this.sFETIFI = Utils.recuperaFecha(activo.getFETIFI());
 			
 			this.sPOBRAR = Utils.recuperaImporte(false,sPOBRAR.substring(0,5));
 			
@@ -1039,6 +1042,14 @@ public class GestorDetallesActivo implements Serializable
 
 	public void setsPOBRAR(String sPOBRAR) {
 		this.sPOBRAR = sPOBRAR;
+	}
+
+	public String getsFETIFI() {
+		return sFETIFI;
+	}
+
+	public void setsFETIFI(String sFETIFI) {
+		this.sFETIFI = sFETIFI;
 	}
 
 	public String getsNota() {
