@@ -296,5 +296,145 @@ public class QMListaCuentasActivos
 
 		return resultado;
 	}
+
+	public static long buscaCantidadRelaccionesCuenta(Connection conexion, long liCodCuenta)
+	{
+		long liNumero = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT("+CAMPO1+") FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1 + " = "+liCodCuenta;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liNumero = rs.getLong("COUNT("+CAMPO1+")");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug("Numero de registros:|"+liNumero+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liNumero = 0;
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liNumero;
+	}
 	
+	public static boolean cuentaAsociadaActivo(Connection conexion, String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT, int iCodCOACES)
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO1 + 
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE ("
+					   + CAMPO2 + " = " + iCodCOACES + " AND "
+					   + CAMPO1 + " IN (SELECT "
+			       	+ QMCuentas.CAMPO1  +                
+			       	" FROM " 
+			       	+ QMCuentas.TABLA + 
+			       	" WHERE ("
+			       	+ QMCuentas.CAMPO4    + " = AES_ENCRYPT('"+sNUCCEN+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) AND " 
+					+ QMCuentas.CAMPO5    + " = AES_ENCRYPT('"+sNUCCOF+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) AND " 
+					+ QMCuentas.CAMPO6    + " = AES_ENCRYPT('"+sNUCCDI+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) AND " 
+					+ QMCuentas.CAMPO7    + " = AES_ENCRYPT('"+sNUCCNT+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) )))"; 
+
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+				
+				logger.error("ERROR ENTIDAD:|"+sNUCCEN+"|");
+				logger.error("ERROR OFICINA:|"+sNUCCOF+"|");
+				logger.error("ERROR DC:|"+sNUCCDI+"|");
+				logger.error("ERROR CUENTA:|"+sNUCCNT+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bEncontrado;
+	}
 }

@@ -245,5 +245,10 @@
 		<managed-bean-class>com.provisiones.pl.GestorBloqueosActivo</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorIngresos</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.GestorIngresos</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

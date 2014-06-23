@@ -578,7 +578,6 @@ public final class CLComunidades
 							{
 								//Error al crear un movimiento
 								iCodigo = -900;
-								conexion.rollback();
 							}
 							else
 							{
@@ -590,7 +589,9 @@ public final class CLComunidades
 										if (liCodComunidad == 0)
 										{
 											
-											if (!QMCuentas.existeCuenta(conexion, movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT()))
+											long liCodCuenta = QMCuentas.getCuentaID(conexion, movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT());
+											
+											if (liCodCuenta == 0)
 											{
 												logger.debug("Dando de Alta...");
 												
@@ -598,7 +599,7 @@ public final class CLComunidades
 												
 												String sDCIBAN = Utils.calculaDCIBAN(sPais, movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT());
 												
-												long liCodCuenta = QMCuentas.addCuenta(conexion, new Cuenta(sPais,sDCIBAN,movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT(),"COMUNIDAD"),ValoresDefecto.CUENTA_COMUNIDAD);
+												liCodCuenta = QMCuentas.addCuenta(conexion, new Cuenta(sPais,sDCIBAN,movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT(),"COMUNIDAD"));
 												
 												if (liCodCuenta != 0)
 												{
@@ -608,49 +609,50 @@ public final class CLComunidades
 													
 													if (liCodComunidad != 0)
 													{
-													
-														//relacion cuenta-Comunidad
-														if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad))
-														{
-															if (QMListaComunidades.addRelacionComunidadInyectada(conexion,liCodComunidad, indice))
-															{	
-																							
 
-																logger.debug("COACES:|{}|",movimiento.getCOACES());
-																/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().isEmpty())
-																{
-																	//OK 
-																	iCodigo = 0;
-																}
-																else*/ 
-																if (QMListaComunidadesActivos.addRelacionComunidadInyectada(conexion,Integer.parseInt(movimiento.getCOACES()), liCodComunidad, indice))
+														if (QMListaComunidades.addRelacionComunidadInyectada(conexion,liCodComunidad, indice))
+														{	
+																						
+
+															logger.debug("COACES:|{}|",movimiento.getCOACES());
+
+															if (QMListaComunidadesActivos.addRelacionComunidadInyectada(conexion,Integer.parseInt(movimiento.getCOACES()), liCodComunidad, indice))
+															{
+																
+																//relacion cuenta-Comunidad
+																if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad,ValoresDefecto.CUENTA_COMUNIDAD))
 																{
 																	//OK 
 																	iCodigo = 0;
 																}
 																else
 																{
-																	//Error y Rollback - error al registrar el activo durante el alta
-																	iCodigo = -903;
+																	//Error y Rollback - error al registrar la relacion cuenta-comunidad
+																	iCodigo = -912;
 																}
+																
 															}
 															else
 															{
-																//Error y Rollback - error al registrar la relaccion
-																iCodigo = -902;
+																//Error y Rollback - error al registrar el activo durante el alta
+																iCodigo = -903;
 															}
 														}
 														else
 														{
-															//Error y Rollback - error al registrar la relacion cuenta-comunidad
-															iCodigo = -912;
+															//Error y Rollback - error al registrar la relaccion
+															iCodigo = -902;
 														}
+													
+
 													}
 													else
 													{
 														//Error y Rollback - error al registrar la comuidad
 														iCodigo = -901;
 													}
+													
+													
 												}
 												else
 												{
@@ -660,9 +662,62 @@ public final class CLComunidades
 											}
 											else
 											{
+												Comunidad comunidad = convierteMovimientoenComunidad(movimiento);
+												
+												liCodComunidad = QMComunidades.addComunidad(conexion,comunidad);
+												
+												if (liCodComunidad != 0)
+												{
+
+													if (QMListaComunidades.addRelacionComunidadInyectada(conexion,liCodComunidad, indice))
+													{	
+																					
+
+														logger.debug("COACES:|{}|",movimiento.getCOACES());
+
+														if (QMListaComunidadesActivos.addRelacionComunidadInyectada(conexion,Integer.parseInt(movimiento.getCOACES()), liCodComunidad, indice))
+														{
+															
+															if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad,ValoresDefecto.CUENTA_COMUNIDAD))
+															{
+																//OK 
+																iCodigo = 0;
+															}
+															else
+															{
+																//Error y Rollback - error al registrar la relacion cuenta-comunidad
+																iCodigo = -912;
+															}
+															
+														}
+														else
+														{
+															//Error y Rollback - error al registrar el activo durante el alta
+															iCodigo = -903;
+														}
+													}
+													else
+													{
+														//Error y Rollback - error al registrar la relaccion
+														iCodigo = -902;
+													}
+												
+
+												}
+												else
+												{
+													//Error y Rollback - error al registrar la comuidad
+													iCodigo = -901;
+												}
 												//Error y Rollback - Cuenta de la comunidad ya de alta
-												iCodigo = -914;
+												//iCodigo = -914;
+												
+	
 											}
+											
+											
+											
+
 											
 										}
 										else
@@ -734,24 +789,41 @@ public final class CLComunidades
 												{
 													if (liCuentaNueva == 0)
 													{
-														liCuentaNueva = QMCuentas.addCuenta(conexion, new Cuenta("ES","#",movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT(),"COMUNIDAD"), ValoresDefecto.CUENTA_COMUNIDAD);
+														liCuentaNueva = QMCuentas.addCuenta(conexion, new Cuenta("ES","#",movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT(),"COMUNIDAD"));
 														
 														if (liCuentaNueva != 0)
 														{
-															if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCuentaNueva, liCodComunidad))
+															if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCuentaNueva, liCodComunidad, ValoresDefecto.CUENTA_COMUNIDAD))
 															{
 																if (QMComunidades.modComunidad(conexion,convierteMovimientoenComunidad(movimiento), liCodComunidad))
 																{
-																	if (QMCuentas.delCuenta(conexion, liCodCuentaAntigua))
+																	if (QMListaCuentasComunidades.delRelacionComunidad(conexion, liCodCuentaAntigua, liCodComunidad))
 																	{
-																		//OK 
-																		iCodigo = 0;
+																		if (!CLCuentas.tieneMasRelacciones(liCodCuentaAntigua))
+																		{
+																			if (QMCuentas.delCuenta(conexion, liCodCuentaAntigua))
+																			{
+																				//OK 
+																				iCodigo = 0;
+																			}
+																			else
+																			{
+																				//Error y Rollback - error al eliminar la cuenta antigua de la comunidad
+																				iCodigo = -913;
+																			}
+																		}
+																		else
+																		{
+																			//OK 
+																			iCodigo = 0;
+																		}
 																	}
 																	else
 																	{
 																		//Error y Rollback - error al eliminar la cuenta antigua de la comunidad
 																		iCodigo = -913;
 																	}
+
 																}
 																else
 																{
@@ -910,7 +982,7 @@ public final class CLComunidades
 
 		}
 		
-		logger.error("iCodigo:|{}|",iCodigo);
+		logger.debug ("iCodigo:|"+iCodigo+"|");
 		
 		return iCodigo;
 	}
@@ -1010,7 +1082,10 @@ public final class CLComunidades
 							switch (COACCI) 
 							{
 								case A:
-									if (!QMCuentas.existeCuenta(conexion, movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT()))
+									
+									long liCodCuenta = QMCuentas.getCuentaID(conexion, movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT());
+									
+									if (liCodCuenta == 0)
 									{
 										logger.debug("Dando de Alta...");
 										
@@ -1018,7 +1093,7 @@ public final class CLComunidades
 
 										String sDCIBAN = Utils.calculaDCIBAN(sPais, movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT());
 										
-										long liCodCuenta = QMCuentas.addCuenta(conexion, new Cuenta(sPais,sDCIBAN,movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT(),"COMUNIDAD"),ValoresDefecto.CUENTA_COMUNIDAD);
+										liCodCuenta = QMCuentas.addCuenta(conexion, new Cuenta(sPais,sDCIBAN,movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT(),"COMUNIDAD"));
 										
 										if (liCodCuenta != 0)
 										{
@@ -1028,22 +1103,18 @@ public final class CLComunidades
 											
 											if (liCodComunidad != 0)
 											{
-											
-												//relacion cuenta-Comunidad
-												if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad))
-												{
-													if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
-													{	
-																					
 
-														logger.debug("COACES:|{}|",movimiento_revisado.getCOACES());
-														/*if (movimiento_revisado.getCOACES().equals("0") || movimiento_revisado.getCOACES().isEmpty())
-														{
-															//OK 
-															iCodigo = 0;
-														}
-														else*/ 
-														if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, liCodMovimiento))
+												if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
+												{	
+																				
+
+													logger.debug("COACES:|{}|",movimiento_revisado.getCOACES());
+
+													if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, liCodMovimiento))
+													{
+														
+														//relacion cuenta-Comunidad
+														if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad,ValoresDefecto.CUENTA_COMUNIDAD))
 														{
 															if (nota.isbInvalida())
 															{
@@ -1066,27 +1137,34 @@ public final class CLComunidades
 														}
 														else
 														{
-															//Error y Rollback - error al registrar el activo durante el alta
-															iCodigo = -903;
+															//Error y Rollback - error al registrar la relacion cuenta-comunidad
+															iCodigo = -912;
 														}
+														
+														
+
 													}
 													else
 													{
-														//Error y Rollback - error al registrar la relaccion
-														iCodigo = -902;
+														//Error y Rollback - error al registrar el activo durante el alta
+														iCodigo = -903;
 													}
 												}
 												else
 												{
-													//Error y Rollback - error al registrar la relacion cuenta-comunidad
-													iCodigo = -912;
+													//Error y Rollback - error al registrar la relaccion
+													iCodigo = -902;
 												}
+											
+
 											}
 											else
 											{
 												//Error y Rollback - error al registrar la comuidad
 													iCodigo = -901;
 											}
+											
+											
 										}
 										else
 										{
@@ -1096,19 +1174,136 @@ public final class CLComunidades
 									}
 									else
 									{
+										Comunidad comunidad = convierteMovimientoenComunidad(movimiento_revisado);
+
+										liCodComunidad = QMComunidades.addComunidad(conexion,comunidad);
+										
+										if (liCodComunidad != 0)
+										{
+
+											if (QMListaComunidades.addRelacionComunidad(conexion,liCodComunidad, liCodMovimiento))
+											{	
+																			
+
+												logger.debug("COACES:|{}|",movimiento_revisado.getCOACES());
+
+												if (QMListaComunidadesActivos.addRelacionComunidad(conexion,Integer.parseInt(movimiento_revisado.getCOACES()), liCodComunidad, liCodMovimiento))
+												{
+													
+													//relacion cuenta-Comunidad
+													if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad,ValoresDefecto.CUENTA_COMUNIDAD))
+													{
+														if (nota.isbInvalida())
+														{
+															//OK 
+															iCodigo = 0;
+														}
+														else
+														{
+															if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+															{
+																//OK 
+																iCodigo = 0;
+															}
+															else
+															{
+																//Error al guardar la nota
+																iCodigo = -915;
+															}
+														}
+													}
+													else
+													{
+														//Error y Rollback - error al registrar la relacion cuenta-comunidad
+														iCodigo = -912;
+													}
+													
+													
+
+												}
+												else
+												{
+													//Error y Rollback - error al registrar el activo durante el alta
+													iCodigo = -903;
+												}
+											}
+											else
+											{
+												//Error y Rollback - error al registrar la relaccion
+												iCodigo = -902;
+											}
+										
+
+										}
+										else
+										{
+											//Error y Rollback - error al registrar la comuidad
+												iCodigo = -901;
+										}
+										
 										//Error y Rollback - Cuenta de la comunidad ya de alta
-										iCodigo = -914;
+										//iCodigo = -914;
+
+
 									}
+									
+									
+
 																
 
 									break;
 								case B:
 									if (QMListaComunidades.existeAltaPendienteComunidad(conexion, liCodComunidad))
 									{
+										ArrayList<Long> resultado = QMListaCuentasComunidades.buscaCodigosCuentasComunidad(conexion, liCodComunidad);
+										
 										if (QMComunidades.delComunidad(conexion, liCodComunidad))
 										{
-											if (QMListaCuentasComunidades.eliminarCuentasComunidad(conexion, liCodComunidad))
+											//desasociar cuentas
+											
+											if (QMListaCuentasComunidades.eliminarRelacionesCuentasComunidad(conexion, liCodComunidad))
 											{
+												
+												
+												if (resultado.size() > 0)
+												{
+										            for (int i = 0; i < resultado.size(); i++)
+										            {
+									            		if (!CLCuentas.tieneMasRelacciones(resultado.get(i)))
+									            		{
+									            			if (QMCuentas.delCuenta(conexion, resultado.get(i)))
+									            			{
+										            			//OK 
+																iCodigo = 0;
+									            			}
+									            			else
+									            			{
+																//Error al dar de baja las cuentas de la comunidad
+																iCodigo = -917;
+																i = resultado.size();
+									            			}
+									            		}
+									            		else
+									            		{
+									            			//OK 
+															iCodigo = 0;
+									            		}
+										            }
+												}
+											}
+											else
+											{
+												//Error al desasociar las cuentas de la comunidad
+												iCodigo = -918;
+												
+											}
+											
+											
+											
+											/*if (QMListaCuentasComunidades.eliminarCuentasComunidad(conexion, liCodComunidad))
+											
+											{
+												CLCuentas.tieneMasRelacciones(liCodCuenta)
 												//OK 
 												iCodigo = 0;
 											}
@@ -1116,7 +1311,7 @@ public final class CLComunidades
 											{
 												//Error al dar de baja las cuentas de la comunidad
 												iCodigo = -917;
-											}
+											}*/
 										}
 										else
 										{
@@ -1216,11 +1411,11 @@ public final class CLComunidades
 
 												String sDCIBAN = Utils.calculaDCIBAN(sPais, movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT());
 												
-												liCuentaNueva = QMCuentas.addCuenta(conexion, new Cuenta(sPais,sDCIBAN,movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT(),"COMUNIDAD"), ValoresDefecto.CUENTA_COMUNIDAD);
+												liCuentaNueva = QMCuentas.addCuenta(conexion, new Cuenta(sPais,sDCIBAN,movimiento.getNUCCEN(), movimiento.getNUCCOF(), movimiento.getNUCCDI(), movimiento.getNUCCNT(),"COMUNIDAD"));
 												
 												if (liCuentaNueva != 0)
 												{
-													if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCuentaNueva, liCodComunidad))
+													if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCuentaNueva, liCodComunidad, ValoresDefecto.CUENTA_COMUNIDAD))
 													{
 														if (QMComunidades.modComunidad(conexion,convierteMovimientoenComunidad(movimiento), liCodComunidad))
 														{

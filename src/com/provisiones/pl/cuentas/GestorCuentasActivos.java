@@ -322,16 +322,17 @@ public class GestorCuentasActivos implements Serializable
 	    	String sMsg = "";
 
 	    	//comprobar la cuenta
-			if (!CLCuentas.existeCuenta(sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT))
+			//if (!CLCuentas.existeCuenta(sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT))
+			if (sCOACES.isEmpty())
+			{
+				sMsg = "ERROR: Debe comprobar el Activo antes de operar sobre sus cuentas. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+	    	else if (!CLCuentas.cuentaAsociadaActivo(sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT,Integer.parseInt(sCOACES)))
 			{
 				
-					if (sCOACES.isEmpty())
-					{
-						sMsg = "ERROR: Debe comprobar el Activo antes de operar sobre sus cuentas. Por favor, revise los datos.";
-						msg = Utils.pfmsgError(sMsg);
-						logger.error(sMsg);
-					}
-					else if (sPais.isEmpty() ||
+	    		if (sPais.isEmpty() ||
 						sDCIBAN.isEmpty() ||
 						sNUCCEN.isEmpty() ||
 						sNUCCOF.isEmpty() ||
@@ -361,7 +362,14 @@ public class GestorCuentasActivos implements Serializable
 								sDescripcion);
 
 						msg = nuevoMovimiento(true, cuenta);
-						logger.debug("Cuenta dada de alta:|"+sPais+"|"+sDCIBAN+"|"+sNUCCEN+"|"+sNUCCOF+"|"+sNUCCDI+"|"+sNUCCNT+"|"+sDescripcion+"|");
+						logger.debug("Cuenta dada de alta:|"+
+								cuenta.getsPais()+"|"+
+								cuenta.getsDCIBAN()+"|"+
+								cuenta.getsNUCCEN()+"|"+
+								cuenta.getsNUCCOF()+"|"+
+								cuenta.getsNUCCDI()+"|"+
+								cuenta.getsNUCCNT()+"|"+
+								cuenta.getsDescripcion()+"|");
 
 					}
 			}

@@ -37,6 +37,23 @@ public class CLCuentas
 		return QMCuentas.existeCuenta(ConnectionManager.getDBConnection(), sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT);
 	}
 	
+	public static boolean cuentaAsociadaActivo (String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT, int iCodCOACES)
+	{
+		return QMListaCuentasActivos.cuentaAsociadaActivo(ConnectionManager.getDBConnection(), sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT, iCodCOACES);
+	}
+
+	public static boolean cuentaAsociadaComunidad (String sNUCCEN, String sNUCCOF, String sNUCCDI, String sNUCCNT, long liCodComunidad)
+	{
+		return QMListaCuentasComunidades.cuentaAsociadaComunidad(ConnectionManager.getDBConnection(), sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT, liCodComunidad);
+	}
+	
+	public static boolean tieneMasRelacciones (long liCodCuenta)
+	{
+		long liRelacionesActivos = QMListaCuentasActivos.buscaCantidadRelaccionesCuenta(ConnectionManager.getDBConnection(), liCodCuenta);
+		long liRelacionesComunidad = QMListaCuentasComunidades.buscaCantidadRelaccionesCuenta(ConnectionManager.getDBConnection(), liCodCuenta);
+		return ((liRelacionesActivos+liRelacionesComunidad) > 0);
+	}
+	
 	//TODO Borrar cuentas Comunidad
 	
 	public static ArrayList<Cuenta> buscarCuentasActivo (int iCodCOACES)
@@ -75,8 +92,7 @@ public class CLCuentas
 				if (bAlta)
 				{
 					
-					liCodCuenta = QMCuentas.addCuenta(ConnectionManager.getDBConnection(), cuenta, ValoresDefecto.CUENTA_CONVENCIONAL); 
-					
+					liCodCuenta = QMCuentas.getCuentaID(conexion, cuenta.getsNUCCEN(), cuenta.getsNUCCOF(), cuenta.getsNUCCDI(), cuenta.getsNUCCNT());
 					
 					
 					if ( liCodCuenta != 0)
@@ -85,49 +101,74 @@ public class CLCuentas
 						{
 							//OK 
 							iCodigo = 0;
-							conexion.commit();
 						}
 						else
 						{
 							//error relación cuenta no creada - Rollback
 							iCodigo = -902;
-							conexion.rollback();
 						}
 						
 					}
 					else
 					{
 						//error cuenta no creada - Rollback
-						iCodigo = -901;
-						conexion.rollback();
+						//iCodigo = -901;
+						
+						liCodCuenta = QMCuentas.addCuenta(ConnectionManager.getDBConnection(), cuenta); 
+						
+						if (QMListaCuentasActivos.addRelacionActivo(conexion, liCodCuenta, iCodCOACES))
+						{
+							//OK 
+							iCodigo = 0;
+						}
+						else
+						{
+							//error relación cuenta no creada - Rollback
+							iCodigo = -902;
+						}
+						
 					}
 				}
 				else
 				{
 					liCodCuenta = CLCuentas.buscarCodigoCuenta(cuenta.getsNUCCEN(), cuenta.getsNUCCOF(), cuenta.getsNUCCDI(), cuenta.getsNUCCNT());
 
-					if (QMCuentas.delCuenta(conexion, liCodCuenta))
+					if (QMListaCuentasActivos.delRelacionActivo(conexion, liCodCuenta, iCodCOACES))
 					{
-						if (QMListaCuentasActivos.delRelacionActivo(conexion, liCodCuenta, iCodCOACES))
+						if (!CLCuentas.tieneMasRelacciones(liCodCuenta))
 						{
-							//OK 
-							iCodigo = 0;
-							conexion.commit();
+							if (QMCuentas.delCuenta(conexion, liCodCuenta))
+							{
+								//OK 
+								iCodigo = 0;
+							}
+							else
+							{
+								//error cuenta no borrada - Rollback
+								iCodigo = -903;
+							}
 						}
 						else
 						{
-							//error relación cuenta no borrada - Rollback
-							iCodigo = -904;
-							conexion.rollback();
+							//OK 
+							iCodigo = 0;
 						}
-						
 					}
 					else
 					{
-						//error cuenta no borrada - Rollback
-						iCodigo = -903;
-						conexion.rollback();
+						//error relación cuenta no borrada - Rollback
+						iCodigo = -904;
 					}
+
+				}
+				
+				if (iCodigo == 0)
+				{
+					conexion.commit();
+				}
+				else
+				{
+					conexion.rollback();
 				}
 				
 				conexion.setAutoCommit(true);	
@@ -184,59 +225,83 @@ public class CLCuentas
 				if (bAlta)
 				{
 					
-					liCodCuenta = QMCuentas.addCuenta(ConnectionManager.getDBConnection(), cuenta, ValoresDefecto.CUENTA_CONVENCIONAL); 
-					
-					
+					liCodCuenta = QMCuentas.getCuentaID(conexion, cuenta.getsNUCCEN(), cuenta.getsNUCCOF(), cuenta.getsNUCCDI(), cuenta.getsNUCCNT());
 					
 					if ( liCodCuenta != 0)
 					{
-						if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad))
+						if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad, ValoresDefecto.CUENTA_CONVENCIONAL))
 						{
 							//OK 
 							iCodigo = 0;
-							conexion.commit();
 						}
 						else
 						{
 							//error relación cuenta no creada - Rollback
 							iCodigo = -902;
-							conexion.rollback();
 						}
 						
 					}
 					else
 					{
 						//error cuenta no creada - Rollback
-						iCodigo = -901;
-						conexion.rollback();
+						//iCodigo = -901;
+						
+						liCodCuenta = QMCuentas.addCuenta(ConnectionManager.getDBConnection(), cuenta); 
+						
+						if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCodCuenta, liCodComunidad, ValoresDefecto.CUENTA_CONVENCIONAL))
+						{
+							//OK 
+							iCodigo = 0;
+						}
+						else
+						{
+							//error relación cuenta no creada - Rollback
+							iCodigo = -902;
+						}
+
+						
 					}
 				}
 				else
 				{
 					liCodCuenta = CLCuentas.buscarCodigoCuenta(cuenta.getsNUCCEN(), cuenta.getsNUCCOF(), cuenta.getsNUCCDI(), cuenta.getsNUCCNT());
 
-					if (QMCuentas.delCuenta(conexion, liCodCuenta))
+					if (QMListaCuentasComunidades.delRelacionComunidad(conexion, liCodCuenta, liCodComunidad))
 					{
-						if (QMListaCuentasComunidades.delRelacionComunidad(conexion, liCodCuenta, liCodComunidad))
+						if (!CLCuentas.tieneMasRelacciones(liCodCuenta))
 						{
-							//OK 
-							iCodigo = 0;
-							conexion.commit();
+							if (QMCuentas.delCuenta(conexion, liCodCuenta))
+							{
+								//OK 
+								iCodigo = 0;
+							}
+							else
+							{
+								//error cuenta no borrada - Rollback
+								iCodigo = -903;
+							}
 						}
 						else
 						{
-							//error relación cuenta no borrada - Rollback
-							iCodigo = -904;
-							conexion.rollback();
+							//OK 
+							iCodigo = 0;
 						}
-						
 					}
 					else
 					{
-						//error cuenta no borrada - Rollback
-						iCodigo = -903;
-						conexion.rollback();
+						//error relación cuenta no borrada - Rollback
+						iCodigo = -904;
 					}
+
+				}
+				
+				if (iCodigo == 0)
+				{
+					conexion.commit();
+				}
+				else
+				{
+					conexion.rollback();
 				}
 				
 				conexion.setAutoCommit(true);	

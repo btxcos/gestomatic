@@ -767,6 +767,12 @@ public class GestorMovimientosComunidades implements Serializable
 						logger.error(sMsg);
 						break;
 						
+					case -918: //Error 918 - error y rollback - error desasociar las cuentas de la comunidad
+						sMsg = "[FATAL] ERROR:918 - Se ha producido un error al desasociar las cuentas de la comunidad. Por favor, revise los datos y avise a soporte.";
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						break;
+						
 					default: //error generico
 						sMsg = "[FATAL] ERROR:"+iSalida+" - La operacion solicitada ha producido un error desconocido. Por favor, revise los datos y avise a soporte.";
 						msg = Utils.pfmsgFatal(sMsg);

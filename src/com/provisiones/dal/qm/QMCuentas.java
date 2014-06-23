@@ -32,13 +32,13 @@ public class QMCuentas
 	public static final String CAMPO6 = "nuccdi";
 	public static final String CAMPO7 = "nuccnt";
 	public static final String CAMPO8 = "descripcion";
-	public static final String CAMPO9 = "comunidad";
+	//public static final String CAMPO9 = "comunidad";
 	public static final String CAMPO10 = "usuario_modificacion";
 	public static final String CAMPO11 = "fecha_modificacion";
 
 	private QMCuentas(){}
 	
-	public static long addCuenta(Connection conexion, Cuenta NuevaCuenta, byte btComunidad)
+	public static long addCuenta(Connection conexion, Cuenta NuevaCuenta)
 	{
 		long liCodigo = 0;
 
@@ -62,7 +62,6 @@ public class QMCuentas
 					+ CAMPO6 + ","
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
-					+ CAMPO9 + ","
 					+ CAMPO10 + ","
 					+ CAMPO11 +
 					") VALUES (" 
@@ -72,8 +71,7 @@ public class QMCuentas
 					+ "AES_ENCRYPT('"+NuevaCuenta.getsNUCCOF()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevaCuenta.getsNUCCDI()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))," 
 					+ "AES_ENCRYPT('"+NuevaCuenta.getsNUCCNT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
-					+ NuevaCuenta.getsDescripcion() + "',"
-					+ btComunidad + ",'"
+					+ NuevaCuenta.getsDescripcion() + "','"
 					+ sUsuario + "','"
 					+ Utils.timeStamp() + 
 					"')";
@@ -94,8 +92,6 @@ public class QMCuentas
 				} 
 
 				logger.debug("Ejecutada con exito!");
-				
-				logger.debug("Ejecutada con exito!");
 			}
 			catch (SQLException ex) 
 			{
@@ -115,7 +111,7 @@ public class QMCuentas
 		return liCodigo;
 	}
 
-	public static boolean modCuenta(Connection conexion, Cuenta cuenta, long liCuentaID, byte btComunidad) 
+	public static boolean modCuenta(Connection conexion, Cuenta cuenta, long liCuentaID) 
 	{
 		boolean bSalida = false;
 
@@ -131,7 +127,6 @@ public class QMCuentas
 					+ TABLA + 
 					" SET " 
 					+ CAMPO8 + " = '" + cuenta.getsDescripcion() + "', "
-					+ CAMPO9 + " = " + btComunidad + ", "
 					+ CAMPO10 + " = '" + sUsuario + "', " 
 					+ CAMPO11 + " = '" + Utils.timeStamp() + "' " +					
 					" WHERE " 

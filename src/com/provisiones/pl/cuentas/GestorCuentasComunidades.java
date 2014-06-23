@@ -29,6 +29,8 @@ public class GestorCuentasComunidades implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorCuentasComunidades.class.getName());
 	
+	private long liCodComunidad = 0;
+	
 	private String sCOACES = "";
 	private String sCOPOIN = "";
 	private String sNOMUIN = "";
@@ -103,6 +105,8 @@ public class GestorCuentasComunidades implements Serializable
     
 	public void borrarCamposComunidad()
 	{
+		this.liCodComunidad = 0;
+		
     	this.sCOCLDO = "";
     	this.sNUDCOM = "";
     	this.sNOMCOC = "";
@@ -297,6 +301,8 @@ public class GestorCuentasComunidades implements Serializable
 			}
 			else
 			{
+				this.liCodComunidad = CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM.toUpperCase());
+				
 				Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO, sNUDCOM.toUpperCase());
 				
 				this.sCOCLDO = comunidad.getsCOCLDO();
@@ -322,7 +328,7 @@ public class GestorCuentasComunidades implements Serializable
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				
-				sMsg = "Encontradas "+getTablacuentas().size()+" Cuentas relacionadas.";
+				sMsg = "Encontradas "+getTablacuentas().size()+" Cuentas adicionales relacionadas.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				
@@ -430,7 +436,10 @@ public class GestorCuentasComunidades implements Serializable
 	    	String sMsg = "";
 
 	    	//comprobar la cuenta
-			if (!CLCuentas.existeCuenta(sNUCCENN, sNUCCOFN, sNUCCDIN, sNUCCNTN))
+	    	
+	    	
+			//if (!CLCuentas.existeCuenta(sNUCCENN, sNUCCOFN, sNUCCDIN, sNUCCNTN))
+	    	if (!CLCuentas.cuentaAsociadaComunidad(sNUCCENN, sNUCCOFN, sNUCCDIN, sNUCCNTN,liCodComunidad))
 			{
 				if (sCOCLDO.isEmpty() ||
 					sNUDCOM.isEmpty() || 
@@ -465,7 +474,14 @@ public class GestorCuentasComunidades implements Serializable
 							sDescripcionN);
 
 					msg = nuevoMovimiento(true, cuenta);
-					logger.debug("Cuenta dada de alta:|"+sPaisN+"|"+sDCIBANN+"|"+sNUCCENN+"|"+sNUCCOFN+"|"+sNUCCDIN+"|"+sNUCCNTN+"|"+sDescripcionN+"|");
+					logger.debug("Cuenta dada de alta:|"+
+					cuenta.getsPais()+"|"+
+					cuenta.getsDCIBAN()+"|"+
+					cuenta.getsNUCCEN()+"|"+
+					cuenta.getsNUCCOF()+"|"+
+					cuenta.getsNUCCDI()+"|"+
+					cuenta.getsNUCCNT()+"|"+
+					cuenta.getsDescripcion()+"|");
 
 				}
 			}
