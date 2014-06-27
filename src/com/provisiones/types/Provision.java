@@ -10,7 +10,7 @@ public class Provision
 	private String sCOTPGA = "";
 	private String sFEPFON = "";
 	private String sNumGastos = "";	
-	private String sValorTolal = "";
+	private String sValorTotal = "";
 	private String sFechaEnvio = "";
 	private String sGastosAutorizados = "";
 	private String sValorAutorizado = "";
@@ -29,7 +29,7 @@ public class Provision
 
 	public Provision(String sNUPROF, String sCOSPAT, String sTAS,
 			String sCOGRUG, String sCOTPGA, String sFEPFON, String sNumGastos,
-			String sValorTolal, String sFechaEnvio, String sGastosAutorizados,
+			String sValorTotal, String sFechaEnvio, String sGastosAutorizados,
 			String sValorAutorizado, String sFechaAutorizado,
 			String sGastosPagados, String sValorPagado, String sFechaPagado,
 			String sRecargoTotal, String sGastosAbonados, String sAbonoTotal,
@@ -42,7 +42,7 @@ public class Provision
 		this.sCOTPGA = sCOTPGA;
 		this.sFEPFON = sFEPFON;
 		this.sNumGastos = sNumGastos;
-		this.sValorTolal = sValorTolal;
+		this.sValorTotal = sValorTotal;
 		this.sFechaEnvio = sFechaEnvio;
 		this.sGastosAutorizados = sGastosAutorizados;
 		this.sValorAutorizado = sValorAutorizado;
@@ -116,12 +116,12 @@ public class Provision
 		this.sNumGastos = sNumGastos;
 	}
 
-	public String getsValorTolal() {
-		return sValorTolal;
+	public String getsValorTotal() {
+		return sValorTotal;
 	}
 
-	public void setsValorTolal(String sValorTolal) {
-		this.sValorTolal = sValorTolal;
+	public void setsValorTotal(String sValorTotal) {
+		this.sValorTotal = sValorTotal;
 	}
 
 	public String getsFechaEnvio() {
@@ -231,7 +231,7 @@ public class Provision
 	//log
 	public String logProvision()
 	{
-		return "(PROVISION)\nsNUPROF           :|"+sNUPROF+"|\nsCOSPAT           :|"+sCOSPAT+"|\nsTAS              :|"+sTAS+"|\nsCOGRUG           :|"+sCOGRUG+"|\nsCOTPGA           :|"+sCOTPGA+"|\nsFEPFON           :|"+sFEPFON+"|\nsNumGastos        :|"+sNumGastos+"|\nsValorTolal       :|"+sValorTolal+"|\nsFechaEnvio       :|"+sFechaEnvio+"|\nsGastosAutorizados:|"+sGastosAutorizados+"|\nsValorAutorizado  :|"+sValorAutorizado+"|\nsFechaAutorizado  :|"+sFechaAutorizado+"|\nsGastosPagados    :|"+sGastosPagados+"|\nsValorPagado      :|"+sValorPagado+"|\nsFechaPagado      :|"+sFechaPagado+"|\nsCodEstado        :|"+sCodEstado+"|";
+		return "(PROVISION)\nsNUPROF           :|"+sNUPROF+"|\nsCOSPAT           :|"+sCOSPAT+"|\nsTAS              :|"+sTAS+"|\nsCOGRUG           :|"+sCOGRUG+"|\nsCOTPGA           :|"+sCOTPGA+"|\nsFEPFON           :|"+sFEPFON+"|\nsNumGastos        :|"+sNumGastos+"|\nsValorTotal       :|"+sValorTotal+"|\nsFechaEnvio       :|"+sFechaEnvio+"|\nsGastosAutorizados:|"+sGastosAutorizados+"|\nsValorAutorizado  :|"+sValorAutorizado+"|\nsFechaAutorizado  :|"+sFechaAutorizado+"|\nsGastosPagados    :|"+sGastosPagados+"|\nsValorPagado      :|"+sValorPagado+"|\nsFechaPagado      :|"+sFechaPagado+"|\nsCodEstado        :|"+sCodEstado+"|";
 	}
 
 }

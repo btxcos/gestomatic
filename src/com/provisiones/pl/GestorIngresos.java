@@ -2,6 +2,8 @@ package com.provisiones.pl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -13,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Provision;
 import com.provisiones.types.tablas.ProvisionTabla;
 
 public class GestorIngresos implements Serializable 
@@ -28,46 +32,86 @@ public class GestorIngresos implements Serializable
 	private String sFEPFONF = "";
 	private String sEstadoProvisionF = "";
 	
+	//Ingreso
 	private String sNUPROF = "";
-	private String sCOSPAT = "";
+	private String sFEPFON = "";
+	private String sFechaIngreso = "";
+	private String sValorIngreso = "";
+	private String sValorAutorizado = "";
+	private String sNumGastosAutorizados = "";	
+	
+	//Detalles
 	private String sDCOSPAT = "";
 	private String sDTAS = "";
 	private String sDCOGRUG = "";	
 	private String sDCOTPGA = "";
-	private String sValorTolal = "";
+	private String sValorTotal = "";
 	private String sNumGastos = "";
-	
-	private boolean bLibre = true; 
 
 	private transient ArrayList<ProvisionTabla> tablaprovisiones = null;
 	
 	private transient ProvisionTabla provisionseleccionada = null;
 	
+	private Map<String,String> tiposestadoprovisionHM = new LinkedHashMap<String, String>();
+	
 	public GestorIngresos()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorIngresos...");	
+			logger.debug("Iniciando GestorIngresos...");
+			
+			tiposestadoprovisionHM.put("AUTORIZADA","T");
+			tiposestadoprovisionHM.put("PAGADA",    "G");
 		}
 	}
 	
-    public void borrarCamposProvision()
+    public void borrarCamposFiltroProvision()
+    {
+    	this.sFEPFONF = "";
+    	this.sEstadoProvisionF = "";
+    }
+	
+	public void limpiarPlantillaProvision()
+	{
+		this.sNUPROF = "";
+		
+		borrarCamposFiltroProvision();
+    	
+    	this.tablaprovisiones = null;
+    	this.provisionseleccionada = null;
+	}
+	
+    public void borrarCamposIngreso()
     {
     	this.sNUPROF = "";
-    	this.sCOSPAT = "";
+    	this.sNumGastosAutorizados = "";
+    	this.sValorAutorizado = "";
+    	this.sFechaIngreso = "";
+    	this.sValorIngreso = "";
+    	this.sFEPFON = "";
+    }
+	
+    public void borrarCamposProvision()
+    {
     	this.sDCOSPAT = "";
     	this.sDTAS = "";
     	this.sDCOGRUG = "";
     	this.sDCOTPGA = "";
     	this.sNumGastos = "";
-    	this.sValorTolal = "";
-    	
+    	this.sValorTotal = "";
+    }
+    
+	public void limpiarPlantilla()
+	{
+		this.sNUPROFB = "";
+		borrarCamposFiltroProvision();
+		borrarCamposIngreso();
+		borrarCamposProvision();
+		
     	this.tablaprovisiones = null;
     	this.provisionseleccionada = null;
-    	
-    	bLibre = true;
-
-    }
+	}
+    
     
 	public void buscarProvisiones(ActionEvent actionEvent)
 	{
@@ -108,7 +152,7 @@ public class GestorIngresos implements Serializable
 				String sFEPFONF = sFecha;
 				String sVALORF = "";
 				String sGASTOSF = "";
-				String sESTADOF = "";
+				String sESTADOF = sEstadoProvisionF;
 				
 				logger.debug("sFEPFONF:|"+sFEPFONF+"|");
 				logger.debug("sESTADOF:|"+sESTADOF+"|");
@@ -154,6 +198,26 @@ public class GestorIngresos implements Serializable
 		}
 	}
 	
+
+
+	public void seleccionarProvision(ActionEvent actionEvent) 
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	this.sNUPROFB = provisionseleccionada.getNUPROF();
+	    	borrarCamposIngreso();
+	    	borrarCamposProvision();
+	    	
+	    	String sMsg = "Provision '"+ sNUPROFB +"' Seleccionada.";
+	    	msg = Utils.pfmsgInfo(sMsg);
+	    	logger.info(sMsg);
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
+		}
+    }
+	
 	public void comprobarProvision(ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -163,161 +227,139 @@ public class GestorIngresos implements Serializable
 			String sMsg = "";
 			
 			this.provisionseleccionada = null;
+			this.tablaprovisiones = null;
 			
 			if (sNUPROFB.isEmpty())
 			{
 				sMsg = "ERROR: Debe informar la Provision para realizar una búsqueda. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
-				
-				this.tablaprovisiones = null;
 			}
-			else
+			else if (Utils.esAlfanumerico(sNUPROFB))
 			{
-				try
-				{
-					Integer.parseInt(sNUPROFB);
-					
-					if (CLProvisiones.existeProvision(sNUPROFB))
-					{
-						this.tablaprovisiones = CLProvisiones.buscarProvisionUnica(sNUPROFB); 
-						
-						if (getTablaprovisiones().size() == 0)
-						{
-							sMsg = "ERROR: No se encontraron Provisiones con los criterios solicitados. Por favor, revise los datos y avise a soporte.";
-							msg = Utils.pfmsgFatal(sMsg);
-							logger.error(sMsg);
-						}
-						else 
-						{
-							sMsg = "Encontrada una Provisión relacionada.";
-							msg = Utils.pfmsgInfo(sMsg);
-							logger.info(sMsg);
-						}
-					}
-					else
-					{
-						sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
-						msg = Utils.pfmsgWarning(sMsg);
-						logger.warn(sMsg);
-						
-						this.tablaprovisiones = null;
-					}
-					
-				}
-				catch(NumberFormatException nfe)
-				{
-					sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					
-					this.tablaprovisiones = null;
-				}
-				
-			}
-
-			FacesContext.getCurrentInstance().addMessage(null, msg);			
-		}
-	}
-
-	public void cargaProvisionesAbiertas(ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-	    	
-			this.tablaprovisiones = CLProvisiones.buscarProvisionesAbiertas(); 
-
-			msg = Utils.pfmsgInfo("Encontradas "+getTablaprovisiones().size()+" provisiones abiertas.");
-			logger.info("Encontradas {} provisiones abiertas.",getTablaprovisiones().size());
-
-			FacesContext.getCurrentInstance().addMessage(null, msg);			
-		}
-	}
-	
-	public void seleccionarProvision(ActionEvent actionEvent) 
-    {
-		if (ConnectionManager.comprobarConexion())
-		{
-	    	FacesMessage msg;
-	    	
-	    	this.sNUPROF  = provisionseleccionada.getNUPROF();
-	    	this.sCOSPAT  = provisionseleccionada.getCOSPAT();
-	    	this.sDCOSPAT  = provisionseleccionada.getDCOSPAT();
-	    	this.sDTAS  = provisionseleccionada.getDTAS();
-	    	this.sDCOGRUG  = provisionseleccionada.getDCOGRUG();
-	    	this.sDCOTPGA  = provisionseleccionada.getDCOTPGA();
-	    	this.sValorTolal  = provisionseleccionada.getVALOR();//CLProvisiones.calcularValorProvision(sNUPROF);
-	    	this.sNumGastos  = provisionseleccionada.getGASTOS();//Long.toString(CLProvisiones.buscarNumeroGastosProvision(sNUPROF));
-	    	
-	    	bLibre = false;
-	    	
-	    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
-	    	logger.info("Provision '{}' Seleccionada.",sNUPROF);
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);			
-		}
-    }
-	
-	public void cerrarProvision(ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-			
-			/*Provision provision = new Provision(sNUPROF, 
-					sCOSPAT, 
-					sTAS,
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
-					Utils.fechaDeHoy(false),
-					sNumGastos,
-					Utils.compruebaImporte(sValorTolal),
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,
-					ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, 
-					ValoresDefecto.DEF_PROVISION_PENDIENTE);*/
-			
-					
-			//CLProvisiones.detallesProvision(sNUPROF);
-			String sMsg = "";
-
-			//if (CLProvisiones.cerrarProvision(provision))
-			
-			if (sNUPROF.isEmpty())
-			{
-				sMsg = "Debe seleccionar una Provisión antes. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
-			}
-			else if (CLProvisiones.estaBloqueada(sNUPROF))
-			{
-				sMsg = "ERROR: La Provisión tiene Abonos con Gastos pendientes de Pago. Realice los Pagos antes de cerrar esta Provisión.";
+				sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 			}
 			else
 			{
 
-				if (CLProvisiones.cerrarProvision(sNUPROF,Utils.fechaDeHoy(false)))
+				if (!CLProvisiones.BuscarFechaIngresado(sNUPROFB).equals("0"))
 				{
-					sMsg = "Provision '"+ sNUPROF +"' cerrada.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-					borrarCamposProvision();
+					sMsg = "ERROR: La Provisión ya registro un ingreso. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+				else if (CLProvisiones.existeProvision(sNUPROFB))
+				{
+					String sEstado = CLProvisiones.estadoProvision(sNUPROFB);
+					
+					if (sEstado.equals(ValoresDefecto.DEF_PROVISION_AUTORIZADA) 
+						|| sEstado.equals(ValoresDefecto.DEF_PROVISION_PAGADA))
+					{
+						this.sNUPROF = sNUPROFB;
 
+						Provision provision = CLProvisiones.buscarDetallesProvision(sNUPROF);
+						
+						this.sFEPFON = Utils.recuperaFecha(provision.getsFEPFON());
+						this.sValorAutorizado = Utils.recuperaImporte(false,provision.getsValorAutorizado());
+						this.sNumGastosAutorizados = provision.getsGastosAutorizados();	
+						
+						//Detalles
+						this.sDCOSPAT = provision.getsCOSPAT();
+						this.sDTAS = provision.getsTAS();
+						this.sDCOGRUG = provision.getsCOGRUG();	
+						this.sDCOTPGA = provision.getsCOTPGA();
+						this.sValorTotal = Utils.recuperaImporte(false,provision.getsValorTotal());
+						this.sNumGastos = provision.getsNumGastos();
+						
+						sMsg = "Provisión "+sNUPROF+" cargada correctamente.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra en un estado que pueda recibir ingresos. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
 				}
 				else
 				{
-					sMsg = "[FATAL] ERROR: ha ocurrido un error al cerrar la provision. Avise a soporte.";
-					msg = Utils.pfmsgFatal(sMsg);
-					logger.error(sMsg);
+					sMsg = "La Provisión '"+sNUPROFB+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 				}
 			}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
+		}
+	}
+	
+	public void hoyFechaIngreso (ActionEvent actionEvent)
+	{
+		this.setsFechaIngreso(Utils.fechaDeHoy(true));
+		logger.debug("sFechaIngreso:|{}|",sFechaIngreso);
+	}
+	
+	public void registraIngreso(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+
+			if (sNUPROF.isEmpty())
+			{
+				sMsg = "Debe comprobar la Provisión antes. Por favor, revise los datos.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+			}
+			else
+			{
+				try
+				{
+					long liValorAutorizado = Long.parseLong(Utils.compruebaImporte(sValorAutorizado));
+					
+					long liValorIngreso = Long.parseLong(Utils.compruebaImporte(sValorIngreso));
+					
+					if (liValorAutorizado != liValorIngreso)
+					{
+						sMsg = "ERROR: El valor a ingresar es distinto del valor autorizado para esta Provisión. Por favor, revise los datos.";
+						msg = Utils.pfmsgError(sMsg);
+						logger.error(sMsg);					
+					}
+					else
+					{
+
+						if (CLProvisiones.registraIngreso(sNUPROF,Utils.compruebaFecha(sFechaIngreso),liValorIngreso))
+						{
+							sMsg = "Ingreso realizado correctamente.";
+							msg = Utils.pfmsgInfo(sMsg);
+							logger.info(sMsg);
+							borrarCamposIngreso();
+							borrarCamposProvision();
+
+						}
+						else
+						{
+							sMsg = "[FATAL] ERROR: ha ocurrido un error al realizar el ingreso. Avise a soporte.";
+							msg = Utils.pfmsgFatal(sMsg);
+							logger.error(sMsg);
+						}
+					}
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El valor a ingresar debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+
+
+			}
+
 			
 			
 
@@ -335,12 +377,36 @@ public class GestorIngresos implements Serializable
 		this.sNUPROF = sNUPROF;
 	}
 
-	public String getsValorTolal() {
-		return sValorTolal;
+	public String getsFEPFON() {
+		return sFEPFON;
 	}
 
-	public void setsValorTolal(String sValorTolal) {
-		this.sValorTolal = sValorTolal;
+	public void setsFEPFON(String sFEPFON) {
+		this.sFEPFON = sFEPFON;
+	}
+
+	public String getsFechaIngreso() {
+		return sFechaIngreso;
+	}
+
+	public void setsFechaIngreso(String sFechaIngreso) {
+		this.sFechaIngreso = sFechaIngreso;
+	}
+
+	public String getsValorIngreso() {
+		return sValorIngreso;
+	}
+
+	public void setsValorIngreso(String sValorIngreso) {
+		this.sValorIngreso = sValorIngreso;
+	}
+
+	public String getsValorTotal() {
+		return sValorTotal;
+	}
+
+	public void setsValorTotal(String sValorTotal) {
+		this.sValorTotal = sValorTotal;
 	}
 
 	public String getsNumGastos() {
@@ -351,12 +417,12 @@ public class GestorIngresos implements Serializable
 		this.sNumGastos = sNumGastos;
 	}
 	
-	public String getsCOSPAT() {
-		return sCOSPAT;
+	public String getsValorAutorizado() {
+		return sValorAutorizado;
 	}
 
-	public void setsCOSPAT(String sCOSPAT) {
-		this.sCOSPAT = sCOSPAT;
+	public void setsValorAutorizado(String sValorAutorizado) {
+		this.sValorAutorizado = sValorAutorizado;
 	}
 
 	public ArrayList<ProvisionTabla> getTablaprovisiones() {
@@ -407,14 +473,6 @@ public class GestorIngresos implements Serializable
 		this.sDCOTPGA = sDCOTPGA;
 	}
 
-	public boolean isbLibre() {
-		return bLibre;
-	}
-
-	public void setbLibre(boolean bLibre) {
-		this.bLibre = bLibre;
-	}
-
 	public String getsNUPROFB() {
 		return sNUPROFB;
 	}
@@ -438,7 +496,21 @@ public class GestorIngresos implements Serializable
 	public void setsEstadoProvisionF(String sEstadoProvisionF) {
 		this.sEstadoProvisionF = sEstadoProvisionF;
 	}
-	
-	
+
+	public String getsNumGastosAutorizados() {
+		return sNumGastosAutorizados;
+	}
+
+	public void setsNumGastosAutorizados(String sNumGastosAutorizados) {
+		this.sNumGastosAutorizados = sNumGastosAutorizados;
+	}
+
+	public Map<String, String> getTiposestadoprovisionHM() {
+		return tiposestadoprovisionHM;
+	}
+
+	public void setTiposestadoprovisionHM(Map<String, String> tiposestadoprovisionHM) {
+		this.tiposestadoprovisionHM = tiposestadoprovisionHM;
+	}
 	
 }

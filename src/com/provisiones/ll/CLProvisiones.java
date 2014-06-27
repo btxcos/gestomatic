@@ -34,8 +34,6 @@ public final class CLProvisiones
 		return QMListaGastosProvisiones.buscaCantidadAbonosEjecutables(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 	
-	
-	
 	public static ArrayList<Long> buscarGastosProvision(String sNUPROF)
 	{
 		return QMListaGastosProvisiones.buscaGastosIDPorProvision(ConnectionManager.getDBConnection(),sNUPROF);
@@ -163,7 +161,7 @@ public final class CLProvisiones
 	public static ArrayList<ProvisionTabla> buscarProvisionesIngresablesConFiltro(ProvisionTabla filtro)
 	{
 		return QMProvisiones.buscaProvisionesIngresablesPorFiltro(ConnectionManager.getDBConnection(),filtro);
-	}//TODO revisar
+	}
 	
 	public static String buscarNota (String sNUPROF)
 	{
@@ -235,6 +233,10 @@ public final class CLProvisiones
 		return iCodigo;
 		
 	}
+	public static String BuscarFechaIngresado (String sNUPROF)
+	{
+		return QMProvisiones.getFechaIngresado(ConnectionManager.getDBConnection(),sNUPROF);
+	}
 	
 	
 	public static boolean existeProvision (String sNUPROF)
@@ -287,6 +289,11 @@ public final class CLProvisiones
 		logger.debug("iCodigo:|"+iCodigo+"|");
 		
 		return iCodigo;
+	}
+	
+	public static boolean registraIngreso (String sNUPROF, String sFecha, long liValor)
+	{
+		return QMProvisiones.setProvisionIngresada(ConnectionManager.getDBConnection(),sNUPROF, sFecha, liValor);
 	}
 	
 	

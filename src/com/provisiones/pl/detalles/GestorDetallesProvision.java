@@ -38,7 +38,7 @@ public class GestorDetallesProvision implements Serializable
 	
 	private String sFEPFON = "";
 	private String sNumGastos = "";	
-	private String sValorTolal = "";
+	private String sValorTotal = "";
 	private String sFechaEnvio = "";
 
 	private String sGastosAutorizados = "";
@@ -140,7 +140,7 @@ public class GestorDetallesProvision implements Serializable
 
 	    	this.sFEPFON = Utils.recuperaFecha(provision.getsFEPFON());
 	    	this.sNumGastos = provision.getsNumGastos();
-	    	this.sValorTolal = Utils.recuperaImporte(false,provision.getsValorTolal());
+	    	this.sValorTotal = Utils.recuperaImporte(false,provision.getsValorTotal());
 	    	this.sFechaEnvio = Utils.recuperaFecha(provision.getsFechaEnvio());
 
 	    	this.sGastosAutorizados = provision.getsGastosAutorizados();
@@ -351,12 +351,12 @@ public class GestorDetallesProvision implements Serializable
 		this.sNumGastos = sNumGastos;
 	}
 
-	public String getsValorTolal() {
-		return sValorTolal;
+	public String getsValorTotal() {
+		return sValorTotal;
 	}
 
-	public void setsValorTolal(String sValorTolal) {
-		this.sValorTolal = sValorTolal;
+	public void setsValorTotal(String sValorTotal) {
+		this.sValorTotal = sValorTotal;
 	}
 
 	public String getsFechaEnvio() {

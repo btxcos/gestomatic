@@ -1419,34 +1419,69 @@ public final class CLComunidades
 													{
 														if (QMComunidades.modComunidad(conexion,convierteMovimientoenComunidad(movimiento), liCodComunidad))
 														{
-															if (QMCuentas.delCuenta(conexion, liCodCuentaAntigua))
+															if (QMListaCuentasComunidades.delRelacionComunidad(conexion, liCodCuentaAntigua, liCodComunidad))
 															{
-																if (nota.isbInvalida())
+																if (!CLCuentas.tieneMasRelacciones(liCodCuentaAntigua))
 																{
-																	//OK 
-																	iCodigo = 0;
+																	if (QMCuentas.delCuenta(conexion, liCodCuentaAntigua))
+																	{
+																		//OK 
+																		if (nota.isbInvalida())
+																		{
+																			//OK 
+																			iCodigo = 0;
+																		}
+																		else
+																		{
+																			if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+																			{
+																				//OK 
+																				iCodigo = 0;
+																			}
+																			else
+																			{
+																				//Error al guardar la nota
+																				iCodigo = -915;
+																			}
+																			
+																		}
+																	}
+																	else
+																	{
+																		//error cuenta no borrada - Rollback
+																		iCodigo = -903;
+																	}
 																}
 																else
 																{
-																	if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+																	//OK 
+																	if (nota.isbInvalida())
 																	{
 																		//OK 
 																		iCodigo = 0;
 																	}
 																	else
 																	{
-																		//Error al guardar la nota
-																		iCodigo = -915;
+																		if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+																		{
+																			//OK 
+																			iCodigo = 0;
+																		}
+																		else
+																		{
+																			//Error al guardar la nota
+																			iCodigo = -915;
+																		}
+																		
 																	}
-																	
 																}
 															}
 															else
 															{
-																//Error y Rollback - error al eliminar la cuenta antigua de la comunidad
-																iCodigo = -913;
+																//error relación cuenta no borrada - Rollback
+																iCodigo = -918;
 															}
-
+															
 														}
 														else
 														{
@@ -1469,7 +1504,89 @@ public final class CLComunidades
 											else
 											{
 												//Error y Rollback - error la cuenta nueva ya existe
-												iCodigo = -914;
+												//iCodigo = -914;
+												
+
+												if (QMListaCuentasComunidades.addRelacionComunidad(conexion, liCuentaNueva, liCodComunidad, ValoresDefecto.CUENTA_COMUNIDAD))
+												{
+													if (QMComunidades.modComunidad(conexion,convierteMovimientoenComunidad(movimiento), liCodComunidad))
+													{
+														if (QMListaCuentasComunidades.delRelacionComunidad(conexion, liCodCuentaAntigua, liCodComunidad))
+														{
+															if (!CLCuentas.tieneMasRelacciones(liCodCuentaAntigua))
+															{
+																if (QMCuentas.delCuenta(conexion, liCodCuentaAntigua))
+																{
+																	//OK 
+																	if (nota.isbInvalida())
+																	{
+																		//OK 
+																		iCodigo = 0;
+																	}
+																	else
+																	{
+																		if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+																		{
+																			//OK 
+																			iCodigo = 0;
+																		}
+																		else
+																		{
+																			//Error al guardar la nota
+																			iCodigo = -915;
+																		}
+																		
+																	}
+																}
+																else
+																{
+																	//error cuenta no borrada - Rollback
+																	iCodigo = -903;
+																}
+															}
+															else
+															{
+																//OK 
+																if (nota.isbInvalida())
+																{
+																	//OK 
+																	iCodigo = 0;
+																}
+																else
+																{
+																	if (QMComunidades.setNota(conexion, liCodComunidad, nota.getsContenido()))
+																	{
+																		//OK 
+																		iCodigo = 0;
+																	}
+																	else
+																	{
+																		//Error al guardar la nota
+																		iCodigo = -915;
+																	}
+																	
+																}
+															}
+														}
+														else
+														{
+															//error relación cuenta no borrada - Rollback
+															iCodigo = -918;
+														}
+														
+													}
+													else
+													{
+														//error y rollback - error al modificar la comunidad
+														iCodigo = -905;
+													}
+												}
+												else
+												{
+													//Error y Rollback - error al registrar la relacion cuenta-comunidad
+													iCodigo = -912;
+												}
+												
 											}	
 										}
 

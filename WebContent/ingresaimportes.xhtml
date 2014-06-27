@@ -28,7 +28,8 @@
 						</p:fieldset>
 									<p:fieldset legend="Acciones" id="acciones">
 										<h:panelGrid columns="3" cellpadding="5">
-											<p:commandButton id="botCerrar" type="button" value="Cerrar Provision" onclick="dlgConfirma.show()" disabled="#{GestorIngresos.bLibre}"/>
+											<p:commandButton value="Limpiar Plantilla" update="msgs, popup, provisiones, panelIngreso, panelProvision, NUPROFB" actionListener="#{GestorIngresos.limpiarPlantilla}" />
+											<p:commandButton value="Ingresar" onclick="dlgConfirmaRegistrar.show()"/>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -64,7 +65,7 @@
 													<h:outputText for="NUPROFB" value="Provisión: " />
 													<p:inputText id="NUPROFB" value="#{GestorIngresos.sNUPROFB}" size="10" maxlength="9"/>
 
-													<p:commandButton value="Comprobar" update="provisiones, msgs, popup" actionListener="#{GestorIngresos.comprobarProvision}"/>	
+													<p:commandButton value="Comprobar" update="panelProvision, panelIngreso, msgs, popup" actionListener="#{GestorIngresos.comprobarProvision}"/>	
 
 												</h:panelGrid>
 											</p:panel>
@@ -73,22 +74,58 @@
 										</h:panelGrid>
 									</p:fieldset>
 
-									<p:fieldset legend="Provisión"  id="panelProvision">
-										<h:panelGrid columns="1" cellpadding="1">
+								<p:fieldset legend="Ingreso" id="panelIngreso">
+										<h:panelGrid columns="1" cellpadding="5">
 
 									<p:panel>
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="4" cellpadding="5">
 											<h:outputText for="NUPROF" value="Provisión de fondos: " />
-												<p:inputText id="NUPROF" value="#{GestorIngresos.sNUPROF}" size="9" maxlength="9" disabled="true">
-												</p:inputText>
-											<p:commandButton value="Cargar Provisiones Abiertas" update="msgs, popup, form:provisiones" actionListener="#{GestorIngresos.cargaProvisionesAbiertas}" oncomplete="dlgTablaProvisiones.show()"/>	
+											<p:inputText id="NUPROF" value="#{GestorIngresos.sNUPROF}" size="9" maxlength="9" disabled="true" />
+
+											<h:outputText for="FEPFON" value="Fecha de Cierre: " />
+											<p:inputText id="FEPFON" value="#{GestorIngresos.sFEPFON}" size="9" maxlength="9" disabled="true" />
+
+
 										</h:panelGrid>
 									</p:panel>
+
+									<p:panel >
+										<h:panelGrid columns="5" cellpadding="5">
+
+											<h:outputText for="NumGastosAutorizados" value="Gastos Autorizados: " />
+											<p:inputText id="NumGastosAutorizados" value="#{GestorIngresos.sNumGastosAutorizados}" size="4" maxlength="4" disabled="true"/>
+
+											<h:outputText for="ValorAutorizado" value="Valor Autorizado: " />
+											<p:inputText id="ValorAutorizado" value="#{GestorIngresos.sValorAutorizado}" size="20" maxlength="20" disabled="true"/>
+											<h:outputText value="¤"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+											<p:panel >
+												<h:panelGrid columns="6" cellpadding="5">
+													<h:outputText for="FechaIngreso" value="Fecha de ingreso: " />
+													<p:inputMask id="FechaIngreso" value="#{GestorIngresos.sFechaIngreso}" mask="99/99/9999" size="10" maxlength="8"/>
+													<p:commandButton icon="ui-icon-clock" update="FechaIngreso" actionListener="#{GestorIngresos.hoyFechaIngreso}"/>
+
+															<h:outputText for="ValorIngreso" value="Ingresado: " />
+															<p:inputText id="ValorIngreso" value="#{GestorIngresos.sValorIngreso}" size="10" maxlength="9"/>
+															<h:outputText value="¤"/>
+
+												</h:panelGrid>
+											</p:panel>
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Detalles Provisión #{GestorIngresos.sNUPROFB}"  id="panelProvision">
+										<h:panelGrid columns="1" cellpadding="1">
+
+
+
 									<p:panel >
 										<h:panelGrid columns="3" cellpadding="5">
 
 											<h:outputText for="DCOSPAT" value="Sociedad patrimonial: " />
-											<p:inputText id="COSPAT" value="#{GestorIngresos.sCOSPAT}" size="5" disabled="true"/>
 											<p:inputText id="DCOSPAT" value="#{GestorIngresos.sDCOSPAT}" size="20" maxlength="20" disabled="true"/>
 
 										</h:panelGrid>
@@ -112,18 +149,17 @@
 											<h:outputText for="DCOTPGA" value="Tipo de gastos contenidos: " />
 											<p:inputText id="DCOTPGA" value="#{GestorIngresos.sDCOTPGA}" size="30" maxlength="30" disabled="true"/>
 
-
-											<h:outputText for="NumGastos" value="Gastos en provisión: " />
-											<p:inputText id="NumGastos" value="#{GestorIngresos.sNumGastos}" size="20" maxlength="20" disabled="true"/>
-
 										</h:panelGrid>
 									</p:panel>
 
 									<p:panel >
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="5" cellpadding="5">
 
-											<h:outputText for="ValorTolal" value="Valor de provisión: " />
-											<p:inputText id="ValorTolal" value="#{GestorIngresos.sValorTolal}" size="20" maxlength="20" disabled="true"/>
+											<h:outputText for="NumGastos" value="Gastos provisionados: " />
+											<p:inputText id="NumGastos" value="#{GestorIngresos.sNumGastos}" size="4" maxlength="4" disabled="true"/>
+
+											<h:outputText for="ValorTotal" value="Valor provisionado: " />
+											<p:inputText id="ValorTotal" value="#{GestorIngresos.sValorTotal}" size="20" maxlength="20" disabled="true"/>
 											<h:outputText value="¤"/>
 
 										</h:panelGrid>
@@ -144,6 +180,13 @@
 										<p:inputMask id="FEPFONF" value="#{GestorIngresos.sFEPFONF}" mask="99/99/9999" size="10" maxlength="8"/>
 										<p:message for="FEPFONF" display="icon"/>
 									</h:panelGrid>
+									<h:panelGrid columns="3" cellpadding="5">
+										<h:outputText value="Estado: "/>
+										<p:selectOneMenu id="ESTADOPROVISIONF" value="#{GestorIngresos.sEstadoProvisionF}">
+											<f:selectItem itemLabel="Estado..." itemValue=""/>
+											<f:selectItems value="#{GestorIngresos.tiposestadoprovisionHM}"/>
+										</p:selectOneMenu>
+									</h:panelGrid>
 								</p:panel>
 								<p:panel >
 									<h:panelGrid columns="3" cellpadding="5">
@@ -158,7 +201,7 @@
 					<p:dialog header="Provisiones abiertas: " widgetVar="dlgTablaProvisiones" resizable="false">  
     				
 							<p:contextMenu for="provisiones">  
-								<p:menuitem value="Seleccionar" update="form:panelProvision, form:popup, form:msgs, form:botCerrar" icon="ui-icon-check" actionListener="#{GestorIngresos.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide()"/>  
+								<p:menuitem value="Seleccionar" update="form:NUPROFB, form:panelIngreso, form:panelProvision, form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorIngresos.seleccionarProvision}" oncomplete="dlgTablaProvisiones.hide()"/>  
 							</p:contextMenu>  
 									
 							<p:dataTable id="provisiones" var="provision" value="#{GestorIngresos.tablaprovisiones}" rowKey="#{provision.NUPROF}"  
@@ -232,20 +275,18 @@
 
 							</p:dataTable> 
 					</p:dialog>
-					<p:dialog header="Confirmación" widgetVar="dlgConfirma" resizable="false"> 
+					<p:dialog header="Confirmación" widgetVar="dlgConfirmaRegistrar" resizable="false"> 
 						<h:panelGrid columns="1">
 							<p:panel>
 								<h:panelGrid columns="1">
-							<h:outputText value="¿Está seguro de cerrar la provisión #{GestorIngresos.sNUPROF}?" />
-							<h:outputText value="- La operación no puede deshacerse una vez concluida." />
-							<h:outputText value="- Todos los gastos no validados en la provisión serán anulados." />
+									<h:outputText value="¿Está seguro de realizar esta operación?" />
 								</h:panelGrid>
-							<p:panel>
-								<h:panelGrid columns="2" cellpadding="5">
-								<p:commandButton value="Si" update="form:panelProvision, form:popup, form:msgs, form:botCerrar"  icon="ui-icon-check" actionListener="#{GestorIngresos.cerrarProvision}" oncomplete="dlgConfirma.hide()"/>  
-								<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirma.hide()"/>
-								</h:panelGrid>
-							</p:panel>
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, provisiones, panelIngreso, panelProvision, NUPROFB" action="#{GestorIngresos.registraIngreso}" onstart="statusDialog.show()" oncomplete="statusDialog.hide();dlgConfirmaRegistrar.hide()"/>  
+									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrar.hide()"/>
+									</h:panelGrid>
+								</p:panel>
 							</p:panel>
 						</h:panelGrid>
 					</p:dialog>
