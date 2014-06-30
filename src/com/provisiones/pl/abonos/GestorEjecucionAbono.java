@@ -658,6 +658,7 @@ public class GestorEjecucionAbono implements Serializable
 				String sFEPFONF = sFecha;
 				String sVALORF = "";
 				String sGASTOSF = "";
+				String sINGRESADOF = "";
 				String sESTADOF = "";
 				
 				ProvisionTabla filtro = new ProvisionTabla(
@@ -673,6 +674,7 @@ public class GestorEjecucionAbono implements Serializable
 						sFEPFONF, 
 						sVALORF, 
 						sGASTOSF,
+						sINGRESADOF,
 						sESTADOF);				
 
 				this.setTablaprovisiones(CLProvisiones.buscarProvisionesEjecutablesConFiltro(filtro));

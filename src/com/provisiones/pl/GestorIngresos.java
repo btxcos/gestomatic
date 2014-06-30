@@ -152,6 +152,7 @@ public class GestorIngresos implements Serializable
 				String sFEPFONF = sFecha;
 				String sVALORF = "";
 				String sGASTOSF = "";
+				String sINGRESADOF = "";
 				String sESTADOF = sEstadoProvisionF;
 				
 				logger.debug("sFEPFONF:|"+sFEPFONF+"|");
@@ -170,6 +171,7 @@ public class GestorIngresos implements Serializable
 						sFEPFONF, 
 						sVALORF, 
 						sGASTOSF,
+						sINGRESADOF,
 						sESTADOF);
 
 				this.tablaprovisiones = CLProvisiones.buscarProvisionesIngresablesConFiltro(filtro); 

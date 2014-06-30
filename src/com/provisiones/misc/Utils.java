@@ -1130,6 +1130,20 @@ public final class Utils
 		return sImporteReal;
 	}
 	
+	public static String recuperaIngreso(String sValor)
+	{
+		String sIngreso = "SI";
+		
+		logger.debug("sValor:|"+sValor+"|");
+		
+		if (sValor.equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+		{
+			sIngreso = "NO";
+		}
+
+		return sIngreso;
+	}
+	
 	public static String recuperaFecha(String sFecha)
 	{
 		//logger.debug("sFecha:|{}|",sFecha);		

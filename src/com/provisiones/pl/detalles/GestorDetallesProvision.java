@@ -48,6 +48,10 @@ public class GestorDetallesProvision implements Serializable
 	private String sGastosPagados = "";
 	private String sValorPagado = "";
 	private String sFechaPagado = "";
+
+	private String sValorIngresado = "";
+	private String sFechaIngresado = "";
+	
 	private String sCodEstado = "";
 	
 	
@@ -150,6 +154,9 @@ public class GestorDetallesProvision implements Serializable
 	    	this.sGastosPagados = provision.getsGastosPagados();
 	    	this.sValorPagado = Utils.recuperaImporte(false,provision.getsValorPagado());
 	    	this.sFechaPagado = Utils.recuperaFecha(provision.getsFechaPagado());
+	    	
+	    	this.sValorIngresado = Utils.recuperaImporte(false,provision.getsValorIngresado());
+	    	this.sFechaIngresado = Utils.recuperaFecha(provision.getsFechaIngresado());
 
 	    	this.sCodEstado = provision.getsCodEstado();
 	    	
@@ -413,6 +420,22 @@ public class GestorDetallesProvision implements Serializable
 
 	public void setsFechaPagado(String sFechaPagado) {
 		this.sFechaPagado = sFechaPagado;
+	}
+
+	public String getsValorIngresado() {
+		return sValorIngresado;
+	}
+
+	public void setsValorIngresado(String sValorIngresado) {
+		this.sValorIngresado = sValorIngresado;
+	}
+
+	public String getsFechaIngresado() {
+		return sFechaIngresado;
+	}
+
+	public void setsFechaIngresado(String sFechaIngresado) {
+		this.sFechaIngresado = sFechaIngresado;
 	}
 
 	public String getsCodEstado() {

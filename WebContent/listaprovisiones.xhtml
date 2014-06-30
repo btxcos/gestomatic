@@ -134,7 +134,7 @@
 
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Número de Provisión" />
+									<h:outputText value="Provisión" />
 								</f:facet>
 								<h:outputText value="#{provision.NUPROF}" />
 							</p:column>
@@ -169,7 +169,7 @@
 
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Número de Gastos" />
+									<h:outputText value="Gastos" />
 								</f:facet>
 								<h:outputText value="#{provision.GASTOS}" />
 							</p:column>
@@ -179,6 +179,13 @@
 									<h:outputText value="Valor" />
 								</f:facet>
 								<h:outputText value="#{provision.VALOR}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Ingresado" />
+								</f:facet>
+								<h:outputText value="#{provision.INGRESADO}" />
 							</p:column>
 
 							<p:column>
@@ -351,6 +358,13 @@
 											<f:selectItems value="#{GestorListaProvisiones.tiposestadoprovisionHM}"/>
 										</p:selectOneMenu>
 									</h:panelGrid>
+									<h:panelGrid columns="3" cellpadding="5">
+										<h:outputText value="Ingresado: "/>
+										<p:selectOneMenu id="INGRESADAFA" value="#{GestorListaProvisiones.sIngresadaFA}">
+											<f:selectItem itemLabel="Ingresado..." itemValue=""/>
+											<f:selectItems value="#{GestorListaProvisiones.tiposingresadoHM}"/>
+										</p:selectOneMenu>
+									</h:panelGrid>
 								</p:panel>
 								<p:panel >
 									<h:panelGrid columns="3" cellpadding="5">
@@ -378,6 +392,13 @@
 											<f:selectItems value="#{GestorListaProvisiones.tiposestadoprovisionHM}"/>
 										</p:selectOneMenu>
 									</h:panelGrid>
+									<h:panelGrid columns="3" cellpadding="5">
+										<h:outputText value="Ingresado: "/>
+										<p:selectOneMenu id="INGRESADAFC" value="#{GestorListaProvisiones.sIngresadaFC}">
+											<f:selectItem itemLabel="Ingresado..." itemValue=""/>
+											<f:selectItems value="#{GestorListaProvisiones.tiposingresadoHM}"/>
+										</p:selectOneMenu>
+									</h:panelGrid>
 								</p:panel>
 								<p:panel >
 									<h:panelGrid columns="3" cellpadding="5">
@@ -403,6 +424,13 @@
 										<p:selectOneMenu id="ESTADOPROVISIONF" value="#{GestorListaProvisiones.sEstadoProvisionF}">
 											<f:selectItem itemLabel="Estado..." itemValue=""/>
 											<f:selectItems value="#{GestorListaProvisiones.tiposestadoprovisionHM}"/>
+										</p:selectOneMenu>
+									</h:panelGrid>
+									<h:panelGrid columns="3" cellpadding="5">
+										<h:outputText value="Ingresado: "/>
+										<p:selectOneMenu id="INGRESADAF" value="#{GestorListaProvisiones.sIngresadaF}">
+											<f:selectItem itemLabel="Ingresado..." itemValue=""/>
+											<f:selectItems value="#{GestorListaProvisiones.tiposingresadoHM}"/>
 										</p:selectOneMenu>
 									</h:panelGrid>
 								</p:panel>

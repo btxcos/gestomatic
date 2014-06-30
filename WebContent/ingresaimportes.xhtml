@@ -283,7 +283,7 @@
 								</h:panelGrid>
 								<p:panel>
 									<h:panelGrid columns="2" cellpadding="5">
-									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, provisiones, panelIngreso, panelProvision, NUPROFB" action="#{GestorIngresos.registraIngreso}" onstart="statusDialog.show()" oncomplete="statusDialog.hide();dlgConfirmaRegistrar.hide()"/>  
+									<p:commandButton value="Si" icon="ui-icon-check" update="msgs, popup, provisiones, panelIngreso, panelProvision, NUPROFB" actionListener="#{GestorIngresos.registraIngreso}" onstart="statusDialog.show()" oncomplete="statusDialog.hide();dlgConfirmaRegistrar.hide()"/>  
 									<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaRegistrar.hide()"/>
 									</h:panelGrid>
 								</p:panel>

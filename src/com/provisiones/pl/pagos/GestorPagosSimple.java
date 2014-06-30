@@ -722,6 +722,7 @@ public class GestorPagosSimple implements Serializable
 				String sFEPFONF = sFecha;
 				String sVALORF = "";
 				String sGASTOSF = "";
+				String sINGRESADOF = "";
 				String sESTADOF = "";
 				
 				ProvisionTabla filtro = new ProvisionTabla(
@@ -737,6 +738,7 @@ public class GestorPagosSimple implements Serializable
 						sFEPFONF, 
 						sVALORF, 
 						sGASTOSF,
+						sINGRESADOF,
 						sESTADOF);				
 
 				this.setTablaprovisiones(CLProvisiones.buscarProvisionesAutorizadasConFiltro(filtro));

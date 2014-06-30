@@ -53,6 +53,7 @@ public class GestorListaProvisiones implements Serializable
 	//Filtro Provision Activos
 	private String sFEPFONFA = "";
 	private String sEstadoProvisionFA = "";
+	private String sIngresadaFA = "";
 	
 	//Buscar Comunidades
 	private String sCOCLDOB = "";
@@ -66,6 +67,7 @@ public class GestorListaProvisiones implements Serializable
 	//Filtro Provision Comunidades
 	private String sFEPFONFC = "";
 	private String sEstadoProvisionFC = "";
+	private String sIngresadaFC = "";
 	
 	//Buscar Provision
 	private String sNUPROFB = "";
@@ -73,6 +75,7 @@ public class GestorListaProvisiones implements Serializable
 	//Filtro Provision
 	private String sFEPFONF = "";
 	private String sEstadoProvisionF = "";
+	private String sIngresadaF = "";
 
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -86,6 +89,7 @@ public class GestorListaProvisiones implements Serializable
 	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 
 	private Map<String,String> tiposestadoprovisionHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposingresadoHM = new LinkedHashMap<String, String>();
 	
 	public GestorListaProvisiones()
 	{
@@ -101,6 +105,9 @@ public class GestorListaProvisiones implements Serializable
 			tiposestadoprovisionHM.put("ENVIADA",	"E");
 			tiposestadoprovisionHM.put("AUTORIZADA","T");
 			tiposestadoprovisionHM.put("PAGADA",	"G");
+			
+			tiposingresadoHM.put("SI","S");
+			tiposingresadoHM.put("NO","N");
 		}
 	}
 	
@@ -365,6 +372,7 @@ public class GestorListaProvisiones implements Serializable
 							String sFEPFONF = sFecha;
 							String sVALORF = "";
 							String sGASTOSF = "";
+							String sINGRESADOF = sIngresadaFA;
 							String sESTADOF = sEstadoProvisionFA;
 							
 							logger.debug("sFEPFONF:|"+sFEPFONF+"|");
@@ -383,6 +391,7 @@ public class GestorListaProvisiones implements Serializable
 									sFEPFONF, 
 									sVALORF, 
 									sGASTOSF,
+									sINGRESADOF,
 									sESTADOF);
 
 							this.tablaprovisiones = CLProvisiones.buscarProvisionesActivoConFiltro(iCOACES, filtro); 
@@ -475,6 +484,7 @@ public class GestorListaProvisiones implements Serializable
 					String sFEPFONF = sFecha;
 					String sVALORF = "";
 					String sGASTOSF = "";
+					String sINGRESADOF = sIngresadaFC;
 					String sESTADOF = sEstadoProvisionFC;
 					
 					logger.debug("sFEPFONF:|"+sFEPFONF+"|");
@@ -493,6 +503,7 @@ public class GestorListaProvisiones implements Serializable
 							sFEPFONF, 
 							sVALORF, 
 							sGASTOSF,
+							sINGRESADOF,
 							sESTADOF);
 
 					this.tablaprovisiones = CLProvisiones.buscarProvisionesComunidadConFiltro(liCodComunidad, filtro); 
@@ -561,6 +572,7 @@ public class GestorListaProvisiones implements Serializable
 				String sFEPFONF = sFecha;
 				String sVALORF = "";
 				String sGASTOSF = "";
+				String sINGRESADOF = sIngresadaF;
 				String sESTADOF = sEstadoProvisionF;
 				
 				logger.debug("sFEPFONF:|"+sFEPFONF+"|");
@@ -579,6 +591,7 @@ public class GestorListaProvisiones implements Serializable
 						sFEPFONF, 
 						sVALORF, 
 						sGASTOSF,
+						sINGRESADOF,
 						sESTADOF);
 
 				this.tablaprovisiones = CLProvisiones.buscarProvisionesConFiltro(filtro); 
@@ -1011,6 +1024,46 @@ public class GestorListaProvisiones implements Serializable
 
 	public void setTiposestadoprovisionHM(Map<String, String> tiposestadoprovisionHM) {
 		this.tiposestadoprovisionHM = tiposestadoprovisionHM;
+	}
+
+
+	public String getsIngresadaFA() {
+		return sIngresadaFA;
+	}
+
+
+	public void setsIngresadaFA(String sIngresadaFA) {
+		this.sIngresadaFA = sIngresadaFA;
+	}
+
+
+	public String getsIngresadaFC() {
+		return sIngresadaFC;
+	}
+
+
+	public void setsIngresadaFC(String sIngresadaFC) {
+		this.sIngresadaFC = sIngresadaFC;
+	}
+
+
+	public String getsIngresadaF() {
+		return sIngresadaF;
+	}
+
+
+	public void setsIngresadaF(String sIngresadaF) {
+		this.sIngresadaF = sIngresadaF;
+	}
+
+
+	public Map<String,String> getTiposingresadoHM() {
+		return tiposingresadoHM;
+	}
+
+
+	public void setTiposingresadoHM(Map<String,String> tiposingresadoHM) {
+		this.tiposingresadoHM = tiposingresadoHM;
 	}
 
 }

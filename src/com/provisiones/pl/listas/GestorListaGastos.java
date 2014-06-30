@@ -377,6 +377,7 @@ public class GestorListaGastos implements Serializable
 				String sFEPFONF = sFecha;
 				String sVALORF = "";
 				String sGASTOSF = "";
+				String sINGRESADOF = "";
 				String sESTADOF = sEstadoProvision;
 				
 				ProvisionTabla filtro = new ProvisionTabla(
@@ -392,6 +393,7 @@ public class GestorListaGastos implements Serializable
 						sFEPFONF, 
 						sVALORF, 
 						sGASTOSF,
+						sINGRESADOF,
 						sESTADOF);
 				
 				this.setTablaprovisiones(CLProvisiones.buscarProvisionesConFiltro(filtro));

@@ -850,6 +850,7 @@ public class GestorMovimientosGastos implements Serializable
 				String sFEPFONF = sFecha;
 				String sVALORF = "";
 				String sGASTOSF = "";
+				String sINGRESADOF = "";
 				String sESTADOF = "";
 				
 				ProvisionTabla filtro = new ProvisionTabla(
@@ -865,6 +866,7 @@ public class GestorMovimientosGastos implements Serializable
 						sFEPFONF, 
 						sVALORF, 
 						sGASTOSF,
+						sINGRESADOF,
 						sESTADOF);
 						
 				

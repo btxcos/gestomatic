@@ -126,6 +126,19 @@
 									<p:panel >
 										<h:panelGrid columns="5" cellpadding="5">
 
+											<h:outputText for="FechaIngresado" value="Fecha de ingreso: " />
+											<p:inputText id="FechaPagado" value="#{GestorDetallesProvision.sFechaIngresado}" size="9" disabled="true"/>
+
+											<h:outputText for="ValorIngresado" value="Valor ingresado: " />
+											<p:inputText id="ValorIngresado" value="#{GestorDetallesProvision.sValorIngresado}" size="20" disabled="true"/>
+											<h:outputText value="¤"/>
+
+										</h:panelGrid>
+									</p:panel>
+
+									<p:panel >
+										<h:panelGrid columns="5" cellpadding="5">
+
 											<h:outputText for="GastosPagados" value="Gastos pagados: " />
 											<p:inputText id="GastosPagados" value="#{GestorDetallesProvision.sGastosPagados}" size="6" disabled="true"/>
 
@@ -139,7 +152,7 @@
 										</h:panelGrid>
 									</p:panel>
 
-										</h:panelGrid>
+								</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Gastos">
 										<h:panelGrid columns="1" cellpadding="5">

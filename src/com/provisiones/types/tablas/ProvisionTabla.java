@@ -16,6 +16,7 @@ public class ProvisionTabla
 	private String FEPFON = "";
 	private String VALOR = "";
 	private String GASTOS = "";
+	private String INGRESADO = "";
 	
 	private String ESTADO = "";
 
@@ -24,7 +25,7 @@ public class ProvisionTabla
 	public ProvisionTabla(String nUPROF, String cOSPAT, String dCOSPAT,
 			String tAS, String dTAS, String cOGRUG, String dCOGRUG,
 			String cOTPGA, String dCOTPGA, String fEPFON, String vALOR,
-			String gASTOS, String eSTADO) {
+			String gASTOS, String iNGRESADO, String eSTADO) {
 		super();
 		NUPROF = nUPROF;
 		COSPAT = cOSPAT;
@@ -38,6 +39,7 @@ public class ProvisionTabla
 		FEPFON = fEPFON;
 		VALOR = vALOR;
 		GASTOS = gASTOS;
+		INGRESADO = iNGRESADO;
 		ESTADO = eSTADO;
 	}
 
@@ -137,6 +139,14 @@ public class ProvisionTabla
 
 	public void setGASTOS(String gASTOS) {
 		GASTOS = gASTOS;
+	}
+
+	public String getINGRESADO() {
+		return INGRESADO;
+	}
+
+	public void setINGRESADO(String iNGRESADO) {
+		INGRESADO = iNGRESADO;
 	}
 
 	public String getESTADO() {
