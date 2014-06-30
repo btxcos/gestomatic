@@ -423,6 +423,11 @@ public class GestorMovimientosComunidades implements Serializable
 				this.sNUCCOF = cuenta.getsNUCCOF();
 				this.sNUCCDI = cuenta.getsNUCCDI();
 				this.sNUCCNT = cuenta.getsNUCCNT();
+				
+				logger.debug("sNUCCEN:|"+sNUCCEN+"|");
+				logger.debug("sNUCCOF:|"+sNUCCOF+"|");
+				logger.debug("sNUCCDI:|"+sNUCCDI+"|");
+				logger.debug("sNUCCNT:|"+sNUCCNT+"|");
 
 				this.sOBTEXC = comunidad.getsOBTEXC();
 				

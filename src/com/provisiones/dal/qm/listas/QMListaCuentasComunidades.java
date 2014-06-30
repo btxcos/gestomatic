@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.qm.QMCuentas;
+import com.provisiones.misc.Longitudes;
+import com.provisiones.misc.Parser;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuenta;
@@ -254,11 +256,11 @@ public class QMListaCuentasComunidades
 						bEncontrado = true;
 						
 						sPais    = rs.getString("AES_DECRYPT("+QMCuentas.CAMPO2 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sDCIBAN  = rs.getString("AES_DECRYPT("+QMCuentas.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCEN  = rs.getString("AES_DECRYPT("+QMCuentas.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCOF  = rs.getString("AES_DECRYPT("+QMCuentas.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCDI  = rs.getString("AES_DECRYPT("+QMCuentas.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNUCCNT  = rs.getString("AES_DECRYPT("+QMCuentas.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sDCIBAN  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.DCIBAN_L);
+						sNUCCEN  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.NUCCEN_L);
+						sNUCCOF  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.NUCCOF_L);
+						sNUCCDI  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.NUCCDI_L);
+						sNUCCNT  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.NUCCNT_L);
 						sDescripcion  = rs.getString(QMCuentas.CAMPO8);
 					
 						Cuenta cuentaencontrada = new Cuenta(
