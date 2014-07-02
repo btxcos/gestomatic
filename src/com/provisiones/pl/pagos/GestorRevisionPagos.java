@@ -172,7 +172,7 @@ public class GestorRevisionPagos implements Serializable
 	private String sNotaO = "";
 	private String sNota = "";
 	
-	private boolean bRevisable = true;
+//	private boolean bRevisable = true;
 	
 	private Map<String,String> tiposcogrugHM = new LinkedHashMap<String, String>();
 
@@ -437,7 +437,7 @@ public class GestorRevisionPagos implements Serializable
 		this.sRecargo = "0";
 		this.bAbono = false;
 		
-		this.bRevisable = true;
+		//this.bRevisable = true;
 		
 		this.sFEPGPR = "";
 		
@@ -1225,7 +1225,7 @@ public class GestorRevisionPagos implements Serializable
 			    		this.setsDescripcion("TRANSFERENCIA");
 			    		
 			    		//comprobar si se ha generado el fichero de transferencias.
-			    		this.bRevisable = !CLPagos.estaEnviado(liCodPago);
+			    		//this.bRevisable = !CLPagos.estaEnviado(liCodPago);
 	    			}
 	    			catch(NumberFormatException nfe)
 	    			{
@@ -1630,12 +1630,12 @@ public class GestorRevisionPagos implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}*/
-				else if (!bRevisable)
+				/*else if (!bRevisable)
 				{
 					sMsg = "ERROR: El Pago no puede ser revisado, el fichero de transferencias que lo contiene ya fue generado. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
-				}
+				}*/
 				else if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION)
 						&& sFEPGPR.equals(sFEPGPRO) 
 						&& sRecargo.equals(sRecargoM) 
