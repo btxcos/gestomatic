@@ -14,6 +14,8 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMGastos;
+import com.provisiones.dal.qm.QMPagos;
+import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
@@ -1449,6 +1451,7 @@ public final class QMListaGastos
 						
 						String sGastoID = rs.getString(QMGastos.CAMPO1);
 						String sNUPROF = QMListaGastosProvisiones.getProvisionDeGasto(conexion, rs.getLong(QMGastos.CAMPO1));
+						String sEstadoPROF = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESPROF,QMCodigosControl.IESPROF,QMProvisiones.getEstado(conexion, sNUPROF));
 						String sCOACES  = rs.getString(QMGastos.CAMPO2);
 						String sCOGRUG  = rs.getString(QMGastos.CAMPO3);
 						String sCOTPGA  = rs.getString(QMGastos.CAMPO4);
@@ -1463,10 +1466,12 @@ public final class QMListaGastos
 						String sEstado  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TESGAST,QMCodigosControl.IESGAST,rs.getString(QMGastos.CAMPO34));
 						String sFEEPAI  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO14));
 						String sFELIPG  = Utils.recuperaFecha(rs.getString(QMGastos.CAMPO9));
+						String sTipoPago  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOPAGO,QMCodigosControl.ICOPAGO,QMPagos.getTipoPago(conexion, rs.getLong(QMGastos.CAMPO1)));;
 						
 						GastoTabla gastoencontrado = new GastoTabla(
 								sGastoID,
 								sNUPROF,
+								sEstadoPROF,
 								sCOACES,
 								sCOGRUG,
 								sCOTPGA,
@@ -1480,7 +1485,8 @@ public final class QMListaGastos
 								sIMNGAS,
 								sEstado,
 								sFEEPAI,
-								sFELIPG);
+								sFELIPG,
+								sTipoPago);
 						
 						resultado.add(gastoencontrado);
 						

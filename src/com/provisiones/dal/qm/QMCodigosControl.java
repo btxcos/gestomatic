@@ -134,6 +134,10 @@ public final class QMCodigosControl
 	
 	public static final String TESACTI = "pp001_estados_activo_tbl";
 	public static final String IESACTI = "estado_activo_id";	
+
+	public static final String TCOPAGO = "pp001_tipo_pago_tbl";
+	public static final String ICOPAGO = "tipo_id";
+	
 	
 	private QMCodigosControl(){}
 	

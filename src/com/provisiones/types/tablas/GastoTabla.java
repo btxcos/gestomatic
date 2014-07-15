@@ -6,6 +6,7 @@ public class GastoTabla
 	private String sGastoID = "";
 	
 	private String NUPROF = "";
+	private String ESTADOPROF = "";
 	private String COACES = "";
 	private String COGRUG = "";
 	private String COTPGA = "";
@@ -20,17 +21,19 @@ public class GastoTabla
 	private String ESTADO = "";
 	private String FEEPAI = "";
 	private String FELIPG = "";
+	private String TIPOPAGO = "";
 
 	//Constructor de clase
 	
-	public GastoTabla(String sGastoID, String nUPROF, String cOACES,
-			String cOGRUG, String cOTPGA, String cOSBGA, String dCOSBGA,
-			String pTPAGO, String dPTPAGO, String fEDEVE, String cOSIGA,
-			String dCOSIGA, String iMNGAS, String eSTADO, String fEEPAI,
-			String fELIPG) {
+	public GastoTabla(String sGastoID, String nUPROF, String eSTADOPROF,
+			String cOACES, String cOGRUG, String cOTPGA, String cOSBGA,
+			String dCOSBGA, String pTPAGO, String dPTPAGO, String fEDEVE,
+			String cOSIGA, String dCOSIGA, String iMNGAS, String eSTADO,
+			String fEEPAI, String fELIPG, String tIPOPAGO) {
 		super();
 		this.sGastoID = sGastoID;
 		NUPROF = nUPROF;
+		ESTADOPROF = eSTADOPROF;
 		COACES = cOACES;
 		COGRUG = cOGRUG;
 		COTPGA = cOTPGA;
@@ -45,6 +48,7 @@ public class GastoTabla
 		ESTADO = eSTADO;
 		FEEPAI = fEEPAI;
 		FELIPG = fELIPG;
+		TIPOPAGO = tIPOPAGO;
 	}
 	
 	//Métodos de acceso
@@ -65,6 +69,14 @@ public class GastoTabla
 		NUPROF = nUPROF;
 	}
 	
+	public String getESTADOPROF() {
+		return ESTADOPROF;
+	}
+
+	public void setESTADOPROF(String eSTADOPROF) {
+		ESTADOPROF = eSTADOPROF;
+	}
+
 	public String getCOACES() {
 		return COACES;
 	}
@@ -175,6 +187,14 @@ public class GastoTabla
 
 	public void setFELIPG(String fELIPG) {
 		FELIPG = fELIPG;
+	}
+
+	public String getTIPOPAGO() {
+		return TIPOPAGO;
+	}
+
+	public void setTIPOPAGO(String tIPOPAGO) {
+		TIPOPAGO = tIPOPAGO;
 	}
 
 }

@@ -941,6 +941,7 @@ public class GestorMovimientosGastos implements Serializable
 						
 						GastoTabla filtro = new GastoTabla(
 								"",
+								"",
 								"",   
 								sCOACESB,   
 								sCOGRUGBA,   
@@ -954,6 +955,7 @@ public class GestorMovimientosGastos implements Serializable
 								"",  
 								"",
 								sEstadoBA,//TODO meter estado en el filtro
+								"",
 								"",
 								"");
 						
@@ -1035,6 +1037,7 @@ public class GestorMovimientosGastos implements Serializable
 						GastoTabla filtro = new GastoTabla(
 								"",
 								sNUPROFB,   
+								"",
 								sCOACESBP,   
 								sCOGRUGBP,   
 								sCOTPGABP,   
@@ -1047,6 +1050,7 @@ public class GestorMovimientosGastos implements Serializable
 								"",  
 								"",
 								sEstadoBP,//TODO meter estado en el filtro
+								"",
 								"",
 								"");
 						

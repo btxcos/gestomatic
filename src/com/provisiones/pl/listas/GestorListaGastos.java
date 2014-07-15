@@ -637,6 +637,7 @@ public class GestorListaGastos implements Serializable
 				{
 					GastoTabla filtro = new GastoTabla(
 							"",
+							"",
 							"",   
 							sCOACES,   
 							sCOGRUGFA,   
@@ -650,6 +651,7 @@ public class GestorListaGastos implements Serializable
 							"",  
 							"",
 							sEstadoGastoFA,
+							"",
 							"",
 							"");
 					
@@ -734,6 +736,7 @@ public class GestorListaGastos implements Serializable
 					GastoTabla filtro = new GastoTabla(
 							"",
 							sNUPROF,   
+							"",
 							"",   
 							sCOGRUGFP,   
 							sCOTPGAFP,   
@@ -744,6 +747,7 @@ public class GestorListaGastos implements Serializable
 							Utils.compruebaFecha(sFEDEVEFP),   
 							"",   
 							"",  
+							"",
 							"",
 							"",
 							"",

@@ -718,6 +718,77 @@ public class QMPagos
 		return bEncontrado;
 	}
 	
+	public static String getTipoPago(Connection conexion, long liCodGasto)
+	{
+		String sTipoPago = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+						+ CAMPO4+
+						" FROM " 
+						+ TABLA + 
+						" WHERE "
+						+ CAMPO3 + " = '"+ liCodGasto +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sTipoPago = rs.getString(CAMPO4);
+						
+						logger.debug(CAMPO3+":|"+liCodGasto+"|");
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO4+":|"+sTipoPago+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sTipoPago = "";
+				
+				logger.error("ERROR GASTO PAGADO:|"+liCodGasto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sTipoPago;
+	}
+	
 	public static boolean existePago(Connection conexion, long liCodGasto)
 	{
 		boolean bEncontrado = false;

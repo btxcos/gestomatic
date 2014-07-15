@@ -832,6 +832,7 @@ public class GestorRevisionPagos implements Serializable
 				{
 					GastoTabla filtro = new GastoTabla(
 							"",
+							"",
 							"",   
 							sCOACESB,   
 							sCOGRUGBA,   
@@ -846,6 +847,7 @@ public class GestorRevisionPagos implements Serializable
 							"",
 							"",
 							"",//TODO meter estado en el filtro
+							"",
 							"");
 					
 					
@@ -928,6 +930,7 @@ public class GestorRevisionPagos implements Serializable
 						GastoTabla filtro = new GastoTabla(
 								"",
 								sNUPROFB,   
+								"",
 								sCOACESBP,   
 								sCOGRUGBP,   
 								sCOTPGABP,   
@@ -941,6 +944,7 @@ public class GestorRevisionPagos implements Serializable
 								"",
 								"",
 								"",//TODO meter estado en el filtro
+								"",
 								"");
 						
 						this.setTablagastosprovision(CLGastos.buscarGastosRevisablesProvisionConFiltro(filtro));

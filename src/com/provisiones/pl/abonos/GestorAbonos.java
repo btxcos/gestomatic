@@ -764,6 +764,7 @@ public class GestorAbonos implements Serializable
 						
 						GastoTabla filtro = new GastoTabla(
 								"",
+								"",
 								"",   
 								sCOACESB,   
 								sCOGRUGBA,   
@@ -778,6 +779,7 @@ public class GestorAbonos implements Serializable
 								"",
 								"",
 								"",//TODO meter estado en el filtro
+								"",
 								"");
 						
 						
@@ -858,6 +860,7 @@ public class GestorAbonos implements Serializable
 						GastoTabla filtro = new GastoTabla(
 								"",
 								sNUPROFB,   
+								"",
 								sCOACESBP,   
 								sCOGRUGBP,   
 								sCOTPGABP,   
@@ -871,6 +874,7 @@ public class GestorAbonos implements Serializable
 								"",
 								"",
 								"",//TODO meter estado en el filtro
+								"",
 								"");
 						
 						this.setTablagastosprovision(CLGastos.buscarGastosAbonablesProvisionConFiltroEstado(filtro,sEstadoBP));

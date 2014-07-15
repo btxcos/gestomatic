@@ -730,6 +730,7 @@ public class GestorEjecucionAbono implements Serializable
 				{
 					GastoTabla filtro = new GastoTabla(
 							"",
+							"",
 							"",   
 							sCOACESB,   
 							sCOGRUGBA,   
@@ -744,6 +745,7 @@ public class GestorEjecucionAbono implements Serializable
 							"",
 							"",
 							"",//TODO meter estado en el filtro
+							"",
 							"");
 					
 					
@@ -827,6 +829,7 @@ public class GestorEjecucionAbono implements Serializable
 						GastoTabla filtro = new GastoTabla(
 								"",
 								sNUPROFB,   
+								"",
 								sCOACESBP,   
 								sCOGRUGBP,   
 								sCOTPGABP,   
@@ -840,6 +843,7 @@ public class GestorEjecucionAbono implements Serializable
 								"",
 								"",
 								"",//TODO meter estado en el filtro
+								"",
 								"");
 						
 						this.setTablagastosprovision(CLGastos.buscarGastosAbonadosEjecutablesProvisionConFiltro(filtro));
