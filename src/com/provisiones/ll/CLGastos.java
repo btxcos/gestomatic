@@ -899,7 +899,7 @@ public final class CLGastos
 
 								if (liCodGasto == 0)
 								{
-									liCodGasto = QMGastos.addGasto(conexion,convierteMovimientoenGasto(movimiento),ValoresDefecto.DEF_GASTO_AUTORIZADO,ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR); 
+									liCodGasto = QMGastos.addGasto(conexion,convierteMovimientoenGasto(movimiento),ValoresDefecto.DEF_GASTO_AUTORIZADO,ValoresDefecto.GASTO_CONVENCIONAL,ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR); 
 								}
 								else
 								{
@@ -1659,7 +1659,7 @@ public final class CLGastos
 									logger.debug("Dando de alta el gasto...");
 									logger.debug(gastonuevo.logGasto());
 								
-									liCodGasto = QMGastos.addGasto(conexion,gastonuevo,movimiento_revisado.getCOSIGA(),nota.getsContenido()); 
+									liCodGasto = QMGastos.addGasto(conexion,gastonuevo,movimiento_revisado.getCOSIGA(),ValoresDefecto.GASTO_CONVENCIONAL,nota.getsContenido()); 
 
 									if (liCodGasto != 0)
 									{

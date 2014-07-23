@@ -19,6 +19,9 @@ public final class ValoresDefecto
 	public static final byte ACTIVO = 1;
 	public static final byte INACTIVO = 0;
 	
+	public static final byte GASTO_URGENTE = 1;
+	public static final byte GASTO_CONVENCIONAL = 0;
+	
 	public static final byte CUENTA_COMUNIDAD = 1;
 	public static final byte CUENTA_CONVENCIONAL = 0;
 	public static final byte CUENTA_TODAS = 2;

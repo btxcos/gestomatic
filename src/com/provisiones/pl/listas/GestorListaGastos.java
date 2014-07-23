@@ -625,6 +625,7 @@ public class GestorListaGastos implements Serializable
 			
 			try
 			{
+				//if (true)
 				if (sCOACES.isEmpty())
 				{
 					sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
@@ -633,7 +634,7 @@ public class GestorListaGastos implements Serializable
 					
 			    	this.setTablagastos(null);
 				}
-				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES))) 
 				{
 					GastoTabla filtro = new GastoTabla(
 							"",
