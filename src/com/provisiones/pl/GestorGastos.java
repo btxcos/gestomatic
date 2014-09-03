@@ -109,6 +109,7 @@ public class GestorGastos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	private String sNURCAT = "";
 	
@@ -236,6 +237,7 @@ public class GestorGastos implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
     	
     	this.sNURCAT = "";
 	}
@@ -391,6 +393,7 @@ public class GestorGastos implements Serializable
 						sNUPIAC.toUpperCase(), 
 						sNUPOAC.toUpperCase(), 
 						sNUPUAC.toUpperCase(), 
+						sNUFIRE.toUpperCase(),
 						"");
 				
 				this.setTablaactivos(CLActivos.buscarActivosConFichaInmovilizado(filtro));
@@ -1874,6 +1877,14 @@ public class GestorGastos implements Serializable
 	public void setsNUPUAC(String sNUPUAC) {
 		this.sNUPUAC = sNUPUAC;
 	}
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
+	}
+
 	public boolean isbFEEESI() {
 		return bFEEESI;
 	}

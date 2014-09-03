@@ -60,6 +60,7 @@ public class GestorRevisionPagos implements Serializable
 	private String sNUPIACB = "";
 	private String sNUPOACB = "";
 	private String sNUPUACB = "";
+	private String sNUFIREB = "";
 	
 	private String sNURCATB = "";
 	
@@ -290,6 +291,7 @@ public class GestorRevisionPagos implements Serializable
 		this.sNUPIACB = "";
 		this.sNUPOACB = "";
 		this.sNUPUACB = "";
+		this.sNUFIREB = "";
 		
 		this.sNURCATB = "";
     	
@@ -651,9 +653,16 @@ public class GestorRevisionPagos implements Serializable
 			if (sNURCATB.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
-						"", sCOPOINB.toUpperCase(), sNOMUINB.toUpperCase(),
-						sNOPRACB.toUpperCase(), sNOVIASB.toUpperCase(), sNUPIACB.toUpperCase(), 
-						sNUPOACB.toUpperCase(), sNUPUACB.toUpperCase(), "");
+						"", 
+						sCOPOINB.toUpperCase(), 
+						sNOMUINB.toUpperCase(),
+						sNOPRACB.toUpperCase(), 
+						sNOVIASB.toUpperCase(), 
+						sNUPIACB.toUpperCase(), 
+						sNUPOACB.toUpperCase(), 
+						sNUPUACB.toUpperCase(), 
+						sNUFIREB.toUpperCase(),
+						"");
 				
 				this.setTablaactivos(CLPagos.buscarActivosConPagos(filtro));
 				
@@ -1985,6 +1994,14 @@ public class GestorRevisionPagos implements Serializable
 
 	public void setsNUPUACB(String sNUPUACB) {
 		this.sNUPUACB = sNUPUACB;
+	}
+
+	public String getsNUFIREB() {
+		return sNUFIREB;
+	}
+
+	public void setsNUFIREB(String sNUFIREB) {
+		this.sNUFIREB = sNUFIREB;
 	}
 
 	public String getsNURCATB() {

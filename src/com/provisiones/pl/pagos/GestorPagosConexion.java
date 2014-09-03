@@ -101,6 +101,7 @@ public class GestorPagosConexion implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	private String sNURCATF = "";
 	
@@ -189,6 +190,7 @@ public class GestorPagosConexion implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
     	
     	this.sNURCATF = "";
 	}
@@ -314,6 +316,7 @@ public class GestorPagosConexion implements Serializable
 						sNUPIAC.toUpperCase(), 
 						sNUPOAC.toUpperCase(), 
 						sNUPUAC.toUpperCase(), 
+						sNUFIRE.toUpperCase(),
 						"");
 				
 				this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
@@ -1539,6 +1542,14 @@ public class GestorPagosConexion implements Serializable
 
 	public void setsNUPUAC(String sNUPUAC) {
 		this.sNUPUAC = sNUPUAC;
+	}
+
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
 	}
 
 	public ActivoTabla getActivoseleccionado() {

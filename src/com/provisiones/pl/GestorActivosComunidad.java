@@ -38,6 +38,7 @@ public class GestorActivosComunidad implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	private String sCOCLDO = "";
 	private String sNUDCOM = "";
@@ -75,6 +76,7 @@ public class GestorActivosComunidad implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
 		
 	}
 	
@@ -109,6 +111,7 @@ public class GestorActivosComunidad implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
 	}
 	
     public void limpiarPlantilla(ActionEvent actionEvent) 
@@ -132,9 +135,16 @@ public class GestorActivosComunidad implements Serializable
 			this.setTablaactivos(null);
 			
 			ActivoTabla buscaactivos = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+					"", 
+					sCOPOIN.toUpperCase(), 
+					sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), 
+					sNOVIAS.toUpperCase(), 
+					sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), 
+					sNUPUAC.toUpperCase(), 
+					sNUFIRE.toUpperCase(),
+					"");
 
 			this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(buscaactivos));
 			
@@ -666,6 +676,14 @@ public class GestorActivosComunidad implements Serializable
 
 	
 	
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
+	}
+
 	public ActivoTabla getActivoseleccionadoalta() {
 		return activoseleccionadoalta;
 	}

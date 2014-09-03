@@ -78,6 +78,7 @@ public class GestorErroresComunidades implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	//Buscar errores
 	private String sCodMovimiento ="";
@@ -153,6 +154,7 @@ public class GestorErroresComunidades implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
     	
     	this.activoseleccionado = null;
     	this.tablaactivos = null;
@@ -368,9 +370,16 @@ public class GestorErroresComunidades implements Serializable
 			FacesMessage msg;
 			
 			ActivoTabla buscaactivos = new ActivoTabla(
-					sCOACES.toUpperCase(), sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+					sCOACES.toUpperCase(), 
+					sCOPOIN.toUpperCase(), 
+					sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), 
+					sNOVIAS.toUpperCase(), 
+					sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), 
+					sNUPUAC.toUpperCase(), 
+					sNUFIRE.toUpperCase(),
+					"");
 			
 			logger.debug("Buscando Activos...");
 			
@@ -878,6 +887,14 @@ public class GestorErroresComunidades implements Serializable
 
 	public void setsNUPUAC(String sNUPUAC) {
 		this.sNUPUAC = sNUPUAC;
+	}
+
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
 	}
 
 	public String getsCOCLDOB() {

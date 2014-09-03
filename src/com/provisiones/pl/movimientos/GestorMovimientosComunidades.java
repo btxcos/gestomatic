@@ -46,6 +46,7 @@ public class GestorMovimientosComunidades implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	private String sNURCAT = "";
 	
@@ -98,6 +99,7 @@ public class GestorMovimientosComunidades implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
 		
 	}
 	
@@ -178,6 +180,7 @@ public class GestorMovimientosComunidades implements Serializable
 						sNUPIAC.toUpperCase(), 
 						sNUPOAC.toUpperCase(), 
 						sNUPUAC.toUpperCase(), 
+						sNUFIRE.toUpperCase(),
 						"");
 				
 				this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
@@ -986,6 +989,12 @@ public class GestorMovimientosComunidades implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
+	}
 	public ActivoTabla getActivoseleccionado() {
 		return activoseleccionado;
 	}

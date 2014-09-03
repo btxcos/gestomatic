@@ -529,7 +529,7 @@ public final class QMListaCuotas
 		return liNumero;
 	}
 
-	public static ArrayList<ActivoTabla> buscaActivosConCuotas(Connection conexion, ActivoTabla activo)
+	public static ArrayList<ActivoTabla> buscaActivosConCuotas(Connection conexion, ActivoTabla filtro)
 	{
 		ArrayList<ActivoTabla> resultado = new ArrayList<ActivoTabla>();
 		
@@ -542,14 +542,14 @@ public final class QMListaCuotas
 
 			boolean bEncontrado = false;
 			
-			String sCOACES = "";
-			String sCOPOIN = "";
-			String sNOMUIN = "";
-			String sNOPRAC = "";
-			String sNOVIAS = "";
-			String sNUPIAC = "";
-			String sNUPOAC = "";
-			String sNUPUAC = "";
+			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND ";
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -562,19 +562,21 @@ public final class QMListaCuotas
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
 
-						   + QMActivos.CAMPO14 + " LIKE '%" + activo.getCOPOIN()	+ "%' AND "  
-						   + QMActivos.CAMPO11 + " LIKE '%" + activo.getNOMUIN()	+ "%' AND "  
-						   + QMActivos.CAMPO13 + " LIKE '%" + activo.getNOPRAC()	+ "%' AND "  
-						   + QMActivos.CAMPO6 + " LIKE '%" + activo.getNOVIAS()	+ "%' AND "  
-						   + QMActivos.CAMPO9 + " LIKE '%" + activo.getNUPIAC()	+ "%' AND "  
-						   + QMActivos.CAMPO7 + " LIKE '%" + activo.getNUPOAC()	+ "%' AND "  
-						   + QMActivos.CAMPO10 + " LIKE '%" + activo.getNUPUAC()	+ "%' AND "			
+					   		+ sCondicionCOPOIN  
+					   		+ sCondicionNOMUIN  
+					   		+ sCondicionNOPRAC  
+					   		+ sCondicionNOVIAS 
+					   		+ sCondicionNUPIAC  
+					   		+ sCondicionNUPOAC
+					   		+ sCondicionNUPUAC
+					   		+ sCondicionNUFIRE	
 
 						   + QMActivos.CAMPO1 +" IN (SELECT "
 						   +  CAMPO1 + 
@@ -605,17 +607,28 @@ public final class QMListaCuotas
 					{
 						bEncontrado = true;
 						
-						sCOACES = rs.getString(QMActivos.CAMPO1);
-						sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, "");
-						
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								"");
+
 						resultado.add(activoencontrado);
 						
 						logger.debug("Encontrado el registro!");

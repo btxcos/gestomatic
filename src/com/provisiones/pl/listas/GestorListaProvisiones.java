@@ -47,6 +47,7 @@ public class GestorListaProvisiones implements Serializable
 	private String sNUPIACF = "";
 	private String sNUPOACF = "";
 	private String sNUPUACF = "";
+	private String sNUFIREF = "";
 	
 	private String sNURCATF = "";
 	
@@ -123,6 +124,7 @@ public class GestorListaProvisiones implements Serializable
 		this.sNUPIACF = "";
 		this.sNUPOACF = "";
 		this.sNUPUACF = "";
+		this.sNUFIREF = "";
     	
     	this.setActivoseleccionado(null);
     	this.setTablaactivos(null);
@@ -195,6 +197,7 @@ public class GestorListaProvisiones implements Serializable
 						sNUPIACF.toUpperCase(), 
 						sNUPOACF.toUpperCase(), 
 						sNUPUACF.toUpperCase(), 
+						sNUFIREF.toUpperCase(),
 						"");
 				
 				this.setTablaactivos(CLGastos.buscarActivosConGastosAutorizados(filtro));
@@ -825,6 +828,16 @@ public class GestorListaProvisiones implements Serializable
 
 	public void setsNURCATF(String sNURCATF) {
 		this.sNURCATF = sNURCATF.trim().toUpperCase();
+	}
+
+
+	public String getsNUFIREF() {
+		return sNUFIREF;
+	}
+
+
+	public void setsNUFIREF(String sNUFIREF) {
+		this.sNUFIREF = sNUFIREF;
 	}
 
 

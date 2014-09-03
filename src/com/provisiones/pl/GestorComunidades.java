@@ -65,6 +65,7 @@ public class GestorComunidades implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	private String sNURCAT = "";
 	
@@ -98,6 +99,7 @@ public class GestorComunidades implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
     	
     	this.sNURCAT = "";
 	}
@@ -165,9 +167,16 @@ public class GestorComunidades implements Serializable
 			if (sNURCAT.isEmpty())
 			{
 				ActivoTabla filtro = new ActivoTabla(
-						"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-						sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-						sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+						"", 
+						sCOPOIN.toUpperCase(), 
+						sNOMUIN.toUpperCase(),
+						sNOPRAC.toUpperCase(), 
+						sNOVIAS.toUpperCase(), 
+						sNUPIAC.toUpperCase(), 
+						sNUPOAC.toUpperCase(), 
+						sNUPUAC.toUpperCase(), 
+						sNUFIRE.toUpperCase(),
+						"");
 				
 				this.setTablaactivos(CLComunidades.buscarActivosSinComunidad(filtro));
 
@@ -837,6 +846,14 @@ public class GestorComunidades implements Serializable
 
 	public void setsNUPUAC(String sNUPUAC) {
 		this.sNUPUAC = sNUPUAC;
+	}
+
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
 	}
 
 	public String getsNota() {

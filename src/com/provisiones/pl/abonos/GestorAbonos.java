@@ -52,6 +52,7 @@ public class GestorAbonos implements Serializable
 	private String sNUPIACB = "";
 	private String sNUPOACB = "";
 	private String sNUPUACB = "";
+	private String sNUFIREB = "";
 	
 	private String sNURCATB = "";
 	
@@ -270,6 +271,7 @@ public class GestorAbonos implements Serializable
 		this.sNUPIACB = "";
 		this.sNUPOACB = "";
 		this.sNUPUACB = "";
+		this.sNUFIREB = "";
 		
 		this.sNURCATB = "";
 	}
@@ -601,6 +603,7 @@ public class GestorAbonos implements Serializable
 						sNUPIACB.toUpperCase(), 
 						sNUPOACB.toUpperCase(), 
 						sNUPUACB.toUpperCase(), 
+						sNUFIREB.toUpperCase(),
 						"");
 				
 				this.setTablaactivos(CLGastos.buscarActivosConGastosAbonables(filtro));
@@ -1680,6 +1683,14 @@ public class GestorAbonos implements Serializable
 
 	public void setsNUPUACB(String sNUPUACB) {
 		this.sNUPUACB = sNUPUACB;
+	}
+
+	public String getsNUFIREB() {
+		return sNUFIREB;
+	}
+
+	public void setsNUFIREB(String sNUFIREB) {
+		this.sNUFIREB = sNUFIREB;
 	}
 
 	public String getsNURCATB() {

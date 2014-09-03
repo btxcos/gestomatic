@@ -38,6 +38,7 @@ public class GestorCuentasActivos implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	//Nueva Cuenta
 	private String sPais = "ES";	
@@ -73,6 +74,7 @@ public class GestorCuentasActivos implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
 		
     	this.tablaactivos = null;
 	}
@@ -122,9 +124,16 @@ public class GestorCuentasActivos implements Serializable
 			String sMsg = "";
 			
 			ActivoTabla filtro = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(), "");
+					"", 
+					sCOPOIN.toUpperCase(), 
+					sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), 
+					sNOVIAS.toUpperCase(), 
+					sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), 
+					sNUPUAC.toUpperCase(), 
+					sNUFIRE.toUpperCase(),
+					"");
 
 			this.setTablaactivos(CLActivos.buscarActivos(filtro));
 			
@@ -477,6 +486,14 @@ public class GestorCuentasActivos implements Serializable
 
 	public void setsNUPUAC(String sNUPUAC) {
 		this.sNUPUAC = sNUPUAC;
+	}
+
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
 	}
 
 	public String getsPais() {

@@ -1,4 +1,4 @@
-package com.provisiones.pl.listas;
+package com.provisiones.pl;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
-import com.provisiones.ll.CLActivos;
+//import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.ll.CLReferencias;
@@ -24,11 +24,11 @@ import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
 
-public class GestorListaGastos implements Serializable 
+public class GestorInformes implements Serializable 
 {
-	private static final long serialVersionUID = 2074872725730594297L;
+	private static final long serialVersionUID = -5292893241678687638L;
 
-	private static Logger logger = LoggerFactory.getLogger(GestorListaGastos.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(GestorInformes.class.getName());
 
 	private String sCOACES = "";
 	private String sNUPROF = "";
@@ -108,7 +108,7 @@ public class GestorListaGastos implements Serializable
 	
 	private Map<String,String> tiposestadoprovisionHM = new LinkedHashMap<String, String>();
 
-	public GestorListaGastos()
+	public GestorInformes()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
@@ -192,7 +192,7 @@ public class GestorListaGastos implements Serializable
 		this.sNUPOAC = "";
 		this.sNUPUAC = "";
 		this.sNUFIRE = "";
-		
+
 		this.sNURCAT = "";
     	
     	this.setActivoseleccionado(null);
@@ -628,8 +628,8 @@ public class GestorListaGastos implements Serializable
 			
 			try
 			{
-				//if (true)
-				if (sCOACES.isEmpty())
+				if (true)
+				/*if (sCOACES.isEmpty())
 				{
 					sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
@@ -638,7 +638,7 @@ public class GestorListaGastos implements Serializable
 			    	this.setTablagastos(null);
 				}
 				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
-				 
+				 */
 				{
 					GastoTabla filtro = new GastoTabla(
 							"",
@@ -668,7 +668,7 @@ public class GestorListaGastos implements Serializable
 			    	logger.debug("sFEDEVEFA:|"+sFEDEVEFA+"|");
 			    	logger.debug("sEstadoGastoFA:|"+sEstadoGastoFA+"|");
 					
-					this.setTablagastos(CLGastos.buscarGastosActivoConFiltro(filtro));
+					this.setTablagastos(CLGastos.buscarGastosInformeConFiltro(filtro));
 					
 					if (getTablagastos().size() == 0)
 					{
@@ -690,14 +690,14 @@ public class GestorListaGastos implements Serializable
 						logger.info(sMsg);
 					}
 				}
-				else
+				/*else
 				{
 					sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
 					msg = Utils.pfmsgWarning(sMsg);
 					logger.warn(sMsg);
 					
 			    	this.setTablagastos(null);
-				} 
+				} */
 				
 			}
 			catch(NumberFormatException nfe)

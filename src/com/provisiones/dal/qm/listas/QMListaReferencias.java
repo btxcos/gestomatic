@@ -542,15 +542,6 @@ public final class QMListaReferencias
 			ResultSet rs = null;
 
 			boolean bEncontrado = false;
-			
-			String sCOACES = "";
-			String sCOPOIN = "";
-			String sNOMUIN = "";
-			String sNOPRAC = "";
-			String sNOVIAS = "";
-			String sNUPIAC = "";
-			String sNUPOAC = "";
-			String sNUPUAC = "";
 		
 			logger.debug("Ejecutando Query...");
 
@@ -563,7 +554,9 @@ public final class QMListaReferencias
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -597,16 +590,27 @@ public final class QMListaReferencias
 					{
 						bEncontrado = true;
 
-						sCOACES = rs.getString(QMActivos.CAMPO1);
-						sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -662,7 +666,9 @@ public final class QMListaReferencias
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -703,8 +709,19 @@ public final class QMListaReferencias
 						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
 						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
 						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -762,7 +779,9 @@ public final class QMListaReferencias
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -808,8 +827,19 @@ public final class QMListaReferencias
 						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
 						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
 						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -865,7 +895,9 @@ public final class QMListaReferencias
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
+ 
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -912,8 +944,19 @@ public final class QMListaReferencias
 						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
 						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
 						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -969,7 +1012,9 @@ public final class QMListaReferencias
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -1017,8 +1062,19 @@ public final class QMListaReferencias
 						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
 						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
 						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -1074,7 +1130,9 @@ public final class QMListaReferencias
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -1120,8 +1178,19 @@ public final class QMListaReferencias
 						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
 						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
 						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -1168,7 +1237,7 @@ public final class QMListaReferencias
 			
 			logger.debug("Ejecutando Query...");
 
-String sQuery = "SELECT "
+			String sQuery = "SELECT "
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
@@ -1177,7 +1246,9 @@ String sQuery = "SELECT "
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -1223,8 +1294,19 @@ String sQuery = "SELECT "
 						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
 						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
 						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -1280,7 +1362,9 @@ String sQuery = "SELECT "
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -1326,8 +1410,19 @@ String sQuery = "SELECT "
 						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
 						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
 						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -1619,15 +1714,15 @@ String sQuery = "SELECT "
 
 			boolean bEncontrado = false;
 			
-			String sCOACES = "";
-			String sCOPOIN = "";
-			String sNOMUIN = "";
-			String sNOPRAC = "";
-			String sNOVIAS = "";
-			String sNUPIAC = "";
-			String sNUPOAC = "";
-			String sNUPUAC = "";
-			String sNURCAT = "";
+			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND ";
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
+
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1641,19 +1736,21 @@ String sQuery = "SELECT "
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
 						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + ","
 						   + QMActivos.CAMPO81 + 
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
 
-						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
-						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
-						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
-						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
-						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
-						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
-						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
+					   		+ sCondicionCOPOIN  
+					   		+ sCondicionNOMUIN  
+					   		+ sCondicionNOPRAC  
+					   		+ sCondicionNOVIAS 
+					   		+ sCondicionNUPIAC  
+					   		+ sCondicionNUPOAC
+					   		+ sCondicionNUPUAC
+					   		+ sCondicionNUFIRE		
 
 						   + QMActivos.CAMPO1 +" NOT IN (SELECT "
 						   +  CAMPO1 + 
@@ -1684,17 +1781,28 @@ String sQuery = "SELECT "
 					{
 						bEncontrado = true;
 						
-						sCOACES = rs.getString(QMActivos.CAMPO1);
-						sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						sNURCAT = rs.getString(QMActivos.CAMPO81);
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNURCAT = rs.getString(QMActivos.CAMPO81);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						
@@ -1737,15 +1845,15 @@ String sQuery = "SELECT "
 
 			boolean bEncontrado = false;
 			
-			String sCOACES = "";
-			String sCOPOIN = "";
-			String sNOMUIN = "";
-			String sNOPRAC = "";
-			String sNOVIAS = "";
-			String sNUPIAC = "";
-			String sNUPOAC = "";
-			String sNUPUAC = "";
-			String sNURCAT = "";
+			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND ";
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
+
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1759,19 +1867,21 @@ String sQuery = "SELECT "
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
 						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + ","
 						   + QMActivos.CAMPO81 + 
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
 
-						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
-						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
-						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
-						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
-						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
-						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
-						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND "			
+					   		+ sCondicionCOPOIN  
+					   		+ sCondicionNOMUIN  
+					   		+ sCondicionNOPRAC  
+					   		+ sCondicionNOVIAS 
+					   		+ sCondicionNUPIAC  
+					   		+ sCondicionNUPOAC
+					   		+ sCondicionNUPUAC
+					   		+ sCondicionNUFIRE		
 
 						   + QMActivos.CAMPO1 +" IN (SELECT "
 						   +  CAMPO1 + 
@@ -1803,17 +1913,28 @@ String sQuery = "SELECT "
 					{
 						bEncontrado = true;
 						
-						sCOACES = rs.getString(QMActivos.CAMPO1);
-						sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						sNURCAT = rs.getString(QMActivos.CAMPO81);
+						String sCOACES = rs.getString(QMActivos.CAMPO1);
+						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
+						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNURCAT = rs.getString(QMActivos.CAMPO81);
 						
-						ActivoTabla activoencontrado = new ActivoTabla(sCOACES, sCOPOIN, sNOMUIN, sNOPRAC, sNOVIAS, sNUPIAC, sNUPOAC, sNUPUAC, sNURCAT);
+						ActivoTabla activoencontrado = new ActivoTabla(
+								sCOACES, 
+								sCOPOIN, 
+								sNOMUIN, 
+								sNOPRAC, 
+								sNOVIAS, 
+								sNUPIAC, 
+								sNUPOAC, 
+								sNUPUAC,
+								sNUFIRE,
+								sNURCAT);
 						
 						resultado.add(activoencontrado);
 						

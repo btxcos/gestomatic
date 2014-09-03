@@ -39,6 +39,7 @@ public class GestorListaComunidades implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	private String sNURCAT = "";
 	
@@ -76,6 +77,7 @@ public class GestorListaComunidades implements Serializable
 		this.sNUPIAC = "";
 		this.sNUPOAC = "";
 		this.sNUPUAC = "";
+		this.sNUFIRE = "";
     	
     	this.setActivoseleccionado(null);
     	this.setTablaactivos(null);
@@ -127,6 +129,7 @@ public class GestorListaComunidades implements Serializable
 						sNUPIAC.toUpperCase(), 
 						sNUPOAC.toUpperCase(),
 						sNUPUAC.toUpperCase(), 
+						sNUFIRE.toUpperCase(),
 						"");
 				
 				this.setTablaactivos(CLComunidades.buscarActivosConComunidad(filtro));
@@ -453,6 +456,14 @@ public class GestorListaComunidades implements Serializable
 
 	public void setsNUPUAC(String sNUPUAC) {
 		this.sNUPUAC = sNUPUAC;
+	}
+
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
 	}
 
 	public String getsCOCLDO() {

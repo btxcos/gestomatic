@@ -68,6 +68,7 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 	private String sNUPIAC = "";
 	private String sNUPOAC = "";
 	private String sNUPUAC = "";
+	private String sNUFIRE = "";
 	
 	//Buscar errores
 	private String sCodMovimiento ="";
@@ -130,6 +131,7 @@ public class GestorErroresReferenciasCatastrales implements Serializable
     	this.sNUPIAC = "";
     	this.sNUPOAC = "";
     	this.sNUPUAC = "";
+    	this.sNUFIRE = "";
 	}
 	
 	public void borrarResultadosActivo()
@@ -323,9 +325,16 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 			String sMsg = "";
 			
 			ActivoTabla buscaactivos = new ActivoTabla(
-					"", sCOPOIN.toUpperCase(), sNOMUIN.toUpperCase(),
-					sNOPRAC.toUpperCase(), sNOVIAS.toUpperCase(), sNUPIAC.toUpperCase(), 
-					sNUPOAC.toUpperCase(), sNUPUAC.toUpperCase(),"");
+					"", 
+					sCOPOIN.toUpperCase(), 
+					sNOMUIN.toUpperCase(),
+					sNOPRAC.toUpperCase(), 
+					sNOVIAS.toUpperCase(), 
+					sNUPIAC.toUpperCase(), 
+					sNUPOAC.toUpperCase(), 
+					sNUPUAC.toUpperCase(),
+					sNUFIRE.toUpperCase(),
+					"");
 			
 			this.setTablaactivos(CLReferencias.buscarActivosConReferencias(buscaactivos));
 			
@@ -678,6 +687,14 @@ public class GestorErroresReferenciasCatastrales implements Serializable
 		this.sNUPUAC = sNUPUAC;
 	}
 	
+	public String getsNUFIRE() {
+		return sNUFIRE;
+	}
+
+	public void setsNUFIRE(String sNUFIRE) {
+		this.sNUFIRE = sNUFIRE;
+	}
+
 	public String getsCOACESB() {
 		return sCOACESB;
 	}
