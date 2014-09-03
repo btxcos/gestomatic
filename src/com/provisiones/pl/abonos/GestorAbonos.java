@@ -780,6 +780,7 @@ public class GestorAbonos implements Serializable
 								"",
 								"",//TODO meter estado en el filtro
 								"",
+								"",
 								"");
 						
 						
@@ -874,6 +875,7 @@ public class GestorAbonos implements Serializable
 								"",
 								"",
 								"",//TODO meter estado en el filtro
+								"",
 								"",
 								"");
 						
@@ -1235,7 +1237,7 @@ public class GestorAbonos implements Serializable
 								nota.setsContenido("");
 							}
 							
-							int iSalida = CLGastos.registraMovimiento(movimiento,true,nota);
+							int iSalida = CLGastos.registraMovimiento(movimiento,true,nota,false);
 							
 							switch (iSalida) 
 							{

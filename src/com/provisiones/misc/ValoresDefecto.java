@@ -29,6 +29,9 @@ public final class ValoresDefecto
 	public static final byte PAGO_ENVIADO = 1;
 	public static final byte PAGO_EMITIDO = 0;
 	
+	public static final String DEF_SI = "1";
+	public static final String DEF_NO = "0";
+	
 	public static final String ABONO_EMITIDO = "0";
 
 	public static final String DEF_COAPII = "168";
@@ -112,6 +115,13 @@ public final class ValoresDefecto
 	
 	public static final String DEF_NEGATIVO = "-";
 	
+	public static final String DEF_COGRUG_COMPRAVENTA = "1";
+	public static final String DEF_COGRUG_PENDIENTES = "2";
+	public static final String DEF_COGRUG_ACCIONES = "3";
+	
+	public static final String DEF_COTPGA_PLUSVALIA = "1";
+	public static final String DEF_COTPGA_IMPUESTO = "1";
+	
 	public static final String DEF_GASTO_ESTIMADO = "1";
 	public static final String DEF_GASTO_CONOCIDO = "2";
 	public static final String DEF_GASTO_AUTORIZADO = "3";
@@ -122,10 +132,13 @@ public final class ValoresDefecto
 	
 	public static final String DEF_GASTO_PROVISION_CONEXION = "0";
 	
-	public static final String DEF_PAGO_CONEXION = "0";
+	public static final String DEF_PAGO_SIN = "0";
 	public static final String DEF_PAGO_VENTANILLA = "1";
 	public static final String DEF_PAGO_DEVOLUCION = "2";
 	public static final String DEF_PAGO_NORMA34 = "3";
+	public static final String DEF_PAGO_NORMA3414 = "4";
+	public static final String DEF_PAGO_TRANSFERENCIA_MANUAL = "5";
+	public static final String DEF_PAGO_CONEXION = "6";
 	
 	public static final String DEF_RECARGO_FIJO = "1";
 	public static final String DEF_RECARGO_PROPORCIONAL = "2";

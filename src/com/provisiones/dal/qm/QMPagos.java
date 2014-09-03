@@ -1299,6 +1299,7 @@ public class QMPagos
 			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
 			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
 			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
 
 			logger.debug("Ejecutando Query...");
 
@@ -1311,7 +1312,8 @@ public class QMPagos
 						   + QMActivos.CAMPO6 + ","
 						   + QMActivos.CAMPO9 + ","
 						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + 
+						   + QMActivos.CAMPO10 + ","
+						   + QMActivos.CAMPO28 + 
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -1322,7 +1324,8 @@ public class QMPagos
 						   + sCondicionNOVIAS  
 						   + sCondicionNUPIAC
 						   + sCondicionNUPOAC 
-						   + sCondicionNUPUAC		
+						   + sCondicionNUPUAC
+						   + sCondicionNUFIRE
 						   + QMActivos.CAMPO1 +" IN (SELECT "
 						   + CAMPO2 + 
 	   					   " FROM " 
@@ -1353,6 +1356,7 @@ public class QMPagos
 						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
 						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
 						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -1362,7 +1366,8 @@ public class QMPagos
 								sNOVIAS, 
 								sNUPIAC, 
 								sNUPOAC, 
-								sNUPUAC, 
+								sNUPUAC,
+								sNUFIRE,
 								"");
 						
 						resultado.add(activoencontrado);

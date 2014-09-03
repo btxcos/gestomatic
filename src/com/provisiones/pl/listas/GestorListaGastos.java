@@ -634,7 +634,8 @@ public class GestorListaGastos implements Serializable
 					
 			    	this.setTablagastos(null);
 				}
-				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES))) 
+				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+				 
 				{
 					GastoTabla filtro = new GastoTabla(
 							"",
@@ -652,6 +653,7 @@ public class GestorListaGastos implements Serializable
 							"",  
 							"",
 							sEstadoGastoFA,
+							"",
 							"",
 							"",
 							"");
@@ -748,6 +750,7 @@ public class GestorListaGastos implements Serializable
 							Utils.compruebaFecha(sFEDEVEFP),   
 							"",   
 							"",  
+							"",
 							"",
 							"",
 							"",

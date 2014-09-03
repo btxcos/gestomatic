@@ -12,13 +12,15 @@ public class ActivoTabla
 	private String NUPIAC = "";
 	private String NUPOAC = "";
 	private String NUPUAC = "";
+	private String NUFIRE = "";
 	private String NURCAT = "";
 	
+	
+	
 	//Constructor de clase
-
 	public ActivoTabla(String cOACES, String cOPOIN, String nOMUIN,
 			String nOPRAC, String nOVIAS, String nUPIAC, String nUPOAC,
-			String nUPUAC, String nURCAT) {
+			String nUPUAC, String nUFIRE, String nURCAT) {
 		super();
 		COACES = cOACES;
 		COPOIN = cOPOIN;
@@ -28,8 +30,10 @@ public class ActivoTabla
 		NUPIAC = nUPIAC;
 		NUPOAC = nUPOAC;
 		NUPUAC = nUPUAC;
+		NUFIRE = nUFIRE;
 		NURCAT = nURCAT;
 	}
+
 
 	public String getCOACES() {
 		return COACES;
@@ -93,6 +97,14 @@ public class ActivoTabla
 
 	public void setNUPUAC(String nUPUAC) {
 		NUPUAC = nUPUAC;
+	}
+
+	public String getNUFIRE() {
+		return NUFIRE;
+	}
+
+	public void setNUFIRE(String nUFIRE) {
+		NUFIRE = nUFIRE;
 	}
 
 	public String getNURCAT() {

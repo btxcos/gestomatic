@@ -603,4 +603,48 @@ public final class CLProvisiones
 		return sProvision;
 	}
 
+	public static boolean comprobarProvisionForzada(String sNUPROF, int iCodCOACES, String sCOGRUG, String sCOTPGA)
+	{
+		boolean bResultado = false;
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			if (CLProvisiones.existeProvision(sNUPROF))
+			{
+				if(QMProvisiones.getEstado(conexion, sNUPROF).equals(ValoresDefecto.DEF_PROVISION_ENVIADA))
+				{
+					Provision provision = CLProvisiones.buscarProvision(sNUPROF);
+					String sCOSPAT = CLActivos.sociedadPatrimonialAsociada(iCodCOACES);
+					
+					if (QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TSOCTIT,QMCodigosControl.ISOCTIT,sCOSPAT).equals(""))
+					{
+						sCOSPAT = ValoresDefecto.CAMPO_NUME_SIN_INFORMAR;
+					}
+					
+					provision.setsCOSPAT(sCOSPAT);
+					
+					if (provision.getsCOGRUG().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+					{
+						provision.setsCOGRUG(sCOGRUG);
+					}
+
+					String sTipo = CLActivos.compruebaTipoActivoSAREB(iCodCOACES);
+					
+					provision.setsTAS(sTipo);
+					
+					bResultado = QMProvisiones.modProvision(conexion,provision);
+				}
+			}
+			else
+			{
+				//No existe la provisión de gasto en el sistema
+				bResultado = false;
+			}
+		}
+		
+		return bResultado;
+	}
+	
 }

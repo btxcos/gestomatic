@@ -92,6 +92,32 @@
 									</h:panelGrid>
 								</p:fieldset>
 
+								<p:fieldset legend="Opciones">
+									<h:panelGrid columns="4" cellpadding="5">
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+
+												<h:outputText value="Pago Urgente: "/>
+												<p:selectOneMenu id="URGENTE" value="#{GestorGastos.sUrgente}">
+													<f:selectItem itemLabel="NO" itemValue="0"/>
+													<f:selectItems value="#{GestorGastos.tiposurgenteHM}"/>
+														<p:ajax update="FNUPROF" listener="#{GestorGastos.cambiaUrgencia}"/>
+												</p:selectOneMenu>
+
+												<p:panel>
+													<h:panelGrid columns="4" cellpadding="5">
+
+														<h:outputText for="FNUPROF" value="Provisión Forzada: "/>
+														<p:inputText id="FNUPROF" value="#{GestorGastos.sFNUPROF}" size="9" maxlength="9" disabled="#{GestorGastos.bBloquear}"/>
+
+													</h:panelGrid>
+												</p:panel>
+
+											</h:panelGrid>
+										</p:panel>
+
+									</h:panelGrid>
+								</p:fieldset>
 
 								<p:fieldset legend="Gasto">
 									<h:panelGrid columns="2" cellpadding="1">

@@ -605,6 +605,12 @@
 								</f:facet>
 								<h:outputText value="#{gastoactivo.FEDEVE}" />
 							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Urgente" />
+								</f:facet>
+								<h:outputText value="#{gastoactivo.URGENTE}" />
+							</p:column>
 						</p:dataTable>
 					</p:dialog>
 					<p:dialog header="Buscar Gastos emitidos en la Provisión: " widgetVar="dlgBuscarGastosProvision" resizable="false">
@@ -706,6 +712,12 @@
 									<h:outputText value="Fecha de Devengo" />
 								</f:facet>
 								<h:outputText value="#{gastoprovision.FEDEVE}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Urgente" />
+								</f:facet>
+								<h:outputText value="#{gastoprovision.URGENTE}" />
 							</p:column>
 						</p:dataTable>
 					</p:dialog>

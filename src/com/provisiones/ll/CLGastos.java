@@ -163,10 +163,21 @@ public final class CLGastos
 		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
 	
-	public static ArrayList<GastoTabla> buscarGastosAutorizadosActivoConFiltro(GastoTabla filtro)
+	public static ArrayList<GastoTabla> buscarGastosInformeConFiltro(GastoTabla filtro)
+	{
+		//return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
+		return QMGastos.buscaGastosPorFiltroSinActivo(ConnectionManager.getDBConnection(),filtro);
+	}
+	
+	/*public static ArrayList<GastoTabla> buscarGastosAutorizadosActivoConFiltro(GastoTabla filtro)
 	{
 		filtro.setESTADO(ValoresDefecto.DEF_GASTO_AUTORIZADO);
 		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
+	}*/
+	
+	public static ArrayList<GastoTabla> buscarGastosPagablesActivoConFiltro(GastoTabla filtro)
+	{
+		return QMGastos.buscaGastosPagablesPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
 	
 	public static ArrayList<GastoTabla> buscarGastosAbonadosEjecutablesActivoConFiltro(GastoTabla filtro)
@@ -397,6 +408,11 @@ public final class CLGastos
 	public static boolean existeBloqueo(long  liCodGasto)
 	{
 		return QMListaGastosProvisiones.existeBloqueoGasto(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+	
+	public static boolean esUrgente(long  liCodGasto)
+	{
+		return QMGastos.getUrgente(ConnectionManager.getDBConnection(),liCodGasto);
 	}
 	
 	//Interfaz avanzado
@@ -638,7 +654,9 @@ public final class CLGastos
 												//recibido OK
 												if (!QMListaGastosProvisiones.getRevisado(conexion,liCodGasto).equals(sValidado))
 												{
-													if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado) && autorizaGasto(liCodGasto, gasto.getFEEAUI(), gasto.getFEAUFA()))
+													if (QMListaGastosProvisiones.setRevisado(conexion,liCodGasto, sValidado) 
+															//TODO comprobar si es urgente
+															&& autorizaGasto(liCodGasto, gasto.getFEEAUI(), gasto.getFEAUFA()))
 													{
 														gasto.setValor_total();
 																												
@@ -717,7 +735,46 @@ public final class CLGastos
 															iCodigo = -6;
 														}
 												}
-												else
+												else if (QMGastos.getCOSIGA(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_PAGADO) && 
+														CLGastos.esUrgente(liCodGasto) && QMGastos.getFechaAutorizado(conexion, liCodGasto).equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+												{
+													if (QMListaGastos.setValidado(conexion, liCodMovimiento,ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+													{
+														if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto,ValoresDefecto.DEF_MOVIMIENTO_RESUELTO))
+														{
+															if (QMGastos.setAutorizadoUrgente(conexion, liCodGasto, gasto.getFEEAUI(), gasto.getFEAUFA()))
+															{
+																if (QMProvisiones.setGastoAutorizado(conexion, gasto.getNUPROF(), gasto.getValor_total()))
+																{
+																	logger.info("Gasto Autorizado.");
+																	iCodigo = 0;
+																}
+																else
+																{
+																	//error al actualizar la provisión
+																	iCodigo = -7;
+																}
+															}
+															else
+															{
+																//Error al actualizar el Gasto
+																iCodigo = -907;	
+															}
+														}
+														else
+														{
+															// Error al actualizar la relación del Gasto con la Provisión
+															iCodigo = -911;
+														}
+													}
+													else
+													{
+														//Error al crear la relación del Gasto
+														iCodigo = -902;
+													}
+														
+												} 
+												else 
 												{
 													//Llega un movimiento sin abono de un gasto resuelto
 													iCodigo = -12;
@@ -844,7 +901,7 @@ public final class CLGastos
 			
 			long liCodMovimiento = QMMovimientosGastos.getMovimientoGastoID(conexion,movimiento);
 
-			//logger.debug("liCodMovimiento:|"+liCodMovimiento+"|");
+			logger.debug("liCodMovimiento:|"+liCodMovimiento+"|");
 			
 			if (liCodMovimiento == 0)
 			{
@@ -1205,6 +1262,11 @@ public final class CLGastos
 										}
 										else
 										{
+											
+											
+											logger.debug("sEstadoAnteriorGasto:|"+sEstadoAnteriorGasto+"|");
+
+											
 											if (QMListaGastos.addRelacionGastoInyectado(conexion,liCodGasto,liCodMovimiento))
 											{
 												
@@ -1245,6 +1307,7 @@ public final class CLGastos
 												}
 												else if (QMListaGastosProvisiones.setRevisado(conexion, liCodGasto, ValoresDefecto.DEF_MOVIMIENTO_VALIDADO))
 												{
+													
 													//OK 
 													if (QMProvisiones.setGastoAutorizado(conexion, movimiento.getNUPROF(), QMGastos.getValorTotal(conexion,liCodGasto)))
 													{
@@ -1262,6 +1325,51 @@ public final class CLGastos
 													// Error al actualizar la relación del Gasto con la Provisión
 													iCodigo = -911;
 												}
+												
+												if (sEstadoAnteriorGasto.equals(ValoresDefecto.DEF_GASTO_PAGADO) && 
+													CLGastos.esUrgente(liCodGasto))
+												{
+													if (QMGastos.getFechaAutorizado(conexion, liCodGasto).equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+													{
+														if (QMListaGastos.setResuelto(conexion, liCodGasto))
+														{
+															
+															if (QMListaGastosProvisiones.setResuelto(conexion, liCodGasto))
+															{
+																if (QMGastos.setAutorizadoUrgente(conexion, liCodGasto, movimiento.getFEEAUI(), movimiento.getFEAUFA()))
+																{
+																	iCodigo = 0;	
+																}
+																else
+																{
+																	//Error al actualizar el Gasto
+																	iCodigo = -907;	
+																}
+																
+															}
+															else
+															{
+																// Error al actualizar la relación del Gasto con la Provisión
+																iCodigo = -911;
+															}
+														}
+														else
+														{
+															//Error al crear la relación del Gasto
+															iCodigo = -902;
+														}
+													}
+													else
+													{
+														//Llega un movimiento sin abono de un gasto resuelto
+														iCodigo = -12;
+													}
+													
+													
+												}
+												
+												//TODO modificar autorizacion tras pago
+												//setresuelto de todos los movimientos
 												
 											}
 											else
@@ -1573,7 +1681,7 @@ public final class CLGastos
 		return iCodigo;
 	}*/	
 
-	public static int registraMovimiento(MovimientoGasto movimiento, boolean bValida, Nota nota)
+	public static int registraMovimiento(MovimientoGasto movimiento, boolean bValida, Nota nota, boolean bUrgente)
 	{
 		int iCodigo = -910;//Error de conexion
 
@@ -1600,7 +1708,7 @@ public final class CLGastos
 			
 			if (bValida)
 			{
-				iCodigo = validaMovimiento(movimiento_revisado,sEstado,sAccion);
+				iCodigo = validaMovimiento(movimiento_revisado,sEstado,sAccion, bUrgente);
 				
 				//Comprobar si solo se modifica la nota
 				if ((iCodigo == -806) && (sAccion.equals(ValoresDefecto.DEF_MODIFICACION)) && !nota.isbInvalida())
@@ -1658,8 +1766,15 @@ public final class CLGastos
 
 									logger.debug("Dando de alta el gasto...");
 									logger.debug(gastonuevo.logGasto());
+									
+									byte btUrgencia = ValoresDefecto.GASTO_CONVENCIONAL;
+									
+									if (bUrgente)
+									{
+										btUrgencia = ValoresDefecto.GASTO_URGENTE;
+									}
 								
-									liCodGasto = QMGastos.addGasto(conexion,gastonuevo,movimiento_revisado.getCOSIGA(),ValoresDefecto.GASTO_CONVENCIONAL,nota.getsContenido()); 
+									liCodGasto = QMGastos.addGasto(conexion,gastonuevo,movimiento_revisado.getCOSIGA(),btUrgencia,nota.getsContenido()); 
 
 									if (liCodGasto != 0)
 									{
@@ -2656,7 +2771,8 @@ public final class CLGastos
 
 	}	
 	
-	public static int validaMovimiento(MovimientoGasto movimiento_revisado, String sEstado, String sAccion)
+	//TODO Eliminar bUrgente tras transicion
+	public static int validaMovimiento(MovimientoGasto movimiento_revisado, String sEstado, String sAccion, boolean bUrgente)
 	{
 		int iCodigo = 0;
 
@@ -2690,7 +2806,8 @@ public final class CLGastos
 				//Error 004 - Descuento mayor que importe nominal del gasto
 				iCodigo = -4;
 			}
-			else if (CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF()))
+			//TODO Eliminar bUrgente tras transicion
+			else if (CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF())&&!bUrgente)
 			{
 				//Error 006 - La provisión ya está cerrada
 				iCodigo = -6;
@@ -2731,8 +2848,9 @@ public final class CLGastos
 			{
 				//Error 024 - Llega modificación de un gasto que YA está pagado
 				iCodigo = -024;
-			}		
-			else if (!movimiento_revisado.getFEPGPR().equals("") && CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF()))
+			}
+			//TODO Eliminar bUrgente tras transicion
+			else if (!movimiento_revisado.getFEPGPR().equals("") && CLProvisiones.estaCerrada(movimiento_revisado.getNUPROF())&&!bUrgente)
 			{
 				//Error 061 - La provisión ya está cerrada pero se ha actualizado la fecha de pago a proveedor.
 				iCodigo = -61;

@@ -57,6 +57,8 @@ public class GestorMovimientosGastos implements Serializable
 	
 	private String sNURCATB = "";
 	
+	//TODO Eliminar tras transicion
+	private boolean bUrgente = false;	
 
 	//Buscar Provision
 	private String sNUPROFB = "";
@@ -417,6 +419,8 @@ public class GestorMovimientosGastos implements Serializable
 
     	this.sNota = "";
     	this.sNotaOriginal = "";
+    	
+    	this.bUrgente = false;
     	
     	borrarCamposBuscarActivo();
     	borrarCamposBuscarProvision();
@@ -957,6 +961,7 @@ public class GestorMovimientosGastos implements Serializable
 								sEstadoBA,//TODO meter estado en el filtro
 								"",
 								"",
+								"",
 								"");
 						
 						
@@ -1050,6 +1055,7 @@ public class GestorMovimientosGastos implements Serializable
 								"",  
 								"",
 								sEstadoBP,//TODO meter estado en el filtro
+								"",
 								"",
 								"",
 								"");
@@ -1167,6 +1173,8 @@ public class GestorMovimientosGastos implements Serializable
 			try
 			{
 		    	this.liCodGastoB = Long.parseLong(gastoseleccionado.getsGastoID());
+		    	
+		    	this.bUrgente = CLGastos.esUrgente(liCodGastoB);
 		    	
 		    	logger.debug("liCodGasto:|"+liCodGastoB+"|");
 		    	
@@ -1443,7 +1451,7 @@ public class GestorMovimientosGastos implements Serializable
 									nota.setsContenido("");
 								}
 								
-								int iSalida = CLGastos.registraMovimiento(movimiento,true,nota);
+								int iSalida = CLGastos.registraMovimiento(movimiento,true,nota,bUrgente);
 								
 								logger.debug("Codigo de salida:"+iSalida);
 								

@@ -22,6 +22,7 @@ public class GastoTabla
 	private String FEEPAI = "";
 	private String FELIPG = "";
 	private String TIPOPAGO = "";
+	private String URGENTE = "";
 
 	//Constructor de clase
 	
@@ -29,7 +30,7 @@ public class GastoTabla
 			String cOACES, String cOGRUG, String cOTPGA, String cOSBGA,
 			String dCOSBGA, String pTPAGO, String dPTPAGO, String fEDEVE,
 			String cOSIGA, String dCOSIGA, String iMNGAS, String eSTADO,
-			String fEEPAI, String fELIPG, String tIPOPAGO) {
+			String fEEPAI, String fELIPG, String tIPOPAGO, String uRGENTE) {
 		super();
 		this.sGastoID = sGastoID;
 		NUPROF = nUPROF;
@@ -49,6 +50,7 @@ public class GastoTabla
 		FEEPAI = fEEPAI;
 		FELIPG = fELIPG;
 		TIPOPAGO = tIPOPAGO;
+		URGENTE = uRGENTE;
 	}
 	
 	//Métodos de acceso
@@ -195,6 +197,14 @@ public class GastoTabla
 
 	public void setTIPOPAGO(String tIPOPAGO) {
 		TIPOPAGO = tIPOPAGO;
+	}
+
+	public String getURGENTE() {
+		return URGENTE;
+	}
+
+	public void setURGENTE(String uRGENTE) {
+		URGENTE = uRGENTE;
 	}
 
 }

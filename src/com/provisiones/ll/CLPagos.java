@@ -119,8 +119,11 @@ public class CLPagos
 			logger.debug("validando moviviento...");
 			
 			long liCodGasto = Long.parseLong(pago.getsGasto());
-			
-			if (!QMGastos.getEstado(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_AUTORIZADO))
+
+			if (!QMGastos.getEstado(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_AUTORIZADO) &&
+					(!CLGastos.esUrgente(liCodGasto) && 
+					(QMGastos.getEstado(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_ESTIMADO)||
+							 QMGastos.getEstado(conexion, liCodGasto).equals(ValoresDefecto.DEF_GASTO_CONOCIDO))))
 			{
 				//ERROR 001 - El gasto no esta autorizado.
 				iCodigo = -1;

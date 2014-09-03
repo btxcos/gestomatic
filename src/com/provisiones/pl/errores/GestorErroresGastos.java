@@ -1041,7 +1041,7 @@ public class GestorErroresGastos implements Serializable
 						//TODO Gestion de notas
 						Nota nota = new Nota (false,"ERROR RECUPERADO");
 						
-						iSalida = CLGastos.registraMovimiento(nuevomovimiento, true, nota);
+						iSalida = CLGastos.registraMovimiento(nuevomovimiento, true, nota,false);
 						break;
 					case E:
 						iSalida = CLErrores.reenviarErrorGasto(liCodMovimiento);

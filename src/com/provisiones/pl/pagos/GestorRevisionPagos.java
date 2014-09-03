@@ -848,6 +848,7 @@ public class GestorRevisionPagos implements Serializable
 							"",
 							"",//TODO meter estado en el filtro
 							"",
+							"",
 							"");
 					
 					
@@ -944,6 +945,7 @@ public class GestorRevisionPagos implements Serializable
 								"",
 								"",
 								"",//TODO meter estado en el filtro
+								"",
 								"",
 								"");
 						

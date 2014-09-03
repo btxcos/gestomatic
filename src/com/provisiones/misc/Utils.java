@@ -1146,12 +1146,17 @@ public final class Utils
 	
 	public static String recuperaFecha(String sFecha)
 	{
-		//logger.debug("sFecha:|{}|",sFecha);		
+		logger.debug("sFecha:|"+sFecha+"|");		
 		
 		String sFechaFormateada = "";
 		
 		if (!sFecha.equals("0"))
 		{
+	        while (sFecha.length() < 8) 
+	        {
+	        	sFecha="0"+sFecha;
+	        }
+			
 			String sAño = sFecha.substring(0, 4);
 			String sMes = sFecha.substring(4, 6);
 			String sDia = sFecha.substring(6, 8);
@@ -1181,5 +1186,25 @@ public final class Utils
 		//logger.debug("sCodigoRevisado:|{}|",sCodigoRevisado);
 		
 		return sCodigoRevisado;
+	}
+	
+	public static String recuperaBit(String sCodigo)
+	{
+		String sDescripcion = "#";
+		
+		logger.debug("sCodigo:|"+sCodigo+"|");
+		
+		if (sCodigo.equals("false"))
+		{
+			sDescripcion = "No";
+		}
+		else if (sCodigo.equals("true"))
+		{
+			sDescripcion = "Si";
+		}
+		
+		logger.debug("sDescripcion:|"+sDescripcion+"|");
+		
+		return sDescripcion;
 	}
 }

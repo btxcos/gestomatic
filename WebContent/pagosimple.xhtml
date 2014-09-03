@@ -654,6 +654,12 @@
 													<h:outputText value="Fecha del devengo: "/>
 													<p:inputMask id="FEDEVEBA" value="#{GestorPagosSimple.sFEDEVEBA}" mask="99/99/9999" size="10" maxlength="10"/>
 
+													<h:outputText value="Urgente: "/>
+													<p:selectOneMenu id="URGENTBA" value="#{GestorPagosSimple.sURGENTBA}">
+														<f:selectItem itemLabel="Urgente..." itemValue=""/>
+														<f:selectItems value="#{GestorPagosSimple.tiposurgenciaHM}"/>
+													</p:selectOneMenu>
+
 												</h:panelGrid>
 											</p:panel>
 
@@ -732,6 +738,13 @@
 															<h:outputText value="#{gastoactivo.FELIPG}" />
 														</p:column>
 
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Urgente" />
+															</f:facet>
+															<h:outputText value="#{gastoactivo.URGENTE}" />
+														</p:column>
+
 						</p:dataTable>
 
 					</p:dialog>
@@ -764,6 +777,12 @@
 
 													<h:outputText value="Fecha del devengo: "/>
 													<p:inputMask id="FEDEVEBP" value="#{GestorPagosSimple.sFEDEVEBP}" mask="99/99/9999" size="10" maxlength="10"/>
+
+													<h:outputText value="Urgente: "/>
+													<p:selectOneMenu id="URGENTBP" value="#{GestorPagosSimple.sURGENTBP}">
+														<f:selectItem itemLabel="Urgente..." itemValue=""/>
+														<f:selectItems value="#{GestorPagosSimple.tiposurgenciaHM}"/>
+													</p:selectOneMenu>
 
 												</h:panelGrid>
 											</p:panel>
@@ -850,6 +869,13 @@
 																<h:outputText value="Límite de Pago" />
 															</f:facet>
 															<h:outputText value="#{gastoprovision.FELIPG}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Urgente" />
+															</f:facet>
+															<h:outputText value="#{gastoprovision.URGENTE}" />
 														</p:column>
 
 						</p:dataTable>

@@ -746,6 +746,7 @@ public class GestorEjecucionAbono implements Serializable
 							"",
 							"",//TODO meter estado en el filtro
 							"",
+							"",
 							"");
 					
 					
@@ -843,6 +844,7 @@ public class GestorEjecucionAbono implements Serializable
 								"",
 								"",
 								"",//TODO meter estado en el filtro
+								"",
 								"",
 								"");
 						

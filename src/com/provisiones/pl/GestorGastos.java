@@ -36,6 +36,13 @@ public class GestorGastos implements Serializable
 
 	private String sCOACES = "";
 	private boolean bDevolucion = false;
+	
+	private String sUrgente = "";
+	private boolean bForzar = false;
+	private boolean bBloquear = true;
+	
+	private String sFNUPROF = "";
+	
 	private String sCOGRUG = "";
 	private String sCOTPGA = "";
 	private String sCOSBGA = "";
@@ -138,6 +145,9 @@ public class GestorGastos implements Serializable
 	private Map<String,String> tiposcosigaHM = new LinkedHashMap<String, String>();
 	
 	private Map<String,String> tiposcoimptHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposurgenteHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposforzadoHM = new LinkedHashMap<String, String>();
 
 	public GestorGastos()
 	{
@@ -207,6 +217,13 @@ public class GestorGastos implements Serializable
 			tiposcoimptHM.put("IGIC",           "2");  
 			tiposcoimptHM.put("IPSI",           "3");  
 			tiposcoimptHM.put("IRPF",           "4");
+			
+			//tiposurgenteHM.put("NO", "0");  
+			tiposurgenteHM.put("SI", "1");
+			
+			tiposforzadoHM.put("NO", "0");  
+			tiposforzadoHM.put("SI", "1");
+
 		}
 	}
 	
@@ -322,6 +339,12 @@ public class GestorGastos implements Serializable
     {  
     	this.sCOACES = "";
     	this.sNota = "";
+    	
+    	this.sUrgente = ValoresDefecto.DEF_NO;
+    	this.bForzar = false;
+    	this.bBloquear = true;
+    	
+    	this.sFNUPROF = "";
 
     	borrarPlantillaActivo();
     	borrarPlantillaGasto();
@@ -556,6 +579,16 @@ public class GestorGastos implements Serializable
 		}
     }
 	
+	public void cambiaUrgencia()
+	{
+		logger.debug("Cambiar Urgencia.");
+
+		if (sUrgente !=null && !sUrgente.equals(""))
+		{
+			this.bBloquear = sUrgente.equals(ValoresDefecto.DEF_NO);
+		}
+	}
+	
 	public void cambiaGrupo()
 	{
 		tiposcotpgaHM = new LinkedHashMap<String, String>();
@@ -752,8 +785,13 @@ public class GestorGastos implements Serializable
 			FacesMessage msg;
 			
 			String sMsg = "";
-			
-			if (sCOACES.isEmpty() || sCOGRUG.isEmpty() || sCOTPGA.isEmpty() || sCOSBGA.isEmpty() || sFEDEVE.isEmpty())
+			if (sUrgente.equals(ValoresDefecto.DEF_SI) && sFNUPROF.isEmpty())
+			{
+				sMsg = "Se necesita el Número de Provisión Forzada para dar de alta un gasto Urgente.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (sCOACES.isEmpty() || sCOGRUG.isEmpty() || sCOTPGA.isEmpty() || sCOSBGA.isEmpty() || sFEDEVE.isEmpty())
 			{
 				sMsg = "Los campos: 'Activo', 'Grupo de gasto', 'Tipo de concepto', 'Subtipo de gasto' y ' Fecha del devengo' son obligatorios. Por favor, revise los datos.";
 				msg = Utils.pfmsgError(sMsg);
@@ -801,7 +839,18 @@ public class GestorGastos implements Serializable
 						
 						String sFechaBloqueo = CLActivos.buscarFechaBloqueo(iCodCOACES);
 						
-						if (!sFechaVentaActivo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) >= Long.parseLong(sFechaVentaActivo)))
+						if (sCOGRUG.equals(ValoresDefecto.DEF_COGRUG_COMPRAVENTA) 
+							&& sCOTPGA.equals(ValoresDefecto.DEF_COTPGA_PLUSVALIA)
+							&& (Long.parseLong(sFechaVentaActivo) > Long.parseLong(Utils.compruebaFecha(sFEDEVE))))
+						{
+							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo de la plusvalía debe de ser superior a la de venta del Activo ("+Utils.recuperaFecha(sFechaVentaActivo)+"). Por favor, revise los datos";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+						}
+						else if (!((sCOGRUG.equals(ValoresDefecto.DEF_COGRUG_PENDIENTES) 
+								&& sCOTPGA.equals(ValoresDefecto.DEF_COTPGA_IMPUESTO))
+								||(sCOGRUG.equals(ValoresDefecto.DEF_COGRUG_COMPRAVENTA) 
+								&& sCOTPGA.equals(ValoresDefecto.DEF_COTPGA_PLUSVALIA))) && !sFechaVentaActivo.equals("0") && (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) >= Long.parseLong(sFechaVentaActivo)))
 						{
 							sMsg = "ERROR: El Gasto informado no puede darse de alta, la fecha de devengo debe de ser inferior a la de venta del Activo ("+Utils.recuperaFecha(sFechaVentaActivo)+"). Por favor, revise los datos";
 							msg = Utils.pfmsgError(sMsg);
@@ -819,9 +868,30 @@ public class GestorGastos implements Serializable
 							msg = Utils.pfmsgError(sMsg);
 							logger.error(sMsg);
 						}
+						else if (/*sUrgente.equals(ValoresDefecto.DEF_SI) &&*/ !CLProvisiones.estadoProvision(sFNUPROF).equals(ValoresDefecto.DEF_PROVISION_ENVIADA))
+						{
+							sMsg = "ERROR: La Provisión a forzar no se encuentra en el estado de Envio.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+						}
 						else
 						{
-							this.sNUPROF = CLProvisiones.provisionAsignada(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA);
+							this.sNUPROF = "";
+							
+							//Comprobar provision Forzada
+							if (sUrgente.equals(ValoresDefecto.DEF_SI))
+							{
+								if (CLProvisiones.comprobarProvisionForzada(sFNUPROF, Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA))
+								{
+									this.sNUPROF = sFNUPROF;
+								}
+							}
+							else
+							{
+								this.sNUPROF = CLProvisiones.provisionAsignada(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA);
+							}
+
+							
 							
 							if (sNUPROF.equals(""))
 							{
@@ -931,7 +1001,7 @@ public class GestorGastos implements Serializable
 									
 									Nota nota = new Nota (false,sNota);
 
-									int iSalida = CLGastos.registraMovimiento(movimiento,true, nota);
+									int iSalida = CLGastos.registraMovimiento(movimiento,true, nota,sUrgente.equals(ValoresDefecto.DEF_SI));
 									
 									switch (iSalida) 
 									{
@@ -1852,6 +1922,30 @@ public class GestorGastos implements Serializable
 	public void setbDevolucion(boolean bDevolucion) {
 		this.bDevolucion = bDevolucion;
 	}
+	
+	public String getsUrgente() {
+		return sUrgente;
+	}
+
+	public void setsUrgente(String sUrgente) {
+		this.sUrgente = sUrgente;
+	}
+
+	public boolean isbForzar() {
+		return bForzar;
+	}
+
+	public boolean isbBloquear() {
+		return bBloquear;
+	}
+
+	public String getsFNUPROF() {
+		return sFNUPROF;
+	}
+
+	public void setsFNUPROF(String sFNUPROF) {
+		this.sFNUPROF = sFNUPROF;
+	}
 
 	public String getsNURCAT() {
 		return sNURCAT;
@@ -1883,6 +1977,22 @@ public class GestorGastos implements Serializable
 
 	public void setTiposcoimptHM(Map<String,String> tiposcoimptHM) {
 		this.tiposcoimptHM = tiposcoimptHM;
+	}
+
+	public Map<String,String> getTiposurgenteHM() {
+		return tiposurgenteHM;
+	}
+
+	public void setTiposurgenteHM(Map<String,String> tiposurgenteHM) {
+		this.tiposurgenteHM = tiposurgenteHM;
+	}
+
+	public Map<String,String> getTiposforzadoHM() {
+		return tiposforzadoHM;
+	}
+
+	public void setTiposforzadoHM(Map<String,String> tiposforzadoHM) {
+		this.tiposforzadoHM = tiposforzadoHM;
 	}
 
 

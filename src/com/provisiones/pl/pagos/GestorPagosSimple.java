@@ -47,6 +47,7 @@ public class GestorPagosSimple implements Serializable
 	private String sCOTPGABA = "";
 	private String sCOSBGABA = "";
 	private String sFEDEVEBA = "";
+	private String sURGENTBA = "";
 	
 	//Filtro Activo
 	private String sCOPOINB = "";
@@ -77,6 +78,7 @@ public class GestorPagosSimple implements Serializable
 	private String sCOSBGABP = "";
 	private String sFEDEVEBP = "";
 	private String sCOACESBP = "";
+	private String sURGENTBP = "";
 	
 	//Gasto Buscado
 	private String sCodGastoB = "";
@@ -170,6 +172,8 @@ public class GestorPagosSimple implements Serializable
 	
 	private Map<String,String> tiposrecargoHM = new LinkedHashMap<String, String>();
 	
+	private Map<String,String> tiposurgenciaHM = new LinkedHashMap<String, String>();
+	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
@@ -241,6 +245,9 @@ public class GestorPagosSimple implements Serializable
 			
 			tiposrecargoHM.put("Cantidad fija (¤)","1");
 			tiposrecargoHM.put("Proporcional (%)", "2");
+			
+			tiposurgenciaHM.put("Si","1");
+			tiposurgenciaHM.put("No","0");
 		}
 	}
 	
@@ -296,6 +303,7 @@ public class GestorPagosSimple implements Serializable
 		this.sCOTPGABA = "";
 		this.sCOSBGABA = "";
 		this.sFEDEVEBA = "";
+		this.sURGENTBA = "";
 		
 		cambiaGrupoActivo();
 	
@@ -316,6 +324,7 @@ public class GestorPagosSimple implements Serializable
 		this.sCOTPGABP = "";
 		this.sCOSBGABP = "";
 		this.sFEDEVEBP = "";
+		this.sURGENTBP = "";
 	
 		this.sCOACESBP = "";
 		
@@ -810,11 +819,12 @@ public class GestorPagosSimple implements Serializable
 							"",
 							"",//TODO meter estado en el filtro
 							"",
-							"");
+							"",
+							sURGENTBA);
 					
 					
 					
-					this.setTablagastosactivo(CLGastos.buscarGastosAutorizadosActivoConFiltro(filtro));
+					this.setTablagastosactivo(CLGastos.buscarGastosPagablesActivoConFiltro(filtro));
 					
 					if (getTablagastosactivo().size() == 0)
 					{
@@ -902,7 +912,8 @@ public class GestorPagosSimple implements Serializable
 								"",
 								"",//TODO meter estado en el filtro
 								"",
-								"");
+								"",
+								sURGENTBP);
 						
 						this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro));
 						
@@ -1628,6 +1639,14 @@ public class GestorPagosSimple implements Serializable
 	public void setsFEDEVEBA(String sFEDEVEBA) {
 		this.sFEDEVEBA = sFEDEVEBA;
 	}
+	
+	public String getsURGENTBA() {
+		return sURGENTBA;
+	}
+
+	public void setsURGENTBA(String sURGENTBA) {
+		this.sURGENTBA = sURGENTBA;
+	}
 
 	public String getsCOPOINB() {
 		return sCOPOINB;
@@ -1763,6 +1782,14 @@ public class GestorPagosSimple implements Serializable
 
 	public void setsFEDEVEBP(String sFEDEVEBP) {
 		this.sFEDEVEBP = sFEDEVEBP;
+	}
+
+	public String getsURGENTBP() {
+		return sURGENTBP;
+	}
+
+	public void setsURGENTBP(String sURGENTBP) {
+		this.sURGENTBP = sURGENTBP;
 	}
 
 	public String getsCOACESBP() {
@@ -2276,6 +2303,14 @@ public class GestorPagosSimple implements Serializable
 
 	public void setTiposcosbga_t33HM(Map<String, String> tiposcosbga_t33HM) {
 		this.tiposcosbga_t33HM = tiposcosbga_t33HM;
+	}
+
+	public Map<String,String> getTiposurgenciaHM() {
+		return tiposurgenciaHM;
+	}
+
+	public void setTiposurgenciaHM(Map<String,String> tiposurgenciaHM) {
+		this.tiposurgenciaHM = tiposurgenciaHM;
 	}
 
 	public ActivoTabla getActivoseleccionado() {
