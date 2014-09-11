@@ -339,20 +339,53 @@ public class GestorListaActivos implements Serializable {
 		
     }
 	
-	public String cargarComunidad() 
+	public void cargarComunidad(ActionEvent actionEvent) 
     {  
-		String sPagina = "login.xhtml";
+		String sPagina = ".";
 		
 		if (ConnectionManager.comprobarConexion())
 		{
-	    	this.sCOACES = activoseleccionado.getCOACES();
-	    	
-	    	logger.debug("Redirigiendo...");
-	    	
-	    	sPagina =  "movimientoscomunidades.xhtml";
-		}
+			if (activoseleccionado != null)
+			{
+		    	this.sCOACES = activoseleccionado.getCOACES();
 
-		return sPagina;
+		    	logger.debug("sCOACES:|"+sCOACES+"|");
+		    			    	
+		    	Sesion.guardaDetalle(sCOACES);
+		    	Sesion.limpiarHistorial();
+		    	Sesion.guardarHistorial("listaactivos.xhtml","GestorDetallesActivo");
+
+		    	sPagina = "detallesactivo.xhtml";
+		    	
+				try 
+				{
+					logger.debug("Redirigiendo...");
+					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+				}
+				catch (IOException e)
+				{
+					FacesMessage msg;
+					
+					String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
+		    	
+		    	
+			}
+			else
+			{
+				FacesMessage msg;
+
+				msg = Utils.pfmsgWarning("No se ha seleccionado ningún activo.");
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+
+		}
     }
 
 	public String cargarCuota()

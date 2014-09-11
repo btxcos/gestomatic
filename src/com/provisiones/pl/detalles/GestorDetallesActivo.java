@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
+import com.provisiones.ll.CLComunidades;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
@@ -120,8 +121,15 @@ public class GestorDetallesActivo implements Serializable
 	private String sFETIFI = "";
 	
 	private String sNota = "";
+	private boolean bSinNotas = false;
+	
 	
 	private int iCOACES = 0;
+	
+	private boolean bSinComunidad = false;
+	private boolean bSinCuotas = false;
+	private boolean bSinReferenciasCatastrales = false;
+	private boolean bSinRecursos = false;
 	
 	public GestorDetallesActivo()
 	{
@@ -272,10 +280,77 @@ public class GestorDetallesActivo implements Serializable
 			this.sPOBRAR = Utils.recuperaImporte(false,sPOBRAR.substring(0,5));
 			
 			this.sNota = CLActivos.buscarNota(iCOACES);
+			
+			this.bSinNotas = sNota.isEmpty();
+			
+			
+			this.bSinComunidad = !CLComunidades.esActivoVinculadoAComunidad(iCOACES);
 
 		}
 		
 	}
+	
+	public void cargarComunidad(ActionEvent actionEvent) 
+    {  
+		String sPagina = ".";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			try
+			{
+				if (!this.sCOACES.isEmpty())
+				{
+			    	String sCodComunidad = Long.toString(CLComunidades.buscarCodigoComunidadDeActivo(Integer.parseInt(sCOACES)));
+
+			    	Sesion.guardaDetalle(sCodComunidad);
+			    	Sesion.guardarHistorial("detallesactivo.xhtml","GestorDetallesComunidad");
+
+			    	sPagina = "detallescomunidad.xhtml";
+			    	
+					try 
+					{
+						logger.debug("Redirigiendo...");
+						FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+					}
+					catch (IOException e)
+					{
+						sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+						
+						msg = Utils.pfmsgFatal(sMsg);
+						logger.error(sMsg);
+						
+						FacesContext.getCurrentInstance().addMessage(null, msg);
+					}
+				}
+				else
+				{
+
+					sMsg = "No se ha seleccionado ninguna comunidad.";
+
+					msg = Utils.pfmsgWarning(sMsg);
+					
+					logger.warn(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+					
+				}
+			}
+			catch(NumberFormatException nfe)
+			{
+				sMsg = "ERROR: La comunidad debe ser numérica. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+			
+			
+		}
+    }
 
     public void limpiarNota(ActionEvent actionEvent) 
     {  
@@ -295,6 +370,8 @@ public class GestorDetallesActivo implements Serializable
 				sMsg = "Nota guardada correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
+				
+				this.bSinNotas = sNota.isEmpty();
 			}
 			else
 			{
@@ -1058,6 +1135,46 @@ public class GestorDetallesActivo implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbSinNotas() {
+		return bSinNotas;
+	}
+
+	public void setbSinNotas(boolean bSinNotas) {
+		this.bSinNotas = bSinNotas;
+	}
+
+	public boolean isbSinComunidad() {
+		return bSinComunidad;
+	}
+
+	public void setbSinComunidad(boolean bSinComunidad) {
+		this.bSinComunidad = bSinComunidad;
+	}
+
+	public boolean isbSinCuotas() {
+		return bSinCuotas;
+	}
+
+	public void setbSinCuotas(boolean bSinCuotas) {
+		this.bSinCuotas = bSinCuotas;
+	}
+
+	public boolean isbSinReferenciasCatastrales() {
+		return bSinReferenciasCatastrales;
+	}
+
+	public void setbSinReferenciasCatastrales(boolean bSinReferenciasCatastrales) {
+		this.bSinReferenciasCatastrales = bSinReferenciasCatastrales;
+	}
+
+	public boolean isbSinRecursos() {
+		return bSinRecursos;
+	}
+
+	public void setbSinRecursos(boolean bSinRecursos) {
+		this.bSinRecursos = bSinRecursos;
 	}
 	
 }

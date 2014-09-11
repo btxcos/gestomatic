@@ -632,37 +632,60 @@
 									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscarGastosActivo" >
-												<h:panelGrid columns="2" cellpadding="5">
+												<h:panelGrid columns="1" cellpadding="5">
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Grupo de gasto: "/>
+															<p:selectOneMenu id="COGRUGBA" value="#{GestorPagosSimple.sCOGRUGBA}">
+																<f:selectItem itemLabel="Grupo..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposcogrugHM}"/>
+																<p:ajax update="COTPGABA, COSBGABA" listener="#{GestorPagosSimple.cambiaTipoActivo}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Grupo de gasto: "/>
-													<p:selectOneMenu id="COGRUGBA" value="#{GestorPagosSimple.sCOGRUGBA}">
-														<f:selectItem itemLabel="Grupo..." itemValue=""/>
-														<f:selectItems value="#{GestorPagosSimple.tiposcogrugHM}"/>
-															<p:ajax update="COTPGABA, COSBGABA" listener="#{GestorPagosSimple.cambiaTipoActivo}"/>
-													</p:selectOneMenu>
+															<h:outputText value="Tipo de concepto de gasto:  "/>
+															<p:selectOneMenu id="COTPGABA" value="#{GestorPagosSimple.sCOTPGABA}">
+																<f:selectItem itemLabel="Tipo..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposcotpgaHMA}"/>
+																<p:ajax update="COSBGABA" listener="#{GestorPagosSimple.cambiaSubtipoActivo}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Tipo de concepto de gasto:  "/>
-													<p:selectOneMenu id="COTPGABA" value="#{GestorPagosSimple.sCOTPGABA}">
-														<f:selectItem itemLabel="Tipo..." itemValue=""/>
-														<f:selectItems value="#{GestorPagosSimple.tiposcotpgaHMA}"/>
-														<p:ajax update="COSBGABA" listener="#{GestorPagosSimple.cambiaSubtipoActivo}"/>
-													</p:selectOneMenu>
+															<h:outputText value="Subtipo de gasto: "/>
+															<p:selectOneMenu id="COSBGABA" value="#{GestorPagosSimple.sCOSBGABA}">
+																<f:selectItem itemLabel="Subtipo..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposcosbgaHMA}"/>
+															</p:selectOneMenu>
+														</h:panelGrid>
+													</p:panel>
 
-													<h:outputText value="Subtipo de gasto: "/>
-													<p:selectOneMenu id="COSBGABA" value="#{GestorPagosSimple.sCOSBGABA}">
-														<f:selectItem itemLabel="Subtipo..." itemValue=""/>
-														<f:selectItems value="#{GestorPagosSimple.tiposcosbgaHMA}"/>
-													</p:selectOneMenu>
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORBA" value="#{GestorPagosSimple.sComparadorBA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORBA, IMNGASBA" listener="#{GestorPagosSimple.cambiaComparadorBA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASBA" value="#{GestorPagosSimple.sIMNGASBA}" size="16" maxlength="16" disabled="#{GestorPagosSimple.bSeleccionadoBA}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
 
-													<h:outputText value="Fecha del devengo: "/>
-													<p:inputMask id="FEDEVEBA" value="#{GestorPagosSimple.sFEDEVEBA}" mask="99/99/9999" size="10" maxlength="10"/>
-
-													<h:outputText value="Urgente: "/>
-													<p:selectOneMenu id="URGENTBA" value="#{GestorPagosSimple.sURGENTBA}">
-														<f:selectItem itemLabel="Urgente..." itemValue=""/>
-														<f:selectItems value="#{GestorPagosSimple.tiposurgenciaHM}"/>
-													</p:selectOneMenu>
-
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha del devengo: "/>
+															<p:inputMask id="FEDEVEBA" value="#{GestorPagosSimple.sFEDEVEBA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEVEBA" actionListener="#{GestorPagosSimple.hoyFEDEVEBA}"/>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">													
+															<h:outputText value="Urgente: "/>
+															<p:selectOneMenu id="URGENTBA" value="#{GestorPagosSimple.sURGENTBA}">
+																<f:selectItem itemLabel="Urgente..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposurgenciaHM}"/>
+															</p:selectOneMenu>
+														</h:panelGrid>
+													</p:panel>
 												</h:panelGrid>
 											</p:panel>
 
@@ -756,37 +779,60 @@
 									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscarGastosProvision" >
-												<h:panelGrid columns="2" cellpadding="5">
+												<h:panelGrid columns="1" cellpadding="5">
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
 
-													<h:outputText value="Grupo de gasto: "/>
-													<p:selectOneMenu id="COGRUGBP" value="#{GestorPagosSimple.sCOGRUGBP}">
-														<f:selectItem itemLabel="Grupo..." itemValue=""/>
-														<f:selectItems value="#{GestorPagosSimple.tiposcogrugHM}"/>
-															<p:ajax update="COTPGABP, COSBGABP" listener="#{GestorPagosSimple.cambiaTipoProvision}"/>
-													</p:selectOneMenu>
+															<h:outputText value="Grupo de gasto: "/>
+															<p:selectOneMenu id="COGRUGBP" value="#{GestorPagosSimple.sCOGRUGBP}">
+																<f:selectItem itemLabel="Grupo..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposcogrugHM}"/>
+																<p:ajax update="COTPGABP, COSBGABP" listener="#{GestorPagosSimple.cambiaTipoProvision}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Tipo de concepto de gasto:  "/>
-													<p:selectOneMenu id="COTPGABP" value="#{GestorPagosSimple.sCOTPGABP}">
-														<f:selectItem itemLabel="Tipo..." itemValue=""/>
-														<f:selectItems value="#{GestorPagosSimple.tiposcotpgaHMP}"/>
-														<p:ajax update="COSBGABP" listener="#{GestorPagosSimple.cambiaSubtipoProvision}"/>
-													</p:selectOneMenu>
+															<h:outputText value="Tipo de concepto de gasto:  "/>
+															<p:selectOneMenu id="COTPGABP" value="#{GestorPagosSimple.sCOTPGABP}">
+																<f:selectItem itemLabel="Tipo..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposcotpgaHMP}"/>
+																<p:ajax update="COSBGABP" listener="#{GestorPagosSimple.cambiaSubtipoProvision}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Subtipo de gasto: "/>
-													<p:selectOneMenu id="COSBGABP" value="#{GestorPagosSimple.sCOSBGABP}">
-														<f:selectItem itemLabel="Subtipo..." itemValue=""/>
-														<f:selectItems value="#{GestorPagosSimple.tiposcosbgaHMP}"/>
-													</p:selectOneMenu>
+															<h:outputText value="Subtipo de gasto: "/>
+															<p:selectOneMenu id="COSBGABP" value="#{GestorPagosSimple.sCOSBGABP}">
+																<f:selectItem itemLabel="Subtipo..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposcosbgaHMP}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Fecha del devengo: "/>
-													<p:inputMask id="FEDEVEBP" value="#{GestorPagosSimple.sFEDEVEBP}" mask="99/99/9999" size="10" maxlength="10"/>
-
-													<h:outputText value="Urgente: "/>
-													<p:selectOneMenu id="URGENTBP" value="#{GestorPagosSimple.sURGENTBP}">
-														<f:selectItem itemLabel="Urgente..." itemValue=""/>
-														<f:selectItems value="#{GestorPagosSimple.tiposurgenciaHM}"/>
-													</p:selectOneMenu>
-
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORBP" value="#{GestorPagosSimple.sComparadorBP}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORBP, IMNGASBP" listener="#{GestorPagosSimple.cambiaComparadorBP}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASBP" value="#{GestorPagosSimple.sIMNGASBP}" size="16" maxlength="16" disabled="#{GestorPagosSimple.bSeleccionadoBP}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha del devengo: "/>
+															<p:inputMask id="FEDEVEBP" value="#{GestorPagosSimple.sFEDEVEBP}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEVEBP" actionListener="#{GestorPagosSimple.hoyFEDEVEBP}"/>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="1">
+															<h:outputText value="Urgente: "/>
+															<p:selectOneMenu id="URGENTBP" value="#{GestorPagosSimple.sURGENTBP}">
+																<f:selectItem itemLabel="Urgente..." itemValue=""/>
+																<f:selectItems value="#{GestorPagosSimple.tiposurgenciaHM}"/>
+															</p:selectOneMenu>
+														</h:panelGrid>
+													</p:panel>
 												</h:panelGrid>
 											</p:panel>
 

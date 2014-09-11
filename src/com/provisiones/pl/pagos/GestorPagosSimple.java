@@ -47,6 +47,9 @@ public class GestorPagosSimple implements Serializable
 	private String sCOTPGABA = "";
 	private String sCOSBGABA = "";
 	private String sFEDEVEBA = "";
+	private String sIMNGASBA = "";
+	private String sComparadorBA = "";
+	private boolean bSeleccionadoBA = true; 
 	private String sURGENTBA = "";
 	
 	//Filtro Activo
@@ -79,6 +82,9 @@ public class GestorPagosSimple implements Serializable
 	private String sCOSBGABP = "";
 	private String sFEDEVEBP = "";
 	private String sCOACESBP = "";
+	private String sIMNGASBP = "";
+	private String sComparadorBP = "";
+	private boolean bSeleccionadoBP = true; 	
 	private String sURGENTBP = "";
 	
 	//Gasto Buscado
@@ -175,6 +181,8 @@ public class GestorPagosSimple implements Serializable
 	
 	private Map<String,String> tiposurgenciaHM = new LinkedHashMap<String, String>();
 	
+	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
+	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
@@ -249,6 +257,10 @@ public class GestorPagosSimple implements Serializable
 			
 			tiposurgenciaHM.put("Si","1");
 			tiposurgenciaHM.put("No","0");
+			
+			tiposcomparaimporteHM.put("Igual a",    		"=");
+			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
+			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
 		}
 	}
 	
@@ -305,6 +317,9 @@ public class GestorPagosSimple implements Serializable
 		this.sCOTPGABA = "";
 		this.sCOSBGABA = "";
 		this.sFEDEVEBA = "";
+		this.sIMNGASBA = "";
+		this.sComparadorBA = "";
+		this.bSeleccionadoBA = true; 
 		this.sURGENTBA = "";
 		
 		cambiaGrupoActivo();
@@ -326,6 +341,9 @@ public class GestorPagosSimple implements Serializable
 		this.sCOTPGABP = "";
 		this.sCOSBGABP = "";
 		this.sFEDEVEBP = "";
+		this.sIMNGASBP = "";
+		this.sComparadorBP = "";
+		this.bSeleccionadoBP = true; 
 		this.sURGENTBP = "";
 	
 		this.sCOACESBP = "";
@@ -588,6 +606,16 @@ public class GestorPagosSimple implements Serializable
 		}
 	}
 	
+	public void cambiaComparadorBA()
+	{
+		this.bSeleccionadoBA = this.sComparadorBA.isEmpty();
+	}
+	
+	public void cambiaComparadorBP()
+	{
+		this.bSeleccionadoBP = this.sComparadorBP.isEmpty();
+	}
+	
 	public void hoyFEDEVEBA (ActionEvent actionEvent)
 	{
 		this.setsFEDEVEBA(Utils.fechaDeHoy(true));
@@ -810,6 +838,15 @@ public class GestorPagosSimple implements Serializable
 				}
 				else if (CLActivos.existeActivo(Integer.parseInt(sCOACESB)))
 				{
+					if (sComparadorBA.isEmpty()) 
+					{
+						sIMNGASBA = "";
+					}
+					else
+					{
+						sIMNGASBA = Utils.compruebaImporte(sIMNGASBA);
+					}
+					
 					GastoTabla filtro = new GastoTabla(
 							"",
 							"",
@@ -824,16 +861,16 @@ public class GestorPagosSimple implements Serializable
 							Utils.compruebaFecha(sFEDEVEBA),   
 							"",   
 							"",  
+							sIMNGASBA,
 							"",
 							"",
-							"",//TODO meter estado en el filtro
 							"",
 							"",
 							sURGENTBA);
 					
 					
 					
-					this.setTablagastosactivo(CLGastos.buscarGastosPagablesActivoConFiltro(filtro));
+					this.setTablagastosactivo(CLGastos.buscarGastosPagablesActivoConFiltro(filtro, sComparadorBA));
 					
 					if (getTablagastosactivo().size() == 0)
 					{
@@ -903,6 +940,15 @@ public class GestorPagosSimple implements Serializable
 				{
 					if (!CLProvisiones.estaPagada(sNUPROFB))
 					{
+						if (sComparadorBP.isEmpty()) 
+						{
+							sIMNGASBP = "";
+						}
+						else
+						{
+							sIMNGASBP = Utils.compruebaImporte(sIMNGASBP);
+						}
+						
 						GastoTabla filtro = new GastoTabla(
 								"",
 								sNUPROFB,   
@@ -917,14 +963,14 @@ public class GestorPagosSimple implements Serializable
 								Utils.compruebaFecha(sFEDEVEBP),   
 								"",   
 								"",  
-								"",
-								"",
+								sIMNGASBP,
 								"",//TODO meter estado en el filtro
+								"",
 								"",
 								"",
 								sURGENTBP);
 						
-						this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro));
+						this.setTablagastosprovision(CLGastos.buscarGastosAutorizadosProvisionConFiltro(filtro, sComparadorBP));
 						
 					}
 					
@@ -1649,6 +1695,30 @@ public class GestorPagosSimple implements Serializable
 		this.sFEDEVEBA = sFEDEVEBA;
 	}
 	
+	public String getsIMNGASBA() {
+		return sIMNGASBA;
+	}
+
+	public void setsIMNGASBA(String sIMNGASBA) {
+		this.sIMNGASBA = sIMNGASBA;
+	}
+
+	public String getsComparadorBA() {
+		return sComparadorBA;
+	}
+
+	public void setsComparadorBA(String sComparadorBA) {
+		this.sComparadorBA = sComparadorBA;
+	}
+
+	public boolean isbSeleccionadoBA() {
+		return bSeleccionadoBA;
+	}
+
+	public void setbSeleccionadoBA(boolean bSeleccionadoBA) {
+		this.bSeleccionadoBA = bSeleccionadoBA;
+	}
+
 	public String getsURGENTBA() {
 		return sURGENTBA;
 	}
@@ -1815,6 +1885,30 @@ public class GestorPagosSimple implements Serializable
 
 	public void setsCOACESBP(String sCOACESBP) {
 		this.sCOACESBP = sCOACESBP.trim();
+	}
+
+	public String getsIMNGASBP() {
+		return sIMNGASBP;
+	}
+
+	public void setsIMNGASBP(String sIMNGASBP) {
+		this.sIMNGASBP = sIMNGASBP;
+	}
+
+	public String getsComparadorBP() {
+		return sComparadorBP;
+	}
+
+	public void setsComparadorBP(String sComparadorBP) {
+		this.sComparadorBP = sComparadorBP;
+	}
+
+	public boolean isbSeleccionadoBP() {
+		return bSeleccionadoBP;
+	}
+
+	public void setbSeleccionadoBP(boolean bSeleccionadoBP) {
+		this.bSeleccionadoBP = bSeleccionadoBP;
 	}
 
 	public String getsCodGastoB() {
@@ -2328,6 +2422,14 @@ public class GestorPagosSimple implements Serializable
 
 	public void setTiposurgenciaHM(Map<String,String> tiposurgenciaHM) {
 		this.tiposurgenciaHM = tiposurgenciaHM;
+	}
+
+	public Map<String,String> getTiposcomparaimporteHM() {
+		return tiposcomparaimporteHM;
+	}
+
+	public void setTiposcomparaimporteHM(Map<String,String> tiposcomparaimporteHM) {
+		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
 	}
 
 	public ActivoTabla getActivoseleccionado() {

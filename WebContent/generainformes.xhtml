@@ -443,6 +443,18 @@
 														</h:panelGrid>
 													</p:panel>
 
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORFA" value="#{GestorInformes.sComparadorFA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorInformes.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORFA, IMNGASFA" listener="#{GestorInformes.cambiaComparadorFA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASFA" value="#{GestorInformes.sIMNGASFA}" size="16" maxlength="16" disabled="#{GestorInformes.bSeleccionadoFA}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
 
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="1">
@@ -510,6 +522,18 @@
 														</h:panelGrid>
 													</p:panel>
 
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORFP" value="#{GestorInformes.sComparadorFP}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorInformes.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORFP, IMNGASFP" listener="#{GestorInformes.cambiaComparadorFP}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASFP" value="#{GestorInformes.sIMNGASFP}" size="16" maxlength="16" disabled="#{GestorInformes.bSeleccionadoFP}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
 
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="1">

@@ -1621,7 +1621,7 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 
-	public static ArrayList<GastoTabla> buscaGastosProvisionPorFiltroEstado(Connection conexion, GastoTabla filtro, String sEstado)
+	public static ArrayList<GastoTabla> buscaGastosProvisionPorFiltroEstado(Connection conexion, GastoTabla filtro, String sEstado, String sComparador)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -1641,6 +1641,8 @@ public final class QMListaGastosProvisiones
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":QMGastos.CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
 			String sCondicionFEDEVE = (filtro.getFEDEVE().isEmpty() || filtro.getFEDEVE().equals("0"))?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
 			String sCondicionEstado = sEstado.isEmpty()?"":QMGastos.CAMPO34 + " = '" + sEstado + "' AND ";
+			String sCondicionImporte = sComparador.isEmpty()?"":QMGastos.CAMPO15 + " "+sComparador+" " + filtro.getIMNGAS() + " AND ";
+			
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1668,6 +1670,7 @@ public final class QMListaGastosProvisiones
 						   + sCondicionCOGRUG
 						   + sCondicionCOTPGA
 						   + sCondicionCOSBGA
+						   + sCondicionImporte
 						   + sCondicionFEDEVE
 						   + sCondicionEstado
 						   + QMGastos.CAMPO1 + 
@@ -1772,7 +1775,7 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosNuevosProvisionPorFiltro(Connection conexion, GastoTabla filtro)
+	public static ArrayList<GastoTabla> buscaGastosNuevosProvisionPorFiltro(Connection conexion, GastoTabla filtro, String sComparador)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -1794,6 +1797,8 @@ public final class QMListaGastosProvisiones
 			String sCondicionEstado = filtro.getESTADO().isEmpty()? 
 					QMGastos.CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO +"')"
 					:QMGastos.CAMPO34 + " = '"+filtro.getESTADO()+"'"; 
+			
+			String sCondicionImporte = sComparador.isEmpty()?"":QMGastos.CAMPO15 + " "+sComparador+" " + filtro.getIMNGAS() + " AND ";
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1822,6 +1827,7 @@ public final class QMListaGastosProvisiones
 						   + sCondicionCOTPGA
 						   + sCondicionCOSBGA
 						   + sCondicionFEDEVE
+						   + sCondicionImporte
 						   + sCondicionEstado + " AND "
 						   + QMGastos.CAMPO1 + 
 						   " IN (SELECT "
@@ -1925,7 +1931,7 @@ public final class QMListaGastosProvisiones
 		return resultado;
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosProvisionRevisablesPorFiltro(Connection conexion, GastoTabla filtro)
+	public static ArrayList<GastoTabla> buscaGastosProvisionRevisablesPorFiltro(Connection conexion, GastoTabla filtro, String sComparador)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -1944,6 +1950,8 @@ public final class QMListaGastosProvisiones
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()?"":QMGastos.CAMPO4 + " = '" + filtro.getCOTPGA() + "' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()?"":QMGastos.CAMPO5 + " = '" + filtro.getCOSBGA() + "' AND ";
 			String sCondicionFEDEVE = (filtro.getFEDEVE().isEmpty() || filtro.getFEDEVE().equals("0"))?"":QMGastos.CAMPO7 + " = '" + filtro.getFEDEVE() + "' AND ";
+			
+			String sCondicionImporte = sComparador.isEmpty()?"":QMGastos.CAMPO15 + " "+sComparador+" " + filtro.getIMNGAS() + " AND ";
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1972,6 +1980,7 @@ public final class QMListaGastosProvisiones
 						   + sCondicionCOTPGA
 						   + sCondicionCOSBGA
 						   + sCondicionFEDEVE
+						   + sCondicionImporte
 						   + QMGastos.CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_AUTORIZADO + "','" + ValoresDefecto.DEF_GASTO_PAGADO + "') AND "
 						   + QMGastos.CAMPO1 + 
 						   " IN (SELECT "

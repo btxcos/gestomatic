@@ -59,6 +59,8 @@ public class GestorListaGastos implements Serializable
 	private String sCOSBGAFA = "";
 	private String sFEDEVEFA = "";
 	private String sIMNGASFA = "";
+	private String sComparadorFA = "";
+	private boolean bSeleccionadoFA = true; 
 	private String sEstadoGastoFA = "";
 	
 	//Filtro Gastos Provision
@@ -67,6 +69,8 @@ public class GestorListaGastos implements Serializable
 	private String sCOSBGAFP = "";
 	private String sFEDEVEFP = "";
 	private String sIMNGASFP = "";
+	private String sComparadorFP = "";
+	private boolean bSeleccionadoFP = true;
 	private String sEstadoGastoFP = "";
 	
 	//Filtro de provision
@@ -103,8 +107,9 @@ public class GestorListaGastos implements Serializable
 	private Map<String,String> tiposcosbga_t32HM = new LinkedHashMap<String, String>();
 	private Map<String,String> tiposcosbga_t33HM = new LinkedHashMap<String, String>();
 	
-	private Map<String,String> tiposestadogastoHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
 	
+	private Map<String,String> tiposestadogastoHM = new LinkedHashMap<String, String>();
 	
 	private Map<String,String> tiposestadoprovisionHM = new LinkedHashMap<String, String>();
 
@@ -158,6 +163,10 @@ public class GestorListaGastos implements Serializable
 			tiposcosbga_t32HM.put("Servicios varios",        "4");
 			
 			tiposcosbga_t33HM.put("Obtencion de Licencias", "0");
+
+			tiposcomparaimporteHM.put("Igual a",    		"=");
+			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
+			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
 			
 			tiposestadogastoHM.put("ESTIMADO",	"1");
 			tiposestadogastoHM.put("CONOCIDO",	"2");
@@ -211,6 +220,8 @@ public class GestorListaGastos implements Serializable
 		this.sCOSBGAFA = "";
 		this.sFEDEVEFA = "";
 		this.sIMNGASFA = "";
+		this.sComparadorFA = "";
+		this.bSeleccionadoFA = true; 
 		this.sEstadoGastoFA = "";
 	}
 	
@@ -226,6 +237,8 @@ public class GestorListaGastos implements Serializable
 		this.sCOSBGAFP = "";
 		this.sFEDEVEFP = "";
 		this.sIMNGASFP = "";
+		this.sComparadorFP = "";
+		this.bSeleccionadoFP = true; 
 		this.sEstadoGastoFP = "";
 	}
 	
@@ -597,6 +610,17 @@ public class GestorListaGastos implements Serializable
 		}
 	}
 	
+	public void cambiaComparadorFA()
+	{
+		this.bSeleccionadoFA = this.sComparadorFA.isEmpty();
+		logger.debug("sComparadorFA:|"+sComparadorFA+"|");
+	}
+	
+	public void cambiaComparadorFP()
+	{
+		this.bSeleccionadoFP = this.sComparadorFP.isEmpty();
+	}
+	
 	public void hoyFEDEVEFA (ActionEvent actionEvent)
 	{
 		this.setsFEDEVEFA(Utils.fechaDeHoy(true));
@@ -640,6 +664,15 @@ public class GestorListaGastos implements Serializable
 				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
 				 
 				{
+					if (sComparadorFA.isEmpty()) 
+					{
+						sIMNGASFA = "";
+					}
+					else
+					{
+						sIMNGASFA = Utils.compruebaImporte(sIMNGASFA);
+					}
+					
 					GastoTabla filtro = new GastoTabla(
 							"",
 							"",
@@ -654,7 +687,7 @@ public class GestorListaGastos implements Serializable
 							Utils.compruebaFecha(sFEDEVEFA),   
 							"",   
 							"",  
-							"",
+							sIMNGASFA,
 							sEstadoGastoFA,
 							"",
 							"",
@@ -665,10 +698,12 @@ public class GestorListaGastos implements Serializable
 			    	logger.debug("sCOGRUGFA:|"+sCOGRUGFA+"|");
 			    	logger.debug("sCOTPGAFA:|"+sCOTPGAFA+"|");
 			    	logger.debug("sCOSBGAFA:|"+sCOSBGAFA+"|");
+			    	logger.debug("sComparadorFA:|"+sComparadorFA+"|");
+			    	logger.debug("sIMNGASFA:|"+sIMNGASFA+"|");
 			    	logger.debug("sFEDEVEFA:|"+sFEDEVEFA+"|");
 			    	logger.debug("sEstadoGastoFA:|"+sEstadoGastoFA+"|");
 					
-					this.setTablagastos(CLGastos.buscarGastosActivoConFiltro(filtro));
+					this.setTablagastos(CLGastos.buscarGastosActivoConFiltro(filtro,sComparadorFA));
 					
 					if (getTablagastos().size() == 0)
 					{
@@ -739,6 +774,15 @@ public class GestorListaGastos implements Serializable
 				}
 				else if (CLProvisiones.existeProvision(sNUPROF))
 				{
+					if (sComparadorFP.isEmpty()) 
+					{
+						sIMNGASFP = "";
+					}
+					else
+					{
+						sIMNGASFP = Utils.compruebaImporte(sIMNGASFP);
+					}
+					
 					GastoTabla filtro = new GastoTabla(
 							"",
 							sNUPROF,   
@@ -753,7 +797,7 @@ public class GestorListaGastos implements Serializable
 							Utils.compruebaFecha(sFEDEVEFP),   
 							"",   
 							"",  
-							"",
+							sIMNGASFP,
 							"",
 							"",
 							"",
@@ -767,7 +811,7 @@ public class GestorListaGastos implements Serializable
 			    	logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
 			    	logger.debug("sEstadoGastoFP:|"+sEstadoGastoFP+"|");
 					
-					this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoGastoFP));
+					this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoGastoFP,sComparadorFP));
 					
 					if (getTablagastos().size() == 0)
 					{
@@ -1327,6 +1371,14 @@ public class GestorListaGastos implements Serializable
 		this.tiposestadogastoHM = tiposestadogastoHM;
 	}
 
+	public Map<String,String> getTiposcomparaimporteHM() {
+		return tiposcomparaimporteHM;
+	}
+
+	public void setTiposcomparaimporteHM(Map<String,String> tiposcomparaimporteHM) {
+		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
+	}
+
 	public Map<String,String> getTiposestadoprovisionHM() {
 		return tiposestadoprovisionHM;
 	}
@@ -1357,6 +1409,38 @@ public class GestorListaGastos implements Serializable
 
 	public void setsFELIPG(String sFELIPG) {
 		this.sFELIPG = sFELIPG;
+	}
+
+	public String getsComparadorFA() {
+		return sComparadorFA;
+	}
+
+	public void setsComparadorFA(String sComparadorFA) {
+		this.sComparadorFA = sComparadorFA;
+	}
+
+	public String getsComparadorFP() {
+		return sComparadorFP;
+	}
+
+	public void setsComparadorFP(String sComparadorFP) {
+		this.sComparadorFP = sComparadorFP;
+	}
+
+	public boolean isbSeleccionadoFA() {
+		return bSeleccionadoFA;
+	}
+
+	public void setbSeleccionadoFA(boolean bSeleccionadoFA) {
+		this.bSeleccionadoFA = bSeleccionadoFA;
+	}
+
+	public boolean isbSeleccionadoFP() {
+		return bSeleccionadoFP;
+	}
+
+	public void setbSeleccionadoFP(boolean bSeleccionadoFP) {
+		this.bSeleccionadoFP = bSeleccionadoFP;
 	}
 	
 }

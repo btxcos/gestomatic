@@ -51,6 +51,9 @@ public class GestorRevisionPagos implements Serializable
 	private String sCOTPGABA = "";
 	private String sCOSBGABA = "";
 	private String sFEDEVEBA = "";
+	private String sIMNGASBA = "";
+	private String sComparadorBA = "";
+	private boolean bSeleccionadoBA = true; 
 	
 	//Filtro Activo
 	private String sCOPOINB = "";
@@ -82,6 +85,9 @@ public class GestorRevisionPagos implements Serializable
 	private String sCOSBGABP = "";
 	private String sFEDEVEBP = "";
 	private String sCOACESBP = "";
+	private String sIMNGASBP = "";
+	private String sComparadorBP = "";
+	private boolean bSeleccionadoBP = true;
 	
 	//Gasto Buscado
 	private String sCodGastoB = "";
@@ -197,6 +203,8 @@ public class GestorRevisionPagos implements Serializable
 	
 	private Map<String,String> tiposrecargoHM = new LinkedHashMap<String, String>();
 	
+	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
+	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
@@ -268,6 +276,10 @@ public class GestorRevisionPagos implements Serializable
 			
 			tiposrecargoHM.put("Cantidad fija (¤)","1");
 			tiposrecargoHM.put("Proporcional (%)", "2");
+			
+			tiposcomparaimporteHM.put("Igual a",    		"=");
+			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
+			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
 		}
 	}
 	
@@ -324,6 +336,9 @@ public class GestorRevisionPagos implements Serializable
 		this.sCOTPGABA = "";
 		this.sCOSBGABA = "";
 		this.sFEDEVEBA = "";
+		this.sIMNGASBA = "";
+		this.sComparadorBA = "";
+		this.bSeleccionadoBA = true;
 		
 		cambiaGrupoActivo();
 	
@@ -344,6 +359,9 @@ public class GestorRevisionPagos implements Serializable
 		this.sCOTPGABP = "";
 		this.sCOSBGABP = "";
 		this.sFEDEVEBP = "";
+		this.sIMNGASBP = "";
+		this.sComparadorBP = "";
+		this.bSeleccionadoBP = true;
 	
 		this.sCOACESBP = "";
 		
@@ -617,6 +635,17 @@ public class GestorRevisionPagos implements Serializable
 		}
 	}
 	
+	public void cambiaComparadorBA()
+	{
+		this.bSeleccionadoBA = this.sComparadorBA.isEmpty();
+		logger.debug("sComparadorBA:|"+sComparadorBA+"|");
+	}
+	
+	public void cambiaComparadorBP()
+	{
+		this.bSeleccionadoBP = this.sComparadorBP.isEmpty();
+	}
+	
 	public void hoyFEDEVEBA (ActionEvent actionEvent)
 	{
 		this.setsFEDEVEBA(Utils.fechaDeHoy(true));
@@ -839,6 +868,15 @@ public class GestorRevisionPagos implements Serializable
 				}
 				else if (CLActivos.existeActivo(Integer.parseInt(sCOACESB)))
 				{
+					if (sComparadorBA.isEmpty()) 
+					{
+						sIMNGASBA = "";
+					}
+					else
+					{
+						sIMNGASBA = Utils.compruebaImporte(sIMNGASBA);
+					}
+					
 					GastoTabla filtro = new GastoTabla(
 							"",
 							"",
@@ -853,16 +891,16 @@ public class GestorRevisionPagos implements Serializable
 							Utils.compruebaFecha(sFEDEVEBA),   
 							"",   
 							"",  
-							"",
-							"",
+							sIMNGASBA,
 							"",//TODO meter estado en el filtro
+							"",
 							"",
 							"",
 							"");
 					
 					
 					
-					this.setTablagastosactivo(CLGastos.buscarGastosRevisablesActivoConFiltro(filtro));
+					this.setTablagastosactivo(CLGastos.buscarGastosRevisablesActivoConFiltro(filtro, sComparadorBA));
 					
 					if (getTablagastosactivo().size() == 0)
 					{
@@ -937,6 +975,15 @@ public class GestorRevisionPagos implements Serializable
 				{
 					if (!CLProvisiones.estaPagada(sNUPROFB))
 					{
+						if (sComparadorBP.isEmpty()) 
+						{
+							sIMNGASBP = "";
+						}
+						else
+						{
+							sIMNGASBP = Utils.compruebaImporte(sIMNGASBP);
+						}
+						
 						GastoTabla filtro = new GastoTabla(
 								"",
 								sNUPROFB,   
@@ -951,14 +998,14 @@ public class GestorRevisionPagos implements Serializable
 								Utils.compruebaFecha(sFEDEVEBP),   
 								"",   
 								"",  
-								"",
-								"",
+								sIMNGASBP,
 								"",//TODO meter estado en el filtro
+								"",
 								"",
 								"",
 								"");
 						
-						this.setTablagastosprovision(CLGastos.buscarGastosRevisablesProvisionConFiltro(filtro));
+						this.setTablagastosprovision(CLGastos.buscarGastosRevisablesProvisionConFiltro(filtro, sComparadorBP));
 						
 					}
 					
@@ -1940,6 +1987,30 @@ public class GestorRevisionPagos implements Serializable
 		this.sFEDEVEBA = sFEDEVEBA;
 	}
 
+	public String getsIMNGASBA() {
+		return sIMNGASBA;
+	}
+
+	public void setsIMNGASBA(String sIMNGASBA) {
+		this.sIMNGASBA = sIMNGASBA;
+	}
+
+	public String getsComparadorBA() {
+		return sComparadorBA;
+	}
+
+	public void setsComparadorBA(String sComparadorBA) {
+		this.sComparadorBA = sComparadorBA;
+	}
+
+	public boolean isbSeleccionadoBA() {
+		return bSeleccionadoBA;
+	}
+
+	public void setbSeleccionadoBA(boolean bSeleccionadoBA) {
+		this.bSeleccionadoBA = bSeleccionadoBA;
+	}
+
 	public String getsCOPOINB() {
 		return sCOPOINB;
 	}
@@ -2090,6 +2161,30 @@ public class GestorRevisionPagos implements Serializable
 
 	public void setsCOACESBP(String sCOACESBP) {
 		this.sCOACESBP = sCOACESBP.trim();
+	}
+
+	public String getsIMNGASBP() {
+		return sIMNGASBP;
+	}
+
+	public void setsIMNGASBP(String sIMNGASBP) {
+		this.sIMNGASBP = sIMNGASBP;
+	}
+
+	public String getsComparadorBP() {
+		return sComparadorBP;
+	}
+
+	public void setsComparadorBP(String sComparadorBP) {
+		this.sComparadorBP = sComparadorBP;
+	}
+
+	public boolean isbSeleccionadoBP() {
+		return bSeleccionadoBP;
+	}
+
+	public void setbSeleccionadoBP(boolean bSeleccionadoBP) {
+		this.bSeleccionadoBP = bSeleccionadoBP;
 	}
 
 	public String getsCodGastoB() {
@@ -2595,6 +2690,14 @@ public class GestorRevisionPagos implements Serializable
 
 	public void setTiposcosbga_t33HM(Map<String, String> tiposcosbga_t33HM) {
 		this.tiposcosbga_t33HM = tiposcosbga_t33HM;
+	}
+
+	public Map<String,String> getTiposcomparaimporteHM() {
+		return tiposcomparaimporteHM;
+	}
+
+	public void setTiposcomparaimporteHM(Map<String,String> tiposcomparaimporteHM) {
+		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
 	}
 
 	public ActivoTabla getActivoseleccionado() {

@@ -537,6 +537,18 @@
 									</h:panelGrid>
 								</p:panel>
 								<p:panel>
+									<h:panelGrid columns="4" cellpadding="1">
+										<h:outputText value="Importe: "/>
+										<p:selectOneMenu id="COMPARADORBA" value="#{GestorMovimientosGastos.sComparadorBA}">
+											<f:selectItem itemLabel="Comparar..." itemValue=""/>
+											<f:selectItems value="#{GestorMovimientosGastos.tiposcomparaimporteHM}"/>
+											<p:ajax update="COMPARADORBA, IMNGASBA" listener="#{GestorMovimientosGastos.cambiaComparadorBA}"/>
+										</p:selectOneMenu>
+										<p:inputText id="IMNGASBA" value="#{GestorMovimientosGastos.sIMNGASBA}" size="16" maxlength="16" disabled="#{GestorMovimientosGastos.bSeleccionadoBA}"/>
+										<h:outputText value="¤"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:panel>
 									<h:panelGrid columns="3" cellpadding="1">
 										<h:outputText value="Fecha del devengo: "/>
 										<p:inputMask id="FEDEVEBA" value="#{GestorMovimientosGastos.sFEDEVEBA}" mask="99/99/9999" size="10" maxlength="10"/>
@@ -637,6 +649,18 @@
 											<f:selectItem itemLabel="Subtipo..." itemValue=""/>
 											<f:selectItems value="#{GestorMovimientosGastos.tiposcosbgaHMP}"/>
 										</p:selectOneMenu>
+									</h:panelGrid>
+								</p:panel>
+								<p:panel>
+									<h:panelGrid columns="4" cellpadding="1">
+										<h:outputText value="Importe: "/>
+										<p:selectOneMenu id="COMPARADORBP" value="#{GestorMovimientosGastos.sComparadorBP}">
+											<f:selectItem itemLabel="Comparar..." itemValue=""/>
+											<f:selectItems value="#{GestorMovimientosGastos.tiposcomparaimporteHM}"/>
+											<p:ajax update="COMPARADORBP, IMNGASBP" listener="#{GestorMovimientosGastos.cambiaComparadorBP}"/>
+										</p:selectOneMenu>
+										<p:inputText id="IMNGASBP" value="#{GestorMovimientosGastos.sIMNGASBP}" size="16" maxlength="16" disabled="#{GestorMovimientosGastos.bSeleccionadoBP}"/>
+										<h:outputText value="¤"/>
 									</h:panelGrid>
 								</p:panel>
 								<p:panel>

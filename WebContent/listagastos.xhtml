@@ -121,6 +121,13 @@
 
 														<p:column>
 															<f:facet name="header">
+																<h:outputText value="ID" />
+															</f:facet>
+															<h:outputText value="G#{gasto.sGastoID}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
 																<h:outputText value="Provisión" />
 															</f:facet>
 															<h:outputText value="#{gasto.NUPROF}" />
@@ -443,6 +450,18 @@
 														</h:panelGrid>
 													</p:panel>
 
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORFA" value="#{GestorListaGastos.sComparadorFA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORFA, IMNGASFA" listener="#{GestorListaGastos.cambiaComparadorFA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASFA" value="#{GestorListaGastos.sIMNGASFA}" size="16" maxlength="16" disabled="#{GestorListaGastos.bSeleccionadoFA}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
 
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="1">
@@ -510,6 +529,18 @@
 														</h:panelGrid>
 													</p:panel>
 
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORFP" value="#{GestorListaGastos.sComparadorFP}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastos.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORFP, IMNGASFP" listener="#{GestorListaGastos.cambiaComparadorFP}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASFP" value="#{GestorListaGastos.sIMNGASFP}" size="16" maxlength="16" disabled="#{GestorListaGastos.bSeleccionadoFP}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
 
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="1">

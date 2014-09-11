@@ -104,12 +104,12 @@
 									</p:panel>
 
 									<p:panel >
-										<h:panelGrid columns="3" cellpadding="5">
+										<h:panelGrid columns="4" cellpadding="5">
 
 											<h:outputText for="ValorTolal" value="Valor de provisión: " />
 											<p:inputText id="ValorTolal" value="#{GestorProvisiones.sValorTolal}" size="20" maxlength="20" disabled="true"/>
 											<h:outputText value="¤"/>
-
+											<p:commandButton value="Resumen de  Gastos" update="msgs, popup, gastosprovision" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaGastosProvision.show()"  disabled="#{GestorProvisiones.bLibre}"/>
 										</h:panelGrid>
 									</p:panel>
 
@@ -118,6 +118,72 @@
 
 						</h:panelGrid>
 					</p:panel>
+					<p:dialog header="Gastos de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
+
+						<p:dataTable id="gastosprovision" var="gastoprovision" value="#{GestorProvisiones.tablagastosprovision}" rowKey="#{gastoprovision.sGastoID}"
+															paginator="true" paginatorPosition="bottom" rows="10"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15">
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Activo" />
+															</f:facet>
+															<h:outputText value="#{gastoprovision.COACES}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Gasto" />
+															</f:facet>
+															<h:outputText value="#{gastoprovision.DCOSBGA}" />
+														</p:column>
+														
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Periodicidad" />
+															</f:facet>
+															<h:outputText value="#{gastoprovision.DPTPAGO}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Importe" />
+															</f:facet>
+															<h:outputText value="#{gastoprovision.IMNGAS}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Devengo" />
+															</f:facet>
+															<h:outputText value="#{gastoprovision.FEDEVE}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Límite de Pago" />
+															</f:facet>
+															<h:outputText value="#{gastoprovision.FELIPG}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Urgente" />
+															</f:facet>
+															<h:outputText value="#{gastoprovision.URGENTE}" />
+														</p:column>
+
+							<f:facet name="footer">
+								<h:commandLink>
+									<p:graphicImage value="recursos/excel.png" />  
+									<p:dataExporter type="xls" target="gastosprovision" fileName="listagastos" encoding="ISO-8859-15"/>  
+								</h:commandLink>
+							</f:facet> 
+
+						</p:dataTable>
+
+					</p:dialog>
 					<p:dialog header="Provisiones abiertas: " widgetVar="dlgTablaProvisiones" resizable="false">  
     				
 							<p:contextMenu for="provisiones">  

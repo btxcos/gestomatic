@@ -637,31 +637,49 @@
 									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscarGastosActivo" >
-												<h:panelGrid columns="2" cellpadding="5">
+												<h:panelGrid columns="1" cellpadding="5">
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="1">
+															<h:outputText value="Grupo de gasto: "/>
+															<p:selectOneMenu id="COGRUGBA" value="#{GestorRevisionPagos.sCOGRUGBA}">
+																<f:selectItem itemLabel="Grupo..." itemValue=""/>
+																<f:selectItems value="#{GestorRevisionPagos.tiposcogrugHM}"/>
+																<p:ajax update="COTPGABA, COSBGABA" listener="#{GestorRevisionPagos.cambiaTipoActivo}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Grupo de gasto: "/>
-													<p:selectOneMenu id="COGRUGBA" value="#{GestorRevisionPagos.sCOGRUGBA}">
-														<f:selectItem itemLabel="Grupo..." itemValue=""/>
-														<f:selectItems value="#{GestorRevisionPagos.tiposcogrugHM}"/>
-															<p:ajax update="COTPGABA, COSBGABA" listener="#{GestorRevisionPagos.cambiaTipoActivo}"/>
-													</p:selectOneMenu>
+															<h:outputText value="Tipo de concepto de gasto:  "/>
+															<p:selectOneMenu id="COTPGABA" value="#{GestorRevisionPagos.sCOTPGABA}">
+																<f:selectItem itemLabel="Tipo..." itemValue=""/>
+																<f:selectItems value="#{GestorRevisionPagos.tiposcotpgaHMA}"/>
+																<p:ajax update="COSBGABA" listener="#{GestorRevisionPagos.cambiaSubtipoActivo}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Tipo de concepto de gasto:  "/>
-													<p:selectOneMenu id="COTPGABA" value="#{GestorRevisionPagos.sCOTPGABA}">
-														<f:selectItem itemLabel="Tipo..." itemValue=""/>
-														<f:selectItems value="#{GestorRevisionPagos.tiposcotpgaHMA}"/>
-														<p:ajax update="COSBGABA" listener="#{GestorRevisionPagos.cambiaSubtipoActivo}"/>
-													</p:selectOneMenu>
-
-													<h:outputText value="Subtipo de gasto: "/>
-													<p:selectOneMenu id="COSBGABA" value="#{GestorRevisionPagos.sCOSBGABA}">
-														<f:selectItem itemLabel="Subtipo..." itemValue=""/>
-														<f:selectItems value="#{GestorRevisionPagos.tiposcosbgaHMA}"/>
-													</p:selectOneMenu>
-
-													<h:outputText value="Fecha del devengo: "/>
-													<p:inputMask id="FEDEVEBA" value="#{GestorRevisionPagos.sFEDEVEBA}" mask="99/99/9999" size="10" maxlength="10"/>
-
+															<h:outputText value="Subtipo de gasto: "/>
+															<p:selectOneMenu id="COSBGABA" value="#{GestorRevisionPagos.sCOSBGABA}">
+																<f:selectItem itemLabel="Subtipo..." itemValue=""/>
+																<f:selectItems value="#{GestorRevisionPagos.tiposcosbgaHMA}"/>
+															</p:selectOneMenu>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORBA" value="#{GestorRevisionPagos.sComparadorBA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorRevisionPagos.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORBA, IMNGASBA" listener="#{GestorRevisionPagos.cambiaComparadorBA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASBA" value="#{GestorRevisionPagos.sIMNGASBA}" size="16" maxlength="16" disabled="#{GestorRevisionPagos.bSeleccionadoBA}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha del devengo: "/>
+															<p:inputMask id="FEDEVEBA" value="#{GestorRevisionPagos.sFEDEVEBA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEVEBA" actionListener="#{GestorRevisionPagos.hoyFEDEVEBA}"/>
+														</h:panelGrid>
+													</p:panel>
 												</h:panelGrid>
 											</p:panel>
 
@@ -748,31 +766,49 @@
 									<p:fieldset legend="Criterios de Búsqueda">
 										<h:panelGrid columns="1" cellpadding="5">
 											<p:panel id="panelBuscarGastosProvision" >
-												<h:panelGrid columns="2" cellpadding="5">
+												<h:panelGrid columns="1" cellpadding="5">
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="1">
+															<h:outputText value="Grupo de gasto: "/>
+															<p:selectOneMenu id="COGRUGBP" value="#{GestorRevisionPagos.sCOGRUGBP}">
+																<f:selectItem itemLabel="Grupo..." itemValue=""/>
+																<f:selectItems value="#{GestorRevisionPagos.tiposcogrugHM}"/>
+																<p:ajax update="COTPGABP, COSBGABP" listener="#{GestorRevisionPagos.cambiaTipoProvision}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Grupo de gasto: "/>
-													<p:selectOneMenu id="COGRUGBP" value="#{GestorRevisionPagos.sCOGRUGBP}">
-														<f:selectItem itemLabel="Grupo..." itemValue=""/>
-														<f:selectItems value="#{GestorRevisionPagos.tiposcogrugHM}"/>
-															<p:ajax update="COTPGABP, COSBGABP" listener="#{GestorRevisionPagos.cambiaTipoProvision}"/>
-													</p:selectOneMenu>
+															<h:outputText value="Tipo de concepto de gasto:  "/>
+															<p:selectOneMenu id="COTPGABP" value="#{GestorRevisionPagos.sCOTPGABP}">
+																<f:selectItem itemLabel="Tipo..." itemValue=""/>
+																<f:selectItems value="#{GestorRevisionPagos.tiposcotpgaHMP}"/>
+																<p:ajax update="COSBGABP" listener="#{GestorRevisionPagos.cambiaSubtipoProvision}"/>
+															</p:selectOneMenu>
 
-													<h:outputText value="Tipo de concepto de gasto:  "/>
-													<p:selectOneMenu id="COTPGABP" value="#{GestorRevisionPagos.sCOTPGABP}">
-														<f:selectItem itemLabel="Tipo..." itemValue=""/>
-														<f:selectItems value="#{GestorRevisionPagos.tiposcotpgaHMP}"/>
-														<p:ajax update="COSBGABP" listener="#{GestorRevisionPagos.cambiaSubtipoProvision}"/>
-													</p:selectOneMenu>
-
-													<h:outputText value="Subtipo de gasto: "/>
-													<p:selectOneMenu id="COSBGABP" value="#{GestorRevisionPagos.sCOSBGABP}">
-														<f:selectItem itemLabel="Subtipo..." itemValue=""/>
-														<f:selectItems value="#{GestorRevisionPagos.tiposcosbgaHMP}"/>
-													</p:selectOneMenu>
-
-													<h:outputText value="Fecha del devengo: "/>
-													<p:inputMask id="FEDEVEBP" value="#{GestorRevisionPagos.sFEDEVEBP}" mask="99/99/9999" size="10" maxlength="10"/>
-
+															<h:outputText value="Subtipo de gasto: "/>
+															<p:selectOneMenu id="COSBGABP" value="#{GestorRevisionPagos.sCOSBGABP}">
+																<f:selectItem itemLabel="Subtipo..." itemValue=""/>
+																<f:selectItems value="#{GestorRevisionPagos.tiposcosbgaHMP}"/>
+															</p:selectOneMenu>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORBA" value="#{GestorRevisionPagos.sComparadorBA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorRevisionPagos.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORBA, IMNGASBA" listener="#{GestorRevisionPagos.cambiaComparadorBA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASBA" value="#{GestorRevisionPagos.sIMNGASBA}" size="16" maxlength="16" disabled="#{GestorRevisionPagos.bSeleccionadoBA}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha del devengo: "/>
+															<p:inputMask id="FEDEVEBP" value="#{GestorRevisionPagos.sFEDEVEBP}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEVEBP" actionListener="#{GestorRevisionPagos.hoyFEDEVEBP}"/>
+														</h:panelGrid>
+													</p:panel>
 												</h:panelGrid>
 											</p:panel>
 

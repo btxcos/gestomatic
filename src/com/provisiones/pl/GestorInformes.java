@@ -59,6 +59,8 @@ public class GestorInformes implements Serializable
 	private String sCOSBGAFA = "";
 	private String sFEDEVEFA = "";
 	private String sIMNGASFA = "";
+	private String sComparadorFA = "";
+	private boolean bSeleccionadoFA = true; 
 	private String sEstadoGastoFA = "";
 	
 	//Filtro Gastos Provision
@@ -67,6 +69,8 @@ public class GestorInformes implements Serializable
 	private String sCOSBGAFP = "";
 	private String sFEDEVEFP = "";
 	private String sIMNGASFP = "";
+	private String sComparadorFP = "";
+	private boolean bSeleccionadoFP = true;
 	private String sEstadoGastoFP = "";
 	
 	//Filtro de provision
@@ -105,14 +109,15 @@ public class GestorInformes implements Serializable
 	
 	private Map<String,String> tiposestadogastoHM = new LinkedHashMap<String, String>();
 	
-	
 	private Map<String,String> tiposestadoprovisionHM = new LinkedHashMap<String, String>();
 
+	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
+	
 	public GestorInformes()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorListaGastos...");
+			logger.debug("Iniciando GestorInformess...");
 			
 			tiposcogrugHM.put("Compraventa",      "1");
 			tiposcogrugHM.put("Pendientes",       "2");
@@ -170,6 +175,10 @@ public class GestorInformes implements Serializable
 			tiposestadoprovisionHM.put("ENVIADA",	"E");
 			tiposestadoprovisionHM.put("AUTORIZADA","T");
 			tiposestadoprovisionHM.put("PAGADA",	"G");
+
+			tiposcomparaimporteHM.put("Igual a",    		"=");
+			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
+			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
 		}
 	}
 	
@@ -211,6 +220,8 @@ public class GestorInformes implements Serializable
 		this.sCOSBGAFA = "";
 		this.sFEDEVEFA = "";
 		this.sIMNGASFA = "";
+		this.sComparadorFA = "";
+		this.bSeleccionadoFA = true; 
 		this.sEstadoGastoFA = "";
 	}
 	
@@ -226,6 +237,8 @@ public class GestorInformes implements Serializable
 		this.sCOSBGAFP = "";
 		this.sFEDEVEFP = "";
 		this.sIMNGASFP = "";
+		this.sComparadorFP = "";
+		this.bSeleccionadoFP = true; 
 		this.sEstadoGastoFP = "";
 	}
 	
@@ -597,6 +610,17 @@ public class GestorInformes implements Serializable
 		}
 	}
 	
+	public void cambiaComparadorFA()
+	{
+		this.bSeleccionadoFA = this.sComparadorFA.isEmpty();
+		logger.debug("sComparadorFA:|"+sComparadorFA+"|");
+	}
+	
+	public void cambiaComparadorFP()
+	{
+		this.bSeleccionadoFP = this.sComparadorFP.isEmpty();
+	}
+	
 	public void hoyFEDEVEFA (ActionEvent actionEvent)
 	{
 		this.setsFEDEVEFA(Utils.fechaDeHoy(true));
@@ -640,6 +664,15 @@ public class GestorInformes implements Serializable
 				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
 				 */
 				{
+					if (sComparadorFA.isEmpty()) 
+					{
+						sIMNGASFA = "";
+					}
+					else
+					{
+						sIMNGASFA = Utils.compruebaImporte(sIMNGASFA);
+					}
+					
 					GastoTabla filtro = new GastoTabla(
 							"",
 							"",
@@ -654,7 +687,7 @@ public class GestorInformes implements Serializable
 							Utils.compruebaFecha(sFEDEVEFA),   
 							"",   
 							"",  
-							"",
+							sIMNGASFA,
 							sEstadoGastoFA,
 							"",
 							"",
@@ -665,10 +698,12 @@ public class GestorInformes implements Serializable
 			    	logger.debug("sCOGRUGFA:|"+sCOGRUGFA+"|");
 			    	logger.debug("sCOTPGAFA:|"+sCOTPGAFA+"|");
 			    	logger.debug("sCOSBGAFA:|"+sCOSBGAFA+"|");
+			    	logger.debug("sComparadorFA:|"+sComparadorFA+"|");
+			    	logger.debug("sIMNGASFA:|"+sIMNGASFA+"|");
 			    	logger.debug("sFEDEVEFA:|"+sFEDEVEFA+"|");
 			    	logger.debug("sEstadoGastoFA:|"+sEstadoGastoFA+"|");
 					
-					this.setTablagastos(CLGastos.buscarGastosInformeConFiltro(filtro));
+					this.setTablagastos(CLGastos.buscarGastosInformeConFiltro(filtro, sComparadorFA));
 					
 					if (getTablagastos().size() == 0)
 					{
@@ -739,6 +774,15 @@ public class GestorInformes implements Serializable
 				}
 				else if (CLProvisiones.existeProvision(sNUPROF))
 				{
+					if (sComparadorFP.isEmpty()) 
+					{
+						sIMNGASFP = "";
+					}
+					else
+					{
+						sIMNGASFP = Utils.compruebaImporte(sIMNGASFP);
+					}
+					
 					GastoTabla filtro = new GastoTabla(
 							"",
 							sNUPROF,   
@@ -753,7 +797,7 @@ public class GestorInformes implements Serializable
 							Utils.compruebaFecha(sFEDEVEFP),   
 							"",   
 							"",  
-							"",
+							sIMNGASFP,
 							"",
 							"",
 							"",
@@ -767,7 +811,7 @@ public class GestorInformes implements Serializable
 			    	logger.debug("sFEDEVEFP:|"+sFEDEVEFP+"|");
 			    	logger.debug("sEstadoGastoFP:|"+sEstadoGastoFP+"|");
 					
-					this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoGastoFP));
+					this.setTablagastos(CLGastos.buscarGastosProvisionConFiltroEstado(filtro,sEstadoGastoFP, sComparadorFP));
 					
 					if (getTablagastos().size() == 0)
 					{
@@ -1103,6 +1147,22 @@ public class GestorInformes implements Serializable
 		this.sIMNGASFA = sIMNGASFA;
 	}
 
+	public String getsComparadorFA() {
+		return sComparadorFA;
+	}
+
+	public void setsComparadorFA(String sComparadorFA) {
+		this.sComparadorFA = sComparadorFA;
+	}
+
+	public boolean isbSeleccionadoFA() {
+		return bSeleccionadoFA;
+	}
+
+	public void setbSeleccionadoFA(boolean bSeleccionadoFA) {
+		this.bSeleccionadoFA = bSeleccionadoFA;
+	}
+
 	public String getsEstadoGastoFA() {
 		return sEstadoGastoFA;
 	}
@@ -1149,6 +1209,22 @@ public class GestorInformes implements Serializable
 
 	public void setsIMNGASFP(String sIMNGASFP) {
 		this.sIMNGASFP = sIMNGASFP;
+	}
+
+	public String getsComparadorFP() {
+		return sComparadorFP;
+	}
+
+	public void setsComparadorFP(String sComparadorFP) {
+		this.sComparadorFP = sComparadorFP;
+	}
+
+	public boolean isbSeleccionadoFP() {
+		return bSeleccionadoFP;
+	}
+
+	public void setbSeleccionadoFP(boolean bSeleccionadoFP) {
+		this.bSeleccionadoFP = bSeleccionadoFP;
 	}
 
 	public String getsEstadoGastoFP() {
@@ -1333,6 +1409,14 @@ public class GestorInformes implements Serializable
 
 	public void setTiposestadoprovisionHM(Map<String,String> tiposestadoprovisionHM) {
 		this.tiposestadoprovisionHM = tiposestadoprovisionHM;
+	}
+
+	public Map<String,String> getTiposcomparaimporteHM() {
+		return tiposcomparaimporteHM;
+	}
+
+	public void setTiposcomparaimporteHM(Map<String,String> tiposcomparaimporteHM) {
+		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
 	}
 
 	public String getsEstadoProvision() {
