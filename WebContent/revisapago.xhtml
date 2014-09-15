@@ -793,12 +793,12 @@
 													<p:panel>
 														<h:panelGrid columns="4" cellpadding="1">
 															<h:outputText value="Importe: "/>
-															<p:selectOneMenu id="COMPARADORBA" value="#{GestorRevisionPagos.sComparadorBA}">
+															<p:selectOneMenu id="COMPARADORBP" value="#{GestorRevisionPagos.sComparadorBP}">
 																<f:selectItem itemLabel="Comparar..." itemValue=""/>
 																<f:selectItems value="#{GestorRevisionPagos.tiposcomparaimporteHM}"/>
-																<p:ajax update="COMPARADORBA, IMNGASBA" listener="#{GestorRevisionPagos.cambiaComparadorBA}"/>
+																<p:ajax update="COMPARADORBP, IMNGASBP" listener="#{GestorRevisionPagos.cambiaComparadorBP}"/>
 															</p:selectOneMenu>
-															<p:inputText id="IMNGASBA" value="#{GestorRevisionPagos.sIMNGASBA}" size="16" maxlength="16" disabled="#{GestorRevisionPagos.bSeleccionadoBA}"/>
+															<p:inputText id="IMNGASBP" value="#{GestorRevisionPagos.sIMNGASBP}" size="16" maxlength="16" disabled="#{GestorRevisionPagos.bSeleccionadoBP}"/>
 															<h:outputText value="¤"/>
 														</h:panelGrid>
 													</p:panel>

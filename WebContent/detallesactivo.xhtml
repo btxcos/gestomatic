@@ -10,7 +10,7 @@
 		<link rel="shortcut icon" href="recursos/favicon.ico"/> 
 	</h:head>
 	<h:body>
-		<h:form id="form" onkeypress="return event.keyCode != 13">
+		<h:form>
 			<p:layout fullPage="true">
 
 				<p:layoutUnit position="north" size="auto" header="Detalles del Activo #{GestorDetallesActivo.sCOACES}">
@@ -32,6 +32,7 @@
 							<h:panelGrid columns="3" cellpadding="5">
 								<p:commandButton value="Volver" actionListener="#{GestorDetallesActivo.volver}"/>
 								<p:commandButton value="Comunidad" actionListener="#{GestorDetallesActivo.cargarComunidad}" disabled="#{GestorDetallesActivo.bSinComunidad}" />
+								<p:commandButton value="Gastos" actionListener="#{GestorDetallesActivo.cargarGastos}" disabled="#{GestorDetallesActivo.bSinGastos}" />
 							</h:panelGrid>
 						</p:fieldset>
 
@@ -40,7 +41,7 @@
 
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
 								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
-								<p:graphicImage value="recursos/notas.png"  disabled="#{GestorDetallesActivo.bSinNotas}"/>
+								<p:graphicImage id="MARCA" value="recursos/notas.png" rendered="#{GestorDetallesActivo.bConNotas}"/>
 
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -523,13 +524,14 @@
 						</h:panelGrid>
 					</p:panel>
 
-					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false" visible="#{GestorDetallesActivo.bConNotas}" position="right">
 						<h:panelGrid columns="1" cellpadding="1">
 							<p:panel>
-								<h:panelGrid columns="2" cellpadding="5">
+								<h:panelGrid columns="3" cellpadding="5">
 
 									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorDetallesActivo.limpiarNota}"/>
-									<p:commandButton value="Guardar" update="NOTA" actionListener="#{GestorDetallesActivo.guardaNota}"/>
+									<p:commandButton value="Guardar" update="NOTA, MARCA" actionListener="#{GestorDetallesActivo.guardaNota}"/>
+									<p:commandButton value="Restaurar" update="NOTA, MARCA" actionListener="#{GestorDetallesActivo.restablecerNota}"/>
 
 								</h:panelGrid>
 							</p:panel>

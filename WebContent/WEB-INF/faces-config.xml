@@ -255,5 +255,10 @@
 		<managed-bean-class>com.provisiones.pl.GestorInformes</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaGastosActivo</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaGastosActivo</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

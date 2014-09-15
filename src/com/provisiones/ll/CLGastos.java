@@ -163,6 +163,12 @@ public final class CLGastos
 		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro, sComparador);
 	}
 	
+	public static ArrayList<GastoTabla> buscarGastosActivoProvisionConFiltro(GastoTabla filtro, String sComparador)
+	{
+		return QMGastos.buscaGastosPorFiltroActivoProvision(ConnectionManager.getDBConnection(),filtro, sComparador);
+	}
+	
+	
 	public static ArrayList<GastoTabla> buscarGastosInformeConFiltro(GastoTabla filtro, String sComparador)
 	{
 		//return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro);
@@ -350,12 +356,11 @@ public final class CLGastos
 	{
 		return QMListaGastosProvisiones.buscaGastosProvisionPorFiltro(ConnectionManager.getDBConnection(),filtro);
 	}
-	
+
 	public static ArrayList<GastoTabla> buscarGastosNuevosProvisionConFiltro(GastoTabla filtro, String sComparador)
 	{
 		return QMListaGastosProvisiones.buscaGastosNuevosProvisionPorFiltro(ConnectionManager.getDBConnection(),filtro, sComparador);
 	}
-	
 	
 	public static ArrayList<GastoTabla> buscarGastosProvisionConFiltroEstado(GastoTabla filtro, String sEstado, String sComparador)
 	{
@@ -413,6 +418,12 @@ public final class CLGastos
 	public static boolean esUrgente(long  liCodGasto)
 	{
 		return QMGastos.getUrgente(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+	
+	
+	public static boolean esActivoConGastos(int  iCodCOACES)
+	{
+		return QMGastos.tieneGastos(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
 	//Interfaz avanzado

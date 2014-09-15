@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
+import com.provisiones.ll.CLGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
@@ -121,15 +122,18 @@ public class GestorDetallesActivo implements Serializable
 	private String sFETIFI = "";
 	
 	private String sNota = "";
-	private boolean bSinNotas = false;
+	private String sNotaOriginal = "";
+	private boolean bConNotas = true;
 	
 	
 	private int iCOACES = 0;
 	
-	private boolean bSinComunidad = false;
-	private boolean bSinCuotas = false;
-	private boolean bSinReferenciasCatastrales = false;
-	private boolean bSinRecursos = false;
+	private boolean bSinComunidad = true;
+	private boolean bSinCuotas = true;
+	private boolean bSinReferenciasCatastrales = true;
+	private boolean bSinRecursos = true;
+	
+	private boolean bSinGastos = true;
 	
 	public GestorDetallesActivo()
 	{
@@ -279,12 +283,17 @@ public class GestorDetallesActivo implements Serializable
 			
 			this.sPOBRAR = Utils.recuperaImporte(false,sPOBRAR.substring(0,5));
 			
-			this.sNota = CLActivos.buscarNota(iCOACES);
+			this.sNotaOriginal = CLActivos.buscarNota(iCOACES);
+
+			this.sNota = sNotaOriginal;
 			
-			this.bSinNotas = sNota.isEmpty();
+			this.bConNotas = !sNota.isEmpty();
+			
+			logger.debug("bConNotas:|"+bConNotas+"|");
 			
 			
 			this.bSinComunidad = !CLComunidades.esActivoVinculadoAComunidad(iCOACES);
+			this.bSinGastos = !CLGastos.esActivoConGastos(iCOACES);
 
 		}
 		
@@ -329,11 +338,11 @@ public class GestorDetallesActivo implements Serializable
 				else
 				{
 
-					sMsg = "No se ha seleccionado ninguna comunidad.";
+					sMsg = "ERROR: No se ha seleccionado ningún activo.";
 
-					msg = Utils.pfmsgWarning(sMsg);
+					msg = Utils.pfmsgFatal(sMsg);
 					
-					logger.warn(sMsg);
+					logger.error(sMsg);
 					
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 					
@@ -346,6 +355,55 @@ public class GestorDetallesActivo implements Serializable
 				logger.error(sMsg);
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+			
+			
+		}
+    }
+	
+	public void cargarGastos(ActionEvent actionEvent) 
+    {  
+		String sPagina = ".";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			if (!this.sCOACES.isEmpty())
+			{
+		    	Sesion.guardaDetalle(sCOACES);
+		    	Sesion.guardarHistorial("detallesactivo.xhtml","GestorListaGastosActivo");
+
+		    	sPagina = "listagastosactivo.xhtml";
+		    	
+				try 
+				{
+					logger.debug("Redirigiendo...");
+					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+				}
+				catch (IOException e)
+				{
+					sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
+			}
+			else
+			{
+
+				sMsg = "ERROR: No se ha seleccionado ningún activo.";
+
+				msg = Utils.pfmsgFatal(sMsg);
+				
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
 			}
 			
 			
@@ -371,7 +429,7 @@ public class GestorDetallesActivo implements Serializable
 				msg = Utils.pfmsgInfo(sMsg);
 				logger.info(sMsg);
 				
-				this.bSinNotas = sNota.isEmpty();
+				this.bConNotas = !sNota.isEmpty();
 			}
 			else
 			{
@@ -384,6 +442,12 @@ public class GestorDetallesActivo implements Serializable
 		
 		}
 	}
+	
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
+    }
 	
 	public String getsCOACES() {
 		return sCOACES;
@@ -1137,12 +1201,12 @@ public class GestorDetallesActivo implements Serializable
 		this.sNota = sNota;
 	}
 
-	public boolean isbSinNotas() {
-		return bSinNotas;
+	public boolean isbConNotas() {
+		return bConNotas;
 	}
 
-	public void setbSinNotas(boolean bSinNotas) {
-		this.bSinNotas = bSinNotas;
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public boolean isbSinComunidad() {
@@ -1175,6 +1239,14 @@ public class GestorDetallesActivo implements Serializable
 
 	public void setbSinRecursos(boolean bSinRecursos) {
 		this.bSinRecursos = bSinRecursos;
+	}
+
+	public boolean isbSinGastos() {
+		return bSinGastos;
+	}
+
+	public void setbSinGastos(boolean bSinGastos) {
+		this.bSinGastos = bSinGastos;
 	}
 	
 }
