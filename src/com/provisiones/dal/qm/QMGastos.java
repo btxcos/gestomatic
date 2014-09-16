@@ -3104,9 +3104,7 @@ public final class QMGastos
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()? "": CAMPO4 + " >= '"+filtro.getCOTPGA()+"' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()? "": CAMPO5 + " >= '"+filtro.getCOSBGA()+"' AND ";
 			
-			String sCondicionEstado = filtro.getESTADO().isEmpty()? 
-					CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO +"')"
-					:CAMPO34 + " = '"+filtro.getESTADO()+"'"; 
+			String sCondicionEstado = filtro.getESTADO().isEmpty()?	"":CAMPO34 + " = '"+filtro.getESTADO()+"' AND "; 
 			
 			String sCondicionImporte = sComparador.isEmpty()?"":CAMPO15 + " "+sComparador+" " + filtro.getIMNGAS() + " AND ";
 	
@@ -3148,7 +3146,7 @@ public final class QMGastos
 					+ sCondicionImporte
 					+ sCondicionFELIPG
 					+ sCondicionEstado
-					+ " AND " + CAMPO2 + " = '"+filtro.getCOACES()+"' "
+					+ CAMPO2 + " = '"+filtro.getCOACES()+"' "
 					+ sCondicionNUPROF;
    
 						   
