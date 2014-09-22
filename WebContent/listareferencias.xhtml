@@ -79,7 +79,7 @@
 												<h:outputText for="COACES" value="Código de activo: " />
 												<p:inputMask id="COACES" value="#{GestorListaReferencias.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 
-												<p:commandButton value="Carga Referencias" update="msgs, popup, referencias" actionListener="#{GestorListaReferencias.buscarReferenciasActivo}"/>
+												<p:commandButton value="Carga Referencias" update="msgs, popup, referencias" oncomplete="dlgFiltrarReferenciaActivo.show()"/>
 
 											</h:panelGrid>
 										</p:panel>
@@ -129,6 +129,27 @@
 																<h:outputText value="Entidad de emisión" />
 															</f:facet>
 															<h:outputText value="#{referencia.ENEMIS}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Valor del Suelo" />
+															</f:facet>
+															<h:outputText value="#{referencia.IMVSUE}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Valor Catastral" />
+															</f:facet>
+															<h:outputText value="#{referencia.IMCATA}" />
+														</p:column>
+
+														<p:column>
+															<f:facet name="header">
+																<h:outputText value="Fecha de revisión" />
+															</f:facet>
+															<h:outputText value="#{referencia.FERECA}" />
 														</p:column>
 
 								<f:facet name="footer">
@@ -270,7 +291,84 @@
 							</h:panelGrid>
 						</p:fieldset>
 					</p:dialog>
+					<p:dialog header="Filtrar Referencias Activo: " widgetVar="dlgFiltrarReferenciaActivo" resizable="false">  
+									<p:fieldset legend="Filtro">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelFiltrarReferenciaActivo">
+												<h:panelGrid columns="1" cellpadding="5">
 
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText for="NURCATFA" value="Referencia Catastral: " />
+															<p:inputText id="NURCATFA" value="#{GestorListaReferencias.sNURCATFA}" size="22" maxlength="20"/>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="1">
+															<h:outputText for="TIRCATFA" value="Titular Catastral: " />
+															<p:inputText id="TIRCATFA" value="#{GestorListaReferencias.sTIRCATFA}" size="60" maxlength="60"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="1">
+															<h:outputText for="ENEMISFA" value="Entidad de Emisión: " />
+															<p:inputText id="ENEMISFA" value="#{GestorListaReferencias.sENEMISFA}" size="60" maxlength="60"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Valor del Suelo: "/>
+															<p:selectOneMenu id="COMPARADORSUELOFA" value="#{GestorListaReferencias.sComparadorSueloFA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorListaReferencias.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORSUELOFA, IMVSUEFA" listener="#{GestorListaReferencias.cambiaComparadorSueloFA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMVSUEFA" value="#{GestorListaReferencias.sIMVSUEFA}" size="16" maxlength="16" disabled="#{GestorListaReferencias.bSeleccionadoSueloFA}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Valor Catastral: "/>
+															<p:selectOneMenu id="COMPARADORCATASTRALFA" value="#{GestorListaReferencias.sComparadorCatastralFA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorListaReferencias.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORCATASTRALFA, IMCATAFA" listener="#{GestorListaReferencias.cambiaComparadorCatastralFA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMCATAFA" value="#{GestorListaReferencias.sIMCATAFA}" size="16" maxlength="16" disabled="#{GestorListaReferencias.bSeleccionadoCatastralFA}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha de revisión: "/>
+															<p:inputMask id="FERECAFA" value="#{GestorListaReferencias.sFERECAFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FERECAFA" actionListener="#{GestorListaReferencias.hoyFERECAFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, msgs, form:referencias" actionListener="#{GestorListaReferencias.buscarReferenciasActivo}" oncomplete="dlgFiltrarReferenciaActivo.hide()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelFiltrarReferenciaActivo" actionListener="#{GestorListaReferencias.limpiarPlantillaFiltroRefereciasActivo}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
 					<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
 						<p:graphicImage value="recursos/loadingBar.gif" />
 					</p:dialog>

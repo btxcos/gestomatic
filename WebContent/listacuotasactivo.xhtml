@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<title>Portal Provisiones</title>
+		<link rel="shortcut icon" href="recursos/favicon.ico"/>
+	</h:head>
+	<h:body>
+		<h:form id="form" onkeypress="return event.keyCode != 13">
+			<p:layout fullPage="true">
+				<p:layoutUnit position="north" size="auto" header="Lista de Cuotas Disponibles">
+					<h:panelGrid columns="4" cellpadding="5">
+						<p:fieldset legend="Sesión" id="sesion">
+							<h:panelGrid columns="1" cellpadding="1">
+								<p:panel>
+									<h:panelGrid columns="2" cellpadding="1">
+										<h:outputText value="Usuario: "/>
+										<p:inputText id="USUARIO" value="#{GestorSesion.sUsuario}" size="10" disabled="true"/>
+									</h:panelGrid>
+								</p:panel>
+								<p:commandButton type="button" value="Salir" onclick="dlgConfirmaSalir.show()"/>
+							</h:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="Acciones">
+							<h:panelGrid columns="4" cellpadding="5">
+								<p:commandButton value="Volver" actionListener="#{GestorListaCuotasActivo.volver}"/>
+								<p:commandButton value="Detalles" update="msgs, popup" actionListener="#{GestorListaCuotasActivo.cargarDetallesCuota}"/>
+								<p:commandButton value="Limpiar Plantilla" update="COACES, cuotas" actionListener="#{GestorListaCuotasActivo.limpiarPlantilla}"/>
+								<p:commandButton value="Buscar" update="popup, msgs, form:cuotas" actionListener="#{GestorListaCuotasActivo.buscarCuotasActivo}"/>
+							</h:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="Info">
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:messages id="msgs"/>
+										<p:commandButton value="Ocultar" onclick="barraInfo.hide()" type="button"/>
+									</h:panelGrid>
+								</p:notificationBar>
+								<p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+								<p:growl id="popup"/>
+							</h:panelGrid>
+						</p:fieldset>
+					</h:panelGrid>
+				</p:layoutUnit>
+				<p:layoutUnit position="west" size="20%" header="Menus">
+					<ui:include src="menu.xhtml"/>
+				</p:layoutUnit>
+				<p:layoutUnit position="center">
+					<p:panel id="panel">
+						<h:panelGrid columns="1" cellpadding="5">
+							<p:fieldset legend="Criterios de Busqueda">
+								<h:panelGrid columns="1" cellpadding="5">
+									<p:fieldset legend="Activo">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel>
+												<h:panelGrid columns="4" cellpadding="5">
+													<h:outputText for="COACES" value="Activo: "/>
+													<p:inputText id="COACES" value="#{GestorListaCuotasActivo.sCOACES}" size="9" readonly="true"/>
+												</h:panelGrid>
+											</p:panel>
+
+											<p:panel id="panelFiltrarCuotaActivo">
+												<h:panelGrid columns="1" cellpadding="5">
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText value="Concepto de cuota: "/>
+															<p:selectOneMenu id="COSBACFA" value="#{GestorListaCuotasActivo.sCOSBACFA}">
+																<f:selectItem itemLabel="Cuota..." itemValue=""/>
+																<f:selectItems value="#{GestorListaCuotasActivo.tiposcosbacHM}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Primer Pago: "/>
+															<p:inputMask id="FIPAGOFA" value="#{GestorListaCuotasActivo.sFIPAGOFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FIPAGOFA" actionListener="#{GestorListaCuotasActivo.hoyFIPAGOFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Último Pago: "/>
+															<p:inputMask id="FFPAGOFA" value="#{GestorListaCuotasActivo.sFFPAGOFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FFPAGOFA" actionListener="#{GestorListaCuotasActivo.hoyFFPAGOFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORFA" value="#{GestorListaCuotasActivo.sComparadorFA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorListaCuotasActivo.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORFA, IMCUCOFA" listener="#{GestorListaCuotasActivo.cambiaComparadorFA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMCUCOFA" value="#{GestorListaCuotasActivo.sIMCUCOFA}" size="16" maxlength="16" disabled="#{GestorListaCuotasActivo.bSeleccionadoFA}"/>
+															<h:outputText value="€"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha de Acta: "/>
+															<p:inputMask id="FAACTAFA" value="#{GestorListaCuotasActivo.sFAACTAFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FAACTAFA" actionListener="#{GestorListaCuotasActivo.hoyFAACTAFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+												<p:panel>
+													<h:panelGrid columns="2" cellpadding="5">
+
+														<h:outputText for="PTPAGOFA" value="Periodicidad: "/>
+														<p:selectOneMenu id="PTPAGOFA" value="#{GestorListaCuotasActivo.sPTPAGOFA}">
+															<f:selectItem itemLabel="Elija..." itemValue=""/>
+															<f:selectItems value="#{GestorListaCuotasActivo.tiposptpagoHM}"/>
+															<f:validateLength minimum="1"/>
+														</p:selectOneMenu>
+
+													</h:panelGrid>
+												</p:panel>
+
+
+
+												</h:panelGrid>
+											</p:panel>
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:contextMenu for="cuotas">
+										<p:menuitem value="Detalles" update="form:popup, form:msgs" icon="ui-icon-check" actionListener="#{GestorListaCuotasActivo.cargarDetallesCuota}"/>
+									</p:contextMenu>
+									<p:dataTable id="cuotas" var="cuota" value="#{GestorListaCuotasActivo.tablacuotas}" rowKey="#{cuota.NUDCOM}"
+															selection="#{GestorListaCuotasActivo.cuotaseleccionada}" selectionMode="single"
+															paginator="true" paginatorPosition="bottom" rows="10" lazy="true"
+															paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+															rowsPerPageTemplate="5,10,15" emptyMessage="Sin registros">
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Activo"/>
+											</f:facet>
+											<h:outputText value="#{cuota.COACES}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Cuota"/>
+											</f:facet>
+											<h:outputText value="#{cuota.DCOSBAC}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Importe"/>
+											</f:facet>
+											<h:outputText value="#{cuota.IMCUCO}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Periodicidad"/>
+											</f:facet>
+											<h:outputText value="#{cuota.DPTPAGO}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Primer Pago"/>
+											</f:facet>
+											<h:outputText value="#{cuota.FIPAGO}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Último Pago"/>
+											</f:facet>
+											<h:outputText value="#{cuota.FFPAGO}"/>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Fecha de Acta"/>
+											</f:facet>
+											<h:outputText value="#{cuota.FAACTA}"/>
+										</p:column>
+
+										<f:facet name="footer">
+											<h:commandLink>
+												<p:graphicImage value="recursos/excel.png"/>
+												<p:dataExporter type="xls" target="cuotas" fileName="listacuotas" encoding="ISO-8859-15"/>
+											</h:commandLink>
+										</f:facet>
+									</p:dataTable>
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
+								<p:graphicImage value="recursos/loadingBar.gif"/>
+							</p:dialog>
+							<p:dialog header="Confirmación" widgetVar="dlgConfirmaSalir" resizable="false">
+								<h:panelGrid columns="1">
+									<p:panel>
+										<h:panelGrid columns="1">
+											<h:outputText value="¿Está seguro de cerrar esta sesión?"/>
+											<h:outputText value="- Todos los datos no guardados se perderán."/>
+										</h:panelGrid>
+										<p:panel>
+											<h:panelGrid columns="2" cellpadding="5">
+												<p:commandButton value="Si" icon="ui-icon-check" action="#{GestorSesion.cerrarSesion}" oncomplete="dlgConfirmaSalir.hide()"/>
+												<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirmaSalir.hide()"/>
+											</h:panelGrid>
+										</p:panel>
+									</p:panel>
+								</h:panelGrid>
+							</p:dialog>
+						</h:panelGrid>
+					</p:panel>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

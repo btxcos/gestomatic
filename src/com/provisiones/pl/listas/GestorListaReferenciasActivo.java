@@ -14,39 +14,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Transicion;
-import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ReferenciaTabla;
 
-public class GestorListaReferencias implements Serializable
+public class GestorListaReferenciasActivo implements Serializable
 {
 
-	private static final long serialVersionUID = 5186745488601793183L;
+	private static final long serialVersionUID = -5674695405991567004L;
 
-
-	private static Logger logger = LoggerFactory.getLogger(GestorListaReferencias.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(GestorListaReferenciasActivo.class.getName());
 
 	//Buscar activos
 	private String sCOACES = "";
-
-	//Filtro activos
-	private String sCOPOIN = "";
-	private String sNOMUIN = "";	
-	private String sNOPRAC = "";
-	private String sNOVIAS = "";
-	private String sNUPIAC = "";
-	private String sNUPOAC = "";
-	private String sNUPUAC = "";
-	private String sNUFIRE = "";
-	
-	private String sNURCATF = "";
-
-	//Buscar referencia
-	private String sNURCAT = "";
 
 	//Filtro referencia activo
 	private String sNURCATFA = "";
@@ -61,56 +45,48 @@ public class GestorListaReferencias implements Serializable
 	private String sENEMISFA = "";
 
 	
-	private transient ActivoTabla activoseleccionado = null;
-	private transient ArrayList<ActivoTabla> tablaactivos = null;
-	
 	private transient ReferenciaTabla referenciaseleccionada = null;
 	private transient ArrayList<ReferenciaTabla> tablareferencias = null;
 	
 	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
 
-	public GestorListaReferencias()
+	public GestorListaReferenciasActivo()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorListaReferencias...");
+			logger.debug("Iniciando GestorListaReferenciasActivo...");
 			
 			tiposcomparaimporteHM.put("Igual a",    		"=");
 			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
 			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
+			
+			cargarDetallesActivo();
 		}
 	}
 	
-	public void borrarCamposActivo()
+	public void volver(ActionEvent actionEvent)
 	{
-		this.sCOPOIN = "";
-		this.sNOMUIN = "";
-		this.sNOPRAC = "";
-		this.sNOVIAS = "";
-		this.sNUPIAC = "";
-		this.sNUPOAC = "";
-		this.sNUPUAC = "";
-		this.sNUFIRE = "";
 		
-		this.sNURCATF = "";
+		try 
+		{
+			FacesContext.getCurrentInstance().getExternalContext().redirect(Sesion.cargarHistorial());
+		}
+		catch (IOException e)
+		{
+			FacesMessage msg;
+			
+			String sMsg = "ERROR: Ocurrió un problema al intentar regresar. Por favor, avise a soporte.";
+			
+			msg = Utils.pfmsgFatal(sMsg);
+			logger.error(sMsg);
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
 
+		}
+		
 	}
 	
-	public void borrarResultadosActivo()
-	{
-    	this.activoseleccionado = null;
-    	this.tablaactivos = null;
-	}
-	
-    public void limpiarPlantillaActivo(ActionEvent actionEvent) 
-    {
-    	this.sCOACES = "";
-
-    	borrarCamposActivo();
-    	
-    	borrarResultadosActivo();
-    }
-    
 	public void borrarCamposFiltroRefereciasActivo()
 	{
 		this.sNURCATFA = "";
@@ -134,7 +110,6 @@ public class GestorListaReferencias implements Serializable
     
 	public void borrarCamposReferencia()
 	{
-    	this.sNURCAT = "";
     	
     	this.setReferenciaseleccionada(null);
     	this.setTablareferencias(null);
@@ -146,107 +121,11 @@ public class GestorListaReferencias implements Serializable
     {
     	this.sCOACES = "";	
 
-    	borrarCamposActivo();
     	borrarCamposReferencia();
     	borrarCamposFiltroRefereciasActivo();
     }
     
-	public void buscarActivos (ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-			
-			String sMsg = "";
-			
-			this.activoseleccionado = null;
-			
-			this.setTablaactivos(null);
-			
-			if (sNURCATF.isEmpty())
-			{
-				ActivoTabla filtro = new ActivoTabla(
-						"", 
-						sCOPOIN.toUpperCase(), 
-						sNOMUIN.toUpperCase(),
-						sNOPRAC.toUpperCase(), 
-						sNOVIAS.toUpperCase(), 
-						sNUPIAC.toUpperCase(), 
-						sNUPOAC.toUpperCase(), 
-						sNUPUAC.toUpperCase(), 
-						sNUFIRE.toUpperCase(),
-						"");
-			
-				this.setTablaactivos(CLReferencias.buscarActivosConReferencias(filtro));
-				
-				if (getTablaactivos().size() == 0)
-				{
-					sMsg = "No se encontraron Activos con los criterios solicitados.";
-					msg = Utils.pfmsgWarning(sMsg);
-					logger.warn(sMsg);
-				}
-				else if (getTablaactivos().size() == 1)
-				{
-					sMsg = "Encontrado un Activo relacionado.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-				else
-				{
-					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-			}
-			else if (CLReferencias.existeReferenciaCatastral(sNURCATF))
-			{
-				this.setTablaactivos(CLReferencias.buscarActivoAsociado(sNURCATF));
-				
-				if (getTablaactivos().size() == 0)
-				{
-					sMsg = "No se encontraron Activos con los criterios solicitados.";
-					msg = Utils.pfmsgWarning(sMsg);
-					logger.warn(sMsg);
-				}
-				else
-				{
-					sMsg = "Encontrado un Activo relacionado.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
-				}
-			}
-			else
-			{
-				
-				sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
-				msg = Utils.pfmsgWarning(sMsg);
-				logger.warn(sMsg);
-			}
 
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}
-		
-	}
-	
-	public void seleccionarActivo(ActionEvent actionEvent) 
-    { 
-		if (ConnectionManager.comprobarConexion())
-		{
-	    	FacesMessage msg;
-	    	
-	    	String sMsg = ""; 
-	    	
-	    	this.sCOACES  = activoseleccionado.getCOACES();
-	    	
-	    	sMsg = "Activo '"+sCOACES+"' seleccionado.";
-	    	msg = Utils.pfmsgInfo(sMsg);
-	    	
-	    	logger.info(sMsg);
-	    	
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}
-    }
 
 	
 	public void buscarReferenciasActivo (ActionEvent actionEvent)
@@ -269,6 +148,8 @@ public class GestorListaReferencias implements Serializable
 			{
 				try
 				{
+					int iCOACES = Integer.parseInt(sCOACES);
+					
 					String sImporteSuelo = "";
 					
 					if (!sComparadorSueloFA.isEmpty())
@@ -294,7 +175,7 @@ public class GestorListaReferencias implements Serializable
 							Utils.compruebaFecha(sFERECAFA));
 					
 					//this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
-					this.tablareferencias = CLReferencias.buscarReferenciasActivo(filtro,sComparadorSueloFA,sComparadorCatastralFA, Integer.parseInt(sCOACES));
+					this.tablareferencias = CLReferencias.buscarReferenciasActivo(filtro,sComparadorSueloFA,sComparadorCatastralFA, iCOACES);
 					
 					if (getTablareferencias().size() == 0)
 					{
@@ -328,37 +209,7 @@ public class GestorListaReferencias implements Serializable
 		}
 	}
 	
-	public void buscarReferencia (ActionEvent actionEvent)
-	{
-		if (ConnectionManager.comprobarConexion())
-		{
-			FacesMessage msg;
-			
-			String sMsg = ""; 
-			
-			if (sNURCAT.equals(""))
-			{
-				sMsg = "Los datos suministrados no son válidos. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				
-				logger.error(sMsg);
-			}
-			else
-			{
-				this.setTablareferencias(CLReferencias.buscarReferenciaCatastralTabla(sNURCAT));
 
-				sMsg = "Encontradas "+getTablareferencias().size()+" comunidades relacionadas.";
-				msg = Utils.pfmsgInfo(sMsg);
-				
-				logger.info(sMsg);
-			}
-
-
-			
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-		}
-		
-	}
 	
 	public void cambiaComparadorSueloFA()
 	{
@@ -378,6 +229,16 @@ public class GestorListaReferencias implements Serializable
 		logger.debug("sFERECAFA:|"+sFERECAFA+"|");
 	}
 	
+	public void cargarDetallesActivo()
+	{
+
+		//this.sCOACES  = Sesion.cargarDetalle();
+		this.sCOACES  = CLActivos.recuperaID();
+		
+		logger.debug("sCOACES:|"+sCOACES+"|");
+
+	}
+	
 	public void cargarDetallesReferencia (ActionEvent actionEvent) 
     { 
 		String sPagina = ".";
@@ -388,7 +249,7 @@ public class GestorListaReferencias implements Serializable
 			if (referenciaseleccionada != null)
 			{
 
-		    	this.sNURCAT  = referenciaseleccionada.getNURCAT();
+		    	String sNURCAT  = referenciaseleccionada.getNURCAT();
 		    	
 		    	String sCodReferencia = Long.toString(CLReferencias.buscarCodigoReferencia(sNURCAT));
 		
@@ -397,10 +258,10 @@ public class GestorListaReferencias implements Serializable
 		    	Transicion transicion = new Transicion (
 		    			sCodReferencia,
 		    			ValoresDefecto.ID_REFERENCIA,
-		    			"listareferencias.xhtml",
+		    			"listareferenciasactivo.xhtml",
 		    			"GestorDetallesReferencia");
 		    	
-		    	Sesion.guardarTransicion(transicion, true);
+		    	Sesion.guardarTransicion(transicion, false);
 		    	
 		    	//Sesion.guardaDetalle(sCodReferencia);
 		    	//Sesion.limpiarHistorial();
@@ -444,100 +305,12 @@ public class GestorListaReferencias implements Serializable
 		//return sPagina;
     }
 
-	public String getsNURCAT() {
-		return sNURCAT;
-	}
-
-	public void setsNURCAT(String sNURCAT) {
-		this.sNURCAT = sNURCAT.trim().toUpperCase();
-	}
-
 	public String getsCOACES() {
 		return sCOACES;
 	}
 
 	public void setsCOACES(String sCOACES) {
 		this.sCOACES = sCOACES.trim();
-	}
-
-	public String getsCOPOIN() {
-		return sCOPOIN;
-	}
-
-	public void setsCOPOIN(String sCOPOIN) {
-		this.sCOPOIN = sCOPOIN;
-	}
-
-	public String getsNOMUIN() {
-		return sNOMUIN;
-	}
-
-	public void setsNOMUIN(String sNOMUIN) {
-		this.sNOMUIN = sNOMUIN;
-	}
-
-	public String getsNOPRAC() {
-		return sNOPRAC;
-	}
-
-	public void setsNOPRAC(String sNOPRAC) {
-		this.sNOPRAC = sNOPRAC;
-	}
-
-	public String getsNOVIAS() {
-		return sNOVIAS;
-	}
-
-	public void setsNOVIAS(String sNOVIAS) {
-		this.sNOVIAS = sNOVIAS;
-	}
-
-	public String getsNUPIAC() {
-		return sNUPIAC;
-	}
-
-	public void setsNUPIAC(String sNUPIAC) {
-		this.sNUPIAC = sNUPIAC;
-	}
-
-	public String getsNUPOAC() {
-		return sNUPOAC;
-	}
-
-	public void setsNUPOAC(String sNUPOAC) {
-		this.sNUPOAC = sNUPOAC;
-	}
-
-	public String getsNUPUAC() {
-		return sNUPUAC;
-	}
-
-	public void setsNUPUAC(String sNUPUAC) {
-		this.sNUPUAC = sNUPUAC;
-	}
-
-	public String getsNUFIRE() {
-		return sNUFIRE;
-	}
-
-	public void setsNUFIRE(String sNUFIRE) {
-		this.sNUFIRE = sNUFIRE;
-	}
-
-	public ActivoTabla getActivoseleccionado() {
-		return activoseleccionado;
-	}
-
-	public void setActivoseleccionado(ActivoTabla activoseleccionado) {
-		this.activoseleccionado = activoseleccionado;
-	}
-
-	public ArrayList<ActivoTabla> getTablaactivos() {
-		return tablaactivos;
-	}
-
-	public void setTablaactivos(ArrayList<ActivoTabla> tablaactivos) {
-		this.tablaactivos = tablaactivos;
 	}
 
 	public ReferenciaTabla getReferenciaseleccionada() {
@@ -562,14 +335,6 @@ public class GestorListaReferencias implements Serializable
 
 	public void setTiposcomparaimporteHM(Map<String,String> tiposcomparaimporteHM) {
 		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
-	}
-
-	public String getsNURCATF() {
-		return sNURCATF;
-	}
-
-	public void setsNURCATF(String sNURCATF) {
-		this.sNURCATF = sNURCATF;
 	}
 
 	public String getsNURCATFA() {

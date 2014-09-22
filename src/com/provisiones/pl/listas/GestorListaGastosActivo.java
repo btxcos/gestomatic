@@ -528,6 +528,9 @@ public class GestorListaGastosActivo implements Serializable
 	
 	public void cargarDetallesActivo()
 	{
+		FacesMessage msg;
+		
+		String sMsg = "";
 
 		//this.sCOACES  = Sesion.cargarDetalle();
 		this.sCOACES  = CLActivos.recuperaID();
@@ -535,12 +538,26 @@ public class GestorListaGastosActivo implements Serializable
 		logger.debug("sCOACES:|"+sCOACES+"|");
 		
 		
-		if (!sCOACES.equals(""))
+		try
 		{
-		
+
 			this.iCOACES = Integer.parseInt(sCOACES);
 			
+			sMsg = "Detalles cargados correctamente.";
+			msg = Utils.pfmsgInfo(sMsg);
+			logger.info(sMsg);
+			
 		}
+		catch(NumberFormatException nfe)
+		{
+			sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
+			msg = Utils.pfmsgError(sMsg);
+			logger.error(sMsg);
+			
+	    	this.setTablagastos(null);
+		}
+		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 	}
 	
@@ -555,18 +572,18 @@ public class GestorListaGastosActivo implements Serializable
 			
 	    	this.setGastoseleccionado(null);
 			
-			try
+	    	//if (true)
+			if (sCOACES.isEmpty())
 			{
-				//if (true)
-				if (sCOACES.isEmpty())
-				{
-					sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
-					msg = Utils.pfmsgError(sMsg);
-					logger.error(sMsg);
-					
-			    	this.setTablagastos(null);
-				}
-				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+				
+		    	this.setTablagastos(null);
+			}
+			else
+			{
+				if (CLActivos.existeActivo(iCOACES))
 				{
 					String sImporte = "";
 					
@@ -635,15 +652,7 @@ public class GestorListaGastosActivo implements Serializable
 					
 			    	this.setTablagastos(null);
 				} 
-				
-			}
-			catch(NumberFormatException nfe)
-			{
-				sMsg = "ERROR: El Activo debe ser numérico. Por favor, revise los datos.";
-				msg = Utils.pfmsgError(sMsg);
-				logger.error(sMsg);
-				
-		    	this.setTablagastos(null);
+
 			}
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);

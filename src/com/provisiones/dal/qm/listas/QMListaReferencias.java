@@ -1700,6 +1700,129 @@ public final class QMListaReferencias
 		return resultado;
 	}
 	
+	public static ArrayList<ReferenciaTabla> buscaReferenciasActivoPorFiltro(Connection conexion, ReferenciaTabla filtro, String sComparadorSuelo, String sComparadorCatastral, int iCodCOACES)
+	{
+		ArrayList<ReferenciaTabla> resultado = new ArrayList<ReferenciaTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			//Condiciones de filtro
+			String sCondicionNURCAT = filtro.getNURCAT().isEmpty()?"":QMReferencias.CAMPO2 + " = '" + filtro.getNURCAT() + "' AND ";
+			String sCondicionTIRCAT = filtro.getTIRCAT().isEmpty()?"":QMReferencias.CAMPO3 + " = '" + filtro.getTIRCAT() + "' AND ";
+			String sCondicionENEMIS = filtro.getENEMIS().isEmpty()?"":QMReferencias.CAMPO4 + " = '" + filtro.getENEMIS() + "' AND ";
+			
+			String sCondicionImporteSuelo = sComparadorSuelo.isEmpty()?"":QMReferencias.CAMPO7 + " "+sComparadorSuelo+" " + filtro.getIMVSUE() + " AND ";
+			String sCondicionImporteCatastral = sComparadorCatastral.isEmpty()?"":QMReferencias.CAMPO8 + " "+sComparadorCatastral+" " + filtro.getIMCATA() + " AND ";
+			
+			String sCondicionFERECA = (filtro.getFERECA().isEmpty() || filtro.getFERECA().equals("0"))?"":QMReferencias.CAMPO9 + " = '" + filtro.getFERECA() + "' AND ";
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + QMReferencias.CAMPO1 + "," 
+					   + QMReferencias.CAMPO2 + ","        
+					   + QMReferencias.CAMPO3 + ","
+					   + QMReferencias.CAMPO4 + ","
+					   + QMReferencias.CAMPO6 + 
+
+					   //Ampliacion de valor catastral
+					   ","
+					   + QMReferencias.CAMPO7 + ","
+					   + QMReferencias.CAMPO8 + ","
+					   + QMReferencias.CAMPO9 + 
+					   
+					   "  FROM " 
+					   + QMReferencias.TABLA + 
+					   " WHERE "
+					   + sCondicionNURCAT
+					   + sCondicionTIRCAT
+					   + sCondicionENEMIS
+					   + sCondicionImporteSuelo
+					   + sCondicionImporteCatastral
+					   + sCondicionFERECA
+					   + QMReferencias.CAMPO1 + " IN " +
+					   "(SELECT " + CAMPO2 + 
+					   " FROM " 
+					   + TABLA +
+					   " WHERE "
+					   + CAMPO1 +  " = '" + iCodCOACES	+ "')";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sReferenciaID = rs.getString(QMReferencias.CAMPO1);
+						String sNURCAT = rs.getString(QMReferencias.CAMPO2);
+						String sTIRCAT = rs.getString(QMReferencias.CAMPO3);
+						String sENEMIS = rs.getString(QMReferencias.CAMPO4);
+						String sOBTEXC = rs.getString(QMReferencias.CAMPO6);
+
+						//Ampliacion de valor catastral
+						String sIMVSUE = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO7));
+						String sIMCATA = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO8));
+						String sFERECA = Utils.recuperaFecha(rs.getString(QMReferencias.CAMPO9));
+						
+						ReferenciaTabla referenciaencontrada = new ReferenciaTabla(
+								sReferenciaID,
+								sNURCAT, 
+								sTIRCAT, 
+								sENEMIS, 
+								sOBTEXC
+
+								//Ampliacion de valor catastral
+								, sIMVSUE, sIMCATA, sFERECA
+								
+								);
+						
+						resultado.add(referenciaencontrada);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO1+":|"+iCodCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ReferenciaTabla>();
+
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return resultado;
+	}
+	
 	
 	public static ArrayList<ActivoTabla> buscaActivosNoAsociados(Connection conexion, ActivoTabla filtro)
 	{
