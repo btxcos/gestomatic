@@ -16,6 +16,7 @@ import com.provisiones.dal.qm.movimientos.QMMovimientosReferencias;
 import com.provisiones.dal.qm.registros.QMRegistroActivos;
 
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Nota;
@@ -183,7 +184,7 @@ public final class CLReferencias
 		return QMReferencias.setNota(ConnectionManager.getDBConnection(),liCodReferencia, sNota);
 	}
 	
-	public static String activoAsociadoRefereciaCatastralID(long liCodReferencia)
+	public static int obtenerActivoDeReferecia(long liCodReferencia)
 	{
 		return QMListaReferencias.getCodigoActivoAsociado(ConnectionManager.getDBConnection(),liCodReferencia);
 	}
@@ -232,6 +233,36 @@ public final class CLReferencias
 	public static String referenciaCatastralAsociada(int iCodCOACES)
 	{
 		return QMListaReferencias.referenciaAsociada(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
+	
+	//Gestion de IDs
+	public static String recuperaID()
+	{
+		String sID = "";
+		
+		int iTipoID = Sesion.cargarTipoID();
+		
+		String sIDCargado = Sesion.cargarID();
+		
+		try
+		{
+			switch (iTipoID) 
+			{
+			case ValoresDefecto.ID_REFERENCIA:
+				sID = sIDCargado;
+				break;
+			case ValoresDefecto.ID_RECURSO:
+				sID = Long.toString(CLImpuestos.obtenerReferenciaDeRecurso(Long.parseLong(sIDCargado)));
+				break;
+
+			}
+		}
+		catch(NumberFormatException nfe)
+		{
+			sID = "";
+		}
+		
+		return sID;
 	}
 	
 	public static int actualizaReferenciaLeida(String linea)

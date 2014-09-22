@@ -1455,9 +1455,9 @@ public final class QMListaReferencias
 	}
 	
 	
-	public static String getCodigoActivoAsociado(Connection conexion, long liCodReferencia)
+	public static int getCodigoActivoAsociado(Connection conexion, long liCodReferencia)
 	{
-		String sCOACES = "";
+		int iCOACES = 0;
 
 		if (conexion != null)
 		{
@@ -1494,11 +1494,11 @@ public final class QMListaReferencias
 					{
 						bEncontrado = true;
 
-						sCOACES = rs.getString(CAMPO1);
+						iCOACES = rs.getInt(CAMPO1);
 						
 						
 						logger.debug("Encontrado el registro!");
-						logger.debug(CAMPO1+":|"+sCOACES+"|");
+						logger.debug(CAMPO1+":|"+iCOACES+"|");
 					}
 				}
 				if (!bEncontrado) 
@@ -1509,7 +1509,7 @@ public final class QMListaReferencias
 			} 
 			catch (SQLException ex) 
 			{
-				sCOACES = "";
+				iCOACES = 0;
 
 				logger.error("ERROR liCodReferencia:|"+liCodReferencia+"|");
 
@@ -1522,7 +1522,7 @@ public final class QMListaReferencias
 			}	
 		}
 
-		return sCOACES;
+		return iCOACES;
 	}
 	
 	public static long buscaCantidadValidado(Connection conexion, String sCodValidado)

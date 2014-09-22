@@ -95,7 +95,7 @@
 												<h:outputText for="COCLDO" value="Documento: "/>
 												<p:selectOneMenu id="COCLDO" value="#{GestorCuotas.sCOCLDO}"  disabled="true">
 													<f:selectItem itemLabel="Elija..." itemValue=""/>
-													<f:selectItems value="#{GestorDatosGenerales.tiposcocldoHM}"/>
+													<f:selectItems value="#{GestorCuotas.tiposcocldoHM}"/>
 													<f:validateLength minimum="1"/>
 												</p:selectOneMenu>
 
@@ -131,7 +131,7 @@
 														<h:outputText for="COSBAC" value="Concepto: "/>
 														<p:selectOneMenu id="COSBAC" value="#{GestorCuotas.sCOSBAC}">
 															<f:selectItem itemLabel="Elija..." itemValue=""/>
-															<f:selectItems value="#{GestorDatosGenerales.tiposcosbga_t22HM}"/>
+															<f:selectItems value="#{GestorCuotas.tiposcosbacHM}"/>
 															<f:validateLength minimum="1"/>
 														</p:selectOneMenu>
 
@@ -154,7 +154,7 @@
 														<h:outputText for="PTPAGO" value="Periodicidad: "/>
 														<p:selectOneMenu id="PTPAGO" value="#{GestorCuotas.sPTPAGO}">
 															<f:selectItem itemLabel="Elija..." itemValue=""/>
-															<f:selectItems value="#{GestorDatosGenerales.tiposptpagoHM}"/>
+															<f:selectItems value="#{GestorCuotas.tiposptpagoHM}"/>
 															<f:validateLength minimum="1"/>
 														</p:selectOneMenu>
 

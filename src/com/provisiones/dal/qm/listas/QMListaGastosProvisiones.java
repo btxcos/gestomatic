@@ -749,7 +749,6 @@ public final class QMListaGastosProvisiones
 		return sRevisado;
 	}
 	
-	
 	public static String getProvisionDeGasto(Connection conexion, long liCodGasto)
 	{
 		String sNUPROF = "";

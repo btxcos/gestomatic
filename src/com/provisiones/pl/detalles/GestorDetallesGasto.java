@@ -20,6 +20,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Pago;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
 
 public class GestorDetallesGasto implements Serializable 
@@ -98,6 +99,10 @@ public class GestorDetallesGasto implements Serializable
 	private String sNota = "";
 	private String sNotaOriginal = "";
 	
+	private long liCodCuota = 0;
+	
+	private boolean bSinCuota = true;
+	
 	
 	public GestorDetallesGasto()
 	{
@@ -136,7 +141,9 @@ public class GestorDetallesGasto implements Serializable
 	{
 		logger.debug("Cargando Gasto...");
 
-		String sCodGasto = Sesion.cargarDetalle();
+		//String sCodGasto = Sesion.cargarDetalle();
+		
+		String sCodGasto = CLGastos.recuperaID();
 		
 		logger.debug("sCodGasto:|"+sCodGasto+"|");
 
@@ -199,7 +206,7 @@ public class GestorDetallesGasto implements Serializable
 				//this.sCOOFCX = ValoresDefecto.DEF_COOFCX;
 				//this.sNUCONE = ValoresDefecto.DEF_NUCONE;
 				
-				this.sNUPROF = CLGastos.buscarProvisionGastoID(liCodGasto);
+				this.sNUPROF = CLGastos.obtenerProvisionDeGasto(liCodGasto);
 
 				this.sCOTERR = ValoresDefecto.DEF_COTERR;
 				
@@ -265,6 +272,10 @@ public class GestorDetallesGasto implements Serializable
 				this.sNotaOriginal = CLGastos.buscarNota(liCodGasto);
 				
 				this.sNota = sNotaOriginal;
+				
+				this.liCodCuota = CLGastos.obtenerCuotaDeGasto(liCodGasto);
+				
+				this.bSinCuota = (liCodCuota == 0);
 				
 				sMsg = "El Gasto se cargó correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -345,9 +356,17 @@ public class GestorDetallesGasto implements Serializable
 			
 			if (sCOACES != "")
 			{
-		    	Sesion.guardaDetalle(sCOACES);
-		    	Sesion.guardarHistorial("detallesgasto.xhtml","GestorDetallesActivo");
+		    	//Sesion.guardaDetalle(sCOACES);
+		    	//Sesion.guardarHistorial("detallesgasto.xhtml","GestorDetallesActivo");
 
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"detallesgasto.xhtml",
+		    			"GestorDetallesActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+		    	
 		    	sPagina = "detallesactivo.xhtml";
 		    	
 				try 
@@ -392,9 +411,17 @@ public class GestorDetallesGasto implements Serializable
 
 			if (sNUPROF != "")
 			{
-	    	
-		    	Sesion.guardaDetalle(sNUPROF);
-		    	Sesion.guardarHistorial("detallesgasto.xhtml","GestorDetallesProvision");
+
+		    	Transicion transicion = new Transicion (
+		    			sNUPROF,
+		    			ValoresDefecto.ID_PROVISION,
+		    			"detallesgasto.xhtml",
+		    			"GestorDetallesProvision");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+
+		    	//Sesion.guardaDetalle(sNUPROF);
+		    	//Sesion.guardarHistorial("detallesgasto.xhtml","GestorDetallesProvision");
 
 		    	sPagina = "detallesprovision.xhtml";
 		    	
@@ -422,6 +449,63 @@ public class GestorDetallesGasto implements Serializable
 				FacesMessage msg;
 
 				msg = Utils.pfmsgWarning("No se ha seleccionado una provisión.");
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+			
+
+
+		}
+
+		//return sPagina;
+
+    }
+	
+	public void cargarDetallesCuota(ActionEvent actionEvent) 
+    { 
+		String sPagina = ".";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	logger.debug("liCodCuota:"+liCodCuota);
+
+			if (liCodCuota != 0)
+			{
+
+		    	Transicion transicion = new Transicion (
+		    			Long.toString(liCodCuota),
+		    			ValoresDefecto.ID_CUOTA,
+		    			"detallesgasto.xhtml",
+		    			"GestorDetallesCuota");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+
+		    	sPagina = "detallescuota.xhtml";
+		    	
+				try 
+				{
+					logger.debug("Redirigiendo...");
+					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+				}
+				catch (IOException e)
+				{
+					FacesMessage msg;
+					
+					String sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+					
+
+				}
+			}
+			else
+			{
+				FacesMessage msg;
+
+				msg = Utils.pfmsgWarning("No se ha seleccionado una cuota.");
 				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
@@ -793,6 +877,14 @@ public class GestorDetallesGasto implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbSinCuota() {
+		return bSinCuota;
+	}
+
+	public void setbSinCuota(boolean bSinCuota) {
+		this.bSinCuota = bSinCuota;
 	}
 	
 	

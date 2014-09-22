@@ -18,6 +18,7 @@ import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ImpuestoRecurso;
+import com.provisiones.types.Transicion;
 
 
 
@@ -92,7 +93,9 @@ public class GestorDetallesImpuesto implements Serializable
 		
 		//this.sNUPROF = ((GestorListaProvisiones)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaProvisiones")).getsNUPROF();
 		
-		String sCodImpuesto = Sesion.cargarDetalle();
+		//String sCodImpuesto = Sesion.cargarDetalle();
+		
+		String sCodImpuesto = CLImpuestos.recuperaID();
 		
 		logger.debug("sCodImpuesto:|"+sCodImpuesto+"|");
 		
@@ -190,9 +193,17 @@ public class GestorDetallesImpuesto implements Serializable
 			String sCodReferncia = Long.toString(CLReferencias.buscarCodigoReferencia(sNURCAT));
 			
 	    	logger.debug("sCodReferncia:|"+sCodReferncia+"|");
+
+	    	Transicion transicion = new Transicion (
+	    			sCodReferncia,
+	    			ValoresDefecto.ID_REFERENCIA,
+	    			"detallesimpuesto.xhtml",
+	    			"GestorDetallesReferencia");
 	    	
-	    	Sesion.guardaDetalle(sCodReferncia);
-	    	Sesion.guardarHistorial("detallesimpuesto.xhtml","GestorDetallesReferencia");
+	    	Sesion.guardarTransicion(transicion, false);
+	    	
+	    	//Sesion.guardaDetalle(sCodReferncia);
+	    	//Sesion.guardarHistorial("detallesimpuesto.xhtml","GestorDetallesReferencia");
 
 	    	sPagina = "detallesreferencia.xhtml";
 	    	

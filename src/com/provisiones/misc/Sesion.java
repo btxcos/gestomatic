@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.pl.GestorSesion;
 import com.provisiones.types.Historial;
+import com.provisiones.types.Transicion;
 
 public final class Sesion 
 {
@@ -21,24 +22,46 @@ public final class Sesion
 	private Sesion() {}
 
 	
-	public static String cargarDetalle()
+	public static String cargarID()
 	{
-		String sDetalle = "";
+		String sID = "";
 		if (ConnectionManager.comprobarConexion())
 		{
-			sDetalle = ((GestorSesion)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getsDetalle();
+			sID = ((GestorSesion)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getsID();
 		}
-		return sDetalle;
+		return sID;
 		
 	}
 	
-	public static void guardaDetalle(String sDetalle)
+	public static void guardaID(String sID)
 	{
-		logger.debug("Guardando:"+sDetalle);
+		logger.debug("Guardando:"+sID);
 
 		if (ConnectionManager.comprobarConexion())
 		{
-			((GestorSesion)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).setsDetalle(sDetalle);
+			((GestorSesion)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).setsID(sID);
+		}
+		
+	}
+	
+	public static int cargarTipoID()
+	{
+		int iTipoID = 0;
+		if (ConnectionManager.comprobarConexion())
+		{
+			iTipoID = ((GestorSesion)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).getiTipoID();
+		}
+		return iTipoID;
+		
+	}
+	
+	public static void guardaTipoID(int iTipoID)
+	{
+		logger.debug("Guardando:"+iTipoID);
+
+		if (ConnectionManager.comprobarConexion())
+		{
+			((GestorSesion)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorSesion")).setiTipoID(iTipoID);
 		}
 		
 	}
@@ -67,7 +90,7 @@ public final class Sesion
 		return sPagina;
 		
 	}
-	
+
 	public static void guardarHistorial(String sPagina, String sGestor)
 	{
 		logger.debug("Guardando:"+sPagina);
@@ -102,4 +125,16 @@ public final class Sesion
 		
 	}
 	
+	public static void guardarTransicion(Transicion transicion, boolean bLimpia)
+	{
+    	if (bLimpia)
+    	{
+        	limpiarHistorial();
+    	}
+
+		guardaID(transicion.getsID());
+    	guardaTipoID(transicion.getiTipoID());
+    	guardarHistorial(transicion.getsPaginaOrigen(),transicion.getsGestorDestino());
+		
+	}
 }

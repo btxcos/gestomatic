@@ -12,6 +12,7 @@ import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cierre;
@@ -247,6 +248,40 @@ public final class CLProvisiones
 	public static String ultimaProvisionCerrada (String sCodCOSPAT)
 	{
 		return QMProvisiones.getUltimaProvisionCerrada(ConnectionManager.getDBConnection(),sCodCOSPAT);
+	}
+	
+	//Gestion de IDs
+	public static String recuperaID()
+	{
+		String sID = "";
+		
+		int iTipoID = Sesion.cargarTipoID();
+		
+		String sIDCargado = Sesion.cargarID();
+
+		logger.debug("iTipoID:|"+iTipoID+"|");
+		logger.debug("sIDCargado:|"+sIDCargado+"|");
+		
+		try
+		{
+			switch (iTipoID) 
+			{
+			case ValoresDefecto.ID_GASTO:
+				sID = CLGastos.obtenerProvisionDeGasto(Long.parseLong(sIDCargado));
+				break;
+			case ValoresDefecto.ID_PROVISION:
+				sID = sIDCargado;
+				break;
+			}
+		}
+		catch(NumberFormatException nfe)
+		{
+			sID = "";
+		}
+		
+		logger.debug("sID:|"+sID+"|");
+		
+		return sID;
 	}
 	
 	public static int inyertarCierreVolcado(String linea)

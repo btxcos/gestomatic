@@ -273,6 +273,138 @@ public final class QMListaImpuestos
 		return bEncontrado;
 	}
 	
+	public static int getActivoRecurso(Connection conexion, long liCodImpuesto)
+	{
+		int iCOACES = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO1 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO2 + " = '" + liCodImpuesto +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						iCOACES = rs.getInt(CAMPO1);
+
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+	 				logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				iCOACES = 0;
+
+				logger.error("ERROR liCodImpuesto:|"+liCodImpuesto+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return iCOACES;
+	}
+
+	public static boolean tieneRecursosActivo(Connection conexion, int iCOACES)
+	{
+		boolean bEncontrado = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO2 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE " 
+					+ CAMPO1 + " = '" + iCOACES +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+	 				logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+
+				logger.error("ERROR iCOACES:|"+iCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return bEncontrado;
+	}
+
 	public static ArrayList<Long>  getMovimientosImpuestosPorEstado(Connection conexion, String sEstado) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>(); 

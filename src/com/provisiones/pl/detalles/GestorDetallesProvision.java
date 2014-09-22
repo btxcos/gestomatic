@@ -20,6 +20,7 @@ import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Provision;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.GastoTabla;
 
 public class GestorDetallesProvision implements Serializable 
@@ -124,7 +125,8 @@ public class GestorDetallesProvision implements Serializable
 		
 		//this.sNUPROF = ((GestorListaProvisiones)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaProvisiones")).getsNUPROF();
 		
-		this.sNUPROF = Sesion.cargarDetalle();
+		//this.sNUPROF = Sesion.cargarDetalle();
+		this.sNUPROF = CLProvisiones.recuperaID();
 		
 		logger.debug("sNUPROF:|"+sNUPROF+"|");
 		
@@ -252,7 +254,7 @@ public class GestorDetallesProvision implements Serializable
 		    	this.sCodGasto = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUGG,sCOTPGAG,sCOSBGAG,Utils.compruebaFecha(sFEDEVEG)));
 		    	
 		    	
-		    	Sesion.guardaDetalle(sCodGasto);
+		    	
 		    	
 		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
 		    	
@@ -264,7 +266,16 @@ public class GestorDetallesProvision implements Serializable
 		    	
 		    	logger.debug("Redirigiendo...");
 		    	
-		    	Sesion.guardarHistorial("detallesprovision.xhtml","GestorDetallesGasto");
+		    	Transicion transicion = new Transicion (
+		    			sCodGasto,
+		    			ValoresDefecto.ID_GASTO,
+		    			"detallesprovision.xhtml",
+		    			"GestorDetallesGasto");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+		    	
+		    	//Sesion.guardaDetalle(sCodGasto);
+		    	//Sesion.guardarHistorial("detallesprovision.xhtml","GestorDetallesGasto");
 
 		    	sPagina = "detallesgasto.xhtml";
 		    	

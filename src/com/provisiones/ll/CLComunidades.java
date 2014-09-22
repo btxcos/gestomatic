@@ -16,6 +16,7 @@ import com.provisiones.dal.qm.listas.QMListaCuentasComunidades;
 import com.provisiones.dal.qm.listas.errores.QMListaErroresComunidades;
 import com.provisiones.dal.qm.movimientos.QMMovimientosComunidades;
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
@@ -188,7 +189,12 @@ public final class CLComunidades
 	{
 		return QMMovimientosComunidades.getMovimientoComunidad(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
-	
+
+	public static long obtenerComunidadDeActivo (int iCodCOACES)
+	{
+		return QMListaComunidadesActivos.getComunidadActivo(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
+
 	public static String buscarNota (long liCodComunidad)
 	{
 		return QMComunidades.getNota(ConnectionManager.getDBConnection(),liCodComunidad);
@@ -258,6 +264,43 @@ public final class CLComunidades
 	public static boolean existeMovimientoComunidad (long liCodMovimiento)
 	{
 		return QMMovimientosComunidades.existeMovimientoComunidad(ConnectionManager.getDBConnection(),liCodMovimiento);
+	}
+	
+	//Gestion de IDs
+	public static String recuperaID()
+	{
+		String sID = "";
+		
+		int iTipoID = Sesion.cargarTipoID();
+		
+		String sIDCargado = Sesion.cargarID();
+		
+		logger.debug("iTipoID|"+iTipoID+"|");
+		logger.debug("sIDCargado|"+sIDCargado+"|");
+		
+		try
+		{
+			switch (iTipoID) 
+			{
+			case ValoresDefecto.ID_COMUNIDAD:
+				sID = sIDCargado;
+				break;
+			case ValoresDefecto.ID_CUOTA:
+				sID = Long.toString(CLCuotas.obtenerComunidadCuota(Long.parseLong(sIDCargado)));
+				break;
+			case ValoresDefecto.ID_ACTIVO:
+				sID = Long.toString(obtenerComunidadDeActivo(Integer.parseInt(sIDCargado)));
+				break;
+			}
+		}
+		catch(NumberFormatException nfe)
+		{
+			sID = "";
+		}
+		
+		logger.debug("sID|"+sID+"|");
+		
+		return sID;
 	}
 	
 	//Interfaz avanzado

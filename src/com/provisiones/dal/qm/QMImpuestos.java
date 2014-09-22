@@ -385,6 +385,72 @@ public final class QMImpuestos
 		return liImpuestoID;
 	}
 	
+	public static String getReferenciaRecursoID(Connection conexion, long liImpuestoID)
+	{
+		String sReferenciaCatrastral = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO2 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1 + " = '" + liImpuestoID + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sReferenciaCatrastral = rs.getString(CAMPO2);
+						
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sReferenciaCatrastral = "";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sReferenciaCatrastral;
+	}
+	
 	public static boolean existeImpuestoRecurso(Connection conexion, long liImpuestoID)
 	{
 		boolean bEncontrado = false;

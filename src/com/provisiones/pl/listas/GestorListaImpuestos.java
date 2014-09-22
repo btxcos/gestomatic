@@ -16,6 +16,8 @@ import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ImpuestoRecursoTabla;
 
@@ -268,10 +270,18 @@ public class GestorListaImpuestos implements Serializable
 		    	String sCodImpuesto = impuestoseleccionado.getsRecursoID();
 		    	
 		    	logger.debug("sCodImpuesto:|"+sCodImpuesto+"|");
+
+		    	Transicion transicion = new Transicion (
+		    			sCodImpuesto,
+		    			ValoresDefecto.ID_RECURSO,
+		    			"listaimpuestos.xhtml",
+		    			"GestorDetallesImpuesto");
 		    	
-		    	Sesion.guardaDetalle(sCodImpuesto);
-		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listaimpuestos.xhtml","GestorDetallesImpuesto");
+		    	Sesion.guardarTransicion(transicion, true);
+		    	
+		    	//Sesion.guardaDetalle(sCodImpuesto);
+		    	//Sesion.limpiarHistorial();
+		    	//Sesion.guardarHistorial("listaimpuestos.xhtml","GestorDetallesImpuesto");
 
 		    	sPagina = "detallesimpuesto.xhtml";
 		    	

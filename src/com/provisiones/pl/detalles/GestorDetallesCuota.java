@@ -19,6 +19,7 @@ import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Cuota;
+import com.provisiones.types.Transicion;
 
 public class GestorDetallesCuota implements Serializable 
 {
@@ -96,7 +97,9 @@ public class GestorDetallesCuota implements Serializable
 		
 		//this.sNUPROF = ((GestorListaProvisiones)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaProvisiones")).getsNUPROF();
 		
-		String sCodCuota = Sesion.cargarDetalle();
+		//String sCodCuota = Sesion.cargarDetalle();
+		
+		String sCodCuota = CLCuotas.recuperaID();
 		
 		logger.debug("sCodCuota:|"+sCodCuota+"|");
 		
@@ -199,8 +202,16 @@ public class GestorDetallesCuota implements Serializable
 			
 			if (sCOACES != "")
 			{
-		    	Sesion.guardaDetalle(sCOACES);
-		    	Sesion.guardarHistorial("detallescuota.xhtml","GestorDetallesActivo");
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"detallescuota.xhtml",
+		    			"GestorDetallesActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+				
+		    	//Sesion.guardaDetalle(sCOACES);
+		    	//Sesion.guardarHistorial("detallescuota.xhtml","GestorDetallesActivo");
 
 		    	sPagina = "detallesactivo.xhtml";
 		    	
@@ -248,9 +259,17 @@ public class GestorDetallesCuota implements Serializable
 	    	
 	    	String sCodComunidad = Long.toString(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
 	    	logger.debug("sCodComunidad:|"+sCodComunidad+"|");
+
+	    	Transicion transicion = new Transicion (
+	    			sCodComunidad,
+	    			ValoresDefecto.ID_COMUNIDAD,
+	    			"detallescuota.xhtml",
+	    			"GestorDetallesComunidad");
 	    	
-	    	Sesion.guardaDetalle(sCodComunidad);
-	    	Sesion.guardarHistorial("detallescuota.xhtml","GestorDetallesComunidad");
+	    	Sesion.guardarTransicion(transicion, false);
+	    	
+	    	//Sesion.guardaDetalle(sCodComunidad);
+	    	//Sesion.guardarHistorial("detallescuota.xhtml","GestorDetallesComunidad");
 
 	    	sPagina = "detallescomunidad.xhtml";
 	    	

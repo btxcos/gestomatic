@@ -19,6 +19,8 @@ import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ComunidadTabla;
 
@@ -348,10 +350,18 @@ public class GestorListaComunidades implements Serializable
 		    	String sCodComunidad = comunidadseleccionada.getsComunidadID();
 		    	
 		    	logger.debug("sCodComunidad:|"+sCodComunidad+"|");
+
+		    	Transicion transicion = new Transicion (
+		    			sCodComunidad,
+		    			ValoresDefecto.ID_COMUNIDAD,
+		    			"listacomunidades.xhtml",
+		    			"GestorDetallesComunidad");
 		    	
-		    	Sesion.guardaDetalle(sCodComunidad);
-		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listacomunidades.xhtml","GestorDetallesComunidad");
+		    	Sesion.guardarTransicion(transicion, true);
+		    	
+		    	//Sesion.guardaDetalle(sCodComunidad);
+		    	//Sesion.limpiarHistorial();
+		    	//Sesion.guardarHistorial("listacomunidades.xhtml","GestorDetallesComunidad");
 
 		    	sPagina = "detallescomunidad.xhtml";
 		    	

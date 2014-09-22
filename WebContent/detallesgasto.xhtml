@@ -60,7 +60,7 @@
 					<p:panel>
 						<h:panelGrid columns="1" cellpadding="5">
 							<p:fieldset legend="Indentificación">
-								<h:panelGrid columns="2" cellpadding="5">
+								<h:panelGrid columns="3" cellpadding="5">
 									<p:panel>
 										<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText value="Activo: " />
@@ -75,6 +75,7 @@
 											<p:commandButton value="Detalles" actionListener="#{GestorDetallesGasto.cargarDetallesProvision}"/>
 										</h:panelGrid>
 									</p:panel>
+									<p:commandButton value="Cuota" actionListener="#{GestorDetallesGasto.cargarDetallesCuota}" disabled="#{GestorDetallesGasto.bSinCuota}"/>
 								</h:panelGrid>
 							</p:fieldset>
 							<p:fieldset legend="Datos">
@@ -83,16 +84,16 @@
 										<p:fieldset legend="Tipo de Gasto">
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Grupo de gasto: " />
-											<p:inputText id="COGRUG" value="#{GestorDetallesGasto.sCOGRUG}" disabled="true" size="0"/>
+											<p:inputText id="COGRUG" value="#{GestorDetallesGasto.sCOGRUG}" readonly="true" size="0"/>
 
 											<h:outputText value="Tipo de concepto de gasto:  " />
-											<p:inputText id="COTPGA" value="#{GestorDetallesGasto.sCOTPGA}" disabled="true" size="0"/>
+											<p:inputText id="COTPGA" value="#{GestorDetallesGasto.sCOTPGA}" readonly="true" size="0"/>
 
 											<h:outputText value="Subtipo de gasto: " />
-											<p:inputText id="COSBGA" value="#{GestorDetallesGasto.sCOSBGA}" disabled="true" size="0"/>
+											<p:inputText id="COSBGA" value="#{GestorDetallesGasto.sCOSBGA}" readonly="true" size="0"/>
 
 											<h:outputText value="Periodicidad de pago: " />
-											<p:inputText id="PTPAGO" value="#{GestorDetallesGasto.sPTPAGO}" disabled="true" size="0"/>
+											<p:inputText id="PTPAGO" value="#{GestorDetallesGasto.sPTPAGO}" readonly="true" size="0"/>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Fechas del gasto">
@@ -100,17 +101,17 @@
 											<p:panel>
 												<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Fecha del devengo: " />
-											<p:inputText id="FEDEVE" value="#{GestorDetallesGasto.sFEDEVE}" disabled="true" size="9"/>
+											<p:inputText id="FEDEVE" value="#{GestorDetallesGasto.sFEDEVE}" readonly="true" size="9"/>
 														</h:panelGrid>
 													</p:panel>
 
 													<p:panel>
 														<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Fecha de fin de periodo: " />
-											<p:inputText id="FFGTVP" value="#{GestorDetallesGasto.sFFGTVP}" disabled="true" size="9"/>
+											<p:inputText id="FFGTVP" value="#{GestorDetallesGasto.sFFGTVP}" readonly="true" size="9"/>
 
 											<h:outputText value="Fecha limite del pago: " />
-											<p:inputText id="FELIPG" value="#{GestorDetallesGasto.sFELIPG}" disabled="true" size="9"/>
+											<p:inputText id="FELIPG" value="#{GestorDetallesGasto.sFELIPG}" readonly="true" size="9"/>
 														</h:panelGrid>
 													</p:panel>
 										</h:panelGrid>
@@ -121,22 +122,22 @@
 													<p:panel>
 														<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Situacion del gasto: " />
-											<p:inputText id="COSIGA" value="#{GestorDetallesGasto.sCOSIGA}" disabled="true" size="0"/>
+											<p:inputText id="COSIGA" value="#{GestorDetallesGasto.sCOSIGA}" readonly="true" size="0"/>
 														</h:panelGrid>
 													</p:panel>
 
 													<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Fecha de estimado: " />
-											<p:inputText id="FEEESI" value="#{GestorDetallesGasto.sFEEESI}" disabled="true" size="9"/>
+											<p:inputText id="FEEESI" value="#{GestorDetallesGasto.sFEEESI}" readonly="true" size="9"/>
 
 											<h:outputText value="Fecha de conocido: " />
-											<p:inputText id="FEECOI" value="#{GestorDetallesGasto.sFEECOI}" disabled="true" size="9"/>
+											<p:inputText id="FEECOI" value="#{GestorDetallesGasto.sFEECOI}" readonly="true" size="9"/>
 
 											<h:outputText value="Fecha de autoriazado: " />
-											<p:inputText id="FEEAUI" value="#{GestorDetallesGasto.sFEEAUI}" disabled="true" size="9"/>
+											<p:inputText id="FEEAUI" value="#{GestorDetallesGasto.sFEEAUI}" readonly="true" size="9"/>
 
 											<h:outputText value="Fecha de pagado: " />
-											<p:inputText id="FEEPAI" value="#{GestorDetallesGasto.sFEEPAI}" disabled="true" size="9"/>
+											<p:inputText id="FEEPAI" value="#{GestorDetallesGasto.sFEEPAI}" readonly="true" size="9"/>
 
 													</h:panelGrid>
 
@@ -150,7 +151,7 @@
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText value="Importe del gasto: " />
-											<p:inputText id="IMNGAS" value="#{GestorDetallesGasto.sIMNGAS}" disabled="true" size="14"/>
+											<p:inputText id="IMNGAS" value="#{GestorDetallesGasto.sIMNGAS}" readonly="true" size="14"/>
 											<h:outputText value="¤"/>
 														</h:panelGrid>
 													</p:panel>
@@ -158,19 +159,19 @@
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText value="Recargo: " />
-											<p:inputText id="IMRGAS" value="#{GestorDetallesGasto.sIMRGAS}" disabled="true" size="14"/>
+											<p:inputText id="IMRGAS" value="#{GestorDetallesGasto.sIMRGAS}" readonly="true" size="14"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText value="Demora: " />
-											<p:inputText id="IMDGAS" value="#{GestorDetallesGasto.sIMDGAS}" disabled="true" size="14"/>
+											<p:inputText id="IMDGAS" value="#{GestorDetallesGasto.sIMDGAS}" readonly="true" size="14"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText value="Costas: " />
-											<p:inputText id="IMCOST" value="#{GestorDetallesGasto.sIMCOST}" disabled="true" size="14"/>
+											<p:inputText id="IMCOST" value="#{GestorDetallesGasto.sIMCOST}" readonly="true" size="14"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText value="Otros incrementos: " />
-											<p:inputText id="IMOGAS" value="#{GestorDetallesGasto.sIMOGAS}" disabled="true" size="14"/>
+											<p:inputText id="IMOGAS" value="#{GestorDetallesGasto.sIMOGAS}" readonly="true" size="14"/>
 											<h:outputText value="¤"/>
 														</h:panelGrid>
 													</p:panel>
@@ -178,7 +179,7 @@
 													<p:panel>
 														<h:panelGrid columns="3" cellpadding="5">
 											<h:outputText value="Descuentos: " />
-											<p:inputText id="IMDTGA" value="#{GestorDetallesGasto.sIMDTGA}" disabled="true" size="14"/>
+											<p:inputText id="IMDTGA" value="#{GestorDetallesGasto.sIMDTGA}" readonly="true" size="14"/>
 											<h:outputText value="¤"/>
 
 
@@ -190,12 +191,12 @@
 
 
 											<h:outputText value="Impuestos: " />
-											<p:inputText id="IMIMGA" value="#{GestorDetallesGasto.sIMIMGA}" disabled="true" size="14"/>
+											<p:inputText id="IMIMGA" value="#{GestorDetallesGasto.sIMIMGA}" readonly="true" size="14"/>
 											<h:outputText value="¤"/>
 
 
 													<h:outputText value="Tipo de impuesto: " />
-													<p:inputText id="COIMPT" value="#{GestorDetallesGasto.sCOIMPT}" disabled="true" size="14"/>
+													<p:inputText id="COIMPT" value="#{GestorDetallesGasto.sCOIMPT}" readonly="true" size="14"/>
 													
 														</h:panelGrid>
 													</p:panel>
@@ -207,16 +208,16 @@
 									<p:fieldset legend="Conexión">
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Codigo de entidad: " />
-											<p:inputText id="COENCX" value="#{GestorDetallesGasto.sCOENCX}" disabled="true" size="5"/>
+											<p:inputText id="COENCX" value="#{GestorDetallesGasto.sCOENCX}" readonly="true" size="5"/>
 
 											<h:outputText value="Oficina de emision: " />
-											<p:inputText id="COOFCX" value="#{GestorDetallesGasto.sCOOFCX}" disabled="true" size="5"/>
+											<p:inputText id="COOFCX" value="#{GestorDetallesGasto.sCOOFCX}" readonly="true" size="5"/>
 
 											<h:outputText value="Numero de conexion: " />
-											<p:inputText id="NUCONE" value="#{GestorDetallesGasto.sNUCONE}" disabled="true" size="5"/>
+											<p:inputText id="NUCONE" value="#{GestorDetallesGasto.sNUCONE}" readonly="true" size="5"/>
 
 											<h:outputText value="Fecha del pago por conexion: " />
-											<p:inputText id="FMPAGN" value="#{GestorDetallesGasto.sFMPAGN}" disabled="true" size="9"/>
+											<p:inputText id="FMPAGN" value="#{GestorDetallesGasto.sFMPAGN}" readonly="true" size="9"/>
 										</h:panelGrid>
 									</p:fieldset>
 </p:panel>
@@ -233,14 +234,14 @@
 										<p:panel>
 											<h:panelGrid columns="2" cellpadding="5">
 												<h:outputText for="FEPGPR" value="Fecha de Pago al proveedor: " />
-												<p:inputText id="FEPGPR" value="#{GestorDetallesGasto.sFEPGPR}" disabled="true" size="9"/>
+												<p:inputText id="FEPGPR" value="#{GestorDetallesGasto.sFEPGPR}" readonly="true" size="9"/>
 											</h:panelGrid>
 										</p:panel>
 
 										<p:panel>
 											<h:panelGrid columns="3" cellpadding="5">
 												<h:outputText value="Tipo de pago: "/>
-												<p:inputText id="DESCRIPCION" value="#{GestorDetallesGasto.sDescripcion}" size="25" maxlength="25" disabled="true"/>
+												<p:inputText id="DESCRIPCION" value="#{GestorDetallesGasto.sDescripcion}" size="25" maxlength="25" readonly="true"/>
 												<p:commandButton type="button" value="Detalles" onclick="dlgDetallesTransferencia.show()" disabled="#{GestorDetallesGasto.bDetallesTransferencia}"/> 
 											</h:panelGrid>
 									  </p:panel>
@@ -250,7 +251,7 @@
 
 												<h:outputText for="RECARGO" value="Recargo adicional en pago: " />
 
-												<p:inputText id="RECARGO" value="#{GestorDetallesGasto.sRecargoAdicional}" size="10" maxlength="10" disabled="true"/>
+												<p:inputText id="RECARGO" value="#{GestorDetallesGasto.sRecargoAdicional}" size="10" maxlength="10" readonly="true"/>
 
 											</h:panelGrid>
 										</p:panel>
@@ -263,16 +264,16 @@
 									<p:panel>
 										<h:panelGrid columns="4" cellpadding="5">
 											<h:outputText value="Indicador de autorizacion: " />
-											<p:inputText id="BIAUTO" value="#{GestorDetallesGasto.sBIAUTO}" disabled="true" size="0"/>
+											<p:inputText id="BIAUTO" value="#{GestorDetallesGasto.sBIAUTO}" readonly="true" size="0"/>
 
 											<h:outputText value="Motivo: " />
-											<p:inputText id="COMONA" value="#{GestorDetallesGasto.sCOMONA}" disabled="true" size="0"/>
+											<p:inputText id="COMONA" value="#{GestorDetallesGasto.sCOMONA}" readonly="true" size="0"/>
 										</h:panelGrid>
 									</p:panel>
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Fecha de autorizacion del gasto: " />
-											<p:inputText id="FEAUFA" value="#{GestorDetallesGasto.sFEAUFA}" disabled="true" size="9"/>
+											<p:inputText id="FEAUFA" value="#{GestorDetallesGasto.sFEAUFA}" readonly="true" size="9"/>
 
 
 										</h:panelGrid>
@@ -285,7 +286,7 @@
 										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText value="Fecha de anulacion del gasto: " />
-											<p:inputText id="FEAGTO" value="#{GestorDetallesGasto.sFEAGTO}" disabled="true" size="9"/>
+											<p:inputText id="FEAGTO" value="#{GestorDetallesGasto.sFEAGTO}" readonly="true" size="9"/>
 
 
 										</h:panelGrid>
@@ -298,17 +299,17 @@
 									<p:panel>
 										<h:panelGrid columns="2" cellpadding="5">
 											<h:outputText value="Fecha de entrada en la aplicación: " />
-											<p:inputText id="FEAPLI" value="#{GestorDetallesGasto.sFEAPLI}" disabled="true" size="9"/>
+											<p:inputText id="FEAPLI" value="#{GestorDetallesGasto.sFEAPLI}" readonly="true" size="9"/>
 
 											<h:outputText value="Código de aplicación INFOCAM: " />
-											<p:inputText id="COAPII" value="#{GestorDetallesGasto.sCOAPII}" disabled="true" size="4"/>
+											<p:inputText id="COAPII" value="#{GestorDetallesGasto.sCOAPII}" readonly="true" size="4"/>
 
 											<h:outputText value="Código de subaplicación INFOCAM: " />
-											<p:inputText id="COSPII" value="#{GestorDetallesGasto.sCOSPII}" disabled="true" size="3"/>
+											<p:inputText id="COSPII" value="#{GestorDetallesGasto.sCOSPII}" readonly="true" size="3"/>
 
 											<h:outputText
 												value="Número de cliente para intercambio de ficheros: " />
-											<p:inputText id="NUCLII" value="#{GestorDetallesGasto.sNUCLII}" disabled="true" size="14"/>
+											<p:inputText id="NUCLII" value="#{GestorDetallesGasto.sNUCLII}" readonly="true" size="14"/>
 										</h:panelGrid>
 									</p:panel>
 													<p:panel>
@@ -316,10 +317,10 @@
 
 
 											<h:outputText value="Codigo de unidad monetaria: " />
-											<p:inputText id="COUNMO" value="#{GestorDetallesGasto.sCOUNMO}" disabled="true" size="5"/>
+											<p:inputText id="COUNMO" value="#{GestorDetallesGasto.sCOUNMO}" readonly="true" size="5"/>
 
 											<h:outputText value="Tipo de Negociado: " />
-											<p:inputText id="COTNEG" value="#{GestorDetallesGasto.sCOTNEG}" disabled="true" size="0"/>
+											<p:inputText id="COTNEG" value="#{GestorDetallesGasto.sCOTNEG}" readonly="true" size="0"/>
 														</h:panelGrid>
 													</p:panel>
 								</h:panelGrid>
@@ -332,15 +333,15 @@
 						<p:panel>
 							<h:panelGrid columns="7" cellpadding="5">
 
-								<p:inputText id="PAIS" value="#{GestorDetallesGasto.sPais}" size="3" disabled="true"/>
+								<p:inputText id="PAIS" value="#{GestorDetallesGasto.sPais}" size="3" readonly="true"/>
 
-								<p:inputText id="DCIBAN" value="#{GestorDetallesGasto.sDCIBAN}" size="3" disabled="true"/>
+								<p:inputText id="DCIBAN" value="#{GestorDetallesGasto.sDCIBAN}" size="3" readonly="true"/>
 
 								<h:outputText value="Número de Cuenta: "/>
-								<p:inputText id="NUCCEN" value="#{GestorDetallesGasto.sNUCCEN}" size="5" disabled="true"/>
-								<p:inputText id="NUCCOF" value="#{GestorDetallesGasto.sNUCCOF}" size="5" disabled="true"/>
-								<p:inputText id="NUCCDI" value="#{GestorDetallesGasto.sNUCCDI}" size="3" disabled="true"/>
-								<p:inputText id="NUCCNT" value="#{GestorDetallesGasto.sNUCCNT}" size="11" disabled="true"/>
+								<p:inputText id="NUCCEN" value="#{GestorDetallesGasto.sNUCCEN}" size="5" readonly="true"/>
+								<p:inputText id="NUCCOF" value="#{GestorDetallesGasto.sNUCCOF}" size="5" readonly="true"/>
+								<p:inputText id="NUCCDI" value="#{GestorDetallesGasto.sNUCCDI}" size="3" readonly="true"/>
+								<p:inputText id="NUCCNT" value="#{GestorDetallesGasto.sNUCCNT}" size="11" readonly="true"/>
 
 							</h:panelGrid>
 						</p:panel>

@@ -16,6 +16,7 @@ import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.ReferenciaCatastral;
+import com.provisiones.types.Transicion;
 
 public class GestorDetallesReferencia implements Serializable 
 {
@@ -83,7 +84,9 @@ public class GestorDetallesReferencia implements Serializable
 		
 		//this.sNUPROF = ((GestorListaProvisiones)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaProvisiones")).getsNUPROF();
 		
-		String sCodReferencia = Sesion.cargarDetalle();
+		//String sCodReferencia = Sesion.cargarDetalle();
+		
+		String sCodReferencia = CLReferencias.recuperaID();
 		
 		logger.debug("sCodReferencia:|"+sCodReferencia+"|");
 		
@@ -113,7 +116,7 @@ public class GestorDetallesReferencia implements Serializable
 		    	this.sFERECA = Utils.recuperaFecha(referencia.getFERECA());
 
 		    	
-		    	this.sCOACES = CLReferencias.activoAsociadoRefereciaCatastralID(liCodReferencia);
+		    	this.sCOACES = Integer.toString(CLReferencias.obtenerActivoDeReferecia(liCodReferencia));
 		    	
 		    		
 		    	this.sNota = CLReferencias.buscarNota(liCodReferencia);
@@ -184,8 +187,16 @@ public class GestorDetallesReferencia implements Serializable
 			
 			if (sCOACES != "")
 			{
-		    	Sesion.guardaDetalle(sCOACES);
-		    	Sesion.guardarHistorial("detallesreferencia.xhtml","GestorDetallesActivo");
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"detallesreferencia.xhtml",
+		    			"GestorDetallesActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+				
+		    	//Sesion.guardaDetalle(sCOACES);
+		    	//Sesion.guardarHistorial("detallesreferencia.xhtml","GestorDetallesActivo");
 
 		    	sPagina = "detallesactivo.xhtml";
 		    	

@@ -1284,7 +1284,7 @@ public class GestorMovimientosGastos implements Serializable
 				
 				//this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
 
-				this.sNUPROF = CLGastos.buscarProvisionGastoID(liCodGastoB);
+				this.sNUPROF = CLGastos.obtenerProvisionDeGasto(liCodGastoB);
 				
 				//this.sCOTERR = ValoresDefecto.DEF_COTERR;
 				//this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);

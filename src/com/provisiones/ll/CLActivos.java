@@ -12,6 +12,7 @@ import com.provisiones.dal.qm.QMActivos;
 import com.provisiones.dal.qm.registros.QMRegistroActivos;
 
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Activo;
 import com.provisiones.types.tablas.ActivoTabla;
@@ -125,6 +126,47 @@ public final class CLActivos
 	public static EstadoActivoTabla buscarEstadoActivo (int iCodCOACES)
 	{
 		return QMRegistroActivos.getEstadoActivo(ConnectionManager.getDBConnection(), iCodCOACES);
+	}
+	
+	//Gestion de IDs
+	public static String recuperaID()
+	{
+		String sID = "";
+		
+		int iTipoID = Sesion.cargarTipoID();
+		
+		String sIDCargado = Sesion.cargarID();
+
+		logger.debug("iTipoID:|"+iTipoID+"|");
+		logger.debug("sID:|"+sID+"|");
+		
+		try
+		{
+			switch (iTipoID) 
+			{
+			case ValoresDefecto.ID_CUOTA:
+				sID = Integer.toString(CLCuotas.obtenerActivoDeCuota(Long.parseLong(sIDCargado)));
+				break;
+			case ValoresDefecto.ID_REFERENCIA:
+				sID = Integer.toString(CLReferencias.obtenerActivoDeReferecia(Long.parseLong(sIDCargado)));
+				break;
+			case ValoresDefecto.ID_RECURSO:
+				sID = Integer.toString(CLImpuestos.obtenerActivoDeRecurso(Long.parseLong(sIDCargado)));
+				break;
+			case ValoresDefecto.ID_ACTIVO:
+				sID = sIDCargado;
+				break;
+			case ValoresDefecto.ID_GASTO:
+				sID = Integer.toString(CLGastos.obtenerActivoDeGasto(Long.parseLong(sIDCargado)));
+				break;
+			}
+		}
+		catch(NumberFormatException nfe)
+		{
+			sID = "";
+		}
+		
+		return sID;
 	}
 	
 	public static int modificaBloqueoActivo(EstadoActivoTabla estadoactivo)

@@ -20,6 +20,8 @@ import com.provisiones.ll.CLProvisiones;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
@@ -664,13 +666,11 @@ public class GestorListaGastos implements Serializable
 				else if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
 				 
 				{
-					if (sComparadorFA.isEmpty()) 
+					String sImporte = "";
+					
+					if (!sComparadorFA.isEmpty())
 					{
-						sIMNGASFA = "";
-					}
-					else
-					{
-						sIMNGASFA = Utils.compruebaImporte(sIMNGASFA);
+						sImporte = Utils.compruebaImporte(sIMNGASFA);
 					}
 					
 					GastoTabla filtro = new GastoTabla(
@@ -687,7 +687,7 @@ public class GestorListaGastos implements Serializable
 							Utils.compruebaFecha(sFEDEVEFA),   
 							"",   
 							"",  
-							sIMNGASFA,
+							sImporte,
 							sEstadoGastoFA,
 							"",
 							"",
@@ -942,12 +942,20 @@ public class GestorListaGastos implements Serializable
 		    	//this.sCodGasto = Long.toString(CLGastos.buscarCodigoGasto(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA,sCOSBGA,Utils.compruebaFecha(sFEDEVE)));
 		    	this.sCodGasto = gastoseleccionado.getsGastoID();
 		    	
-		    	
 		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
 		    	
-		    	Sesion.guardaDetalle(sCodGasto);
-		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listagastos.xhtml","GestorDetallesGasto");
+		    	Transicion transicion = new Transicion (
+		    			sCodGasto,
+		    			ValoresDefecto.ID_GASTO,
+		    			"listagastos.xhtml",
+		    			"GestorDetallesGasto");
+		    	
+		    	Sesion.guardarTransicion(transicion, true);
+		    	
+		    	
+		    	//Sesion.guardaDetalle(sCodGasto);
+		    	//Sesion.limpiarHistorial();
+		    	//Sesion.guardarHistorial("listagastos.xhtml","GestorDetallesGasto");
 
 		    	sPagina = "detallesgasto.xhtml";
 		    	

@@ -22,7 +22,9 @@ import com.provisiones.ll.CLProvisiones;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ComunidadTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
@@ -699,10 +701,18 @@ public class GestorListaProvisiones implements Serializable
 			{
 				this.sNUPROF  = provisionseleccionada.getNUPROF();
 				logger.debug("sNUPROF:|"+sNUPROF+"|");
+				
+		    	Transicion transicion = new Transicion (
+		    			sNUPROF,
+		    			ValoresDefecto.ID_PROVISION,
+		    			"listaprovisiones.xhtml",
+		    			"GestorDetallesProvision");
 		    	
-		    	Sesion.guardaDetalle(sNUPROF);
-		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listaprovisiones.xhtml","GestorDetallesProvision");
+		    	Sesion.guardarTransicion(transicion, true);
+		    	
+		    	//Sesion.guardaDetalle(sNUPROF);
+		    	//Sesion.limpiarHistorial();
+		    	//Sesion.guardarHistorial("listaprovisiones.xhtml","GestorDetallesProvision");
 
 		    	sPagina = "detallesprovision.xhtml";
 		    	

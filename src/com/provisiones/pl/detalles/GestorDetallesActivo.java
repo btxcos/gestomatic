@@ -13,12 +13,15 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
+import com.provisiones.ll.CLCuotas;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Activo;
+import com.provisiones.types.Transicion;
 
 public class GestorDetallesActivo implements Serializable 
 {
@@ -170,7 +173,9 @@ public class GestorDetallesActivo implements Serializable
 	public void cargarDetallesActivo()
 	{
 
-		this.sCOACES  = Sesion.cargarDetalle();
+		//this.sCOACES  = Sesion.cargarDetalle();
+		
+		this.sCOACES = CLActivos.recuperaID();
 		
 		logger.debug("sCOACES:|"+sCOACES+"|");
 		
@@ -294,6 +299,9 @@ public class GestorDetallesActivo implements Serializable
 			
 			this.bSinComunidad = !CLComunidades.esActivoVinculadoAComunidad(iCOACES);
 			this.bSinGastos = !CLGastos.esActivoConGastos(iCOACES);
+			this.bSinCuotas = !CLCuotas.tieneCuotasActivo(iCOACES);
+			this.bSinReferenciasCatastrales = true;//!CLReferencias.estaAsociado(iCOACES);
+			this.bSinRecursos = true;//!CLImpuestos.tieneRecursosActivo(iCOACES);
 
 		}
 		
@@ -315,8 +323,16 @@ public class GestorDetallesActivo implements Serializable
 				{
 			    	String sCodComunidad = Long.toString(CLComunidades.buscarCodigoComunidadDeActivo(Integer.parseInt(sCOACES)));
 
-			    	Sesion.guardaDetalle(sCodComunidad);
-			    	Sesion.guardarHistorial("detallesactivo.xhtml","GestorDetallesComunidad");
+			    	Transicion transicion = new Transicion (
+			    			sCodComunidad,
+			    			ValoresDefecto.ID_COMUNIDAD,
+			    			"detallesactivo.xhtml",
+			    			"GestorDetallesComunidad");
+			    	
+			    	Sesion.guardarTransicion(transicion, false);
+			    	
+			    	//Sesion.guardaDetalle(sCodComunidad);
+			    	//Sesion.guardarHistorial("detallesactivo.xhtml","GestorDetallesComunidad");
 
 			    	sPagina = "detallescomunidad.xhtml";
 			    	
@@ -373,10 +389,180 @@ public class GestorDetallesActivo implements Serializable
 			
 			if (!this.sCOACES.isEmpty())
 			{
-		    	Sesion.guardaDetalle(sCOACES);
-		    	Sesion.guardarHistorial("detallesactivo.xhtml","GestorListaGastosActivo");
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"detallesactivo.xhtml",
+		    			"GestorListaGastosActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+				
+		    	//Sesion.guardaDetalle(sCOACES);
+		    	//Sesion.guardarHistorial("detallesactivo.xhtml","GestorListaGastosActivo");
 
 		    	sPagina = "listagastosactivo.xhtml";
+		    	
+				try 
+				{
+					logger.debug("Redirigiendo...");
+					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+				}
+				catch (IOException e)
+				{
+					sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
+			}
+			else
+			{
+
+				sMsg = "ERROR: No se ha seleccionado ningún activo.";
+
+				msg = Utils.pfmsgFatal(sMsg);
+				
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+			}
+			
+			
+		}
+    }
+	
+	public void cargarCuotas(ActionEvent actionEvent) 
+    {  
+		String sPagina = ".";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			if (!this.sCOACES.isEmpty())
+			{
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"detallesactivo.xhtml",
+		    			"GestorListaCuotasActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+
+		    	sPagina = "listacuotasactivo.xhtml";
+		    	
+				try 
+				{
+					logger.debug("Redirigiendo...");
+					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+				}
+				catch (IOException e)
+				{
+					sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
+			}
+			else
+			{
+
+				sMsg = "ERROR: No se ha seleccionado ningún activo.";
+
+				msg = Utils.pfmsgFatal(sMsg);
+				
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+			}
+			
+			
+		}
+    }
+	
+	public void cargarReferenciasCatastrales(ActionEvent actionEvent) 
+    {  
+		String sPagina = ".";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			if (!this.sCOACES.isEmpty())
+			{
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"detallesactivo.xhtml",
+		    			"GestorListaCuotasActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+
+		    	sPagina = "listacuotasactivo.xhtml";
+		    	
+				try 
+				{
+					logger.debug("Redirigiendo...");
+					FacesContext.getCurrentInstance().getExternalContext().redirect(sPagina);
+				}
+				catch (IOException e)
+				{
+					sMsg = "ERROR: Ocurrió un problema al acceder a los detalles. Por favor, avise a soporte.";
+					
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+					
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
+			}
+			else
+			{
+
+				sMsg = "ERROR: No se ha seleccionado ningún activo.";
+
+				msg = Utils.pfmsgFatal(sMsg);
+				
+				logger.error(sMsg);
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+			}
+			
+			
+		}
+    }
+	
+	public void cargarRecursos(ActionEvent actionEvent) 
+    {  
+		String sPagina = ".";
+		
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			if (!this.sCOACES.isEmpty())
+			{
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"detallesactivo.xhtml",
+		    			"GestorListaCuotasActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+
+		    	sPagina = "listacuotasactivo.xhtml";
 		    	
 				try 
 				{

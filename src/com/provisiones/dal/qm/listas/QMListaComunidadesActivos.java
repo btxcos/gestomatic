@@ -484,6 +484,76 @@ public final class QMListaComunidadesActivos
 		return bEncontrado;
 	}
 	
+	public static long getComunidadActivo(Connection conexion, int iCodCOACES)
+	{
+		boolean bEncontrado = false;
+		
+		long liCodComunidad = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+				       + CAMPO2  +               
+				       " FROM " 
+				       + TABLA + 
+				       " WHERE "
+				       + CAMPO1 + " = '" + iCodCOACES + "'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						liCodComunidad = rs.getLong(CAMPO2);
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liCodComunidad = 0;
+				
+				bEncontrado = false;
+
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liCodComunidad;
+	}
+	
+	
 	public static long getMovimientoDeActivoVinculadoComunidad(Connection conexion, long liCodComunidad, int iCodCOACES)
 	{
 		long liMovimiento = 0;

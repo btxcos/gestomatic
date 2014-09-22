@@ -15,6 +15,8 @@ import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ReferenciaTabla;
 
@@ -287,13 +289,21 @@ public class GestorListaReferencias implements Serializable
 
 		    	this.sNURCAT  = referenciaseleccionada.getNURCAT();
 		    	
-		    	String sCodReferncia = Long.toString(CLReferencias.buscarCodigoReferencia(sNURCAT));
+		    	String sCodReferencia = Long.toString(CLReferencias.buscarCodigoReferencia(sNURCAT));
 		
-		    	logger.debug("sCodReferncia:|"+sCodReferncia+"|");
+		    	logger.debug("sCodReferencia:|"+sCodReferencia+"|");
+
+		    	Transicion transicion = new Transicion (
+		    			sCodReferencia,
+		    			ValoresDefecto.ID_REFERENCIA,
+		    			"listareferencias.xhtml",
+		    			"GestorDetallesReferencia");
 		    	
-		    	Sesion.guardaDetalle(sCodReferncia);
-		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listareferencias.xhtml","GestorDetallesReferencia");
+		    	Sesion.guardarTransicion(transicion, true);
+		    	
+		    	//Sesion.guardaDetalle(sCodReferencia);
+		    	//Sesion.limpiarHistorial();
+		    	//Sesion.guardarHistorial("listareferencias.xhtml","GestorDetallesReferencia");
 
 		    	sPagina = "detallesreferencia.xhtml";
 		    	

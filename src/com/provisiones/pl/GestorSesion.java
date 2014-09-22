@@ -32,7 +32,8 @@ public class GestorSesion implements Serializable
 	private String sMensaje = "";
 	private boolean bComprobado = false;
 	
-	private String sDetalle = "";
+	private String sID = "";
+	private int iTipoID = 0;
 	
 	private LinkedList<Historial> historial = new  LinkedList<Historial>();
 	
@@ -248,12 +249,20 @@ public class GestorSesion implements Serializable
 		return bComprobado;
 	}
 
-	public String getsDetalle() {
-		return sDetalle;
+	public String getsID() {
+		return sID;
 	}
 
-	public void setsDetalle(String sDetalle) {
-		this.sDetalle = sDetalle;
+	public void setsID(String sID) {
+		this.sID = sID;
+	}
+
+	public int getiTipoID() {
+		return iTipoID;
+	}
+
+	public void setiTipoID(int iTipoID) {
+		this.iTipoID = iTipoID;
 	}
 
 	public LinkedList<Historial> getHistorial() {

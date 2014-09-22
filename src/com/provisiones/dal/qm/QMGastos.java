@@ -1793,6 +1793,76 @@ public final class QMGastos
 		return sFEDEVE;
 	}
 	
+	public static int getActivoGasto(Connection conexion, long liGastoID)
+	{
+		int iCOACES = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ CAMPO2 + 
+					" FROM "
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1  + " = '"+ liGastoID +"'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						iCOACES = rs.getInt(CAMPO2);
+						
+						logger.debug("Encontrado el registro!");
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				iCOACES = 0;
+
+				logger.error("ERROR GASTO:|"+liGastoID);
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return iCOACES;
+	}
+	
 	public static String getFechaAutorizado(Connection conexion, long liGastoID)
 	{
 		String sFecha = "";
@@ -2820,10 +2890,10 @@ public final class QMGastos
 
 			boolean bEncontrado = false;
 			
-			String sCondicionFEDEVE = filtro.getFEDEVE().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR)? "": CAMPO7 + " >= '"+filtro.getFEDEVE()+"' AND ";
-			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()? "": CAMPO3 + " >= '"+filtro.getCOGRUG()+"' AND ";
-			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()? "": CAMPO4 + " >= '"+filtro.getCOTPGA()+"' AND ";
-			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()? "": CAMPO5 + " >= '"+filtro.getCOSBGA()+"' AND ";
+			String sCondicionFEDEVE = filtro.getFEDEVE().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR)? "": CAMPO7 + " = '"+filtro.getFEDEVE()+"' AND ";
+			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()? "": CAMPO3 + " = '"+filtro.getCOGRUG()+"' AND ";
+			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()? "": CAMPO4 + " = '"+filtro.getCOTPGA()+"' AND ";
+			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()? "": CAMPO5 + " = '"+filtro.getCOSBGA()+"' AND ";
 			
 			String sCondicionEstado = filtro.getESTADO().isEmpty()? 
 					CAMPO34 + " IN ('" + ValoresDefecto.DEF_GASTO_ESTIMADO + "','" + ValoresDefecto.DEF_GASTO_CONOCIDO +"')"
@@ -3099,10 +3169,10 @@ public final class QMGastos
 			
 			boolean bEncontrado = false;
 
-			String sCondicionFEDEVE = filtro.getFEDEVE().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR)? "": CAMPO7 + " >= '"+filtro.getFEDEVE()+"' AND ";
-			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()? "": CAMPO3 + " >= '"+filtro.getCOGRUG()+"' AND ";
-			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()? "": CAMPO4 + " >= '"+filtro.getCOTPGA()+"' AND ";
-			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()? "": CAMPO5 + " >= '"+filtro.getCOSBGA()+"' AND ";
+			String sCondicionFEDEVE = filtro.getFEDEVE().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR)? "": CAMPO7 + " = '"+filtro.getFEDEVE()+"' AND ";
+			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()? "": CAMPO3 + " = '"+filtro.getCOGRUG()+"' AND ";
+			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()? "": CAMPO4 + " = '"+filtro.getCOTPGA()+"' AND ";
+			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()? "": CAMPO5 + " = '"+filtro.getCOSBGA()+"' AND ";
 			
 			String sCondicionEstado = filtro.getESTADO().isEmpty()?	"":CAMPO34 + " = '"+filtro.getESTADO()+"' AND "; 
 			

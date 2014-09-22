@@ -14,6 +14,7 @@ import com.provisiones.dal.qm.listas.errores.QMListaErroresCuotas;
 import com.provisiones.dal.qm.movimientos.QMMovimientosCuotas;
 
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Cuota;
@@ -85,9 +86,9 @@ public final class CLCuotas
 	}
 	
 	//Interfaz básico
-	public static ArrayList<ActivoTabla> buscarActivosConCuotas (ActivoTabla activo)
+	public static ArrayList<ActivoTabla> buscarActivosConCuotas (ActivoTabla filtro)
 	{
-		return QMListaCuotas.buscaActivosConCuotas(ConnectionManager.getDBConnection(),activo);
+		return QMListaCuotas.buscaActivosConCuotas(ConnectionManager.getDBConnection(),filtro);
 	}
 
 	public static ArrayList<CuotaTabla> buscarCuotasActivo (int iCOACES)
@@ -95,14 +96,29 @@ public final class CLCuotas
 		return QMCuotas.buscaCuotasActivo(ConnectionManager.getDBConnection(),iCOACES);
 	}
 	
+	public static ArrayList<CuotaTabla> buscarCuotasActivoConFiltro (CuotaTabla filtro, String sComparador)
+	{
+		return QMCuotas.buscaCuotasActivoPorFiltro(ConnectionManager.getDBConnection(),filtro, sComparador);
+	}
+	
 	public static ArrayList<CuotaTabla> buscarCuotasComunidad (String sCodCOCLDO, String sCodNUDCOM)
 	{
 		return QMCuotas.buscaCuotasComunidad(ConnectionManager.getDBConnection(),sCodCOCLDO,sCodNUDCOM);
 	}
 	
+	public static ArrayList<CuotaTabla> buscarCuotasComunidadConFiltro (CuotaTabla filtro, String sComparador)
+	{
+		return QMCuotas.buscaCuotasComunidadPorFiltro(ConnectionManager.getDBConnection(),filtro,sComparador);
+	}	
+	
 	public static MovimientoCuota buscarMovimientoCuota (long liCodMovimiento)
 	{
 		return QMMovimientosCuotas.getMovimientoCuota(ConnectionManager.getDBConnection(),liCodMovimiento);
+	}
+	
+	public static int obtenerActivoDeCuota (long liCodCuota)
+	{
+		return QMCuotas.getActivoCuota(ConnectionManager.getDBConnection(),liCodCuota);
 	}
 	
 	public static String buscarNota (long liCodCuota)
@@ -118,6 +134,13 @@ public final class CLCuotas
 	public static Cuota buscarDetallesCuota (long liCodCuota)
 	{
 		return QMCuotas.getDetallesCuota(ConnectionManager.getDBConnection(),liCodCuota);
+	}
+	
+	public static long obtenerComunidadCuota (long liCodCuota)
+	{
+		Cuota cuota = QMCuotas.getCuota(ConnectionManager.getDBConnection(),liCodCuota);
+		
+		return CLComunidades.buscarCodigoComunidad(cuota.getCOCLDO(), cuota.getNUDCOM());
 	}
 	
 	public static boolean guardarNota (long liCodCuota, String sNota)
@@ -153,6 +176,36 @@ public final class CLCuotas
 	public static boolean tieneCuotasComunidad (String sCodCOCLDO, String sCodNUDCOM)
 	{
 		return QMCuotas.tieneCuotasComunidad(ConnectionManager.getDBConnection(),sCodCOCLDO, sCodNUDCOM);
+	}
+	
+	//Gestion de IDs
+	public static String recuperaID()
+	{
+		String sID = "";
+		
+		int iTipoID = Sesion.cargarTipoID();
+		
+		String sIDCargado = Sesion.cargarID();
+		
+		try
+		{
+			switch (iTipoID) 
+			{
+			case ValoresDefecto.ID_CUOTA:
+				sID = sIDCargado;
+				break;
+			case ValoresDefecto.ID_GASTO:
+				sID = Long.toString(CLGastos.obtenerCuotaDeGasto(Long.parseLong(sIDCargado)));
+				break;
+
+			}
+		}
+		catch(NumberFormatException nfe)
+		{
+			sID = "";
+		}
+		
+		return sID;
 	}
 	
 	public static int actualizarCuotaLeida(String linea)

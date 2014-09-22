@@ -70,6 +70,10 @@ public class GestorCuotas implements Serializable
 	
 	private Map<String,String> tiposcocldoHM = new LinkedHashMap<String, String>();
 	
+	private Map<String,String> tiposcosbacHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposptpagoHM = new LinkedHashMap<String, String>();
+	
 	public GestorCuotas()
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -79,6 +83,22 @@ public class GestorCuotas implements Serializable
 			tiposcocldoHM.put("C.I.F.",                     "2");
 			tiposcocldoHM.put("C.I.F país extranjero.",     "5");
 			tiposcocldoHM.put("Otros persona jurídica.",    "J");
+			
+			tiposcosbacHM.put("Comunidad",	                   	"0");  
+			tiposcosbacHM.put("Ordinaria",                     	"1");  
+			tiposcosbacHM.put("Extras Comunidad",              	"2");  
+			tiposcosbacHM.put("Mancomunidad",                  	"3");  
+			tiposcosbacHM.put("Extras Mancomunidad",           	"4");  
+			tiposcosbacHM.put("Obras comunidad",               	"5");
+			
+			tiposptpagoHM.put("APERIODICO",      "1");
+			tiposptpagoHM.put("MENSUAL",         "2");
+			tiposptpagoHM.put("BIMENSUAL",       "3");
+			tiposptpagoHM.put("TRIMESTRAL",      "4");
+			tiposptpagoHM.put("CUATRIMESTRAL",   "5");
+			tiposptpagoHM.put("SEMESTRAL",       "6");
+			tiposptpagoHM.put("ANUAL",           "7");
+			tiposptpagoHM.put("VARIOS PERIODOS", "8");
 		}
 	}
 	
@@ -761,5 +781,21 @@ public class GestorCuotas implements Serializable
 
 	public void setTiposcocldoHM(Map<String, String> tiposcocldoHM) {
 		this.tiposcocldoHM = tiposcocldoHM;
+	}
+
+	public Map<String, String> getTiposcosbacHM() {
+		return tiposcosbacHM;
+	}
+
+	public void setTiposcosbacHM(Map<String, String> tiposcosbacHM) {
+		this.tiposcosbacHM = tiposcosbacHM;
+	}
+
+	public Map<String, String> getTiposptpagoHM() {
+		return tiposptpagoHM;
+	}
+
+	public void setTiposptpagoHM(Map<String, String> tiposptpagoHM) {
+		this.tiposptpagoHM = tiposptpagoHM;
 	}
 }

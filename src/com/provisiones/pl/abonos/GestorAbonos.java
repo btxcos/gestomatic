@@ -1067,7 +1067,7 @@ public class GestorAbonos implements Serializable
 			
 			//this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
 
-			this.sNUPROF = CLGastos.buscarProvisionGastoID(liCodGastoB);
+			this.sNUPROF = CLGastos.obtenerProvisionDeGasto(liCodGastoB);
 			
 			this.sNotaOriginal = CLGastos.buscarNota(liCodGastoB);
 			this.sNota = sNotaOriginal;

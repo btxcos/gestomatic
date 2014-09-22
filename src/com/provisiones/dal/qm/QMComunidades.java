@@ -640,7 +640,8 @@ public final class QMComunidades
 		}
 
 		return liComunidadID;
-	}	
+	}
+	
 	
 	public static boolean existeComunidad(Connection conexion, long liComunidadID)
 	{

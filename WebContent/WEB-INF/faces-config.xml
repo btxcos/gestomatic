@@ -260,5 +260,10 @@
 		<managed-bean-class>com.provisiones.pl.listas.GestorListaGastosActivo</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaCuotasActivo</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.GestorListaCuotasActivo</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>

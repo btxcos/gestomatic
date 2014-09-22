@@ -67,10 +67,10 @@
 											<p:inputText id="NUPROF" value="#{GestorDetallesProvision.sNUPROF}" size="10" readonly="true"/>
 
 											<h:outputText for="Estado" value="Estado: " />
-											<p:inputText id="Estado" value="#{GestorDetallesProvision.sCodEstado}" size="12" disabled="true"/>
+											<p:inputText id="Estado" value="#{GestorDetallesProvision.sCodEstado}" size="12" readonly="true"/>
 
 											<h:outputText for="FEPFON" value="Fecha de cierre: " />
-											<p:inputText id="FEPFON" value="#{GestorDetallesProvision.sFEPFON}" size="9" disabled="true"/>
+											<p:inputText id="FEPFON" value="#{GestorDetallesProvision.sFEPFON}" size="9" readonly="true"/>
 
 										</h:panelGrid>
 									</p:panel>
@@ -78,16 +78,16 @@
 										<h:panelGrid columns="2" cellpadding="5">
 
 											<h:outputText for="TAS" value="Tipo de activos SAREB: " />
-											<p:inputText id="TAS" value="#{GestorDetallesProvision.sTAS}" size="25" disabled="true"/>
+											<p:inputText id="TAS" value="#{GestorDetallesProvision.sTAS}" size="25" readonly="true"/>
 
 											<h:outputText for="COSPAT" value="Sociedad patrimonial: " />
-											<p:inputText id="COSPAT" value="#{GestorDetallesProvision.sCOSPAT}" size="60" disabled="true"/>
+											<p:inputText id="COSPAT" value="#{GestorDetallesProvision.sCOSPAT}" size="60" readonly="true"/>
 
 											<h:outputText for="COGRUG" value="Grupo de gastos contenidos: " />
-											<p:inputText id="COGRUG" value="#{GestorDetallesProvision.sCOGRUG}" size="25" disabled="true"/>
+											<p:inputText id="COGRUG" value="#{GestorDetallesProvision.sCOGRUG}" size="25" readonly="true"/>
 
 											<h:outputText for="COTPGA" value="Tipo de gastos contenidos: " />
-											<p:inputText id="COTPGA" value="#{GestorDetallesProvision.sCOTPGA}" size="25" disabled="true"/>
+											<p:inputText id="COTPGA" value="#{GestorDetallesProvision.sCOTPGA}" size="25" readonly="true"/>
 
 										</h:panelGrid>
 									</p:panel>
@@ -95,14 +95,14 @@
 										<h:panelGrid columns="5" cellpadding="5">
 
 											<h:outputText for="NumGastos" value="Gastos en provisión: " />
-											<p:inputText id="NumGastos" value="#{GestorDetallesProvision.sNumGastos}" size="6" disabled="true"/>
+											<p:inputText id="NumGastos" value="#{GestorDetallesProvision.sNumGastos}" size="6" readonly="true"/>
 
 											<h:outputText for="ValorTotal" value="Valor de provisión: " />
-											<p:inputText id="ValorTotal" value="#{GestorDetallesProvision.sValorTotal}" size="20" disabled="true"/>
+											<p:inputText id="ValorTotal" value="#{GestorDetallesProvision.sValorTotal}" size="20" readonly="true"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText for="FechaEnvio" value="Fecha de envio: " />
-											<p:inputText id="FechaEnvio" value="#{GestorDetallesProvision.sFechaEnvio}" size="9" disabled="true"/>
+											<p:inputText id="FechaEnvio" value="#{GestorDetallesProvision.sFechaEnvio}" size="9" readonly="true"/>
 
 										</h:panelGrid>
 									</p:panel>
@@ -110,14 +110,14 @@
 										<h:panelGrid columns="5" cellpadding="5">
 
 											<h:outputText for="GastosAutorizados" value="Gastos autorizados: " />
-											<p:inputText id="GastosAutorizados" value="#{GestorDetallesProvision.sGastosAutorizados}" size="6" disabled="true"/>
+											<p:inputText id="GastosAutorizados" value="#{GestorDetallesProvision.sGastosAutorizados}" size="6" readonly="true"/>
 
 											<h:outputText for="ValorAutorizado" value="Valor autorizado: " />
-											<p:inputText id="ValorAutorizado" value="#{GestorDetallesProvision.sValorAutorizado}" size="20" disabled="true"/>
+											<p:inputText id="ValorAutorizado" value="#{GestorDetallesProvision.sValorAutorizado}" size="20" readonly="true"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText for="FechaAutorizado" value="Fecha de autorización: " />
-											<p:inputText id="FechaAutorizado" value="#{GestorDetallesProvision.sFechaAutorizado}" size="9" disabled="true"/>
+											<p:inputText id="FechaAutorizado" value="#{GestorDetallesProvision.sFechaAutorizado}" size="9" readonly="true"/>
 
 
 										</h:panelGrid>
@@ -127,10 +127,10 @@
 										<h:panelGrid columns="5" cellpadding="5">
 
 											<h:outputText for="FechaIngresado" value="Fecha de ingreso: " />
-											<p:inputText id="FechaIngresado" value="#{GestorDetallesProvision.sFechaIngresado}" size="9" disabled="true"/>
+											<p:inputText id="FechaIngresado" value="#{GestorDetallesProvision.sFechaIngresado}" size="9" readonly="true"/>
 
 											<h:outputText for="ValorIngresado" value="Valor ingresado: " />
-											<p:inputText id="ValorIngresado" value="#{GestorDetallesProvision.sValorIngresado}" size="20" disabled="true"/>
+											<p:inputText id="ValorIngresado" value="#{GestorDetallesProvision.sValorIngresado}" size="20" readonly="true"/>
 											<h:outputText value="¤"/>
 
 										</h:panelGrid>
@@ -140,14 +140,14 @@
 										<h:panelGrid columns="5" cellpadding="5">
 
 											<h:outputText for="GastosPagados" value="Gastos pagados: " />
-											<p:inputText id="GastosPagados" value="#{GestorDetallesProvision.sGastosPagados}" size="6" disabled="true"/>
+											<p:inputText id="GastosPagados" value="#{GestorDetallesProvision.sGastosPagados}" size="6" readonly="true"/>
 
 											<h:outputText for="ValorPagado" value="Valor pagado: " />
-											<p:inputText id="ValorPagado" value="#{GestorDetallesProvision.sValorPagado}" size="20" disabled="true"/>
+											<p:inputText id="ValorPagado" value="#{GestorDetallesProvision.sValorPagado}" size="20" readonly="true"/>
 											<h:outputText value="¤"/>
 
 											<h:outputText for="FechaPagado" value="Fecha de pago: " />
-											<p:inputText id="FechaPagado" value="#{GestorDetallesProvision.sFechaPagado}" size="9" disabled="true"/>
+											<p:inputText id="FechaPagado" value="#{GestorDetallesProvision.sFechaPagado}" size="9" readonly="true"/>
 
 										</h:panelGrid>
 									</p:panel>

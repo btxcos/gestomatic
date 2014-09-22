@@ -11,6 +11,15 @@ public final class ValoresDefecto
 	
 	public static final int MAX_GASTOS_PROVISION = 500;
 	
+	public static final int ID_COMUNIDAD = 1;
+	public static final int ID_CUOTA = 2;
+	public static final int ID_REFERENCIA = 3;
+	public static final int ID_RECURSO = 4;
+	public static final int ID_ACTIVO = 5;
+	public static final int ID_GASTO = 6;
+	public static final int ID_PROVISION = 7;
+	
+	
 	public static final String CAMPO_ALFA_SIN_INFORMAR = "";
 	public static final String CAMPO_NUME_SIN_INFORMAR = "0";
 	

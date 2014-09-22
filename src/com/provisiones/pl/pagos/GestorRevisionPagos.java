@@ -1195,7 +1195,7 @@ public class GestorRevisionPagos implements Serializable
 				
 				this.sImporteBase = Utils.recuperaImporte(false,Long.toString(gasto.getValor_total()));
 				
-				this.sNUPROF = CLGastos.buscarProvisionGastoID(liCodGasto);
+				this.sNUPROF = CLGastos.obtenerProvisionDeGasto(liCodGasto);
 				//this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, gasto.getFEDEVE());
 				actualizaProgreso();
 				

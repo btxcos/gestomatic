@@ -19,6 +19,8 @@ import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
@@ -527,7 +529,8 @@ public class GestorListaGastosActivo implements Serializable
 	public void cargarDetallesActivo()
 	{
 
-		this.sCOACES  = Sesion.cargarDetalle();
+		//this.sCOACES  = Sesion.cargarDetalle();
+		this.sCOACES  = CLActivos.recuperaID();
 		
 		logger.debug("sCOACES:|"+sCOACES+"|");
 		
@@ -662,10 +665,18 @@ public class GestorListaGastosActivo implements Serializable
 		    	
 		    	
 		    	logger.debug("sCodGasto:|"+sCodGasto+"|");
+
+		    	Transicion transicion = new Transicion (
+		    			sCodGasto,
+		    			ValoresDefecto.ID_GASTO,
+		    			"listagastosactivo.xhtml",
+		    			"GestorDetallesGasto");
 		    	
-		    	Sesion.guardaDetalle(sCodGasto);
-		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listagastos.xhtml","GestorDetallesGasto");
+		    	Sesion.guardarTransicion(transicion, false);
+		    	
+		    	//Sesion.guardaDetalle(sCodGasto);
+		    	//Sesion.limpiarHistorial();
+		    	//Sesion.guardarHistorial("listagastos.xhtml","GestorDetallesGasto");
 
 		    	sPagina = "detallesgasto.xhtml";
 		    	

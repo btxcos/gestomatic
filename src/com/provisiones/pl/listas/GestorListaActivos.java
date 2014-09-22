@@ -20,6 +20,7 @@ import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.ComunidadTabla;
 
@@ -350,12 +351,21 @@ public class GestorListaActivos implements Serializable {
 		    	this.sCOACES = activoseleccionado.getCOACES();
 
 		    	logger.debug("sCOACES:|"+sCOACES+"|");
-		    			    	
-		    	Sesion.guardaDetalle(sCOACES);
-		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listaactivos.xhtml","GestorDetallesActivo");
+		    	
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"listaactivos.xhtml",
+		    			"GestorDetallesComunidad");
+		    	
+		    	Sesion.guardarTransicion(transicion, true);
+		    	
+		    	//Sesion.guardaDetalle(sCOACES);
+		    	//Sesion.guardaTipoDetalle(ValoresDefecto.ID_ACTIVO);
+		    	//Sesion.limpiarHistorial();
+		    	//Sesion.guardarHistorial("listaactivos.xhtml","GestorDetallesComunidad");
 
-		    	sPagina = "detallesactivo.xhtml";
+		    	sPagina = "detallescomunidad.xhtml";
 		    	
 				try 
 				{
@@ -463,10 +473,19 @@ public class GestorListaActivos implements Serializable {
 		    	this.sCOACES = activoseleccionado.getCOACES();
 
 		    	logger.debug("sCOACES:|"+sCOACES+"|");
+		    	
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"listaactivos.xhtml",
+		    			"GestorDetallesActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, true);
 		    			    	
-		    	Sesion.guardaDetalle(sCOACES);
-		    	Sesion.limpiarHistorial();
-		    	Sesion.guardarHistorial("listaactivos.xhtml","GestorDetallesActivo");
+		    	//Sesion.guardaDetalle(sCOACES);
+		    	//Sesion.guardaTipoDetalle(ValoresDefecto.ID_ACTIVO);
+		    	//Sesion.limpiarHistorial();
+		    	//Sesion.guardarHistorial("listaactivos.xhtml","GestorDetallesActivo");
 
 		    	sPagina = "detallesactivo.xhtml";
 		    	

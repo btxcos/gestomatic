@@ -19,8 +19,10 @@ import com.provisiones.dal.qm.listas.errores.QMListaErroresGastos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosGastos;
 
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Comunidad;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Nota;
 import com.provisiones.types.Provision;
@@ -287,17 +289,30 @@ public final class CLGastos
 		return QMGastos.getDetallesGasto(ConnectionManager.getDBConnection(),liCodGasto);
 	}
 	
+	public static int obtenerActivoDeGasto(long liCodGasto)
+	{
+		return QMGastos.getActivoGasto(ConnectionManager.getDBConnection(),liCodGasto);
+	}
+
+	public static long obtenerCuotaDeGasto(long liCodGasto)
+	{
+		Gasto gasto = buscarGastoConCodigo(liCodGasto);
+		
+		Comunidad comunidad = CLComunidades.buscarComunidad(CLComunidades.buscarCodigoComunidadDeActivo(Integer.parseInt(gasto.getCOACES())));
+		
+		return CLCuotas.buscarCodigoCuota(Integer.parseInt(gasto.getCOACES()), comunidad.getsCOCLDO(), comunidad.getsNUDCOM(), gasto.getCOSBGA());
+	}
+	
 	public static String buscarNota (long liCodGasto)
 	{
 		return QMGastos.getNota(ConnectionManager.getDBConnection(),liCodGasto);
 	}
-	
+
 	public static long buscarValorTotal (long liCodGasto)
 	{
 		return QMGastos.getValorTotal(ConnectionManager.getDBConnection(), liCodGasto);
 	}
-	
-	
+
 	public static boolean guardarNota (long liCodGasto, String sNota)
 	{
 		return QMGastos.setNota(ConnectionManager.getDBConnection(),liCodGasto, sNota);
@@ -318,7 +333,7 @@ public final class CLGastos
 		return QMListaGastosProvisiones.getProvisionDeGasto(ConnectionManager.getDBConnection(),buscarCodigoGasto(iCodCOACES, sCodCOGRUG, sCodCOTPGA, sCodCOSBGA, sFEDEVE));
 	}
 	
-	public static String buscarProvisionGastoID(long liCodGasto)
+	public static String obtenerProvisionDeGasto(long liCodGasto)
 	{
 		return QMListaGastosProvisiones.getProvisionDeGasto(ConnectionManager.getDBConnection(),liCodGasto);
 	}
@@ -426,16 +441,33 @@ public final class CLGastos
 		return QMGastos.tieneGastos(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
-	//Interfaz avanzado
-	public static int eliminarMomivientosSuperfluos (long liCodGasto)
+	//Gestion de IDs
+	public static String recuperaID()
 	{
-		int iCodigo = 0;
+		String sID = "";
 		
+		int iTipoID = Sesion.cargarTipoID();
 		
+		String sIDCargado = Sesion.cargarID();
 		
-		return iCodigo;
+		try
+		{
+			switch (iTipoID) 
+			{
+			case ValoresDefecto.ID_GASTO:
+				sID = sIDCargado;
+				break;
+			}
+		}
+		catch(NumberFormatException nfe)
+		{
+			sID = "";
+		}
+		
+		return sID;
 	}
 	
+	//Interfaz avanzado
 	public static int ejecutaAbono (long liCodGasto, String sFechaEjecucion)
 	{
 		int iCodigo = -910;

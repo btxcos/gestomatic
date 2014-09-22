@@ -871,7 +871,7 @@ public class GestorGastos implements Serializable
 							msg = Utils.pfmsgError(sMsg);
 							logger.error(sMsg);
 						}
-						else if (/*sUrgente.equals(ValoresDefecto.DEF_SI) &&*/ !CLProvisiones.estadoProvision(sFNUPROF).equals(ValoresDefecto.DEF_PROVISION_ENVIADA))
+						else if (sUrgente.equals(ValoresDefecto.DEF_SI) && !CLProvisiones.estadoProvision(sFNUPROF).equals(ValoresDefecto.DEF_PROVISION_ENVIADA))
 						{
 							sMsg = "ERROR: La Provisión a forzar no se encuentra en el estado de Envio.";
 							msg = Utils.pfmsgError(sMsg);
@@ -893,7 +893,6 @@ public class GestorGastos implements Serializable
 							{
 								this.sNUPROF = CLProvisiones.provisionAsignada(Integer.parseInt(sCOACES),sCOGRUG,sCOTPGA);
 							}
-
 							
 							
 							if (sNUPROF.equals(""))

@@ -19,6 +19,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Comunidad;
 import com.provisiones.types.Cuenta;
+import com.provisiones.types.Transicion;
 import com.provisiones.types.tablas.ActivoTabla;
 
 public class GestorDetallesComunidad implements Serializable 
@@ -110,7 +111,12 @@ public class GestorDetallesComunidad implements Serializable
 		
 		//this.sNUPROF = ((GestorListaProvisiones)((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("GestorListaProvisiones")).getsNUPROF();
 		
-		String sCodComunidad = Sesion.cargarDetalle();
+		//int iTipoDetalle = Sesion.cargarTipoDetalle();
+		
+		//String sDetalle = Sesion.cargarDetalle();
+		
+		String sCodComunidad = CLComunidades.recuperaID();
+		
 		
 		logger.debug("sCodComunidad:|"+sCodComunidad+"|");
 		
@@ -308,8 +314,17 @@ public class GestorDetallesComunidad implements Serializable
 			
 			if (sCOACES != "")
 			{
-		    	Sesion.guardaDetalle(sCOACES);
-		    	Sesion.guardarHistorial("detallescomunidad.xhtml","GestorDetallesActivo");
+				
+		    	Transicion transicion = new Transicion (
+		    			sCOACES,
+		    			ValoresDefecto.ID_ACTIVO,
+		    			"detallescomunidad.xhtml",
+		    			"GestorDetallesActivo");
+		    	
+		    	Sesion.guardarTransicion(transicion, false);
+
+		    	//Sesion.guardaDetalle(sCOACES);
+		    	//Sesion.guardarHistorial("detallescomunidad.xhtml","GestorDetallesActivo");
 
 		    	sPagina = "detallesactivo.xhtml";
 		    	

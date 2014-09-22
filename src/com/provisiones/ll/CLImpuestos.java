@@ -14,6 +14,7 @@ import com.provisiones.dal.qm.listas.errores.QMListaErroresImpuestos;
 import com.provisiones.dal.qm.movimientos.QMMovimientosImpuestos;
 
 import com.provisiones.misc.Parser;
+import com.provisiones.misc.Sesion;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.ImpuestoRecurso;
@@ -117,6 +118,16 @@ public final class CLImpuestos
 		return QMImpuestos.getImpuestoRecurso(ConnectionManager.getDBConnection(),liCodImpuesto);
 	}
 	
+	public static int obtenerActivoDeRecurso (long liCodImpuesto)
+	{
+		return QMListaImpuestos.getActivoRecurso(ConnectionManager.getDBConnection(),liCodImpuesto);
+	}
+	
+	public static long obtenerReferenciaDeRecurso (long liCodImpuesto)
+	{
+		return CLReferencias.buscarCodigoReferencia(QMImpuestos.getReferenciaRecursoID(ConnectionManager.getDBConnection(),liCodImpuesto));
+	}
+	
 	public static String buscarNota (long liCodImpuesto)
 	{
 		return QMImpuestos.getNota(ConnectionManager.getDBConnection(),liCodImpuesto);
@@ -130,7 +141,12 @@ public final class CLImpuestos
 	public static boolean comprobarRelacion (String sCodNURCAT,String sCodCOSBAC, int iCodCOACES)
 	{
 		return QMListaImpuestos.compruebaRelacionImpuestoActivo(ConnectionManager.getDBConnection(),iCodCOACES, buscarCodigoImpuesto(sCodNURCAT, sCodCOSBAC));
-	}	
+	}
+	
+	public static boolean tieneRecursosActivo (int iCOACES)
+	{
+		return QMListaImpuestos.tieneRecursosActivo(ConnectionManager.getDBConnection(),iCOACES);
+	}
 
 	public static boolean estaDeBaja (String sCodNURCAT,String sCodCOSBAC)
 	{
@@ -146,6 +162,35 @@ public final class CLImpuestos
 	{
 		return QMMovimientosImpuestos.existeMovimientoImpuestoRecurso(ConnectionManager.getDBConnection(),liCodMovimiento);
 	}
+	
+	//Gestion de IDs
+		public static String recuperaID()
+		{
+			String sID = "";
+			
+			int iTipoID = Sesion.cargarTipoID();
+			
+			String sIDCargado = Sesion.cargarID();
+
+			logger.debug("iTipoID:|"+iTipoID+"|");
+			logger.debug("sID:|"+sID+"|");
+			
+			try
+			{
+				switch (iTipoID) 
+				{
+				case ValoresDefecto.ID_RECURSO:
+					sID = sIDCargado;
+					break;
+				}
+			}
+			catch(NumberFormatException nfe)
+			{
+				sID = "";
+			}
+			
+			return sID;
+		}
 	
 	public static int actualizarImpuestoLeido(String linea)
 	{
