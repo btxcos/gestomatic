@@ -103,6 +103,11 @@ public final class CLImpuestos
 		return QMListaImpuestos.buscaImpuestosActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 	
+	public static ArrayList<ImpuestoRecursoTabla> buscarImpuestosActivoConFiltro (ImpuestoRecursoTabla filtro, int iCodCOACES)
+	{
+		return QMListaImpuestos.buscaImpuestosActivoPorFiltro(ConnectionManager.getDBConnection(),filtro,iCodCOACES);
+	}
+	
 	public static MovimientoImpuestoRecurso buscarMovimientoImpuestoRecurso (long liCodMovimiento)
 	{
 		return QMMovimientosImpuestos.getMovimientoImpuestoRecurso(ConnectionManager.getDBConnection(),liCodMovimiento);

@@ -1,4 +1,4 @@
-package com.provisiones.pl.listas;
+package com.provisiones.pl.listas.activo;
 
 import java.io.IOException;
 import java.io.Serializable;

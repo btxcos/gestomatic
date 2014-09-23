@@ -294,7 +294,7 @@ public class GestorListaReferencias implements Serializable
 							Utils.compruebaFecha(sFERECAFA));
 					
 					//this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
-					this.tablareferencias = CLReferencias.buscarReferenciasActivo(filtro,sComparadorSueloFA,sComparadorCatastralFA, Integer.parseInt(sCOACES));
+					this.tablareferencias = CLReferencias.buscarReferenciasActivoConFiltro(filtro,sComparadorSueloFA,sComparadorCatastralFA, Integer.parseInt(sCOACES));
 					
 					if (getTablareferencias().size() == 0)
 					{

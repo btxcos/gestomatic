@@ -15,6 +15,7 @@ import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLComunidades;
 import com.provisiones.ll.CLCuotas;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLImpuestos;
 import com.provisiones.ll.CLReferencias;
 import com.provisiones.misc.Parser;
 import com.provisiones.misc.Sesion;
@@ -302,7 +303,7 @@ public class GestorDetallesActivo implements Serializable
 			this.bSinGastos = !CLGastos.esActivoConGastos(iCOACES);
 			this.bSinCuotas = !CLCuotas.tieneCuotasActivo(iCOACES);
 			this.bSinReferenciasCatastrales = !CLReferencias.estaAsociado(iCOACES);
-			this.bSinRecursos = true;//!CLImpuestos.tieneRecursosActivo(iCOACES);
+			this.bSinRecursos = !CLImpuestos.tieneRecursosActivo(iCOACES);
 
 		}
 		
@@ -559,11 +560,11 @@ public class GestorDetallesActivo implements Serializable
 		    			sCOACES,
 		    			ValoresDefecto.ID_ACTIVO,
 		    			"detallesactivo.xhtml",
-		    			"GestorListaCuotasActivo");
+		    			"GestorListaRecursosActivo");
 		    	
 		    	Sesion.guardarTransicion(transicion, false);
 
-		    	sPagina = "listacuotasactivo.xhtml";
+		    	sPagina = "listaimpuestosactivo.xhtml";
 		    	
 				try 
 				{

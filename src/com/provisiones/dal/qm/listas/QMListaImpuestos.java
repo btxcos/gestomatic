@@ -858,6 +858,131 @@ public final class QMListaImpuestos
 
 		return resultado;
 	}
+
+	public static ArrayList<ImpuestoRecursoTabla> buscaImpuestosActivoPorFiltro(Connection conexion, ImpuestoRecursoTabla filtro, int iCodCOACES)
+	{
+		ArrayList<ImpuestoRecursoTabla> resultado = new ArrayList<ImpuestoRecursoTabla>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			//Condiciones de filtro
+			String sCondicionNURCAT = filtro.getNURCAT().isEmpty()?"":QMImpuestos.CAMPO2 + " = '" + filtro.getNURCAT() + "' AND ";
+			String sCondicionCOSBAC = filtro.getCOSBAC().isEmpty()?"":QMImpuestos.CAMPO3 + " = '" + filtro.getCOSBAC() + "' AND ";
+			String sCondicionFEPRRE = (filtro.getFEPRRE().isEmpty() || filtro.getFEPRRE().equals("0"))?"":QMImpuestos.CAMPO4 + " = '" + filtro.getFEPRRE() + "' AND ";
+			String sCondicionFERERE = (filtro.getFERERE().isEmpty() || filtro.getFERERE().equals("0"))?"":QMImpuestos.CAMPO5 + " = '" + filtro.getFERERE() + "' AND ";
+			String sCondicionFEDEIN = (filtro.getFEDEIN().isEmpty() || filtro.getFEDEIN().equals("0"))?"":QMImpuestos.CAMPO6 + " = '" + filtro.getFEDEIN() + "' AND ";
+			String sCondicionBISODE = filtro.getBISODE().isEmpty()?"":QMImpuestos.CAMPO7 + " = '" + filtro.getBISODE() + "' AND ";
+			String sCondicionBIRESO = filtro.getBIRESO().isEmpty()?"":QMImpuestos.CAMPO8 + " = '" + filtro.getBIRESO() + "' AND ";
+			
+			logger.debug("Ejecutando Query...");
+
+			String sQuery = "SELECT "
+						   + QMImpuestos.CAMPO1 + ","   
+						   + QMImpuestos.CAMPO2 + ","
+						   + QMImpuestos.CAMPO3 + ","
+						   + QMImpuestos.CAMPO4 + ","
+						   + QMImpuestos.CAMPO5 + ","
+						   + QMImpuestos.CAMPO6 + ","
+						   + QMImpuestos.CAMPO7 + ","
+						   + QMImpuestos.CAMPO8 + ","
+						   + QMImpuestos.CAMPO9 + ","  
+						   + QMImpuestos.CAMPO10 +
+
+						   " FROM " 
+						   + QMImpuestos.TABLA + 
+						   " WHERE ("
+						   + sCondicionNURCAT
+						   + sCondicionCOSBAC
+						   + sCondicionFEPRRE
+						   + sCondicionFERERE
+						   + sCondicionFEDEIN
+						   + sCondicionBISODE
+						   + sCondicionBIRESO
+						   + QMImpuestos.CAMPO1 +" IN (SELECT "
+						   +  CAMPO2 + 
+						   " FROM " 
+						   + TABLA + 
+						   " WHERE " 
+						   + CAMPO1 + " = '" + iCodCOACES	+ "'))";					   
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						String sRecursoID  = rs.getString(QMImpuestos.CAMPO1);
+						String sNURCAT	   = rs.getString(QMImpuestos.CAMPO2);
+						String sCOSBAC     = rs.getString(QMImpuestos.CAMPO3);
+						String sDesCOSBAC  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TCOSBGAT21,QMCodigosControl.ICOSBGAT21,sCOSBAC);
+						String sFEPRRE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO4));
+						String sFERERE     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO5));
+						String sFEDEIN     = Utils.recuperaFecha(rs.getString(QMImpuestos.CAMPO6));
+						String sBISODE     = rs.getString(QMImpuestos.CAMPO7);
+						String sDesBISODE  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
+						String sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
+						String sDesBIRESO  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
+						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
+
+						ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
+								sRecursoID,
+								sNURCAT,
+								sCOSBAC,
+								sDesCOSBAC,
+								sFEPRRE,
+								sFERERE,
+								sFEDEIN,
+								sBISODE,
+								sDesBISODE,
+								sBIRESO,
+								sDesBIRESO,
+								sOBTEXC);
+						
+						resultado.add(impuestoencontrado);
+						
+						logger.debug("Encontrado el registro!");
+						
+						logger.debug(CAMPO1+":|"+iCodCOACES+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				resultado = new ArrayList<ImpuestoRecursoTabla>();
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}			
+		}
+
+		return resultado;
+	}
 	
 	public static ArrayList<ImpuestoRecursoTabla> buscaDevolucionesActivo(Connection conexion, int iCodCOACES)
 	{

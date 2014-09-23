@@ -1,4 +1,4 @@
-package com.provisiones.pl.listas;
+package com.provisiones.pl.listas.activo;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -175,7 +175,7 @@ public class GestorListaReferenciasActivo implements Serializable
 							Utils.compruebaFecha(sFERECAFA));
 					
 					//this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
-					this.tablareferencias = CLReferencias.buscarReferenciasActivo(filtro,sComparadorSueloFA,sComparadorCatastralFA, iCOACES);
+					this.tablareferencias = CLReferencias.buscarReferenciasActivoConFiltro(filtro,sComparadorSueloFA,sComparadorCatastralFA, iCOACES);
 					
 					if (getTablareferencias().size() == 0)
 					{

@@ -61,7 +61,7 @@
 													<h:outputText for="COACES" value="Activo: "/>
 													<p:inputMask id="COACES" value="#{GestorListaImpuestos.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
 													<p:message for="COACES" display="icon"/>
-													<p:commandButton value="Buscar Impuestos" update="impuestos, msgs, popup" actionListener="#{GestorListaImpuestos.buscarImpuestos}"/>	
+													<p:commandButton value="Buscar Recursos" update="impuestos, msgs, popup" oncomplete="dlgFiltrarRecursoActivo.show()"/>	
 												</h:panelGrid>
 											</p:panel>
 											<p:commandButton value="Buscar Activo" update="COACES, form:activos, msgs, popup" oncomplete="dlgBuscar.show()"/>		
@@ -256,6 +256,96 @@
 									</h:panelGrid>
 								</p:fieldset>
 							</p:dialog>
+					<p:dialog header="Filtrar Recursos Activo: " widgetVar="dlgFiltrarRecursoActivo" resizable="false">  
+									<p:fieldset legend="Filtro">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelFiltrarRecursoActivo">
+												<h:panelGrid columns="1" cellpadding="5">
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText for="NURCATFA" value="Referencia Catastral: " />
+															<p:inputText id="NURCATFA" value="#{GestorListaImpuestos.sNURCATFA}" size="22" maxlength="20"/>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText value="Impuesto: "/>
+															<p:selectOneMenu id="COSBACFA" value="#{GestorListaImpuestos.sCOSBACFA}">
+																<f:selectItem itemLabel="Impuesto..." itemValue=""/>
+																<f:selectItems value="#{GestorListaImpuestos.tiposcosbacHM}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha Solicitud: "/>
+															<p:inputMask id="FEPRREFA" value="#{GestorListaImpuestos.sFEPRREFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEPRREFA" actionListener="#{GestorListaImpuestos.hoyFEPRREFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText value="Resolución: "/>
+															<p:selectOneMenu id="BIRESOFA" value="#{GestorListaImpuestos.sBIRESOFA}">
+																<f:selectItem itemLabel="Resolución..." itemValue=""/>
+																<f:selectItems value="#{GestorListaImpuestos.tiposbiresoHM}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha Resolución "/>
+															<p:inputMask id="FEREREFA" value="#{GestorListaImpuestos.sFEREREFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEREREFA" actionListener="#{GestorListaImpuestos.hoyFEREREFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText value="Con Devolución: "/>
+															<p:selectOneMenu id="BISODEFA" value="#{GestorListaImpuestos.sBISODEFA}">
+																<f:selectItem itemLabel="Devolución..." itemValue=""/>
+																<f:selectItems value="#{GestorListaImpuestos.tiposbinariaHM}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha Devolución: "/>
+															<p:inputMask id="FEDEINFA" value="#{GestorListaImpuestos.sFEDEINFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEINFA" actionListener="#{GestorListaImpuestos.hoyFEDEINFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, msgs, form:impuestos" actionListener="#{GestorListaImpuestos.buscarRecursosActivo}" oncomplete="dlgFiltrarRecursoActivo.hide()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelFiltrarRecursoActivo" actionListener="#{GestorListaImpuestos.limpiarPlantillaFiltroRecursosActivo}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
 							<p:dialog modal="true" widgetVar="statusDialog" header="Tramitando..." draggable="false" closable="false">
 								<p:graphicImage value="recursos/loadingBar.gif"/>
 							</p:dialog>

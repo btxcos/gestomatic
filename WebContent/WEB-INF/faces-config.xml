@@ -257,17 +257,22 @@
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>GestorListaGastosActivo</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.listas.GestorListaGastosActivo</managed-bean-class>
+		<managed-bean-class>com.provisiones.pl.listas.activo.GestorListaGastosActivo</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>GestorListaCuotasActivo</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.listas.GestorListaCuotasActivo</managed-bean-class>
+		<managed-bean-class>com.provisiones.pl.listas.activo.GestorListaCuotasActivo</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>GestorListaReferenciasActivo</managed-bean-name>
-		<managed-bean-class>com.provisiones.pl.listas.GestorListaReferenciasActivo</managed-bean-class>
+		<managed-bean-class>com.provisiones.pl.listas.activo.GestorListaReferenciasActivo</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorListaImpuestosActivo</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.listas.activo.GestorListaImpuestosActivo</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 

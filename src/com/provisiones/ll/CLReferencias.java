@@ -174,7 +174,7 @@ public final class CLReferencias
 		return QMListaReferencias.buscaReferenciasActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 
-	public static ArrayList<ReferenciaTabla> buscarReferenciasActivo(ReferenciaTabla filtro, String sComparadorSuelo, String sComparadorCatastral, int iCodCOACES)
+	public static ArrayList<ReferenciaTabla> buscarReferenciasActivoConFiltro(ReferenciaTabla filtro, String sComparadorSuelo, String sComparadorCatastral, int iCodCOACES)
 	{
 		return QMListaReferencias.buscaReferenciasActivoPorFiltro(ConnectionManager.getDBConnection(),filtro,sComparadorSuelo,sComparadorCatastral,iCodCOACES);
 	}
