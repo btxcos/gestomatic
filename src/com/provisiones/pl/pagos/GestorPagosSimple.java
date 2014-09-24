@@ -51,7 +51,7 @@ public class GestorPagosSimple implements Serializable
 	private String sComparadorBA = "";
 	private boolean bSeleccionadoBA = true; 
 	private String sURGENTBA = "";
-	
+
 	//Filtro Activo
 	private String sCOPOINB = "";
 	private String sNOMUINB = "";
@@ -136,6 +136,8 @@ public class GestorPagosSimple implements Serializable
 	
 	private String sTipoPago = "";
 	
+	private boolean bBloquearCuenta = false;
+	
 	//Recargo
 	private String sTipoRecargo = "";
 	private String sValorRecargo = "0";
@@ -182,6 +184,9 @@ public class GestorPagosSimple implements Serializable
 	private Map<String,String> tiposurgenciaHM = new LinkedHashMap<String, String>();
 	
 	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
+	
+	
+	private Map<String,String> tipospagoHM = new LinkedHashMap<String, String>();
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -261,6 +266,10 @@ public class GestorPagosSimple implements Serializable
 			tiposcomparaimporteHM.put("Igual a",    		"=");
 			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
 			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
+			
+			tipospagoHM.put("Ventanilla",       "1");
+			tipospagoHM.put("Norma 34",         "3");
+			tipospagoHM.put("Transferencia",    "5");
 		}
 	}
 	
@@ -412,8 +421,8 @@ public class GestorPagosSimple implements Serializable
 		this.sNUCCDI = "";
 		this.sNUCCNT = "";
 		this.sDescripcion = "";
-		
-		this.sTipoPago = "";
+
+		this.bBloquearCuenta = false;
 
 	}
 	
@@ -440,6 +449,8 @@ public class GestorPagosSimple implements Serializable
 		this.sTipoRecargo = "";
     	this.sValorRecargo = "0";
     	this.bRecargo = true;
+    	
+		this.sTipoPago = "";
 		
 		borrarCamposCuenta();
 
@@ -604,6 +615,30 @@ public class GestorPagosSimple implements Serializable
 			}
 			sCOSBGABP = "";
 		}
+	}
+	
+	public void cambiaTipoPago()
+	{
+		
+		if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_VENTANILLA))
+		{
+			this.bBloquearCuenta = true;
+			
+			this.sPais = "ES";
+			this.sDCIBAN = "00";
+			this.sNUCCEN = "0000";
+			this.sNUCCOF = "0000";
+			this.sNUCCDI = "00";
+			this.sNUCCNT = "0000000000";
+			
+			this.setsDescripcion("POR VENTANILLA");
+		}
+		else
+		{
+			borrarCamposCuenta();
+		}
+		
+		
 	}
 	
 	public void cambiaComparadorBA()
@@ -1129,6 +1164,8 @@ public class GestorPagosSimple implements Serializable
 		    		this.setsDescripcion("DEVOLUCION");
 		    		
 		    		this.sTipoPago = ValoresDefecto.DEF_PAGO_DEVOLUCION;
+		    		
+		    		this.bBloquearCuenta = true;
 		    	}
 		    	else
 		    	{
@@ -1356,20 +1393,6 @@ public class GestorPagosSimple implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
-	public void seleccionarPagoPorVentanilla(ActionEvent actionEvent)
-	{
-		this.sPais = "ES";
-		this.sDCIBAN = "00";
-		this.sNUCCEN = "0000";
-		this.sNUCCOF = "0000";
-		this.sNUCCDI = "00";
-		this.sNUCCNT = "0000000000";
-		
-		this.setsDescripcion("POR VENTANILLA");
-		
-		this.sTipoPago = ValoresDefecto.DEF_PAGO_VENTANILLA;
-	}
-	
 	
 	public void seleccionarCuentaActivo(ActionEvent actionEvent)
 	{
@@ -1499,7 +1522,7 @@ public class GestorPagosSimple implements Serializable
 				}*/
 				else
 				{
-					if (bDevolucion)
+					/*if (bDevolucion)
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_DEVOLUCION;
 					}
@@ -1513,7 +1536,7 @@ public class GestorPagosSimple implements Serializable
 					else
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_NORMA34;
-					}
+					}*/
 					
 					String sRecargo = "0";
 					
@@ -2208,6 +2231,22 @@ public class GestorPagosSimple implements Serializable
 		this.sValorRecargo = sValorRecargo;
 	}
 
+	public boolean isbBloquearCuenta() {
+		return bBloquearCuenta;
+	}
+
+	public void setbBloquearCuenta(boolean bBloquearCuenta) {
+		this.bBloquearCuenta = bBloquearCuenta;
+	}
+
+	public String getsTipoPago() {
+		return sTipoPago;
+	}
+
+	public void setsTipoPago(String sTipoPago) {
+		this.sTipoPago = sTipoPago;
+	}
+
 	public boolean isbRecargo() {
 		return bRecargo;
 	}
@@ -2430,6 +2469,14 @@ public class GestorPagosSimple implements Serializable
 
 	public void setTiposcomparaimporteHM(Map<String,String> tiposcomparaimporteHM) {
 		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
+	}
+
+	public Map<String,String> getTipospagoHM() {
+		return tipospagoHM;
+	}
+
+	public void setTipospagoHM(Map<String,String> tipospagoHM) {
+		this.tipospagoHM = tipospagoHM;
 	}
 
 	public ActivoTabla getActivoseleccionado() {

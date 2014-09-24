@@ -147,6 +147,7 @@ public class GestorRevisionPagos implements Serializable
 	private String sRecargo = "0";
 	private String sTipoPago = "";
 	
+	private boolean bBloquearCuenta = false;
 	
 	//Recargo
 	private String sTipoRecargo = "";
@@ -204,6 +205,8 @@ public class GestorRevisionPagos implements Serializable
 	private Map<String,String> tiposrecargoHM = new LinkedHashMap<String, String>();
 	
 	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tipospagoHM = new LinkedHashMap<String, String>();
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -280,6 +283,10 @@ public class GestorRevisionPagos implements Serializable
 			tiposcomparaimporteHM.put("Igual a",    		"=");
 			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
 			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
+
+			tipospagoHM.put("Ventanilla",       "1");
+			tipospagoHM.put("Norma 34",         "3");
+			tipospagoHM.put("Transferencia",    "5");
 		}
 	}
 	
@@ -431,8 +438,7 @@ public class GestorRevisionPagos implements Serializable
 		this.sNUCCNT = "";
 		this.sDescripcion = "";
 		
-		this.sTipoPago = "";
-
+		this.bBloquearCuenta = false;
 	}
 	
 	
@@ -467,6 +473,8 @@ public class GestorRevisionPagos implements Serializable
 		this.sTipoRecargo = "";
     	this.sValorRecargo = "0";
     	this.bRecargo = true;
+    	
+		this.sTipoPago = "";
 		
 		borrarCamposCuenta();
 
@@ -632,6 +640,27 @@ public class GestorRevisionPagos implements Serializable
 					break;
 			}
 			sCOSBGABP = "";
+		}
+	}
+	
+	public void cambiaTipoPago()
+	{
+		if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_VENTANILLA))
+		{
+			this.setbBloquearCuenta(true);
+			
+			this.sPais = "ES";
+			this.sDCIBAN = "00";
+			this.sNUCCEN = "0000";
+			this.sNUCCOF = "0000";
+			this.sNUCCDI = "00";
+			this.sNUCCNT = "0000000000";
+			
+			this.setsDescripcion("POR VENTANILLA");
+		}
+		else
+		{
+			borrarCamposCuenta();
 		}
 	}
 	
@@ -1260,6 +1289,8 @@ public class GestorRevisionPagos implements Serializable
 		    		this.sNUCCNT = "0000000000";
 		    		
 		    		this.setsDescripcion("DEVOLUCION");
+		    		
+		    		this.bBloquearCuenta = true;
 		    	}
 		    	else if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_VENTANILLA))
 		    	{
@@ -1270,8 +1301,62 @@ public class GestorRevisionPagos implements Serializable
 		    		this.sNUCCNT = "0000000000";
 		    		
 		    		this.setsDescripcion("VENTANILLA");
+		    		
+		    		this.bBloquearCuenta = true;
 		    	}
 	    		else if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_NORMA34))
+	    		{
+	    			try
+	    			{
+	    				
+	    				this.liCodOperacion = Long.parseLong(pago.getsCodOperacion());
+		    			TransferenciaN34 transferencia = CLTransferencias.buscarTransferenciaN34(liCodOperacion);
+		    			
+			    		this.sNUCCEN = transferencia.getsNUCCEN();
+			    		this.sNUCCOF = transferencia.getsNUCCOF();
+			    		this.sNUCCDI = transferencia.getsNUCCDI();
+			    		this.sNUCCNT = transferencia.getsNUCCNT();
+			    		
+			    		this.setsDescripcion("TRANSFERENCIA N34");
+			    		
+			    		//comprobar si se ha generado el fichero de transferencias.
+			    		//this.bRevisable = !CLPagos.estaEnviado(liCodPago);
+	    			}
+	    			catch(NumberFormatException nfe)
+	    			{
+	    				logger.debug("NFE!!!");
+	    				bError = true;
+	    			}
+
+	    			
+	    		}
+	    		else if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_NORMA3414))
+	    		{
+	    			try
+	    			{
+	    				
+	    				this.liCodOperacion = Long.parseLong(pago.getsCodOperacion());
+		    			TransferenciaN34 transferencia = CLTransferencias.buscarTransferenciaN34(liCodOperacion);
+		    			
+			    		this.sNUCCEN = transferencia.getsNUCCEN();
+			    		this.sNUCCOF = transferencia.getsNUCCOF();
+			    		this.sNUCCDI = transferencia.getsNUCCDI();
+			    		this.sNUCCNT = transferencia.getsNUCCNT();
+			    		
+			    		this.setsDescripcion("TRANSFERENCIA N3414");
+			    		
+			    		//comprobar si se ha generado el fichero de transferencias.
+			    		//this.bRevisable = !CLPagos.estaEnviado(liCodPago);
+	    			}
+	    			catch(NumberFormatException nfe)
+	    			{
+	    				logger.debug("NFE!!!");
+	    				bError = true;
+	    			}
+
+	    			
+	    		}
+	    		else if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_TRANSFERENCIA_MANUAL))
 	    		{
 	    			try
 	    			{
@@ -1734,7 +1819,7 @@ public class GestorRevisionPagos implements Serializable
 					logger.debug("sNota:|"+sNota+"|");
 					logger.debug("sNotaO:|"+sNotaO+"|");
 					
-					if (bDevolucion)
+					/*if (bDevolucion)
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_DEVOLUCION;
 					}
@@ -1748,7 +1833,7 @@ public class GestorRevisionPagos implements Serializable
 					else
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_NORMA34;
-					}
+					}*/
 					
 					logger.debug("sTipoPago:|"+sTipoPago+"|");
 					
@@ -2572,6 +2657,22 @@ public class GestorRevisionPagos implements Serializable
 		this.sNota = sNota;
 	}
 
+	public String getsTipoPago() {
+		return sTipoPago;
+	}
+
+	public void setsTipoPago(String sTipoPago) {
+		this.sTipoPago = sTipoPago;
+	}
+
+	public boolean isbBloquearCuenta() {
+		return bBloquearCuenta;
+	}
+
+	public void setbBloquearCuenta(boolean bBloquearCuenta) {
+		this.bBloquearCuenta = bBloquearCuenta;
+	}
+
 	public Map<String, String> getTiposcogrugHM() {
 		return tiposcogrugHM;
 	}
@@ -2698,6 +2799,14 @@ public class GestorRevisionPagos implements Serializable
 
 	public void setTiposcomparaimporteHM(Map<String,String> tiposcomparaimporteHM) {
 		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
+	}
+
+	public Map<String,String> getTipospagoHM() {
+		return tipospagoHM;
+	}
+
+	public void setTipospagoHM(Map<String,String> tipospagoHM) {
+		this.tipospagoHM = tipospagoHM;
 	}
 
 	public ActivoTabla getActivoseleccionado() {

@@ -127,11 +127,19 @@
 										<h:panelGrid columns="1" cellpadding="3">
 
 										<p:panel>
-											<h:panelGrid columns="3" cellpadding="5">
+											<h:panelGrid columns="5" cellpadding="5">
 												<h:outputText for="FEPGPR" value="Fecha de Pago: " />
 												<p:inputMask id="FEPGPR" value="#{GestorRevisionPagos.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
 
 												<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorRevisionPagos.hoyFEPGPR}"/>
+
+												<h:outputText value="Tipo de pago:  "/>
+												<p:selectOneMenu id="TIPOPAGO" value="#{GestorRevisionPagos.sTipoPago}" disabled="#{GestorRevisionPagos.bDevolucion}">
+													<f:selectItem itemLabel="Tipo..." itemValue=""/>
+													<f:selectItems value="#{GestorRevisionPagos.tipospagoHM}"/>
+													<p:ajax update="TIPOPAGO,panelCuenta" listener="#{GestorRevisionPagos.cambiaTipoPago}"/>
+												</p:selectOneMenu>
+
 											</h:panelGrid>
 										</p:panel>
 
@@ -139,7 +147,7 @@
 											<h:panelGrid columns="7" cellpadding="5">
 
 												<h:outputText for="TRECARGO" value="Recargo adicional en pago: " />
-												<p:selectOneMenu id="TRECARGO" value="#{GestorRevisionPagos.sTipoRecargo}">
+												<p:selectOneMenu id="TRECARGO" value="#{GestorRevisionPagos.sTipoRecargo}" disabled="#{GestorPagosSimple.bDevolucion}">
 													<f:selectItem itemLabel="Sin recargo" itemValue=""/>
 													<f:selectItems value="#{GestorPagosComunidad.tiposrecargoHM}"/>
 														<p:ajax update="VRECARGO" listener="#{GestorRevisionPagos.cambiaRecargo}"/>
@@ -170,25 +178,25 @@
 
 										<h:outputText value="Número de Cuenta: "/>
 
-										<p:inputMask id="NUCCEN" value="#{GestorRevisionPagos.sNUCCEN}" mask="9999" size="4" disabled="#{GestorRevisionPagos.bDevolucion}">
+										<p:inputMask id="NUCCEN" value="#{GestorRevisionPagos.sNUCCEN}" mask="9999" size="4" disabled="#{GestorRevisionPagos.bBloquearCuenta}">
 											<f:validateLength minimum="4"/>
 										</p:inputMask>
 
-										<p:inputMask id="NUCCOF" value="#{GestorRevisionPagos.sNUCCOF}" mask="9999" size="4" disabled="#{GestorRevisionPagos.bDevolucion}">
+										<p:inputMask id="NUCCOF" value="#{GestorRevisionPagos.sNUCCOF}" mask="9999" size="4" disabled="#{GestorRevisionPagos.bBloquearCuenta}">
 											<f:validateLength minimum="4"/>
 										</p:inputMask>
 
-										<p:inputMask id="NUCCDI" value="#{GestorRevisionPagos.sNUCCDI}" mask="99" size="2" disabled="#{GestorRevisionPagos.bDevolucion}">
+										<p:inputMask id="NUCCDI" value="#{GestorRevisionPagos.sNUCCDI}" mask="99" size="2" disabled="#{GestorRevisionPagos.bBloquearCuenta}">
 											<f:validateLength minimum="2"/>
 										</p:inputMask>
 
-										<p:inputMask id="NUCCNT" value="#{GestorRevisionPagos.sNUCCNT}" mask="9999999999" size="10" disabled="#{GestorRevisionPagos.bDevolucion}">
+										<p:inputMask id="NUCCNT" value="#{GestorRevisionPagos.sNUCCNT}" mask="9999999999" size="10" disabled="#{GestorRevisionPagos.bBloquearCuenta}">
 											<f:validateLength minimum="10"/>
 										</p:inputMask>
 											</h:panelGrid>
 									  </p:panel>
 
-										<p:commandButton id="botBuscaCuenta" value="Buscar Cuenta" update="cuentasactivo, cuentascomunidad, msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorRevisionPagos.buscaCuentas}" oncomplete="dlgTablaCuentas.show()" disabled="#{GestorRevisionPagos.bDevolucion}"/>	
+										<p:commandButton id="botBuscaCuenta" value="Buscar Cuenta" update="cuentasactivo, cuentascomunidad, msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorRevisionPagos.buscaCuentas}" oncomplete="dlgTablaCuentas.show()" disabled="#{GestorRevisionPagos.bBloquearCuenta}"/>	
 
 										<p:panel>
 											<h:panelGrid columns="2" cellpadding="5">
@@ -197,9 +205,7 @@
 											</h:panelGrid>
 									  </p:panel>
 
-									 <p:commandButton id="botSinCuenta" value="Sin Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorRevisionPagos.seleccionarPagoPorVentanilla}" disabled="#{GestorRevisionPagos.bDevolucion}"/>
-
-									 <p:commandButton id="botLimpiaCuenta" value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorRevisionPagos.limpiarPlantillaCuenta}" disabled="#{GestorRevisionPagos.bDevolucion}"/>
+									 <p:commandButton id="botLimpiaCuenta" value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorRevisionPagos.limpiarPlantillaCuenta}" disabled="#{GestorRevisionPagos.bBloquearCuenta}"/>
 
 											</h:panelGrid>
 									  </p:panel>
@@ -700,7 +706,7 @@
 					<p:dialog header="Gastos Autorizados del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">  
 
 						<p:contextMenu for="gastosactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision, form:panelRecargo, form:panelCuenta, form:FEPGPR, form:NOTA" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarPagoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision, form:panelRecargo, form:panelCuenta, form:FEPGPR, form:TIPOPAGO, form:NOTA" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarPagoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosactivo" var="gastoactivo" value="#{GestorRevisionPagos.tablagastosactivo}" rowKey="#{gastoactivo.sGastoID}"
@@ -838,7 +844,7 @@
 					<p:dialog header="Gastos Autorizados de la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">  
 
 						<p:contextMenu for="gastosprovision">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision, form:panelRecargo, form:panelCuenta, form:FEPGPR, form:NOTA" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarPagoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:panelProgresoProvision, form:panelRecargo, form:panelCuenta, form:FEPGPR, form:TIPOPAGO, form:NOTA" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarPagoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
 						</p:contextMenu>
 
 						<p:dataTable id="gastosprovision" var="gastoprovision" value="#{GestorRevisionPagos.tablagastosprovision}" rowKey="#{gastoprovision.sGastoID}"
@@ -903,7 +909,7 @@
 					<p:dialog header="Cuentas Disponibles: " widgetVar="dlgTablaCuentas" resizable="false">
 
 						<p:contextMenu for="cuentasactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, NUCCEN, NUCCOF, NUCCDI, NUCCNT" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarCuentaActivo}" oncomplete="dlgTablaCuentas.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, panelCuenta" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarCuentaActivo}" oncomplete="dlgTablaCuentas.hide();"/>
 						</p:contextMenu>
 
 								<p:dataTable id="cuentasactivo" var="cuentaactivo" value="#{GestorRevisionPagos.tablacuentasactivo}" rowKey="#{cuentaactivo.sNUCCEN}"
@@ -969,7 +975,7 @@
 
 
 						<p:contextMenu for="cuentascomunidad">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, NUCCEN, NUCCOF, NUCCDI, NUCCNT" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarCuentaComunidad}" oncomplete="dlgTablaCuentas.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, panelCuenta" icon="ui-icon-check" actionListener="#{GestorRevisionPagos.seleccionarCuentaComunidad}" oncomplete="dlgTablaCuentas.hide();"/>
 						</p:contextMenu>
 
 								<p:dataTable id="cuentascomunidad" var="cuentacomunidad" value="#{GestorRevisionPagos.tablacuentascomunidad}" rowKey="#{cuentacomunidad.sNUCCEN}"

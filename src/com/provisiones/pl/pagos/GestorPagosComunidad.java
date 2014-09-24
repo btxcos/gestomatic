@@ -96,12 +96,16 @@ public class GestorPagosComunidad implements Serializable
 	
 	private String sTipoPago = "";
 	
+	private boolean bBloquearCuenta = false;
+	
 	private long iCodComunidad = 0;
 	
 	//Notas
 	private String sNota = "";
 	
 	private Map<String,String> tiposrecargoHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tipospagoHM = new LinkedHashMap<String, String>();
 	
 	private transient ProvisionTabla provisionseleccionada = null;
 	private transient ArrayList<ProvisionTabla> tablaprovisiones = null;
@@ -120,6 +124,10 @@ public class GestorPagosComunidad implements Serializable
 			
 			tiposrecargoHM.put("Cantidad fija (¤)","1");
 			tiposrecargoHM.put("Proporcional (%)", "2");
+			
+			tipospagoHM.put("Ventanilla",       "1");
+			tipospagoHM.put("Norma 34",         "3");
+			tipospagoHM.put("Transferencia",    "5");
 		}
 	}
 	
@@ -152,6 +160,8 @@ public class GestorPagosComunidad implements Serializable
     	this.sNUCCDI = "";
     	this.sNUCCNT = "";
     	this.sDescripcion = "";
+    	
+    	this.bBloquearCuenta = false;
 	}
 	
 	public void borrarResultadosBuscarCuenta()
@@ -227,6 +237,8 @@ public class GestorPagosComunidad implements Serializable
     	this.sTipoRecargo = "";
     	this.sValorRecargo = "0";
     	this.bRecargo = true;
+    	
+    	this.sTipoPago = "";
     	
     	borrarCamposCuenta();
 	}
@@ -546,7 +558,7 @@ public class GestorPagosComunidad implements Serializable
 			
 			this.iCodComunidad  = Long.parseLong(comunidadseleccionada.getsComunidadID());
 			
-			this.sCOCLDO = comunidadseleccionada.getCOCLDO();
+			this.sCOCLDO = comunidadseleccionada.getDCOCLDO();
 			this.sNUDCOM = comunidadseleccionada.getNUDCOM();
 			this.sNOMCOC = comunidadseleccionada.getNOMCOC();
 			
@@ -563,6 +575,27 @@ public class GestorPagosComunidad implements Serializable
 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}				
+	}
+	
+	public void cambiaTipoPago()
+	{
+		if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_VENTANILLA))
+		{
+			this.setbBloquearCuenta(true);
+			
+			this.sPais = "ES";
+			this.sDCIBAN = "00";
+			this.sNUCCEN = "0000";
+			this.sNUCCOF = "0000";
+			this.sNUCCDI = "00";
+			this.sNUCCNT = "0000000000";
+			
+			this.setsDescripcion("POR VENTANILLA");
+		}
+		else
+		{
+			borrarCamposCuenta();
+		}
 	}
 	
 	public void hoyFEPGPR (ActionEvent actionEvent)
@@ -728,7 +761,7 @@ public class GestorPagosComunidad implements Serializable
 				}
 				else
 				{
-					if (sNUCCEN.equals("0000") &&
+					/*if (sNUCCEN.equals("0000") &&
 					sNUCCOF.equals("0000") &&
 					sNUCCDI.equals("00") &&
 					sNUCCNT.equals("0000000000"))
@@ -738,7 +771,7 @@ public class GestorPagosComunidad implements Serializable
 					else
 					{
 						this.sTipoPago= ValoresDefecto.DEF_PAGO_NORMA34;
-					}
+					}*/
 					
 					Cuenta cuenta = new Cuenta (sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT,"");
 					
@@ -1148,12 +1181,36 @@ public class GestorPagosComunidad implements Serializable
 		this.sNota = sNota;
 	}
 
+	public String getsTipoPago() {
+		return sTipoPago;
+	}
+
+	public void setsTipoPago(String sTipoPago) {
+		this.sTipoPago = sTipoPago;
+	}
+
+	public boolean isbBloquearCuenta() {
+		return bBloquearCuenta;
+	}
+
+	public void setbBloquearCuenta(boolean bBloquearCuenta) {
+		this.bBloquearCuenta = bBloquearCuenta;
+	}
+
 	public Map<String, String> getTiposrecargoHM() {
 		return tiposrecargoHM;
 	}
 
 	public void setTiposrecargoHM(Map<String, String> tiposrecargoHM) {
 		this.tiposrecargoHM = tiposrecargoHM;
+	}
+
+	public Map<String,String> getTipospagoHM() {
+		return tipospagoHM;
+	}
+
+	public void setTipospagoHM(Map<String,String> tipospagoHM) {
+		this.tipospagoHM = tipospagoHM;
 	}
 
 	public ProvisionTabla getProvisionseleccionada() {

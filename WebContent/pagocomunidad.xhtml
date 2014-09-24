@@ -201,14 +201,21 @@
 										<h:panelGrid columns="1" cellpadding="5">
 
 										<p:panel>
-											<h:panelGrid columns="5" cellpadding="5">
-											<h:outputText for="FEPGPR" value="Fecha de Pago: " />
-											<p:inputMask id="FEPGPR" value="#{GestorPagosComunidad.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
+											<h:panelGrid columns="7" cellpadding="5">
+												<h:outputText for="FEPGPR" value="Fecha de Pago: " />
+												<p:inputMask id="FEPGPR" value="#{GestorPagosComunidad.sFEPGPR}" mask="99/99/9999" size="10" maxlength="10"/>
 
-											<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorPagosComunidad.hoyFEPGPR}"/>
+												<p:commandButton icon="ui-icon-clock" update="FEPGPR" actionListener="#{GestorPagosComunidad.hoyFEPGPR}"/>
 
-											<h:outputText for="FechaUltimoDevengo" value="Fecha del último devengo: " />
-											<p:inputText id="FechaUltimoDevengo" value="#{GestorPagosComunidad.sFechaUltimoDevengo}" size="9" disabled="true"/>
+												<h:outputText for="FechaUltimoDevengo" value="Fecha del último devengo: " />
+												<p:inputText id="FechaUltimoDevengo" value="#{GestorPagosComunidad.sFechaUltimoDevengo}" size="9" disabled="true"/>
+
+												<h:outputText value="Tipo de pago:  "/>
+												<p:selectOneMenu id="TIPOPAGO" value="#{GestorPagosComunidad.sTipoPago}">
+													<f:selectItem itemLabel="Tipo..." itemValue=""/>
+													<f:selectItems value="#{GestorPagosComunidad.tipospagoHM}"/>
+													<p:ajax update="TIPOPAGO,panelCuenta" listener="#{GestorPagosComunidad.cambiaTipoPago}"/>
+												</p:selectOneMenu>
 
 											</h:panelGrid>
 									  </p:panel>
@@ -229,7 +236,7 @@
 										</p:panel>
 
 
-										<p:panel>
+										<p:panel id="panelCuenta">
 											<h:panelGrid columns="2" cellpadding="5">
 
 												<p:panel>
@@ -241,26 +248,26 @@
 
 														<h:outputText value="Número de Cuenta: "/>
 
-														<p:inputMask id="NUCCEN" value="#{GestorPagosComunidad.sNUCCEN}" mask="9999" size="4">
+														<p:inputMask id="NUCCEN" value="#{GestorPagosComunidad.sNUCCEN}" mask="9999" size="4" disabled="#{GestorPagosComunidad.bBloquearCuenta}">
 															<f:validateLength minimum="4"/>
 														</p:inputMask>
 
-														<p:inputMask id="NUCCOF" value="#{GestorPagosComunidad.sNUCCOF}" mask="9999" size="4">
+														<p:inputMask id="NUCCOF" value="#{GestorPagosComunidad.sNUCCOF}" mask="9999" size="4" disabled="#{GestorPagosComunidad.bBloquearCuenta}">
 															<f:validateLength minimum="4"/>
 														</p:inputMask>
 
-														<p:inputMask id="NUCCDI" value="#{GestorPagosComunidad.sNUCCDI}" mask="99" size="2">
+														<p:inputMask id="NUCCDI" value="#{GestorPagosComunidad.sNUCCDI}" mask="99" size="2" disabled="#{GestorPagosComunidad.bBloquearCuenta}">
 															<f:validateLength minimum="2"/>
 														</p:inputMask>
 
-														<p:inputMask id="NUCCNT" value="#{GestorPagosComunidad.sNUCCNT}" mask="9999999999" size="10">
+														<p:inputMask id="NUCCNT" value="#{GestorPagosComunidad.sNUCCNT}" mask="9999999999" size="10" disabled="#{GestorPagosComunidad.bBloquearCuenta}">
 															<f:validateLength minimum="10"/>
 														</p:inputMask>
 
 													</h:panelGrid>
 											  </p:panel>
 
-										<p:commandButton value="Buscar Cuenta" update="cuentascomunidad, msgs, popup" actionListener="#{GestorPagosComunidad.buscaCuentas}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaCuentas.show()"/>	
+										<p:commandButton value="Buscar Cuenta" update="cuentascomunidad, msgs, popup" actionListener="#{GestorPagosComunidad.buscaCuentas}" onstart="statusDialog.show()" oncomplete="statusDialog.hide(); dlgTablaCuentas.show()" disabled="#{GestorPagosComunidad.bBloquearCuenta}"/>	
 
 										<p:panel>
 											<h:panelGrid columns="2" cellpadding="5">
@@ -269,9 +276,7 @@
 											</h:panelGrid>
 									  </p:panel>
 
-									 <p:commandButton value="Sin Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosComunidad.seleccionarPagoPorVentanilla}"/>
-
-									 <p:commandButton value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosComunidad.limpiarPlantillaCuenta}"/>
+									 <p:commandButton value="Limpiar Cuenta" update="msgs, popup, PAIS, DCIBAN, NUCCEN, NUCCOF, NUCCDI, NUCCNT, DESCRIPCION" actionListener="#{GestorPagosComunidad.limpiarPlantillaCuenta}" disabled="#{GestorPagosComunidad.bBloquearCuenta}"/>
 
 											</h:panelGrid>
 									  </p:panel>
@@ -454,7 +459,7 @@
 											<f:facet name="header">
 												<h:outputText value="Documento"/>
 											</f:facet>
-											<h:outputText value="#{comunidad.COCLDO}"/>
+											<h:outputText value="#{comunidad.DCOCLDO}"/>
 										</p:column>
 
 										<p:column>
