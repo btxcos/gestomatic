@@ -143,6 +143,10 @@ public class GestorRevisionPagos implements Serializable
 	private String sFEPGPRO = "";
 
 	private String sFEPGPR = "";
+	
+	private String sFechaPagoReal = "";
+	private String sFechaPagoRealO = "";
+	
 	private long liValor = 0;
 	private String sRecargo = "0";
 	private String sTipoPago = "";
@@ -467,6 +471,8 @@ public class GestorRevisionPagos implements Serializable
 		
 		this.sFEPGPR = "";
 		
+		this.sFechaPagoReal = "";
+		
 		this.sImporte = "0";
 		this.sImporteBase= "0"; 
 		
@@ -691,6 +697,12 @@ public class GestorRevisionPagos implements Serializable
 	{
 		this.setsFEPGPR(Utils.fechaDeHoy(true));
 		logger.debug("sFEPGPR:|"+sFEPGPR+"|");
+	}
+	
+	public void hoyFECHAPAGOREAL (ActionEvent actionEvent)
+	{
+		this.setsFechaPagoReal(Utils.fechaDeHoy(true));
+		logger.debug("sFechaPagoReal:|"+sFechaPagoReal+"|");
 	}
 	
 	public void cambiaRecargo()
@@ -1235,6 +1247,10 @@ public class GestorRevisionPagos implements Serializable
 				this.sFEPGPR = Utils.recuperaFecha(pago.getsFEPGPR());
 				
 				this.sFEPGPRO = sFEPGPR;
+
+				this.sFechaPagoReal = Utils.recuperaFecha(pago.getsFechaPagoReal());
+				
+				this.sFechaPagoRealO =  sFechaPagoReal;
 				
 				logger.debug("pago.getsTipoPago():|"+pago.getsTipoPago()+"|");
 				
@@ -1784,7 +1800,8 @@ public class GestorRevisionPagos implements Serializable
 					logger.error(sMsg);
 				}*/
 				else if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION)
-						&& sFEPGPR.equals(sFEPGPRO) 
+						&& sFEPGPR.equals(sFEPGPRO)
+						&& sFechaPagoReal.equals(sFechaPagoRealO)
 						&& sRecargo.equals(sRecargoM) 
 						&& sPais.equals(sPaisO)
 						&& sDCIBAN.equals(sDCIBANO)
@@ -1802,6 +1819,8 @@ public class GestorRevisionPagos implements Serializable
 				{
 					logger.debug("sFEPGPR:|"+sFEPGPR+"|");
 					logger.debug("sFEPGPRO:|"+sFEPGPRO+"|");
+					logger.debug("sFechaPagoReal:|"+sFechaPagoReal+"|");
+					logger.debug("sFechaPagoRealO:|"+sFechaPagoRealO+"|");
 					logger.debug("sRecargo:|"+sRecargo+"|");
 					logger.debug("sRecargoM:|"+sRecargoM+"|");
 					logger.debug("sPais:|"+sPais+"|");
@@ -1855,7 +1874,7 @@ public class GestorRevisionPagos implements Serializable
 					}
 					else //if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION))
 					{
-						Pago pago = new Pago(sCOACES,sCodGastoB,sTipoPago,Long.toString(liCodOperacion),Utils.compruebaFecha(sFEPGPR),sRecargoM);
+						Pago pago = new Pago(sCOACES,sCodGastoB,sTipoPago,Long.toString(liCodOperacion),Utils.compruebaFecha(sFEPGPR),Utils.compruebaFecha(sFechaPagoReal),sRecargoM);
 						
 						Cuenta cuenta = new Cuenta (sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT,"");
 						
@@ -2552,6 +2571,14 @@ public class GestorRevisionPagos implements Serializable
 		this.sFEPGPR = sFEPGPR;
 	}
 
+
+	public String getsFechaPagoReal() {
+		return sFechaPagoReal;
+	}
+
+	public void setsFechaPagoReal(String sFechaPagoReal) {
+		this.sFechaPagoReal = sFechaPagoReal;
+	}
 
 	public String getsTipoRecargo() {
 		return sTipoRecargo;

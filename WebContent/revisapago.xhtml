@@ -142,6 +142,16 @@
 
 											</h:panelGrid>
 										</p:panel>
+										
+										<p:panel>
+											<h:panelGrid columns="3" cellpadding="5">
+												<h:outputText for="FECHAPAGOREAL" value="Fecha de Pago Recibido: " />
+												<p:inputMask id="FECHAPAGOREAL" value="#{GestorRevisionPagos.sFechaPagoReal}" mask="99/99/9999" size="10" maxlength="10"/>
+
+												<p:commandButton icon="ui-icon-clock" update="FECHAPAGOREAL" actionListener="#{GestorRevisionPagos.hoyFECHAPAGOREAL}"/>
+
+											</h:panelGrid>
+										</p:panel>
 
 										<p:panel id="panelRecargo">
 											<h:panelGrid columns="7" cellpadding="5">

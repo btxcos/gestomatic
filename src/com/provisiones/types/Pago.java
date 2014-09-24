@@ -7,18 +7,21 @@ public class Pago
 	private String sTipoPago = "";
 	private String sCodOperacion = "";
 	private String sFEPGPR = "";
+	private String sFechaPagoReal = "";
 	private String sRecargoAdicional = "";
 
 	//Constructor de clase
 	
 	public Pago(String sCOACES, String sGasto, String sTipoPago,
-			String sCodOperacion, String sFEPGPR, String sRecargoAdicional) {
+			String sCodOperacion, String sFEPGPR, String sFechaPagoReal,
+			String sRecargoAdicional) {
 		super();
 		this.sCOACES = sCOACES;
 		this.sGasto = sGasto;
 		this.sTipoPago = sTipoPago;
 		this.sCodOperacion = sCodOperacion;
 		this.sFEPGPR = sFEPGPR;
+		this.sFechaPagoReal = sFechaPagoReal;
 		this.sRecargoAdicional = sRecargoAdicional;
 	}
 
@@ -62,6 +65,14 @@ public class Pago
 
 	public void setsFEPGPR(String sFEPGPR) {
 		this.sFEPGPR = sFEPGPR;
+	}
+
+	public String getsFechaPagoReal() {
+		return sFechaPagoReal;
+	}
+
+	public void setsFechaPagoReal(String sFechaPagoReal) {
+		this.sFechaPagoReal = sFechaPagoReal;
 	}
 
 	public String getsRecargoAdicional() {

@@ -3700,7 +3700,7 @@ public final class QMProvisiones
 					+ QMPagos.TABLA +
 					" WHERE ("
 					+ QMPagos.CAMPO4 + " = " + ValoresDefecto.DEF_PAGO_NORMA34 +" AND " 
-					+ QMPagos.CAMPO8 + " = '" + ValoresDefecto.PAGO_EMITIDO + "'))))";
+					+ QMPagos.CAMPO9 + " = '" + ValoresDefecto.PAGO_EMITIDO + "'))))";
 
 			
 			logger.debug(sQuery);
