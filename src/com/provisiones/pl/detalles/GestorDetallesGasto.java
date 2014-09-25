@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLGastos;
 import com.provisiones.ll.CLPagos;
-import com.provisiones.ll.CLProvisiones;
 import com.provisiones.ll.CLTransferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
@@ -98,6 +97,7 @@ public class GestorDetallesGasto implements Serializable
 
 	private String sNota = "";
 	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private long liCodCuota = 0;
 	
@@ -270,8 +270,9 @@ public class GestorDetallesGasto implements Serializable
 				this.sNUCLII = ValoresDefecto.DEF_NUCLII;
 				
 				this.sNotaOriginal = CLGastos.buscarNota(liCodGasto);
-				
 				this.sNota = sNotaOriginal;
+				
+				this.bConNotas = !sNota.isEmpty();
 				
 				this.liCodCuota = CLGastos.obtenerCuotaDeGasto(liCodGasto);
 				
@@ -304,9 +305,10 @@ public class GestorDetallesGasto implements Serializable
     	this.sNota = "";
     }
     
-    public void restaurarNota(ActionEvent actionEvent) 
+    public void restablecerNota(ActionEvent actionEvent) 
     {  
     	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
     }
 	
 	public void guardaNota (ActionEvent actionEvent)
@@ -325,7 +327,7 @@ public class GestorDetallesGasto implements Serializable
 			}
 			else
 			{
-				if (CLProvisiones.guardarNota(sNUPROF, sNota))
+				if (CLGastos.guardarNota(liCodGasto, sNota))
 				{
 					sMsg = "Nota guardada correctamente.";
 					msg = Utils.pfmsgInfo(sMsg);
@@ -877,6 +879,14 @@ public class GestorDetallesGasto implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public boolean isbSinCuota() {

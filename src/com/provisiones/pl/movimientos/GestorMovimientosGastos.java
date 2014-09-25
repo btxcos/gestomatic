@@ -36,6 +36,9 @@ public class GestorMovimientosGastos implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosGastos.class.getName());
 
+	//Gasto Buscado
+	private long liCodGasto = 0;
+	
 	//Buscar Activo
 	private String sCOACESB = "";
 
@@ -82,9 +85,6 @@ public class GestorMovimientosGastos implements Serializable
 	private boolean bSeleccionadoBP = true; 		
 	private String sEstadoBP = "";
 	
-	//Gasto Buscado
-	private long liCodGastoB = 0;
-
 	//Gasto objetivo
 	private String sCOACES = "";
 	private boolean bDevolucion = false;
@@ -147,9 +147,10 @@ public class GestorMovimientosGastos implements Serializable
 	private String sCOSBAC = "";
 	private String sIMCUCO = "";
 	
-	//Nota 
+	//Nota
 	private String sNota = "";
 	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -364,7 +365,7 @@ public class GestorMovimientosGastos implements Serializable
     
 	public void borrarPlantillaGasto()
 	{
-		this.liCodGastoB = 0;
+		this.liCodGasto = 0;
 
 		this.sCOACES = "";
 		this.sCOGRUG = "";
@@ -441,6 +442,8 @@ public class GestorMovimientosGastos implements Serializable
     	
     	this.bUrgente = false;
     	
+    	this.liCodGasto = 0;
+    	
     	borrarCamposBuscarActivo();
     	borrarCamposBuscarProvision();
     	borrarCamposBuscarGastoActivo();
@@ -454,9 +457,42 @@ public class GestorMovimientosGastos implements Serializable
     	this.sNota = "";
     }
     
-    public void restaurarNota(ActionEvent actionEvent) 
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+
+			String sMsg = "";
+			
+			if (liCodGasto == 0)
+			{
+				sMsg = "Debe de haber cargado un Gasto antes de guardar la nota. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (CLGastos.guardarNota(liCodGasto, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrio un error al guardar la nota del Gasto. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
+	}
+    
+    public void restablecerNota(ActionEvent actionEvent) 
     {  
     	this.sNota = sNotaOriginal;
+    	this.setbConNotas(!sNota.isEmpty());
     }
 
 	
@@ -1220,11 +1256,11 @@ public class GestorMovimientosGastos implements Serializable
 
 			try
 			{
-		    	this.liCodGastoB = Long.parseLong(gastoseleccionado.getsGastoID());
+		    	this.liCodGasto = Long.parseLong(gastoseleccionado.getsGastoID());
 		    	
-		    	this.bUrgente = CLGastos.esUrgente(liCodGastoB);
+		    	this.bUrgente = CLGastos.esUrgente(liCodGasto);
 		    	
-		    	logger.debug("liCodGasto:|"+liCodGastoB+"|");
+		    	logger.debug("liCodGasto:|"+liCodGasto+"|");
 		    	
 		    	this.sCOACES = gastoseleccionado.getCOACES();
 		    	
@@ -1242,7 +1278,7 @@ public class GestorMovimientosGastos implements Serializable
 				
 			  	//Gasto gasto = CLGastos.buscarGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
 		    	
-				Gasto gasto = CLGastos.buscarGastoConCodigo(liCodGastoB);
+				Gasto gasto = CLGastos.buscarGastoConCodigo(liCodGasto);
 				
 		    	logger.debug(gasto.logGasto());
 		 
@@ -1284,7 +1320,7 @@ public class GestorMovimientosGastos implements Serializable
 				
 				//this.sNUPROF = CLGastos.buscarProvisionGasto(Integer.parseInt(sCOACES), sCOGRUG, sCOTPGA, sCOSBGA, Utils.compruebaFecha(sFEDEVE));
 
-				this.sNUPROF = CLGastos.obtenerProvisionDeGasto(liCodGastoB);
+				this.sNUPROF = CLGastos.obtenerProvisionDeGasto(liCodGasto);
 				
 				//this.sCOTERR = ValoresDefecto.DEF_COTERR;
 				//this.sFMPAGN = Utils.recuperaFecha(ValoresDefecto.DEF_FMPAGN);
@@ -1294,8 +1330,10 @@ public class GestorMovimientosGastos implements Serializable
 				//this.sCOSPII = ValoresDefecto.DEF_COSPII_GA;
 				//this.sNUCLII = ValoresDefecto.DEF_NUCLII;
 				
-				this.sNotaOriginal = CLGastos.buscarNota(liCodGastoB);
+				this.sNotaOriginal = CLGastos.buscarNota(liCodGasto);
 				this.sNota = sNotaOriginal;
+				
+				this.bConNotas = !sNota.isEmpty();
 				
 				String sTipo = bDevolucion ? "La devolucion":"El Gasto"; 
 				
@@ -2407,6 +2445,14 @@ public class GestorMovimientosGastos implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public Map<String,String> getTiposptpagoHM() {

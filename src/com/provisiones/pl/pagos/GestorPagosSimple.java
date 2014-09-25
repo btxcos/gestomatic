@@ -1559,7 +1559,7 @@ public class GestorPagosSimple implements Serializable
 	            	logger.debug("sRecargo:|"+sRecargo+"|");
 	            	
 					
-					Pago pago = new Pago(sCOACES,sCodGastoB,sTipoPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,Utils.compruebaFecha(sFEPGPR),Utils.compruebaFecha(sFEPGPR),sRecargo);
+					Pago pago = new Pago(sCOACES,sCodGastoB,sTipoPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,Utils.compruebaFecha(sFEPGPR),ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sRecargo);
 					
 					Cuenta cuenta = new Cuenta (sPais,sDCIBAN,sNUCCEN,sNUCCOF,sNUCCDI,sNUCCNT,"");
 					

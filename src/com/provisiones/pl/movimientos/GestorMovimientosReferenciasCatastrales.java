@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -26,6 +28,8 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosReferenciasCatastrales.class.getName());
 
+	private long liCodReferencia = 0;
+	
 	//Accion
 	private String sCOACCI = "";
 	
@@ -44,6 +48,18 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	
 	private String sNURCATF = "";
 	
+	//Filtro referencia activo
+	private String sNURCATFA = "";
+	private String sTIRCATFA = "";
+	private String sIMVSUEFA = "";
+	private String sComparadorSueloFA = "";
+	private boolean bSeleccionadoSueloFA = true; 
+	private String sIMCATAFA = "";
+	private String sComparadorCatastralFA = "";
+	private boolean bSeleccionadoCatastralFA = true; 
+	private String sFERECAFA = "";
+	private String sENEMISFA = "";
+	
 	//Referencia Catastral	
 	private String sNURCAT = "";
 	private String sTIRCAT = "";
@@ -58,9 +74,11 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 
 	//Observaciones
 	private String sOBTEXC = "";
-
+	
 	//Notas
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	private transient ActivoTabla activoseleccionado = null;
@@ -68,12 +86,17 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	private transient ArrayList<ReferenciaTabla> tablareferencias = null;
 	private transient ReferenciaTabla referenciaseleccionada = null;
 	
+	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
 	
 	public GestorMovimientosReferenciasCatastrales()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorMovimientosReferenciasCatastrales...");	
+			logger.debug("Iniciando GestorMovimientosReferenciasCatastrales...");
+			
+			tiposcomparaimporteHM.put("Igual a",    		"=");
+			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
+			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
 		}
 	}
 	
@@ -108,6 +131,26 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
    	
     }
     
+	public void borrarCamposFiltroRefereciasActivo()
+	{
+		this.sNURCATFA = "";
+		this.sTIRCATFA = "";
+		this.sIMVSUEFA = "";
+		this.sComparadorSueloFA = "";
+		this.bSeleccionadoSueloFA = true; 
+		this.sIMCATAFA = "";
+		this.sComparadorCatastralFA = "";
+		this.bSeleccionadoCatastralFA = true; 
+		this.sFERECAFA = "";
+		this.sENEMISFA = "";
+
+	}
+	
+    public void limpiarPlantillaFiltroRefereciasActivo(ActionEvent actionEvent) 
+    {  
+    	borrarCamposFiltroRefereciasActivo();
+    }
+    
 	public void borrarPlantillaReferencia()
 	{
         this.sNURCAT = "";
@@ -132,16 +175,58 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
     {  
     	this.sCOACES = "";
     	
+    	this.liCodReferencia = 0;
+    	
     	borrarResultadosActivo();
     	
     	borrarPlantillaReferencia();
     	
     	borrarResultadosReferencia();
+
+    	borrarCamposFiltroRefereciasActivo();
     }
 
     public void limpiarNota(ActionEvent actionEvent) 
     {  
     	this.sNota = "";
+    }
+    
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+
+			String sMsg = "";
+			
+			if (liCodReferencia == 0)
+			{
+				sMsg = "Debe de haber cargado una Referencia Catastral antes de guardar la nota. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (CLReferencias.guardarNota(liCodReferencia, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrio un error al guardar la nota de la Referencia Catastral. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
+	}
+	
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
     }
     
 	public void buscaActivos (ActionEvent actionEvent)
@@ -236,6 +321,87 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		}
     }
 	
+	public void buscarReferenciasActivo (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			if (sCOACES.isEmpty())
+			{
+				sMsg = "ERROR: Debe informar el campo 'Activo' para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+				
+				this.setTablareferencias(null);
+			}
+			else
+			{
+				try
+				{
+					String sImporteSuelo = "";
+					
+					if (!sComparadorSueloFA.isEmpty())
+					{
+						sImporteSuelo = Utils.compruebaImporte(sIMVSUEFA);
+					}
+					
+					String sImporteCatastral = "";
+
+					if (!sComparadorCatastralFA.isEmpty())
+					{
+						sImporteCatastral = Utils.compruebaImporte(sIMCATAFA);
+					}
+					
+					ReferenciaTabla filtro = new ReferenciaTabla(
+							"",
+							sNURCATFA,   
+							sTIRCATFA,
+							sENEMISFA,
+							"",   
+							sImporteSuelo,
+							sImporteCatastral,
+							Utils.compruebaFecha(sFERECAFA),
+							ValoresDefecto.DEF_ALTA);
+					
+					//this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
+					this.tablareferencias = CLReferencias.buscarReferenciasActivoConFiltro(filtro,sComparadorSueloFA,sComparadorCatastralFA, Integer.parseInt(sCOACES));
+					
+					if (getTablareferencias().size() == 0)
+					{
+						sMsg = "No se encontraron Referencias con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else if (getTablareferencias().size() == 1)
+					{
+						sMsg = "Encontrada una Referencia relacionada.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontradas "+getTablareferencias().size()+" Referencias relacionadas.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
+	
 	public void cargarReferencias (ActionEvent actionEvent)
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -279,6 +445,8 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
+	    	this.liCodReferencia = Long.parseLong(referenciaseleccionada.getsReferenciaID());
+	    	
 	    	this.sNURCAT = referenciaseleccionada.getNURCAT(); 
 	    	this.sTIRCAT = referenciaseleccionada.getTIRCAT();
 	    	this.sENEMIS = referenciaseleccionada.getENEMIS();
@@ -288,6 +456,11 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	    	this.sIMVSUE = referenciaseleccionada.getIMVSUE();
 	    	this.sIMCATA = referenciaseleccionada.getIMCATA();
 	    	this.sFERECA = referenciaseleccionada.getFERECA();
+	    	
+	    	this.sNotaOriginal = CLReferencias.buscarNota(liCodReferencia);
+			this.sNota = sNotaOriginal;
+			
+			this.bConNotas = !sNota.isEmpty();
 
 	    	String sMsg = "Referencia '"+ sNURCAT +"' Seleccionada.";
 	    	msg = Utils.pfmsgInfo(sMsg);
@@ -296,6 +469,24 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
+	
+	public void cambiaComparadorSueloFA()
+	{
+		this.bSeleccionadoSueloFA = this.sComparadorSueloFA.isEmpty();
+		logger.debug("sComparadorSueloFA:|"+sComparadorSueloFA+"|");
+	}
+	
+	public void cambiaComparadorCatastralFA()
+	{
+		this.bSeleccionadoCatastralFA = this.sComparadorCatastralFA.isEmpty();
+		logger.debug("sComparadorCatastralFA:|"+sComparadorCatastralFA+"|");
+	}
+	
+	public void hoyFERECAFA (ActionEvent actionEvent)
+	{
+		this.setsFERECAFA(Utils.fechaDeHoy(true));
+		logger.debug("sFERECAFA:|"+sFERECAFA+"|");
+	}
 
 	public void hoyFERECA (ActionEvent actionEvent)
 	{
@@ -657,6 +848,86 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		this.sNUFIRE = sNUFIRE;
 	}
 
+	public String getsNURCATFA() {
+		return sNURCATFA;
+	}
+
+	public void setsNURCATFA(String sNURCATFA) {
+		this.sNURCATFA = sNURCATFA;
+	}
+
+	public String getsTIRCATFA() {
+		return sTIRCATFA;
+	}
+
+	public void setsTIRCATFA(String sTIRCATFA) {
+		this.sTIRCATFA = sTIRCATFA;
+	}
+
+	public String getsIMVSUEFA() {
+		return sIMVSUEFA;
+	}
+
+	public void setsIMVSUEFA(String sIMVSUEFA) {
+		this.sIMVSUEFA = sIMVSUEFA;
+	}
+
+	public String getsComparadorSueloFA() {
+		return sComparadorSueloFA;
+	}
+
+	public void setsComparadorSueloFA(String sComparadorSueloFA) {
+		this.sComparadorSueloFA = sComparadorSueloFA;
+	}
+
+	public boolean isbSeleccionadoSueloFA() {
+		return bSeleccionadoSueloFA;
+	}
+
+	public void setbSeleccionadoSueloFA(boolean bSeleccionadoSueloFA) {
+		this.bSeleccionadoSueloFA = bSeleccionadoSueloFA;
+	}
+
+	public String getsIMCATAFA() {
+		return sIMCATAFA;
+	}
+
+	public void setsIMCATAFA(String sIMCATAFA) {
+		this.sIMCATAFA = sIMCATAFA;
+	}
+
+	public String getsComparadorCatastralFA() {
+		return sComparadorCatastralFA;
+	}
+
+	public void setsComparadorCatastralFA(String sComparadorCatastralFA) {
+		this.sComparadorCatastralFA = sComparadorCatastralFA;
+	}
+
+	public boolean isbSeleccionadoCatastralFA() {
+		return bSeleccionadoCatastralFA;
+	}
+
+	public void setbSeleccionadoCatastralFA(boolean bSeleccionadoCatastralFA) {
+		this.bSeleccionadoCatastralFA = bSeleccionadoCatastralFA;
+	}
+
+	public String getsFERECAFA() {
+		return sFERECAFA;
+	}
+
+	public void setsFERECAFA(String sFERECAFA) {
+		this.sFERECAFA = sFERECAFA;
+	}
+
+	public String getsENEMISFA() {
+		return sENEMISFA;
+	}
+
+	public void setsENEMISFA(String sENEMISFA) {
+		this.sENEMISFA = sENEMISFA;
+	}
+
 	public ArrayList<ActivoTabla> getTablaactivos() {
 		return tablaactivos;
 	}
@@ -689,6 +960,14 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 		this.referenciaseleccionada = referenciaseleccionada;
 	}
 
+	public Map<String,String> getTiposcomparaimporteHM() {
+		return tiposcomparaimporteHM;
+	}
+
+	public void setTiposcomparaimporteHM(Map<String,String> tiposcomparaimporteHM) {
+		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
+	}
+
 	public String getsIMVSUE() {
 		return sIMVSUE;
 	}
@@ -719,6 +998,14 @@ public class GestorMovimientosReferenciasCatastrales implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota.trim();
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public String getsNURCATF() {

@@ -2,6 +2,8 @@ package com.provisiones.pl.movimientos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -26,6 +28,8 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosImpuestosRecursos.class.getName());
 
+	private long liCodImpuesto = 0;
+	
 	//Accion
 	private String sCOACCI = "";
 	
@@ -44,9 +48,18 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	
 	private String sNURCATF = "";
 	
+	//filtro recurso activo
+	private String sNURCATFA = "";
+	private String sCOSBACFA = "";
+	private String sFEPRREFA = "";
+	private String sFEREREFA = "";
+	private String sFEDEINFA = "";
+	private String sBISODEFA = "";
+	private String sBIRESOFA = "";
+	
 	//Referecia Catastral
 	private String sNURCAT = "";
-
+	
 	//Solicitud
 	private String sDesCOSBAC = "";
 	private String sCOSBAC = "";
@@ -67,6 +80,8 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
 	//Notas
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 	private transient ActivoTabla activoseleccionado = null;
@@ -74,12 +89,31 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	private transient ArrayList<ImpuestoRecursoTabla> tablaimpuestos = null;
 	private transient ImpuestoRecursoTabla impuestoseleccionado = null;
 	
+	private Map<String,String> tiposbiresoHM = new LinkedHashMap<String, String>();
+	private Map<String,String> tiposbinariaHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcosbacHM = new LinkedHashMap<String, String>();
+	
 
 	public GestorMovimientosImpuestosRecursos()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorMovimientosImpuestosRecursos...");	
+			logger.debug("Iniciando GestorMovimientosImpuestosRecursos...");
+			
+			tiposbinariaHM.put("SI","S");
+			tiposbinariaHM.put("NO","N");
+			
+			tiposbiresoHM.put("FAVORABLE",   "F");
+			tiposbiresoHM.put("DESFAVORABLE","D");
+			
+			tiposcosbacHM.put("Impuestos e IBIS",                     "0");
+			tiposcosbacHM.put("IBIS",                                 "1");
+			tiposcosbacHM.put("Tasas basura",                         "2");
+			tiposcosbacHM.put("Tasas alcantarillado",                 "3");
+			tiposcosbacHM.put("Tasas agua",                           "4");
+			tiposcosbacHM.put("Contribuciones especiales",            "5");
+			tiposcosbacHM.put("Otras tasas",                          "6");
 		}
 	}
 	
@@ -114,6 +148,22 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
    	
     }
     
+	public void borrarCamposFiltroRecursosActivo()
+	{
+		this.sNURCATFA = "";
+		this.sCOSBACFA = "";
+		this.sFEPRREFA = "";
+		this.sFEREREFA = "";
+		this.sFEDEINFA = "";
+		this.sBISODEFA = "";
+		this.sBIRESOFA = "";
+	}
+	
+    public void limpiarPlantillaFiltroRecursosActivo(ActionEvent actionEvent) 
+    {  
+    	borrarCamposFiltroRecursosActivo();
+    }
+    
 	public void borrarPlantillaImpuesto()
 	{
 		
@@ -140,17 +190,58 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
     public void limpiarPlantilla(ActionEvent actionEvent) 
     {  
     	this.sCOACES = "";
+    	
+    	this.liCodImpuesto = 0;
 
     	borrarPlantillaImpuesto();
     	
     	borrarResultadosActivo();
     	borrarResultadosImpuesto();
+    	borrarCamposFiltroRecursosActivo();
    	
     }
     
     public void limpiarNota(ActionEvent actionEvent) 
     {  
     	this.sNota = "";
+    }
+    
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+
+			String sMsg = "";
+			
+			if (liCodImpuesto == 0)
+			{
+				sMsg = "Debe de haber cargado un Recurso antes de guardar la nota. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (CLImpuestos.guardarNota(liCodImpuesto, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrio un error al guardar la nota del Recurso. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
+	}
+	
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
     }
 	
 	public void buscaActivos (ActionEvent actionEvent)
@@ -259,6 +350,87 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
+	
+	
+	public void buscarRecursosActivo(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			this.impuestoseleccionado = null;
+			
+			this.tablaimpuestos = null;
+			
+			if (sCOACES.isEmpty())
+			{
+				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else
+			{
+				
+				try
+				{
+					
+					int iCOACES = Integer.parseInt(sCOACES);
+					
+					ImpuestoRecursoTabla filtro = new ImpuestoRecursoTabla(
+							"",
+							sNURCATFA,   
+							sCOSBACFA,
+							"",
+							Utils.compruebaFecha(sFEPRREFA),   
+							Utils.compruebaFecha(sFEREREFA),
+							Utils.compruebaFecha(sFEDEINFA),
+							sBISODEFA,
+							"",
+							sBIRESOFA,
+							"",
+							"",
+							ValoresDefecto.DEF_ALTA);
+					
+					//this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(iCOACES);
+					this.tablaimpuestos = CLImpuestos.buscarImpuestosActivoConFiltro(filtro,iCOACES);
+					
+					
+					if (getTablaimpuestos().size() == 0)
+					{
+						sMsg = "No se encontraron Impuestos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else if (getTablaimpuestos().size() == 1)
+					{
+						sMsg = "Encontrado un Impuesto relacionado.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontradas "+getTablaimpuestos().size()+" Impuestos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					
+					
+					//this.sNURCAT  = CLReferencias.referenciaCatastralAsociada(iCOACES);
+
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
+			
+	    	FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
     
 	public void cargarImpuestos(ActionEvent actionEvent)
 	{
@@ -318,6 +490,8 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		{
 	    	FacesMessage msg;
 	    	
+	    	this.liCodImpuesto = Long.parseLong(impuestoseleccionado.getsRecursoID());
+	    	
 	    	this.sCOSBAC = impuestoseleccionado.getCOSBAC();
 	    	this.sDesCOSBAC = impuestoseleccionado.getDCOSBAC();
 	    	this.sFEPRRE = impuestoseleccionado.getFEPRRE();
@@ -328,6 +502,11 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	    	this.sBIRESO = impuestoseleccionado.getBIRESO();
 	    	this.sDesBIRESO = impuestoseleccionado.getBIRESO();
 	    	this.sOBTEXC = impuestoseleccionado.getOBTEXC();
+	    	
+	    	this.sNotaOriginal = CLImpuestos.buscarNota(liCodImpuesto);
+			this.sNota = sNotaOriginal;
+			
+			this.bConNotas = !sNota.isEmpty();
 	    	
 	    	String sMsg = "Recurso de '"+sDesCOSBAC +"' Seleccionado.";
 			msg = Utils.pfmsgInfo(sMsg);
@@ -353,6 +532,24 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 	{
 		this.setsFEDEIN(Utils.fechaDeHoy(true));
 		logger.debug("sFEDEIN:|{}|",sFEDEIN);
+	}
+	
+	public void hoyFEPRREFA (ActionEvent actionEvent)
+	{
+		this.setsFEPRREFA(Utils.fechaDeHoy(true));
+		logger.debug("sFEPRREFA:|"+sFEPRREFA+"|");
+	}
+	
+	public void hoyFEREREFA (ActionEvent actionEvent)
+	{
+		this.setsFEREREFA(Utils.fechaDeHoy(true));
+		logger.debug("sFEREREFA:|"+sFEREREFA+"|");
+	}
+	
+	public void hoyFEDEINFA (ActionEvent actionEvent)
+	{
+		this.setsFEDEINFA(Utils.fechaDeHoy(true));
+		logger.debug("sFEDEINFA:|"+sFEDEINFA+"|");
 	}
     
 	public void registraDatos(ActionEvent actionEvent)
@@ -815,6 +1012,62 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		this.sNUFIRE = sNUFIRE;
 	}
 
+	public String getsNURCATFA() {
+		return sNURCATFA;
+	}
+
+	public void setsNURCATFA(String sNURCATFA) {
+		this.sNURCATFA = sNURCATFA;
+	}
+
+	public String getsCOSBACFA() {
+		return sCOSBACFA;
+	}
+
+	public void setsCOSBACFA(String sCOSBACFA) {
+		this.sCOSBACFA = sCOSBACFA;
+	}
+
+	public String getsFEPRREFA() {
+		return sFEPRREFA;
+	}
+
+	public void setsFEPRREFA(String sFEPRREFA) {
+		this.sFEPRREFA = sFEPRREFA;
+	}
+
+	public String getsFEREREFA() {
+		return sFEREREFA;
+	}
+
+	public void setsFEREREFA(String sFEREREFA) {
+		this.sFEREREFA = sFEREREFA;
+	}
+
+	public String getsFEDEINFA() {
+		return sFEDEINFA;
+	}
+
+	public void setsFEDEINFA(String sFEDEINFA) {
+		this.sFEDEINFA = sFEDEINFA;
+	}
+
+	public String getsBISODEFA() {
+		return sBISODEFA;
+	}
+
+	public void setsBISODEFA(String sBISODEFA) {
+		this.sBISODEFA = sBISODEFA;
+	}
+
+	public String getsBIRESOFA() {
+		return sBIRESOFA;
+	}
+
+	public void setsBIRESOFA(String sBIRESOFA) {
+		this.sBIRESOFA = sBIRESOFA;
+	}
+
 	public ArrayList<ActivoTabla> getTablaactivos() {
 		return tablaactivos;
 	}
@@ -847,6 +1100,30 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 		this.tablaimpuestos = tablaimpuestos;
 	}
 
+	public Map<String, String> getTiposbiresoHM() {
+		return tiposbiresoHM;
+	}
+
+	public void setTiposbiresoHM(Map<String, String> tiposbiresoHM) {
+		this.tiposbiresoHM = tiposbiresoHM;
+	}
+
+	public Map<String, String> getTiposbinariaHM() {
+		return tiposbinariaHM;
+	}
+
+	public void setTiposbinariaHM(Map<String, String> tiposbinariaHM) {
+		this.tiposbinariaHM = tiposbinariaHM;
+	}
+
+	public Map<String, String> getTiposcosbacHM() {
+		return tiposcosbacHM;
+	}
+
+	public void setTiposcosbacHM(Map<String, String> tiposcosbacHM) {
+		this.tiposcosbacHM = tiposcosbacHM;
+	}
+
 	public String getsDesCOSBAC() {
 		return sDesCOSBAC;
 	}
@@ -877,6 +1154,14 @@ public class GestorMovimientosImpuestosRecursos implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public String getsNURCATF() {

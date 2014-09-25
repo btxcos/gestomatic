@@ -70,6 +70,8 @@ public class GestorDetallesProvision implements Serializable
 	private String sCodGasto = ""; 
 
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private String sEstadoGastos = "";
 	
@@ -162,6 +164,11 @@ public class GestorDetallesProvision implements Serializable
 
 	    	this.sCodEstado = provision.getsCodEstado();
 	    	
+	    	this.sNotaOriginal = CLProvisiones.buscarNota(sNUPROF);
+			this.sNota = sNotaOriginal;
+			
+			this.bConNotas = !sNota.isEmpty();
+	    	
 		}
 		
 	}
@@ -196,6 +203,12 @@ public class GestorDetallesProvision implements Serializable
 		
 		}
 	}
+	
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
+    }
 	
 	public void buscarGastos()
 	{
@@ -511,6 +524,14 @@ public class GestorDetallesProvision implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public String getsEstadoGastos() {

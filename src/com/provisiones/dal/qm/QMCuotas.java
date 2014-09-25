@@ -759,7 +759,8 @@ public final class QMCuotas
 						String sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
 						String sPTPAGO     = rs.getString(CAMPO10);
 						String sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						String sOBTEXC     = rs.getString(CAMPO11);  
+						String sOBTEXC     = rs.getString(CAMPO11);
+						String sESTADO     = rs.getString(CAMPO12);
 
 						
 						CuotaTabla cuotaencontrada = new CuotaTabla(
@@ -776,7 +777,8 @@ public final class QMCuotas
 								sFAACTA,
 								sPTPAGO,
 								sDesPTPAGO,
-								sOBTEXC);
+								sOBTEXC,
+								sESTADO);
 						
 						resultado.add(cuotaencontrada);
 						
@@ -829,6 +831,7 @@ public final class QMCuotas
 			
 			String sCondicionFAACTA = (filtro.getFAACTA().isEmpty() || filtro.getFAACTA().equals("0"))?"":CAMPO9 + " = '" + filtro.getFAACTA() + "' AND ";
 			String sCondicionPTPAGO = filtro.getPTPAGO().isEmpty()?"":CAMPO10 + " = '" + filtro.getPTPAGO() + "' AND ";
+			String sCondicionESTADO = filtro.getESTADO().isEmpty()?"":CAMPO12 + " = '" + filtro.getESTADO() + "' AND ";
 	
 			logger.debug("Ejecutando Query...");
 			
@@ -854,6 +857,7 @@ public final class QMCuotas
 						   +sCondicionImporte
 						   +sCondicionFAACTA
 						   +sCondicionPTPAGO
+						   +sCondicionESTADO
 						   + CAMPO2 + " = '" + filtro.getCOACES() + "')";
 			
 			logger.debug(sQuery);
@@ -887,7 +891,8 @@ public final class QMCuotas
 						String sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
 						String sPTPAGO     = rs.getString(CAMPO10);
 						String sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						String sOBTEXC     = rs.getString(CAMPO11);  
+						String sOBTEXC     = rs.getString(CAMPO11);
+						String sESTADO     = rs.getString(CAMPO12);
 
 						
 						CuotaTabla cuotaencontrada = new CuotaTabla(
@@ -904,7 +909,8 @@ public final class QMCuotas
 								sFAACTA,
 								sPTPAGO,
 								sDesPTPAGO,
-								sOBTEXC);
+								sOBTEXC,
+								sESTADO);
 						
 						resultado.add(cuotaencontrada);
 						
@@ -1000,7 +1006,8 @@ public final class QMCuotas
 						String sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
 						String sPTPAGO     = rs.getString(CAMPO10);
 						String sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						String sOBTEXC     = rs.getString(CAMPO11);  
+						String sOBTEXC     = rs.getString(CAMPO11);
+						String sESTADO     = rs.getString(CAMPO12);
 
 						
 						CuotaTabla cuotaencontrada = new CuotaTabla(
@@ -1017,7 +1024,8 @@ public final class QMCuotas
 								sFAACTA,
 								sPTPAGO,
 								sDesPTPAGO,
-								sOBTEXC);
+								sOBTEXC,
+								sESTADO);
 						
 						resultado.add(cuotaencontrada);
 						
@@ -1074,6 +1082,7 @@ public final class QMCuotas
 			
 			String sCondicionFAACTA = (filtro.getFAACTA().isEmpty() || filtro.getFAACTA().equals("0"))?"":CAMPO9 + " = '" + filtro.getFAACTA() + "' AND ";
 			String sCondicionPTPAGO = filtro.getPTPAGO().isEmpty()?"":CAMPO10 + " = '" + filtro.getPTPAGO() + "' AND ";
+			String sCondicionESTADO = filtro.getESTADO().isEmpty()?"":CAMPO12 + " = '" + filtro.getESTADO() + "' AND ";
 			
 			logger.debug("Ejecutando Query...");
 			
@@ -1100,6 +1109,7 @@ public final class QMCuotas
 						   + sCondicionImporte
 						   + sCondicionFAACTA
 						   + sCondicionPTPAGO
+						   + sCondicionESTADO
 						   + CAMPO3  + " = '"+ filtro.getCOCLDO() +"' AND "
 						   + CAMPO4  + " = '"+ filtro.getNUDCOM() +"')";
 			
@@ -1134,7 +1144,8 @@ public final class QMCuotas
 						String sFAACTA     = Utils.recuperaFecha(rs.getString(CAMPO9));
 						String sPTPAGO     = rs.getString(CAMPO10);
 						String sDesPTPAGO  = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TPTPAGO,QMCodigosControl.IPTPAGO,sPTPAGO);
-						String sOBTEXC     = rs.getString(CAMPO11);  
+						String sOBTEXC     = rs.getString(CAMPO11);
+						String sESTADO     = rs.getString(CAMPO12);
 
 						
 						CuotaTabla cuotaencontrada = new CuotaTabla(
@@ -1151,7 +1162,8 @@ public final class QMCuotas
 								sFAACTA,
 								sPTPAGO,
 								sDesPTPAGO,
-								sOBTEXC);
+								sOBTEXC,
+								sESTADO);
 						
 						resultado.add(cuotaencontrada);
 						

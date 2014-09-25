@@ -52,6 +52,8 @@ public class GestorDetallesImpuesto implements Serializable
 	private String sDesBIRESO = "";
 	
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	public GestorDetallesImpuesto()
 	{
@@ -125,7 +127,10 @@ public class GestorDetallesImpuesto implements Serializable
 		    	this.sDesBIRESO = CLDescripciones.descripcionResolucion(impuesto.getBIRESO());
 		    	this.sOBTEXC = impuesto.getOBTEXC();
 		    		
-		    	this.sNota = CLImpuestos.buscarNota(liCodImpuesto);
+		    	this.sNotaOriginal = CLImpuestos.buscarNota(liCodImpuesto);
+				this.sNota = sNotaOriginal;
+				
+				this.bConNotas = !sNota.isEmpty();
 
 				sMsg = "La Impuesto se cargó correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -182,6 +187,12 @@ public class GestorDetallesImpuesto implements Serializable
 		
 		}
 	}
+	
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
+    }
 	
 	public void cargarDetallesReferencia (ActionEvent actionEvent) 
     { 
@@ -367,5 +378,13 @@ public class GestorDetallesImpuesto implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 }

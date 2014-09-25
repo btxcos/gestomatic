@@ -12,15 +12,15 @@ public class ReferenciaTabla
 	private String IMVSUE = "";
 	private String IMCATA = "";
 	private String FERECA = "";
-
+	private String ESTADO = "";
 	
 	//Constructor de clase
 
 	public ReferenciaTabla(String sReferenciaID, String nURCAT, String tIRCAT,
 			String eNEMIS, String oBTEXC, String iMVSUE, String iMCATA,
-			String fERECA) {
+			String fERECA, String eSTADO) {
 		super();
-		this.setsReferenciaID(sReferenciaID);
+		this.sReferenciaID = sReferenciaID;
 		NURCAT = nURCAT;
 		TIRCAT = tIRCAT;
 		ENEMIS = eNEMIS;
@@ -28,6 +28,7 @@ public class ReferenciaTabla
 		IMVSUE = iMVSUE;
 		IMCATA = iMCATA;
 		FERECA = fERECA;
+		ESTADO = eSTADO;
 	}
 
 	//Métodos de acceso
@@ -106,6 +107,14 @@ public class ReferenciaTabla
 
 	public void setFERECA(String fERECA) {
 		FERECA = fERECA;
+	}
+
+	public String getESTADO() {
+		return ESTADO;
+	}
+
+	public void setESTADO(String eSTADO) {
+		ESTADO = eSTADO;
 	}
 	
 }

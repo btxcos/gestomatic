@@ -81,10 +81,10 @@
 										<p:panel>
 											<h:panelGrid columns="3" cellpadding="5">
 
-												<h:outputText for="COACES" value="Codigo de activo: "/>
+												<h:outputText for="COACES" value="Activo: "/>
 												<p:inputText id="COACES" value="#{GestorMovimientosCuotas.sCOACES}" size="9" maxlength="9"/>
 
-												<p:commandButton value="Cargar Cuotas" update="msgs, popup, COACES, form:cuotas" actionListener="#{GestorMovimientosCuotas.cargarCuotas}" oncomplete="dlgTablaCuotas.show()"/>	
+												<p:commandButton value="Buscar Cuotas" update="msgs, popup, COACES, form:cuotas" oncomplete="dlgFiltrarCuotaActivo.show()"/>	
 
 											</h:panelGrid>
 										</p:panel>
@@ -217,12 +217,14 @@
 						</h:panelGrid>
 					</p:dialog>
 
-					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+					<p:dialog id="DNOTAS" header="Notas:" widgetVar="dlgNotas" resizable="false" visible="#{GestorMovimientosCuotas.bConNotas}" position="right">
 						<h:panelGrid columns="1" cellpadding="1">
 							<p:panel>
-								<h:panelGrid columns="2" cellpadding="5">
+								<h:panelGrid columns="3" cellpadding="5">
 
 									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorMovimientosCuotas.limpiarNota}"/>
+									<p:commandButton value="Guardar" update="NOTA" actionListener="#{GestorMovimientosCuotas.guardaNota}"/>
+									<p:commandButton value="Restaurar" update="NOTA" actionListener="#{GestorMovimientosCuotas.restablecerNota}"/>
 
 								</h:panelGrid>
 							</p:panel>
@@ -276,10 +278,94 @@
 
 							</p:dataTable>
 					</p:dialog>
+					<p:dialog header="Filtrar Cuotas Activo: " widgetVar="dlgFiltrarCuotaActivo" resizable="false">  
+									<p:fieldset legend="Filtro">
+										<h:panelGrid columns="1" cellpadding="5">
+											<p:panel id="panelFiltrarCuotaActivo">
+												<h:panelGrid columns="1" cellpadding="5">
 
+													<p:panel>
+														<h:panelGrid columns="2" cellpadding="5">
+
+															<h:outputText value="Concepto de cuota: "/>
+															<p:selectOneMenu id="COSBACFA" value="#{GestorMovimientosCuotas.sCOSBACFA}">
+																<f:selectItem itemLabel="Cuota..." itemValue=""/>
+																<f:selectItems value="#{GestorMovimientosCuotas.tiposcosbacHM}"/>
+															</p:selectOneMenu>
+
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Primer Pago: "/>
+															<p:inputMask id="FIPAGOFA" value="#{GestorMovimientosCuotas.sFIPAGOFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FIPAGOFA" actionListener="#{GestorMovimientosCuotas.hoyFIPAGOFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Último Pago: "/>
+															<p:inputMask id="FFPAGOFA" value="#{GestorMovimientosCuotas.sFFPAGOFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FFPAGOFA" actionListener="#{GestorMovimientosCuotas.hoyFFPAGOFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="4" cellpadding="1">
+															<h:outputText value="Importe: "/>
+															<p:selectOneMenu id="COMPARADORFA" value="#{GestorMovimientosCuotas.sComparadorFA}">
+																<f:selectItem itemLabel="Comparar..." itemValue=""/>
+																<f:selectItems value="#{GestorMovimientosCuotas.tiposcomparaimporteHM}"/>
+																<p:ajax update="COMPARADORFA, IMNGASFA" listener="#{GestorMovimientosCuotas.cambiaComparadorFA}"/>
+															</p:selectOneMenu>
+															<p:inputText id="IMNGASFA" value="#{GestorMovimientosCuotas.sIMCUCOFA}" size="16" maxlength="16" disabled="#{GestorMovimientosCuotas.bSeleccionadoFA}"/>
+															<h:outputText value="¤"/>
+														</h:panelGrid>
+													</p:panel>
+
+													<p:panel>
+														<h:panelGrid columns="3" cellpadding="1">
+															<h:outputText value="Fecha de Acta: "/>
+															<p:inputMask id="FAACTAFA" value="#{GestorMovimientosCuotas.sFAACTAFA}" mask="99/99/9999" size="10" maxlength="10"/>
+															<p:commandButton icon="ui-icon-clock" update="FAACTAFA" actionListener="#{GestorMovimientosCuotas.hoyFAACTAFA}"/>
+														</h:panelGrid>
+													</p:panel>
+
+												<p:panel>
+													<h:panelGrid columns="2" cellpadding="5">
+
+														<h:outputText for="PTPAGOFA" value="Periodicidad: "/>
+														<p:selectOneMenu id="PTPAGOFA" value="#{GestorMovimientosCuotas.sPTPAGOFA}">
+															<f:selectItem itemLabel="Elija..." itemValue=""/>
+															<f:selectItems value="#{GestorMovimientosCuotas.tiposptpagoHM}"/>
+															<f:validateLength minimum="1"/>
+														</p:selectOneMenu>
+
+													</h:panelGrid>
+												</p:panel>
+
+
+
+												</h:panelGrid>
+											</p:panel>
+											<p:panel >
+												<h:panelGrid columns="3" cellpadding="5">
+													
+													<p:commandButton value="Buscar" update="popup, msgs, form:cuotas" actionListener="#{GestorMovimientosCuotas.buscarCuotasActivo}" oncomplete="dlgFiltrarCuotaActivo.hide(); dlgTablaCuotas.show()"/>	
+													<p:commandButton value="Limpiar Plantilla" update="panelFiltrarCuotaActivo" actionListener="#{GestorMovimientosCuotas.limpiarPlantillaFiltroCuotasActivo}" />	
+
+												</h:panelGrid>
+											</p:panel>
+
+													
+										</h:panelGrid>
+									</p:fieldset>
+					</p:dialog>
 					<p:dialog header="Cuotas disponibles:" widgetVar="dlgTablaCuotas" resizable="false">
 						<p:contextMenu for="cuotas">
-							<p:menuitem value="Seleccionar" update="panel, form:popup" icon="ui-icon-check" actionListener="#{GestorMovimientosCuotas.seleccionarCuota}" oncomplete="dlgTablaCuotas.hide()"/>
+							<p:menuitem value="Seleccionar" update="panel, form:popup, DNOTAS" icon="ui-icon-check" actionListener="#{GestorMovimientosCuotas.seleccionarCuota}" oncomplete="dlgTablaCuotas.hide()"/>
 						</p:contextMenu>
 
 							<p:dataTable id="cuotas" var="cuota" value="#{GestorMovimientosCuotas.tablacuotas}" rowKey="#{cuota.DCOSBAC}"

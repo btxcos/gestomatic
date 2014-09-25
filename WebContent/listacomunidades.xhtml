@@ -57,9 +57,10 @@
 									<p:fieldset legend="Activo">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACES" value="Activo: "/>
 													<p:inputText id="COACES" value="#{GestorListaComunidades.sCOACES}" size="10" maxlength="9"/>
+
 													<p:commandButton value="Buscar Comunidad" update="comunidades, msgs, popup, activos, COACES" actionListener="#{GestorListaComunidades.buscarComunidadActivo}"/>	
 												</h:panelGrid>
 											</p:panel>

@@ -815,7 +815,8 @@ public final class QMListaImpuestos
 						String sDesBISODE  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
 						String sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
 						String sDesBIRESO  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
-						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
+						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);
+						String sEstado     = rs.getString(QMImpuestos.CAMPO11); 
 
 						ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
 								sRecursoID,
@@ -829,7 +830,8 @@ public final class QMListaImpuestos
 								sDesBISODE,
 								sBIRESO,
 								sDesBIRESO,
-								sOBTEXC);
+								sOBTEXC,
+								sEstado);
 						
 						resultado.add(impuestoencontrado);
 						
@@ -880,6 +882,7 @@ public final class QMListaImpuestos
 			String sCondicionFEDEIN = (filtro.getFEDEIN().isEmpty() || filtro.getFEDEIN().equals("0"))?"":QMImpuestos.CAMPO6 + " = '" + filtro.getFEDEIN() + "' AND ";
 			String sCondicionBISODE = filtro.getBISODE().isEmpty()?"":QMImpuestos.CAMPO7 + " = '" + filtro.getBISODE() + "' AND ";
 			String sCondicionBIRESO = filtro.getBIRESO().isEmpty()?"":QMImpuestos.CAMPO8 + " = '" + filtro.getBIRESO() + "' AND ";
+			String sCondicionEstado = filtro.getESTADO().isEmpty()?"":QMImpuestos.CAMPO11 + " = '" + filtro.getESTADO() + "' AND ";
 			
 			logger.debug("Ejecutando Query...");
 
@@ -892,8 +895,9 @@ public final class QMListaImpuestos
 						   + QMImpuestos.CAMPO6 + ","
 						   + QMImpuestos.CAMPO7 + ","
 						   + QMImpuestos.CAMPO8 + ","
-						   + QMImpuestos.CAMPO9 + ","  
-						   + QMImpuestos.CAMPO10 +
+						   + QMImpuestos.CAMPO9 + ","
+						   + QMImpuestos.CAMPO10 + ","
+						   + QMImpuestos.CAMPO11 +
 
 						   " FROM " 
 						   + QMImpuestos.TABLA + 
@@ -905,6 +909,7 @@ public final class QMListaImpuestos
 						   + sCondicionFEDEIN
 						   + sCondicionBISODE
 						   + sCondicionBIRESO
+						   + sCondicionEstado
 						   + QMImpuestos.CAMPO1 +" IN (SELECT "
 						   +  CAMPO2 + 
 						   " FROM " 
@@ -940,7 +945,8 @@ public final class QMListaImpuestos
 						String sDesBISODE  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
 						String sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
 						String sDesBIRESO  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
-						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
+						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);
+						String sEstado     = rs.getString(QMImpuestos.CAMPO11);
 
 						ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
 								sRecursoID,
@@ -954,7 +960,8 @@ public final class QMListaImpuestos
 								sDesBISODE,
 								sBIRESO,
 								sDesBIRESO,
-								sOBTEXC);
+								sOBTEXC,
+								sEstado);
 						
 						resultado.add(impuestoencontrado);
 						
@@ -1057,7 +1064,8 @@ public final class QMListaImpuestos
 						String sDesBISODE  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBINARIA,QMCodigosControl.IBINARIA,sBISODE);
 						String sBIRESO     = rs.getString(QMImpuestos.CAMPO8);
 						String sDesBIRESO  = QMCodigosControl.getDesCampo(conexion,QMCodigosControl.TBIRESO,QMCodigosControl.IBIRESO,sBIRESO);
-						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);  
+						String sOBTEXC     = rs.getString(QMImpuestos.CAMPO10);
+						String sEstado     = rs.getString(QMImpuestos.CAMPO11);
 						
 						ImpuestoRecursoTabla impuestoencontrado = new ImpuestoRecursoTabla(
 								sRecursoID,
@@ -1071,7 +1079,8 @@ public final class QMListaImpuestos
 								sDesBISODE,
 								sBIRESO,
 								sDesBIRESO,
-								sOBTEXC);
+								sOBTEXC,
+								sEstado);
 						
 						resultado.add(impuestoencontrado);
 						

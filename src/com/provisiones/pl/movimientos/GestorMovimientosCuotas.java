@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -29,6 +31,8 @@ public class GestorMovimientosCuotas implements Serializable
 	
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosCuotas.class.getName());
 
+	private long liCodCuota = 0;
+	
 	//Accion
 	private String sCOACCI = "";
 
@@ -46,6 +50,16 @@ public class GestorMovimientosCuotas implements Serializable
 	private String sNUFIRE = "";
 	
 	private String sNURCAT = "";
+	
+	//Filtro cuotas activo
+	private String sCOSBACFA = "";
+	private String sFIPAGOFA = "";
+	private String sFFPAGOFA = "";
+	private String sIMCUCOFA = "";
+	private String sFAACTAFA = "";
+	private String sPTPAGOFA = "";
+	private String sComparadorFA = "";
+	private boolean bSeleccionadoFA = true;
 	
 	//Comunidad
 	private String sCOCLDO = "";
@@ -69,19 +83,47 @@ public class GestorMovimientosCuotas implements Serializable
 	
 	//Notas
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
 
 	private transient CuotaTabla cuotaseleccionada = null;
 	private transient ArrayList<CuotaTabla> tablacuotas = null;
+	
+	private Map<String,String> tiposcosbacHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposptpagoHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposcomparaimporteHM = new LinkedHashMap<String, String>();
 
 	
 	public GestorMovimientosCuotas()
 	{
 		if (ConnectionManager.comprobarConexion())
 		{
-			logger.debug("Iniciando GestorMovimientosCuotas...");	
+			logger.debug("Iniciando GestorMovimientosCuotas...");
+			
+			tiposcosbacHM.put("Comunidad",	                   	"0");  
+			tiposcosbacHM.put("Ordinaria",                     	"1");  
+			tiposcosbacHM.put("Extras Comunidad",              	"2");  
+			tiposcosbacHM.put("Mancomunidad",                  	"3");  
+			tiposcosbacHM.put("Extras Mancomunidad",           	"4");  
+			tiposcosbacHM.put("Obras comunidad",               	"5");
+			
+			tiposptpagoHM.put("APERIODICO",      "1");
+			tiposptpagoHM.put("MENSUAL",         "2");
+			tiposptpagoHM.put("BIMENSUAL",       "3");
+			tiposptpagoHM.put("TRIMESTRAL",      "4");
+			tiposptpagoHM.put("CUATRIMESTRAL",   "5");
+			tiposptpagoHM.put("SEMESTRAL",       "6");
+			tiposptpagoHM.put("ANUAL",           "7");
+			tiposptpagoHM.put("VARIOS PERIODOS", "8");
+			
+			tiposcomparaimporteHM.put("Igual a",    		"=");
+			tiposcomparaimporteHM.put("Mayor o igual a",	">=");
+			tiposcomparaimporteHM.put("Menor o igual a",	"<=");
 		}
 	}
 	
@@ -111,6 +153,24 @@ public class GestorMovimientosCuotas implements Serializable
     {  
     	borrarCamposFiltroActivo();
     	borrarResultadosActivo();
+    }
+    
+	public void borrarCamposFiltroCuotasActivo()
+	{
+		this.sCOSBACFA = "";
+		this.sFIPAGOFA = "";
+		this.sFFPAGOFA = "";
+		this.sIMCUCOFA = "";
+		this.sFAACTAFA = "";
+		this.sPTPAGOFA = "";
+		this.sComparadorFA = "";
+		this.bSeleccionadoFA = true; 
+
+	}
+	
+    public void limpiarPlantillaFiltroCuotasActivo(ActionEvent actionEvent) 
+    {  
+    	borrarCamposFiltroCuotasActivo();
     }
     
 	public void borrarCamposComunidad()
@@ -143,6 +203,8 @@ public class GestorMovimientosCuotas implements Serializable
 	
 	public void limpiarPlantilla(ActionEvent actionEvent) 
     {
+		this.liCodCuota = 0;
+		
 		this.sCOACCI = "";
 		
     	borrarCamposFiltroActivo();
@@ -150,11 +212,50 @@ public class GestorMovimientosCuotas implements Serializable
 
     	borrarCamposCuota();
     	borrarResultadosCuota();
+    	borrarCamposFiltroCuotasActivo();
     }
     
     public void limpiarNota(ActionEvent actionEvent) 
     {  
     	this.sNota = "";
+    }
+    
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+
+			String sMsg = "";
+			
+			if (liCodCuota == 0)
+			{
+				sMsg = "Debe de haber cargado una Cuota antes de guardar la nota. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (CLCuotas.guardarNota(liCodCuota, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrio un error al guardar la nota de la Cuota. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
+	}
+	
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
     }
     
 	public void buscaActivos (ActionEvent actionEvent)
@@ -267,9 +368,11 @@ public class GestorMovimientosCuotas implements Serializable
 			{
 				try
 				{
-					if (CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					int iCOACES  = Integer.parseInt(sCOACES);
+					
+					if (CLActivos.existeActivo(iCOACES))
 					{
-						this.tablacuotas = CLCuotas.buscarCuotasActivo(Integer.parseInt(sCOACES));
+						this.tablacuotas = CLCuotas.buscarCuotasActivo(iCOACES);
 						
 						if (getTablacuotas().size() == 0)
 						{
@@ -312,12 +415,129 @@ public class GestorMovimientosCuotas implements Serializable
 		}
 	}
 	
+	public void buscarCuotasActivo(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+			
+			String sMsg = "";
+			
+			this.cuotaseleccionada = null;
+
+			this.tablacuotas = null;
+			
+			if (sCOACES.isEmpty())
+			{
+				sMsg = "ERROR: Debe informar el Activo para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else
+			{
+		    	try
+		    	{
+		    		int iCOACES = Integer.parseInt(sCOACES);
+		    		
+					if (CLActivos.existeActivo(iCOACES))
+					{
+						try
+						{
+							if (CLActivos.existeActivo(iCOACES))
+							{
+								String sImporte = "";
+								
+								if (!sComparadorFA.isEmpty())
+								{
+									sImporte = Utils.compruebaImporte(sIMCUCOFA);
+								}
+								
+								CuotaTabla filtro = new CuotaTabla(
+										"",
+										sCOACES,   
+										"",
+										"",
+										"",   
+										sCOSBACFA,
+										"",
+										Utils.compruebaFecha(sFIPAGOFA),  
+										Utils.compruebaFecha(sFFPAGOFA),   
+										sImporte,  
+										Utils.compruebaFecha(sFAACTAFA),   
+										sPTPAGOFA,
+										"",
+										"",
+										ValoresDefecto.DEF_ALTA);
+								
+								//this.tablacuotas = CLCuotas.buscarCuotasActivo(iCOACES);
+								this.tablacuotas = CLCuotas.buscarCuotasActivoConFiltro(filtro, sComparadorFA);
+								
+								if (getTablacuotas().size() == 0)
+								{
+									sMsg = "No se encontraron Cuotas con los criterios solicitados.";
+									msg = Utils.pfmsgWarning(sMsg);
+									logger.warn(sMsg);
+								}
+								else if (getTablacuotas().size() == 1)
+								{
+									sMsg = "Encontrada una Cuota relacionada.";
+									msg = Utils.pfmsgInfo(sMsg);
+									logger.info(sMsg);
+								}
+								else
+								{
+									sMsg = "Encontradas "+getTablacuotas().size()+" Cuotas relacionadas.";
+									msg = Utils.pfmsgInfo(sMsg);
+									logger.info(sMsg);
+								}
+							}
+							else
+							{
+								sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+								msg = Utils.pfmsgWarning(sMsg);
+								logger.warn(sMsg);
+							}
+							
+
+						}
+						catch(NumberFormatException nfe)
+						{
+							sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+							msg = Utils.pfmsgError(sMsg);
+							logger.error(sMsg);
+						}				
+					}
+					else
+					{
+						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+						
+				    	this.setTablacuotas(null);
+					} 
+				}
+				catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: El activo debe ser numérico. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
 	public void seleccionarCuota(ActionEvent actionEvent) 
     {
 		if (ConnectionManager.comprobarConexion())
 		{
 		   	FacesMessage msg;
 	    	
+		   	this.liCodCuota = Long.parseLong(cuotaseleccionada.getsCuotaID());
+		   	
+		   	logger.debug("liCodCuota:|"+liCodCuota+"|");
+		   	
 	    	this.sCOCLDO = cuotaseleccionada.getCOCLDO(); 
 	    	this.sDesCOCLDO = cuotaseleccionada.getDCOCLDO();
 	    	this.sNUDCOM = cuotaseleccionada.getNUDCOM();
@@ -331,13 +551,42 @@ public class GestorMovimientosCuotas implements Serializable
 	    	this.sDesPTPAGO = cuotaseleccionada.getDPTPAGO();
 	    	this.sOBTEXC = cuotaseleccionada.getOBTEXC();
 	    	
-	    	String sMsg = "Cuota de '"+ sDesCOSBAC +"' Seleccionada.";
+	    	this.sNotaOriginal = CLCuotas.buscarNota(liCodCuota);
+	    	this.sNota = sNotaOriginal;
+			
+			this.bConNotas = !sNota.isEmpty();
+	    	
+	    	String sMsg = "Cuota de '"+ sDesCOSBAC +"' cargada correctamente .";
 	    	msg = Utils.pfmsgInfo(sMsg);
 	    	logger.info(sMsg);
 
 	    	FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
     }
+	
+	public void cambiaComparadorFA()
+	{
+		this.bSeleccionadoFA = this.sComparadorFA.isEmpty();
+		logger.debug("sComparadorFA:|"+sComparadorFA+"|");
+	}
+	
+	public void hoyFIPAGOFA (ActionEvent actionEvent)
+	{
+		this.setsFIPAGOFA(Utils.fechaDeHoy(true));
+		logger.debug("sFIPAGOFA:|"+sFIPAGOFA+"|");
+	}
+	
+	public void hoyFFPAGOFA (ActionEvent actionEvent)
+	{
+		this.setsFFPAGOFA(Utils.fechaDeHoy(true));
+		logger.debug("sFFPAGOFA:|"+sFFPAGOFA+"|");
+	}
+	
+	public void hoyFAACTAFA (ActionEvent actionEvent)
+	{
+		this.setsFAACTAFA(Utils.fechaDeHoy(true));
+		logger.debug("sFAACTAFA:|"+sFAACTAFA+"|");
+	}
 	
 	public void hoyFIPAGO (ActionEvent actionEvent)
 	{
@@ -679,6 +928,70 @@ public class GestorMovimientosCuotas implements Serializable
 		this.sNUFIRE = sNUFIRE;
 	}
 
+	public String getsCOSBACFA() {
+		return sCOSBACFA;
+	}
+
+	public void setsCOSBACFA(String sCOSBACFA) {
+		this.sCOSBACFA = sCOSBACFA;
+	}
+
+	public String getsFIPAGOFA() {
+		return sFIPAGOFA;
+	}
+
+	public void setsFIPAGOFA(String sFIPAGOFA) {
+		this.sFIPAGOFA = sFIPAGOFA;
+	}
+
+	public String getsFFPAGOFA() {
+		return sFFPAGOFA;
+	}
+
+	public void setsFFPAGOFA(String sFFPAGOFA) {
+		this.sFFPAGOFA = sFFPAGOFA;
+	}
+
+	public String getsIMCUCOFA() {
+		return sIMCUCOFA;
+	}
+
+	public void setsIMCUCOFA(String sIMCUCOFA) {
+		this.sIMCUCOFA = sIMCUCOFA;
+	}
+
+	public String getsFAACTAFA() {
+		return sFAACTAFA;
+	}
+
+	public void setsFAACTAFA(String sFAACTAFA) {
+		this.sFAACTAFA = sFAACTAFA;
+	}
+
+	public String getsPTPAGOFA() {
+		return sPTPAGOFA;
+	}
+
+	public void setsPTPAGOFA(String sPTPAGOFA) {
+		this.sPTPAGOFA = sPTPAGOFA;
+	}
+
+	public String getsComparadorFA() {
+		return sComparadorFA;
+	}
+
+	public void setsComparadorFA(String sComparadorFA) {
+		this.sComparadorFA = sComparadorFA;
+	}
+
+	public boolean isbSeleccionadoFA() {
+		return bSeleccionadoFA;
+	}
+
+	public void setbSeleccionadoFA(boolean bSeleccionadoFA) {
+		this.bSeleccionadoFA = bSeleccionadoFA;
+	}
+
 	public String getsCOACES() {
 		return sCOACES;
 	}
@@ -815,6 +1128,30 @@ public class GestorMovimientosCuotas implements Serializable
 		this.tablacuotas = tablacuotas;
 	}
 
+	public Map<String, String> getTiposcosbacHM() {
+		return tiposcosbacHM;
+	}
+
+	public void setTiposcosbacHM(Map<String, String> tiposcosbacHM) {
+		this.tiposcosbacHM = tiposcosbacHM;
+	}
+
+	public Map<String, String> getTiposptpagoHM() {
+		return tiposptpagoHM;
+	}
+
+	public void setTiposptpagoHM(Map<String, String> tiposptpagoHM) {
+		this.tiposptpagoHM = tiposptpagoHM;
+	}
+
+	public Map<String, String> getTiposcomparaimporteHM() {
+		return tiposcomparaimporteHM;
+	}
+
+	public void setTiposcomparaimporteHM(Map<String, String> tiposcomparaimporteHM) {
+		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
+	}
+
 	public String getsDesCOSBAC() {
 		return sDesCOSBAC;
 	}
@@ -845,6 +1182,14 @@ public class GestorMovimientosCuotas implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota.trim();
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public String getsNURCAT() {

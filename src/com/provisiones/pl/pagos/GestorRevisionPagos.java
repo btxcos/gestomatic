@@ -181,8 +181,9 @@ public class GestorRevisionPagos implements Serializable
 	private String sDescripcion = "";
 	
 	//Notas
-	private String sNotaO = "";
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 //	private boolean bRevisable = true;
 	
@@ -505,6 +506,44 @@ public class GestorRevisionPagos implements Serializable
     public void limpiarNota(ActionEvent actionEvent) 
     {  
     	this.sNota = "";
+    }
+    
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+
+			String sMsg = "";
+			
+			if (liCodPago == 0)
+			{
+				sMsg = "Debe de haber cargado un Pago antes de guardar la nota. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (CLPagos.guardarNota(liCodPago, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrio un error al guardar la nota del Pago. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
+	}
+    
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.setbConNotas(!sNota.isEmpty());
     }
     
 	public void cambiaGrupoActivo()
@@ -1431,8 +1470,13 @@ public class GestorRevisionPagos implements Serializable
 				logger.debug("sNUCCNT:|"+sNUCCNT+"|");
 				
 				//Notas
-				this.sNota = CLPagos.buscarNota(liCodPago);
-				this.sNotaO = sNota;
+				logger.debug("liCodPago:|"+liCodPago+"|");
+				this.sNotaOriginal = CLPagos.buscarNota(liCodPago);
+				this.sNota = sNotaOriginal;
+				
+				this.bConNotas = !sNota.isEmpty();
+				
+				logger.debug("bConNotas:|"+bConNotas+"|");
 
 
 	    	}
@@ -1809,7 +1853,7 @@ public class GestorRevisionPagos implements Serializable
 						&& sNUCCOF.equals(sNUCCOFO)
 						&& sNUCCDI.equals(sNUCCDIO)
 						&& sNUCCNT.equals(sNUCCNTO)
-						&& sNota.equals(sNotaO))
+						&& sNota.equals(sNotaOriginal))
 				{
 					sMsg = "ERROR: No hay modificaciones que realizar. Por favor, revise los datos.";
 					msg = Utils.pfmsgError(sMsg);
@@ -1836,7 +1880,7 @@ public class GestorRevisionPagos implements Serializable
 					logger.debug("sNUCCNT:|"+sNUCCNT+"|");
 					logger.debug("sNUCCNTO:|"+sNUCCNTO+"|");
 					logger.debug("sNota:|"+sNota+"|");
-					logger.debug("sNotaO:|"+sNotaO+"|");
+					logger.debug("sNotaO:|"+sNotaOriginal+"|");
 					
 					/*if (bDevolucion)
 					{
@@ -2682,6 +2726,14 @@ public class GestorRevisionPagos implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public String getsTipoPago() {

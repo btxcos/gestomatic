@@ -167,6 +167,7 @@ public class GestorListaImpuestosActivo implements Serializable
 							"",
 							sBIRESOFA,
 							"",
+							"",
 							"");
 					
 					//this.tablaimpuestos = CLImpuestos.buscarImpuestosActivos(iCOACES);

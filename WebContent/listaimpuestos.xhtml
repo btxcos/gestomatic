@@ -34,6 +34,7 @@
 						<p:fieldset legend="Info">
 							<h:panelGrid columns="3" cellpadding="5">
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
+
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
 										<p:messages id="msgs"/>
@@ -57,10 +58,10 @@
 									<p:fieldset legend="Activo">
 										<h:panelGrid columns="2" cellpadding="5">
 											<p:panel >
-												<h:panelGrid columns="4" cellpadding="5">
+												<h:panelGrid columns="3" cellpadding="5">
 													<h:outputText for="COACES" value="Activo: "/>
-													<p:inputMask id="COACES" value="#{GestorListaImpuestos.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
-													<p:message for="COACES" display="icon"/>
+													<p:inputText id="COACES" value="#{GestorListaImpuestos.sCOACES}" size="9" maxlength="9"/>
+
 													<p:commandButton value="Buscar Recursos" update="impuestos, msgs, popup" oncomplete="dlgFiltrarRecursoActivo.show()"/>	
 												</h:panelGrid>
 											</p:panel>

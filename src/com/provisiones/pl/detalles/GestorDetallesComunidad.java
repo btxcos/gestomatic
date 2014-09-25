@@ -64,6 +64,8 @@ public class GestorDetallesComunidad implements Serializable
 	private String sCOACES = "";
 	
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -156,9 +158,13 @@ public class GestorDetallesComunidad implements Serializable
 		    	this.sOBTEXC = comunidad.getsOBTEXC();
 		    		
 		    	this.sOBDEER = "";
-		    		
-		    	this.sNota = CLComunidades.buscarNota(liCodComunidad);
+		    	
+		    	this.sNotaOriginal = CLComunidades.buscarNota(liCodComunidad);
 
+				this.sNota = sNotaOriginal;
+				
+				this.bConNotas = !sNota.isEmpty();
+		    		
 		    	this.sNumActivosComunidad = Long.toString(CLComunidades.buscarNumeroActivosComunidad(liCodComunidad));
 
 		    	this.setTablacuentas(CLCuentas.buscarCuentasConvencionalesComunidad(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM)));
@@ -358,6 +364,12 @@ public class GestorDetallesComunidad implements Serializable
 
 		//return sPagina;
     }
+	
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
+    }
 
 	public String getsCODTRN() {
 		return sCODTRN;
@@ -541,6 +553,14 @@ public class GestorDetallesComunidad implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 
 	public String getsNumActivosComunidad() {

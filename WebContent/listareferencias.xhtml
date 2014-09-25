@@ -42,7 +42,6 @@
 							<h:panelGrid columns="3" cellpadding="5">
 
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button" />
-								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
 
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -76,8 +75,8 @@
 										<p:panel>
 											<h:panelGrid columns="3" cellpadding="5">
 
-												<h:outputText for="COACES" value="Código de activo: " />
-												<p:inputMask id="COACES" value="#{GestorListaReferencias.sCOACES}" mask="9?99999999" placeHolder=" " size="9" maxlength="9"/>
+												<h:outputText for="COACES" value="Activo: " />
+												<p:inputText id="COACES" value="#{GestorListaReferencias.sCOACES}" size="9" maxlength="9"/>
 
 												<p:commandButton value="Carga Referencias" update="msgs, popup, referencias" oncomplete="dlgFiltrarReferenciaActivo.show()"/>
 

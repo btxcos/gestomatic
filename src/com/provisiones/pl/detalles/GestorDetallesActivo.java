@@ -128,7 +128,7 @@ public class GestorDetallesActivo implements Serializable
 	
 	private String sNota = "";
 	private String sNotaOriginal = "";
-	private boolean bConNotas = true;
+	private boolean bConNotas = false;
 	
 	
 	private int iCOACES = 0;
@@ -291,7 +291,6 @@ public class GestorDetallesActivo implements Serializable
 			this.sPOBRAR = Utils.recuperaImporte(false,sPOBRAR.substring(0,5));
 			
 			this.sNotaOriginal = CLActivos.buscarNota(iCOACES);
-
 			this.sNota = sNotaOriginal;
 			
 			this.bConNotas = !sNota.isEmpty();

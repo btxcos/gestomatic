@@ -298,13 +298,14 @@
 						</h:panelGrid>
 					</p:dialog>
 
-					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+					<p:dialog id="DNOTAS" header="Notas:" widgetVar="dlgNotas" resizable="false" visible="#{GestorMovimientosGastos.bConNotas}" position="right">
 						<h:panelGrid columns="1" cellpadding="1">
 							<p:panel>
-								<h:panelGrid columns="2" cellpadding="5">
+								<h:panelGrid columns="3" cellpadding="5">
 
 									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorMovimientosGastos.limpiarNota}"/>
-									<p:commandButton value="Restaurar" update="NOTA" actionListener="#{GestorMovimientosGastos.restaurarNota}"/>
+									<p:commandButton value="Guardar" update="NOTA" actionListener="#{GestorMovimientosGastos.guardaNota}"/>
+									<p:commandButton value="Restaurar" update="NOTA" actionListener="#{GestorMovimientosGastos.restablecerNota}"/>
 
 								</h:panelGrid>
 							</p:panel>
@@ -576,7 +577,7 @@
 					</p:dialog>
 					<p:dialog header="Gastos emitidos del Activo: " widgetVar="dlgTablaGastosActivo" resizable="false">
 						<p:contextMenu for="gastosactivo">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:NOTA" icon="ui-icon-check" actionListener="#{GestorMovimientosGastos.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:NOTA, DNOTAS" icon="ui-icon-check" actionListener="#{GestorMovimientosGastos.seleccionarGastoActivo}" oncomplete="dlgTablaGastosActivo.hide();  dlgBuscarGastosActivo.hide();"/>
 						</p:contextMenu>
 						<p:dataTable id="gastosactivo" var="gastoactivo" value="#{GestorMovimientosGastos.tablagastosactivo}" rowKey="#{gastoactivo.sGastoID}"
 												selection="#{GestorMovimientosGastos.gastoactivoseleccionado}" selectionMode="single"
@@ -696,7 +697,7 @@
 					</p:dialog>
 					<p:dialog header="Gastos abonables en la Provisión: " widgetVar="dlgTablaGastosProvision" resizable="false">
 						<p:contextMenu for="gastosprovision">
-							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:NOTA" icon="ui-icon-check" actionListener="#{GestorMovimientosGastos.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
+							<p:menuitem value="Seleccionar" update="form:popup, form:msgs, form:panelDatosGasto, form:NOTA, DNOTAS" icon="ui-icon-check" actionListener="#{GestorMovimientosGastos.seleccionarGastoProvision}" oncomplete="dlgTablaGastosProvision.hide();  dlgBuscarGastosProvision.hide();"/>
 						</p:contextMenu>
 						<p:dataTable id="gastosprovision" var="gastoprovision" value="#{GestorMovimientosGastos.tablagastosprovision}" rowKey="#{gastoprovision.sGastoID}"
 												selection="#{GestorMovimientosGastos.gastoprovisionseleccionado}" selectionMode="single"

@@ -190,6 +190,7 @@ public class GestorListaCuotasActivo implements Serializable
 										Utils.compruebaFecha(sFAACTAFA),   
 										sPTPAGOFA,
 										"",
+										"",
 										"");
 								
 								//this.tablacuotas = CLCuotas.buscarCuotasActivo(iCOACES);

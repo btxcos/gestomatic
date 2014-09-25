@@ -1618,7 +1618,8 @@ public final class QMListaReferencias
 					   ","
 					   + QMReferencias.CAMPO7 + ","
 					   + QMReferencias.CAMPO8 + ","
-					   + QMReferencias.CAMPO9 + 
+					   + QMReferencias.CAMPO9 + ","
+					   + QMReferencias.CAMPO10 +
 					   
 					   "  FROM " 
 					   + QMReferencias.TABLA + 
@@ -1658,6 +1659,7 @@ public final class QMListaReferencias
 						String sIMVSUE = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO7));
 						String sIMCATA = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO8));
 						String sFERECA = Utils.recuperaFecha(rs.getString(QMReferencias.CAMPO9));
+						String sESTADO = rs.getString(QMReferencias.CAMPO10);
 						
 						ReferenciaTabla referenciaencontrada = new ReferenciaTabla(
 								sReferenciaID,
@@ -1667,9 +1669,9 @@ public final class QMListaReferencias
 								sOBTEXC
 
 								//Ampliacion de valor catastral
-								, sIMVSUE, sIMCATA, sFERECA
+								, sIMVSUE, sIMCATA, sFERECA,
 								
-								);
+								sESTADO);
 						
 						resultado.add(referenciaencontrada);
 						
@@ -1723,6 +1725,8 @@ public final class QMListaReferencias
 			
 			String sCondicionFERECA = (filtro.getFERECA().isEmpty() || filtro.getFERECA().equals("0"))?"":QMReferencias.CAMPO9 + " = '" + filtro.getFERECA() + "' AND ";
 			
+			String sCondicionESTADO = filtro.getESTADO().isEmpty()?"":QMReferencias.CAMPO10 + " = '" + filtro.getESTADO() + "' AND ";
+			
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
@@ -1736,7 +1740,8 @@ public final class QMListaReferencias
 					   ","
 					   + QMReferencias.CAMPO7 + ","
 					   + QMReferencias.CAMPO8 + ","
-					   + QMReferencias.CAMPO9 + 
+					   + QMReferencias.CAMPO9 + ","
+					   + QMReferencias.CAMPO10 +
 					   
 					   "  FROM " 
 					   + QMReferencias.TABLA + 
@@ -1747,6 +1752,7 @@ public final class QMListaReferencias
 					   + sCondicionImporteSuelo
 					   + sCondicionImporteCatastral
 					   + sCondicionFERECA
+					   + sCondicionESTADO
 					   + QMReferencias.CAMPO1 + " IN " +
 					   "(SELECT " + CAMPO2 + 
 					   " FROM " 
@@ -1781,6 +1787,7 @@ public final class QMListaReferencias
 						String sIMVSUE = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO7));
 						String sIMCATA = Utils.recuperaImporte(false,rs.getString(QMReferencias.CAMPO8));
 						String sFERECA = Utils.recuperaFecha(rs.getString(QMReferencias.CAMPO9));
+						String sESTADO = rs.getString(QMReferencias.CAMPO10);
 						
 						ReferenciaTabla referenciaencontrada = new ReferenciaTabla(
 								sReferenciaID,
@@ -1790,9 +1797,9 @@ public final class QMListaReferencias
 								sOBTEXC
 
 								//Ampliacion de valor catastral
-								, sIMVSUE, sIMCATA, sFERECA
+								, sIMVSUE, sIMCATA, sFERECA,
 								
-								);
+								sESTADO);
 						
 						resultado.add(referenciaencontrada);
 						

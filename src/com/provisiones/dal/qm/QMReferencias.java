@@ -828,8 +828,9 @@ public final class QMReferencias
 				       //Ampliacion de valor catastral
 				       ","              
 				       + CAMPO7  + ","              
-				       + CAMPO8  + ","              
-				       + CAMPO9  +
+				       + CAMPO8  + ","
+				       + CAMPO9  + ","
+				       + CAMPO10  +
 
 				       " FROM " 
 				       + TABLA + 
@@ -863,6 +864,7 @@ public final class QMReferencias
 	  					String sIMVSUE = rs.getString(CAMPO7);
 	  					String sIMCATA = rs.getString(CAMPO8);
 	  					String sFERECA = rs.getString(CAMPO9);
+	  					String sESTADO = rs.getString(CAMPO10);
 	  					
 	  					ReferenciaTabla referenciaencontrada = new ReferenciaTabla(
 	  							sReferenciaID,
@@ -872,7 +874,8 @@ public final class QMReferencias
 	  							sOBTEXC,
 	  							sIMVSUE,
 	  							sIMCATA,
-	  							sFERECA);
+	  							sFERECA,
+	  							sESTADO);
 	  					
 	  					resultado.add(referenciaencontrada);
 	  					

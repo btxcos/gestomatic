@@ -41,6 +41,8 @@ public class GestorDetallesReferencia implements Serializable
 	private String sCOACES = "";
 
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private long liCodReferencia = 0;
 	
@@ -119,7 +121,10 @@ public class GestorDetallesReferencia implements Serializable
 		    	this.sCOACES = Integer.toString(CLReferencias.obtenerActivoDeReferecia(liCodReferencia));
 		    	
 		    		
-		    	this.sNota = CLReferencias.buscarNota(liCodReferencia);
+		    	this.sNotaOriginal = CLReferencias.buscarNota(liCodReferencia);
+				this.sNota = sNotaOriginal;
+				
+				this.bConNotas = !sNota.isEmpty();
 			
 				sMsg = "La referencia se cargó correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -176,6 +181,12 @@ public class GestorDetallesReferencia implements Serializable
 		
 		}
 	}
+	
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
+    }
 	
 	
 	public void cargarDetallesActivo(ActionEvent actionEvent) 
@@ -308,5 +319,13 @@ public class GestorDetallesReferencia implements Serializable
 
 	public void setsNota(String sNota) {
 		this.sNota = sNota;
+	}
+
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 }

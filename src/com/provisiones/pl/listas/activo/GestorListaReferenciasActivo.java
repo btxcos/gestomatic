@@ -172,7 +172,8 @@ public class GestorListaReferenciasActivo implements Serializable
 							"",   
 							sImporteSuelo,
 							sImporteCatastral,
-							Utils.compruebaFecha(sFERECAFA));
+							Utils.compruebaFecha(sFERECAFA),
+							"");
 					
 					//this.tablareferencias = CLReferencias.buscarReferenciasActivo(Integer.parseInt(sCOACES));
 					this.tablareferencias = CLReferencias.buscarReferenciasActivoConFiltro(filtro,sComparadorSueloFA,sComparadorCatastralFA, iCOACES);

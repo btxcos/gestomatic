@@ -36,6 +36,7 @@
 
 								<p:commandButton value="Mostrar" onclick="barraInfo.show()" type="button"/>
 								<p:commandButton value="Notas" onclick="dlgNotas.show()" type="button"/>
+								<p:graphicImage id="MARCA" value="recursos/notas.png" rendered="#{GestorDetallesGasto.bConNotas}"/>
 
 								<p:notificationBar position="top" effect="slide" widgetVar="barraInfo" styleClass="top" style="height: auto">
 									<h:panelGrid columns="2" cellpadding="5">
@@ -347,14 +348,14 @@
 						</p:panel>
 					</p:dialog> 
 
-					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false">
+					<p:dialog header="Notas:" widgetVar="dlgNotas" resizable="false" visible="#{GestorDetallesGasto.bConNotas}" position="right">
 						<h:panelGrid columns="1" cellpadding="1">
 							<p:panel>
 								<h:panelGrid columns="3" cellpadding="5">
 
 									<p:commandButton value="Limpiar" update="NOTA" actionListener="#{GestorDetallesGasto.limpiarNota}"/>
-									<p:commandButton value="Guardar" update="NOTA" actionListener="#{GestorDetallesGasto.guardaNota}"/>
-									<p:commandButton value="Restaurar" update="NOTA" actionListener="#{GestorDetallesGasto.restaurarNota}"/>
+									<p:commandButton value="Guardar" update="NOTA, MARCA" actionListener="#{GestorDetallesGasto.guardaNota}"/>
+									<p:commandButton value="Restaurar" update="NOTA, MARCA" actionListener="#{GestorDetallesGasto.restablecerNota}"/>
 
 								</h:panelGrid>
 							</p:panel>

@@ -685,7 +685,7 @@ public class CLPagos
             	
             	logger.debug("sRecargo:|"+sRecargo+"|");
             	
-            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR,sFEPGPR,sRecargo);
+            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sRecargo);
             	
             	iCodigo = registraPagoSimple(pago, cuenta, bValida, nota);
             	
@@ -751,7 +751,7 @@ public class CLPagos
             	
             	logger.debug("sRecargo:|"+sRecargo+"|");
             	
-            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR,sFEPGPR, sRecargo);
+            	Pago pago = new Pago(gasto.getCOACES(),gasto.getsGastoID(),sPago,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,sFEPGPR,ValoresDefecto.CAMPO_NUME_SIN_INFORMAR, sRecargo);
             	
             	iCodigo = registraPagoSimple(pago, cuenta, bValida, nota);
             	

@@ -32,6 +32,8 @@ public class GestorMovimientosComunidades implements Serializable
 
 	private static Logger logger = LoggerFactory.getLogger(GestorMovimientosComunidades.class.getName());
 	
+	private long liCodComunidad = 0;
+	
 	//Accion
 	private String sCOACCI = "";
 
@@ -72,6 +74,8 @@ public class GestorMovimientosComunidades implements Serializable
 
 
 	private String sNota = "";
+	private String sNotaOriginal = "";
+	private boolean bConNotas = false;
 	
 	private transient ActivoTabla activoseleccionado = null;
 	
@@ -141,6 +145,8 @@ public class GestorMovimientosComunidades implements Serializable
 		this.sCOACES = "";
 		this.sCOACCI = "";
 		
+		liCodComunidad = 0;
+		
 		borrarResultadosActivo();
 		borrarCamposComunidad();
 	}
@@ -151,10 +157,42 @@ public class GestorMovimientosComunidades implements Serializable
 
     }
 
-    public void guardarNota(ActionEvent actionEvent) 
-    {  
-		this.sCOACES = "";
+	public void guardaNota (ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
 
+			String sMsg = "";
+			
+			if (liCodComunidad == 0)
+			{
+				sMsg = "Debe de haber cargado una Comunidad antes de guardar la nota. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+			}
+			else if (CLComunidades.guardarNota(liCodComunidad, sNota))
+			{
+				sMsg = "Nota guardada correctamente.";
+				msg = Utils.pfmsgInfo(sMsg);
+				logger.info(sMsg);
+			}
+			else
+			{
+				sMsg = "ERROR: Ocurrio un error al guardar la nota de la Comunidad. Por favor, revise los datos y avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		
+		}
+	}
+    
+    public void restablecerNota(ActionEvent actionEvent) 
+    {  
+    	this.sNota = sNotaOriginal;
+    	this.bConNotas = !sNota.isEmpty();
     }
 	
 	public void buscaActivos (ActionEvent actionEvent)
@@ -328,7 +366,9 @@ public class GestorMovimientosComunidades implements Serializable
 			{
 				try
 				{
-					if (!CLActivos.existeActivo(Integer.parseInt(sCOACES)))
+					int iCOACES = Integer.parseInt(sCOACES);
+					
+					if (!CLActivos.existeActivo(iCOACES))
 					{
 						sMsg = "El Activo '"+sCOACES+"' no pertenece a la cartera. Por favor, revise los datos.";
 						msg = Utils.pfmsgWarning(sMsg);
@@ -336,7 +376,7 @@ public class GestorMovimientosComunidades implements Serializable
 					}
 					else
 					{
-						Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(Integer.parseInt(sCOACES));
+						Comunidad comunidad = CLComunidades.buscarComunidadDeActivo(iCOACES);
 						
 						if (comunidad.getsNUDCOM().isEmpty())
 						{
@@ -347,7 +387,7 @@ public class GestorMovimientosComunidades implements Serializable
 						else
 						{
 							Cuenta cuenta = CLCuentas.buscarCuenta(Long.parseLong(comunidad.getsCuenta()));
-							
+
 							this.sCOCLDO = comunidad.getsCOCLDO();
 							this.sNUDCOM = comunidad.getsNUDCOM();
 							this.sNOMCOC = comunidad.getsNOMCOC();
@@ -362,8 +402,15 @@ public class GestorMovimientosComunidades implements Serializable
 							this.sNUCCDI = cuenta.getsNUCCDI();
 							this.sNUCCNT = cuenta.getsNUCCNT();
 							this.sOBTEXC = comunidad.getsOBTEXC();
+
+							liCodComunidad = CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM);
 							
-							this.sNota = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
+							this.sNotaOriginal = CLComunidades.buscarNota(liCodComunidad);
+							this.sNota = sNotaOriginal;
+							
+							this.bConNotas = !sNota.isEmpty();
+							
+							logger.debug("bConNotas:|"+bConNotas+"|");
 							
 							sMsg = "La comunidad '"+sNUDCOM+"' se ha cargado correctamente.";
 							msg = Utils.pfmsgInfo(sMsg);
@@ -408,7 +455,11 @@ public class GestorMovimientosComunidades implements Serializable
 			}
 			else
 			{
-				Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO, sNUDCOM.toUpperCase());
+				liCodComunidad = CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM);
+				
+				//Comunidad comunidad = CLComunidades.consultarComunidad(sCOCLDO, sNUDCOM.toUpperCase());
+				Comunidad comunidad = CLComunidades.buscarComunidad(liCodComunidad);
+				
 				
 				this.sCOCLDO = comunidad.getsCOCLDO();
 				this.sNUDCOM = comunidad.getsNUDCOM();
@@ -434,7 +485,12 @@ public class GestorMovimientosComunidades implements Serializable
 
 				this.sOBTEXC = comunidad.getsOBTEXC();
 				
-				this.sNota = CLComunidades.buscarNota(CLComunidades.buscarCodigoComunidad(sCOCLDO, sNUDCOM));
+				this.sNotaOriginal = CLComunidades.buscarNota(liCodComunidad);
+				this.sNota = sNotaOriginal;
+				
+				this.bConNotas = !sNota.isEmpty();
+				
+				logger.debug("bConNotas:|"+bConNotas+"|");
 				
 				sMsg = "La comunidad '"+sNUDCOM+"' se ha cargado correctamente.";
 				msg = Utils.pfmsgInfo(sMsg);
@@ -1015,6 +1071,12 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 	public void setsNota(String sNota) {
 		this.sNota = sNota.trim();
+	}
+	public boolean isbConNotas() {
+		return bConNotas;
+	}
+	public void setbConNotas(boolean bConNotas) {
+		this.bConNotas = bConNotas;
 	}
 	public Map<String,String> getTiposcocldoHM() {
 		return tiposcocldoHM;

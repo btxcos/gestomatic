@@ -18,13 +18,14 @@ public class CuotaTabla
 	private String PTPAGO = "";
 	private String DPTPAGO = "";
 	private String OBTEXC = "";
+	private String ESTADO = "";
 
 	//Constructor de clase	
 	
 	public CuotaTabla(String sCuotaID, String cOACES, String cOCLDO,
 			String dCOCLDO, String nUDCOM, String cOSBAC, String dCOSBAC,
 			String fIPAGO, String fFPAGO, String iMCUCO, String fAACTA,
-			String pTPAGO, String dPTPAGO, String oBTEXC) {
+			String pTPAGO, String dPTPAGO, String oBTEXC, String eSTADO) {
 		super();
 		this.sCuotaID = sCuotaID;
 		COACES = cOACES;
@@ -40,6 +41,7 @@ public class CuotaTabla
 		PTPAGO = pTPAGO;
 		DPTPAGO = dPTPAGO;
 		OBTEXC = oBTEXC;
+		ESTADO = eSTADO;
 	}
 
 	//Métodos de acceso
@@ -154,6 +156,14 @@ public class CuotaTabla
 
 	public void setOBTEXC(String oBTEXC) {
 		OBTEXC = oBTEXC;
+	}
+
+	public String getESTADO() {
+		return ESTADO;
+	}
+
+	public void setESTADO(String eSTADO) {
+		ESTADO = eSTADO;
 	}
 	
 }

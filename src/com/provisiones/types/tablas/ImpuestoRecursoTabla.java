@@ -16,13 +16,14 @@ public class ImpuestoRecursoTabla
 	private String BIRESO = "";
 	private String DBIRESO = "";
 	private String OBTEXC = "";
+	private String ESTADO = "";
 	
 	//Constructor de clase
 
 	public ImpuestoRecursoTabla(String sRecursoID, String nURCAT,
 			String cOSBAC, String dCOSBAC, String fEPRRE, String fERERE,
 			String fEDEIN, String bISODE, String dBISODE, String bIRESO,
-			String dBIRESO, String oBTEXC) {
+			String dBIRESO, String oBTEXC, String eSTADO) {
 		super();
 		this.sRecursoID = sRecursoID;
 		NURCAT = nURCAT;
@@ -36,6 +37,7 @@ public class ImpuestoRecursoTabla
 		BIRESO = bIRESO;
 		DBIRESO = dBIRESO;
 		OBTEXC = oBTEXC;
+		ESTADO = eSTADO;
 	}
 
 	//Métodos de acceso
@@ -134,6 +136,14 @@ public class ImpuestoRecursoTabla
 
 	public void setOBTEXC(String oBTEXC) {
 		OBTEXC = oBTEXC;
+	}
+
+	public String getESTADO() {
+		return ESTADO;
+	}
+
+	public void setESTADO(String eSTADO) {
+		ESTADO = eSTADO;
 	}
 
 }
