@@ -54,6 +54,9 @@ public class GestorEnvios implements Serializable
 	private String sNumTransferenciasN34 = "0";
 	private boolean bNumTransferenciasN34 = true;
 
+	private String sNumTransferenciasN3414 = "0";
+	private boolean bNumTransferenciasN3414 = true;
+	
 	private transient StreamedContent file;
 	
 	private String sFicheroComunidades = "";
@@ -65,6 +68,7 @@ public class GestorEnvios implements Serializable
 	private String sFicheroGastos = "";
 	
 	private String sFicheroTransferenciasN34 = "";
+	private String sFicheroTransferenciasN3414 = "";
 	
 	
 	private transient ProvisionTabla provisionseleccionada = null;
@@ -733,6 +737,96 @@ public class GestorEnvios implements Serializable
 		}
 	}
 	
+	public void cargarMovimientosPagosPendientesN3414(ActionEvent actionEvent)
+	{
+		if (ConnectionManager.comprobarConexion())
+		{
+			FacesMessage msg;
+	    	
+	    	String sMsg = "";
+	    	
+	    	this.sNumTransferenciasN34  = "0";
+	    	this.bNumTransferenciasN34 = true;
+	    	this.sFicheroTransferenciasN34 = "";
+	    	
+	    	if (sNUPROF.isEmpty())
+	    	{
+	    		sMsg = "ERROR: Debe informar la Provision para realizar una búsqueda. Por favor, revise los datos.";
+				msg = Utils.pfmsgError(sMsg);
+				logger.error(sMsg);
+	    	}
+	    	else
+	    	{
+	    		try
+	    		{
+	    			Integer.parseInt(sNUPROF);
+	    			
+	    			if (CLProvisiones.existeProvision(sNUPROF))
+					{
+	    		    	ResultadoEnvio resultadotransferenciasn3414 = FileManager.escribirNorma3414(sNUPROF);
+	    		    	this.setsNumTransferenciasN3414(Long.toString(resultadotransferenciasn3414.getLiEntradas()));
+	    		    	this.setbNumTransferenciasN3414((resultadotransferenciasn3414.getLiEntradas() == 0));
+	    		    	
+	    		    	logger.debug("sNumTransferenciasN3414:|"+sNumTransferenciasN3414+"|");
+	    		    	if (!bNumTransferenciasN3414)
+	    		    	{
+	    		    		this.sFicheroTransferenciasN3414 = resultadotransferenciasn3414.getsFichero();
+	    		     		 
+	    		    		if (!sFicheroTransferenciasN3414.equals(""))
+	    		    		{
+
+	    			    		sMsg = "Generado el fichero de Transferencias Norma 3414.";
+	    			    		sNUPROFG = sNUPROF;
+	    			        	
+	    			    		msg = Utils.pfmsgInfo(sMsg);
+	    			    		logger.info(sMsg);
+	    		    			
+	    		    		}
+	    		    		else
+	    		    		{
+	    			    		sMsg = "ERROR: Ocurrio un error mientras se procesaban los datos. No se ha generado el fichero de Transferencias Norma 34.";
+	    			        	
+	    			    		msg = Utils.pfmsgError(sMsg);
+	    			    		logger.error(sMsg);
+	    		    		}
+	    		    		
+	    		    		FacesContext.getCurrentInstance().addMessage(null, msg);
+	    		    	}
+	    		    	
+	    		    	if (bNumTransferenciasN3414)
+	    		    	{
+	    		    		sMsg = "No hay movimientos de Pagos pendientes.";
+	    		    		msg = Utils.pfmsgWarning(sMsg);
+	    		    		logger.warn(sMsg);
+	    		    	}
+	    		    	else
+	    		    	{
+	    		    		sMsg = "Cargados todos los movimientos de Pagos pendientes.";
+	    		    		msg = Utils.pfmsgInfo(sMsg);
+	    		    		logger.info(sMsg);
+
+	    		    	}
+					}
+					else
+					{
+						sMsg = "La Provisión '"+sNUPROF+"' no se encuentra regristada en el sistema. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+	    			
+	    		}
+	    		catch(NumberFormatException nfe)
+				{
+					sMsg = "ERROR: La Provisión debe ser numérica. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}
+	    	}
+
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
 	public void descargarComunidades() 
     {  
 		if (ConnectionManager.comprobarConexion())
@@ -975,6 +1069,38 @@ public class GestorEnvios implements Serializable
 		}		
     }
 	
+	public void descargarTransferenciasN3414() 
+    {
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	String sMsg = "";
+	    	
+	    	try 
+			{
+				InputStream stream = new FileInputStream(sFicheroTransferenciasN3414);
+				
+				this.file = new DefaultStreamedContent(stream, "text/plain", ValoresDefecto.DEF_IDPROV+"_"+sNUPROFG+"_"+Utils.timeStamp()+".Q34");
+				
+	    		sMsg = "Descargado el fichero de Pagos por Transferencias Norma 3414 a enviar.";
+	        	
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+
+			} 
+			catch (FileNotFoundException e) 
+			{
+	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
+			}
+
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}		
+    }
+	
 	public String getsNumComunidades() {
 		return sNumComunidades;
 	}
@@ -1092,6 +1218,22 @@ public class GestorEnvios implements Serializable
 		this.bNumTransferenciasN34 = bNumTransferenciasN34;
 	}
 
+	public String getsNumTransferenciasN3414() {
+		return sNumTransferenciasN3414;
+	}
+
+	public void setsNumTransferenciasN3414(String sNumTransferenciasN3414) {
+		this.sNumTransferenciasN3414 = sNumTransferenciasN3414;
+	}
+
+	public boolean isbNumTransferenciasN3414() {
+		return bNumTransferenciasN3414;
+	}
+
+	public void setbNumTransferenciasN3414(boolean bNumTransferenciasN3414) {
+		this.bNumTransferenciasN3414 = bNumTransferenciasN3414;
+	}
+
 	public String getsFicheroComunidades() {
 		return sFicheroComunidades;
 	}
@@ -1146,6 +1288,14 @@ public class GestorEnvios implements Serializable
 
 	public void setsFicheroTransferenciasN34(String sFicheroTransferenciasN34) {
 		this.sFicheroTransferenciasN34 = sFicheroTransferenciasN34;
+	}
+
+	public String getsFicheroTransferenciasN3414() {
+		return sFicheroTransferenciasN3414;
+	}
+
+	public void setsFicheroTransferenciasN3414(String sFicheroTransferenciasN3414) {
+		this.sFicheroTransferenciasN3414 = sFicheroTransferenciasN3414;
 	}
 
 	public String getsNUPROF() {

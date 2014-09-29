@@ -12,6 +12,7 @@ import com.provisiones.dal.qm.QMGastos;
 import com.provisiones.dal.qm.QMPagos;
 import com.provisiones.dal.qm.QMProvisiones;
 import com.provisiones.dal.qm.QMTransferenciasN34;
+import com.provisiones.dal.qm.QMTransferenciasN3414;
 import com.provisiones.dal.qm.listas.QMListaAbonosGastos;
 import com.provisiones.dal.qm.listas.QMListaGastos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
@@ -26,6 +27,7 @@ import com.provisiones.types.movimientos.MovimientoGasto;
 import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
+import com.provisiones.types.transferencias.N3414.TransferenciaN3414;
 
 public class CLPagos 
 {
@@ -71,9 +73,9 @@ public class CLPagos
 		return QMPagos.buscarPagoEnvio(ConnectionManager.getDBConnection(),ValoresDefecto.PAGO_EMITIDO);
 	}*/
 	
-	public static ArrayList<Long> buscarPagosSinEnviar(String sNUPROF)
+	public static ArrayList<Long> buscarPagosSinEnviar(String sNUPROF, String sTipoPago)
 	{
-		return QMPagos.buscarPagosEmitidosProvision(ConnectionManager.getDBConnection(),sNUPROF);
+		return QMPagos.buscarPagosEmitidosProvision(ConnectionManager.getDBConnection(),sNUPROF, sTipoPago);
 	}
 	
 	public static ArrayList<ActivoTabla> buscarActivosConPagos(ActivoTabla filtro)
@@ -446,8 +448,8 @@ public class CLPagos
 								{
 									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
 
-									TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta, liRecargo);
-									long liCodTransferencia = QMTransferenciasN34.addTransferencia(conexion, transferencia);
+									TransferenciaN3414 transferencia = CLTransferencias.generarTransferenciaN3414(liCodGasto, cuenta, liRecargo);
+									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, transferencia);
 									
 									if (liCodTransferencia != 0)
 									{
@@ -478,8 +480,8 @@ public class CLPagos
 								{
 									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
 
-									TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta, liRecargo);
-									long liCodTransferencia = QMTransferenciasN34.addTransferencia(conexion, transferencia);
+									TransferenciaN3414 transferencia = CLTransferencias.generarTransferenciaN3414(liCodGasto, cuenta, liRecargo);
+									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, transferencia);
 									
 									if (liCodTransferencia != 0)
 									{
@@ -959,6 +961,66 @@ public class CLPagos
 
 									TransferenciaN34 transferencia = CLTransferencias.generarTransferenciaN34(liCodGasto, cuenta, liRecargo);
 									long liCodTransferencia = QMTransferenciasN34.addTransferencia(conexion, transferencia);
+									
+									if (liCodTransferencia != 0)
+									{
+										pago.setsCodOperacion(Long.toString(liCodTransferencia));
+
+										liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										
+										if ( liCodPagoNuevo != 0)
+										{
+											
+											iCodigo = 0;
+										}
+										else
+										{
+											//error al crear el pago
+											iCodigo = -900;
+										}
+									}
+									else
+									{
+										//error al crear la transferencia pago
+										iCodigo = -906;
+									}
+								}
+								else if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_NORMA3414))
+								{
+									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
+
+									TransferenciaN3414 transferencia = CLTransferencias.generarTransferenciaN3414(liCodGasto, cuenta, liRecargo);
+									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, transferencia);
+									
+									if (liCodTransferencia != 0)
+									{
+										pago.setsCodOperacion(Long.toString(liCodTransferencia));
+
+										liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										
+										if ( liCodPagoNuevo != 0)
+										{
+											
+											iCodigo = 0;
+										}
+										else
+										{
+											//error al crear el pago
+											iCodigo = -900;
+										}
+									}
+									else
+									{
+										//error al crear la transferencia pago
+										iCodigo = -906;
+									}
+								}
+								else if (pago.getsTipoPago().equals(ValoresDefecto.DEF_PAGO_TRANSFERENCIA_MANUAL))
+								{
+									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
+
+									TransferenciaN3414 transferencia = CLTransferencias.generarTransferenciaN3414(liCodGasto, cuenta, liRecargo);
+									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, transferencia);
 									
 									if (liCodTransferencia != 0)
 									{

@@ -17,6 +17,10 @@ public final class QMCodigosControl
 
 	public static final String DESCRIPCION = "descripcion";
 	
+	public static final String TESWIFT = "pp001_entidades_swift_tbl";
+	public static final String IESWIFT = "entidad_id";
+	public static final String SESWIFT = "swift";
+	
 	public static final String TCOCLDO = "pp001_cocldo_tbl";
 	public static final String ICOCLDO = "cocldo_id";
 	
@@ -417,5 +421,76 @@ public final class QMCodigosControl
 		}
 
 		return sDescripcion;
+	}
+	
+	public static String getSWIFT(Connection conexion, String sEntidad)
+	{
+		String sSWIFT = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ SESWIFT +
+					" FROM " 
+					+ TESWIFT + 
+					" WHERE "
+					+ IESWIFT + " = '" + sEntidad + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				
+				if (rs != null) 
+				{
+					
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sSWIFT = rs.getString(SESWIFT);
+
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(SESWIFT+":|"+sSWIFT+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+	 
+					logger.debug("No se encontró la información.");
+				}
+
+			} 
+			catch (SQLException ex) 
+			{
+				sSWIFT = "";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sSWIFT;
 	}
 }

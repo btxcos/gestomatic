@@ -209,6 +209,7 @@ public final class ValoresDefecto
 	}
 	
 	
+	//Norma 34
 	public static final String DEF_CODIGO_REGOPER_ORDENANTE = "0356"; 
 	public static final String DEF_CODIGO_REGOPER_BENEFICIARIO = "0656"; 
 	public static final String DEF_CODIGO_REGOPER_RESUMEN = "0856"; 
@@ -220,6 +221,8 @@ public final class ValoresDefecto
 	public static final String DEF_ORDENANTE_DOMICILIO = "Calle Andres Mellado, 114, 1 Iz";
 	public static final String DEF_ORDENANTE_PLAZA = "28003 MADRID";
 	
+	public static final String DEF_ORDENANTE_PAIS = "ES";
+	public static final String DEF_ORDENANTE_IBAN = "25";
 	public static final String DEF_ORDENANTE_ENTIDAD = "2038";
 	public static final String DEF_ORDENANTE_OFICINA = "1859";
 	public static final String DEF_ORDENANTE_CUENTA = "6003842008";
@@ -252,6 +255,47 @@ public final class ValoresDefecto
 	public static final String DEF_DELEGADO_ = "";
 	public static final String DEF_DELEGADO_DOMICILIO = "";
 
+	//Norma 3414
+	
+	public static final String DEF_CODIGO_REGISTRO_ORDENANTE_N3414 = "01";
+	public static final String DEF_CODIGO_OPERACION_ORDENANTE_N3414 = "ORD";
+	public static final String DEF_VERSION_CUADERNO_N3414 = "34145";
+	public static final String DEF_NUMERO_DATO_ORDENANTE_N3414 = "001";
+	public static final String DEF_IDENTIFICACION_ORDENANTE_N3414 = "B79012860";
+	public static final String DEF_IDENTIFICACION_ORDENANTE_SUFIJO_N3414 = "000";
+	public static final String DEF_IDENTIFICACION_CUENTA_ORDENANTE_N3414 = "A";
+	public static final String DEF_CUENTA_ORDENANTE_N3414 = "ES2520381859506003842008";
+	public static final String DEF_DETALLE_CARGO_ORDENANTE_N3414 = "0";
+	public static final String DEF_NOMBRE_ORDENANTE_N3414 = "GUTIERREZ LABRADOR SL";
+	public static final String DEF_DIRECCION_ORDENANTE1_N3414 = "Calle Andres Mellado 114, 1 Izquierda";
+	public static final String DEF_DIRECCION_ORDENANTE2_N3414 = "28003 Madrid";
+	public static final String DEF_DIRECCION_ORDENANTE3_N3414 = "Madrid";
+	public static final String DEF_PAIS_ORDENANTE_N3414 = "ES";
+	public static final String LIBRE311 = "                                                                                                                                                                                                                                                                                                                       ";
+	
+	public static final String DEF_CODIGO_REGISTRO_CEBECERA_N3414 = "02";
+	public static final String DEF_CODIGO_OPERACION_CEBECERA_N3414 = "SCT";
+	public static final String LIBRE578 = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ";
+
+	public static final String DEF_CODIGO_REGISTRO_BENEFICIARIO_N3414 = "03";
+	public static final String DEF_CODIGO_OPERACION_BENEFICIARIO_N3414 = "SCT";
+	public static final String DEF_NUMERO_DATO_BENEFICIARIO_N3414 = "002";
+	public static final String DEF_IDENTIFICACION_CUENTA_BENEFICIARIO_N3414 = "A";
+	public static final String DEF_CLAVE_GASTOS_N3414 = "3";
+	public static final String DEF_PAIS_BENEFICIARIO_N3414 = "ES";
+	public static final String LIBRE35 = "                                   ";
+	public static final String DEF_TIPO_TRANSFERENCIA_N3414 = "OTHR";
+	public static final String LIBRE4 = "    ";
+	public static final String LIBRE99 = "                                                                                                   ";
+	
+	
+	public static final String DEF_CODIGO_REGISTRO_RESUMEN_N3414 = "04";
+	public static final String DEF_CODIGO_OPERACION_RESUMEN_N3414 = "SCT";
+	public static final String LIBRE560 = "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ";
+
+	public static final String DEF_CODIGO_REGISTRO_TOTALES_N3414 = "99";
+	public static final String DEF_CODIGO_OPERACION_TOTALES_N3414 = "ORD";
+	
 	public static final String DEF_CODIFICACION = "ISO-8859-15";
 	public static final String DEF_FIN_FICHERO = new Character((char) CHAR_FIN).toString();
 

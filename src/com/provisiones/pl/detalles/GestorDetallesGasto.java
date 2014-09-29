@@ -17,10 +17,12 @@ import com.provisiones.ll.CLTransferencias;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
+import com.provisiones.types.Cuenta;
 import com.provisiones.types.Gasto;
 import com.provisiones.types.Pago;
 import com.provisiones.types.Transicion;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
+import com.provisiones.types.transferencias.N3414.TransferenciaN3414;
 
 public class GestorDetallesGasto implements Serializable 
 {
@@ -254,6 +256,25 @@ public class GestorDetallesGasto implements Serializable
 						
 						
 						this.sDescripcion = "Pago por transferencia";
+					}
+					else if (sTipoPago.equals(ValoresDefecto.DEF_PAGO_NORMA3414))
+					{
+						this.bDetallesTransferencia = false;
+						
+						long liCodOperacion = Long.parseLong(pago.getsCodOperacion());
+						
+						TransferenciaN3414 transferencia = CLTransferencias.buscarTransferenciaN3414(liCodOperacion);
+						
+						Cuenta cuenta = Utils.recuperaCuentaSEPA(transferencia.getsCuentaBeneficiario());
+						
+						this.sPais = cuenta.getsPais();
+						this.sDCIBAN = cuenta.getsDCIBAN();
+						this.sNUCCEN = cuenta.getsNUCCEN();
+						this.sNUCCOF = cuenta.getsNUCCOF();
+						this.sNUCCDI = cuenta.getsNUCCDI();
+						this.sNUCCNT = cuenta.getsNUCCNT();
+						
+						this.sDescripcion = "Pago por transferencia N3414";
 					}
 					
 					//Cuenta

@@ -90,7 +90,21 @@
 
 										</h:panelGrid>
 									</p:panel>
+									<p:panel >
+										<h:panelGrid columns="3" cellpadding="5">
 
+
+											<h:outputText for="NumTransferenciasN3414" value="Norma 3414: " />
+											<p:inputText id="NumTransferenciasN3414" value="#{GestorEnvios.sNumTransferenciasN3414}" size="10" disabled="true">
+											</p:inputText>
+											<p:commandButton id="botTransferenciasN3414" value="Descargar Norma 3414" ajax="false" actionListener="#{GestorEnvios.descargarTransferenciasN3414}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" 
+												disabled="#{GestorEnvios.bNumTransferenciasN3414}">
+												<p:fileDownload value="#{GestorEnvios.file}" />  
+											</p:commandButton>
+
+										</h:panelGrid>
+									</p:panel>
 										
 
 								</h:panelGrid>

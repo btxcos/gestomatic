@@ -51,6 +51,10 @@ import com.provisiones.types.tablas.ResultadosTabla;
 import com.provisiones.types.transferencias.N34.OrdenanteN34;
 import com.provisiones.types.transferencias.N34.ResumenN34;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
+import com.provisiones.types.transferencias.N3414.OrdenanteN3414;
+import com.provisiones.types.transferencias.N3414.ResumenN3414;
+import com.provisiones.types.transferencias.N3414.TotalesN3414;
+import com.provisiones.types.transferencias.N3414.TransferenciaN3414;
 
 public final class FileManager 
 {
@@ -1377,7 +1381,7 @@ public final class FileManager
 
 		if (conexion != null)
 		{
-			ArrayList<Long> resultpagos = CLPagos.buscarPagosSinEnviar(sNUPROF);
+			ArrayList<Long> resultpagos = CLPagos.buscarPagosSinEnviar(sNUPROF,ValoresDefecto.DEF_PAGO_NORMA34);
 
 			if (resultpagos.size() > 0)
 			{
@@ -1463,6 +1467,261 @@ public final class FileManager
 			            
 			            String sResumen = Parser.escribirResumenN34(resumen);
 			            pw.println(sResumen);
+			            liEntradas = resultpagos.size();
+		            }
+		 
+		        } 
+		        catch (IOException e) 
+		        {
+		        	sNombreFichero = "";
+		        	liEntradas = 0;
+		            
+		        	//En caso de error se devuelven los registros a su estado anterior
+		            try
+		            {
+		            	conexion.rollback();
+		            	conexion.setAutoCommit(true);
+		            }
+		            catch (SQLException eDeshacerCambios)
+			        {
+						try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		            
+		            logger.error("Ocurrió un error al escribir en el fichero de envio, se restauran los estados afectados.");
+		        } 
+		        catch (SQLException eGuardarCambios)
+		        {
+		            sNombreFichero = "";
+		            liEntradas = 0;
+					try 
+					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
+						conexion.close();
+					} 
+					catch (SQLException eReintentar) 
+					{
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException eCerrarConexion) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
+					}
+				} 
+		        finally 
+		        {
+		        	try 
+			        {
+			        	if (null != ficheroN34)
+			        	{
+			        		if (bOK)
+			        		{
+				        		conexion.commit();
+
+							    logger.info("Generado:|"+sNombreFichero+"|"); 
+			        		}
+			        		else
+			        		{
+					        	sNombreFichero = "";
+					        	liEntradas = 0;
+
+								conexion.rollback();
+								logger.error("Error al revisar los movimientos.");
+			        		}
+			        		ficheroN34.close();
+
+			        	}
+			        	else
+			        	{
+			        		sNombreFichero = "";
+					        liEntradas = 0;
+
+							conexion.rollback();
+								
+							logger.error("Error de descriptor de fichero.");
+			        	}
+		        		conexion.setAutoCommit(true);
+			        }
+			        catch (IOException eCerarFichero) 
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+			              
+						try 
+						{
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+						}
+						catch (SQLException eDeshacerCambios) 
+						{
+							try 
+							{
+								//reintentamos
+								conexion.rollback();
+								conexion.setAutoCommit(true);
+								conexion.close();
+							} 
+							catch (SQLException eReintentar) 
+							{
+								try 
+								{
+									conexion.close();
+								}
+								catch (SQLException eCerrarConexion) 
+								{
+									logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+								}
+							}
+						}
+						
+			            logger.error("Ocurrió un error al cerrar el fichero de envio, se restauran los estados afectados.");
+			        }
+		        	catch (SQLException eDeshacerCambios)
+			        {
+			        	sNombreFichero = "";
+			        	liEntradas = 0;
+
+			        	try 
+						{
+							//reintentamos
+							conexion.rollback();
+							conexion.setAutoCommit(true);
+							conexion.close();
+						} 
+						catch (SQLException eReintentar) 
+						{
+							try 
+							{
+								conexion.close();
+							}
+							catch (SQLException eCerrarConexion) 
+							{
+								logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+							}
+						}
+					}
+		        }
+			}
+		}
+        
+        return new ResultadoEnvio(sNombreFichero,liEntradas);
+	}
+	
+	public static ResultadoEnvio escribirNorma3414(String sNUPROF) 
+	{
+		String sNombreFichero = "";
+		long liEntradas = 0;
+
+		Connection conexion = ConnectionManager.getDBConnection();
+
+		if (conexion != null)
+		{
+			ArrayList<Long> resultpagos = CLPagos.buscarPagosSinEnviar(sNUPROF,ValoresDefecto.DEF_PAGO_NORMA3414);
+
+			if (resultpagos.size() > 0)
+			{
+		        FileWriter ficheroN34 = null;
+		        
+		        PrintWriter pw = null;
+		        
+		        int iLineas = 0;
+		        
+		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_PAGOS+"_"+ValoresDefecto.DEF_NORMA34+".Q34";
+		        
+		        boolean bOK = false;
+		        try
+		        {
+
+		        	ficheroN34 = new FileWriter(sNombreFichero);
+		            pw = new PrintWriter(ficheroN34);
+		            
+		            Cuenta cuentaordenante = new Cuenta (
+		            		ValoresDefecto.DEF_ORDENANTE_PAIS,
+		            		ValoresDefecto.DEF_ORDENANTE_IBAN,
+		            		ValoresDefecto.DEF_ORDENANTE_ENTIDAD,
+		            		ValoresDefecto.DEF_ORDENANTE_OFICINA,
+		            		ValoresDefecto.DEF_ORDENANTE_DIGITO_CONTROL,
+		            		ValoresDefecto.DEF_ORDENANTE_CUENTA,
+		            		"");
+		            
+		            OrdenanteN3414 ordenante = CLTransferencias.generarOrdenanteN3414(cuentaordenante);
+		            
+		            String sOrdenante = Parser.escribirOrdenanteN3414(ordenante);
+
+		            pw.println(sOrdenante);
+		            
+		            iLineas = iLineas + 1;
+
+		            
+		            long liSumaImportes = 0;
+		            
+		            conexion.setAutoCommit(false);
+		            
+		            for (int i = 0; i < resultpagos.size(); i++)
+		            {
+		            	logger.debug("resultpagos.get("+i+"):|"+resultpagos.get(i)+"|");
+		            	
+		            	bOK = QMPagos.setEnviado(conexion, resultpagos.get(i),ValoresDefecto.PAGO_ENVIADO);
+		            	
+		            	if (bOK)
+		            	{
+		            		String sCodOperacion = QMPagos.getCodOperacion(conexion, resultpagos.get(i));
+		            		
+		            		logger.debug("sCodOperacion:|"+sCodOperacion+"|");
+		            		
+		            		TransferenciaN3414 transferencia = CLTransferencias.buscarTransferenciaN3414(Long.parseLong(sCodOperacion));
+			            	
+			            	String sBeneficiarioTransferencia = Parser.escribirBeneficiarioTransferenciaN3414(transferencia);
+				            
+			            	pw.println(sBeneficiarioTransferencia);
+				            
+				            iLineas = iLineas + 1;
+				            
+				            logger.debug("transferencia.getsImporte():|"+transferencia.getsImporteTransferencia()+"|");
+				            
+				            liSumaImportes = liSumaImportes + Long.parseLong(transferencia.getsImporteTransferencia());
+		            	}
+		            	else
+		            	{
+		            		i = resultpagos.size();
+		            	}
+		            }
+		            
+		            if (bOK)
+		            {
+			            iLineas++;
+			            
+			            ResumenN3414 resumen = CLTransferencias.generarResumenN3414(liSumaImportes, resultpagos.size(), iLineas);
+			            
+			            String sResumen = Parser.escribirResumenN3414(resumen);
+			            pw.println(sResumen);
+			            
+			            TotalesN3414 totales = CLTransferencias.generarTotalesN3414(liSumaImportes, resultpagos.size(), iLineas);
+			            
+			            String sTotales = Parser.escribirTotalesN3414(totales);
+			            pw.println(sTotales);
+			            
 			            liEntradas = resultpagos.size();
 		            }
 		 

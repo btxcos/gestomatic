@@ -33,6 +33,7 @@ import com.provisiones.types.tablas.ActivoTabla;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
+import com.provisiones.types.transferencias.N3414.TransferenciaN3414;
 
 public class GestorRevisionPagos implements Serializable 
 {
@@ -291,6 +292,7 @@ public class GestorRevisionPagos implements Serializable
 
 			tipospagoHM.put("Ventanilla",       "1");
 			tipospagoHM.put("Norma 34",         "3");
+			tipospagoHM.put("Norma 3414",         "4");
 			tipospagoHM.put("Transferencia",    "5");
 		}
 	}
@@ -1391,12 +1393,16 @@ public class GestorRevisionPagos implements Serializable
 	    			{
 	    				
 	    				this.liCodOperacion = Long.parseLong(pago.getsCodOperacion());
-		    			TransferenciaN34 transferencia = CLTransferencias.buscarTransferenciaN34(liCodOperacion);
+		    			TransferenciaN3414 transferencia = CLTransferencias.buscarTransferenciaN3414(liCodOperacion);
 		    			
-			    		this.sNUCCEN = transferencia.getsNUCCEN();
-			    		this.sNUCCOF = transferencia.getsNUCCOF();
-			    		this.sNUCCDI = transferencia.getsNUCCDI();
-			    		this.sNUCCNT = transferencia.getsNUCCNT();
+		    			Cuenta cuenta = Utils.recuperaCuentaSEPA(transferencia.getsCuentaBeneficiario());
+						
+						this.sPais = cuenta.getsPais();
+						this.sDCIBAN = cuenta.getsDCIBAN();
+						this.sNUCCEN = cuenta.getsNUCCEN();
+						this.sNUCCOF = cuenta.getsNUCCOF();
+						this.sNUCCDI = cuenta.getsNUCCDI();
+						this.sNUCCNT = cuenta.getsNUCCNT();
 			    		
 			    		this.setsDescripcion("TRANSFERENCIA N3414");
 			    		
@@ -1417,12 +1423,16 @@ public class GestorRevisionPagos implements Serializable
 	    			{
 	    				
 	    				this.liCodOperacion = Long.parseLong(pago.getsCodOperacion());
-		    			TransferenciaN34 transferencia = CLTransferencias.buscarTransferenciaN34(liCodOperacion);
+		    			TransferenciaN3414 transferencia = CLTransferencias.buscarTransferenciaN3414(liCodOperacion);
 		    			
-			    		this.sNUCCEN = transferencia.getsNUCCEN();
-			    		this.sNUCCOF = transferencia.getsNUCCOF();
-			    		this.sNUCCDI = transferencia.getsNUCCDI();
-			    		this.sNUCCNT = transferencia.getsNUCCNT();
+		    			Cuenta cuenta = Utils.recuperaCuentaSEPA(transferencia.getsCuentaBeneficiario());
+						
+						this.sPais = cuenta.getsPais();
+						this.sDCIBAN = cuenta.getsDCIBAN();
+						this.sNUCCEN = cuenta.getsNUCCEN();
+						this.sNUCCOF = cuenta.getsNUCCOF();
+						this.sNUCCDI = cuenta.getsNUCCDI();
+						this.sNUCCNT = cuenta.getsNUCCNT();
 			    		
 			    		this.setsDescripcion("TRANSFERENCIA");
 			    		
@@ -1797,6 +1807,12 @@ public class GestorRevisionPagos implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (sAccion.equals(ValoresDefecto.DEF_MODIFICACION) && sTipoPago.equals(ValoresDefecto.DEF_PAGO_NORMA34))
+				{
+					sMsg = "ERROR: El Pago por Norma 34 esta en desuso en favor de Norma 3414. Por favor, revise los datos.";
+					msg = Utils.pfmsgError(sMsg);
+					logger.error(sMsg);
+				}				
 				else if (sCOACES.isEmpty() || sCOGRUG.isEmpty() || sCOTPGA.isEmpty() || sCOSBGA.isEmpty() || sFEDEVE.isEmpty())
 				{
 					sMsg = "ERROR: No se ha seleccionado un Gasto. Por favor, revise los datos.";

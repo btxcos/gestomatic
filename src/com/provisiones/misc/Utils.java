@@ -23,6 +23,7 @@ import javax.faces.application.FacesMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.types.Cuenta;
 import com.provisiones.types.ImporteDevolucion;
 
 public final class Utils 
@@ -1206,6 +1207,25 @@ public final class Utils
 		logger.debug("sDescripcion:|"+sDescripcion+"|");
 		
 		return sDescripcion;
+	}
+	
+	public static Cuenta recuperaCuentaSEPA(String sCuentaSEPA)
+	{
+		String sPais = sCuentaSEPA.substring(0, 2);	
+		String sDCIBAN = sCuentaSEPA.substring(2, 4);	
+		String sNUCCEN = sCuentaSEPA.substring(4, 8);
+		String sNUCCOF = sCuentaSEPA.substring(8, 12);
+		String sNUCCDI = sCuentaSEPA.substring(12, 14);
+		String sNUCCNT = sCuentaSEPA.substring(14);
+		
+		return new Cuenta(
+				sPais,
+				sDCIBAN,
+				sNUCCEN,
+				sNUCCOF,
+				sNUCCDI,
+				sNUCCNT,
+				 "");
 	}
 
 }

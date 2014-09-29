@@ -246,6 +246,20 @@ public final class Longitudes
 	public static final int N34_NUM_TRANSFERENCIAS_L = 8;
 	public static final int N34_NUM_REGISTROS_L = 10;
 
+	//Tamaños N3414
+	public static final int N3414_IDENTIFICACION_L = 9;
+	public static final int N3414_NOMBRE_BENEFICIARIO_L = 70;
+	public static final int N3414_DIRECCION12_L = 50;
+	public static final int N3414_DIRECCION3_L = 40;
+	public static final int N3414_REFERENCIA_BENEFICIARIO_L = 12;
+	public static final int N3414_IMPORTE_L = 11;
+	public static final int N3414_CONCEPTO_L = 140;
+	
+	public static final int N3414_TOTAL_IMPORTES_L = 17;
+	public static final int N3414_NUM_REGISTROS_L = 8;
+	public static final int N3414_TOTAL_REGISTROS_L = 10;
+	
+
 	
 	private Longitudes(){}
 }

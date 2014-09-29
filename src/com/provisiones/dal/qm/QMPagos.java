@@ -1148,7 +1148,7 @@ public class QMPagos
 		return resultado;
 	}
 	
-	public static ArrayList<Long> buscarPagosEmitidosProvision(Connection conexion, String sNUPROF) 
+	public static ArrayList<Long> buscarPagosEmitidosProvision(Connection conexion, String sNUPROF, String sTipoPago) 
 	{
 		ArrayList<Long> resultado = new ArrayList<Long>();
 
@@ -1167,7 +1167,8 @@ public class QMPagos
 					+ CAMPO1  +
 					" FROM " 
 					+ TABLA + 
-					" WHERE (" 
+					" WHERE ("
+					+ CAMPO4 + " = '"+ sTipoPago + "' AND "
 					+ CAMPO9 + " = "+ ValoresDefecto.PAGO_EMITIDO + " AND "
 					+ CAMPO3 + " IN (SELECT "
 					+ QMListaGastosProvisiones.CAMPO1 +

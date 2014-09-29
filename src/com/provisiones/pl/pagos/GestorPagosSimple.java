@@ -269,6 +269,7 @@ public class GestorPagosSimple implements Serializable
 			
 			tipospagoHM.put("Ventanilla",       "1");
 			tipospagoHM.put("Norma 34",         "3");
+			tipospagoHM.put("Norma 3414",         "4");
 			tipospagoHM.put("Transferencia",    "5");
 		}
 	}

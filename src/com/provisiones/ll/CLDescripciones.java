@@ -12,6 +12,11 @@ public class CLDescripciones
 
 	private CLDescripciones(){}
 	
+	public static String swiftEntidad (String sEntidad)
+	{
+		return QMCodigosControl.getSWIFT(ConnectionManager.getDBConnection(), sEntidad);
+	}
+	
 	public static String descripcionEstadoGasto (String sEstado)
 	{
 		return QMCodigosControl.getDesCampo(ConnectionManager.getDBConnection(), QMCodigosControl.TESGAST, QMCodigosControl.IESGAST, sEstado);
