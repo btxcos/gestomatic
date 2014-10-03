@@ -1227,5 +1227,17 @@ public final class Utils
 				sNUCCNT,
 				 "");
 	}
+	
+	public static String compruebaISO20022(String sCampo)
+	{
+
+		//logger.debug("sFecha:|{}|",sFecha);
+		
+		String sCampoFormateado = "";
+		
+		//sCampo
+		
+		return sCampoFormateado;
+	}
 
 }

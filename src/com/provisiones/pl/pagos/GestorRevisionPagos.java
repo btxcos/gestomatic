@@ -1846,6 +1846,13 @@ public class GestorRevisionPagos implements Serializable
 					msg = Utils.pfmsgError(sMsg);
 					logger.error(sMsg);
 				}
+				else if (!sTipoPago.equals(ValoresDefecto.DEF_PAGO_VENTANILLA) 
+						&& CLDescripciones.swiftEntidad(sNUCCEN).isEmpty())
+				{
+					sMsg = "ERROR: La entidad de la cuenta corriente proporcionada no se encuentra registrada en el sistema. Por favor, revise los datos y avise a soporte.";
+					msg = Utils.pfmsgFatal(sMsg);
+					logger.error(sMsg);
+				}
 				
 				/*else if (Long.parseLong(Utils.compruebaFecha(sFEDEVE)) > Long.parseLong(Utils.compruebaFecha(sFEPGPR)))
 				{
@@ -1917,7 +1924,14 @@ public class GestorRevisionPagos implements Serializable
 					logger.debug("sTipoPago:|"+sTipoPago+"|");
 					
 
-	            	
+            		if (sPais.isEmpty())
+            		{
+            			this.sPais = "ES";	
+            		}
+            		if (sDCIBAN.isEmpty())
+            		{
+            			this.sDCIBAN = Utils.calculaDCIBAN(sPais, sNUCCEN, sNUCCOF, sNUCCDI, sNUCCNT);	
+            		}
 					
 					int iSalida = -999;
 

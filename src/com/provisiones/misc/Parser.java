@@ -920,12 +920,12 @@ public final class Parser {
 				+ ordenante.getsFechaCreacionFichero()
 				+ ordenante.getsFechaEjecucionOrdenes()
 				+ ordenante.getsIdentificadorCuentaOrdenante()
-				+ ordenante.getsCuentaOrdenante()
+				+ formateaCampoAlfanumerico(ordenante.getsCuentaOrdenante(),Longitudes.N3414_CUENTA_ORDENANTE_L)
 				+ ordenante.getsDetallesCargos()
-				+ ordenante.getsNombreOrdenante()
-				+ ordenante.getsDireccionOrdenante1()
-				+ ordenante.getsDireccionOrdenante2()
-				+ ordenante.getsDireccionOrdenante3()
+				+ formateaCampoAlfanumerico(ordenante.getsNombreOrdenante(),Longitudes.N3414_NOMBRE_ORDENANTE_L)
+				+ formateaCampoAlfanumerico(ordenante.getsDireccionOrdenante1(),Longitudes.N3414_DIRECCION_ORDENANTE1_L)
+				+ formateaCampoAlfanumerico(ordenante.getsDireccionOrdenante2(),Longitudes.N3414_DIRECCION_ORDENANTE2_L)
+				+ formateaCampoAlfanumerico(ordenante.getsDireccionOrdenante3(),Longitudes.N3414_DIRECCION_ORDENANTE3_L)
 				+ ordenante.getsPaisOrdenante()
 				+ ValoresDefecto.LIBRE311;
 				
@@ -954,18 +954,19 @@ public final class Parser {
 				+ ValoresDefecto.DEF_NUMERO_DATO_BENEFICIARIO_N3414
 				+ ValoresDefecto.LIBRE35
 				+ ValoresDefecto.DEF_IDENTIFICACION_CUENTA_BENEFICIARIO_N3414
-				+ transferencia.getsCuentaBeneficiario()
+				+ formateaCampoAlfanumerico(transferencia.getsCuentaBeneficiario(),Longitudes.N3414_CUENTA_BENEFICIARIO_L)
 				+ formateaCampoNumerico(transferencia.getsImporteTransferencia(),Longitudes.N3414_IMPORTE_L)
 				+ ValoresDefecto.DEF_CLAVE_GASTOS_N3414
 				+ transferencia.getsBICBeneficiario()
 				+ formateaCampoAlfanumerico(transferencia.getsNombreBeneficiario(),Longitudes.N3414_NOMBRE_BENEFICIARIO_L)
-				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario1(),Longitudes.N3414_DIRECCION12_L)
-				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario2(),Longitudes.N3414_DIRECCION12_L)
-				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario3(),Longitudes.N3414_DIRECCION3_L)
+				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario1(),Longitudes.N3414_DIRECCION_BENEFICIARIO1_L)
+				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario2(),Longitudes.N3414_DIRECCION_BENEFICIARIO2_L)
+				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario3(),Longitudes.N3414_DIRECCION_BENEFICIARIO3_L)
+				+ transferencia.getsPaisBeneficiario()
 				+ formateaCampoAlfanumerico(transferencia.getsConcepto(),Longitudes.N3414_CONCEPTO_L)
 				+ ValoresDefecto.LIBRE35
-				+ ValoresDefecto.DEF_TIPO_TRANSFERENCIA_N3414
 				+ ValoresDefecto.LIBRE4
+				+ ValoresDefecto.DEF_PROPOSITO_TRANSFERENCIA_N3414
 				+ ValoresDefecto.LIBRE99;
 			
 		return sResultado;
@@ -976,9 +977,9 @@ public final class Parser {
 	
 		String sResultado = resumen.getsCodRegistro()
 				+ resumen.getsCodOperacion()
-				+ formateaCampoAlfanumerico(resumen.getsTotalImportes(),Longitudes.N3414_TOTAL_IMPORTES_L)
-				+ formateaCampoAlfanumerico(resumen.getsNumeroRegistros(),Longitudes.N3414_NUM_REGISTROS_L)
-				+ formateaCampoAlfanumerico(resumen.getsTotalRegistros(),Longitudes.N3414_TOTAL_REGISTROS_L)
+				+ formateaCampoNumerico(resumen.getsTotalImportes(),Longitudes.N3414_TOTAL_IMPORTES_L)
+				+ formateaCampoNumerico(resumen.getsNumeroRegistros(),Longitudes.N3414_NUM_REGISTROS_L)
+				+ formateaCampoNumerico(resumen.getsTotalRegistros(),Longitudes.N3414_TOTAL_REGISTROS_L)
 				+ ValoresDefecto.LIBRE560;
 				
 		return sResultado;
@@ -990,9 +991,9 @@ public final class Parser {
 	
 		String sResultado = totales.getsCodRegistro()
 				+ totales.getsCodOperacion()
-				+ formateaCampoAlfanumerico(totales.getsTotalImportesGeneral(),Longitudes.N3414_TOTAL_IMPORTES_L)
-				+ formateaCampoAlfanumerico(totales.getsNumeroRegistros(),Longitudes.N3414_NUM_REGISTROS_L)
-				+ formateaCampoAlfanumerico(totales.getsTotalRegistros(),Longitudes.N3414_TOTAL_REGISTROS_L)
+				+ formateaCampoNumerico(totales.getsTotalImportesGeneral(),Longitudes.N3414_TOTAL_IMPORTES_L)
+				+ formateaCampoNumerico(totales.getsNumeroRegistros(),Longitudes.N3414_NUM_REGISTROS_L)
+				+ formateaCampoNumerico(totales.getsTotalRegistros(),Longitudes.N3414_TOTAL_REGISTROS_L)
 				+ ValoresDefecto.LIBRE560;
 				
 		return sResultado;

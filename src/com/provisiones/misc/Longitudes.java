@@ -247,10 +247,19 @@ public final class Longitudes
 	public static final int N34_NUM_REGISTROS_L = 10;
 
 	//Tamaños N3414
+	public static final int N3414_CUENTA_ORDENANTE_L = 34;
+	public static final int N3414_NOMBRE_ORDENANTE_L = 70;
+	public static final int N3414_DIRECCION_ORDENANTE1_L = 50;
+	public static final int N3414_DIRECCION_ORDENANTE2_L = 50;
+	public static final int N3414_DIRECCION_ORDENANTE3_L = 40;
+	
+	public static final int N3414_CUENTA_BENEFICIARIO_L = 34;
+	
 	public static final int N3414_IDENTIFICACION_L = 9;
 	public static final int N3414_NOMBRE_BENEFICIARIO_L = 70;
-	public static final int N3414_DIRECCION12_L = 50;
-	public static final int N3414_DIRECCION3_L = 40;
+	public static final int N3414_DIRECCION_BENEFICIARIO1_L = 50;
+	public static final int N3414_DIRECCION_BENEFICIARIO2_L = 50;
+	public static final int N3414_DIRECCION_BENEFICIARIO3_L = 40;
 	public static final int N3414_REFERENCIA_BENEFICIARIO_L = 12;
 	public static final int N3414_IMPORTE_L = 11;
 	public static final int N3414_CONCEPTO_L = 140;

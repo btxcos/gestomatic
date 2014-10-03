@@ -449,7 +449,7 @@ public class CLPagos
 									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
 
 									TransferenciaN3414 transferencia = CLTransferencias.generarTransferenciaN3414(liCodGasto, cuenta, liRecargo);
-									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, transferencia);
+									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, liCodGasto, transferencia);
 									
 									if (liCodTransferencia != 0)
 									{
@@ -481,7 +481,7 @@ public class CLPagos
 									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
 
 									TransferenciaN3414 transferencia = CLTransferencias.generarTransferenciaN3414(liCodGasto, cuenta, liRecargo);
-									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, transferencia);
+									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, liCodGasto, transferencia);
 									
 									if (liCodTransferencia != 0)
 									{
@@ -779,6 +779,8 @@ public class CLPagos
 			{
 				conexion.setAutoCommit(false);
 				
+				byte btEnviado = (QMPagos.getEnviado(conexion, liCodPago))? ValoresDefecto.PAGO_ENVIADO: ValoresDefecto.PAGO_EMITIDO;
+				
 				if (QMGastos.setEstado(conexion, liCodGasto, ValoresDefecto.DEF_GASTO_AUTORIZADO))
 				{
 					if (QMGastos.setFechaPagado(conexion, liCodGasto, ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
@@ -966,7 +968,9 @@ public class CLPagos
 									{
 										pago.setsCodOperacion(Long.toString(liCodTransferencia));
 
-										liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										//liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										
+										liCodPagoNuevo = QMPagos.addPago(conexion, pago, btEnviado);
 										
 										if ( liCodPagoNuevo != 0)
 										{
@@ -990,13 +994,16 @@ public class CLPagos
 									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
 
 									TransferenciaN3414 transferencia = CLTransferencias.generarTransferenciaN3414(liCodGasto, cuenta, liRecargo);
-									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, transferencia);
+									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, liCodGasto, transferencia);
 									
 									if (liCodTransferencia != 0)
 									{
 										pago.setsCodOperacion(Long.toString(liCodTransferencia));
 
-										liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										//liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										
+										liCodPagoNuevo = QMPagos.addPago(conexion, pago, btEnviado);
+										
 										
 										if ( liCodPagoNuevo != 0)
 										{
@@ -1020,13 +1027,15 @@ public class CLPagos
 									long liRecargo = Utils.redondeaRecargo(Long.parseLong(pago.getsRecargoAdicional()));
 
 									TransferenciaN3414 transferencia = CLTransferencias.generarTransferenciaN3414(liCodGasto, cuenta, liRecargo);
-									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, transferencia);
+									long liCodTransferencia = QMTransferenciasN3414.addTransferencia(conexion, liCodGasto, transferencia);
 									
 									if (liCodTransferencia != 0)
 									{
 										pago.setsCodOperacion(Long.toString(liCodTransferencia));
 
-										liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										//liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_EMITIDO);
+										
+										liCodPagoNuevo = QMPagos.addPago(conexion, pago, btEnviado);
 										
 										if ( liCodPagoNuevo != 0)
 										{
@@ -1047,6 +1056,8 @@ public class CLPagos
 								}
 								else
 								{
+									//Ventanilla
+									pago.setsCodOperacion(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR);
 									liCodPagoNuevo = QMPagos.addPago(conexion, pago, ValoresDefecto.PAGO_ENVIADO);
 									
 									if (liCodPagoNuevo != 0)

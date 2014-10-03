@@ -228,16 +228,35 @@ public class CLTransferencias
 		String sNumeroDato = ValoresDefecto.DEF_NUMERO_DATO_ORDENANTE_N3414;
 		String sIdentificacionOrdenante = ValoresDefecto.DEF_IDENTIFICACION_ORDENANTE_N3414;
 		String sIdentificacionOrdenanteSufijo = ValoresDefecto.DEF_IDENTIFICACION_ORDENANTE_SUFIJO_N3414;
-		String sFechaCreacionFichero = Utils.aFechaN34(Utils.sumaDiasFecha(Utils.fechaDeHoy(false), -1));
-		String sFechaEjecucionOrdenes = Utils.fechaDeHoyN34(false);
-		String sIdentificadorCuentaOrdenante = cuenta.getsPais()+cuenta.getsDCIBAN()+cuenta.getsNUCCEN()+cuenta.getsNUCCOF()+cuenta.getsNUCCDI()+cuenta.getsNUCCNT();
-		String sCuentaOrdenante = ValoresDefecto.DEF_CUENTA_ORDENANTE_N3414;
+		String sFechaCreacionFichero = Utils.sumaDiasFecha(Utils.fechaDeHoy(false), -1);
+		String sFechaEjecucionOrdenes = Utils.fechaDeHoy(false);
+		String sIdentificadorCuentaOrdenante = ValoresDefecto.DEF_IDENTIFICACION_CUENTA_ORDENANTE_N3414;
+		String sCuentaOrdenante = cuenta.getsPais()+cuenta.getsDCIBAN()+cuenta.getsNUCCEN()+cuenta.getsNUCCOF()+cuenta.getsNUCCDI()+cuenta.getsNUCCNT();
 		String sDetallesCargos = ValoresDefecto.DEF_DETALLE_CARGO_ORDENANTE_N3414;
 		String sNombreOrdenante = ValoresDefecto.DEF_NOMBRE_ORDENANTE_N3414;
 		String sDireccionOrdenante1 = ValoresDefecto.DEF_DIRECCION_ORDENANTE1_N3414;
 		String sDireccionOrdenante2 = ValoresDefecto.DEF_DIRECCION_ORDENANTE2_N3414;
 		String sDireccionOrdenante3 = ValoresDefecto.DEF_DIRECCION_ORDENANTE3_N3414;
 		String sPaisOrdenante = ValoresDefecto.DEF_PAIS_ORDENANTE_N3414;
+		
+		logger.debug("sCodRegistro:|"+sCodRegistro+"|"+sCodRegistro.length());
+		logger.debug("sCodOperacion:|"+sCodOperacion+"|"+sCodOperacion.length());
+		logger.debug("sVersionCuaderno:|"+sVersionCuaderno+"|"+sVersionCuaderno.length());
+		logger.debug("sNumeroDato:|"+sNumeroDato+"|"+sNumeroDato.length());
+		logger.debug("sIdentificacionOrdenante:|"+sIdentificacionOrdenante+"|"+sIdentificacionOrdenante.length());
+		logger.debug("sIdentificacionOrdenanteSufijo:|"+sIdentificacionOrdenanteSufijo+"|"+sIdentificacionOrdenanteSufijo.length());
+		logger.debug("sFechaCreacionFichero:|"+sFechaCreacionFichero+"|"+sFechaCreacionFichero.length());
+		logger.debug("sFechaEjecucionOrdenes:|"+sFechaEjecucionOrdenes+"|"+sFechaEjecucionOrdenes.length());
+		logger.debug("sIdentificadorCuentaOrdenante:|"+sIdentificadorCuentaOrdenante+"|"+sIdentificadorCuentaOrdenante.length());
+		logger.debug("sCuentaOrdenante:|"+sCuentaOrdenante+"|"+sCuentaOrdenante.length());
+		logger.debug("sDetallesCargos:|"+sDetallesCargos+"|"+sDetallesCargos.length());
+		logger.debug("sNombreOrdenante:|"+sNombreOrdenante+"|"+sNombreOrdenante.length());
+		logger.debug("sDireccionOrdenante1:|"+sDireccionOrdenante1+"|"+sDireccionOrdenante1.length());
+		logger.debug("sDireccionOrdenante2:|"+sDireccionOrdenante2+"|"+sDireccionOrdenante2.length());
+		logger.debug("sDireccionOrdenante3:|"+sDireccionOrdenante3+"|"+sDireccionOrdenante3.length());
+		logger.debug("sPaisOrdenante:|"+sPaisOrdenante+"|"+sPaisOrdenante.length());
+		
+		
 		
 		return new OrdenanteN3414 (
 				sCodRegistro,
@@ -258,7 +277,7 @@ public class CLTransferencias
 				sPaisOrdenante);
 	}
 	
-	public static CabeceraTransferenciasN3414 generarCabeceraTransferenciaN3414(Cuenta cuenta)
+	public static CabeceraTransferenciasN3414 generarCabeceraTransferenciaN3414()
 	{
 		
 		String sCodRegistro = ValoresDefecto.DEF_CODIGO_REGISTRO_CEBECERA_N3414;
@@ -335,10 +354,10 @@ public class CLTransferencias
 			
 	    	String sDomicilio = activo.getNOVIAS() + " " + activo.getNUPOAC();
 	    	
-	    	if (sDomicilio.length() > Longitudes.N3414_DIRECCION12_L)
+	    	if (sDomicilio.length() > Longitudes.N3414_DIRECCION_BENEFICIARIO1_L)
 	    	{
-	    		sDireccionBeneficiario1 = sDomicilio.substring(0, Longitudes.N3414_DIRECCION12_L);
-	    		sDireccionBeneficiario2 = sDomicilio.substring(Longitudes.N3414_DIRECCION12_L);
+	    		sDireccionBeneficiario1 = sDomicilio.substring(0, Longitudes.N3414_DIRECCION_BENEFICIARIO1_L);
+	    		sDireccionBeneficiario2 = sDomicilio.substring(Longitudes.N3414_DIRECCION_BENEFICIARIO1_L);
 	    	}
 	    	else
 	    	{
@@ -349,10 +368,10 @@ public class CLTransferencias
 	    	
 
 	    	
-	    	if (sPlaza.length() > Longitudes.N3414_DIRECCION12_L)
+	    	if (sPlaza.length() > Longitudes.N3414_DIRECCION_BENEFICIARIO2_L)
 	    	{
-	    		sDireccionBeneficiario2 = sPlaza.substring(0, Longitudes.N3414_DIRECCION12_L);
-	    		sDireccionBeneficiario3 = sPlaza.substring(Longitudes.N3414_DIRECCION12_L);
+	    		sDireccionBeneficiario2 = sPlaza.substring(0, Longitudes.N3414_DIRECCION_BENEFICIARIO2_L);
+	    		sDireccionBeneficiario3 = sPlaza.substring(Longitudes.N3414_DIRECCION_BENEFICIARIO2_L);
 	    	}
 	    	else
 	    	{
@@ -362,20 +381,22 @@ public class CLTransferencias
 	    	sDireccionBeneficiario3 = sDireccionBeneficiario3 + activo.getNOPRAC();
 
 	    	sPaisBeneficiario = ValoresDefecto.DEF_PAIS_BENEFICIARIO_N3414;
+
+	    	String sConcepto1 = CLDescripciones.descripcionGasto(gasto.getCOGRUG(), gasto.getCOTPGA(), gasto.getCOSBGA()).toUpperCase();
 	    	
-	    	String sConcepto1 = activo.getNUPIAC() 
+	    	String sConcepto2 = activo.getNUPIAC() 
 	    			+ (activo.getNUPUAC().isEmpty()? "" : " " + activo.getNUPUAC()) 
 	    			+ (activo.getNUESAC().isEmpty()? "" : " " + activo.getNUESAC());
 	    	
 	    	String sFechaConcepto = Utils.recuperaFecha(gasto.getFEDEVE());
 	    	
-	    	String sConcepto2 = CLDescripciones.descripcionGasto(gasto.getCOGRUG(), gasto.getCOTPGA(), gasto.getCOSBGA());
+
 	    	
-	    	sConcepto = sConcepto1 + " " + sConcepto2 + " " + sFechaConcepto + " ";
+	    	sConcepto = "PAGO DE "+ sConcepto1 + " " + sFechaConcepto + " " + sConcepto2  + " ";
 	    	
 			sIdentificacionInstruccion = ValoresDefecto.LIBRE35;
-			sTipoTransferencia = ValoresDefecto.DEF_TIPO_TRANSFERENCIA_N3414;
-			sPropositoTransferencia = ValoresDefecto.LIBRE4;
+			sTipoTransferencia = ValoresDefecto.LIBRE4;
+			sPropositoTransferencia = ValoresDefecto.DEF_PROPOSITO_TRANSFERENCIA_N3414;
 	
 
 	    	
@@ -440,7 +461,7 @@ public class CLTransferencias
 				sCodOperacion,
 				Long.toString(liSumaImportes),
 				Integer.toString(iNumeroTransferencias),
-				Integer.toString(iNumeroRegistros+2));
+				Integer.toString(iNumeroRegistros));
 	}
 	
 	public static TransferenciaN3414 buscarTransferenciaN3414 (long liCodTransferencia)

@@ -51,6 +51,7 @@ import com.provisiones.types.tablas.ResultadosTabla;
 import com.provisiones.types.transferencias.N34.OrdenanteN34;
 import com.provisiones.types.transferencias.N34.ResumenN34;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
+import com.provisiones.types.transferencias.N3414.CabeceraTransferenciasN3414;
 import com.provisiones.types.transferencias.N3414.OrdenanteN3414;
 import com.provisiones.types.transferencias.N3414.ResumenN3414;
 import com.provisiones.types.transferencias.N3414.TotalesN3414;
@@ -1647,7 +1648,7 @@ public final class FileManager
 		        
 		        int iLineas = 0;
 		        
-		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_PAGOS+"_"+ValoresDefecto.DEF_NORMA34+".Q34";
+		        sNombreFichero = ValoresDefecto.DEF_PATH_BACKUP_GENERADOS+Utils.timeStamp()+"_"+ValoresDefecto.DEF_PAGOS+"_"+ValoresDefecto.DEF_NORMA3414+".Q34";
 		        
 		        boolean bOK = false;
 		        try
@@ -1672,8 +1673,15 @@ public final class FileManager
 		            pw.println(sOrdenante);
 		            
 		            iLineas = iLineas + 1;
-
 		            
+		            CabeceraTransferenciasN3414 cabecera = CLTransferencias.generarCabeceraTransferenciaN3414();
+
+		            String sCabecera = Parser.escribirCabeceraTransferenciasN3414(cabecera);
+		            
+		            pw.println(sCabecera);
+
+		            iLineas = iLineas + 1;
+
 		            long liSumaImportes = 0;
 		            
 		            conexion.setAutoCommit(false);
@@ -1693,6 +1701,8 @@ public final class FileManager
 		            		TransferenciaN3414 transferencia = CLTransferencias.buscarTransferenciaN3414(Long.parseLong(sCodOperacion));
 			            	
 			            	String sBeneficiarioTransferencia = Parser.escribirBeneficiarioTransferenciaN3414(transferencia);
+			            	
+			            	logger.debug("sBeneficiarioTransferencia:|"+sBeneficiarioTransferencia.length()+"|");
 				            
 			            	pw.println(sBeneficiarioTransferencia);
 				            
@@ -1710,12 +1720,15 @@ public final class FileManager
 		            
 		            if (bOK)
 		            {
-			            iLineas++;
 			            
 			            ResumenN3414 resumen = CLTransferencias.generarResumenN3414(liSumaImportes, resultpagos.size(), iLineas);
+			         
+			            iLineas++;
 			            
 			            String sResumen = Parser.escribirResumenN3414(resumen);
 			            pw.println(sResumen);
+			            
+			            iLineas++;
 			            
 			            TotalesN3414 totales = CLTransferencias.generarTotalesN3414(liSumaImportes, resultpagos.size(), iLineas);
 			            
@@ -2286,6 +2299,10 @@ public final class FileManager
 	    				break;
 	    			case -9:
 	    				sDescripcion = "No existe la provisión de gasto en el sistema.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
+	    				break;
+	    			case -12:
+	    				sDescripcion = "El gasto no admite más movimientos salvo abonos.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;
 	    				break;	
 	    			case -800:

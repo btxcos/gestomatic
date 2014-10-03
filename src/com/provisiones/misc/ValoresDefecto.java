@@ -67,6 +67,7 @@ public final class ValoresDefecto
 	public static final String DEF_PAGOS = "PAGOS";
 	
 	public static final String DEF_NORMA34 = "N34";
+	public static final String DEF_NORMA3414 = "N3414";
 		
 	public static final String DEF_E1_CODTRN = "EE41";
 	public static final String DEF_E2_CODTRN = "EE42";
@@ -284,7 +285,7 @@ public final class ValoresDefecto
 	public static final String DEF_CLAVE_GASTOS_N3414 = "3";
 	public static final String DEF_PAIS_BENEFICIARIO_N3414 = "ES";
 	public static final String LIBRE35 = "                                   ";
-	public static final String DEF_TIPO_TRANSFERENCIA_N3414 = "OTHR";
+	public static final String DEF_PROPOSITO_TRANSFERENCIA_N3414 = "OTHR";
 	public static final String LIBRE4 = "    ";
 	public static final String LIBRE99 = "                                                                                                   ";
 	

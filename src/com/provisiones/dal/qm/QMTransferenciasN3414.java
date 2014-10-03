@@ -21,19 +21,20 @@ public class QMTransferenciasN3414
 
 	public static final String CAMPO1 = "transferencia_id";
 	
-	public static final String CAMPO2 = "cuenta_beneficiario";
-	public static final String CAMPO3 = "importe_transferencia";
-	public static final String CAMPO4 = "bic_beneficiario";
-	public static final String CAMPO5 = "nombre_beneficiario";
-	public static final String CAMPO6 = "direccion_beneficiario1";
-	public static final String CAMPO7 = "direccion_beneficiario2";
-	public static final String CAMPO8 = "direccion_beneficiario3";
-	public static final String CAMPO9 = "pais_beneficiario";
-	public static final String CAMPO10 = "concepto";
+	public static final String CAMPO2 = "cod_gasto";
+	public static final String CAMPO3 = "cuenta_beneficiario";
+	public static final String CAMPO4 = "importe_transferencia";
+	public static final String CAMPO5 = "bic_beneficiario";
+	public static final String CAMPO6 = "nombre_beneficiario";
+	public static final String CAMPO7 = "direccion_beneficiario1";
+	public static final String CAMPO8 = "direccion_beneficiario2";
+	public static final String CAMPO9 = "direccion_beneficiario3";
+	public static final String CAMPO10 = "pais_beneficiario";
+	public static final String CAMPO11 = "concepto";
 
 	private QMTransferenciasN3414(){}
 	
-	public static long addTransferencia(Connection conexion, TransferenciaN3414 NuevaTransferencia)
+	public static long addTransferencia(Connection conexion, long liCodGasto, TransferenciaN3414 NuevaTransferencia)
 	{
 		long liCodigo = 0;
 
@@ -57,8 +58,10 @@ public class QMTransferenciasN3414
 					+ CAMPO7 + ","
 					+ CAMPO8 + ","
 					+ CAMPO9 + ","
-					+ CAMPO10 +
-					") VALUES (" 
+					+ CAMPO10 + ","
+					+ CAMPO11 +
+					") VALUES ('" 
+					+ liCodGasto + "',"
 					+ "AES_ENCRYPT('"+NuevaTransferencia.getsCuentaBeneficiario()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 					+ "'" + NuevaTransferencia.getsImporteTransferencia() + "',"
 					+ "AES_ENCRYPT('"+NuevaTransferencia.getsBICBeneficiario()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
@@ -173,15 +176,15 @@ public class QMTransferenciasN3414
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-						+ "AES_DECRYPT("+CAMPO2 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-						+ CAMPO3 + "," 
-						+ "AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+						+ "AES_DECRYPT("+CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+						+ CAMPO4 + "," 
 						+ "AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
 						+ "AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-						+ "AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ," 
-						+ "AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+						+ "AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+						+ "AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ," 
 						+ "AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-						+ "AES_DECRYPT("+CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+						+ "AES_DECRYPT("+CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+						+ "AES_DECRYPT("+CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
 				       " FROM " 
 				       + TABLA + 
 				       " WHERE "
@@ -207,15 +210,15 @@ public class QMTransferenciasN3414
 					{
 						bEncontrado = true;
 
-						sCuentaBeneficiario = rs.getString("AES_DECRYPT("+CAMPO2 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sImporteTransferencia = rs.getString(CAMPO3);
-						sBICBeneficiario = rs.getString("AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sNombreBeneficiario = rs.getString("AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sDireccionBeneficiario1 = rs.getString("AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sDireccionBeneficiario2 = rs.getString("AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sDireccionBeneficiario3 = rs.getString("AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sPaisBeneficiario = rs.getString("AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sConcepto = rs.getString("AES_DECRYPT("+CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sCuentaBeneficiario = rs.getString("AES_DECRYPT("+CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sImporteTransferencia = rs.getString(CAMPO4);
+						sBICBeneficiario = rs.getString("AES_DECRYPT("+CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sNombreBeneficiario = rs.getString("AES_DECRYPT("+CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sDireccionBeneficiario1 = rs.getString("AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sDireccionBeneficiario2 = rs.getString("AES_DECRYPT("+CAMPO8 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sDireccionBeneficiario3 = rs.getString("AES_DECRYPT("+CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sPaisBeneficiario = rs.getString("AES_DECRYPT("+CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sConcepto = rs.getString("AES_DECRYPT("+CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
 
 						logger.debug("Encontrado el registro!");
 					}
