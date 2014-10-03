@@ -392,7 +392,7 @@ public class CLTransferencias
 	    	
 
 	    	
-	    	sConcepto = "PAGO DE "+ sConcepto1 + " " + sFechaConcepto + " " + sConcepto2  + " ";
+	    	sConcepto = "PAGO DE "+ sConcepto1 + " " + sFechaConcepto + " " + sConcepto2  + " REF. G"+liCodGasto;
 	    	
 			sIdentificacionInstruccion = ValoresDefecto.LIBRE35;
 			sTipoTransferencia = ValoresDefecto.LIBRE4;
