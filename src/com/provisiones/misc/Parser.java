@@ -958,10 +958,10 @@ public final class Parser {
 				+ formateaCampoNumerico(transferencia.getsImporteTransferencia(),Longitudes.N3414_IMPORTE_L)
 				+ ValoresDefecto.DEF_CLAVE_GASTOS_N3414
 				+ transferencia.getsBICBeneficiario()
-				+ formateaCampoAlfanumerico(transferencia.getsNombreBeneficiario(),Longitudes.N3414_NOMBRE_BENEFICIARIO_L)
-				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario1(),Longitudes.N3414_DIRECCION_BENEFICIARIO1_L)
-				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario2(),Longitudes.N3414_DIRECCION_BENEFICIARIO2_L)
-				+ formateaCampoAlfanumerico(transferencia.getsDireccionBeneficiario3(),Longitudes.N3414_DIRECCION_BENEFICIARIO3_L)
+				+ formateaCampoAlfanumerico(Utils.compruebaISO20022(transferencia.getsNombreBeneficiario()),Longitudes.N3414_NOMBRE_BENEFICIARIO_L)
+				+ formateaCampoAlfanumerico(Utils.compruebaISO20022(transferencia.getsDireccionBeneficiario1()),Longitudes.N3414_DIRECCION_BENEFICIARIO1_L)
+				+ formateaCampoAlfanumerico(Utils.compruebaISO20022(transferencia.getsDireccionBeneficiario2()),Longitudes.N3414_DIRECCION_BENEFICIARIO2_L)
+				+ formateaCampoAlfanumerico(Utils.compruebaISO20022(transferencia.getsDireccionBeneficiario3()),Longitudes.N3414_DIRECCION_BENEFICIARIO3_L)
 				+ transferencia.getsPaisBeneficiario()
 				+ formateaCampoAlfanumerico(transferencia.getsConcepto(),Longitudes.N3414_CONCEPTO_L)
 				+ ValoresDefecto.LIBRE35

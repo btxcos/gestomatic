@@ -1230,12 +1230,29 @@ public final class Utils
 	
 	public static String compruebaISO20022(String sCampo)
 	{
-
-		//logger.debug("sFecha:|{}|",sFecha);
 		
 		String sCampoFormateado = "";
 		
-		//sCampo
+		sCampoFormateado = sCampo.replaceAll("[—]", "N");
+		sCampoFormateado = sCampoFormateado.replaceAll("[Ò]", "n");
+		sCampoFormateado = sCampoFormateado.replaceAll("[«]", "C");
+		sCampoFormateado = sCampoFormateado.replaceAll("[Á]", "c");
+		sCampoFormateado = sCampoFormateado.replaceAll("[¿¡¬√ƒ≈]", "A");
+		sCampoFormateado = sCampoFormateado.replaceAll("[‡·‚„‰Â]", "a");
+		sCampoFormateado = sCampoFormateado.replaceAll("[∆]", "A");
+		sCampoFormateado = sCampoFormateado.replaceAll("[Ê]", "a");
+		sCampoFormateado = sCampoFormateado.replaceAll("[»… À]", "E");
+		sCampoFormateado = sCampoFormateado.replaceAll("[ËÈÍÎ]", "e");
+		sCampoFormateado = sCampoFormateado.replaceAll("[ÃÕŒœ]", "I");
+		sCampoFormateado = sCampoFormateado.replaceAll("[ÏÌÓÔ]", "i");
+		sCampoFormateado = sCampoFormateado.replaceAll("[“”‘÷]", "O");
+		sCampoFormateado = sCampoFormateado.replaceAll("[ÚÛÙˆ]", "o");
+		sCampoFormateado = sCampoFormateado.replaceAll("[Ÿ⁄€‹]", "U");
+		sCampoFormateado = sCampoFormateado.replaceAll("[˘˙˚¸]", "u");
+		sCampoFormateado = sCampoFormateado.replaceAll("[^\\w/\\?\\-\\:()\\.\\,\\'\\+\\s]","?");
+		
+		//logger.debug("sCampo:|"+sCampo+"|");
+		//logger.debug("sCampoFormateado:|"+sCampoFormateado+"|");
 		
 		return sCampoFormateado;
 	}

@@ -918,5 +918,7 @@ public class GestorDetallesGasto implements Serializable
 		this.bSinCuota = bSinCuota;
 	}
 	
-	
+	public long getLiCodGasto() {
+		return liCodGasto;
+	}
 }

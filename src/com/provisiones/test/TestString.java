@@ -83,7 +83,7 @@ public class TestString{
     	System.out.println("sFechaN34: " + Utils.aFechaN34(sFecha));*/
     	
     	
-    	String sValorRecargo = "1000";
+    	/*String sValorRecargo = "1000";
     	long liValorTotal = 0;
     	
     	long liRecargoAdicional = 0;
@@ -102,7 +102,16 @@ public class TestString{
 		
 		System.out.println("recuperaImporte:|"+ Utils.recuperaImporte(false, Long.toString(liValorTotal)) +"|");
 		
-		System.out.println("liRecargoAdicional:|"+ Utils.redondeaRecargo(liRecargoAdicional) +"|");
+		System.out.println("liRecargoAdicional:|"+ Utils.redondeaRecargo(liRecargoAdicional) +"|");*/
+    	
+    	
+    	String sTexto = "ËstÈ es un text“ con c”sas raru—as, no@§§§. Esto vale:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 /-?:().,'+";
+    	
+    	
+    	System.out.println("sTexto:|" + sTexto +"|");
+    	System.out.println("sTexto.compruebaISO20022:|" + Utils.compruebaISO20022(sTexto) +"|");
+    	
+    	
 
     }
     
