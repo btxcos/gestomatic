@@ -3156,7 +3156,7 @@ public final class QMGastos
 		return resultado;
 	}
 	
-	public static ArrayList<GastoTabla> buscaGastosPorFiltroActivoProvision(Connection conexion, GastoTabla filtro, String sComparador)
+	public static ArrayList<GastoTabla> buscaGastosPorFiltroActivoProvision(Connection conexion, GastoTabla filtro, String sComparador, String sFechaFin, String sPeriodo)
 	{
 		ArrayList<GastoTabla> resultado = new ArrayList<GastoTabla>();
 
@@ -3168,8 +3168,26 @@ public final class QMGastos
 			ResultSet rs = null;
 			
 			boolean bEncontrado = false;
+			
+			String sCondicionFEDEVE = "";
+			
+			if (sPeriodo.equals(ValoresDefecto.DEF_PERIODOS_FECHA_FIJO)) 
+			{
+				sCondicionFEDEVE = filtro.getFEDEVE().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR)? "": CAMPO7 + " = '"+filtro.getFEDEVE()+"' AND ";
+			}
+			else if (sPeriodo.equals(ValoresDefecto.DEF_PERIODOS_FECHA_ENTRE))
+			{
+				if (sFechaFin.isEmpty() || sFechaFin.equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR))
+				{
+					sCondicionFEDEVE = CAMPO7 + " >= "+filtro.getFEDEVE()+" AND ";
+				}
+				else
+				{
+					sCondicionFEDEVE = CAMPO7 + " BETWEEN "+filtro.getFEDEVE()+" AND "+sFechaFin+" AND ";
+				}
+			}
 
-			String sCondicionFEDEVE = filtro.getFEDEVE().equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR)? "": CAMPO7 + " = '"+filtro.getFEDEVE()+"' AND ";
+			
 			String sCondicionCOGRUG = filtro.getCOGRUG().isEmpty()? "": CAMPO3 + " = '"+filtro.getCOGRUG()+"' AND ";
 			String sCondicionCOTPGA = filtro.getCOTPGA().isEmpty()? "": CAMPO4 + " = '"+filtro.getCOTPGA()+"' AND ";
 			String sCondicionCOSBGA = filtro.getCOSBGA().isEmpty()? "": CAMPO5 + " = '"+filtro.getCOSBGA()+"' AND ";

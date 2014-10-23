@@ -165,9 +165,9 @@ public final class CLGastos
 		return QMGastos.buscaGastosPorFiltro(ConnectionManager.getDBConnection(),filtro, sComparador);
 	}
 	
-	public static ArrayList<GastoTabla> buscarGastosActivoProvisionConFiltro(GastoTabla filtro, String sComparador)
+	public static ArrayList<GastoTabla> buscarGastosActivoProvisionConFiltro(GastoTabla filtro, String sComparador, String sFechaFin, String sPeriodo)
 	{
-		return QMGastos.buscaGastosPorFiltroActivoProvision(ConnectionManager.getDBConnection(),filtro, sComparador);
+		return QMGastos.buscaGastosPorFiltroActivoProvision(ConnectionManager.getDBConnection(),filtro, sComparador, sFechaFin, sPeriodo);
 	}
 	
 	

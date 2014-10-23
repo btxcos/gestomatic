@@ -265,14 +265,33 @@
 						<h:panelGrid columns="1">
 							<p:panel>
 								<h:panelGrid columns="1">
-							<h:outputText value="¿Está seguro de cerrar la provisión #{GestorProvisiones.sNUPROF}?" />
+							<h:outputText value="¿Está seguro de cerrar la provisión?" />
 							<h:outputText value="- La operación no puede deshacerse una vez concluida." />
 							<h:outputText value="- Todos los gastos no validados en la provisión serán anulados." />
 								</h:panelGrid>
 							<p:panel>
 								<h:panelGrid columns="2" cellpadding="5">
-								<p:commandButton value="Si" update="form:panelProvision, form:popup, form:msgs, form:botCerrar"  icon="ui-icon-check" actionListener="#{GestorProvisiones.cerrarProvision}" oncomplete="dlgConfirma.hide()"/>  
+								<p:commandButton value="Si" update="form:panelProvision, form:popup, form:msgs, form:botCerrar"  icon="ui-icon-check" actionListener="#{GestorProvisiones.cerrarProvision}" oncomplete="dlgConfirma.hide(); dlgCerrada.show()"/>  
 								<p:commandButton value="No" type="button" icon="ui-icon-close" onclick="dlgConfirma.hide()"/>
+								</h:panelGrid>
+							</p:panel>
+							</p:panel>
+						</h:panelGrid>
+					</p:dialog>
+					<p:dialog header="Provisión Cerrada" widgetVar="dlgCerrada" resizable="false"> 
+						<h:panelGrid columns="1">
+							<p:panel>
+								<h:panelGrid columns="1">
+							<h:outputText value="La provisión se ha cerrado correctamente." />
+							<h:outputText value="Por favor, descargue el informe." />
+								</h:panelGrid>
+							<p:panel>
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:commandButton id="botDescargarInforme" value="Descargar Informe" ajax="false" actionListener="#{GestorProvisiones.descargarInforme}"
+												oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" icon="ui-icon-arrowthick-1-s">
+												<p:fileDownload value="#{GestorProvisiones.file}" />  
+									</p:commandButton>
+									<p:commandButton value="Continuar" type="button" update="form:panelProvision, form:popup, form:msgs, form:botCerrar" onclick="dlgCerrada.hide()"/>  
 								</h:panelGrid>
 							</p:panel>
 							</p:panel>

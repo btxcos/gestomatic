@@ -378,6 +378,13 @@ public final class Utils
 			dirGenerados.mkdir(); 
 		}
 		
+		File dirInformes = new File(ValoresDefecto.DEF_PATH_BACKUP_INFORMES);
+
+		if(!dirInformes.exists())
+		{
+			dirInformes.mkdir(); 
+		}
+		
 		File dirCargados = new File(ValoresDefecto.DEF_PATH_BACKUP_CARGADOS);
 
 		if(!dirCargados.exists())
@@ -1151,7 +1158,8 @@ public final class Utils
 		
 		String sFechaFormateada = "";
 		
-		if (!sFecha.equals("0"))
+		if (!sFecha.equals("0")
+			&&!sFecha.isEmpty())
 		{
 	        while (sFecha.length() < 8) 
 	        {

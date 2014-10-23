@@ -341,6 +341,84 @@ public final class QMListaComunidadesActivos
 
 		return liCodComunidad;
 	}
+	
+	public static String getCIFComunidadActivo(Connection conexion, int iCodCOACES)
+	{
+		String sCIF = "";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			boolean bEncontrado = false;
+			
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					+ QMComunidades.CAMPO3 + 
+					" FROM "
+					+ QMComunidades.TABLA +
+					" WHERE ("
+					+ QMComunidades.CAMPO1 +
+					" IN (SELECT "
+					+ CAMPO2 + 
+				    " FROM " 
+				    + TABLA + 
+				    " WHERE "
+				    + CAMPO1 + " = '" + iCodCOACES + "'))";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						sCIF = rs.getString(QMComunidades.CAMPO3);
+						
+						logger.debug("Encontrado el registro!");
+						logger.debug(QMComunidades.CAMPO3+":|"+sCIF+"|");
+						
+
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				bEncontrado = false;
+				
+				sCIF = "";
+
+				logger.error("ERROR COACES:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sCIF;
+	}
 
 	public static boolean compruebaRelacionComunidadActivo(Connection conexion, long liCodComunidad, int iCodCOACES)
 	{

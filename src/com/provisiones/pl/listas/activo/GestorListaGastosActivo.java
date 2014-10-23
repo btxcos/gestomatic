@@ -1,6 +1,9 @@
 package com.provisiones.pl.listas.activo;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -10,12 +13,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLActivos;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLInformes;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Sesion;
 import com.provisiones.misc.Utils;
@@ -39,7 +45,11 @@ public class GestorListaGastosActivo implements Serializable
 	private String sCOGRUGFA = "";
 	private String sCOTPGAFA = "";
 	private String sCOSBGAFA = "";
-	private String sFEDEVEFA = "";
+	private String sFEDEVEINIFA = "";
+	private String sFEDEVEFINFA = "";
+	private String sPeriodoFA = "";
+	private boolean bInicioFA = true;
+	private boolean bFinFA = true;
 	private String sIMNGASFA = "";
 	private String sComparadorFA = "";
 	private boolean bSeleccionadoFA = true; 
@@ -54,6 +64,7 @@ public class GestorListaGastosActivo implements Serializable
 	private String sCOTPGAFP = "";
 	private String sCOSBGAFP = "";
 	private String sFEDEVEFP = "";
+	
 	private String sIMNGASFP = "";
 	private String sComparadorFP = "";
 	private boolean bSeleccionadoFP = true;
@@ -66,7 +77,8 @@ public class GestorListaGastosActivo implements Serializable
 	//Filtro fecha limite
 	private String sFELIPG = "";
 	
-	
+	private String sNombreInforme = "";
+	private boolean bSinInforme = true; 
 	
 	private transient ActivoTabla activoseleccionado = null;
 	private transient ArrayList<ActivoTabla> tablaactivos = null;
@@ -98,7 +110,11 @@ public class GestorListaGastosActivo implements Serializable
 	private Map<String,String> tiposestadogastoHM = new LinkedHashMap<String, String>();
 	
 	private Map<String,String> tiposestadoprovisionHM = new LinkedHashMap<String, String>();
+	
+	private Map<String,String> tiposperiodoHM = new LinkedHashMap<String, String>();
 
+	private transient StreamedContent file;
+	
 	public GestorListaGastosActivo()
 	{
 		if (ConnectionManager.comprobarConexion())
@@ -166,6 +182,10 @@ public class GestorListaGastosActivo implements Serializable
 			tiposestadoprovisionHM.put("AUTORIZADA","T");
 			tiposestadoprovisionHM.put("PAGADA",	"G");
 			
+			tiposperiodoHM.put("TODAS",	"T");
+			tiposperiodoHM.put("FIJA",	"F");
+			tiposperiodoHM.put("ENTRE", "E");
+			
 			cargarDetallesActivo();
 		}
 	}
@@ -200,6 +220,7 @@ public class GestorListaGastosActivo implements Serializable
     	
     	this.setGastoseleccionado(null);
     	this.setTablagastos(null);
+    	this.bSinInforme = true;
 	}
 	
     
@@ -208,7 +229,11 @@ public class GestorListaGastosActivo implements Serializable
 		this.sCOGRUGFA = "";
 		this.sCOTPGAFA = "";
 		this.sCOSBGAFA = "";
-		this.sFEDEVEFA = "";
+		this.sFEDEVEINIFA = "";
+		this.sFEDEVEFINFA = "";
+		this.sPeriodoFA = "";
+		this.bInicioFA = true;
+		this.bFinFA = true;
 		this.sIMNGASFA = "";
 		this.sComparadorFA = "";
 		this.bSeleccionadoFA = true; 
@@ -508,10 +533,48 @@ public class GestorListaGastosActivo implements Serializable
 		this.bSeleccionadoFP = this.sComparadorFP.isEmpty();
 	}
 	
-	public void hoyFEDEVEFA (ActionEvent actionEvent)
+	public void cambiaPeriodoFA()
 	{
-		this.setsFEDEVEFA(Utils.fechaDeHoy(true));
-		logger.debug("sFEDEVEFA:|"+sFEDEVEFP+"|");
+		if (sPeriodoFA.isEmpty())
+		{
+			this.bInicioFA = true;
+			this.sFEDEVEINIFA = "";
+			this.bFinFA = true;
+			this.sFEDEVEFINFA = "";
+			
+		}
+		else if (sPeriodoFA.equals(ValoresDefecto.DEF_PERIODOS_FECHA_TODOS))
+		{
+			this.bInicioFA = true;
+			this.sFEDEVEINIFA = "";
+			this.bFinFA = true;
+			this.sFEDEVEFINFA = "";
+		}
+		else if (sPeriodoFA.equals(ValoresDefecto.DEF_PERIODOS_FECHA_FIJO))
+		{
+			this.bInicioFA = false;
+			this.bFinFA = true;
+			this.sFEDEVEFINFA = "";
+		}
+		else if (sPeriodoFA.equals(ValoresDefecto.DEF_PERIODOS_FECHA_ENTRE))
+		{
+			this.bInicioFA = false;
+			this.bFinFA = false;
+		}
+		
+		logger.debug("sPeriodoFA:|"+sPeriodoFA+"|");
+	}
+	
+	public void hoyFEDEVEINIFA (ActionEvent actionEvent)
+	{
+		this.setsFEDEVEINIFA(Utils.fechaDeHoy(true));
+		logger.debug("sFEDEVEINIFA:|"+sFEDEVEINIFA+"|");
+	}
+	
+	public void hoyFEDEVEFINFA (ActionEvent actionEvent)
+	{
+		this.setsFEDEVEFINFA(Utils.fechaDeHoy(true));
+		logger.debug("sFEDEVEFINFA:|"+sFEDEVEFINFA+"|");
 	}
 
 	public void hoyFEDEVEFP (ActionEvent actionEvent)
@@ -603,7 +666,7 @@ public class GestorListaGastosActivo implements Serializable
 							"",  
 							"",   
 							"",  
-							Utils.compruebaFecha(sFEDEVEFA),   
+							Utils.compruebaFecha(sFEDEVEINIFA),   
 							"",   
 							"",  
 							sImporte,
@@ -619,10 +682,31 @@ public class GestorListaGastosActivo implements Serializable
 			    	logger.debug("sCOSBGAFA:|"+sCOSBGAFA+"|");
 			    	logger.debug("sComparadorFA:|"+sComparadorFA+"|");
 			    	logger.debug("sIMNGASFA:|"+sIMNGASFA+"|");
-			    	logger.debug("sFEDEVEFA:|"+sFEDEVEFA+"|");
+			    	logger.debug("sFEDEVEFA:|"+sFEDEVEINIFA+"|");
+			    	logger.debug("sFEDEVEFA:|"+sFEDEVEFINFA+"|");
 			    	logger.debug("sEstadoGastoFA:|"+sEstadoGastoFA+"|");
+			    	
+			    	if (sPeriodoFA.equals(ValoresDefecto.DEF_PERIODOS_FECHA_FIJO) && (sFEDEVEINIFA.isEmpty()||sFEDEVEINIFA.equals(ValoresDefecto.CAMPO_NUME_SIN_INFORMAR)))
+			    	{
+			    		sPeriodoFA = ValoresDefecto.DEF_PERIODOS_FECHA_TODOS;
+			    	}
 					
-					this.setTablagastos(CLGastos.buscarGastosActivoProvisionConFiltro(filtro,sComparadorFA));
+					this.setTablagastos(CLGastos.buscarGastosActivoProvisionConFiltro(filtro,sComparadorFA,Utils.compruebaFecha(sFEDEVEFINFA), sPeriodoFA));
+					
+					
+					if (getTablagastos().size() > 0)
+					{
+						bSinInforme = false;
+						
+						sNombreInforme = CLInformes.generarInformeGastosActivo(iCOACES,getTablagastos());
+					}
+					else
+					{
+						bSinInforme = true;
+						
+						sNombreInforme = "";
+						
+					}
 					
 					if (getTablagastos().size() == 0)
 					{
@@ -724,6 +808,51 @@ public class GestorListaGastosActivo implements Serializable
 
 		//return sPagina;
     }
+	
+	public void descargarInforme(ActionEvent actionEvent) 
+    {  
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	String sMsg = "";
+	    	
+			if (getTablagastos().size() == 0)
+			{
+				sMsg = "No se encontraron Gastos que exportar.";
+				msg = Utils.pfmsgWarning(sMsg);
+				logger.warn(sMsg);
+				
+			}
+			else
+			{
+		    	try 
+				{
+		    		InputStream stream = new FileInputStream(sNombreInforme);
+					
+					this.setFile(new DefaultStreamedContent(stream, "text/plain", "Informe_Gastos_ACtivo_"+sCOACES+"_"+Utils.fechaDeHoy(false)+".pdf"));
+					
+		    		sMsg = "Descargado el Informe a enviar.";
+		        	
+		    		msg = Utils.pfmsgInfo(sMsg);
+		    		logger.info(sMsg);
+
+				} 
+				catch (FileNotFoundException e) 
+				{
+					
+					
+		    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
+		        	
+		    		msg = Utils.pfmsgError(sMsg);
+		    		logger.error(sMsg);
+				}
+			}
+
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}		
+    }
 
 	public String getsCOACES() {
 		return sCOACES;
@@ -773,12 +902,23 @@ public class GestorListaGastosActivo implements Serializable
 		this.sCOSBGAFA = sCOSBGAFA;
 	}
 
-	public String getsFEDEVEFA() {
-		return sFEDEVEFA;
+	public String getsFEDEVEINIFA() {
+		return sFEDEVEINIFA;
 	}
 
-	public void setsFEDEVEFA(String sFEDEVEFA) {
-		this.sFEDEVEFA = sFEDEVEFA;
+
+	public void setsFEDEVEINIFA(String sFEDEVEINIFA) {
+		this.sFEDEVEINIFA = sFEDEVEINIFA;
+	}
+
+
+	public String getsFEDEVEFINFA() {
+		return sFEDEVEFINFA;
+	}
+
+
+	public void setsFEDEVEFINFA(String sFEDEVEFINFA) {
+		this.sFEDEVEFINFA = sFEDEVEFINFA;
 	}
 
 	public String getsIMNGASFA() {
@@ -1029,6 +1169,16 @@ public class GestorListaGastosActivo implements Serializable
 		this.tiposestadoprovisionHM = tiposestadoprovisionHM;
 	}
 
+	public Map<String, String> getTiposperiodoHM() {
+		return tiposperiodoHM;
+	}
+
+
+	public void setTiposperiodoHM(Map<String, String> tiposperiodoHM) {
+		this.tiposperiodoHM = tiposperiodoHM;
+	}
+
+
 	public String getsEstadoProvision() {
 		return sEstadoProvision;
 	}
@@ -1075,6 +1225,56 @@ public class GestorListaGastosActivo implements Serializable
 
 	public void setbSeleccionadoFP(boolean bSeleccionadoFP) {
 		this.bSeleccionadoFP = bSeleccionadoFP;
+	}
+
+
+	public String getsPeriodoFA() {
+		return sPeriodoFA;
+	}
+
+
+	public void setsPeriodoFA(String sPeriodoFA) {
+		this.sPeriodoFA = sPeriodoFA;
+	}
+
+
+	public boolean isbInicioFA() {
+		return bInicioFA;
+	}
+
+
+	public void setbInicioFA(boolean bInicioFA) {
+		this.bInicioFA = bInicioFA;
+	}
+
+
+	public boolean isbFinFA() {
+		return bFinFA;
+	}
+
+
+	public void setbFinFA(boolean bFinFA) {
+		this.bFinFA = bFinFA;
+	}
+
+
+	public StreamedContent getFile() {
+		return file;
+	}
+
+
+	public void setFile(StreamedContent file) {
+		this.file = file;
+	}
+
+
+	public boolean isbSinInforme() {
+		return bSinInforme;
+	}
+
+
+	public void setbSinInforme(boolean bSinInforme) {
+		this.bSinInforme = bSinInforme;
 	}
 	
 }

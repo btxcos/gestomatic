@@ -194,6 +194,11 @@ public final class CLComunidades
 	{
 		return QMListaComunidadesActivos.getComunidadActivo(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
+	
+	public static String obtenerCIFComunidadDeActivo (int iCodCOACES)
+	{
+		return QMListaComunidadesActivos.getCIFComunidadActivo(ConnectionManager.getDBConnection(),iCodCOACES);
+	}
 
 	public static String buscarNota (long liCodComunidad)
 	{

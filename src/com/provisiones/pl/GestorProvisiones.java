@@ -1,7 +1,12 @@
 package com.provisiones.pl;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.Serializable;
 
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +18,7 @@ import javax.faces.event.ActionEvent;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.ll.CLGastos;
+import com.provisiones.ll.CLInformes;
 import com.provisiones.ll.CLProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.tablas.GastoTabla;
@@ -33,6 +39,10 @@ public class GestorProvisiones implements Serializable
 	private String sValorTolal = "";
 	private String sNumGastos = "";
 	
+	private String sNombreInforme = "";
+	
+	private String sProvisionInforme = "";
+	
 	private boolean bLibre = true; 
 
 	private transient ArrayList<ProvisionTabla> tablaprovisiones = null;
@@ -40,6 +50,8 @@ public class GestorProvisiones implements Serializable
 	private transient ProvisionTabla provisionseleccionada = null;
 	
 	private transient ArrayList<GastoTabla> tablagastosprovision = null;
+	
+	private transient StreamedContent file;
 	
 	public GestorProvisiones()
 	{
@@ -112,11 +124,13 @@ public class GestorProvisiones implements Serializable
 	    	}
 	    	
 	    	msg = Utils.pfmsgInfo("Provision '"+ sNUPROF +"' Seleccionada.");
-	    	logger.info("Provision '{}' Seleccionada.",sNUPROF);
+	    	logger.info("Provision '"+ sNUPROF +"' Seleccionada.");
 			
 			FacesContext.getCurrentInstance().addMessage(null, msg);			
 		}
     }
+	
+
 	
 	public void cerrarProvision(ActionEvent actionEvent)
 	{
@@ -167,6 +181,8 @@ public class GestorProvisiones implements Serializable
 					sMsg = "Provision '"+ sNUPROF +"' cerrada.";
 					msg = Utils.pfmsgInfo(sMsg);
 					logger.info(sMsg);
+					sNombreInforme = CLInformes.generarInformeCierreProvision(provisionseleccionada);
+					sProvisionInforme = provisionseleccionada.getNUPROF();
 					borrarCamposProvision();
 
 				}
@@ -185,6 +201,41 @@ public class GestorProvisiones implements Serializable
 			FacesContext.getCurrentInstance().addMessage(null, msg);	
 		}
 	}
+	
+	public void descargarInforme(ActionEvent actionEvent) 
+    {  
+		if (ConnectionManager.comprobarConexion())
+		{
+	    	FacesMessage msg;
+	    	
+	    	String sMsg = "";
+
+	    	try 
+			{
+	    		InputStream stream = new FileInputStream(sNombreInforme);
+				
+				this.setFile(new DefaultStreamedContent(stream, "text/plain", "Informe_Provision_"+sProvisionInforme+"_"+Utils.fechaDeHoy(false)+".pdf"));
+				
+	    		sMsg = "Descargado el Informe a enviar.";
+	        	
+	    		msg = Utils.pfmsgInfo(sMsg);
+	    		logger.info(sMsg);
+
+			} 
+			catch (FileNotFoundException e) 
+			{
+				
+				
+	    		sMsg = "ERROR: Ocurrio un problema al acceder al archivo.";
+	        	
+	    		msg = Utils.pfmsgError(sMsg);
+	    		logger.error(sMsg);
+			}
+
+			
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}		
+    }
 
 	public String getsNUPROF() {
 		return sNUPROF;
@@ -282,4 +333,11 @@ public class GestorProvisiones implements Serializable
 		this.bLibre = bLibre;
 	}
 
+	public StreamedContent getFile() {
+		return file;
+	}
+
+	public void setFile(StreamedContent file) {
+		this.file = file;
+	}
 }

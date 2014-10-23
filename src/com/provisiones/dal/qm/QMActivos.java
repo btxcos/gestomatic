@@ -1947,6 +1947,74 @@ public final class QMActivos
 		return sFEVACT;
 	}
 	
+	public static String getFEADACActivo(Connection conexion, int iCOACES)
+	{
+		String sFEADAC = "";
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT "
+					   + CAMPO21  +        
+					   " FROM " 
+					   + TABLA + 
+					   " WHERE " 
+					   + CAMPO1 + " = '" + iCOACES + "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sFEADAC = rs.getString(CAMPO21);
+
+						logger.debug("Encontrado el registro!");
+						logger.debug(CAMPO21+":|"+sFEADAC+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sFEADAC = "";
+
+				logger.error("ERROR COACES:|"+iCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sFEADAC;
+	}
+	
 	public static String getSociedadPatrimonial(Connection conexion, int iCOACES)
 	{
 		String sCodCOSPAT = "0";

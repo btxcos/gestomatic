@@ -343,6 +343,39 @@ public final class CLActivos
 				
 		return iCodigo;
 	}	
+
+	public static String compruebaTipoObra (int iCodCOACES)
+	{
+		String sTipo = "";
+
+		Connection conexion = ConnectionManager.getDBConnection();
+		
+		if (conexion != null)
+		{
+			sTipo = "#";
+			
+			logger.debug("iCodCOACES:|"+iCodCOACES+"|");
+			
+			if (QMActivos.getCOTSINActivo(conexion,iCodCOACES).startsWith("SU"))
+			{
+				//SUELOS Y OBRA EN CURSO
+				sTipo = "S";
+			}
+			else if (QMActivos.getBIARREActivo(conexion,iCodCOACES).equals("S"))
+			{
+				//ARRENDAMIENTOS
+				sTipo = "A";
+			}
+			else
+			{
+				//PRODUCTO TERMINADO
+				sTipo = "T";
+			}
+		}
+		
+		logger.debug("sTipo:|"+sTipo+"|");
+		return sTipo;
+	}
 	
 	public static String compruebaTipoActivoSAREB (int iCodCOACES)
 	{
@@ -358,6 +391,7 @@ public final class CLActivos
 			
 			String sCOSPAT = QMActivos.getSociedadPatrimonial(conexion,iCodCOACES);
 
+			//TODO incluir mas sociedades patrimoniales
 			if (sCOSPAT.equals("9999") || sCOSPAT.equals("9998"))
 			{
 				if (QMActivos.getCOTSINActivo(conexion,iCodCOACES).startsWith("SU"))

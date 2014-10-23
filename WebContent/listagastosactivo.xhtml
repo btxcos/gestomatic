@@ -31,12 +31,15 @@
 
 
 									<p:fieldset legend="Acciones">
-										<h:panelGrid columns="4" cellpadding="5">
+										<h:panelGrid columns="5" cellpadding="5">
 													<p:commandButton value="Volver" actionListener="#{GestorListaGastosActivo.volver}"/>
 													<p:commandButton value="Limpiar Plantilla" update="msgs, popup, panelBuscarProvision, provisiones, gastos, COACES, NUPROF, FELIPG" actionListener="#{GestorListaGastosActivo.limpiarPlantilla}" />	
-													<p:commandButton value="Buscar" update="popup, msgs, form:gastos" actionListener="#{GestorListaGastosActivo.buscarGastosActivo}"/>	
+													<p:commandButton value="Buscar" update="popup, msgs, form:gastos, botDescargarInforme" actionListener="#{GestorListaGastosActivo.buscarGastosActivo}"/>	
 													<p:commandButton value="Detalles" update="msgs, popup, gastos" action="#{GestorListaGastosActivo.cargarDetallesGasto}"/>
-
+													<p:commandButton id="botDescargarInforme" value="Descargar Informe" ajax="false" actionListener="#{GestorListaGastosActivo.descargarInforme}" disabled="#{GestorListaGastosActivo.bSinInforme}"
+														oncomplete="PrimeFaces.monitorDownload(statusDialog.show(),statusDialog.hide();)" icon="ui-icon-arrowthick-1-s">
+														<p:fileDownload value="#{GestorListaGastosActivo.file}" />
+													</p:commandButton>
 										</h:panelGrid>
 									</p:fieldset>
 									<p:fieldset legend="Info">
@@ -117,10 +120,17 @@
 													</p:panel>
 
 													<p:panel>
-														<h:panelGrid columns="3" cellpadding="1">
+														<h:panelGrid columns="6" cellpadding="1">
 															<h:outputText value="Fecha del devengo: "/>
-															<p:inputMask id="FEDEVEFA" value="#{GestorListaGastosActivo.sFEDEVEFA}" mask="99/99/9999" size="10" maxlength="10"/>
-															<p:commandButton icon="ui-icon-clock" update="FEDEVEFA" actionListener="#{GestorListaGastosActivo.hoyFEDEVEFA}"/>
+															<p:selectOneMenu id="PERIODOFA" value="#{GestorListaGastosActivo.sPeriodoFA}">
+																<f:selectItem itemLabel="Fecha..." itemValue=""/>
+																<f:selectItems value="#{GestorListaGastosActivo.tiposperiodoHM}"/>
+																<p:ajax update="PERIODOFA, FEDEVEINIFA, FEDEVEFINFA" listener="#{GestorListaGastosActivo.cambiaPeriodoFA}"/>
+															</p:selectOneMenu>
+															<p:inputMask id="FEDEVEINIFA" value="#{GestorListaGastosActivo.sFEDEVEINIFA}" mask="99/99/9999" size="10" maxlength="10" disabled="#{GestorListaGastosActivo.bInicioFA}"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEVEINIFA" actionListener="#{GestorListaGastosActivo.hoyFEDEVEINIFA}"/>
+															<p:inputMask id="FEDEVEFINFA" value="#{GestorListaGastosActivo.sFEDEVEFINFA}" mask="99/99/9999" size="10" maxlength="10" disabled="#{GestorListaGastosActivo.bFinFA}"/>
+															<p:commandButton icon="ui-icon-clock" update="FEDEVEFINFA" actionListener="#{GestorListaGastosActivo.hoyFEDEVEFINFA}"/>
 														</h:panelGrid>
 													</p:panel>
 													<p:panel>

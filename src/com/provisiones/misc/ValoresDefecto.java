@@ -87,6 +87,15 @@ public final class ValoresDefecto
 	public static final String DEF_COGRUG_E4 = "2";
 	public static final String DEF_COTACA_E4 = "1";
 	
+	
+	public static final String DEF_GASTO_IMPUESTOS = "21";
+	public static final String DEF_GASTO_COMUNIDADES = "22";
+	public static final String DEF_GASTO_SUMINISTROS = "23";
+	
+	public static final String DEF_PERIODOS_FECHA_TODOS = "T";
+	public static final String DEF_PERIODOS_FECHA_FIJO =  "F";
+	public static final String DEF_PERIODOS_FECHA_ENTRE = "E";
+	
 	public static final String DEF_ALTA = "A";
 	public static final String DEF_BAJA = "B";
 	public static final String DEF_MODIFICACION = "M";
@@ -306,6 +315,7 @@ public final class ValoresDefecto
 	public static final String DEF_FILE_PATH = DEF_EXEC_PATH+"archivos"+File.separator;
 	public static final String DEF_PATH_BACKUP_RECIBIDOS = DEF_FILE_PATH+"recibidos"+File.separator;
 	public static final String DEF_PATH_BACKUP_GENERADOS = DEF_FILE_PATH+"generados"+File.separator;
+	public static final String DEF_PATH_BACKUP_INFORMES = DEF_FILE_PATH+"informes"+File.separator;
 	
 	public static final String DEF_DUMP_PATH = DEF_EXEC_PATH+"volcados"+File.separator;
 	public static final String DEF_PATH_BACKUP_CARGADOS    = DEF_DUMP_PATH+"cargados"+File.separator;
