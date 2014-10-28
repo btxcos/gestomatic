@@ -272,8 +272,10 @@ public class CLInformes
 						"times",
 		                8,
 		                Font.NORMAL);
-				
-				long liTotal = 0;
+
+				long liValorTotal = 0;
+				int iNumPagados = 0;
+				long liValorPagados = 0;
 				
 				for (int i = 0; i < iFilas; i++)
 				{
@@ -284,8 +286,14 @@ public class CLInformes
 				    tabla.addCell(new Phrase (listagastos.get(i).getIMNGAS(),fuenteceldas));
 				    tabla.addCell(new Phrase (listagastos.get(i).getNUPROF(),fuenteceldas));
 				    tabla.addCell(new Phrase (listagastos.get(i).getFEEPAI(),fuenteceldas));
-				    
-				    liTotal = liTotal + Long.parseLong(Utils.compruebaImporte(listagastos.get(i).getIMNGAS()));
+
+				    long liValor = Long.parseLong(Utils.compruebaImporte(listagastos.get(i).getIMNGAS()));
+				    liValorTotal = liValorTotal + liValor;
+				    if (!listagastos.get(i).getFEEPAI().isEmpty())
+				    {
+				    	iNumPagados++;
+				    	liValorPagados = liValorPagados + liValor;
+				    }
 
 				}
 				pdf.add(tabla);
@@ -296,18 +304,52 @@ public class CLInformes
 				
 				Font fuentepie = FontFactory.getFont(
 						"arial",
-		                8,
+		                10,
 		                Font.BOLD);
 				
 				
-				String sTotal = Long.toString(liTotal); 
+				String sValorTotal = Long.toString(liValorTotal);
+				String sValorPendiente = "";
 				
-				Paragraph pargastos = new Paragraph("\n\nNúmero de Gastos: "+ listagastos.size(),fuentepie);
-				pargastos.setAlignment(Element.ALIGN_RIGHT);
-				pdf.add(pargastos);
-				Paragraph parvalor = new Paragraph("Valor de Gastos: "+ Utils.recuperaImporte(sTotal.startsWith("-"), sTotal) +"¤",fuentepie);
-				parvalor.setAlignment(Element.ALIGN_RIGHT);
-				pdf.add(parvalor);
+				if (liValorTotal >= 0)
+				{
+					if (liValorPagados >= 0)
+					{
+						sValorPendiente = Long.toString(liValorTotal - liValorPagados);
+					}
+					else
+					{
+						sValorPendiente = Long.toString(liValorTotal + liValorPagados);
+					}
+				}
+				else
+				{
+					sValorPendiente = Long.toString(liValorTotal + liValorPagados);
+				}
+				
+				
+				String sValorPagado = Long.toString(liValorPagados);
+				
+				Paragraph pargastostotales = new Paragraph("\n\nNúmero de Gastos: "+ listagastos.size(),fuentepie);
+				pargastostotales.setAlignment(Element.ALIGN_RIGHT);
+				pdf.add(pargastostotales);
+				Paragraph parvalortotal = new Paragraph("Valor de Gastos: "+ Utils.recuperaImporte(sValorTotal.startsWith("-"), sValorTotal) +"¤",fuentepie);
+				parvalortotal.setAlignment(Element.ALIGN_RIGHT);
+				pdf.add(parvalortotal);
+				
+				Paragraph pargastospendientes = new Paragraph("\nNúmero de Gastos por pagar: "+ (listagastos.size() - iNumPagados),fuentepie);
+				pargastospendientes.setAlignment(Element.ALIGN_RIGHT);
+				pdf.add(pargastospendientes);
+				Paragraph parvalorpendiente = new Paragraph("Valor de Gastos por pagar: "+ Utils.recuperaImporte(sValorPendiente.startsWith("-"), sValorPendiente) +"¤",fuentepie);
+				parvalorpendiente.setAlignment(Element.ALIGN_RIGHT);
+				pdf.add(parvalorpendiente);
+				
+				Paragraph pargastospagados = new Paragraph("\nNúmero de Gastos pagados: "+ iNumPagados,fuentepie);
+				pargastospagados.setAlignment(Element.ALIGN_RIGHT);
+				pdf.add(pargastospagados);
+				Paragraph parvalorpagados = new Paragraph("Valor de Gastos pagados: "+ Utils.recuperaImporte(sValorPagado.startsWith("-"), sValorPagado) +"¤",fuentepie);
+				parvalorpagados.setAlignment(Element.ALIGN_RIGHT);
+				pdf.add(parvalorpagados);
 				
 				pdf.close();
 				
@@ -381,10 +423,29 @@ public class CLInformes
 						"arial",
 		                12,
 		                Font.NORMAL);
+				
+				String sTipoGastos = provision.getCOGRUG() + provision.getCOTPGA();
+				
+				String sContenido = "";
+				
+				if (sTipoGastos.equals(ValoresDefecto.DEF_GASTO_COMUNIDADES) 
+					||sTipoGastos.equals(ValoresDefecto.DEF_GASTO_SUMINISTROS))
+				{
+					sContenido = "Comunidades";
+				}
+				else if (sTipoGastos.equals(ValoresDefecto.DEF_GASTO_IMPUESTOS)
+						||sTipoGastos.equals(ValoresDefecto.DEF_GASTO_PLUSVALIAS))
+				{
+					sContenido = "Tributos";
+				}
+				else
+				{
+					sContenido = provision.getDCOTPGA();
+				}
 
 				pdf.add(Image.getInstance(logo));
 				pdf.add(new Paragraph("Provisión de fondos: "+provision.getNUPROF()+"   Fecha: "+Utils.fechaDeHoy(true) +"\n",fuentecabecera)); 
-				pdf.add(new Paragraph("Sociedad Patrimonial: "+provision.getDCOSPAT()+"   Gastos contenidos: "+provision.getDCOTPGA() +"\n\n",fuentecabecera));
+				pdf.add(new Paragraph("Sociedad Patrimonial: "+provision.getDCOSPAT()+"   Gastos contenidos: "+ sContenido +"\n\n",fuentecabecera));
 
 				
 				pdf.setHeader(header);
@@ -402,19 +463,19 @@ public class CLInformes
 				
 				
 				//Definicion de columnas segun tipo de gastos
-				String sTipoGastos = provision.getCOGRUG() + provision.getCOTPGA();
 				
 				if (sTipoGastos.equals(ValoresDefecto.DEF_GASTO_COMUNIDADES))
 				{
 					iColumnas = 12;
 					columnWidths = new float[] {9f, 12f, 25f, 8f, 10f, 11f, 30f, 20f, 15f, 10f, 10f, 13f};
 				}
-				if (sTipoGastos.equals(ValoresDefecto.DEF_GASTO_SUMINISTROS))
+				else if (sTipoGastos.equals(ValoresDefecto.DEF_GASTO_SUMINISTROS))
 				{
 					iColumnas = 11;
 					columnWidths = new float[] {9f, 12f, 25f, 8f, 10f, 11f, 30f, 20f, 15f, 10f, 13f};
 				}
-				if (sTipoGastos.equals(ValoresDefecto.DEF_GASTO_IMPUESTOS))
+				else if (sTipoGastos.equals(ValoresDefecto.DEF_GASTO_IMPUESTOS)
+						||sTipoGastos.equals(ValoresDefecto.DEF_GASTO_PLUSVALIAS))
 				{
 					iColumnas = 11;
 					columnWidths = new float[] {9f, 12f, 25f, 8f, 10f, 11f, 30f, 20f, 15f, 22f, 13f};
@@ -523,7 +584,7 @@ public class CLInformes
 				
 				Font fuentepie = FontFactory.getFont(
 						"arial",
-		                8,
+		                10,
 		                Font.BOLD);
 				
 				

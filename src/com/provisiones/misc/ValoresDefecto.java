@@ -87,7 +87,7 @@ public final class ValoresDefecto
 	public static final String DEF_COGRUG_E4 = "2";
 	public static final String DEF_COTACA_E4 = "1";
 	
-	
+	public static final String DEF_GASTO_PLUSVALIAS = "11";
 	public static final String DEF_GASTO_IMPUESTOS = "21";
 	public static final String DEF_GASTO_COMUNIDADES = "22";
 	public static final String DEF_GASTO_SUMINISTROS = "23";
