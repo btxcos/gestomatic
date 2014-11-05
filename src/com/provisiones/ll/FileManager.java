@@ -1981,6 +1981,10 @@ public final class FileManager
 	    				sDescripcion = "[FATAL] Error de acceso a base de datos.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
+	    			case -6:
+	    				sDescripcion = "[FATAL] Error de sociedad patrimonial desconocida.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
 	    			case 1:
 	    				sDescripcion = "Activo actualizado.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ACTUALIZADO;

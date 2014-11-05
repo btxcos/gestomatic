@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.dal.qm.QMActivos;
+import com.provisiones.dal.qm.QMCodigosControl;
 import com.provisiones.dal.qm.registros.QMRegistroActivos;
 
 import com.provisiones.misc.Parser;
@@ -247,39 +248,61 @@ public final class CLActivos
 			try 
 			{
 				conexion.setAutoCommit(false);
-				
-				if (!QMActivos.existeActivo(conexion,iCodCOACES))
+
+				if (QMCodigosControl.existeCOSPAT(conexion,activo.getCOSPAT()))
 				{
-					if (QMActivos.addActivo(conexion,activo))
+					if (!QMActivos.existeActivo(conexion,iCodCOACES))
 					{
-						//logger.info("Nuevo Activo registrado.");
-						if (QMRegistroActivos.addRegistroActivo(conexion, iCodCOACES))
+						if (QMActivos.addActivo(conexion,activo))
 						{
-							conexion.commit();
+							//logger.info("Nuevo Activo registrado.");
+							if (QMRegistroActivos.addRegistroActivo(conexion, iCodCOACES))
+							{
+								conexion.commit();
+							}
+							else
+							{
+								iCodigo = -3;
+								conexion.rollback();
+							}
+							
 						}
 						else
 						{
-							iCodigo = -3;
+							iCodigo = -1;
 							conexion.rollback();
 						}
-						
 					}
 					else
 					{
-						iCodigo = -1;
-						conexion.rollback();
-					}
-				}
-				else
-				{
-					if (!QMActivos.compruebaActivo(conexion,activo))
-					{
-						if (QMActivos.modActivo(conexion,activo,iCodCOACES))
+						if (!QMActivos.compruebaActivo(conexion,activo))
 						{
-							//logger.info("Activo actualizado.");
+							if (QMActivos.modActivo(conexion,activo,iCodCOACES))
+							{
+								//logger.info("Activo actualizado.");
+								if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES))
+								{
+									iCodigo = 1;
+									conexion.commit();
+								}
+								else
+								{
+									iCodigo = -4;
+									conexion.rollback();
+								}
+							}
+							else
+							{
+								iCodigo = -2;
+								conexion.rollback();
+							}
+						}
+						else
+						{
+							//logger.warn("El siguiente registro ya se encuentra en el sistema:");
 							if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES))
 							{
-								iCodigo = 1;
+								iCodigo = 2;
 								conexion.commit();
 							}
 							else
@@ -288,27 +311,16 @@ public final class CLActivos
 								conexion.rollback();
 							}
 						}
-						else
-						{
-							iCodigo = -2;
-							conexion.rollback();
-						}
-					}
-					else
-					{
-						//logger.warn("El siguiente registro ya se encuentra en el sistema:");
-						if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES))
-						{
-							iCodigo = 2;
-							conexion.commit();
-						}
-						else
-						{
-							iCodigo = -4;
-							conexion.rollback();
-						}
 					}
 				}
+				else
+				{
+					//Error de cospat no encontrado
+					iCodigo = -6;
+					logger.error("[ERROR] Se encontró un nuevo código de sociedad patrimonial ("+activo.getCOSPAT()+").");
+				}
+				
+				
 				conexion.setAutoCommit(true);
 			} 
 			catch (SQLException e) 
