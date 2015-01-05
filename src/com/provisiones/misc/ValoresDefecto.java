@@ -18,7 +18,7 @@ public final class ValoresDefecto
 	public static final int ID_ACTIVO = 5;
 	public static final int ID_GASTO = 6;
 	public static final int ID_PROVISION = 7;
-	
+	public static final int ID_PAGO = 8;
 	
 	public static final String CAMPO_ALFA_SIN_INFORMAR = "";
 	public static final String CAMPO_NUME_SIN_INFORMAR = "0";

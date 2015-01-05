@@ -2679,6 +2679,10 @@ public final class FileManager
 	    				sDescripcion = "[FATAL] Error al registrar el movimiento pendiente.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
 	    				break;
+	    			case -7:
+	    				sDescripcion = "[FATAL] Error al registrar el fichero de revisión.";
+	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+	    				break;
 	    			case -8:
 	    				sDescripcion = "El activo no pertenece a la cartera.";
 	    				sResultado = ValoresDefecto.DEF_CARGA_ERROR;

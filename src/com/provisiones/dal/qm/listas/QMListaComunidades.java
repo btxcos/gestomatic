@@ -31,7 +31,10 @@ public final class QMListaComunidades
 	public static final String CAMPO3  = "cod_validado";    
 	public static final String CAMPO4  = "usuario_movimiento";
 	public static final String CAMPO5  = "fecha_movimiento";
-
+	public static final String CAMPO6  = "archivo_envio";
+	public static final String CAMPO7  = "archivo_respuesta";
+	
+	
 	private QMListaComunidades(){}
 	
 	public static boolean addRelacionComunidad(Connection conexion, long liCodComunidad, long liCodMovimiento)
@@ -53,13 +56,17 @@ public final class QMListaComunidades
 				       + CAMPO2  + ","              
 				       + CAMPO3  + ","
 				       + CAMPO4  + ","
-				       + CAMPO5  +  
+				       + CAMPO5  + ","
+				       + CAMPO6  + ","
+				       + CAMPO7  +  
 				       ") VALUES ('"
 				       + liCodComunidad + "','" 
 				       + liCodMovimiento + "','"
 				       + ValoresDefecto.DEF_MOVIMIENTO_PENDIENTE + "','"
 				       + sUsuario + "','"
-				       + Utils.timeStamp() +
+				       + Utils.timeStamp() +"','"
+				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR + "','"
+				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR +
 				       "' )";
 			
 			logger.debug(sQuery);
@@ -110,13 +117,17 @@ public final class QMListaComunidades
 				       + CAMPO2  + ","              
 				       + CAMPO3  + ","
 				       + CAMPO4  + ","
-				       + CAMPO5  +  
+				       + CAMPO5  + ","
+				       + CAMPO6  + ","
+				       + CAMPO7  +  
 				       ") VALUES ('"
 				       + liCodComunidad + "','" 
 				       + liCodMovimiento + "','"
 				       + ValoresDefecto.DEF_MOVIMIENTO_VALIDADO + "','"
 				       + sUsuario + "','"
-				       + Utils.timeStamp() +
+				       + Utils.timeStamp() +"','"
+				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR + "','"
+				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR +
 				       "' )";
 			
 			logger.debug(sQuery);
@@ -580,6 +591,234 @@ public final class QMListaComunidades
 		}
 
 		return sValidado;
+	}
+	
+	public static boolean setArchivoEnvio(Connection conexion, long liCodMovimiento, long liCodArchivo)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO6 + " = '"+ liCodArchivo + "' "+
+					" WHERE " 
+					+ CAMPO2 + " = '" + liCodMovimiento	+ "'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}	
+
+		return bSalida;
+	}
+	
+	public static long getArchivoEnvio(Connection conexion, long liCodMovimiento)
+	{
+		long liCodArchivo = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO6 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO2 + " = '" + liCodMovimiento	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liCodArchivo = rs.getLong(CAMPO6);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO6+":|"+liCodArchivo+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liCodArchivo = 0;
+
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liCodArchivo;
+	}
+	
+	public static boolean setArchivoRespuesta(Connection conexion, long liCodMovimiento, long liCodArchivo)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO7 + " = '"+ liCodArchivo + "' "+
+					" WHERE " 
+					+ CAMPO2 + " = '" + liCodMovimiento	+ "'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}	
+
+		return bSalida;
+	}
+	
+	public static long getArchivoRespuesta(Connection conexion, long liCodMovimiento)
+	{
+		long liCodArchivo = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO7 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO2 + " = '" + liCodMovimiento	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liCodArchivo = rs.getLong(CAMPO7);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO7+":|"+liCodArchivo+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liCodArchivo = 0;
+
+				logger.error("ERROR Movimiento:|"+liCodMovimiento+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liCodArchivo;
 	}
 	
 	public static long buscaCantidadValidado(Connection conexion, String sCodValidado)
