@@ -3343,7 +3343,7 @@ public final class FileManager
         return resultadocarga;
 	}
 
-	public static ResultadoCarga leerImpuestosRevisadas(String sNombre) 
+	public static ResultadoCarga leerImpuestosRevisados(String sNombre) 
 	{
 		ArrayList<ResultadosTabla> tabla = new ArrayList<ResultadosTabla>();
 		
@@ -3764,7 +3764,7 @@ public final class FileManager
 					logger.debug("Impuestos");
 					if (bRecibido)
 					{
-						carga = leerImpuestosRevisadas(sNombre);
+						carga = leerImpuestosRevisados(sNombre);
 					}
 					else
 					{

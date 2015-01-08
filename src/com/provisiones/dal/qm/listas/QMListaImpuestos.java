@@ -33,7 +33,9 @@ public final class QMListaImpuestos
 	//Campos de control
 	public static final String CAMPO4 = "cod_validado";
 	public static final String CAMPO5 = "usuario_movimiento";
-	public static final String CAMPO6  = "fecha_movimiento";    
+	public static final String CAMPO6 = "fecha_movimiento";
+	public static final String CAMPO7 = "archivo_envio";
+	public static final String CAMPO8 = "archivo_respuesta"; 
 
 	private QMListaImpuestos(){}
 

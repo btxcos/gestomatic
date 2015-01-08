@@ -35,7 +35,9 @@ public final class QMListaGastos
 	
 	public static final String CAMPO4 = "usuario_movimiento";    
 	public static final String CAMPO5 = "fecha_movimiento";
-
+	public static final String CAMPO6 = "archivo_envio";
+	public static final String CAMPO7 = "archivo_respuesta";
+	
 	private QMListaGastos(){}
 
 	public static boolean addRelacionGasto(Connection conexion, long liCodGasto, long liCodMovimiento) 

@@ -29,15 +29,16 @@ public class QMRegistroActivos implements Serializable
 	public static final String TABLA = "pp002_registro_activos_multi";
 
 	//identificadores
-	public static final String CAMPO1  = "cod_coaces";
+	public static final String CAMPO1 = "cod_coaces";
 
 	//Campos de control
-	public static final String CAMPO2  = "fecha_registro";
-	public static final String CAMPO3  = "usuario_carga";
-	public static final String CAMPO4  = "fecha_carga";
-	public static final String CAMPO5  = "cod_estado";
-	public static final String CAMPO6  = "fecha_bloqueo";
-	public static final String CAMPO7  = "nota";
+	public static final String CAMPO2 = "fecha_registro";
+	public static final String CAMPO3 = "usuario_carga";
+	public static final String CAMPO4 = "fecha_carga";
+	public static final String CAMPO5 = "cod_estado";
+	public static final String CAMPO6 = "fecha_bloqueo";
+	public static final String CAMPO7 = "nota";
+	public static final String CAMPO8 = "archivo_envio";
 	
 
 	
@@ -64,16 +65,17 @@ public class QMRegistroActivos implements Serializable
 				       + CAMPO4  + ","
 				       + CAMPO5  + ","
 				       + CAMPO6  + ","
-				       + CAMPO7  + 
-				       ") VALUES ('"
-				       + iCodCOACES + "','" 
-				       + sTimeStamp + "','"
+				       + CAMPO7  + ","
+				       + CAMPO8  + 
+				       ") VALUES ("
+				       + iCodCOACES + "," 
+				       + sTimeStamp + ",'"
 				       + sUsuario + "','"
-				       + sTimeStamp + "','"
-				       + ValoresDefecto.DEF_ACTIVO_DESBLOQUEADO + "','"
-				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR + "', "
-				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))" + 
-				       ")";
+				       + sTimeStamp + ",'"
+				       + ValoresDefecto.DEF_ACTIVO_DESBLOQUEADO + "',"
+				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR + ", "
+				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR + ")";
 			
 			logger.debug(sQuery);
 
@@ -843,6 +845,120 @@ public class QMRegistroActivos implements Serializable
 		}
 
 		return new EstadoActivoTabla(sCOACES, sEstado, sFechaActivacion);
+	}
+	
+	public static boolean setArchivoEnvio(Connection conexion, int iCodCOACES, long liCodArchivo)
+	{
+		boolean bSalida = false;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "UPDATE " 
+					+ TABLA + 
+					" SET " 
+					+ CAMPO8 + " = '"+ liCodArchivo + "' "+
+					" WHERE " 
+					+ CAMPO1 + " = '" + iCodCOACES	+ "'";
+			
+			logger.debug(sQuery);
+			
+			try 
+			{
+				stmt = conexion.createStatement();
+				stmt.executeUpdate(sQuery);
+				
+				logger.debug("Ejecutada con exito!");
+				
+				bSalida = true;
+			} 
+			catch (SQLException ex) 
+			{
+				bSalida = false;
+
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeStatement(stmt);
+			}
+		}	
+
+		return bSalida;
+	}
+	
+	public static long getArchivoEnvio(Connection conexion, int iCodCOACES)
+	{
+		long liCodArchivo = 0;
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT " 
+					+ CAMPO8 + 
+					" FROM " 
+					+ TABLA + 
+					" WHERE "
+					+ CAMPO1 + " = '" + iCodCOACES	+ "'";
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con exito!");
+				
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+
+						liCodArchivo = rs.getLong(CAMPO8);
+						
+						logger.debug("Encontrado el registro!");
+
+						logger.debug(CAMPO8+":|"+liCodArchivo+"|");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontró la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				liCodArchivo = 0;
+
+				logger.error("ERROR ACTIVO:|"+iCodCOACES+"|");
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return liCodArchivo;
 	}
 
 	public static ArrayList<EstadoActivoTabla> buscaActivosRegistradosPorFiltroEstado(Connection conexion, ActivoTabla filtro, String sEstado)

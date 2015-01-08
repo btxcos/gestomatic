@@ -29,16 +29,16 @@ public final class QMListaComunidadesActivos
 	public static final String TABLA = "pp002_lista_comunidades_activos_multi";
 
 	//identificadores
-	public static final String CAMPO1  = "cod_coaces";
-	public static final String CAMPO2  = "cod_comunidad";
-	public static final String CAMPO3  = "cod_movimiento";    
+	public static final String CAMPO1 = "cod_coaces";
+	public static final String CAMPO2 = "cod_comunidad";
+	public static final String CAMPO3 = "cod_movimiento";    
 
 	//Campos de control
-	public static final String CAMPO4  = "cod_validado";    
-	public static final String CAMPO5  = "usuario_movimiento";
-	public static final String CAMPO6  = "fecha_movimiento";    
-	public static final String CAMPO7  = "archivo_envio";
-	public static final String CAMPO8  = "archivo_respuesta"; 
+	public static final String CAMPO4 = "cod_validado";    
+	public static final String CAMPO5 = "usuario_movimiento";
+	public static final String CAMPO6 = "fecha_movimiento";    
+	public static final String CAMPO7 = "archivo_envio";
+	public static final String CAMPO8 = "archivo_respuesta"; 
 	
 	private QMListaComunidadesActivos(){}
 	

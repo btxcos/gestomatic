@@ -51,6 +51,7 @@ public final class QMProvisiones
 	public static final String CAMPO22 = "usuario_modificacion";
 	public static final String CAMPO23 = "fecha_modificacion";
 	public static final String CAMPO24 = "nota";
+	public static final String CAMPO25 = "archivo_envio";
 	
 
 	private QMProvisiones(){}

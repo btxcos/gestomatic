@@ -37,6 +37,7 @@ public class QMPagos
 	public static final String CAMPO10 = "usuario_pago";
 	public static final String CAMPO11 = "fecha_pago";
 	public static final String CAMPO12 = "nota";
+	public static final String CAMPO13 = "archivo_envio";
 
 
 	private QMPagos(){}
