@@ -74,7 +74,7 @@ public final class CLActivos
 	
 	public static ArrayList<ActivoTabla> buscarActivoUnico (int iCodCOACES)
 	{
-		return QMActivos.buscaActivo(ConnectionManager.getDBConnection(),iCodCOACES);
+		return QMActivos.buscaActivoPorCOACES(ConnectionManager.getDBConnection(),iCodCOACES);
 	}
 
 	public static ArrayList<ActivoTabla> buscarListaActivosConReferencia (ActivoTabla activo)
@@ -229,7 +229,7 @@ public final class CLActivos
 	}
 	
 	//Interfaz avanzado
-	public static int actualizaActivoLeido(String linea)
+	public static int actualizaActivoLeido(String linea, long liCodFichero)
 	{
 		int iCodigo = -5;//Error de conexion
 		
@@ -237,7 +237,7 @@ public final class CLActivos
 		
 		if (conexion != null)
 		{
-			iCodigo = 0;
+			
 			
 			Activo activo = Parser.leerActivo(linea);
 			
@@ -245,109 +245,120 @@ public final class CLActivos
 			
 			//logger.debug("sCodActivo:|"+sCodActivo+"|");
 
-			try 
+			if (liCodFichero != 0)
 			{
-				conexion.setAutoCommit(false);
-
-				if (QMCodigosControl.existeCOSPAT(conexion,activo.getCOSPAT()))
+				try 
 				{
-					if (!QMActivos.existeActivo(conexion,iCodCOACES))
+					
+
+					if (QMCodigosControl.existeCOSPAT(conexion,activo.getCOSPAT()))
 					{
-						if (QMActivos.addActivo(conexion,activo))
+						conexion.setAutoCommit(false);
+						
+						if (!QMActivos.existeActivo(conexion,iCodCOACES))
 						{
-							//logger.info("Nuevo Activo registrado.");
-							if (QMRegistroActivos.addRegistroActivo(conexion, iCodCOACES))
+							if (QMActivos.addActivo(conexion,activo))
 							{
-								conexion.commit();
+								//logger.info("Nuevo Activo registrado.");
+								if (QMRegistroActivos.addRegistroActivo(conexion, iCodCOACES, liCodFichero))
+								{
+									iCodigo = 0;
+								}
+								else
+								{
+									iCodigo = -3;
+								}
+								
 							}
 							else
 							{
-								iCodigo = -3;
-								conexion.rollback();
+								iCodigo = -1;
 							}
-							
 						}
 						else
 						{
-							iCodigo = -1;
-							conexion.rollback();
-						}
-					}
-					else
-					{
-						if (!QMActivos.compruebaActivo(conexion,activo))
-						{
-							if (QMActivos.modActivo(conexion,activo,iCodCOACES))
+							if (!QMActivos.compruebaActivo(conexion,activo))
 							{
-								//logger.info("Activo actualizado.");
-								if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES))
+								if (QMActivos.modActivo(conexion,activo,iCodCOACES))
 								{
-									iCodigo = 1;
-									conexion.commit();
+									//logger.info("Activo actualizado.");
+									if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES, liCodFichero))
+									{
+										iCodigo = 1;
+									}
+									else
+									{
+										iCodigo = -4;
+									}
+								}
+								else
+								{
+									iCodigo = -2;
+								}
+							}
+							else
+							{
+								//logger.warn("El siguiente registro ya se encuentra en el sistema:");
+								if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES, liCodFichero))
+								{
+									iCodigo = 2;
 								}
 								else
 								{
 									iCodigo = -4;
-									conexion.rollback();
 								}
 							}
-							else
-							{
-								iCodigo = -2;
-								conexion.rollback();
-							}
+						}
+						
+						if (iCodigo >= 0)
+						{
+							conexion.commit();
 						}
 						else
 						{
-							//logger.warn("El siguiente registro ya se encuentra en el sistema:");
-							if (QMRegistroActivos.modRegistroActivo(conexion, iCodCOACES))
-							{
-								iCodigo = 2;
-								conexion.commit();
-							}
-							else
-							{
-								iCodigo = -4;
-								conexion.rollback();
-							}
+							conexion.rollback();
 						}
+						
+						
+						conexion.setAutoCommit(true);
 					}
-				}
-				else
-				{
-					//Error de cospat no encontrado
-					iCodigo = -6;
-					logger.error("[ERROR] Se encontró un nuevo código de sociedad patrimonial ("+activo.getCOSPAT()+").");
-				}
-				
-				
-				conexion.setAutoCommit(true);
-			} 
-			catch (SQLException e) 
-			{
-				//error de conexion con base de datos.
-				iCodigo = -5;
-
-				try 
-				{
-					//reintentamos
-					conexion.rollback();
-					conexion.setAutoCommit(true);
-					conexion.close();
+					else
+					{
+						//Error de cospat no encontrado
+						iCodigo = -6;
+						logger.error("[ERROR] Se encontró un nuevo código de sociedad patrimonial ("+activo.getCOSPAT()+").");
+					}
 				} 
-				catch (SQLException e1) 
+				catch (SQLException e) 
 				{
+					//error de conexion con base de datos.
+					iCodigo = -5;
+
 					try 
 					{
+						//reintentamos
+						conexion.rollback();
+						conexion.setAutoCommit(true);
 						conexion.close();
-					}
-					catch (SQLException e2) 
+					} 
+					catch (SQLException e1) 
 					{
-						logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						try 
+						{
+							conexion.close();
+						}
+						catch (SQLException e2) 
+						{
+							logger.error("[FATAL] Se perdió la conexión de forma inesperada.");
+						}
 					}
+					
+					
 				}
-				
-				
+			}
+			else
+			{
+				logger.error("[FATAL] Se recibio un código de fichero no válido.");
 			}
 
 

@@ -744,7 +744,7 @@ public final class QMReferencias
 			
 			String sQuery = "SELECT " 
 						//+ CAMPO11 +
-						+"AES_DECRYPT("+CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+						+"CONVERT(AES_DECRYPT("+CAMPO11+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -769,7 +769,7 @@ public final class QMReferencias
 
 						//sNota = rs.getString(CAMPO11);
 						
-						sNota = rs.getString("AES_DECRYPT("+CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sNota = rs.getString("CONVERT(AES_DECRYPT("+CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						logger.debug(CAMPO1+":|"+liReferenciaID+"|");
 						

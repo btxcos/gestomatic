@@ -551,13 +551,20 @@ public final class QMListaReferencias
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + 
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -594,13 +601,20 @@ public final class QMListaReferencias
 
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -663,14 +677,20 @@ public final class QMListaReferencias
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + 
-
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -705,13 +725,20 @@ public final class QMListaReferencias
 
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -776,13 +803,20 @@ public final class QMListaReferencias
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + 
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -823,13 +857,20 @@ public final class QMListaReferencias
 
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -892,14 +933,21 @@ public final class QMListaReferencias
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + 
- 
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -940,13 +988,20 @@ public final class QMListaReferencias
 
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -1009,13 +1064,21 @@ public final class QMListaReferencias
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + 
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
+
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -1058,13 +1121,20 @@ public final class QMListaReferencias
 
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -1127,13 +1197,20 @@ public final class QMListaReferencias
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + 
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -1174,13 +1251,20 @@ public final class QMListaReferencias
 
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -1243,14 +1327,20 @@ public final class QMListaReferencias
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + 
-
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
 						   " FROM " 
 						   + QMActivos.TABLA + 
 						   " WHERE ("
@@ -1290,13 +1380,20 @@ public final class QMListaReferencias
 
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -1359,13 +1456,20 @@ public final class QMListaReferencias
 					
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + 
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -1406,13 +1510,20 @@ public final class QMListaReferencias
 
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -1847,14 +1958,21 @@ public final class QMListaReferencias
 			boolean bEncontrado = false;
 			
 			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND ";
-			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
-			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
-			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
-			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
-			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
-			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
-			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
+			//String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			//String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			//String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			//String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			//String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+			//String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+			//String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
 
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOMUIN() + "%' AND ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOPRAC() + "%' AND ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOVIAS() + "%' AND ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPIAC() + "%' AND ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPOAC() + "%' AND ";
+			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPUAC() + "%' AND ";
+			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUFIRE() + "%' AND ";
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1862,14 +1980,22 @@ public final class QMListaReferencias
 						
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + ","
-						   + QMActivos.CAMPO81 + 
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO81 + 
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -1915,14 +2041,22 @@ public final class QMListaReferencias
 						
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
-						String sNURCAT = rs.getString(QMActivos.CAMPO81);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNURCAT = rs.getString(QMActivos.CAMPO81);
+						String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -1978,14 +2112,21 @@ public final class QMListaReferencias
 			boolean bEncontrado = false;
 			
 			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND ";
-			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
-			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
-			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
-			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
-			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
-			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
-			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
+			//String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			//String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			//String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			//String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			//String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+			//String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+			//String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
 
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOMUIN() + "%' AND ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOPRAC() + "%' AND ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOVIAS() + "%' AND ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPIAC() + "%' AND ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPOAC() + "%' AND ";
+			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPUAC() + "%' AND ";
+			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUFIRE() + "%' AND ";
 			
 			logger.debug("Ejecutando Query...");
 
@@ -1993,14 +2134,22 @@ public final class QMListaReferencias
 						
 						   + QMActivos.CAMPO1 + ","        
 						   + QMActivos.CAMPO14 + ","
-						   + QMActivos.CAMPO11 + ","
-						   + QMActivos.CAMPO13 + ","
-						   + QMActivos.CAMPO6 + ","
-						   + QMActivos.CAMPO9 + ","
-						   + QMActivos.CAMPO7 + ","
-						   + QMActivos.CAMPO10 + ","
-						   + QMActivos.CAMPO28 + ","
-						   + QMActivos.CAMPO81 + 
+						   //+ QMActivos.CAMPO11 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO13 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO6 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO9 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO7 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO10 + ","
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO28 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   //+ QMActivos.CAMPO81 +
+						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -2047,14 +2196,23 @@ public final class QMListaReferencias
 						
 						String sCOACES = rs.getString(QMActivos.CAMPO1);
 						String sCOPOIN = rs.getString(QMActivos.CAMPO14);
-						String sNOMUIN = rs.getString(QMActivos.CAMPO11);
-						String sNOPRAC = rs.getString(QMActivos.CAMPO13);
-						String sNOVIAS = rs.getString(QMActivos.CAMPO6);
-						String sNUPIAC = rs.getString(QMActivos.CAMPO9);
-						String sNUPOAC = rs.getString(QMActivos.CAMPO7);
-						String sNUPUAC = rs.getString(QMActivos.CAMPO10);
-						String sNUFIRE = rs.getString(QMActivos.CAMPO28);
-						String sNURCAT = rs.getString(QMActivos.CAMPO81);
+						//String sNOMUIN = rs.getString(QMActivos.CAMPO11);
+						String sNOMUIN = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOPRAC = rs.getString(QMActivos.CAMPO13);
+						String sNOPRAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNOVIAS = rs.getString(QMActivos.CAMPO6);
+						String sNOVIAS = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPIAC = rs.getString(QMActivos.CAMPO9);
+						String sNUPIAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPOAC = rs.getString(QMActivos.CAMPO7);
+						String sNUPOAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUPUAC = rs.getString(QMActivos.CAMPO10);
+						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
+						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						
+						//String sNURCAT = rs.getString(QMActivos.CAMPO81);
+						String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 

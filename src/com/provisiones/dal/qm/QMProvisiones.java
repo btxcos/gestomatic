@@ -1564,7 +1564,7 @@ public final class QMProvisiones
 			
 			String sQuery = "SELECT " 
 						//+ CAMPO24 +
-						+"AES_DECRYPT("+CAMPO24+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+						+"CONVERT(AES_DECRYPT("+CAMPO24+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -1589,7 +1589,7 @@ public final class QMProvisiones
 
 						//sNota = rs.getString(CAMPO24);
 						
-						sNota = rs.getString("AES_DECRYPT("+CAMPO24 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sNota = rs.getString("CONVERT(AES_DECRYPT("+CAMPO24 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						logger.debug(CAMPO1+":|"+sNUPROF+"|");
 						

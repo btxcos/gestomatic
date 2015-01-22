@@ -238,11 +238,11 @@ public final class QMUsuarios
 			
 			String sQuery = "SELECT "
 					   + CAMPO2  + ","
-					   + "AES_DECRYPT("+ CAMPO3 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-					   + "AES_DECRYPT("+ CAMPO4 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-					   + "AES_DECRYPT("+ CAMPO5 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-					   + "AES_DECRYPT("+ CAMPO6 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-					   + "AES_DECRYPT("+ CAMPO7 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+					   + "CONVERT(AES_DECRYPT("+ CAMPO3 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+					   + "CONVERT(AES_DECRYPT("+ CAMPO4 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+					   + "CONVERT(AES_DECRYPT("+ CAMPO5 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+					   + "CONVERT(AES_DECRYPT("+ CAMPO6 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+					   + "CONVERT(AES_DECRYPT("+ CAMPO7 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO8  + ","              
 				       + CAMPO9  + ","              
 				       + CAMPO10 +      
@@ -270,12 +270,12 @@ public final class QMUsuarios
 						bEncontrado = true;
 						
 						sLogin = rs.getString(CAMPO2); 
-						sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sPassword = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						//sPassword = rs.getString(CAMPO3);
-						sNombre = rs.getString("AES_DECRYPT("+ CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sApellido1 = rs.getString("AES_DECRYPT("+ CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sApellido2 = rs.getString("AES_DECRYPT("+ CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sContacto = rs.getString("AES_DECRYPT("+ CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sNombre = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						sApellido1 = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						sApellido2 = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						sContacto = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						sFechaAlta = rs.getString(CAMPO8);
 						sTipoUsuario = rs.getString(CAMPO9);
 						sActivo = rs.getString(CAMPO10); 
@@ -719,7 +719,7 @@ public final class QMUsuarios
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-					+ "AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+					+ "CONVERT(AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"+
 					//+ CAMPO3 + 
 					" FROM "
 					+ TABLA + 
@@ -743,7 +743,7 @@ public final class QMUsuarios
 					{
 						bEncontrado = true;
 						
-						sPassword = rs.getString("AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sPassword = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						//sPassword = rs.getString(CAMPO3);
 						
 						logger.debug("Encontrado el registro!");

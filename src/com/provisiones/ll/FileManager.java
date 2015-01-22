@@ -23,6 +23,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.dal.qm.QMFicheros;
 import com.provisiones.dal.qm.QMPagos;
 import com.provisiones.dal.qm.QMProvisiones;
 
@@ -45,6 +46,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 
 import com.provisiones.types.Cuenta;
+import com.provisiones.types.Fichero;
 import com.provisiones.types.ResultadoEnvio;
 import com.provisiones.types.ResultadoCarga;
 import com.provisiones.types.tablas.ResultadosTabla;
@@ -107,6 +109,20 @@ public final class FileManager
 		}
         logger.debug("Completado con exito.");
         return sFichero;
+	}
+	
+	public static long registrarFichero (String sNombre, int iTipo, byte btRespuesta)
+	{		
+		long liCodFichero = 0;//Error
+	
+		Connection conexion = ConnectionManager.getDBConnection();
+	
+		if (conexion != null)
+		{
+			liCodFichero = QMFicheros.addFichero(conexion, new Fichero(sNombre,iTipo), btRespuesta);
+				
+		}
+		return liCodFichero;
 	}
 
 	public static ResultadoEnvio escribirComunidades() 
@@ -1930,102 +1946,115 @@ public final class FileManager
 
 			int iLongitudValida = Longitudes.ACTIVOS_L-Longitudes.FILLER_ACTIVOS_L-Longitudes.OBDEER_L;
 			
-			while((linea=br.readLine())!=null)
-	        {
-				contador++;
-
-				//logger.debug("Longitud de línea leida:|"+linea.length()+"|");
-				//logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
-
-	    		if (linea.equals(sFinFichero))
-	    		{
-	    			contador--;
-	    			logger.info("Lectura finalizada.");
-	    		}
-	    		else if (linea.length()< iLongitudValida )
-	    		{
-	    			iSalida = -1;
-	    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
-	    		}
-	    		else
-	    		{
-	    			int iCodigo = CLActivos.actualizaActivoLeido(linea);
-
-	    			String sResultado = "";
-	    			String sDescripcion = "";
-
-	    			
-	    			switch (iCodigo)
-	    			{
-	    			case 0:
-	    				sDescripcion = "Nuevo Activo registrado.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
-	    				break;
-	    			case -1:
-	    				sDescripcion = "[FATAL] Error al crear el Activo.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
-	    				break;
-	    			case -2:
-	    				sDescripcion = "[FATAL] Error al actualizar el Activo.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
-	    				break;
-	    			case -3:
-	    				sDescripcion = "[FATAL] Error al crear la entrada en el registro de Activos.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
-	    				break;
-	    			case -4:
-	    				sDescripcion = "[FATAL] Error al modificar la entrada en el registro de Activos.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
-	    				break;
-	    			case -5:
-	    				sDescripcion = "[FATAL] Error de acceso a base de datos.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
-	    				break;
-	    			case -6:
-	    				sDescripcion = "[FATAL] Error de sociedad patrimonial desconocida.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
-	    				break;
-	    			case 1:
-	    				sDescripcion = "Activo actualizado.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_ACTUALIZADO;
-	    				break;
-	    			case 2:
-	    				sDescripcion = "El registro ya se encuentra en el sistema.";
-	    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
-	    				break;
-	    			}
-	    			
-	    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
-
-	    			if ( iCodigo >= 0 )
-	    			{
-	    				logger.info(sMensaje);
-	    				registros++;
-	    			}
-	    			else
-	    			{
-	    				iSalida = -1;
-	    				logger.error(sMensaje);
-	    			}
-
-	    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
-	    			tabla.add(resultadolectura);
-	    		}
-	        }
+			//Registro fichero
 			
-			sDuracion = Utils.duracion(liTiempo,System.currentTimeMillis());
-		
-			br.close();
+			long liCodFichero = registrarFichero (sNombre, ValoresDefecto.ID_ACTIVO, ValoresDefecto.BT_NO);
 			
-			//logger.debug("Registros procesados:|"+contador+"|");
-			//logger.debug("Registros correctos:|"+registros+"|");
-			
-			if (iSalida != 0)
+			if (liCodFichero != 0)
 			{
-				logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
-			}
+
+				while((linea=br.readLine())!=null)
+		        {
+					contador++;
+
+					//logger.debug("Longitud de línea leida:|"+linea.length()+"|");
+					//logger.debug("Longitud de línea válida:|"+iLongitudValida+"|");
+
+		    		if (linea.equals(sFinFichero))
+		    		{
+		    			contador--;
+		    			logger.info("Lectura finalizada.");
+		    		}
+		    		else if (linea.length()< iLongitudValida )
+		    		{
+		    			iSalida = -1;
+		    			logger.error("Error en línea "+contador+", tamaño incorrecto.");
+		    		}
+		    		else
+		    		{
+		    			int iCodigo = CLActivos.actualizaActivoLeido(linea, liCodFichero);
+
+		    			String sResultado = "";
+		    			String sDescripcion = "";
+
+		    			
+		    			switch (iCodigo)
+		    			{
+		    			case 0:
+		    				sDescripcion = "Nuevo Activo registrado.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
+		    				break;
+		    			case -1:
+		    				sDescripcion = "[FATAL] Error al crear el Activo.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+		    				break;
+		    			case -2:
+		    				sDescripcion = "[FATAL] Error al actualizar el Activo.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+		    				break;
+		    			case -3:
+		    				sDescripcion = "[FATAL] Error al crear la entrada en el registro de Activos.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_NUEVO;
+		    				break;
+		    			case -4:
+		    				sDescripcion = "[FATAL] Error al modificar la entrada en el registro de Activos.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+		    				break;
+		    			case -5:
+		    				sDescripcion = "[FATAL] Error de acceso a base de datos.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+		    				break;
+		    			case -6:
+		    				sDescripcion = "[FATAL] Error de sociedad patrimonial desconocida.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_ERRORFATAL;
+		    				break;
+		    			case 1:
+		    				sDescripcion = "Activo actualizado.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_ACTUALIZADO;
+		    				break;
+		    			case 2:
+		    				sDescripcion = "El registro ya se encuentra en el sistema.";
+		    				sResultado = ValoresDefecto.DEF_CARGA_SINCAMBIOS;
+		    				break;
+		    			}
+		    			
+		    			String sMensaje = "["+sResultado+"] Línea "+contador+": "+sDescripcion;
+
+		    			if ( iCodigo >= 0 )
+		    			{
+		    				logger.info(sMensaje);
+		    				registros++;
+		    			}
+		    			else
+		    			{
+		    				iSalida = -1;
+		    				logger.error(sMensaje);
+		    			}
+
+		    			ResultadosTabla resultadolectura = new ResultadosTabla(sNombre,contador,sResultado,sDescripcion);
+		    			tabla.add(resultadolectura);
+		    		}
+		        }
+				
+				sDuracion = Utils.duracion(liTiempo,System.currentTimeMillis());
 			
-			logger.info("Duración de la carga: "+sDuracion);
+				br.close();
+				
+				//logger.debug("Registros procesados:|"+contador+"|");
+				//logger.debug("Registros correctos:|"+registros+"|");
+				
+				if (iSalida != 0)
+				{
+					logger.info( "Encontrados "+(contador-registros)+" registros erróneos.\n");
+				}
+				
+				logger.info("Duración de la carga: "+sDuracion);
+			}
+			else
+			{
+				logger.error("Ocurrió un error al registrar el fichero recibido.");
+				iSalida = -4;
+			}
 		}
 		catch (FileNotFoundException e)
 		{

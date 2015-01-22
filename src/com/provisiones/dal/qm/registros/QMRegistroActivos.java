@@ -38,11 +38,11 @@ public class QMRegistroActivos implements Serializable
 	public static final String CAMPO5 = "cod_estado";
 	public static final String CAMPO6 = "fecha_bloqueo";
 	public static final String CAMPO7 = "nota";
-	public static final String CAMPO8 = "archivo_envio";
+	public static final String CAMPO8 = "archivo";
 	
 
 	
-	public static boolean addRegistroActivo(Connection conexion, int iCodCOACES)
+	public static boolean addRegistroActivo(Connection conexion, int iCodCOACES, long liCodFichero)
 	{
 		boolean bSalida = false;
 
@@ -70,12 +70,12 @@ public class QMRegistroActivos implements Serializable
 				       ") VALUES ("
 				       + iCodCOACES + "," 
 				       + sTimeStamp + ",'"
-				       + sUsuario + "','"
+				       + sUsuario + "',"
 				       + sTimeStamp + ",'"
 				       + ValoresDefecto.DEF_ACTIVO_DESBLOQUEADO + "',"
 				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR + ", "
 				       + "AES_ENCRYPT('"+ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
-				       + ValoresDefecto.CAMPO_NUME_SIN_INFORMAR + ")";
+				       + liCodFichero + ")";
 			
 			logger.debug(sQuery);
 
@@ -106,7 +106,7 @@ public class QMRegistroActivos implements Serializable
 		return bSalida;
 	}
 	
-	public static boolean modRegistroActivo(Connection conexion, int iCodCOACES)
+	public static boolean modRegistroActivo(Connection conexion, int iCodCOACES, long liCodFichero)
 	{
 		boolean bSalida = false;
 
@@ -122,7 +122,8 @@ public class QMRegistroActivos implements Serializable
 					+ TABLA + 
 					" SET " 
 					+ CAMPO3  + " = '"+ sUsuario + "', "
-					+ CAMPO4  + " = '"+ Utils.timeStamp() + "' "+
+					+ CAMPO4  + " = "+ Utils.timeStamp() + ", "
+					+ CAMPO8  + " = "+ liCodFichero + " "+
 					" WHERE " 
 					+ CAMPO1  + " = '"+ iCodCOACES +"'";
 			
@@ -712,7 +713,7 @@ public class QMRegistroActivos implements Serializable
 			
 			String sQuery = "SELECT " 
 						//+ CAMPO7 +
-						+"AES_DECRYPT("+CAMPO7+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+						+"CONVERT(AES_DECRYPT("+CAMPO7+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"+
 						" FROM " 
 						+ TABLA + 
 						" WHERE "
@@ -737,7 +738,7 @@ public class QMRegistroActivos implements Serializable
 
 						//sNota = rs.getString(CAMPO7);
 						
-						sNota = rs.getString("AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sNota = rs.getString("CONVERT(AES_DECRYPT("+CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						logger.debug(CAMPO1+":|"+iCodCOACES+"|");
 						
@@ -974,6 +975,47 @@ public class QMRegistroActivos implements Serializable
 
 			boolean bEncontrado = false;
 			
+			String sCondicionCOPOIN = filtro.getCOPOIN().isEmpty()?"":QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' ";
+			//String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND ";
+			//String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND ";
+			//String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND ";
+			//String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND ";
+			//String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND ";
+			//String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%' AND ";
+			//String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":QMActivos.CAMPO28 + " LIKE '%" + filtro.getNUFIRE()	+ "%' AND ";
+
+			String sCondiciones = sCondicionCOPOIN;
+			
+			//String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"INSTR(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + filtro.getNOMUIN() + "') > 0 ";
+			String sCondicionNOMUIN = filtro.getNOMUIN().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"CONVERT(AES_DECRYPT("+QMActivos.CAMPO11 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOMUIN() + "%' ";
+			sCondiciones = sCondiciones + sCondicionNOMUIN;
+		
+			//String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"INSTR(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + filtro.getNOPRAC() + "') > 0 ";
+			String sCondicionNOPRAC = filtro.getNOPRAC().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"CONVERT(AES_DECRYPT("+QMActivos.CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOPRAC() + "%' ";
+			sCondiciones = sCondiciones + sCondicionNOPRAC;
+
+			//String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"INSTR(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + filtro.getNOVIAS() + "') > 0 ";
+			String sCondicionNOVIAS = filtro.getNOVIAS().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"CONVERT(AES_DECRYPT("+QMActivos.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNOVIAS() + "%' ";
+			sCondiciones = sCondiciones + sCondicionNOVIAS;
+
+			//String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"INSTR(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + filtro.getNUPIAC() + "') > 0 ";
+			String sCondicionNUPIAC = filtro.getNUPIAC().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"CONVERT(AES_DECRYPT("+QMActivos.CAMPO9 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPIAC() + "%' ";
+			sCondiciones = sCondiciones + sCondicionNUPIAC;
+
+			//String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"INSTR(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + filtro.getNUPOAC() + "') > 0 ";
+			String sCondicionNUPOAC = filtro.getNUPOAC().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"CONVERT(AES_DECRYPT("+QMActivos.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPOAC() + "%' ";
+			sCondiciones = sCondiciones + sCondicionNUPOAC;
+
+			//String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"INSTR(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + filtro.getNUPUAC() + "') > 0 ";
+			String sCondicionNUPUAC = filtro.getNUPUAC().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUPUAC() + "%' ";
+			sCondiciones = sCondiciones + sCondicionNUPUAC;
+
+			//String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"INSTR(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'" + filtro.getNUFIRE() + "') > 0 ";
+			String sCondicionNUFIRE = filtro.getNUFIRE().isEmpty()?"":(sCondiciones.isEmpty()?"":"AND ")+"CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getNUFIRE() + "%' ";
+			sCondiciones = sCondiciones + sCondicionNUFIRE;
+			
+			String sCondicionesWHERE = sCondiciones.isEmpty()?"":" WHERE ("+sCondiciones+")";
+			
 			String sCondicionEstado = sEstado.isEmpty()? "": CAMPO5 + " = '"+ sEstado +"' AND "; 
 			
 			logger.debug("Ejecutando Query...");
@@ -987,15 +1029,17 @@ public class QMRegistroActivos implements Serializable
 						   + sCondicionEstado
 						   + CAMPO1 + " IN (SELECT "
 						   + QMActivos.CAMPO1 + 
-						   " FROM " + QMActivos.TABLA + 
-						   " WHERE ("
-						   + QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
-						   + QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
-						   + QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
-						   + QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
-						   + QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
-						   + QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
-						   + QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%')))";
+						   " FROM " + QMActivos.TABLA +
+						   sCondicionesWHERE
+						   //" WHERE ("
+						   //+ QMActivos.CAMPO14 + " LIKE '%" + filtro.getCOPOIN()	+ "%' AND "  
+						   //+ QMActivos.CAMPO11 + " LIKE '%" + filtro.getNOMUIN()	+ "%' AND "  
+						   //+ QMActivos.CAMPO13 + " LIKE '%" + filtro.getNOPRAC()	+ "%' AND "  
+						   //+ QMActivos.CAMPO6 + " LIKE '%" + filtro.getNOVIAS()	+ "%' AND "  
+						   //+ QMActivos.CAMPO9 + " LIKE '%" + filtro.getNUPIAC()	+ "%' AND "  
+						   //+ QMActivos.CAMPO7 + " LIKE '%" + filtro.getNUPOAC()	+ "%' AND "  
+						   //+ QMActivos.CAMPO10 + " LIKE '%" + filtro.getNUPUAC()	+ "%')))";
+					   		+ "))";
 			
 			logger.debug(sQuery);
 			

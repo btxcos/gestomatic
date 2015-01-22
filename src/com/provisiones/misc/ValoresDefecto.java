@@ -41,6 +41,9 @@ public final class ValoresDefecto
 	public static final String DEF_SI = "1";
 	public static final String DEF_NO = "0";
 	
+	public static final byte BT_SI = 1;
+	public static final byte BT_NO = 0;
+	
 	public static final String ABONO_EMITIDO = "0";
 
 	public static final String DEF_COAPII = "168";
@@ -52,7 +55,6 @@ public final class ValoresDefecto
 	public static final String CIFRADO_LLAVE_SIMETRICA = "glsl1234glsl1234";
 	public static final String CIFRADO_LONGITUD = "512";
 	public static final String CIFRADO_ALGORITMO = "AES";
-	
 
 	public static final String DEF_COSPII_GA = "GA";
 	public static final String DEF_COSPII_E1 = "E1";

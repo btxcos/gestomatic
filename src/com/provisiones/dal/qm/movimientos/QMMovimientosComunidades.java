@@ -420,24 +420,24 @@ public final class QMMovimientosComunidades
 				       + CAMPO27 + ","              
 				       + CAMPO28 + ","              
 				       + CAMPO29 + ","*/
-				       + "AES_DECRYPT("+ CAMPO12 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "CONVERT(AES_DECRYPT("+ CAMPO12 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO13 + ","              
-				       + "AES_DECRYPT("+ CAMPO14 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "CONVERT(AES_DECRYPT("+ CAMPO14 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO15 + ","              
-				       + "AES_DECRYPT("+ CAMPO16 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "CONVERT(AES_DECRYPT("+ CAMPO16 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO17 + ","              
-				       + "AES_DECRYPT("+ CAMPO18 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "CONVERT(AES_DECRYPT("+ CAMPO18 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO19 + ","              
-				       + "AES_DECRYPT("+ CAMPO20 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "CONVERT(AES_DECRYPT("+ CAMPO20 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO21 + ","              
-				       + "AES_DECRYPT("+ CAMPO22 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "CONVERT(AES_DECRYPT("+ CAMPO22 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO23 + ","              
-				       + "AES_DECRYPT("+ CAMPO24 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "CONVERT(AES_DECRYPT("+ CAMPO24 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO25 + ","              
-				       + "AES_DECRYPT("+ CAMPO26 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+ CAMPO27 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+ CAMPO28 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-				       + "AES_DECRYPT("+ CAMPO29 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+				       + "CONVERT(AES_DECRYPT("+ CAMPO26 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+				       + "CONVERT(AES_DECRYPT("+ CAMPO27 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+				       + "CONVERT(AES_DECRYPT("+ CAMPO28 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+				       + "CONVERT(AES_DECRYPT("+ CAMPO29 + ",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       
 				       + CAMPO30 + ","
 				       + CAMPO31 + ","
@@ -474,24 +474,24 @@ public final class QMMovimientosComunidades
 						sBITC10 = rs.getString(CAMPO9);  
 						sCOACES = rs.getString(CAMPO10); 
 						sBITC01 = rs.getString(CAMPO11); 
-						sNOMCOC = rs.getString("AES_DECRYPT("+ CAMPO12 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNOMCOC = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO12 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
 						sBITC02 = rs.getString(CAMPO13); 
-						sNODCCO = rs.getString("AES_DECRYPT("+ CAMPO14 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNODCCO = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO14 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
 						sBITC03 = rs.getString(CAMPO15); 
-						sNOMPRC = rs.getString("AES_DECRYPT("+ CAMPO16 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNOMPRC = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO16 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
 						sBITC04 = rs.getString(CAMPO17); 
-						sNUTPRC = rs.getString("AES_DECRYPT("+ CAMPO18 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUTPRC = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO18 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
 						sBITC05 = rs.getString(CAMPO19); 
-						sNOMADC = rs.getString("AES_DECRYPT("+ CAMPO20 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNOMADC = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO20 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
 						sBITC06 = rs.getString(CAMPO21); 
-						sNUTADC = rs.getString("AES_DECRYPT("+ CAMPO22 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUTADC = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO22 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
 						sBITC07 = rs.getString(CAMPO23); 
-						sNODCAD = rs.getString("AES_DECRYPT("+ CAMPO24 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNODCAD = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO24 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
 						sBITC08 = rs.getString(CAMPO25); 
-						sNUCCEN = rs.getString("AES_DECRYPT("+ CAMPO26 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-						sNUCCOF = rs.getString("AES_DECRYPT("+ CAMPO27 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-						sNUCCDI = rs.getString("AES_DECRYPT("+ CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
-						sNUCCNT = rs.getString("AES_DECRYPT("+ CAMPO29 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"); 
+						sNUCCEN = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO26 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
+						sNUCCOF = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO27 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
+						sNUCCDI = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
+						sNUCCNT = rs.getString("CONVERT(AES_DECRYPT("+ CAMPO29 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"); 
 						sBITC09 = rs.getString(CAMPO30); 
 						sOBTEXC = rs.getString(CAMPO31); 
 						sOBDEER = rs.getString(CAMPO32); 

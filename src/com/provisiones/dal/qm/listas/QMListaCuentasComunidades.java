@@ -217,12 +217,12 @@ public class QMListaCuentasComunidades
 
 			String sQuery = "SELECT "
 
-						   + "AES_DECRYPT("+QMCuentas.CAMPO2 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-						   + "AES_DECRYPT("+QMCuentas.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-						   + "AES_DECRYPT("+QMCuentas.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-						   + "AES_DECRYPT("+QMCuentas.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-						   + "AES_DECRYPT("+QMCuentas.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
-						   + "AES_DECRYPT("+QMCuentas.CAMPO7+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) ,"
+						   + "CONVERT(AES_DECRYPT("+QMCuentas.CAMPO2 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   + "CONVERT(AES_DECRYPT("+QMCuentas.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   + "CONVERT(AES_DECRYPT("+QMCuentas.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   + "CONVERT(AES_DECRYPT("+QMCuentas.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   + "CONVERT(AES_DECRYPT("+QMCuentas.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+						   + "CONVERT(AES_DECRYPT("+QMCuentas.CAMPO7+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 
 						   + QMCuentas.CAMPO8 +						   
 
@@ -255,12 +255,12 @@ public class QMListaCuentasComunidades
 					{
 						bEncontrado = true;
 						
-						sPais    = rs.getString("AES_DECRYPT("+QMCuentas.CAMPO2 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
-						sDCIBAN  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.DCIBAN_L);
-						sNUCCEN  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.NUCCEN_L);
-						sNUCCOF  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.NUCCOF_L);
-						sNUCCDI  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.NUCCDI_L);
-						sNUCCNT  = Parser.formateaCampoNumerico(rs.getString("AES_DECRYPT("+QMCuentas.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"),Longitudes.NUCCNT_L);
+						sPais    = rs.getString("CONVERT(AES_DECRYPT("+QMCuentas.CAMPO2 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						sDCIBAN  = Parser.formateaCampoNumerico(rs.getString("CONVERT(AES_DECRYPT("+QMCuentas.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"),Longitudes.DCIBAN_L);
+						sNUCCEN  = Parser.formateaCampoNumerico(rs.getString("CONVERT(AES_DECRYPT("+QMCuentas.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"),Longitudes.NUCCEN_L);
+						sNUCCOF  = Parser.formateaCampoNumerico(rs.getString("CONVERT(AES_DECRYPT("+QMCuentas.CAMPO5 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"),Longitudes.NUCCOF_L);
+						sNUCCDI  = Parser.formateaCampoNumerico(rs.getString("CONVERT(AES_DECRYPT("+QMCuentas.CAMPO6 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"),Longitudes.NUCCDI_L);
+						sNUCCNT  = Parser.formateaCampoNumerico(rs.getString("CONVERT(AES_DECRYPT("+QMCuentas.CAMPO7 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"),Longitudes.NUCCNT_L);
 						sDescripcion  = rs.getString(QMCuentas.CAMPO8);
 					
 						Cuenta cuentaencontrada = new Cuenta(

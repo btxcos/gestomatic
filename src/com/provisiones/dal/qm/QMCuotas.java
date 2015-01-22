@@ -1514,7 +1514,7 @@ public final class QMCuotas
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-						+"AES_DECRYPT("+CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))"+
+						+"CONVERT(AES_DECRYPT("+CAMPO13+",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)"+
 						//+ CAMPO13 + 
 						" FROM " 
 						+ TABLA + 
@@ -1540,7 +1540,7 @@ public final class QMCuotas
 
 						//sNota = rs.getString(CAMPO13);
 						
-						sNota = rs.getString("AES_DECRYPT("+CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+"))");
+						sNota = rs.getString("CONVERT(AES_DECRYPT("+CAMPO13 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						logger.debug(CAMPO1+":|"+liCuotaID+"|");
 						

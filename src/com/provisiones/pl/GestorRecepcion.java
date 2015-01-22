@@ -121,6 +121,11 @@ public class GestorRecepcion implements Serializable
 				msg = Utils.pfmsgError(sMsg);
 				logger.error(sMsg);
 				break;
+			case -4:
+				sMsg = "El archivo proporcionado no pudo ser registrado. Por favor, avise a soporte.";
+				msg = Utils.pfmsgFatal(sMsg);
+				logger.error(sMsg);
+				break;
 			default:
 				sMsg = "ERROR: Se encontraron problemas al procesar el archivo '"+event.getFile().getFileName() +"', contiene registros inconsistentes con el sistema. Por favor, reviselo.";
 				msg = Utils.pfmsgFatal(sMsg);
