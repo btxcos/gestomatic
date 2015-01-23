@@ -526,8 +526,8 @@ public final class QMListaImpuestos
 						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 						   //+ QMActivos.CAMPO28 +
 						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), " 
-						   //+ QMActivos.CAMPO81 + 
-						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
+						   + QMActivos.CAMPO81 + 
+						   //+ "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -591,8 +591,8 @@ public final class QMListaImpuestos
 						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 
-						//String sNURCAT = rs.getString(QMActivos.CAMPO81);
-						String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						String sNURCAT = rs.getString(QMActivos.CAMPO81);
+						//String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -684,8 +684,8 @@ public final class QMListaImpuestos
 						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 						   //+ QMActivos.CAMPO28 +
 						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
-						   //+ QMActivos.CAMPO81 +
-						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
+						   + QMActivos.CAMPO81 +
+						   //+ "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -753,8 +753,8 @@ public final class QMListaImpuestos
 						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 
-						//String sNURCAT = rs.getString(QMActivos.CAMPO81);
-						String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						String sNURCAT = rs.getString(QMActivos.CAMPO81);
+						//String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 

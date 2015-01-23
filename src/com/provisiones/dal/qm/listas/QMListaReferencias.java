@@ -1723,8 +1723,10 @@ public final class QMListaReferencias
 			String sQuery = "SELECT "
 					   + QMReferencias.CAMPO1 + "," 
 					   + QMReferencias.CAMPO2 + ","        
-					   + QMReferencias.CAMPO3 + ","
-					   + QMReferencias.CAMPO4 + ","
+					   //+ QMReferencias.CAMPO3 + ","
+					   + "CONVERT(AES_DECRYPT("+QMReferencias.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+					   //+ QMReferencias.CAMPO4 + ","
+					   + "CONVERT(AES_DECRYPT("+QMReferencias.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 					   + QMReferencias.CAMPO6 + 
 
 					   //Ampliacion de valor catastral
@@ -1764,8 +1766,10 @@ public final class QMListaReferencias
 						
 						String sReferenciaID = rs.getString(QMReferencias.CAMPO1);
 						String sNURCAT = rs.getString(QMReferencias.CAMPO2);
-						String sTIRCAT = rs.getString(QMReferencias.CAMPO3);
-						String sENEMIS = rs.getString(QMReferencias.CAMPO4);
+						//String sTIRCAT = rs.getString(QMReferencias.CAMPO3);
+						String sTIRCAT = rs.getString("CONVERT(AES_DECRYPT("+QMReferencias.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sENEMIS = rs.getString(QMReferencias.CAMPO4);
+						String sENEMIS = rs.getString("CONVERT(AES_DECRYPT("+QMReferencias.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						String sOBTEXC = rs.getString(QMReferencias.CAMPO6);
 
 						//Ampliacion de valor catastral
@@ -1830,8 +1834,14 @@ public final class QMListaReferencias
 			
 			//Condiciones de filtro
 			String sCondicionNURCAT = filtro.getNURCAT().isEmpty()?"":QMReferencias.CAMPO2 + " = '" + filtro.getNURCAT() + "' AND ";
-			String sCondicionTIRCAT = filtro.getTIRCAT().isEmpty()?"":QMReferencias.CAMPO3 + " = '" + filtro.getTIRCAT() + "' AND ";
-			String sCondicionENEMIS = filtro.getENEMIS().isEmpty()?"":QMReferencias.CAMPO4 + " = '" + filtro.getENEMIS() + "' AND ";
+			
+			//String sCondicionTIRCAT = filtro.getTIRCAT().isEmpty()?"":QMReferencias.CAMPO3 + " = '" + filtro.getTIRCAT() + "' AND ";
+			String sCondicionTIRCAT = filtro.getTIRCAT().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMReferencias.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getTIRCAT() + "%' AND ";
+			
+			//String sCondicionENEMIS = filtro.getENEMIS().isEmpty()?"":QMReferencias.CAMPO4 + " = '" + filtro.getENEMIS() + "' AND ";
+			String sCondicionENEMIS = filtro.getENEMIS().isEmpty()?"":"CONVERT(AES_DECRYPT("+QMReferencias.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) LIKE '%" + filtro.getENEMIS() + "%' AND ";
+			
+
 			
 			String sCondicionImporteSuelo = sComparadorSuelo.isEmpty()?"":QMReferencias.CAMPO7 + " "+sComparadorSuelo+" " + filtro.getIMVSUE() + " AND ";
 			String sCondicionImporteCatastral = sComparadorCatastral.isEmpty()?"":QMReferencias.CAMPO8 + " "+sComparadorCatastral+" " + filtro.getIMCATA() + " AND ";
@@ -1845,8 +1855,10 @@ public final class QMListaReferencias
 			String sQuery = "SELECT "
 					   + QMReferencias.CAMPO1 + "," 
 					   + QMReferencias.CAMPO2 + ","        
-					   + QMReferencias.CAMPO3 + ","
-					   + QMReferencias.CAMPO4 + ","
+					   //+ QMReferencias.CAMPO3 + ","
+					   + "CONVERT(AES_DECRYPT("+QMReferencias.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+					   //+ QMReferencias.CAMPO4 + ","
+					   + "CONVERT(AES_DECRYPT("+QMReferencias.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 					   + QMReferencias.CAMPO6 + 
 
 					   //Ampliacion de valor catastral
@@ -1892,8 +1904,10 @@ public final class QMListaReferencias
 						
 						String sReferenciaID = rs.getString(QMReferencias.CAMPO1);
 						String sNURCAT = rs.getString(QMReferencias.CAMPO2);
-						String sTIRCAT = rs.getString(QMReferencias.CAMPO3);
-						String sENEMIS = rs.getString(QMReferencias.CAMPO4);
+						//String sTIRCAT = rs.getString(QMReferencias.CAMPO3);
+						String sTIRCAT = rs.getString("CONVERT(AES_DECRYPT("+QMReferencias.CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						//String sENEMIS = rs.getString(QMReferencias.CAMPO4);
+						String sENEMIS = rs.getString("CONVERT(AES_DECRYPT("+QMReferencias.CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						String sOBTEXC = rs.getString(QMReferencias.CAMPO6);
 
 						//Ampliacion de valor catastral
@@ -1994,8 +2008,8 @@ public final class QMListaReferencias
 						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 						   //+ QMActivos.CAMPO28 +
 						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
-						   //+ QMActivos.CAMPO81 + 
-						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
+						   + QMActivos.CAMPO81 + 
+						   //+ "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -2055,8 +2069,8 @@ public final class QMListaReferencias
 						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
-						//String sNURCAT = rs.getString(QMActivos.CAMPO81);
-						String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						String sNURCAT = rs.getString(QMActivos.CAMPO81);
+						//String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 
@@ -2148,8 +2162,8 @@ public final class QMListaReferencias
 						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 						   //+ QMActivos.CAMPO28 +
 						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
-						   //+ QMActivos.CAMPO81 +
-						   + "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
+						   + QMActivos.CAMPO81 +
+						   //+ "CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
 
 						   " FROM " 
 						   + QMActivos.TABLA + 
@@ -2211,8 +2225,8 @@ public final class QMListaReferencias
 						//String sNUFIRE = rs.getString(QMActivos.CAMPO28);
 						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
-						//String sNURCAT = rs.getString(QMActivos.CAMPO81);
-						String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						String sNURCAT = rs.getString(QMActivos.CAMPO81);
+						//String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+QMActivos.CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 

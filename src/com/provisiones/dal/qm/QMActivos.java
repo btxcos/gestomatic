@@ -318,8 +318,8 @@ public final class QMActivos
 				       + NuevoActivo.getFEREAC() + "','"  
 				       + NuevoActivo.getCOXSIA() + "','"  
 				       + NuevoActivo.getNUJUZD() + "','"  
-				       //+ NuevoActivo.getNURCAT() + "','"
-				       + "AES_ENCRYPT('"+NuevoActivo.getNURCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       + NuevoActivo.getNURCAT() + "','"
+				       //+ "AES_ENCRYPT('"+NuevoActivo.getNURCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 				       //+ NuevoActivo.getNOMPRC() + "','"
 				       + "AES_ENCRYPT('"+NuevoActivo.getNOMPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 				       //+ NuevoActivo.getNUTPRC() + "','"
@@ -471,8 +471,8 @@ public final class QMActivos
 					+ CAMPO78 + " = '"+ NuevoActivo.getFEREAC() + "', "
 					+ CAMPO79 + " = '"+ NuevoActivo.getCOXSIA() + "', "
 					+ CAMPO80 + " = '"+ NuevoActivo.getNUJUZD() + "', "
-					//+ CAMPO81 + " = '"+ NuevoActivo.getNURCAT() + "', "
-					+ CAMPO81 + " = AES_ENCRYPT('"+NuevoActivo.getNURCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+					+ CAMPO81 + " = '"+ NuevoActivo.getNURCAT() + "', "
+					//+ CAMPO81 + " = AES_ENCRYPT('"+NuevoActivo.getNURCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 					//+ CAMPO82 + " = '"+ NuevoActivo.getNOMPRC() + "', "
 					+ CAMPO82 + " = AES_ENCRYPT('"+NuevoActivo.getNOMPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 					//+ CAMPO83 + " = '"+ NuevoActivo.getNUTPRC() + "', "
@@ -770,8 +770,8 @@ public final class QMActivos
 				       + CAMPO78 + ","              
 				       + CAMPO79 + ","              
 				       + CAMPO80 + ","              
-				       //+ CAMPO81 + ","
-				       + "CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+				       + CAMPO81 + ","
+				       //+ "CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       //+ CAMPO82 + ","
 				       + "CONVERT(AES_DECRYPT("+CAMPO82 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       //+ CAMPO83 + ","
@@ -907,8 +907,8 @@ public final class QMActivos
 						sFEREAC = rs.getString(CAMPO78);
 						sCOXSIA = rs.getString(CAMPO79);
 						sNUJUZD = rs.getString(CAMPO80);
-						//sNURCAT = rs.getString(CAMPO81);
-						sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						sNURCAT = rs.getString(CAMPO81);
+						//sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						//sNOMPRC = rs.getString(CAMPO82);
 						sNOMPRC = rs.getString("CONVERT(AES_DECRYPT("+CAMPO82 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						//sNUTPRC = rs.getString(CAMPO83);
@@ -1262,8 +1262,8 @@ public final class QMActivos
 				       + CAMPO78 + ","              
 				       + CAMPO79 + ","              
 				       + CAMPO80 + ","              
-				       //+ CAMPO81 + ","
-				       + "CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+				       + CAMPO81 + ","
+				       //+ "CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       //+ CAMPO82 + ","
 				       + "CONVERT(AES_DECRYPT("+CAMPO82 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       //+ CAMPO83 + ","
@@ -1399,8 +1399,8 @@ public final class QMActivos
 						sFEREAC = rs.getString(CAMPO78);
 						sCOXSIA = QMCodigosControl.getDesCampo(conexion, QMCodigosControl.TCOXSIA, QMCodigosControl.ICOXSIA, rs.getString(CAMPO79));
 						sNUJUZD = rs.getString(CAMPO80);
-						//sNURCAT = rs.getString(CAMPO81);
-						sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						sNURCAT = rs.getString(CAMPO81);
+						//sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						//sNOMPRC = rs.getString(CAMPO82);
 						sNOMPRC = rs.getString("CONVERT(AES_DECRYPT("+CAMPO82 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						//sNUTPRC = rs.getString(CAMPO83);
@@ -1735,8 +1735,8 @@ public final class QMActivos
 					+ CAMPO78 + " = '"+ NuevoActivo.getFEREAC() + "' AND "
 					+ CAMPO79 + " = '"+ NuevoActivo.getCOXSIA() + "' AND "
 					+ CAMPO80 + " = '"+ NuevoActivo.getNUJUZD() + "' AND "
-					//+ CAMPO81 + " = '"+ NuevoActivo.getNURCAT() + "' AND "
-					+ CAMPO81  + " = AES_ENCRYPT('"+NuevoActivo.getNURCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) AND "
+					+ CAMPO81 + " = '"+ NuevoActivo.getNURCAT() + "' AND "
+					//+ CAMPO81  + " = AES_ENCRYPT('"+NuevoActivo.getNURCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) AND "
 					//+ CAMPO82 + " = '"+ NuevoActivo.getNOMPRC() + "' AND "
 					+ CAMPO82  + " = AES_ENCRYPT('"+NuevoActivo.getNOMPRC()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) AND "
 					//+ CAMPO83 + " = '"+ NuevoActivo.getNUTPRC() + "' AND "
@@ -1817,8 +1817,8 @@ public final class QMActivos
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-						//+ CAMPO81  +
-						+ "CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
+						+ CAMPO81  +
+						//+ "CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
 						" FROM " 
 						+ TABLA + 
 						" WHERE " 
@@ -1842,8 +1842,8 @@ public final class QMActivos
 					{
 						bEncontrado = true;
 						
-						//sReferencia = rs.getString(CAMPO81);
-						sReferencia = rs.getString("CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						sReferencia = rs.getString(CAMPO81);
+						//sReferencia = rs.getString("CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 
 						logger.debug("Encontrado el registro!");
@@ -2880,8 +2880,8 @@ public final class QMActivos
 						   + "CONVERT(AES_DECRYPT("+CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 						   //+ CAMPO28 +
 						   + "CONVERT(AES_DECRYPT("+CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
-						   //+ CAMPO81 +
-						   + "CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
+						   + CAMPO81 +
+						   //+ "CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) " +
 						   " FROM " 
 						   + TABLA + 
 						   sCondicionesWHERE;
@@ -2930,8 +2930,8 @@ public final class QMActivos
 						String sNUPUAC = rs.getString("CONVERT(AES_DECRYPT("+CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						//String sNUFIRE = rs.getString(CAMPO28);
 						String sNUFIRE = rs.getString("CONVERT(AES_DECRYPT("+CAMPO28 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
-						//String sNURCAT = rs.getString(CAMPO81);
-						String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+						String sNURCAT = rs.getString(CAMPO81);
+						//String sNURCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO81 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 						
 						ActivoTabla activoencontrado = new ActivoTabla(
 								sCOACES, 

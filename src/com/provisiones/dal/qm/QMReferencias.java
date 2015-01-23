@@ -68,8 +68,10 @@ public final class QMReferencias
 				       + CAMPO11 +              
 				       ") VALUES ('" 
 				       + NuevaReferenciaCatastral.getNURCAT() + "','"
-				       + NuevaReferenciaCatastral.getTIRCAT() + "','"
-				       + NuevaReferenciaCatastral.getENEMIS() + "','"
+				       //+ NuevaReferenciaCatastral.getTIRCAT() + "','"
+				       + "AES_ENCRYPT('"+NuevaReferenciaCatastral.getTIRCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       //+ NuevaReferenciaCatastral.getENEMIS() + "','"
+				       + "AES_ENCRYPT('"+NuevaReferenciaCatastral.getENEMIS()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 				       + NuevaReferenciaCatastral.getCOTEXA() + "','"
 				       + NuevaReferenciaCatastral.getOBTEXC() + "','"
 				       
@@ -129,8 +131,10 @@ public final class QMReferencias
 					+ TABLA + 
 					" SET " 
 					//+ CAMPO2  + " = '"+ NuevaReferenciaCatastral.getNURCAT() + "', "
-					+ CAMPO3  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "', "
-					+ CAMPO4  + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "', "
+					//+ CAMPO3  + " = '"+ NuevaReferenciaCatastral.getTIRCAT() + "', "
+					+ CAMPO3 + " = AES_ENCRYPT('"+NuevaReferenciaCatastral.getTIRCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+					//+ CAMPO4  + " = '"+ NuevaReferenciaCatastral.getENEMIS() + "', "
+					+ CAMPO4 + " = AES_ENCRYPT('"+NuevaReferenciaCatastral.getENEMIS()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 					+ CAMPO5  + " = '"+ NuevaReferenciaCatastral.getCOTEXA() + "', "
 					+ CAMPO6  + " = '"+ NuevaReferenciaCatastral.getOBTEXC() + "', "
 					
@@ -240,8 +244,10 @@ public final class QMReferencias
 			
 			String sQuery = "SELECT "
 				       + CAMPO2  + ","
-				       + CAMPO3  + ","              
-				       + CAMPO4  + ","              
+				       //+ CAMPO3  + ","
+				       + "CONVERT(AES_DECRYPT("+CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+				       //+ CAMPO4  + ","
+				       + "CONVERT(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO5  + ","              
 				       + CAMPO6  +  
 
@@ -274,8 +280,10 @@ public final class QMReferencias
 						bEncontrado = true;
 
 	  					sNURCAT = rs.getString(CAMPO2); 
-	  					sTIRCAT = rs.getString(CAMPO3); 
-	  					sENEMIS = rs.getString(CAMPO4);
+	  					//sTIRCAT = rs.getString(CAMPO3);
+	  					sTIRCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+	  					//sENEMIS = rs.getString(CAMPO4);
+	  					sENEMIS = rs.getString("CONVERT(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 	  					sCOTEXA = rs.getString(CAMPO5);
 	  					sOBTEXC = rs.getString(CAMPO6);
 
@@ -348,8 +356,10 @@ public final class QMReferencias
 			
 			String sQuery = "SELECT "
 				       + CAMPO2  + ","
-				       + CAMPO3  + ","              
-				       + CAMPO4  + ","              
+				       //+ CAMPO3  + ","
+				       + "CONVERT(AES_DECRYPT("+CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+				       //+ CAMPO4  + ","
+				       + "CONVERT(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO5  + ","              
 				       + CAMPO6  +  
 
@@ -382,8 +392,10 @@ public final class QMReferencias
 						bEncontrado = true;
 
 	  					sNURCAT = rs.getString(CAMPO2); 
-	  					sTIRCAT = rs.getString(CAMPO3); 
-	  					sENEMIS = rs.getString(CAMPO4);
+	  					//sTIRCAT = rs.getString(CAMPO3);
+	  					sTIRCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+	  					//sENEMIS = rs.getString(CAMPO4);
+	  					sENEMIS = rs.getString("CONVERT(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 	  					sCOTEXA = rs.getString(CAMPO5);
 	  					sOBTEXC = rs.getString(CAMPO6);
 
@@ -512,11 +524,12 @@ public final class QMReferencias
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-				       + CAMPO4  +              
-				       " FROM " 
-				       + TABLA + 
-				       " WHERE " 
-				       + CAMPO1 + " = '" + liReferenciaID	+ "'";
+				    + CAMPO4  +
+					//+ "CONVERT(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
+				    " FROM " 
+				    + TABLA + 
+				    " WHERE " 
+				    + CAMPO1 + " = '" + liReferenciaID	+ "'";
 			
 			logger.debug(sQuery);
 
@@ -820,8 +833,10 @@ public final class QMReferencias
 			String sQuery = "SELECT "
 					   + CAMPO1  + ","
 				       + CAMPO2  + ","
-				       + CAMPO3  + ","              
-				       + CAMPO4  + ","              
+				       //+ CAMPO3  + ","
+				       + "CONVERT(AES_DECRYPT("+CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
+				       //+ CAMPO4  + ","
+				       + "CONVERT(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       //+ CAMPO5  + ","              
 				       + CAMPO6  +  
 
@@ -856,8 +871,10 @@ public final class QMReferencias
 
 						String sReferenciaID = rs.getString(CAMPO1); 
 	  					String sNURCAT = rs.getString(CAMPO2); 
-	  					String sTIRCAT = rs.getString(CAMPO3); 
-	  					String sENEMIS = rs.getString(CAMPO4);
+	  					//String sTIRCAT = rs.getString(CAMPO3);
+	  					String sTIRCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO3 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
+	  					//String sENEMIS = rs.getString(CAMPO4);
+	  					String sENEMIS = rs.getString("CONVERT(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 	  					String sOBTEXC = rs.getString(CAMPO6);
 
 	  					//Ampliacion de valor catastral
