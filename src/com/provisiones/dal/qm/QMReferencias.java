@@ -67,11 +67,11 @@ public final class QMReferencias
 				       + CAMPO10  + ","
 				       + CAMPO11 +              
 				       ") VALUES ('" 
-				       + NuevaReferenciaCatastral.getNURCAT() + "','"
+				       + NuevaReferenciaCatastral.getNURCAT() + "',"
 				       //+ NuevaReferenciaCatastral.getTIRCAT() + "','"
 				       + "AES_ENCRYPT('"+NuevaReferenciaCatastral.getTIRCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 				       //+ NuevaReferenciaCatastral.getENEMIS() + "','"
-				       + "AES_ENCRYPT('"+NuevaReferenciaCatastral.getENEMIS()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
+				       + "AES_ENCRYPT('"+NuevaReferenciaCatastral.getENEMIS()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
 				       + NuevaReferenciaCatastral.getCOTEXA() + "','"
 				       + NuevaReferenciaCatastral.getOBTEXC() + "','"
 				       
@@ -524,8 +524,7 @@ public final class QMReferencias
 			logger.debug("Ejecutando Query...");
 			
 			String sQuery = "SELECT "
-				    + CAMPO4  +
-					//+ "CONVERT(AES_DECRYPT("+CAMPO4 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1) "+
+				    + CAMPO10  +
 				    " FROM " 
 				    + TABLA + 
 				    " WHERE " 

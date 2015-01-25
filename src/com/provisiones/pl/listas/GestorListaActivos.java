@@ -141,6 +141,8 @@ public class GestorListaActivos implements Serializable {
 			
 			String sMsg = "";
 			
+			this.setTablaactivos(null);
+			
 			try
 			{
 				
@@ -171,10 +173,6 @@ public class GestorListaActivos implements Serializable {
 					else
 					{
 				    	this.setTablaactivos(null);
-						
-						sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
-						msg = Utils.pfmsgWarning(sMsg);
-						logger.warn(sMsg);
 					}
 				}
 				else
@@ -183,25 +181,38 @@ public class GestorListaActivos implements Serializable {
 					
 					this.setTablaactivos(CLActivos.buscarActivoUnico(iCOACES));
 				}
-
-				if (getTablaactivos().size() == 0)
+				
+				if (this.getTablaactivos() != null)
 				{
-					sMsg = "No se encontraron Activos con los criterios solicitados.";
-					msg = Utils.pfmsgWarning(sMsg);
-					logger.warn(sMsg);
-				}
-				else if (getTablaactivos().size() == 1)
-				{
-					sMsg = "Encontrado un Activo relacionado.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					logger.debug("getTablaactivos().size():"+getTablaactivos().size());
+					
+					if (getTablaactivos().size() == 0)
+					{
+						sMsg = "No se encontraron Activos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else if (getTablaactivos().size() == 1)
+					{
+						sMsg = "Encontrado un Activo relacionado.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
+					else
+					{
+						sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
+						msg = Utils.pfmsgInfo(sMsg);
+						logger.info(sMsg);
+					}
 				}
 				else
 				{
-					sMsg = "Encontrados "+getTablaactivos().size()+" Activos relacionados.";
-					msg = Utils.pfmsgInfo(sMsg);
-					logger.info(sMsg);
+					sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+					msg = Utils.pfmsgWarning(sMsg);
+					logger.warn(sMsg);
 				}
+
+
 			}
 			catch(NumberFormatException nfe)
 			{

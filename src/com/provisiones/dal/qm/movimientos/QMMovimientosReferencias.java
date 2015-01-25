@@ -2,6 +2,7 @@ package com.provisiones.dal.qm.movimientos;
 
 import com.provisiones.dal.ConnectionManager;
 import com.provisiones.misc.Utils;
+import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.movimientos.MovimientoReferenciaCatastral;
 
 import java.sql.Connection;
@@ -100,10 +101,12 @@ public final class QMMovimientosReferencias
 				       + NuevoMovimientoReferenciaCatastral.getCOENGP() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getCOACES() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getNURCAT() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getBITC16() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getTIRCAT() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getBITC17() + "','"
-				       + NuevoMovimientoReferenciaCatastral.getENEMIS() + "','"
+				       + NuevoMovimientoReferenciaCatastral.getBITC16() + "',"
+				       //+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoReferenciaCatastral.getTIRCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
+				       + NuevoMovimientoReferenciaCatastral.getBITC17() + "',"
+				       //+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "','"
+				       + "AES_ENCRYPT('"+NuevoMovimientoReferenciaCatastral.getENEMIS()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),'"
 				       + NuevoMovimientoReferenciaCatastral.getCOTEXA() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getBITC09() + "','"
 				       + NuevoMovimientoReferenciaCatastral.getOBTEXC() + "','"
@@ -176,9 +179,11 @@ public final class QMMovimientosReferencias
 					+ CAMPO7  + " = '"+ NuevoMovimientoReferenciaCatastral.getCOACES() + "', "
 					+ CAMPO8  + " = '"+ NuevoMovimientoReferenciaCatastral.getNURCAT() + "', "
 					+ CAMPO9  + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC16() + "', "
-					+ CAMPO10 + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
+					//+ CAMPO10 + " = '"+ NuevoMovimientoReferenciaCatastral.getTIRCAT() + "', "
+					+ CAMPO10 + " = AES_ENCRYPT('"+NuevoMovimientoReferenciaCatastral.getTIRCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 					+ CAMPO11 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC17() + "', "
-					+ CAMPO12 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
+					//+ CAMPO12 + " = '"+ NuevoMovimientoReferenciaCatastral.getENEMIS() + "', "
+					+ CAMPO12 + " = AES_ENCRYPT('"+NuevoMovimientoReferenciaCatastral.getENEMIS()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")),"
 					+ CAMPO13 + " = '"+ NuevoMovimientoReferenciaCatastral.getCOTEXA() + "', "
 					+ CAMPO14 + " = '"+ NuevoMovimientoReferenciaCatastral.getBITC09() + "', "
 					+ CAMPO15 + " = '"+ NuevoMovimientoReferenciaCatastral.getOBTEXC() + "', "
@@ -296,9 +301,11 @@ public final class QMMovimientosReferencias
 					+ CAMPO7  + " = '" + referencia.getCOACES()	+ "' AND "
 					+ CAMPO8  + " = '" + referencia.getNURCAT()	+ "' AND "
 					+ CAMPO9  + " = '" + referencia.getBITC16()	+ "' AND "
-					+ CAMPO10 + " = '" + referencia.getTIRCAT()	+ "' AND "
+					//+ CAMPO10 + " = '" + referencia.getTIRCAT()	+ "' AND "
+					+ CAMPO10  + " = AES_ENCRYPT('"+referencia.getTIRCAT()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) AND "
 					+ CAMPO11 + " = '" + referencia.getBITC17()	+ "' AND "
-					+ CAMPO12 + " = '" + referencia.getENEMIS()	+ "' AND "
+					//+ CAMPO12 + " = '" + referencia.getENEMIS()	+ "' AND "
+					+ CAMPO12  + " = AES_ENCRYPT('"+referencia.getENEMIS()+"',SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) AND "
 					+ CAMPO13 + " = '" + referencia.getCOTEXA()	+ "' AND "
 					+ CAMPO14 + " = '" + referencia.getBITC09()	+ "' AND "
 					+ CAMPO15 + " = '" + referencia.getOBTEXC()	+ "' AND "
@@ -405,9 +412,11 @@ public final class QMMovimientosReferencias
 				       + CAMPO7  + ","              
 				       + CAMPO8  + ","              
 				       + CAMPO9  + ","              
-				       + CAMPO10 + ","              
+				       //+ CAMPO10 + ","
+				       + "CONVERT(AES_DECRYPT("+CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO11 + ","              
-				       + CAMPO12 + ","              
+				       //+ CAMPO12 + ","
+				       + "CONVERT(AES_DECRYPT("+CAMPO12 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1), "
 				       + CAMPO13 + ","
 				       + CAMPO14 + ","
 				       + CAMPO15 + ","
@@ -452,9 +461,11 @@ public final class QMMovimientosReferencias
 	  					sCOACES = rs.getString(CAMPO7); 
 	  					sNURCAT = rs.getString(CAMPO8); 
 	  					sBITC16 = rs.getString(CAMPO9); 
-	  					sTIRCAT = rs.getString(CAMPO10);
+	  					//sTIRCAT = rs.getString(CAMPO10);
+	  					sTIRCAT = rs.getString("CONVERT(AES_DECRYPT("+CAMPO10 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 	  					sBITC17 = rs.getString(CAMPO11);
-	  					sENEMIS = rs.getString(CAMPO12);
+	  					//sENEMIS = rs.getString(CAMPO12);
+	  					sENEMIS = rs.getString("CONVERT(AES_DECRYPT("+CAMPO12 +",SHA2('"+ValoresDefecto.CIFRADO_LLAVE_SIMETRICA+"',"+ValoresDefecto.CIFRADO_LONGITUD+")) USING latin1)");
 	  					sCOTEXA = rs.getString(CAMPO13);
 	  					sBITC09 = rs.getString(CAMPO14);
 	  					sOBTEXC = rs.getString(CAMPO15);
