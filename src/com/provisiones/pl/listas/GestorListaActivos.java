@@ -143,6 +143,8 @@ public class GestorListaActivos implements Serializable {
 			
 			this.setTablaactivos(null);
 			
+			boolean bReferenciaInvalida = false;
+			
 			try
 			{
 				
@@ -173,6 +175,7 @@ public class GestorListaActivos implements Serializable {
 					else
 					{
 				    	this.setTablaactivos(null);
+				    	bReferenciaInvalida = true;
 					}
 				}
 				else
@@ -207,9 +210,20 @@ public class GestorListaActivos implements Serializable {
 				}
 				else
 				{
-					sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
-					msg = Utils.pfmsgWarning(sMsg);
-					logger.warn(sMsg);
+					
+					if (bReferenciaInvalida)
+					{
+						sMsg = "La Referencia Catastral informada no se encuentrar registrada en el sistema. Por favor, revise los datos.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+					else
+					{
+						sMsg = "No se encontraron Activos con los criterios solicitados.";
+						msg = Utils.pfmsgWarning(sMsg);
+						logger.warn(sMsg);
+					}
+
 				}
 
 
