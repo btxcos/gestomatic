@@ -70,11 +70,25 @@ public final class ConnectionManager
 				logger.warn("La conexión fue cerrada.");
 			}
 			
+			
+			/*try 
+			{
+				FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+			} 
+			catch (IOException eL) 
+			{
+				logger.error("ERROR: No se puede acceder a la página de login.");
+			}*/
+			
+			logger.debug("Gestionando sesión...");
 			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+			logger.debug("Hecho!");
 			
 			try
 			{
+				logger.debug("invalidando...");
 				session.invalidate();
+				logger.debug("session.invalidate()");
 			}
 			catch (Exception es)
 			{
