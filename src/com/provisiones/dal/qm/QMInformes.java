@@ -14,6 +14,7 @@ import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
 import com.provisiones.misc.Utils;
 import com.provisiones.types.informes.CierreInforme;
+import com.provisiones.types.informes.RangoAnual;
 
 
 public class QMInformes 
@@ -21,6 +22,269 @@ public class QMInformes
 	private static Logger logger = LoggerFactory.getLogger(QMInformes.class.getName());
 	
 	private QMInformes(){}
+	
+	public static String getActivosTotales(Connection conexion)
+	{
+		String sActivosTotales = "0";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT("
+					   + QMActivos.CAMPO3  +        
+					   ") FROM " 
+					   + QMActivos.TABLA;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sActivosTotales = rs.getString("COUNT("+QMActivos.CAMPO3+")");
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sActivosTotales = "0";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sActivosTotales;
+	}
+	
+	public static String getActivosGestionadosTotales(Connection conexion)
+	{
+		String sActivosTotales = "0";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT(DISTINCT("
+					   + QMGastos.CAMPO2  +        
+					   ")) FROM " 
+					   + QMGastos.TABLA;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sActivosTotales = rs.getString("COUNT(DISTINCT("+QMGastos.CAMPO2+"))");
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sActivosTotales = "0";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sActivosTotales;
+	}
+	
+	public static String getActivosGestionadosUltimoMes(Connection conexion)
+	{
+		String sActivosTotales = "0";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT(DISTINCT("
+					   + QMGastos.CAMPO2  +        
+					   ")) FROM " 
+					   + QMGastos.TABLA+
+					   " WHERE "
+					   + QMGastos.CAMPO7 + " > " + Utils.primeroDeMes();
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sActivosTotales = rs.getString("COUNT(DISTINCT("+QMGastos.CAMPO2+"))");
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sActivosTotales = "0";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sActivosTotales;
+	}
+	
+	public static ArrayList<String> buscaActivosGestionadosEnRango(Connection conexion, ArrayList<RangoAnual> rango)
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			for(int i=0; i<rango.size(); i++)
+			{
+				logger.debug("Ejecutando Query...");
+
+				String sQuery = "SELECT COUNT(DISTINCT("
+						   + QMGastos.CAMPO2  +        
+						   ")) FROM " 
+						   + QMGastos.TABLA+
+						   " WHERE "
+						   + QMGastos.CAMPO7 + " BETWEEN " + rango.get(i).getsValor() + " AND " + ((i > 10)? Utils.primeroDeMes():rango.get(i+1).getsValor()) ;				   
+							   
+				
+				logger.debug(sQuery);
+				
+				try 
+				{
+					stmt = conexion.createStatement();
+					
+					pstmt = conexion.prepareStatement(sQuery);
+					rs = pstmt.executeQuery();
+					
+					logger.debug("Ejecutada con exito!");
+
+					if (rs != null) 
+					{
+						while (rs.next()) 
+						{
+							bEncontrado = true;
+							
+							String sValor = rs.getString("COUNT(DISTINCT("+QMGastos.CAMPO2+"))");
+							
+							resultado.add(sValor);
+
+						}
+					}
+					if (!bEncontrado) 
+					{
+						logger.debug("No se encontró la información.");
+					}
+				} 
+				catch (SQLException ex) 
+				{
+					 resultado = new ArrayList<String>();
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				} 
+				finally 
+				{
+					Utils.closeResultSet(rs);
+					Utils.closeStatement(stmt);
+				}
+			}
+			
+
+		}
+
+		return resultado;
+	}
+	
 	
 	public static ArrayList<CierreInforme> buscaCierreInformeProvision(Connection conexion, String sNUPROF)
 	{

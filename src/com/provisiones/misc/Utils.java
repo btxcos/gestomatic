@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.provisiones.types.Cuenta;
 import com.provisiones.types.ImporteDevolucion;
+import com.provisiones.types.informes.RangoAnual;
 
 public final class Utils 
 {
@@ -177,6 +178,107 @@ public final class Utils
 		return sHoy;
 	}
 	
+	public static String primeroDeMes ()
+	{
+
+
+		Date fechaHoy = new Date();
+	
+		String sFecha = "";
+		
+		//SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+		sFecha = format.format(fechaHoy) + "01";
+		
+		//sFecha = sFecha.substring(0, 6) + "01";
+		
+		
+		
+		//logger.debug(sFecha);
+		
+		return sFecha;
+	}
+	
+	public static String abreviaturaMes(int iMes)
+	{
+		String sMes = ""; 
+		
+		switch (iMes) 
+		{
+		case 1:
+			sMes = "Ene";
+			break;
+		case 2:
+			sMes = "Feb";
+			break;
+		case 3:
+			sMes = "Mar";
+			break;
+		case 4:
+			sMes = "Abr";
+			break;
+		case 5:
+			sMes = "May";
+			break;
+		case 6:
+			sMes = "Jun";
+			break;
+		case 7:
+			sMes = "Jul";
+			break;
+		case 8:
+			sMes = "Ago";
+			break;
+		case 9:
+			sMes = "Sep";
+			break;
+		case 10:
+			sMes = "Oct";
+			break;
+		case 11:
+			sMes = "Nov";
+			break;
+		case 12:
+			sMes = "Dec";
+			break;
+		default:
+			sMes = "#";
+			break;
+		}		
+		return sMes;
+	}
+	
+	public static ArrayList<RangoAnual> rangoAnual()
+	{
+
+		ArrayList<RangoAnual> rango = new ArrayList<RangoAnual>();
+
+		Date fechaHoy = new Date();
+	
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+		String sFecha = format.format(fechaHoy);
+		
+		int iAño = Integer.parseInt(sFecha.substring(0, 4)) - 1;
+		int iMes = Integer.parseInt(sFecha.substring(4,6));
+		
+		for(int i=0; i<12; i++)
+		{
+			
+			RangoAnual resumen = new RangoAnual(
+					abreviaturaMes(iMes)+((iMes==1)?"-"+iAño:""),
+					iAño+""+((iMes<10)?"0"+iMes:iMes)+"01");
+			
+			rango.add(resumen);
+			iMes++;
+			if (iMes > 12)
+			{
+				iAño++;
+				iMes = 1;
+			}
+		}
+		
+		return rango;
+	}
 	
 	public static String aFechaN34 (String sFecha)
 	{

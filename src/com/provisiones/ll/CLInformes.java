@@ -32,6 +32,7 @@ import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Activo;
 import com.provisiones.types.informes.CierreInforme;
+import com.provisiones.types.informes.RangoAnual;
 import com.provisiones.types.tablas.GastoTabla;
 import com.provisiones.types.tablas.ProvisionTabla;
 
@@ -43,9 +44,29 @@ public class CLInformes
 	
 	public static ArrayList<CierreInforme> buscarInformeCierreProvision(String sNUPROF)
 	{
-		return (QMInformes.buscaCierreInformeProvision(ConnectionManager.getDBConnection(),sNUPROF));
+		return QMInformes.buscaCierreInformeProvision(ConnectionManager.getDBConnection(),sNUPROF);
 	}
 
+
+	public static String obtenerNumeroActivosTotales()
+	{
+		return QMInformes.getActivosTotales(ConnectionManager.getDBConnection());
+	}
+	
+	public static String obtenerNumeroActivosGestionadosTotales()
+	{
+		return QMInformes.getActivosGestionadosTotales(ConnectionManager.getDBConnection());
+	}
+	
+	public static String obtenerNumeroActivosGestionadosUltimoMes()
+	{
+		return QMInformes.getActivosGestionadosUltimoMes(ConnectionManager.getDBConnection());
+	}
+	
+	public static ArrayList<String> buscarActivosGestionadosEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaActivosGestionadosEnRango(ConnectionManager.getDBConnection(), rango);
+	}
 	
 	public static String generarInformeGastosActivo(int iCOACES, ArrayList<GastoTabla> listagastos)
 	{

@@ -12,12 +12,14 @@ import javax.servlet.http.HttpSession;
 //import org.slf4j.LoggerFactory;
 
 import com.provisiones.dal.ConnectionManager;
+import com.provisiones.dal.qm.QMInformes;
 import com.provisiones.dal.qm.QMPagos;
 import com.provisiones.dal.qm.QMTransferenciasN34;
 import com.provisiones.dal.qm.usuarios.QMUsuarios;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.Pago;
+import com.provisiones.types.informes.RangoAnual;
 import com.provisiones.types.tablas.ResultadosTabla;
 import com.provisiones.types.transferencias.N34.TransferenciaN34;
 import com.provisiones.types.usuarios.Usuario;
@@ -64,7 +66,19 @@ public class TestActivos
 		String sTemp = "";
 		
 		
-		System.out.println("CI:|"+Utils.compruebaImporte(sTemp)+"|");
+		//System.out.println("CI:|"+Utils.compruebaImporte(sTemp)+"|");
+		
+		ArrayList<RangoAnual> rango = Utils.rangoAnual();
+		
+		ArrayList<String> resultado = QMInformes.buscaActivosGestionadosEnRango(conx, rango);
+		
+		for(int i=0; i<resultado.size(); i++)
+		{
+			System.out.println("MES["+rango.get(i).getsMes()+"]:VALOR|"+resultado.get(i)+"|");
+		}
+		
+		
+		/*System.out.println("PRIMERO DE MES:|"+Utils.primeroDeMes()+"|");*/
 		
 		ConnectionManager.closeDBConnection(conx);
 	}

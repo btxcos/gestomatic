@@ -275,5 +275,10 @@
 		<managed-bean-class>com.provisiones.pl.listas.activo.GestorListaImpuestosActivo</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>GestorPanelControl</managed-bean-name>
+		<managed-bean-class>com.provisiones.pl.informes.GestorPanelControl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
 
 </faces-config>
