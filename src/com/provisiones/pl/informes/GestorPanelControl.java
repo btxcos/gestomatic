@@ -12,6 +12,7 @@ import com.provisiones.types.informes.RangoAnual;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.PieChartModel;
 
 public class GestorPanelControl implements Serializable 
 {
@@ -23,18 +24,30 @@ public class GestorPanelControl implements Serializable
 	private String sActivosTotales = "";
 	private String sActivosGestionadosTotales = "";
 	private String sActivosGestionadosUltimoMes = "";
+	private String sActivosVendidosTotales = "";
 	
-	private ArrayList<RangoAnual> periodoactivos = new ArrayList<RangoAnual>();
+	private ArrayList<RangoAnual> periodoanual = Utils.rangoAnual();
 	
-	private CartesianChartModel model = new CartesianChartModel();
+	private CartesianChartModel graficolineasactivos;
+	private CartesianChartModel graficolineasgastos;
 
+	private CartesianChartModel graficolineasprovisiones;
+	private CartesianChartModel graficolineasvaloresprovisiones;
+
+	private PieChartModel graficotartatipogastos;
+	private PieChartModel graficotartatipogastospagados;
+	
 	private String sGastosTotales = "";
 	private String sGastosAutorizados = "";
 	private String sGastosPagados = "";
 	
-	private String sValorTotal = "";
-	private String sValorAutorizado = "";
-	private String sValorPagado = "";
+	private String sGastosComunidades = "";
+	private String sGastosImpuestos = "";
+	private String sGastosOtros = "";
+	
+	private String sGastosComunidadesPagados = "";
+	private String sGastosImpuestosPagados = "";
+	private String sGastosOtrosPagados = "";
 	
 	private String sValorPromedio = "";
 
@@ -44,6 +57,9 @@ public class GestorPanelControl implements Serializable
 	
 	private String sPromedioGastosProvision = "";
 
+	private String sValorProvisionado = "";
+	private String sValorAutorizado = "";
+	private String sValorPagado = "";
 	
 	private String sComunidadesRegistradas = "";
 	private String sCuotasRegistradas = "";
@@ -54,51 +70,207 @@ public class GestorPanelControl implements Serializable
 	public GestorPanelControl()
 	{
 		logger.debug("Iniciando GestorPanelControl...");
-		//actualizarDatos();
-		cargarDatosActivos();
+		actualizarDatos();
 	}
 	
-	public void generarGraficoActivos()
+	public void generarGraficoLineasActivos()
 	{
-		ArrayList<String> muestraactivos = CLInformes.buscarActivosGestionadosEnRango(periodoactivos);
+		graficolineasactivos = new CartesianChartModel();
 		
-		ChartSeries evolucionactivos = new ChartSeries();
-		evolucionactivos.setLabel("Evolución Activos");
+		ArrayList<String> muestragestionados = CLInformes.buscarActivosGestionadosEnRango(periodoanual);
 		
-		for(int i=0; i<muestraactivos.size(); i++)
+		ChartSeries evoluciongestionados = new ChartSeries();
+		evoluciongestionados.setLabel("Gestionados");
+		
+		for(int i=0; i<muestragestionados.size(); i++)
 		{
-			evolucionactivos.set(periodoactivos.get(i).getsMes(), Integer.parseInt(muestraactivos.get(i)));
+			evoluciongestionados.set(periodoanual.get(i).getsMes(), Long.parseLong(muestragestionados.get(i)));
 		}
 		
-		model.addSeries(evolucionactivos);
+		graficolineasactivos.addSeries(evoluciongestionados);
+
+		ArrayList<String> muestravendidos = CLInformes.buscarActivosVendidosAcumuladosEnRango(periodoanual);
+		
+		ChartSeries evolucionvendidos = new ChartSeries();
+		evolucionvendidos.setLabel("Vendidos");
+		
+		for(int i=0; i<muestravendidos.size(); i++)
+		{
+			evolucionvendidos.set(periodoanual.get(i).getsMes(), Long.parseLong(muestravendidos.get(i)));
+		}
+		
+		graficolineasactivos.addSeries(evolucionvendidos);
 	}
+	
+	public void generarGraficoLineasGastos()
+	{
+		graficolineasgastos = new CartesianChartModel();
+		
+		ArrayList<String> muestraautorizados = CLInformes.buscarGastosAutorizadosEnRango(periodoanual);
+		
+		ChartSeries evolucionautoriazados = new ChartSeries();
+		evolucionautoriazados.setLabel("Autorizados");
+		
+		for(int i=0; i<muestraautorizados.size(); i++)
+		{
+			evolucionautoriazados.set(periodoanual.get(i).getsMes(), Long.parseLong(muestraautorizados.get(i)));
+		}
+		
+		graficolineasgastos.addSeries(evolucionautoriazados);
+		
+		ArrayList<String> muestrapagados= CLInformes.buscarGastosPagadosEnRango(periodoanual);
+		
+		ChartSeries evolucionpagados = new ChartSeries();
+		evolucionpagados.setLabel("Pagados");
+		
+		for(int i=0; i<muestrapagados.size(); i++)
+		{
+			evolucionpagados.set(periodoanual.get(i).getsMes(), Long.parseLong(muestrapagados.get(i)));
+		}
+		
+		graficolineasgastos.addSeries(evolucionpagados);
+	}
+	
+	public void generarGraficoTartaGastos()
+	{
+		graficotartatipogastos = new PieChartModel();
+		
+		graficotartatipogastos.set("Comunidades", Long.parseLong(sGastosComunidades));
+		graficotartatipogastos.set("Impuestos", Long.parseLong(sGastosImpuestos));
+		graficotartatipogastos.set("Otros", Long.parseLong(sGastosOtros));
+	}
+	
+	public void generarGraficoTartaGastosPagados()
+	{
+		graficotartatipogastospagados = new PieChartModel();
+		
+		graficotartatipogastospagados.set("Comunidades", Long.parseLong(sGastosComunidadesPagados));
+		graficotartatipogastospagados.set("Impuestos", Long.parseLong(sGastosImpuestosPagados));
+		graficotartatipogastospagados.set("Otros", Long.parseLong(sGastosOtrosPagados));
+	}
+	
+	public void generarGraficoLineasProvisiones()
+	{
+		graficolineasprovisiones = new CartesianChartModel();
+		
+		ArrayList<String> muestraautorizadas = CLInformes.buscarProvisionesAutorizadasEnRango(periodoanual);
+		
+		ChartSeries evolucionautorizadas = new ChartSeries();
+		evolucionautorizadas.setLabel("Autorizadas");
+		
+		for(int i=0; i<muestraautorizadas.size(); i++)
+		{
+			evolucionautorizadas.set(periodoanual.get(i).getsMes(), Long.parseLong(muestraautorizadas.get(i)));
+		}
+		
+		graficolineasprovisiones.addSeries(evolucionautorizadas);
+
+		ArrayList<String> muestrapagadas = CLInformes.buscarProvisionesPagadasEnRango(periodoanual);
+		
+		ChartSeries evolucionpagadas = new ChartSeries();
+		evolucionpagadas.setLabel("Pagadas");
+		
+		for(int i=0; i<muestrapagadas.size(); i++)
+		{
+			evolucionpagadas.set(periodoanual.get(i).getsMes(), Long.parseLong(muestrapagadas.get(i)));
+		}
+		
+		graficolineasprovisiones.addSeries(evolucionpagadas);
+	}
+	
+	public void generarGraficoLineasValoresProvisiones()
+	{
+		graficolineasvaloresprovisiones = new CartesianChartModel();
+		
+		ArrayList<String> muestravalorautorizados = CLInformes.buscarValoresProvisionesAutorizadasEnRango(periodoanual);
+		
+		ChartSeries evolucionautorizados = new ChartSeries();
+		evolucionautorizados.setLabel("Autorizado");
+		
+		for(int i=0; i<muestravalorautorizados.size(); i++)
+		{
+			evolucionautorizados.set(periodoanual.get(i).getsMes(), Long.parseLong(muestravalorautorizados.get(i)));
+		}
+		
+		graficolineasvaloresprovisiones.addSeries(evolucionautorizados);
+
+		ArrayList<String> muestravalorpagados = CLInformes.buscarValoresProvisionesPagadasEnRango(periodoanual);
+		
+		ChartSeries evolucionpagados = new ChartSeries();
+		evolucionpagados.setLabel("Pagado");
+		
+		for(int i=0; i<muestravalorpagados.size(); i++)
+		{
+			evolucionpagados.set(periodoanual.get(i).getsMes(), Long.parseLong(muestravalorpagados.get(i)));
+		}
+		
+		graficolineasvaloresprovisiones.addSeries(evolucionpagados);
+	}
+	
+	public void generarGraficosActivos()
+	{
+		generarGraficoLineasActivos();
+	}
+	
+	public void generarGraficosGastos()
+	{
+
+		generarGraficoLineasGastos();
+		generarGraficoTartaGastos();
+		generarGraficoTartaGastosPagados();
+		
+	}
+	
+	public void generarGraficosProvisiones()
+	{
+		generarGraficoLineasProvisiones();
+		generarGraficoLineasValoresProvisiones();
+	}
+	
 	
 	public void cargarDatosActivos()
 	{
 		sActivosTotales = CLInformes.obtenerNumeroActivosTotales();
 		sActivosGestionadosTotales = CLInformes.obtenerNumeroActivosGestionadosTotales();
 		sActivosGestionadosUltimoMes = CLInformes.obtenerNumeroActivosGestionadosUltimoMes();
-		
-		periodoactivos = Utils.rangoAnual();
+		sActivosVendidosTotales = CLInformes.obtenerNumeroActivosVendidosTotales();
 
-		generarGraficoActivos();
+		generarGraficosActivos();
 
 		
 	}
 	
 	public void cargarDatosGastos()
 	{
+		sGastosTotales = CLInformes.obtenerGastosTotales();
+		sGastosAutorizados = CLInformes.obtenerGastosAutorizados();
+		sGastosPagados = CLInformes.obtenerGastosPagados();
+		sValorPromedio = CLInformes.obtenerValorPromedioGasto();
 		
-	}
-	
-	public void cargarDatosValores()
-	{
+		sGastosComunidades = CLInformes.obtenerTotalGastosComunidades();
+		sGastosImpuestos = CLInformes.obtenerTotalGastosImpuestos();
+		sGastosOtros = CLInformes.obtenerTotalGastosOtros();
 		
+		sGastosComunidadesPagados = CLInformes.obtenerTotalGastosComunidadesPagados();
+		sGastosImpuestosPagados = CLInformes.obtenerTotalGastosImpuestosPagados();
+		sGastosOtrosPagados = CLInformes.obtenerTotalGastosOtrosPagados();
+		
+		generarGraficosGastos();
 	}
 	
 	public void cargarDatosProvisiones()
 	{
+		sProvisionesTotales = CLInformes.obtenerTotalProvisiones();
+		sProvisionesAutorizadas = CLInformes.obtenerProvisionesAutorizadas();
+		sProvisionesPagadas = CLInformes.obtenerProvisionesPagadas();
 		
+		sPromedioGastosProvision = CLInformes.obtenerPromedioGastosProvision();
+		
+		sValorProvisionado = CLInformes.obtenerValorProvisionado();
+		sValorAutorizado = CLInformes.obtenerValorProvisionadoAutorizado();
+		sValorPagado = CLInformes.obtenerValorProvisionadoPagado();
+		
+		generarGraficosProvisiones();	
 	}
 	
 	public void cargarDatosAsociaciones()
@@ -110,7 +282,6 @@ public class GestorPanelControl implements Serializable
 	{
 		cargarDatosActivos();
 		cargarDatosGastos();
-		cargarDatosValores();
 		cargarDatosProvisiones();
 		cargarDatosAsociaciones();
 	}
@@ -139,10 +310,14 @@ public class GestorPanelControl implements Serializable
 		this.sActivosGestionadosUltimoMes = sActivosGestionadosUltimoMes;
 	}
 
-	public CartesianChartModel getModel() {
-		return model;
+	public String getsActivosVendidosTotales() {
+		return sActivosVendidosTotales;
 	}
-	
+
+	public void setsActivosVendidosTotales(String sActivosVendidosTotales) {
+		this.sActivosVendidosTotales = sActivosVendidosTotales;
+	}
+
 	public String getDatatipFormat() {
 		return "<span style=\"display:none;\">%s</span><span>%s</span>";
 		}
@@ -171,12 +346,60 @@ public class GestorPanelControl implements Serializable
 		this.sGastosPagados = sGastosPagados;
 	}
 
-	public String getsValorTotal() {
-		return sValorTotal;
+	public String getsGastosComunidades() {
+		return sGastosComunidades;
 	}
 
-	public void setsValorTotal(String sValorTotal) {
-		this.sValorTotal = sValorTotal;
+	public void setsGastosComunidades(String sGastosComunidades) {
+		this.sGastosComunidades = sGastosComunidades;
+	}
+
+	public String getsGastosImpuestos() {
+		return sGastosImpuestos;
+	}
+
+	public void setsGastosImpuestos(String sGastosImpuestos) {
+		this.sGastosImpuestos = sGastosImpuestos;
+	}
+
+	public String getsGastosOtros() {
+		return sGastosOtros;
+	}
+
+	public void setsGastosOtros(String sGastosOtros) {
+		this.sGastosOtros = sGastosOtros;
+	}
+
+	public String getsGastosComunidadesPagados() {
+		return sGastosComunidadesPagados;
+	}
+
+	public void setsGastosComunidadesPagados(String sGastosComunidadesPagados) {
+		this.sGastosComunidadesPagados = sGastosComunidadesPagados;
+	}
+
+	public String getsGastosImpuestosPagados() {
+		return sGastosImpuestosPagados;
+	}
+
+	public void setsGastosImpuestosPagados(String sGastosImpuestosPagados) {
+		this.sGastosImpuestosPagados = sGastosImpuestosPagados;
+	}
+
+	public String getsGastosOtrosPagados() {
+		return sGastosOtrosPagados;
+	}
+
+	public void setsGastosOtrosPagados(String sGastosOtrosPagados) {
+		this.sGastosOtrosPagados = sGastosOtrosPagados;
+	}
+
+	public String getsValorProvisionado() {
+		return sValorProvisionado;
+	}
+
+	public void setsValorProvisionado(String sValorProvisionado) {
+		this.sValorProvisionado = sValorProvisionado;
 	}
 
 	public String getsValorAutorizado() {
@@ -267,4 +490,27 @@ public class GestorPanelControl implements Serializable
 		this.sRecursossRegistrados = sRecursossRegistrados;
 	}
 
+	public CartesianChartModel getGraficolineasactivos() {
+		return graficolineasactivos;
+	}
+
+	public CartesianChartModel getGraficolineasgastos() {
+		return graficolineasgastos;
+	}
+
+	public PieChartModel getGraficotartatipogastos() {
+		return graficotartatipogastos;
+	}
+
+	public PieChartModel getGraficotartatipogastospagados() {
+		return graficotartatipogastospagados;
+	}
+
+	public CartesianChartModel getGraficolineasprovisiones() {
+		return graficolineasprovisiones;
+	}
+
+	public CartesianChartModel getGraficolineasvaloresprovisiones() {
+		return graficolineasvaloresprovisiones;
+	}
 }

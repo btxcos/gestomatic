@@ -89,11 +89,6 @@ public final class ValoresDefecto
 	public static final String DEF_COGRUG_E4 = "2";
 	public static final String DEF_COTACA_E4 = "1";
 	
-	public static final String DEF_GASTO_PLUSVALIAS = "11";
-	public static final String DEF_GASTO_IMPUESTOS = "21";
-	public static final String DEF_GASTO_COMUNIDADES = "22";
-	public static final String DEF_GASTO_SUMINISTROS = "23";
-	
 	public static final String DEF_PERIODOS_FECHA_TODOS = "T";
 	public static final String DEF_PERIODOS_FECHA_FIJO =  "F";
 	public static final String DEF_PERIODOS_FECHA_ENTRE = "E";
@@ -136,12 +131,19 @@ public final class ValoresDefecto
 	
 	public static final String DEF_NEGATIVO = "-";
 	
+	public static final String DEF_GASTO_PLUSVALIAS = "11";
+	public static final String DEF_GASTO_IMPUESTOS = "21";
+	public static final String DEF_GASTO_COMUNIDADES = "22";
+	public static final String DEF_GASTO_SUMINISTROS = "23";
+	
 	public static final String DEF_COGRUG_COMPRAVENTA = "1";
 	public static final String DEF_COGRUG_PENDIENTES = "2";
 	public static final String DEF_COGRUG_ACCIONES = "3";
 	
 	public static final String DEF_COTPGA_PLUSVALIA = "1";
 	public static final String DEF_COTPGA_IMPUESTO = "1";
+	public static final String DEF_COTPGA_COMUNIDADES = "2";
+	public static final String DEF_COTPGA_SUMINISTROS = "3";
 	
 	public static final String DEF_GASTO_ESTIMADO = "1";
 	public static final String DEF_GASTO_CONOCIDO = "2";

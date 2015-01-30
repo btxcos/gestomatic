@@ -62,11 +62,155 @@ public class CLInformes
 	{
 		return QMInformes.getActivosGestionadosUltimoMes(ConnectionManager.getDBConnection());
 	}
+
+	public static String obtenerNumeroActivosVendidosTotales()
+	{
+		return QMInformes.getActivosVendidosTotales(ConnectionManager.getDBConnection());
+	}
+	
+	public static String obtenerGastosTotales()
+	{
+		return QMInformes.getGastosTotales(ConnectionManager.getDBConnection());
+	}
+	
+	public static String obtenerGastosAutorizados()
+	{
+		return QMInformes.getGastosEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_GASTO_AUTORIZADO);
+	}
+	
+	public static String obtenerGastosPagados()
+	{
+		return QMInformes.getGastosEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_GASTO_PAGADO);
+	}
+	
+	public static String obtenerValorPromedioGasto()
+	{
+		long liValorPromedio = (Long.parseLong(QMInformes.getValorTotalGastos(ConnectionManager.getDBConnection())))
+				/(Long.parseLong(QMInformes.getGastosTotales(ConnectionManager.getDBConnection())));
+		
+		String sValorPromedio = Utils.cortaDecimales(Long.toString(liValorPromedio));
+		
+		return Utils.recuperaImporte(sValorPromedio.startsWith("-"), sValorPromedio);
+	}
+	
+	public static String obtenerTotalGastosComunidades()
+	{
+		return QMInformes.getTotalGastosTipoEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_GASTO_COMUNIDADES,ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
+	}
+	
+	public static String obtenerTotalGastosImpuestos()
+	{
+		return QMInformes.getTotalGastosTipoEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_GASTO_IMPUESTOS,ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
+	}
+	
+	public static String obtenerTotalGastosOtros()
+	{
+		return QMInformes.getTotalGastosTipoEstado(ConnectionManager.getDBConnection(),ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,ValoresDefecto.CAMPO_ALFA_SIN_INFORMAR);
+	}
+	
+	public static String obtenerTotalGastosComunidadesPagados()
+	{
+		return QMInformes.getTotalGastosTipoEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_GASTO_COMUNIDADES,ValoresDefecto.DEF_GASTO_PAGADO);
+	}
+	
+	public static String obtenerTotalGastosImpuestosPagados()
+	{
+		return QMInformes.getTotalGastosTipoEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_GASTO_IMPUESTOS,ValoresDefecto.DEF_GASTO_PAGADO);
+	}
+	
+	public static String obtenerTotalGastosOtrosPagados()
+	{
+		return QMInformes.getTotalGastosTipoEstado(ConnectionManager.getDBConnection(),ValoresDefecto.CAMPO_NUME_SIN_INFORMAR,ValoresDefecto.DEF_GASTO_PAGADO);
+	}
+	
+	public static String obtenerTotalProvisiones()
+	{
+		return QMInformes.getProvisionesTotales(ConnectionManager.getDBConnection());
+	}
+	
+	public static String obtenerProvisionesAutorizadas()
+	{
+		return QMInformes.getProvisionesEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+	}
+	
+	public static String obtenerProvisionesPagadas()
+	{
+		return QMInformes.getProvisionesEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PAGADA);
+	}
+	
+	public static String obtenerPromedioGastosProvision()
+	{
+		long liValorPromedio = (Long.parseLong(QMInformes.getGastosEnProvisionesTotales(ConnectionManager.getDBConnection())))
+				/(Long.parseLong(QMInformes.getProvisionesTotales(ConnectionManager.getDBConnection())));
+		
+		logger.debug("liValorPromedio:|"+liValorPromedio+"|");
+		
+		return Long.toString(liValorPromedio);
+	}
+	
+	public static String obtenerValorProvisionado()
+	{
+		String sValor = QMInformes.getValorProvisionado(ConnectionManager.getDBConnection());
+		
+		return Utils.recuperaImporte(sValor.startsWith("-"), sValor);
+	}
+	
+	public static String obtenerValorProvisionadoAutorizado()
+	{
+		String sValor = QMInformes.getValorProvisionadoEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+		
+		return Utils.recuperaImporte(sValor.startsWith("-"), sValor);
+	}
+	
+	public static String obtenerValorProvisionadoPagado()
+	{
+		String sValor = QMInformes.getValorProvisionadoEstado(ConnectionManager.getDBConnection(),ValoresDefecto.DEF_PROVISION_PAGADA);
+		
+		return Utils.recuperaImporte(sValor.startsWith("-"), sValor);
+	}
 	
 	public static ArrayList<String> buscarActivosGestionadosEnRango (ArrayList<RangoAnual> rango)
 	{
 		return QMInformes.buscaActivosGestionadosEnRango(ConnectionManager.getDBConnection(), rango);
 	}
+
+	public static ArrayList<String> buscarActivosVendidosAcumuladosEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaActivosVendidosAcumuladosEnRango(ConnectionManager.getDBConnection(), rango);
+	}
+
+	public static ArrayList<String> buscarGastosAutorizadosEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaGastosEstadoEnRango(ConnectionManager.getDBConnection(), rango, ValoresDefecto.DEF_GASTO_AUTORIZADO);
+	}
+	
+	public static ArrayList<String> buscarGastosPagadosEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaGastosEstadoEnRango(ConnectionManager.getDBConnection(), rango, ValoresDefecto.DEF_GASTO_PAGADO);
+	}
+
+	public static ArrayList<String> buscarProvisionesAutorizadasEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaProvisionesEstadoEnRango(ConnectionManager.getDBConnection(), rango, ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+	}
+	
+	public static ArrayList<String> buscarProvisionesPagadasEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaProvisionesEstadoEnRango(ConnectionManager.getDBConnection(), rango, ValoresDefecto.DEF_PROVISION_PAGADA);
+	}
+	
+	public static ArrayList<String> buscarValoresProvisionesAutorizadasEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaValoresProvisionesEstadoEnRango(ConnectionManager.getDBConnection(), rango, ValoresDefecto.DEF_PROVISION_AUTORIZADA);
+	}
+	
+	public static ArrayList<String> buscarValoresProvisionesPagadasEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaValoresProvisionesEstadoEnRango(ConnectionManager.getDBConnection(), rango, ValoresDefecto.DEF_PROVISION_PAGADA);
+	}
+	
+	
+	
 	
 	public static String generarInformeGastosActivo(int iCOACES, ArrayList<GastoTabla> listagastos)
 	{

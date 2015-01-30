@@ -571,6 +571,8 @@ public final class Utils
 	
 	public static String cortaDecimales(String sImporte)
 	{
+		logger.debug("sImporte:|"+sImporte+"|");
+		
 		String sResultado = sImporte;
 		
 		String sSeparador = "";
@@ -597,12 +599,13 @@ public final class Utils
 			{
 				sCentimos = sCentimos.substring(0, ValoresDefecto.DECIMALES);
 			}
-			//logger.debug("sEuros:|{}|",sEuros);
-			//logger.debug("sCentimos:|{}|",sCentimos);
+			
+			logger.debug("sEuros:|"+sEuros+"|");
+			logger.debug("sCentimos:|"+sCentimos+"|");
 		
 			sResultado = sEuros + sCentimos;
 		}
-		
+		logger.debug("sResultado:|"+sResultado+"|");
 		return sResultado;
 	}
 	

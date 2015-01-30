@@ -71,21 +71,162 @@
 									<p:panel>
 										<h:panelGrid columns="4" cellpadding="5">
 
-											<h:outputText for="ActivosTotales" value="Activos Registrados "/>
+											<h:outputText for="ActivosTotales" value="Registrados "/>
 											<p:inputText id="ActivosTotales" value="#{GestorPanelControl.sActivosTotales}" size="9" readonly="true"/>
 
-											<h:outputText for="ActivosGestionadosTotales" value="Activos Gestionados Totales "/>
-											<p:inputText id="ActivosGestionadosTotales" value="#{GestorPanelControl.sActivosGestionadosTotales}" size="9" readonly="true"/>
+											<h:outputText for="ActivosVendidosTotales" value="Vendidos Totales "/>
+											<p:inputText id="ActivosVendidosTotales" value="#{GestorPanelControl.sActivosVendidosTotales}" size="9" readonly="true"/>
 											
-											<h:outputText for="ActivosGestionadosUltimoMes" value="Activos Gestionados Este Mes "/>
+											<h:outputText for="ActivosGestionadosUltimoMes" value="Gestionados este mes "/>
 											<p:inputText id="ActivosGestionadosUltimoMes" value="#{GestorPanelControl.sActivosGestionadosUltimoMes}" size="9" readonly="true"/>
+
+											<h:outputText for="ActivosGestionadosTotales" value="Gestionados Totales "/>
+											<p:inputText id="ActivosGestionadosTotales" value="#{GestorPanelControl.sActivosGestionadosTotales}" size="9" readonly="true"/>
+
 
 										</h:panelGrid>
 								  </p:panel>
 								  
 								  <p:panel>
-								  	<p:lineChart value="#{GestorPanelControl.model}"
-								  				fill="true" 
+								  	<p:lineChart value="#{GestorPanelControl.graficolineasactivos}"
+								  				fill="false"
+								  				legendPosition = "nw" 
+												showDatatip="true"
+												datatipFormat="#{GestorPanelControl.datatipFormat}" />
+								  </p:panel>
+
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Resumen de Gastos">
+								<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel>
+										<h:panelGrid columns="4" cellpadding="5">
+
+											<h:outputText for="GastosTotales" value="Registrados "/>
+											<p:inputText id="GastosTotales" value="#{GestorPanelControl.sGastosTotales}" size="9" readonly="true"/>
+
+											<h:outputText for="GastosAutorizados" value="Autorizados Totales "/>
+											<p:inputText id="GastosAutorizados" value="#{GestorPanelControl.sGastosAutorizados}" size="9" readonly="true"/>
+											
+											<h:outputText for="GastosPagados" value="Pagados Totales "/>
+											<p:inputText id="GastosPagados" value="#{GestorPanelControl.sGastosPagados}" size="9" readonly="true"/>
+
+											<h:outputText for="ValorPromedio" value="Valor Promedio "/>
+											<p:inputText id="ValorPromedio" value="#{GestorPanelControl.sValorPromedio}" size="9" readonly="true"/>
+
+
+										</h:panelGrid>
+								  </p:panel>
+								  
+								  <p:panel>
+								  	<p:lineChart value="#{GestorPanelControl.graficolineasgastos}"
+								  				fill="false"
+								  				legendPosition = "nw" 
+												showDatatip="true"
+												datatipFormat="#{GestorPanelControl.datatipFormat}" />
+								  </p:panel>
+
+								<p:panel>
+										<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText for="GastosComunidades" value="Comunidades "/>
+											<p:inputText id="GastosComunidades" value="#{GestorPanelControl.sGastosComunidades}" size="9" readonly="true"/>
+
+											<h:outputText for="GastosImpuestos" value="Impuestos "/>
+											<p:inputText id="GastosImpuestos" value="#{GestorPanelControl.sGastosImpuestos}" size="9" readonly="true"/>
+											
+											<h:outputText for="GastosOtros" value="Otros "/>
+											<p:inputText id="GastosOtros" value="#{GestorPanelControl.sGastosOtros}" size="9" readonly="true"/>
+
+										</h:panelGrid>
+								  </p:panel>
+
+								  <p:panel>
+								  	<p:pieChart value="#{GestorPanelControl.graficotartatipogastos}" 
+								  	style="height:400px"
+								  	legendPosition = "nw" 
+								  	showDataLabels = "true"
+									title="Tipos de Gastos" />
+								  </p:panel>							
+
+								<p:panel>
+										<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText for="GastosComunidadesPagados" value="Pagados Comunidades "/>
+											<p:inputText id="GastosComunidadesPagados" value="#{GestorPanelControl.sGastosComunidadesPagados}" size="9" readonly="true"/>
+
+											<h:outputText for="GastosImpuestosPagados" value="Pagados Impuestos "/>
+											<p:inputText id="GastosImpuestosPagados" value="#{GestorPanelControl.sGastosImpuestosPagados}" size="9" readonly="true"/>
+											
+											<h:outputText for="GastosOtrosPagados" value="Pagados Otros "/>
+											<p:inputText id="GastosOtrosPagados" value="#{GestorPanelControl.sGastosOtrosPagados}" size="9" readonly="true"/>
+
+										</h:panelGrid>
+								  </p:panel>
+
+								  <p:panel>
+								  	<p:pieChart value="#{GestorPanelControl.graficotartatipogastospagados}" 
+								  	style="height:400px"
+								  	legendPosition = "nw" 
+								  	showDataLabels = "true"
+									title="Tipos de Gastos Pagados" />
+								  </p:panel>
+
+								</h:panelGrid>
+							</p:fieldset>
+
+							<p:fieldset legend="Resumen de Provisiones">
+								<h:panelGrid columns="1" cellpadding="5">
+
+									<p:panel>
+										<h:panelGrid columns="4" cellpadding="5">
+
+											<h:outputText for="ProvisionesTotales" value="Generadas "/>
+											<p:inputText id="ProvisionesTotales" value="#{GestorPanelControl.sProvisionesTotales}" size="9" readonly="true"/>
+
+											<h:outputText for="ProvisionesAutorizadas" value="Autorizadas "/>
+											<p:inputText id="ProvisionesAutorizadas" value="#{GestorPanelControl.sProvisionesAutorizadas}" size="9" readonly="true"/>
+											
+											<h:outputText for="ProvisionesPagadas" value="Pagadas "/>
+											<p:inputText id="ProvisionesPagadas" value="#{GestorPanelControl.sProvisionesPagadas}" size="9" readonly="true"/>
+
+											<h:outputText for="PromedioGastosProvision" value="Promedio Gastos por Provision "/>
+											<p:inputText id="PromedioGastosProvision" value="#{GestorPanelControl.sPromedioGastosProvision}" size="9" readonly="true"/>
+
+
+										</h:panelGrid>
+								  </p:panel>
+								  
+								  <p:panel>
+								  	<p:lineChart value="#{GestorPanelControl.graficolineasprovisiones}"
+								  				fill="false"
+								  				legendPosition = "nw" 
+												showDatatip="true"
+												datatipFormat="#{GestorPanelControl.datatipFormat}" />
+								  </p:panel>
+
+									<p:panel>
+										<h:panelGrid columns="6" cellpadding="5">
+
+											<h:outputText for="ValorProvisionado" value="Valor Provisionado "/>
+											<p:inputText id="ValorProvisionado" value="#{GestorPanelControl.sValorProvisionado}" size="9" readonly="true"/>
+
+											<h:outputText for="ValorAutorizado" value="Valor Autorizado "/>
+											<p:inputText id="ValorAutorizado" value="#{GestorPanelControl.sValorAutorizado}" size="9" readonly="true"/>
+											
+											<h:outputText for="ValorPagado" value="Valor Pagado "/>
+											<p:inputText id="ValorPagado" value="#{GestorPanelControl.sValorPagado}" size="9" readonly="true"/>
+
+										</h:panelGrid>
+								  </p:panel>
+								  
+								  <p:panel>
+								  	<p:lineChart value="#{GestorPanelControl.graficolineasvaloresprovisiones}"
+								  				fill="false"
+								  				legendPosition = "nw" 
 												showDatatip="true"
 												datatipFormat="#{GestorPanelControl.datatipFormat}" />
 								  </p:panel>
