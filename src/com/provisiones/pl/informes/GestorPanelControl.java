@@ -37,6 +37,8 @@ public class GestorPanelControl implements Serializable
 	private PieChartModel graficotartatipogastos;
 	private PieChartModel graficotartatipogastospagados;
 	
+	private CartesianChartModel graficolineasasociaciones;
+	
 	private String sGastosTotales = "";
 	private String sGastosAutorizados = "";
 	private String sGastosPagados = "";
@@ -100,6 +102,18 @@ public class GestorPanelControl implements Serializable
 		}
 		
 		graficolineasactivos.addSeries(evolucionvendidos);
+		
+		ArrayList<String> muestranuevos = CLInformes.buscarActivosNuevosEnRango(periodoanual);
+		
+		ChartSeries evolucionnuevos = new ChartSeries();
+		evolucionnuevos.setLabel("Nuevos");
+		
+		for(int i=0; i<muestranuevos.size(); i++)
+		{
+			evolucionnuevos.set(periodoanual.get(i).getsMes(), Long.parseLong(muestranuevos.get(i)));
+		}
+		
+		graficolineasactivos.addSeries(evolucionnuevos);
 	}
 	
 	public void generarGraficoLineasGastos()
@@ -207,6 +221,59 @@ public class GestorPanelControl implements Serializable
 		graficolineasvaloresprovisiones.addSeries(evolucionpagados);
 	}
 	
+	public void generarGraficoLineasAsociaciones()
+	{
+		graficolineasasociaciones = new CartesianChartModel();
+		
+		ArrayList<String> muestracomunidades = CLInformes.buscarComunidadesEnRango(periodoanual);
+		
+		ChartSeries evolucioncomunidades = new ChartSeries();
+		evolucioncomunidades.setLabel("Comuniades");
+		
+		for(int i=0; i<muestracomunidades.size(); i++)
+		{
+			evolucioncomunidades.set(periodoanual.get(i).getsMes(), Long.parseLong(muestracomunidades.get(i)));
+		}
+		
+		graficolineasasociaciones.addSeries(evolucioncomunidades);
+
+		ArrayList<String> muestracuotas = CLInformes.buscarCuotasEnRango(periodoanual);
+		
+		ChartSeries evolucioncuotas = new ChartSeries();
+		evolucioncuotas.setLabel("Cuotas");
+		
+		for(int i=0; i<muestracuotas.size(); i++)
+		{
+			evolucioncuotas.set(periodoanual.get(i).getsMes(), Long.parseLong(muestracuotas.get(i)));
+		}
+		
+		graficolineasasociaciones.addSeries(evolucioncuotas);
+		
+		ArrayList<String> muestrareferenciascatastrales = CLInformes.buscarReferenciasCatastralesEnRango(periodoanual);
+		
+		ChartSeries evolucionreferenciascatrastrales = new ChartSeries();
+		evolucionreferenciascatrastrales.setLabel("Referencias Catastrales");
+		
+		for(int i=0; i<muestrareferenciascatastrales.size(); i++)
+		{
+			evolucionreferenciascatrastrales.set(periodoanual.get(i).getsMes(), Long.parseLong(muestrareferenciascatastrales.get(i)));
+		}
+		
+		graficolineasasociaciones.addSeries(evolucionreferenciascatrastrales);
+		
+		ArrayList<String> muestrarecursos = CLInformes.buscarRecursosEnRango(periodoanual);
+		
+		ChartSeries evolucionrecursos = new ChartSeries();
+		evolucionrecursos.setLabel("Recursos");
+		
+		for(int i=0; i<muestrarecursos.size(); i++)
+		{
+			evolucionrecursos.set(periodoanual.get(i).getsMes(), Long.parseLong(muestrarecursos.get(i)));
+		}
+		
+		graficolineasasociaciones.addSeries(evolucionrecursos);
+	}
+	
 	public void generarGraficosActivos()
 	{
 		generarGraficoLineasActivos();
@@ -227,6 +294,10 @@ public class GestorPanelControl implements Serializable
 		generarGraficoLineasValoresProvisiones();
 	}
 	
+	public void generarGraficosAsociaciones()
+	{
+		generarGraficoLineasAsociaciones();
+	}
 	
 	public void cargarDatosActivos()
 	{
@@ -275,7 +346,12 @@ public class GestorPanelControl implements Serializable
 	
 	public void cargarDatosAsociaciones()
 	{
+		sComunidadesRegistradas = CLInformes.obtenerComunidadesTolales();
+		sCuotasRegistradas = CLInformes.obtenerCuotasTolales();
+		sReferenciasRegistradas = CLInformes.obtenerReferenciasCatastralesTolales();
+		sRecursossRegistrados = CLInformes.obtenerRecursosTolales();
 		
+		generarGraficosAsociaciones();
 	}
 	
 	public void actualizarDatos()
@@ -512,5 +588,9 @@ public class GestorPanelControl implements Serializable
 
 	public CartesianChartModel getGraficolineasvaloresprovisiones() {
 		return graficolineasvaloresprovisiones;
+	}
+	
+	public CartesianChartModel getGraficolineasasociaciones() {
+		return graficolineasasociaciones;
 	}
 }

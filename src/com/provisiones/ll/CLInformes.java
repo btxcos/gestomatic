@@ -169,6 +169,26 @@ public class CLInformes
 		return Utils.recuperaImporte(sValor.startsWith("-"), sValor);
 	}
 	
+	public static String obtenerComunidadesTolales()
+	{
+		return QMInformes.getComunidadesTotales(ConnectionManager.getDBConnection());
+	}
+	
+	public static String obtenerCuotasTolales()
+	{
+		return QMInformes.getCuotasTotales(ConnectionManager.getDBConnection());
+	}
+	
+	public static String obtenerReferenciasCatastralesTolales()
+	{
+		return QMInformes.getReferenciasCatastralesTotales(ConnectionManager.getDBConnection());
+	}
+	
+	public static String obtenerRecursosTolales()
+	{
+		return QMInformes.getRecursosTotales(ConnectionManager.getDBConnection());
+	}
+	
 	public static ArrayList<String> buscarActivosGestionadosEnRango (ArrayList<RangoAnual> rango)
 	{
 		return QMInformes.buscaActivosGestionadosEnRango(ConnectionManager.getDBConnection(), rango);
@@ -177,6 +197,11 @@ public class CLInformes
 	public static ArrayList<String> buscarActivosVendidosAcumuladosEnRango (ArrayList<RangoAnual> rango)
 	{
 		return QMInformes.buscaActivosVendidosAcumuladosEnRango(ConnectionManager.getDBConnection(), rango);
+	}
+	
+	public static ArrayList<String> buscarActivosNuevosEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaActivosNuevosEnRango(ConnectionManager.getDBConnection(), rango);
 	}
 
 	public static ArrayList<String> buscarGastosAutorizadosEnRango (ArrayList<RangoAnual> rango)
@@ -209,7 +234,25 @@ public class CLInformes
 		return QMInformes.buscaValoresProvisionesEstadoEnRango(ConnectionManager.getDBConnection(), rango, ValoresDefecto.DEF_PROVISION_PAGADA);
 	}
 	
+	public static ArrayList<String> buscarComunidadesEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaComunidadesEnRango(ConnectionManager.getDBConnection(), rango);
+	}
 	
+	public static ArrayList<String> buscarCuotasEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaCuotasEnRango(ConnectionManager.getDBConnection(), rango);
+	}
+	
+	public static ArrayList<String> buscarReferenciasCatastralesEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaReferenciasCatastralesEnRango(ConnectionManager.getDBConnection(), rango);
+	}
+	
+	public static ArrayList<String> buscarRecursosEnRango (ArrayList<RangoAnual> rango)
+	{
+		return QMInformes.buscaRecursosEnRango(ConnectionManager.getDBConnection(), rango);
+	}
 	
 	
 	public static String generarInformeGastosActivo(int iCOACES, ArrayList<GastoTabla> listagastos)

@@ -10,8 +10,13 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.provisiones.dal.qm.listas.QMListaComunidades;
 import com.provisiones.dal.qm.listas.QMListaComunidadesActivos;
+import com.provisiones.dal.qm.listas.QMListaCuotas;
 import com.provisiones.dal.qm.listas.QMListaGastosProvisiones;
+import com.provisiones.dal.qm.listas.QMListaImpuestos;
+import com.provisiones.dal.qm.listas.QMListaReferencias;
+import com.provisiones.dal.qm.registros.QMRegistroActivos;
 import com.provisiones.misc.Utils;
 import com.provisiones.misc.ValoresDefecto;
 import com.provisiones.types.informes.CierreInforme;
@@ -900,6 +905,258 @@ public class QMInformes
 		return sNumProvisiones;
 	}
 	
+	public static String getComunidadesTotales(Connection conexion)
+	{
+		String sComunidadesTotales = "0";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT("
+					   + QMComunidades.CAMPO2  +        
+					   ") FROM " 
+					   + QMComunidades.TABLA;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sComunidadesTotales = rs.getString("COUNT("+QMComunidades.CAMPO2+")");
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sComunidadesTotales = "0";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sComunidadesTotales;
+	}
+
+	public static String getCuotasTotales(Connection conexion)
+	{
+		String sCuotasTotales = "0";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT("
+					   + QMCuotas.CAMPO5  +        
+					   ") FROM " 
+					   + QMCuotas.TABLA;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sCuotasTotales = rs.getString("COUNT("+QMCuotas.CAMPO5+")");
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sCuotasTotales = "0";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sCuotasTotales;
+	}
+	
+	public static String getReferenciasCatastralesTotales(Connection conexion)
+	{
+		String sReferenciasCatastralesTotales = "0";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT("
+					   + QMReferencias.CAMPO10  +        
+					   ") FROM " 
+					   + QMReferencias.TABLA;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sReferenciasCatastralesTotales = rs.getString("COUNT("+QMReferencias.CAMPO10+")");
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sReferenciasCatastralesTotales = "0";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sReferenciasCatastralesTotales;
+	}
+	
+	public static String getRecursosTotales(Connection conexion)
+	{
+		String sRecursosTotales = "0";
+		
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;			
+
+			boolean bEncontrado = false;
+
+			logger.debug("Ejecutando Query...");
+			
+			String sQuery = "SELECT COUNT("
+					   + QMImpuestos.CAMPO3  +        
+					   ") FROM " 
+					   + QMImpuestos.TABLA;
+			
+			logger.debug(sQuery);
+
+			try 
+			{
+				stmt = conexion.createStatement();
+
+				pstmt = conexion.prepareStatement(sQuery);
+				rs = pstmt.executeQuery();
+				
+				logger.debug("Ejecutada con éxito!");
+
+				if (rs != null) 
+				{
+					while (rs.next()) 
+					{
+						bEncontrado = true;
+						
+						sRecursosTotales = rs.getString("COUNT("+QMImpuestos.CAMPO3+")");
+
+						logger.debug("Encontrado el registro!");
+					}
+				}
+				if (!bEncontrado) 
+				{
+					logger.debug("No se encontro la información.");
+				}
+			} 
+			catch (SQLException ex) 
+			{
+				sRecursosTotales = "0";
+
+				logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+			} 
+			finally 
+			{
+				Utils.closeResultSet(rs);
+				Utils.closeStatement(stmt);
+			}
+		}
+
+		return sRecursosTotales;
+	}
+	
 	public static ArrayList<String> buscaActivosGestionadosEnRango(Connection conexion, ArrayList<RangoAnual> rango)
 	{
 		ArrayList<String> resultado = new ArrayList<String>();
@@ -1014,6 +1271,77 @@ public class QMInformes
 							bEncontrado = true;
 							
 							String sValor = rs.getString("COUNT("+QMActivos.CAMPO1+")");
+							
+							resultado.add(sValor);
+
+						}
+					}
+					if (!bEncontrado) 
+					{
+						logger.debug("No se encontró la información.");
+					}
+				} 
+				catch (SQLException ex) 
+				{
+					 resultado = new ArrayList<String>();
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				} 
+				finally 
+				{
+					Utils.closeResultSet(rs);
+					Utils.closeStatement(stmt);
+				}
+			}
+			
+
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<String> buscaActivosNuevosEnRango(Connection conexion, ArrayList<RangoAnual> rango)
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			for(int i=0; i<rango.size(); i++)
+			{
+				logger.debug("Ejecutando Query...");
+
+				String sQuery = "SELECT COUNT(DISTINCT("
+						   + QMRegistroActivos.CAMPO1  +        
+						   ")) FROM " 
+						   + QMRegistroActivos.TABLA+
+						   " WHERE "
+						   + QMRegistroActivos.CAMPO2 + " BETWEEN " + rango.get(i).getsValor() + "000000000 AND " + ((i > 10)? Utils.primeroDeMes():rango.get(i+1).getsValor()) +"000000000";				   
+							   
+				
+				logger.debug(sQuery);
+				
+				try 
+				{
+					stmt = conexion.createStatement();
+					
+					pstmt = conexion.prepareStatement(sQuery);
+					rs = pstmt.executeQuery();
+					
+					logger.debug("Ejecutada con exito!");
+
+					if (rs != null) 
+					{
+						while (rs.next()) 
+						{
+							bEncontrado = true;
+							
+							String sValor = rs.getString("COUNT(DISTINCT("+QMRegistroActivos.CAMPO1+"))");
 							
 							resultado.add(sValor);
 
@@ -1266,6 +1594,290 @@ public class QMInformes
 							
 							
 							String sValor = rs.getString("SUM("+sCondicionCampo+")");
+							
+							resultado.add(sValor);
+
+						}
+					}
+					if (!bEncontrado) 
+					{
+						logger.debug("No se encontró la información.");
+					}
+				} 
+				catch (SQLException ex) 
+				{
+					 resultado = new ArrayList<String>();
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				} 
+				finally 
+				{
+					Utils.closeResultSet(rs);
+					Utils.closeStatement(stmt);
+				}
+			}
+			
+
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<String> buscaComunidadesEnRango(Connection conexion, ArrayList<RangoAnual> rango)
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			for(int i=0; i<rango.size(); i++)
+			{
+				logger.debug("Ejecutando Query...");
+
+				String sQuery = "SELECT COUNT(DISTINCT("
+						   + QMListaComunidades.CAMPO1  +        
+						   ")) FROM " 
+						   + QMListaComunidades.TABLA+
+						   " WHERE "
+						   + QMListaComunidades.CAMPO5 + " BETWEEN " + rango.get(i).getsValor() + "000000000 AND " + ((i > 10)? Utils.primeroDeMes():rango.get(i+1).getsValor()) +"000000000";				   
+							   
+				
+				logger.debug(sQuery);
+				
+				try 
+				{
+					stmt = conexion.createStatement();
+					
+					pstmt = conexion.prepareStatement(sQuery);
+					rs = pstmt.executeQuery();
+					
+					logger.debug("Ejecutada con exito!");
+
+					if (rs != null) 
+					{
+						while (rs.next()) 
+						{
+							bEncontrado = true;
+							
+							String sValor = rs.getString("COUNT(DISTINCT("+QMListaComunidades.CAMPO1+"))");
+							
+							resultado.add(sValor);
+
+						}
+					}
+					if (!bEncontrado) 
+					{
+						logger.debug("No se encontró la información.");
+					}
+				} 
+				catch (SQLException ex) 
+				{
+					 resultado = new ArrayList<String>();
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				} 
+				finally 
+				{
+					Utils.closeResultSet(rs);
+					Utils.closeStatement(stmt);
+				}
+			}
+			
+
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<String> buscaCuotasEnRango(Connection conexion, ArrayList<RangoAnual> rango)
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			for(int i=0; i<rango.size(); i++)
+			{
+				logger.debug("Ejecutando Query...");
+
+				String sQuery = "SELECT COUNT(DISTINCT("
+						   + QMListaCuotas.CAMPO2  +        
+						   ")) FROM " 
+						   + QMListaCuotas.TABLA+
+						   " WHERE "
+						   + QMListaCuotas.CAMPO6 + " BETWEEN " + rango.get(i).getsValor() + "000000000 AND " + ((i > 10)? Utils.primeroDeMes():rango.get(i+1).getsValor()) +"000000000";				   
+							   
+				
+				logger.debug(sQuery);
+				
+				try 
+				{
+					stmt = conexion.createStatement();
+					
+					pstmt = conexion.prepareStatement(sQuery);
+					rs = pstmt.executeQuery();
+					
+					logger.debug("Ejecutada con exito!");
+
+					if (rs != null) 
+					{
+						while (rs.next()) 
+						{
+							bEncontrado = true;
+							
+							String sValor = rs.getString("COUNT(DISTINCT("+QMListaCuotas.CAMPO2+"))");
+							
+							resultado.add(sValor);
+
+						}
+					}
+					if (!bEncontrado) 
+					{
+						logger.debug("No se encontró la información.");
+					}
+				} 
+				catch (SQLException ex) 
+				{
+					 resultado = new ArrayList<String>();
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				} 
+				finally 
+				{
+					Utils.closeResultSet(rs);
+					Utils.closeStatement(stmt);
+				}
+			}
+			
+
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<String> buscaReferenciasCatastralesEnRango(Connection conexion, ArrayList<RangoAnual> rango)
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			for(int i=0; i<rango.size(); i++)
+			{
+				logger.debug("Ejecutando Query...");
+
+				String sQuery = "SELECT COUNT(DISTINCT("
+						   + QMListaReferencias.CAMPO2  +        
+						   ")) FROM " 
+						   + QMListaReferencias.TABLA+
+						   " WHERE "
+						   + QMListaReferencias.CAMPO6 + " BETWEEN " + rango.get(i).getsValor() + "000000000 AND " + ((i > 10)? Utils.primeroDeMes():rango.get(i+1).getsValor()) +"000000000";				   
+							   
+				
+				logger.debug(sQuery);
+				
+				try 
+				{
+					stmt = conexion.createStatement();
+					
+					pstmt = conexion.prepareStatement(sQuery);
+					rs = pstmt.executeQuery();
+					
+					logger.debug("Ejecutada con exito!");
+
+					if (rs != null) 
+					{
+						while (rs.next()) 
+						{
+							bEncontrado = true;
+							
+							String sValor = rs.getString("COUNT(DISTINCT("+QMListaReferencias.CAMPO2+"))");
+							
+							resultado.add(sValor);
+
+						}
+					}
+					if (!bEncontrado) 
+					{
+						logger.debug("No se encontró la información.");
+					}
+				} 
+				catch (SQLException ex) 
+				{
+					 resultado = new ArrayList<String>();
+					logger.error("ERROR "+ex.getErrorCode()+" ("+ex.getSQLState()+"): "+ ex.getMessage());
+				} 
+				finally 
+				{
+					Utils.closeResultSet(rs);
+					Utils.closeStatement(stmt);
+				}
+			}
+			
+
+		}
+
+		return resultado;
+	}
+	
+	public static ArrayList<String> buscaRecursosEnRango(Connection conexion, ArrayList<RangoAnual> rango)
+	{
+		ArrayList<String> resultado = new ArrayList<String>();
+
+		if (conexion != null)
+		{
+			Statement stmt = null;
+
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			boolean bEncontrado = false;
+			
+			for(int i=0; i<rango.size(); i++)
+			{
+				logger.debug("Ejecutando Query...");
+
+				String sQuery = "SELECT COUNT(DISTINCT("
+						   + QMListaImpuestos.CAMPO2  +        
+						   ")) FROM " 
+						   + QMListaImpuestos.TABLA+
+						   " WHERE "
+						   + QMListaImpuestos.CAMPO6 + " BETWEEN " + rango.get(i).getsValor() + "000000000 AND " + ((i > 10)? Utils.primeroDeMes():rango.get(i+1).getsValor()) +"000000000";				   
+							   
+				
+				logger.debug(sQuery);
+				
+				try 
+				{
+					stmt = conexion.createStatement();
+					
+					pstmt = conexion.prepareStatement(sQuery);
+					rs = pstmt.executeQuery();
+					
+					logger.debug("Ejecutada con exito!");
+
+					if (rs != null) 
+					{
+						while (rs.next()) 
+						{
+							bEncontrado = true;
+							
+							String sValor = rs.getString("COUNT(DISTINCT("+QMListaImpuestos.CAMPO2+"))");
 							
 							resultado.add(sValor);
 
