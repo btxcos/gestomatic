@@ -53,3 +53,5 @@ public class ErrorReferenciaTabla
 		ERRORES = eRRORES;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

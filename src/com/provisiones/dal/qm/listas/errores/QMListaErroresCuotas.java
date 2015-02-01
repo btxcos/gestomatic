@@ -370,3 +370,5 @@ public final class QMListaErroresCuotas
 		return resultado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

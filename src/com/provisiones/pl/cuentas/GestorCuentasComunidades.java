@@ -785,3 +785,5 @@ public class GestorCuentasComunidades implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

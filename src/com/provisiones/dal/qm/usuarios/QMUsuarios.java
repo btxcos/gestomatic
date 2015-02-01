@@ -777,3 +777,5 @@ public final class QMUsuarios
 		return sPassword;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

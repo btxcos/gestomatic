@@ -176,3 +176,4 @@ public class CierreInforme
 	}
 }
 
+//Autor: Francisco Valverde Manjón

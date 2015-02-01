@@ -526,3 +526,5 @@ public class QMCuentas
 		return sFechaCuenta;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

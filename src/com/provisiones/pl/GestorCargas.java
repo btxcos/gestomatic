@@ -212,3 +212,5 @@ public class GestorCargas implements Serializable
 		this.bPoll = bPoll;
 	}  
 }
+
+//Autor: Francisco Valverde Manjón

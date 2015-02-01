@@ -197,3 +197,5 @@ public final class ConnectionManager
 		return true;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

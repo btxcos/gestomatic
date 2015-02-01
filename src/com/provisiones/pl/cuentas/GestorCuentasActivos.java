@@ -585,3 +585,5 @@ public class GestorCuentasActivos implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

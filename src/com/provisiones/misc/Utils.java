@@ -1371,3 +1371,5 @@ public final class Utils
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

@@ -594,3 +594,5 @@ public class GestorPanelControl implements Serializable
 		return graficolineasasociaciones;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

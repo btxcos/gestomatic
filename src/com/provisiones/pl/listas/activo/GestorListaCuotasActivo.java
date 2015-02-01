@@ -470,3 +470,4 @@ public class GestorListaCuotasActivo implements Serializable
 
 }
 
+//Autor: Francisco Valverde Manjón

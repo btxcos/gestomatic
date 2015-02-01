@@ -887,3 +887,5 @@ public final class CLErrores
 		return iCodigo;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

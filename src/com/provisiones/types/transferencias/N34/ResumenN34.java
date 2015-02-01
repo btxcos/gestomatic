@@ -52,3 +52,5 @@ public class ResumenN34
 		this.sNumeroRegistros = sNumeroRegistros;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

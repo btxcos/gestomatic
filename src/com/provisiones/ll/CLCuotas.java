@@ -968,3 +968,5 @@ public final class CLCuotas
 
 	}
 }
+
+//Autor: Francisco Valverde Manjón

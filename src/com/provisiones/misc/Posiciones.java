@@ -266,3 +266,5 @@ public final class Posiciones
 
 	private Posiciones(){}
 }
+
+//Autor: Francisco Valverde Manjón

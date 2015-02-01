@@ -63,3 +63,5 @@ public class TotalesN3414
 		this.sTotalRegistros = sTotalRegistros;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

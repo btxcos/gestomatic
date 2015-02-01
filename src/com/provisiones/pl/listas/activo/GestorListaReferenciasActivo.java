@@ -419,3 +419,5 @@ public class GestorListaReferenciasActivo implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

@@ -308,3 +308,5 @@ public class QMTransferenciasN34
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

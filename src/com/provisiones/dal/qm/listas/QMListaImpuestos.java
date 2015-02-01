@@ -1416,3 +1416,5 @@ public final class QMListaImpuestos
 		return resultado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

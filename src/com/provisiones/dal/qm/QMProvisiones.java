@@ -4527,3 +4527,5 @@ public final class QMProvisiones
 		return sNUPROF;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

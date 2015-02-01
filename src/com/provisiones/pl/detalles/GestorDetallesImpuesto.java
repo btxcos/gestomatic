@@ -388,3 +388,5 @@ public class GestorDetallesImpuesto implements Serializable
 		this.bConNotas = bConNotas;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

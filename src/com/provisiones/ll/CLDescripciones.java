@@ -67,3 +67,5 @@ public class CLDescripciones
 		return QMCodigosControl.getDesCampo(ConnectionManager.getDBConnection(), QMCodigosControl.TBIRESO, QMCodigosControl.IBIRESO, sBIRESO);
 	}
 }
+
+//Autor: Francisco Valverde Manjón

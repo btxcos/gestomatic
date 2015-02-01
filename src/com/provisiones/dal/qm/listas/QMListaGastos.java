@@ -1843,3 +1843,5 @@ public final class QMListaGastos
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

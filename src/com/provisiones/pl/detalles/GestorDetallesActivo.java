@@ -1437,3 +1437,5 @@ public class GestorDetallesActivo implements Serializable
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

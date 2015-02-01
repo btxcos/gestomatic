@@ -167,3 +167,5 @@ public class CuotaTabla
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

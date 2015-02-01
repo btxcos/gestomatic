@@ -592,3 +592,5 @@ public final class QMMovimientosImpuestos
 		return bEncontrado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

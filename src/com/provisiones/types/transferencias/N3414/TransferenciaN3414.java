@@ -105,3 +105,5 @@ public class TransferenciaN3414
 		this.sConcepto = sConcepto;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

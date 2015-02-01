@@ -329,3 +329,5 @@ public class GestorDetallesReferencia implements Serializable
 		this.bConNotas = bConNotas;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

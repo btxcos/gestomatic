@@ -820,3 +820,5 @@ public final class TableManager
 		return bExit;
 	}*/
 }
+
+//Autor: Francisco Valverde Manjón

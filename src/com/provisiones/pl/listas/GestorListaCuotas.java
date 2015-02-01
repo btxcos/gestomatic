@@ -1014,3 +1014,5 @@ public class GestorListaCuotas implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

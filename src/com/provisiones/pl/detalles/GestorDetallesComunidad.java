@@ -604,3 +604,5 @@ public class GestorDetallesComunidad implements Serializable
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

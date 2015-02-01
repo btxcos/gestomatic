@@ -609,3 +609,5 @@ public class QMListaCuentasComunidades
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

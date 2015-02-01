@@ -549,3 +549,5 @@ public class GestorListaComunidades implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

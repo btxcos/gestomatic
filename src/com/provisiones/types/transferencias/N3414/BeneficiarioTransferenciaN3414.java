@@ -212,3 +212,5 @@ public class BeneficiarioTransferenciaN3414
 		this.sPropositoTransferencia = sPropositoTransferencia;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

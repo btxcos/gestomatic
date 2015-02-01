@@ -1082,3 +1082,5 @@ public class GestorErroresComunidades implements Serializable
 		this.tiposcocldoHM = tiposcocldoHM;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

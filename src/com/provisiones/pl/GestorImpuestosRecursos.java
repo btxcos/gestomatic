@@ -791,3 +791,5 @@ public class GestorImpuestosRecursos implements Serializable
 	
 	
 }
+
+//Autor: Francisco Valverde Manjón

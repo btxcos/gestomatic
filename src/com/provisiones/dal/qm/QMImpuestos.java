@@ -816,3 +816,5 @@ public final class QMImpuestos
 		return sNota;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

@@ -123,3 +123,5 @@ public final class QMListaPerfilesRecursos
 	
 
 }
+
+//Autor: Francisco Valverde Manjón

@@ -32,3 +32,5 @@ public class Fichero
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

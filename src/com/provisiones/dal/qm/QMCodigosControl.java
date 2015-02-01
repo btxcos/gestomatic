@@ -560,3 +560,5 @@ public final class QMCodigosControl
 		return bExiste;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

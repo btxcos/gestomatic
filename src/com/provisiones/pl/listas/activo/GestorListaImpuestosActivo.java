@@ -412,3 +412,4 @@ public class GestorListaImpuestosActivo implements Serializable
 
 }
 
+//Autor: Francisco Valverde Manjón

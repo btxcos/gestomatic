@@ -1387,3 +1387,5 @@ public final class QMComunidades
 		return resultado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

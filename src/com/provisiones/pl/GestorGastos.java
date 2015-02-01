@@ -2009,3 +2009,5 @@ public class GestorGastos implements Serializable
 
 
 }
+
+//Autor: Francisco Valverde Manjón

@@ -719,3 +719,5 @@ public final class QMMovimientosComunidades
 		return bEncontrado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

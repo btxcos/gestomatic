@@ -138,3 +138,5 @@ public final class Sesion
 		
 	}
 }
+
+//Autor: Francisco Valverde Manjón

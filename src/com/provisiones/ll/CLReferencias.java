@@ -1040,3 +1040,5 @@ public final class CLReferencias
 		return iCodigo;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

@@ -1699,3 +1699,4 @@ public class GestorPagosConexion implements Serializable
 	
 }
 
+//Autor: Francisco Valverde Manjón

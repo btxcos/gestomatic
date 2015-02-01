@@ -596,3 +596,5 @@ public final class QMMovimientosCuotas
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

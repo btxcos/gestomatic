@@ -566,3 +566,5 @@ public class GestorDetallesProvision implements Serializable
 		this.tiposestadogastoHM = tiposestadogastoHM;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

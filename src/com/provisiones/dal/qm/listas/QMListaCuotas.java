@@ -756,3 +756,4 @@ public final class QMListaCuotas
 	}
 }
 
+//Autor: Francisco Valverde Manjón

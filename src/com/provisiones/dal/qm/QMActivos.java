@@ -2975,3 +2975,5 @@ public final class QMActivos
 
 	}
 }
+
+//Autor: Francisco Valverde Manjón

@@ -599,3 +599,5 @@ public class GestorListaImpuestos implements Serializable
 		this.sNURCATF = sNURCATF.trim().toUpperCase();
 	}
 }
+
+//Autor: Francisco Valverde Manjón

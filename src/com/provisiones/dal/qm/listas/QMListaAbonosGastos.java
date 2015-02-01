@@ -368,3 +368,5 @@ public class QMListaAbonosGastos
 		return bSalida;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

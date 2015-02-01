@@ -1069,3 +1069,5 @@ public final class QMMovimientosGastos
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

@@ -2046,3 +2046,5 @@ public class GestorErroresGastos implements Serializable
 		this.sAccion = sAccion;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

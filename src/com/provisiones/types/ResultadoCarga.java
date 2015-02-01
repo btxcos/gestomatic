@@ -85,3 +85,5 @@ public class ResultadoCarga
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

@@ -265,3 +265,5 @@ public class QMTransferenciasN3414
 				sConcepto);
 	}
 }
+
+//Autor: Francisco Valverde Manjón

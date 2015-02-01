@@ -208,3 +208,5 @@ public class GastoTabla
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

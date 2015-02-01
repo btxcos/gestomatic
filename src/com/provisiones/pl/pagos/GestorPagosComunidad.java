@@ -1286,3 +1286,5 @@ public class GestorPagosComunidad implements Serializable
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

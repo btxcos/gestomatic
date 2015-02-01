@@ -3014,3 +3014,5 @@ public class GestorRevisionPagos implements Serializable
 		this.tablacuentascomunidad = tablacuentascomunidad;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

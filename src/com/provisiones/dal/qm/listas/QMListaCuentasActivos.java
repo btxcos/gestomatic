@@ -440,3 +440,5 @@ public class QMListaCuentasActivos
 		return bEncontrado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

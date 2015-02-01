@@ -273,3 +273,5 @@ public class GestorSesion implements Serializable
 		this.historial = historial;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

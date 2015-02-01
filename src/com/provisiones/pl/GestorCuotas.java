@@ -799,3 +799,5 @@ public class GestorCuotas implements Serializable
 		this.tiposptpagoHM = tiposptpagoHM;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

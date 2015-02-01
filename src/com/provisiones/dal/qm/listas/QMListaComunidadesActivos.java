@@ -2534,3 +2534,5 @@ public final class QMListaComunidadesActivos
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

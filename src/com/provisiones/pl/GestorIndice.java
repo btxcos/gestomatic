@@ -35,3 +35,5 @@ public class GestorIndice implements Serializable
 		this.sUsuario = sUsuario;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

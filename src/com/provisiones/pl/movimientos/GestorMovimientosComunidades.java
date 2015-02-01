@@ -1092,3 +1092,5 @@ public class GestorMovimientosComunidades implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

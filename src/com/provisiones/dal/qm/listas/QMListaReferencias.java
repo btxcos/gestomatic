@@ -2475,3 +2475,5 @@ public final class QMListaReferencias
 		return resultado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

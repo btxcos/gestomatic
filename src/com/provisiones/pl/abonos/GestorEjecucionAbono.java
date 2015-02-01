@@ -1853,3 +1853,5 @@ public class GestorEjecucionAbono implements Serializable
 		this.tablacuentascomunidad = tablacuentascomunidad;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

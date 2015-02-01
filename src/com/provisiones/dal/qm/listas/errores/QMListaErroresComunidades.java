@@ -457,3 +457,5 @@ public final class QMListaErroresComunidades
 		return resultado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

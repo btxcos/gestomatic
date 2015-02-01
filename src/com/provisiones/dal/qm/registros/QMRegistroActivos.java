@@ -1185,3 +1185,5 @@ public class QMRegistroActivos implements Serializable
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

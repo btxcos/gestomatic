@@ -65,3 +65,5 @@ public class CabeceraTransferenciasN3414
 		this.sIdentificacionOrdenanteSufijo = sIdentificacionOrdenanteSufijo;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

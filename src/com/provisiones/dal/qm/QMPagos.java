@@ -1436,3 +1436,5 @@ public class QMPagos
 
 	}
 }
+
+//Autor: Francisco Valverde Manjón

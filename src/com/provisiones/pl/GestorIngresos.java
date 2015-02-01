@@ -516,3 +516,5 @@ public class GestorIngresos implements Serializable
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

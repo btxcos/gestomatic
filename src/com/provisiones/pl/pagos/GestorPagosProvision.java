@@ -986,3 +986,5 @@ public class GestorPagosProvision implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

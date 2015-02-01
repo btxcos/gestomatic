@@ -115,3 +115,5 @@ public class ErrorGastoTabla
 		ERRORES = eRRORES;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

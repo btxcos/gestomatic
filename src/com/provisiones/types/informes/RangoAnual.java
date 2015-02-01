@@ -32,3 +32,5 @@ public class RangoAnual
 		this.sValor = sValor;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

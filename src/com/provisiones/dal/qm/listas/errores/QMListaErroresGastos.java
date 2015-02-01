@@ -379,3 +379,5 @@ public final class QMListaErroresGastos
 		return resultado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

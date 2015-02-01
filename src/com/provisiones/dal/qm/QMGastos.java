@@ -4516,3 +4516,5 @@ public final class QMGastos
 		return resultado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

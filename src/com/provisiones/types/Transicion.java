@@ -60,3 +60,5 @@ public class Transicion
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

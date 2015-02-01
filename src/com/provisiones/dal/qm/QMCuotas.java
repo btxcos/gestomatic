@@ -1573,3 +1573,5 @@ public final class QMCuotas
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

@@ -96,3 +96,5 @@ public class ErrorCuotaTabla
 	
 	
 }
+
+//Autor: Francisco Valverde Manjón

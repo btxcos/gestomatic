@@ -2150,3 +2150,5 @@ public class QMInformes
 		return resultado;
 	}*/
 }
+
+//Autor: Francisco Valverde Manjón

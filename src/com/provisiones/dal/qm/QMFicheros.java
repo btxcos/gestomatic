@@ -413,3 +413,5 @@ public class QMFicheros
 		return sTipoFichero;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

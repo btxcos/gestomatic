@@ -109,3 +109,5 @@ public class ImpuestoRecurso
 		return String.format("(IMPUESTO/RECURSO)\nNURCAT:|%s|\nCOSBAC:|%s|\nFEPRRE:|%s|\nFERERE:|%s|\nFEDEIN:|%s|\nBISODE:|%s|\nBIRESO:|%s|\nCOTEXA:|%s|\nOBTEXC:|%s|",NURCAT,COSBAC,FEPRRE,FERERE,FEDEIN,BISODE,BIRESO,COTEXA,OBTEXC);
 	}
 }
+
+//Autor: Francisco Valverde Manjón

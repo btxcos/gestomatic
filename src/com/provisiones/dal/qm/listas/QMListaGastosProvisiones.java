@@ -2943,3 +2943,5 @@ public final class QMListaGastosProvisiones
 		return liValor;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

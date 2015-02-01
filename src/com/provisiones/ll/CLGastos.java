@@ -3028,3 +3028,5 @@ public final class CLGastos
 		return iCodigo;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

@@ -924,3 +924,5 @@ public final class QMReferencias
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

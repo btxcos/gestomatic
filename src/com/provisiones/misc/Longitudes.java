@@ -272,3 +272,5 @@ public final class Longitudes
 	
 	private Longitudes(){}
 }
+
+//Autor: Francisco Valverde Manjón

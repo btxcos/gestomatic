@@ -922,3 +922,5 @@ public class GestorDetallesGasto implements Serializable
 		return liCodGasto;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

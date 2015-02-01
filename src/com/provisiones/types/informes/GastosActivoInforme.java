@@ -114,3 +114,5 @@ public class GastosActivoInforme
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

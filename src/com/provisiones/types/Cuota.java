@@ -121,3 +121,5 @@ public class Cuota
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

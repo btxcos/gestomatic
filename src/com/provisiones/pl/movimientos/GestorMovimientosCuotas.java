@@ -1203,3 +1203,5 @@ public class GestorMovimientosCuotas implements Serializable
 	
 	
 }
+
+//Autor: Francisco Valverde Manjón

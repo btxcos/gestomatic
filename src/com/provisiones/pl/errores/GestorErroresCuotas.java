@@ -985,3 +985,5 @@ public class GestorErroresCuotas implements Serializable
 		this.tablacuotas = tablacuotas;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

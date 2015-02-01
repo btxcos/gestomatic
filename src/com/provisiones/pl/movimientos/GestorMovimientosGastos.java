@@ -2751,3 +2751,5 @@ public class GestorMovimientosGastos implements Serializable
 		this.tiposcomparaimporteHM = tiposcomparaimporteHM;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

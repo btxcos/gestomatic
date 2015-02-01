@@ -479,3 +479,5 @@ public class GestorDetallesCuota implements Serializable
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

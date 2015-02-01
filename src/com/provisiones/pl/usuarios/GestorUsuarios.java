@@ -252,3 +252,5 @@ public class GestorUsuarios implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

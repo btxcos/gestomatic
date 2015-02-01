@@ -276,3 +276,5 @@ public final class QMPerfiles
 		return bSalida;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

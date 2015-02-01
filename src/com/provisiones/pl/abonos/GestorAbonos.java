@@ -2366,3 +2366,5 @@ public class GestorAbonos implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

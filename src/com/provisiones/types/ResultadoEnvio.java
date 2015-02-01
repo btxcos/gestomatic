@@ -31,3 +31,5 @@ public class ResultadoEnvio
 		this.liEntradas = liEntradas;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

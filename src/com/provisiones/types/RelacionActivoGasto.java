@@ -30,3 +30,5 @@ public class RelacionActivoGasto
 	
 	
 }
+
+//Autor: Francisco Valverde Manjón

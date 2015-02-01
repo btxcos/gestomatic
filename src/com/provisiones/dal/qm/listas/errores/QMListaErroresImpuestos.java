@@ -364,3 +364,5 @@ public final class QMListaErroresImpuestos
 		return resultado;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

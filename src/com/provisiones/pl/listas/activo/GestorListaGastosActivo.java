@@ -1278,3 +1278,5 @@ public class GestorListaGastosActivo implements Serializable
 	}
 	
 }
+
+//Autor: Francisco Valverde Manjón

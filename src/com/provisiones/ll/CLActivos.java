@@ -440,3 +440,5 @@ public final class CLActivos
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

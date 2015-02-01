@@ -3832,3 +3832,5 @@ public final class FileManager
 		return carga;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

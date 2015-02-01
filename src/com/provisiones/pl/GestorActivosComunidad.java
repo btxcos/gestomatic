@@ -717,3 +717,5 @@ public class GestorActivosComunidad implements Serializable
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

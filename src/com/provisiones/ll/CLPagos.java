@@ -1348,3 +1348,5 @@ public class CLPagos
 		return iCodigo;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

@@ -2576,3 +2576,5 @@ public class GestorPagosSimple implements Serializable
 		this.tablacuentascomunidad = tablacuentascomunidad;
 	}
 }
+
+//Autor: Francisco Valverde Manjón

@@ -269,3 +269,5 @@ public class MovimientoCuota
 	}
 
 }
+
+//Autor: Francisco Valverde Manjón

@@ -9,3 +9,5 @@ public final class MensajesActivos
 	
 	private MensajesActivos(){}
 }
+
+//Autor: Francisco Valverde Manjón
